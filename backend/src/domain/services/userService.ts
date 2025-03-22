@@ -1,5 +1,5 @@
 import { ApiResponse } from "../../shared/types/apiResponse";
-import { UserRepository } from "../repositories/userRepository";
+import { UserRepository } from "../repositories/UserRepository";
 
 export class UserService {
     private userRepository: UserRepository;

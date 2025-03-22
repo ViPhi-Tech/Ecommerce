@@ -1,15 +1,45 @@
-import { FastifyInstance } from 'fastify';
-import { AuthController } from '../controllers/AuthController';
-import { OAuth2Client } from 'google-auth-library';
+import { FastifyInstance, FastifyPluginOptions } from 'fastify';
+import { authController } from '../../config/dependencies/authDependencies';
 
-const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+export default async function authRoutes(
+  fastify: FastifyInstance,
+  options: FastifyPluginOptions
+) {
+  // Login tradicional
+  fastify.post('/token', {
+    schema: {
+      body: {
+        type: 'object',
+        required: ['email', 'password'],
+        properties: {
+          email: { type: 'string', format: 'email' },
+          password: { type: 'string', minLength: 1 }
+        }
+      }
+    },
+    handler: authController.login.bind(authController)
+  });
 
-export async function authRoutes(fastify: FastifyInstance) {
-  const authController = new AuthController(googleClient);
+  // Obter URL de autenticação do Google
+  fastify.get('/login/google', {
+    handler: authController.getGoogleAuthUrl.bind(authController)
+  });
 
-  fastify.post('/token', authController.loginWithEmailPassword.bind(authController));
-
-  fastify.get('/login/google', authController.loginWithGoogle.bind(authController));
-
-  fastify.post('/callback', authController.googleCallback.bind(authController));
+  // Callback do Google - suporta tanto código de autorização quanto ID token
+  fastify.post('/callback', {
+    schema: {
+      body: {
+        type: 'object',
+        properties: {
+          code: { type: 'string' },
+          credential: { type: 'string' }
+        },
+        oneOf: [
+          { required: ['code'] },
+          { required: ['credential'] }
+        ]
+      }
+    },
+    handler: authController.googleCallback.bind(authController)
+  });
 }

@@ -1,79 +1,110 @@
-// ecommerce/backend/src/infrastructure/http/controllers/AuthController.ts
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { userService } from '../../../domain/services/userService';
-import { OAuth2Client } from 'google-auth-library';
+import { AuthUseCase } from '../../../domain/use-cases/auth/AuthUseCase';
+import { LoginDTO, GoogleLoginDTO } from '../../../domain/entities/Auth';
+import { InvalidCredentialsError } from '../../../shared/errors/UserErrors';
 
 export class AuthController {
-  private userService = userService;
-  private googleClient: OAuth2Client;
+  constructor(private authUseCase: AuthUseCase) {}
 
-  constructor(googleClient: OAuth2Client) {
-    this.userService = userService;
-    this.googleClient = googleClient;
-  };
-
-  async loginWithEmailPassword(request: FastifyRequest, response: FastifyReply) {
-    const { username, password } = request.body as { username: string; password: string };
-
+  async login(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const user = await this.userService.authenticateUser(username, password);
-      const accessToken = await this.userService.createAccessTokenForUser(user);
+      const loginData = request.body as LoginDTO;
+      
+      const result = await this.authUseCase.login(loginData);
 
-      response.setCookie('access_token', accessToken, {
-        path: '/',
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Só usa secure em produção
-        sameSite: 'lax',
-      });
-
-      return { status: true, descricao: 'Login realizado com sucesso!' };
-    } catch (error) {
-        response.status(401).send({ error: error });
-    }
-  };
-
-  async loginWithGoogle(request: FastifyRequest, reply: FastifyReply) {
-    const redirectUrl = this.googleClient.generateAuthUrl({
-      access_type: 'offline',
-      scope: ['profile', 'email'],
-      redirect_uri: process.env.GOOGLE_REDIRECT_URI,
-    });
-
-    return { redirect_url: redirectUrl };
-  };
-
-  async googleCallback(request: FastifyRequest, reply: FastifyReply) {
-    const { credential } = request.body as { credential: string };
-
-    if (!credential) {
-      reply.status(400).send({ error: 'Credencial não fornecida' });
-      return;
-    }
-
-    try {
-      const ticket = await this.googleClient.verifyIdToken({
-        idToken: credential,
-        audience: process.env.GOOGLE_CLIENT_ID,
-      });
-
-      const userInfo = ticket.getPayload();
-      if (!userInfo) {
-        throw new Error('Falha ao autenticar com o Google');
+      // Definir cookie com o token JWT
+      if (result.token) {
+        reply.setCookie('access_token', result.token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          path: '/'
+        });
       }
 
-      const user = await this.userService.getOrCreateUserByGoogle(userInfo);
-      const accessToken = await this.userService.createAccessTokenForUser(user);
-
-      reply.setCookie('access_token', accessToken, {
-        path: '/',
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production', // Só usa secure em produção
-        sameSite: 'lax',
+      return reply.code(200).send({
+        status: result.status,
+        descricao: result.descricao
       });
-
-      return { status: true, descricao: 'Login realizado com sucesso!' };
     } catch (error) {
-      reply.status(400).send({ error: error });
+      if (error instanceof InvalidCredentialsError) {
+        return reply.code(401).send({
+          status: false,
+          descricao: error.message
+        });
+      }
+      
+      console.error(error);
+      return reply.code(500).send({
+        status: false,
+        descricao: 'Erro interno do servidor'
+      });
     }
-  };
+  }
+
+  async getGoogleAuthUrl(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const url = this.authUseCase.getGoogleAuthUrl();
+      
+      return reply.code(200).send({
+        redirect_url: url
+      });
+    } catch (error) {
+      console.error(error);
+      return reply.code(500).send({
+        status: false,
+        descricao: 'Erro ao gerar URL de autenticação do Google'
+      });
+    }
+  }
+
+  async googleCallback(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      // Verificar se é um callback com código ou com ID token
+      const body = request.body as any;
+      
+      let result;
+      
+      if (body.code) {
+        // Fluxo de redirecionamento (código de autorização)
+        result = await this.authUseCase.googleLoginWithCode(body.code);
+      } else if (body.credential) {
+        // Fluxo de botão de login (ID token)
+        result = await this.authUseCase.googleLogin({ credential: body.credential });
+      } else {
+        return reply.code(400).send({
+          status: false,
+          descricao: 'Parâmetros de autenticação Google não fornecidos'
+        });
+      }
+
+      // Definir cookie com o token JWT
+      if (result.token) {
+        reply.setCookie('access_token', result.token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'lax',
+          path: '/'
+        });
+      }
+
+      return reply.code(200).send({
+        status: result.status,
+        descricao: result.descricao
+      });
+    } catch (error) {
+      if (error instanceof InvalidCredentialsError) {
+        return reply.code(401).send({
+          status: false,
+          descricao: 'Credenciais inválidas'
+        });
+      }
+      
+      console.error(error);
+      return reply.code(500).send({
+        status: false,
+        descricao: 'Erro interno do servidor'
+      });
+    }
+  }
 }
