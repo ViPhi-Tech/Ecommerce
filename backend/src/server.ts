@@ -1,5 +1,6 @@
 import fastify from 'fastify';
 import cookie from '@fastify/cookie';
+import cors from '@fastify/cors';
 import handleRoutes from './infrastructure/http/routes/HandleRoutes';
 import dotenv from 'dotenv';
 import path from 'path';
@@ -7,8 +8,12 @@ import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const server = fastify({ logger: true });
-
+server.register(cors, {
+  origin: ['http://localhost:3000'],
+  credentials: true
+})
 server.register(cookie)
+
 server.register(handleRoutes);
 
 // Iniciar o servidor
