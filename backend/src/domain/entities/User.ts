@@ -11,11 +11,9 @@ export interface User {
 export type CreateUserDTO = {
   full_name: string;
   is_active?: boolean;
-  login: {
-    email: string;
-    google_id?: string;
-    password: string;
-  };
+  email: string;
+  google_id?: string;
+  password?: string;
 };
 
 export type UpdateUserDTO = Partial<{

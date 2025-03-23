@@ -1,6 +1,10 @@
 import fastify from 'fastify';
 import cookie from '@fastify/cookie';
-import handleRoutes from './infrastructure/http/routes/handleRoutes';
+import handleRoutes from './infrastructure/http/routes/HandleRoutes';
+import dotenv from 'dotenv';
+import path from 'path';
+
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const server = fastify({ logger: true });
 

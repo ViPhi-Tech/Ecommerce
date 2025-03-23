@@ -2,14 +2,14 @@ import { User, UpdateUserDTO } from '../../entities/User';
 import { UpdateLoginDTO } from '../../entities/Login';
 import { IUserRepository } from '../../repositories/UserRepository';
 import { ILoginRepository } from '../../repositories/LoginRepository';
-import { PasswordService } from '../../services/PasswordService';
+import { IPasswordService } from '../../services/PasswordService';
 import { UserNotFoundError, EmailAlreadyExistsError } from '../../../shared/errors/UserErrors';
 
 export class UpdateUserUseCase {
   constructor(
     private userRepository: IUserRepository,
     private loginRepository: ILoginRepository,
-    private passwordService: PasswordService
+    private passwordService: IPasswordService
   ) {}
 
   async execute(id: number, userData: UpdateUserDTO, loginData?: UpdateLoginDTO): Promise<User> {

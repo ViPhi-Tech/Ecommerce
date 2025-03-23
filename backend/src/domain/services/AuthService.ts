@@ -1,6 +1,6 @@
 import { TokenPayload } from '../entities/Auth';
 
-export interface AuthService {
+export interface IAuthService {
   generateToken(payload: TokenPayload): string;
   getGoogleAuthUrl(): string;
   exchangeCodeForTokens(code: string): Promise<any>;

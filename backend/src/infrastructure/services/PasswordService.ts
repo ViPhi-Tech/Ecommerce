@@ -1,8 +1,8 @@
 import bcrypt from 'bcrypt';
-import { PasswordService } from '../../domain/services/PasswordService';
+import { IPasswordService } from '../../domain/services/PasswordService';
 
 
-export class BcryptPasswordService implements PasswordService {
+export class BcryptPasswordService implements IPasswordService {
   private readonly saltRounds = 10;
 
   async hash(password: string): Promise<string> {

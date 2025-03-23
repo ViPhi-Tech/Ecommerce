@@ -8,7 +8,7 @@ export interface Login {
 export type CreateLoginDTO = {
   email: string;
   google_id?: string;
-  password: string; // Senha em texto puro, será hasheada antes de salvar
+  hashed_password?: string | null;
 };
 
 export type UpdateLoginDTO = Partial<{

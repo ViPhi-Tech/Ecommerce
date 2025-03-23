@@ -7,11 +7,11 @@ export default async function userRoutes(
   options: FastifyPluginOptions
 ) {
   // Criar usuário
-  fastify.post('/', {
+  fastify.post('/create', {
     schema: {
       body: {
         type: 'object',
-        required: ['full_name', 'login'],
+        required: ['full_name', 'email', 'password'],
         properties: {
           full_name: { type: 'string' },
           is_active: { type: 'boolean' },

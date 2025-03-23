@@ -1,31 +1,7 @@
-import { ApiResponse } from "../../shared/types/apiResponse";
-import { UserRepository } from "../repositories/UserRepository";
+import { User } from '../entities/User';
 
-export class UserService {
-    private userRepository: UserRepository;
-
-    constructor(userRepository: UserRepository){
-        this.userRepository = userRepository
-    };
-
-    async authenticateUser(username: string, password: string): Promise<ApiResponse>{
-        return {status: true, descricao: ''}
-    };
-
-    async createAccessTokenForUser(user: any): Promise<string>{
-        return '3443423'
-    };
-
-    async create(): Promise<ApiResponse>{
-      return {status: true, descricao: ''}
-    };
-
-    async getOrCreateUserByGoogle(userInfo: any): Promise<string> {
-        return ''
-    };
-
+export interface IUserService {
+  authenticateUser(email: string, password: string): Promise<{ success: boolean; user?: User; message: string }>;
+  createAccessTokenForUser(userId: number, email: string): Promise<string>;
+  getOrCreateUserByGoogle(googleUserInfo: { id: string; email: string; name: string }): Promise<User>;
 }
-
-const userRepository = new UserRepository();
-
-export const userService = new UserService(userRepository);

@@ -5,7 +5,7 @@ export default async function authRoutes(
   fastify: FastifyInstance,
   options: FastifyPluginOptions
 ) {
-  // Login tradicional
+
   fastify.post('/token', {
     schema: {
       body: {

@@ -2,16 +2,16 @@ import { User } from '../../entities/User';
 import { LoginDTO, GoogleLoginDTO, AuthResponse } from '../../entities/Auth';
 import { IUserRepository } from '../../repositories/UserRepository';
 import { ILoginRepository } from '../../repositories/LoginRepository';
-import { PasswordService } from '../../services/PasswordService';
-import { AuthService } from '../../services/AuthService';
+import { IPasswordService } from '../../services/PasswordService';
+import { IAuthService } from '../../services/AuthService';
 import { InvalidCredentialsError } from '../../../shared/errors/UserErrors';
 
 export class AuthUseCase {
   constructor(
     private userRepository: IUserRepository,
     private loginRepository: ILoginRepository,
-    private passwordService: PasswordService,
-    private authService: AuthService
+    private passwordService: IPasswordService,
+    private authService: IAuthService
   ) {}
 
   // Login tradicional
