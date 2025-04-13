@@ -8,6 +8,7 @@ export default async function authRoutes(
 
   fastify.post('/token', {
     schema: {
+      tags: ['auth'],
       body: {
         type: 'object',
         required: ['email', 'password'],
@@ -22,12 +23,16 @@ export default async function authRoutes(
 
   // Obter URL de autenticação do Google
   fastify.get('/login/google', {
+    schema: {
+      tags: ['auth']
+    },
     handler: authController.getGoogleAuthUrl.bind(authController)
   });
 
   // Callback do Google - suporta tanto código de autorização quanto ID token
   fastify.post('/callback', {
     schema: {
+      hide: true,
       body: {
         type: 'object',
         properties: {

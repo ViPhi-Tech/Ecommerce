@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-import { userController} from "../../config/dependencies";
+import { userController } from "../../config/dependencies";
 import { authenticate, checkRole } from "../middlewares/authMiddleware";
+
 
 // Transformando em um plugin Fastify
 export default async function userRoutes(
@@ -10,6 +11,7 @@ export default async function userRoutes(
   // Criar usuário
   fastify.post('/create', {
     schema: {
+      tags: ['user'],
       body: {
         type: 'object',
         required: ['fullName', 'email', 'password'],
@@ -34,6 +36,8 @@ export default async function userRoutes(
   // Obter todos os usuários
   fastify.get('/', {
     schema: {
+      hidden: true,
+      tags: ['user'],
       querystring: {
         type: 'object',
         properties: {
@@ -41,12 +45,14 @@ export default async function userRoutes(
         }
       }
     },
+    preValidation: [authenticate],
     handler: userController.getAll.bind(userController)
   });
 
   // Obter usuário por ID
-  fastify.get('/:id', {
+  fastify.get<{ Params: { id: string } }>('/:id', {
     schema: {
+      tags: ['user'],
       params: {
         type: 'object',
         required: ['id'],
@@ -55,12 +61,14 @@ export default async function userRoutes(
         }
       }
     },
+    preValidation: [authenticate],
     handler: userController.getById.bind(userController)
   });
 
   // Atualizar usuário
-  fastify.put('/:id', {
+  fastify.put<{ Params: { id: string } }>('/:id', {
     schema: {
+      tags: ['user'],
       params: {
         type: 'object',
         required: ['id'],
@@ -89,12 +97,14 @@ export default async function userRoutes(
         }
       }
     },
+    preValidation: [authenticate],
     handler: userController.update.bind(userController)
   });
 
   // Excluir usuário
-  fastify.delete('/:id', {
+  fastify.delete<{ Params: { id: string } }>('/:id', {
     schema: {
+      tags: ['user'],
       params: {
         type: 'object',
         required: ['id'],
@@ -103,6 +113,7 @@ export default async function userRoutes(
         }
       }
     },
+    preValidation: [authenticate],
     handler: userController.delete.bind(userController)
   });
 }

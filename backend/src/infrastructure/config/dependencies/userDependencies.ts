@@ -1,4 +1,3 @@
-// backend/src/infrastructure/config/userDependencies.ts
 import { prisma } from '../../database/prismaClient';
 import { UserRepository } from '../../database/repositories/UserRepository';
 import { LoginRepository } from '../../database/repositories/LoginRepository';

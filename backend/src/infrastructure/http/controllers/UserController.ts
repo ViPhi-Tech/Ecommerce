@@ -6,6 +6,8 @@ import { DeleteUserUseCase } from '../../../domain/use-cases/user/DeleteUserUseC
 import { CreateUserDTO, UpdateUserDTO } from '../../../shared/dtos/User.dto';
 import { UpdateLoginDTO } from '../../../shared/dtos/Login.dto';
 import { EmailAlreadyExistsError, UserNotFoundError } from '../../../shared/errors/UserErrors';
+import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
+import { HTTP_STATUS} from "../../../shared/types/httpStatus";
 
 export class UserController {
   constructor(
@@ -21,7 +23,7 @@ export class UserController {
       
       const user = await this.createUserUseCase.execute(userData);
 
-      return reply.code(201).send({
+      return reply.code(HTTP_STATUS.API_STATUS_CREATED).send({
         id: user.id,
         full_name: user.fullName,
         is_active: user.isActive,
@@ -29,11 +31,11 @@ export class UserController {
       });
     } catch (error) {
       if (error instanceof EmailAlreadyExistsError) {
-        return reply.code(409).send({ message: error.message });
+        return reply.code(HTTP_STATUS.API_STATUS_CONFLICT).send({ message: error.message });
       }
       
       console.error(error);
-      return reply.code(500).send({ message: 'Internal server error' });
+      return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ message: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
     }
   }
 

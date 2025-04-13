@@ -8,23 +8,23 @@ export class ProductRepository implements IProductRepository {
     }
 
     async create(data: ProductCreateDTO): Promise<Product> {
-        return this.prisma.product.create({
+        return await this.prisma.product.create({
             data
         });
     }
 
     async findAll(): Promise<Product[]> {
-        return this.prisma.product.findMany();
+        return await this.prisma.product.findMany();
     }
 
     async findById(id: number): Promise<Product | null> {
-        return this.prisma.product.findUnique({
+        return await this.prisma.product.findUnique({
             where: { id }
         });
     }
 
     async update(id: number, data: Partial<ProductDTO>): Promise<Product> {
-        return this.prisma.product.update({
+        return await this.prisma.product.update({
             where: { id },
             data
         })
