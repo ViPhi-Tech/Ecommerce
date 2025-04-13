@@ -14,14 +14,14 @@ export default async function userRoutes(
         type: 'object',
         required: ['fullName', 'email', 'password'],
         properties: {
-          full_name: { type: 'string' },
+          fullName: { type: 'string' },
           isActive: { type: 'boolean' },
           login: {
             type: 'object',
             required: ['email', 'password'],
             properties: {
               email: { type: 'string', format: 'email' },
-              google_id: { type: 'string' },
+              googleId: { type: 'string' },
               password: { type: 'string', minLength: 6 }
             }
           }
@@ -74,7 +74,7 @@ export default async function userRoutes(
           user: {
             type: 'object',
             properties: {
-              full_name: { type: 'string' },
+              fullName: { type: 'string' },
               isActive: { type: 'boolean' }
             }
           },
@@ -82,7 +82,7 @@ export default async function userRoutes(
             type: 'object',
             properties: {
               email: { type: 'string', format: 'email' },
-              google_id: { type: 'string' },
+              googleId: { type: 'string' },
               password: { type: 'string', minLength: 6 }
             }
           }

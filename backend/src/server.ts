@@ -2,7 +2,7 @@ import fastify from 'fastify';
 import cookie from '@fastify/cookie';
 import cors from '@fastify/cors';
 import handleRoutes from "./infrastructure/http/routes/HandleRoutes";
-import cache from './infrastructure/plugins/cache';
+import swagger from './infrastructure/plugins/swagger';
 import dotenv from 'dotenv';
 import path from 'path';
 
@@ -14,6 +14,7 @@ server.register(cors, {
   origin: ['http://localhost:3000', 'http://localhost:4200'],
   credentials: true
 });
+server.register(swagger);
 server.register(cookie)
 // server.register(jwt);
 // server.register(cache);
