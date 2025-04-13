@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-import { userController } from '../../config/dependencies/userDependencies';
+import { userController} from "../../config/dependencies";
+import { authenticate, checkRole } from "../middlewares/authMiddleware";
 
 // Transformando em um plugin Fastify
 export default async function userRoutes(
@@ -11,10 +12,10 @@ export default async function userRoutes(
     schema: {
       body: {
         type: 'object',
-        required: ['full_name', 'email', 'password'],
+        required: ['fullName', 'email', 'password'],
         properties: {
           full_name: { type: 'string' },
-          is_active: { type: 'boolean' },
+          isActive: { type: 'boolean' },
           login: {
             type: 'object',
             required: ['email', 'password'],
@@ -74,7 +75,7 @@ export default async function userRoutes(
             type: 'object',
             properties: {
               full_name: { type: 'string' },
-              is_active: { type: 'boolean' }
+              isActive: { type: 'boolean' }
             }
           },
           login: {

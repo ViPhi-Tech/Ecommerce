@@ -1,6 +1,6 @@
-import { IUserRepository } from '../../repositories/UserRepository';
-import { ILoginRepository } from '../../repositories/LoginRepository';
-import { UserNotFoundError } from '../../../shared/errors/UserErrors';
+import { IUserRepository } from '../../repositories/IUserRepository';
+import { ILoginRepository } from '../../repositories/ILoginRepository';
+import { UserNotFoundError, NullValueError } from '../../../shared/errors/UserErrors';
 
 export class DeleteUserUseCase {
   constructor(
@@ -16,12 +16,15 @@ export class DeleteUserUseCase {
     }
 
     // Armazenar o login_id antes de excluir o usuário
-    const loginId = user.login_id;
+    const loginId = user.loginId;
 
     // Excluir o usuário
     await this.userRepository.delete(id);
 
     // Excluir o login associado
+    if (loginId === null) {
+      throw new NullValueError('loginId');
+    }
     await this.loginRepository.delete(loginId);
   }
 }

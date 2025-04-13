@@ -1,11 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import { Login } from '../../../domain/entities/Login';
-import { ILoginRepository } from '../../../domain/repositories/LoginRepository';
+import { ILoginRepository } from '../../../domain/repositories/ILoginRepository';
 
 export class LoginRepository implements ILoginRepository {
   constructor(private prisma: PrismaClient) {}
 
-  async create(data: { email: string; google_id?: string; hashed_password: string }): Promise<Login> {
+  async create(data: { email: string; googleId?: string; hashedPassword: string }): Promise<Login> {
     return this.prisma.login.create({
       data
     });
@@ -25,7 +25,7 @@ export class LoginRepository implements ILoginRepository {
 
   async findByGoogleId(googleId: string): Promise<Login | null> {
     return this.prisma.login.findUnique({
-      where: { google_id: googleId }
+      where: { googleId: googleId }
     });
   }
 

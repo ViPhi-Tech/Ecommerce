@@ -1,8 +1,9 @@
-import { User, UpdateUserDTO } from '../../entities/User';
-import { UpdateLoginDTO } from '../../entities/Login';
-import { IUserRepository } from '../../repositories/UserRepository';
-import { ILoginRepository } from '../../repositories/LoginRepository';
-import { IPasswordService } from '../../services/PasswordService';
+import { User } from '../../entities/User';
+import { UpdateUserDTO } from '../../../shared/dtos/User.dto';
+import { UpdateLoginDTO } from '../../../shared/dtos/Login.dto';
+import { IUserRepository } from '../../repositories/IUserRepository';
+import { ILoginRepository } from '../../repositories/ILoginRepository';
+import { IPasswordService } from '../../services/IPasswordService';
 import { UserNotFoundError, EmailAlreadyExistsError } from '../../../shared/errors/UserErrors';
 
 export class UpdateUserUseCase {
@@ -24,30 +25,28 @@ export class UpdateUserUseCase {
       // Verificar se o email já está em uso por outro login
       if (loginData.email) {
         const existingLogin = await this.loginRepository.findByEmail(loginData.email);
-        if (existingLogin && existingLogin.id !== user.login_id) {
+        if (existingLogin && existingLogin.id !== user.loginId) {
           throw new EmailAlreadyExistsError();
         }
       }
 
-      // Verificar se o google_id já está em uso por outro login
-      if (loginData.google_id) {
-        const existingGoogleLogin = await this.loginRepository.findByGoogleId(loginData.google_id);
-        if (existingGoogleLogin && existingGoogleLogin.id !== user.login_id) {
+      if (loginData.googleId) {
+        const existingGoogleLogin = await this.loginRepository.findByGoogleId(loginData.googleId);
+        if (existingGoogleLogin && existingGoogleLogin.id !== user.loginId) {
           throw new Error('Google ID already in use');
         }
       }
 
-      // Preparar dados de atualização do login
       const loginUpdateData: any = {};
       if (loginData.email) loginUpdateData.email = loginData.email;
-      if (loginData.google_id !== undefined) loginUpdateData.google_id = loginData.google_id;
+      if (loginData.googleId !== undefined) loginUpdateData.googleId = loginData.googleId;
       if (loginData.password) {
         loginUpdateData.hashed_password = await this.passwordService.hash(loginData.password);
       }
 
       // Atualizar login
       if (Object.keys(loginUpdateData).length > 0) {
-        await this.loginRepository.update(user.login_id, loginUpdateData);
+        await this.loginRepository.update(user.loginId ?? 0, loginUpdateData);
       }
     }
 

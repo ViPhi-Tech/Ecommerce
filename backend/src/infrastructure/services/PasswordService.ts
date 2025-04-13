@@ -1,5 +1,5 @@
 import bcrypt from 'bcrypt';
-import { IPasswordService } from '../../domain/services/PasswordService';
+import { IPasswordService } from '../../domain/services/IPasswordService';
 
 
 export class BcryptPasswordService implements IPasswordService {

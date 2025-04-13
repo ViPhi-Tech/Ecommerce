@@ -2,21 +2,8 @@ import { Login } from './Login';
 
 export interface User {
   id: number;
-  full_name: string;
-  is_active: boolean;
-  login_id: number;
-  login?: Login;
+  loginId: number | null;
+  fullName: string | null;  // Permite null
+  isActive: boolean;
+  companyId: number | null;
 }
-
-export type CreateUserDTO = {
-  full_name: string;
-  is_active?: boolean;
-  email: string;
-  google_id?: string;
-  password?: string;
-};
-
-export type UpdateUserDTO = Partial<{
-  full_name: string;
-  is_active: boolean;
-}>;

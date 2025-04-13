@@ -1,5 +1,5 @@
 import { User } from '../../entities/User';
-import { IUserRepository } from '../../repositories/UserRepository';
+import { IUserRepository } from '../../repositories/IUserRepository';
 import { UserNotFoundError } from '../../../shared/errors/UserErrors';
 
 export class GetUserUseCase {

@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 import { TokenPayload } from '../../domain/entities/Auth';
-import { IAuthService } from '../../domain/services/AuthService';
+import { IAuthService } from '../../domain/services/IAuthService';
 
 export class JwtGoogleAuthService implements IAuthService {
   private jwtSecret: string;

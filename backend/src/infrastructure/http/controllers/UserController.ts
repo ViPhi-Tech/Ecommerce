@@ -3,8 +3,8 @@ import { CreateUserUseCase } from '../../../domain/use-cases/user/CreateUserUseC
 import { GetUserUseCase } from '../../../domain/use-cases/user/GetUserUseCase';
 import { UpdateUserUseCase } from '../../../domain/use-cases/user/UpdateUserUseCase';
 import { DeleteUserUseCase } from '../../../domain/use-cases/user/DeleteUserUseCase';
-import { CreateUserDTO, UpdateUserDTO } from '../../../domain/entities/User';
-import { UpdateLoginDTO } from '../../../domain/entities/Login';
+import { CreateUserDTO, UpdateUserDTO } from '../../../shared/dtos/User.dto';
+import { UpdateLoginDTO } from '../../../shared/dtos/Login.dto';
 import { EmailAlreadyExistsError, UserNotFoundError } from '../../../shared/errors/UserErrors';
 
 export class UserController {
@@ -23,9 +23,9 @@ export class UserController {
 
       return reply.code(201).send({
         id: user.id,
-        full_name: user.full_name,
-        is_active: user.is_active,
-        login_id: user.login_id
+        full_name: user.fullName,
+        is_active: user.isActive,
+        login_id: user.loginId
       });
     } catch (error) {
       if (error instanceof EmailAlreadyExistsError) {

@@ -5,16 +5,15 @@ import userRoutes from './UserRoutes';
 export default async function handleRoutes(fastify: FastifyInstance) {
   // Registrar todas as rotas com o prefixo '/api'
   fastify.register(async (fastify) => {
-    // Registrar rotas de autenticação com prefixo '/auth'
     fastify.register(authRoutes, { prefix: '/auth' });
 
-    // Registrar rotas de usuário com prefixo '/users'
-    fastify.register(userRoutes, { prefix: '/user' });
-
-    // Rota raiz (agora acessível em /api/)
     fastify.get('/', async (request, reply) => {
-      return { message: 'Hello World' };
+      return { message: 'API funcionando!' };
     });
 
-  }, { prefix: '/api' }); // Prefixo global '/api'
+    fastify.register(userRoutes, { prefix: '/user' });
+
+    // Você pode adicionar outras rotas aqui conforme necessário
+
+  }, { prefix: '/api' });
 }

@@ -1,9 +1,9 @@
 import { User } from '../../entities/User';
-import { LoginDTO, GoogleLoginDTO, AuthResponse } from '../../entities/Auth';
-import { IUserRepository } from '../../repositories/UserRepository';
-import { ILoginRepository } from '../../repositories/LoginRepository';
-import { IPasswordService } from '../../services/PasswordService';
-import { IAuthService } from '../../services/AuthService';
+import { LoginDTO, GoogleLoginDTO, AuthResponse } from '../../../shared/dtos/Auth.dto';
+import { IUserRepository } from '../../repositories/IUserRepository';
+import { ILoginRepository } from '../../repositories/ILoginRepository';
+import { IPasswordService } from '../../services/IPasswordService';
+import { IAuthService } from '../../services/IAuthService';
 import { InvalidCredentialsError } from '../../../shared/errors/UserErrors';
 
 export class AuthUseCase {
@@ -25,7 +25,7 @@ export class AuthUseCase {
     // Verificar senha
     const isPasswordValid = await this.passwordService.compare(
       data.password,
-      login.hashed_password
+      login.hashedPassword ?? ''
     );
 
     if (!isPasswordValid) {
@@ -41,8 +41,8 @@ export class AuthUseCase {
     // Gerar token JWT
     const token = this.authService.generateToken({
       sub: user.id,
-      email: login.email,
-      name: user.full_name
+      email: login.email ?? '',
+      name: user.fullName ?? ''
     });
 
     return {
@@ -114,7 +114,7 @@ export class AuthUseCase {
       if (login) {
         // Se existe login com este email, atualizar o google_id
         login = await this.loginRepository.update(login.id, {
-          google_id: payload.sub
+          googleId: payload.sub
         });
         user = await this.userRepository.findByLoginId(login.id);
       } else {
@@ -126,15 +126,15 @@ export class AuthUseCase {
         // Criar login
         login = await this.loginRepository.create({
           email: payload.email,
-          google_id: payload.sub,
-          hashed_password: hashedPassword
+          googleId: payload.sub,
+          hashedPassword: hashedPassword ?? ''
         });
 
         // Criar usuário
         user = await this.userRepository.create({
-          full_name: payload.name || payload.email.split('@')[0],
-          is_active: true,
-          login_id: login.id
+          fullName: payload.name || payload.email.split('@')[0],
+          isActive: true,
+          loginId: login.id
         });
       }
     }
@@ -146,8 +146,8 @@ export class AuthUseCase {
     // Gerar token JWT
     const token = this.authService.generateToken({
       sub: user.id,
-      email: login.email,
-      name: user.full_name
+      email: login.email ?? '',
+      name: user.fullName ?? ''
     });
 
     return {

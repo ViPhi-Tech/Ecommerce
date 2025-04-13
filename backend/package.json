@@ -6,6 +6,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node src/server.ts"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -13,14 +16,15 @@
   "dependencies": {
     "@fastify/cookie": "^11.0.2",
     "@fastify/cors": "^11.0.0",
-    "@prisma/client": "^6.4.1",
+    "@prisma/client": "^6.5.0",
     "bcrypt": "^5.1.1",
     "dotenv": "^16.4.7",
     "fastify": "^5.2.1",
     "google-auth-library": "^9.15.1",
+    "ioredis": "^5.6.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "^8.13.3",
-    "prisma": "^6.4.1"
+    "prisma": "^6.5.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",

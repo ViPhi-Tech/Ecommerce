@@ -18,3 +18,12 @@ export class InvalidCredentialsError extends Error {
     this.name = 'InvalidCredentialsError';
   }
 }
+
+
+export class NullValueError extends Error {
+  constructor(fieldName: string) {
+    super(`The field ${fieldName} cannot be null or undefined`);
+    this.name = 'NullValueError';
+    Error.captureStackTrace(this, NullValueError); // Captura a stack trace, para facilitar o debug
+  }
+}

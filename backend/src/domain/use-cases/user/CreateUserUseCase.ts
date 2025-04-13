@@ -1,7 +1,8 @@
-import { User, CreateUserDTO } from '../../entities/User';
-import { IUserRepository } from '../../repositories/UserRepository';
-import { ILoginRepository } from '../../repositories/LoginRepository';
-import { IPasswordService } from '../../services/PasswordService';
+import { User } from '../../entities/User';
+import { CreateUserDTO} from "../../../shared/dtos/User.dto";
+import { IUserRepository } from '../../repositories/IUserRepository';
+import { ILoginRepository } from '../../repositories/ILoginRepository';
+import { IPasswordService } from '../../services/IPasswordService';
 import { EmailAlreadyExistsError } from '../../../shared/errors/UserErrors';
 
 export class CreateUserUseCase {
@@ -19,8 +20,8 @@ export class CreateUserUseCase {
     }
 
     // Verificar se já existe um login com o google_id fornecido (se houver)
-    if (data.google_id) {
-      const existingGoogleLogin = await this.loginRepository.findByGoogleId(data.google_id);
+    if (data.googleId) {
+      const existingGoogleLogin = await this.loginRepository.findByGoogleId(data.googleId);
       if (existingGoogleLogin) {
         throw new Error('Google ID already in use');
       }
@@ -34,15 +35,15 @@ export class CreateUserUseCase {
     // Criar login
     const login = await this.loginRepository.create({
       email: data.email,
-      google_id: data.google_id,
-      hashed_password: hashed_password || undefined
+      googleId: data.googleId,
+      hashedPassword: hashed_password || undefined
     });
 
     // Criar usuário
     return this.userRepository.create({
-      full_name: data.full_name,
-      is_active: data.is_active ?? true,
-      login_id: login.id
+      fullName: data.fullName,
+      isActive: data.isActive ?? true,
+      loginId: login.id
     });
   }
 }

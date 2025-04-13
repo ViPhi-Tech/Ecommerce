@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { AuthUseCase } from '../../../domain/use-cases/auth/AuthUseCase';
-import { LoginDTO, GoogleLoginDTO } from '../../../domain/entities/Auth';
+import { LoginDTO } from '../../../shared/dtos/Auth.dto';
 import { InvalidCredentialsError } from '../../../shared/errors/UserErrors';
 
 export class AuthController {
@@ -12,7 +12,6 @@ export class AuthController {
       
       const result = await this.authUseCase.login(loginData);
 
-      // Definir cookie com o token JWT
       if (result.token) {
         reply.setCookie('access_token', result.token, {
           httpOnly: true,

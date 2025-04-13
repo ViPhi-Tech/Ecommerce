@@ -1,18 +1,6 @@
 export interface Login {
   id: number;
-  email: string;
-  google_id?: string | null;
-  hashed_password: string;
+  email: string | null;
+  googleId?: string | null;
+  hashedPassword: string | null;
 }
-
-export type CreateLoginDTO = {
-  email: string;
-  google_id?: string;
-  hashed_password?: string | null;
-};
-
-export type UpdateLoginDTO = Partial<{
-  email: string;
-  google_id?: string;
-  password: string; // Senha em texto puro, será hasheada antes de salvar
-}>;
