@@ -21,6 +21,21 @@ export default async function authRoutes(
     handler: authController.login.bind(authController)
   });
 
+  fastify.post('/token/angular', {
+    schema: {
+      tags: ['auth'],
+      body: {
+        type: 'object',
+        required: ['email', 'password'],
+        properties: {
+          email: { type: 'string', format: 'email' },
+          password: { type: 'string', minLength: 1 }
+        }
+      }
+    },
+    handler: authController.loginAngular.bind(authController)
+  });
+
   // Obter URL de autenticação do Google
   fastify.get('/login/google', {
     schema: {

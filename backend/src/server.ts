@@ -11,7 +11,7 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const server = fastify({ logger: true });
 
 server.register(cors, {
-  origin: ['http://localhost:3000', 'http://localhost:4200'],
+  origin: ['http://localhost:3000', 'http://localhost:4200', 'http://127.0.0.1:4200'],
   credentials: true
 });
 server.register(swagger);
@@ -24,7 +24,7 @@ server.register(handleRoutes);
 // Iniciar o servidor
 const start = async () => {
   try {
-    await server.listen({ port: 8000 });
+    await server.listen({ port: 8000, host: 'localhost' });
     console.log('Servidor rodando em http://localhost:8000');
   } catch (err) {
     server.log.error(err);

@@ -9,14 +9,13 @@ export class AuthController {
   async login(request: FastifyRequest, reply: FastifyReply) {
     try {
       const loginData = request.body as LoginDTO;
-      
       const result = await this.authUseCase.login(loginData);
 
       if (result.token) {
         reply.setCookie('access_token', result.token, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === 'production',
-          sameSite: 'lax',
+          secure: true,
+          sameSite: 'none',
           path: '/'
         });
       }
@@ -33,7 +32,34 @@ export class AuthController {
         });
       }
       
-      console.error(error);
+      return reply.code(500).send({
+        status: false,
+        descricao: 'Erro interno do servidor'
+      });
+    }
+  }
+
+  async loginAngular(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const loginData = request.body as LoginDTO;
+      const result = await this.authUseCase.login(loginData);
+
+      if (result.token) {
+        return reply.code(200).send({
+          status: result.status,
+          descricao: result.descricao,
+          accessToken: result.token
+        });
+      }
+
+    } catch (error) {
+      if (error instanceof InvalidCredentialsError) {
+        return reply.code(401).send({
+          status: false,
+          descricao: error.message
+        });
+      }
+      
       return reply.code(500).send({
         status: false,
         descricao: 'Erro interno do servidor'
