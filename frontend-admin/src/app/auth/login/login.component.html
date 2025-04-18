@@ -1,0 +1,56 @@
+<div class="grid min-h-svh lg:grid-cols-2">
+  <div class="flex flex-col gap-4 p-6 md:p-10">
+    <div class="flex flex-1 items-center justify-center">
+      <div class="w-full max-w-xs">
+        <form [formGroup]="form" class="flex flex-col gap-6">
+          <div class="flex flex-col items-center gap-2 text-center">
+            <h1 class="text-2xl font-bold">Acesse sua conta</h1>
+            <p class="text-balance text-sm">
+              Digite seu e-mail abaixo para entrar na sua conta to login to your account
+            </p>
+          </div>
+          <div class="grid gap-6">
+            <div class="grid gap-2">
+              <fuse-input
+                label="Email"
+                placeholder="m@examplo.com"
+                [control]="form.get('email')"
+                errorMessage="Email inválido"
+              />
+            </div>
+            <div class="grid gap-2">
+              <fuse-input
+                label="Senha"
+                placeholder="********"
+                type="password"
+                [control]="form.get('password')"
+                errorMessage="Senha inválida"
+              />
+            </div>
+            <p-button [loading]="loading()" [disabled]="form.invalid" size="small" (onClick)="onSubmit()" label="Acessar" styleClass="w-full"/>
+            <div
+              class="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border"
+            >
+              <span
+                class="relative z-10 bg-white dark:bg-container-background px-2">
+                Ou
+              </span>
+            </div>
+
+          </div>
+          <div class="text-center text-sm">
+            Não tem uma conta?
+            <a href="#" class="underline underline-offset-4">Cadastre-se</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="relative hidden bg-muted lg:block">
+    <img
+      alt="Image"
+      class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+      src="https://g66knp9qlv84vs28z.lite.vusercontent.net/placeholder.svg"
+    />
+  </div>
+</div>

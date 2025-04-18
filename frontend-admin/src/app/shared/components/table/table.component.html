@@ -1,0 +1,87 @@
+<p-table
+  #dt2
+  [value]="data()"
+  dataKey="id"
+  [rows]="10"
+  [rowsPerPageOptions]="[10, 25, 50]"
+  [loading]="loading()"
+  [showLoader]="false"
+  [paginator]="true"
+  [globalFilterFields]="globalFilterFields()"
+  [tableStyle]="{ 'min-width': '75rem' }"
+>
+  <ng-template #caption>
+    <div class="flex justify-between items-center">
+      <div>
+        <ng-content select="[data-headerFilter]"></ng-content>
+      </div>
+
+      <div class="flex gap-2">
+        <p-iconfield class="small" iconPosition="left">
+          <p-inputicon class="pi pi-search" />
+          <input
+            pInputText
+            pSize="small"
+            type="text"
+            (input)="search($event, dt2)"
+            placeholder="Pesquisar"
+          />
+        </p-iconfield>
+
+        @for (button of config().headerButtons; track $index) {
+          @if (button?.visible !== false) {
+            <p-button
+              [label]="button?.label"
+              [icon]="button?.icon"
+              [class]="button?.class"
+              [styleClass]="button?.styleClass"
+              [variant]="button?.outline ? 'outlined' : undefined"
+              (click)="button?.action()"
+              size="small"
+            >
+            </p-button>
+          }
+        }
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #header>
+    <tr>
+      @for (column of config().columns; track $index) {
+        <th>{{ column?.caption }}</th>
+      }
+    </tr>
+  </ng-template>
+  <ng-template #body let-product>
+    <tr>
+      @for (column of config().columns; track $index) {
+        <td>{{ product?.[column?.field || ''] }}</td>
+      }
+    </tr>
+  </ng-template>
+  <ng-template #loadingbody let-columns="columns">
+    @for (i of [1, 2, 3, 4, 5]; track $index) {
+      <tr style="height: 46px">
+        @for (col of config().columns; track $index) {
+          <td>
+            <p-skeleton
+              [ngStyle]="{
+                width:
+                  $index % 2 === 0
+                    ? col.field === 'year'
+                      ? '30%'
+                      : '40%'
+                    : '60%',
+              }"
+            />
+          </td>
+        }
+      </tr>
+    }
+  </ng-template>
+  <ng-template #emptymessage>
+    <tr>
+      <td colspan="9000">{{ config().emptyMessage }}</td>
+    </tr>
+  </ng-template>
+</p-table>

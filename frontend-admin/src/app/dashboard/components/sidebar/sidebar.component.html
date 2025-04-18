@@ -1,0 +1,57 @@
+<nav
+  class="fixed h-full inset-y-0 left-0 z-[70] w-64 bg-white dark:bg-container-background transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static lg:w-64 border-r border-gray-200 dark:border-[#1F1F23] -translate-x-full"
+>
+  <div class="h-full flex flex-col">
+    <!-- Exemplo de logo -->
+    <a
+      href="https://kokonutui.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="h-16 px-6 flex items-center border-b border-gray-200 dark:border-[#1F1F23]"
+    >
+      <div class="flex items-center gap-3">
+        <img
+          alt="Acme"
+          width="32"
+          height="32"
+          class="flex-shrink-0 hidden dark:block"
+          src="https://kokonutui.com/logo.svg"
+        />
+        <img
+          alt="Acme"
+          width="32"
+          height="32"
+          class="flex-shrink-0 block dark:hidden"
+          src="https://kokonutui.com/logo-black.svg"
+        />
+        <span
+          class="text-lg font-semibold hover:cursor-pointer text-gray-900 dark:text-white"
+          >KokonutUI</span
+        >
+      </div>
+    </a>
+
+    <!-- Menu dinâmico -->
+    <fuse-menu />
+
+    <!-- Rodapé do menu -->
+    <div class="px-4 py-4 border-t border-gray-200 dark:border-[#1F1F23]">
+      <div class="space-y-1">
+        <a
+          href="#"
+          class="flex items-center px-3 py-2 text-sm rounded-md transition-colors text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#1F1F23]"
+        >
+          <ng-icon size="16" name="lucideSettings" class="mr-3" />
+          Settings
+        </a>
+        <a
+          href="#"
+          class="flex items-center px-3 py-2 text-sm rounded-md transition-colors text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#1F1F23]"
+        >
+          <ng-icon size="16" name="lucideCircleHelp" class="mr-3" />
+          Help
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>

@@ -1,0 +1,17 @@
+:host {
+  .label-position.left {
+    text-align: center;
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    align-items: center !important;
+    gap: 1rem !important;
+
+    label {
+      text-align: right !important;
+    }
+
+    p-datepicker {
+      grid-column: span 3 / span 3 !important;
+    }
+  }
+}

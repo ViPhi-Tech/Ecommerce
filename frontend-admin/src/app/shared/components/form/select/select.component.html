@@ -1,0 +1,23 @@
+<div class="w-full label-position {{ labelPosition() }}">
+  @if (label()) {
+    <label
+      for="icondisplay"
+      class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-right"
+    >
+      {{ label() }}
+    </label>
+  }
+  <p-select
+    [options]="items()"
+    [size]="size()"
+    [formControl]="control()"
+    [optionLabel]="labelRef()"
+    [optionValue]="valueRef()"
+    [placeholder]="placeholder()"
+    [filter]="true"
+    [filterBy]="labelRef()"
+    appendTo="body"
+    [class]="addictionalPrimeClass()"
+    [styleClass]="addictionalClass()"
+  />
+</div>

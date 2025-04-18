@@ -1,0 +1,164 @@
+<div class="w-full h-full border-l bg-background">
+  <div class="flex h-full flex-col">
+    <div class="p-4 border-b">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-medium">Carrinho</h2>
+        <div
+          class="flex items-center gap-1 rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary"
+        >
+          @if (cartStore.quantityItems() === 1) {
+            <span class="text-xs font-medium">1 item</span>
+          } @else {
+            <span class="text-xs font-medium"
+              >{{ cartStore.quantityItems() }} itens</span
+            >
+          }
+        </div>
+      </div>
+    </div>
+    <div
+      class="relative overflow-hidden flex-1 p-4"
+      style="
+        position: relative;
+        --radix-scroll-area-corner-width: 0px;
+        --radix-scroll-area-corner-height: 0px;
+      "
+    >
+      <div
+        class="h-full w-full rounded-[inherit]"
+        style="overflow: hidden scroll"
+      >
+        <div style="min-width: 100%; display: table">
+          <div class="space-y-1">
+            @for (item of cartStore.cartItems(); track $index) {
+              <div>
+                <div class="flex items-start gap-4 py-4">
+                  <div
+                    class="relative h-16 w-16 overflow-hidden rounded-md bg-muted"
+                  >
+                    <img
+                      alt="Tênis Casual"
+                      loading="lazy"
+                      decoding="async"
+                      data-nimg="fill"
+                      class="object-cover"
+                      src="/placeholder.svg?height=200&amp;width=200"
+                      style="
+                        position: absolute;
+                        height: 100%;
+                        width: 100%;
+                        inset: 0px;
+                        color: transparent;
+                      "
+                    />
+                  </div>
+                  <div class="flex flex-1 flex-col">
+                    <div class="flex justify-between">
+                      <h4 class="font-medium">{{ item.name }}</h4>
+                      <button
+                        (click)="removeItem(item.id)"
+                        class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-6 w-6 text-muted-foreground"
+                      >
+                        x
+                      </button>
+                    </div>
+                    <div class="mt-1 text-sm text-muted-foreground">
+                      @if (item.discountPercent) {
+                        <!-- Preço com desconto -->
+                        <span class="text-sm font-medium">
+                          {{
+                            item.price -
+                              (item.price * item.discountPercent) / 100
+                              | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+                          }}
+                        </span>
+                        <!-- Preço original riscado -->
+                        <span
+                          class="text-sm line-through ml-2 text-muted-foreground"
+                        >
+                          {{
+                            item.price
+                              | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+                          }}
+                        </span>
+                      } @else {
+                        <!-- Apenas o preço normal quando não há desconto -->
+                        <span class="text-sm">
+                          {{
+                            item.price
+                              | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+                          }}
+                        </span>
+                      }
+                    </div>
+                    <div class="mt-2 flex items-center">
+                      <button
+                        (click)="minusItemQuantity(item.id)"
+                        class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-7 w-7 rounded-full"
+                      >
+                        -</button
+                      ><span class="w-8 text-center text-sm">{{
+                        item.quantity
+                      }}</span
+                      ><button
+                        (click)="plusItemQuantity(item.id)"
+                        class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-7 w-7 rounded-full"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  data-orientation="horizontal"
+                  role="none"
+                  class="shrink-0 bg-border h-[1px] w-full"
+                ></div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="border-t p-4">
+      <div class="space-y-1.5">
+        <div class="flex justify-between">
+          <span class="text-sm">Subtotal</span
+          ><span class="text-sm font-medium">{{
+            cartStore.subTotal()
+              | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+          }}</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-sm">Frete</span>
+          @if (cartStore.frete() === 0) {
+            <span class="text-sm font-medium">Grátis</span>
+          } @else {
+            <span class="text-sm font-medium"
+              >{{
+                cartStore.frete()
+                  | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+              }}
+            </span>
+          }
+        </div>
+        <div
+          data-orientation="horizontal"
+          role="none"
+          class="shrink-0 bg-border h-[1px] w-full my-2"
+        ></div>
+        <div class="flex justify-between">
+          <span class="text-base font-medium">Total</span
+          ><span class="text-base font-medium">{{
+            cartStore.total() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+          }}</span>
+        </div>
+      </div>
+      <p-button
+        styleClass="w-full mt-5"
+        label="Finalizar Compra"
+        icon="pi pi-check"
+      />
+    </div>
+  </div>
+</div>

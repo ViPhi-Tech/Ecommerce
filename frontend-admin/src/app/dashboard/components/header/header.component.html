@@ -1,0 +1,64 @@
+<header class="h-16 border-b border-gray-200 dark:border-[#1F1F23]">
+  <nav
+    class="px-3 sm:px-6 flex items-center justify-between bg-white dark:bg-container-background border-b border-gray-200 dark:border-[#1F1F23] h-full"
+  >
+    <div
+      class="font-medium text-sm hidden sm:flex items-center space-x-1 truncate max-w-[300px]"
+    >
+      @for (item of breadcrumb; track $index) {
+        <div class="flex items-center">
+          {{ item }}
+        </div>
+        @if ($index < breadcrumb.length - 1) {
+          <ng-icon
+            name="lucideChevronRight"
+            class="text-gray-400 dark:text-gray-300"
+          ></ng-icon>
+        }
+      }
+    </div>
+    <div class="flex items-center gap-2 sm:gap-4 ml-auto sm:ml-0">
+      <button
+        type="button"
+        class="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-[#1F1F23] rounded-full transition-colors flex items-center justify-center"
+      >
+        <ng-icon
+          name="lucideBell"
+          class="text-xl text-gray-600 dark:text-gray-300 transition-all"
+        />
+      </button>
+      <button
+        (click)="toggleDarkMode()"
+        class="relative cursor-pointer p-2 hover:bg-gray-100 dark:hover:bg-[#1F1F23] rounded-full transition-colors flex items-center justify-center"
+      >
+        <div class="flex dark:hidden">
+          <ng-icon
+            name="lucideSun"
+            class="text-xl text-gray-600 dark:text-gray-300 transition-all"
+          />
+        </div>
+        <div class="hidden dark:flex">
+          <ng-icon
+            name="lucideMoon"
+            class="text-xl text-gray-600 dark:text-gray-300 transition-all"
+          />
+        </div>
+
+        <span class="sr-only">Toggle theme</span>
+      </button>
+      <button type="button" class="focus:outline-none">
+        <img
+          alt="User avatar"
+          loading="lazy"
+          width="28"
+          height="28"
+          decoding="async"
+          data-nimg="1"
+          class="rounded-full ring-2 ring-gray-200 dark:ring-[#2B2B30] sm:w-8 sm:h-8 cursor-pointer"
+          src="https://ferf1mheo22r9ira.public.blob.vercel-storage.com/avatar-01-n0x8HFv8EUetf9z6ht0wScJKoTHqf8.png"
+          style="color: transparent"
+        />
+      </button>
+    </div>
+  </nav>
+</header>

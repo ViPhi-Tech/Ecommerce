@@ -1,0 +1,18 @@
+<div class="overflow-y-auto py-4 px-4 space-y-6">
+  @for (group of menu; track $index) {
+    <div>
+      <div>
+        <div
+          class="px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400"
+        >
+          {{ group.groupTitle }}
+        </div>
+        <div>
+          @for (item of group?.items; track $index) {
+            <fuse-menu-item [item]="item" />
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

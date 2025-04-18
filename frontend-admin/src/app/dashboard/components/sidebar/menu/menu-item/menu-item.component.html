@@ -1,0 +1,26 @@
+<a
+  (onmouseenter)="onMouseEnter()"
+  (onmouseleave)="onMouseLeave()"
+  (click)="toggleMenu(!item().visible)"
+  routerLinkActive="text-gray-900 dark:text-white bg-gray-50 dark:bg-[#1F1F23]"
+  [routerLink]="item().route"
+  class="flex items-center px-3 py-2 text-sm rounded-md transition-colors text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#1F1F23] {{
+    addictionalClass()
+  }}"
+>
+  <ng-icon size="16" [name]="item().icon" class="mr-3" />
+  {{ item().label }}
+
+  @if (item().items?.length) {
+    <ng-icon size="16" class="ml-auto" name="matArrowDropDownOutline" />
+  }
+</a>
+@if (item().items?.length) {
+  <div [@heightAnimation]="item().visible ? 'in' : 'out'">
+    @for (item of item().items; track $index) {
+      <div>
+        <fuse-menu-item addictionalClass="pl-7" [item]="item" />
+      </div>
+    }
+  </div>
+}

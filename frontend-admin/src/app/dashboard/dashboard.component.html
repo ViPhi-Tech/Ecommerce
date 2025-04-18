@@ -1,0 +1,12 @@
+<div class="flex h-screen layout-wrapper">
+  <fuse-logo />
+  <fuse-sidebar />
+  <div class="w-full flex flex-1 flex-col">
+    <fuse-header />
+    <main class="flex-1 overflow-auto bg-white dark:bg-container-background">
+      <div class="space-y-4">
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+  </div>
+</div>

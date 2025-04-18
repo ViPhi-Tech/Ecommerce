@@ -1,0 +1,60 @@
+<div class="grid min-h-svh lg:grid-cols-2">
+  <div class="flex flex-col gap-4 p-6 md:p-10">
+    <div class="flex flex-1 items-center justify-center">
+      <div class="w-full max-w-xs">
+        <form class="flex flex-col gap-6">
+          <div class="flex flex-col items-center gap-2 text-center">
+            <h1 class="text-2xl font-bold">Crie sua conta</h1>
+            <p class="text-balance text-sm text-muted-foreground">
+              Preencha os campos abaixo para criar sua conta
+            </p>
+          </div>
+          <div class="grid gap-6">
+            <div class="grid gap-2">
+              <fuse-input 
+                label="Nome" 
+                placeholder="Seu nome completo" 
+              />
+            </div>
+            <div class="grid gap-2">
+              <fuse-input 
+                label="Email" 
+                placeholder="m@exemplo.com.br" 
+              />
+            </div>
+            <div class="grid gap-2">
+              <fuse-input 
+                label="Senha" 
+              />
+            </div>
+            <div class="grid gap-2">
+              <fuse-input 
+                label="Confirme a senha" 
+              />
+            </div>
+            <p-button label="Cadastrar" styleClass="w-full"/>
+            <div
+              class="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border"
+            >
+              <span
+                class="relative z-10 bg-white dark:bg-transparent px-2 text-muted-foreground"
+                >Ou</span>
+            </div>
+            
+          </div>
+          <div class="text-center text-sm">
+            Já possui uma conta?
+            <a href="#" class="underline underline-offset-4">Acesse aqui</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="relative hidden bg-muted lg:block">
+    <img
+      alt="Imagem"
+      class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+      src="https://g66knp9qlv84vs28z.lite.vusercontent.net/placeholder.svg"
+    />
+  </div>
+</div>

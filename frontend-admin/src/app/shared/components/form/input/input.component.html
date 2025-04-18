@@ -1,0 +1,57 @@
+<div class="w-full label-position {{ labelPosition() }}">
+  @if (label()) {
+    <label
+      [for]="idRef()"
+      class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-right"
+    >
+      {{ label() }}
+    </label>
+  }
+
+  @if (type() === 'text') {
+    <input
+      pInputText
+      [formControl]="control()"
+      class="{{ addictionalClass() }}"
+      [pSize]="size()"
+      [placeholder]="placeholder()"
+      [id]="idRef()"
+      [name]="idRef()"
+    />
+  }
+
+  @if (type() === 'number') {
+    <input
+      type="number"
+      pInputText
+      [formControl]="control()"
+      [pSize]="size()"
+      [placeholder]="placeholder()"
+      [id]="idRef()"
+      [name]="idRef()"
+      [step]="step()"
+    />
+  }
+
+  @if (type() === 'password') {
+    <p-password
+      [formControl]="control()"
+      styleClass="w-full"
+      [size]="size()"
+      [id]="idRef()"
+      [feedback]="feedback()"
+    />
+  }
+
+</div>
+
+@if (errorMessage() && control().invalid && (control().dirty || control().touched)) {
+  <p-message
+    severity="error"
+    icon="pi pi-times-circle"
+    styleClass="mt-2"
+    size="small"
+  >
+    {{ errorMessage() }}
+  </p-message>
+}

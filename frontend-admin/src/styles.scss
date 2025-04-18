@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'primeicons/primeicons.css';
+
+* {
+  font-family: 'Poppins', sans-serif;
+}
+
+:root {
+  input-background: #18181b;
+}
+
+:root[class='dark'] {
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md p-4 dark:text-white dark:bg-card-background;
+}
+
+.p-datatable.p-component {
+  background-color: transparent;
+
+  .p-datatable-header {
+    background-color: transparent;
+    border-top: 0;
+  }
+
+  .p-datatable-tbody > tr,
+  .p-datatable-tbody > tr > td,
+  .p-paginator.p-component {
+    background-color: transparent;
+  }
+}
+
+.dark {
+  textarea,
+  input,
+  p-select {
+    background-color: var(--input-background);
+  }
+}
+
+.p-iconfield.small {
+  .p-inputicon {
+    top: 43%;
+  }
+}
+
+.p-datatable-table {
+  border: 1px solid var(--p-datatable-body-cell-border-color);
+  border-radius: 5px !important;
+}
+
+.p-datatable-header {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  border: none !important;
+}
+
+.p-datatable-thead {
+  tr th:first-child {
+    border-radius: 5px 0 0 0 !important;
+  }
+
+  tr th:last-child {
+    border-radius: 0 5px 0 0 !important;
+  }
+}
+
+.p-inputtext {
+  width: 100%;
+}
+
+
+.ng-invalid.ng-touched {
+  & > .p-password {
+    input {
+      border-color: var(--p-inputtext-invalid-border-color);
+      color: var(--p-inputtext-invalid-border-color);
+      &::placeholder {
+        color: var(--p-inputtext-invalid-border-color);
+      }
+    }
+  }
+}
+
+input{
+  &.ng-touched.ng-invalid {
+    border-color: var(--p-inputtext-invalid-border-color);
+    color: var(--p-inputtext-invalid-border-color);
+    &::placeholder {
+      color: var(--p-inputtext-invalid-border-color);
+    }
+  }
+}

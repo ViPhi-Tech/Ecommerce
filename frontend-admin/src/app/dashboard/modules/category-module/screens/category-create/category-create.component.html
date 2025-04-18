@@ -1,0 +1,69 @@
+<p-drawer
+  #drawerRef
+  [header]="title()"
+  [visible]="visible()"
+  (onHide)="onCloseDrawer()"
+  position="right"
+  styleClass="!w-full md:!w-[80vw] lg:!w-[80vw]"
+>
+  <form class="flex flex-col gap-4">
+    <!-- Nome do Produto -->
+    <div class="flex flex-col gap-2">
+      <label for="name" class="font-medium">Nome</label>
+      <input
+        id="name"
+        type="text"
+        pInputText
+        name="name"
+        required
+        placeholder="Nome do Produto"
+      />
+    </div>
+    <!-- Descrição do Produto -->
+    <div class="flex flex-col gap-2">
+      <label for="description" class="font-medium">Descrição</label>
+      <textarea
+        id="description"
+        pTextarea
+        name="description"
+        required
+        placeholder="Descrição do Produto"
+        rows="4"
+      ></textarea>
+    </div>
+    <!-- Preço do Produto -->
+    <div class="flex flex-col gap-2">
+      <label for="price" class="font-medium">Preço</label>
+      <input
+        id="price"
+        type="number"
+        pInputText
+        name="price"
+        required
+        placeholder="Preço do Produto"
+      />
+    </div>
+  </form>
+
+  <ng-template #footer>
+    <div class="flex items-center gap-2">
+      <button
+        pButton
+        type="submit"
+        label="Cadastrar"
+        icon="pi pi-check"
+        class="w-full"
+        severity="success"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        class="w-full"
+        (click)="closeDrawer($event)"
+        severity="danger"
+      ></button>
+    </div>
+  </ng-template>
+</p-drawer>

@@ -1,0 +1,14 @@
+<div class="p-8">
+  <div class="pb-3">
+    <p class="text-xl">Lista de produtos</p>
+  </div>
+  <fuse-table [data]="products()" [config]="tableConfig()">
+    <ng-container data-headerFilter>
+      <fuse-select
+        addictionalPrimeClass="w-[200px]"
+        placeholder="Categorias"
+        [items]="categorias()"
+      />
+    </ng-container>
+  </fuse-table>
+</div>
