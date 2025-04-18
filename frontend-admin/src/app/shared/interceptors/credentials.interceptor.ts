@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 
 export function credentialsInterceptor(
   req: HttpRequest<unknown>,
-  next: HttpHandlerFn,
+  next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> {
   const newReq = req.clone({
     withCredentials: true,

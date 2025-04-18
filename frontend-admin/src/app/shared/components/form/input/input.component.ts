@@ -9,7 +9,12 @@ import { MessageModule } from 'primeng/message';
   selector: 'fuse-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
-  imports: [InputTextModule, ReactiveFormsModule, PasswordModule, MessageModule],
+  imports: [
+    InputTextModule,
+    ReactiveFormsModule,
+    PasswordModule,
+    MessageModule,
+  ],
 })
 export class InputComponent implements OnInit {
   control: InputSignal<any> = input(new FormControl());
@@ -25,7 +30,7 @@ export class InputComponent implements OnInit {
   feedback = input<boolean>(false);
   errorMessage = input<string>('');
 
-  idRef = signal("input_" + randomId());
+  idRef = signal('input_' + randomId());
 
   constructor() {}
 

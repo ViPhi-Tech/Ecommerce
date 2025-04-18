@@ -1,9 +1,6 @@
-<div class="p-5">
-  <div class="card">
-    <fuse-table
-      title="Lista de pedidos"
-      [data]="orders()"
-      [config]="tableConfig()"
-    />
+<div class="p-8">
+  <div class="pb-3">
+    <p class="text-xl">Lista de pedidos</p>
   </div>
+  <fuse-table [data]="orders()" [config]="tableConfig()" />
 </div>

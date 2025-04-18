@@ -42,6 +42,10 @@ export class CartStore {
 
   constructor() {}
 
+  public getCartData() {
+    return this.state();
+  }
+
   public setCartData(cartData: any) {
     this.state.set({
       ...cartData,

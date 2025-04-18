@@ -57,9 +57,4 @@ export class ProductSearchComponent implements OnInit {
       },
     ];
   }
-
-  selectProduct(product: any) {
-    this.cartStore.addItem(product?.value);
-    this.selectedProduct.setValue(null, { emitEvent: false });
-  }
 }

@@ -29,4 +29,9 @@ export class OrderCartComponent implements OnInit {
   minusItemQuantity(item: number | string) {
     this.cartStore.updateItemQuantity(item, -1, true);
   }
+
+  checkout() {
+    const cart = this.cartStore.getCartData();
+    console.log('cart', cart);
+  }
 }

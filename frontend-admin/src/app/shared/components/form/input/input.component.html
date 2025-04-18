@@ -42,10 +42,11 @@
       [feedback]="feedback()"
     />
   }
-
 </div>
 
-@if (errorMessage() && control().invalid && (control().dirty || control().touched)) {
+@if (
+  errorMessage() && control().invalid && (control().dirty || control().touched)
+) {
   <p-message
     severity="error"
     icon="pi pi-times-circle"

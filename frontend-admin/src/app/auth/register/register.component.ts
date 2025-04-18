@@ -6,7 +6,7 @@ import { FormModule } from '../../shared/components/form/form.module';
   selector: 'fuse-register',
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
-  imports: [ButtonModule, FormModule]
+  imports: [ButtonModule, FormModule],
 })
 export class RegisterComponent implements OnInit {
   constructor() {}

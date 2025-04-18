@@ -1,10 +1,6 @@
-<div class="p-5">
-  <div class="card">
-    <fuse-table
-      title="Lista de usuários"
-      [data]="users()"
-      [config]="tableConfig()"
-      [loading]="loading()"
-    />
+<div class="p-8">
+  <div class="pb-3">
+    <p class="text-xl">Lista de usuários</p>
   </div>
+  <fuse-table [data]="users()" [config]="tableConfig()" />
 </div>

@@ -1,30 +1,31 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environments } from '../../environments/environments';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { AuthResponse } from '../shared/interfaces/auth.interfaces';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
-  private http = inject(HttpClient)
+  private http = inject(HttpClient);
 
   apiUrl = environments?.apiUrl;
 
-  constructor() { }
+  constructor() {}
 
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post(`${this.apiUrl}auth/token/angular`, { email, password }) as Observable<AuthResponse>;
+    return this.http.post(`${this.apiUrl}auth/token/angular`, {
+      email,
+      password,
+    }) as Observable<AuthResponse>;
   }
-
 
   setToken(token: string, name = 'accessToken') {
     // setar o token no local storage
     localStorage.setItem(name, token);
   }
-
 
   // pegar o token do local storage
   getToken(name = 'accessToken'): string | null {
@@ -48,8 +49,6 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     const decodedToken = this.getDecodedToken();
-    console.log(decodedToken);
-
     if (decodedToken) {
       if (decodedToken && decodedToken['exp']) {
         const expirationDate = new Date(decodedToken['exp'] * 1000);

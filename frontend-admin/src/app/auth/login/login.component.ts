@@ -22,8 +22,8 @@ export class LoginComponent implements OnInit {
 
   form = this.formBuilder.group({
     email: ['', Validators.required],
-    password: ['', Validators.required]
-  })
+    password: ['', Validators.required],
+  });
 
   loading = signal(false);
 
@@ -40,15 +40,15 @@ export class LoginComponent implements OnInit {
       this.loading.set(true);
       this.authService.login(email!, password!).subscribe({
         next: (res: AuthResponse) => {
-          this.authService.setToken(res?.accessToken)
+          this.authService.setToken(res?.accessToken);
           this.router.navigate(['dashboard']);
         },
-        error: (err) => {
+        error: err => {
           console.error('Login failed', err);
         },
         complete: () => {
           this.loading.set(false);
-        }
+        },
       });
     }
   }
