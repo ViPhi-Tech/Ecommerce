@@ -2,10 +2,10 @@ import { prisma } from '../../database/prismaClient';
 import { UserRepository } from '../../database/repositories/UserRepository';
 import { LoginRepository } from '../../database/repositories/LoginRepository';
 import { BcryptPasswordService } from '../../services/PasswordService';
-import { CreateUserUseCase } from '../../../domain/use-cases/user/CreateUserUseCase';
-import { GetUserUseCase } from '../../../domain/use-cases/user/GetUserUseCase';
-import { UpdateUserUseCase } from '../../../domain/use-cases/user/UpdateUserUseCase';
-import { DeleteUserUseCase } from '../../../domain/use-cases/user/DeleteUserUseCase';
+import { CreateUserUseCase } from '../../../application/use-cases/user/CreateUserUseCase';
+import { GetUserUseCase } from '../../../application/use-cases/user/GetUserUseCase';
+import { UpdateUserUseCase } from '../../../application/use-cases/user/UpdateUserUseCase';
+import { DeleteUserUseCase } from '../../../application/use-cases/user/DeleteUserUseCase';
 import { UserController } from '../../http/controllers/UserController';
 
 // Repositories

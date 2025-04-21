@@ -1,8 +1,8 @@
-import { User } from '../../entities/User';
-import { CreateUserDTO} from "../../../shared/dtos/User.dto";
-import { IUserRepository } from '../../repositories/IUserRepository';
-import { ILoginRepository } from '../../repositories/ILoginRepository';
-import { IPasswordService } from '../../services/IPasswordService';
+import { User } from '../../../domain/entities/User';
+import { CreateUserDTO} from "../../../infrastructure/http/dto/User.dto";
+import { IUserRepository } from '../../../domain/repositories/IUserRepository';
+import { ILoginRepository } from '../../../domain/repositories/ILoginRepository';
+import { IPasswordService } from '../../../domain/services/IPasswordService';
 import { EmailAlreadyExistsError } from '../../../shared/errors/UserErrors';
 
 export class CreateUserUseCase {

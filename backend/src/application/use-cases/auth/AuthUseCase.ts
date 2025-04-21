@@ -1,9 +1,9 @@
-import { User } from '../../entities/User';
-import { LoginDTO, GoogleLoginDTO, AuthResponse } from '../../../shared/dtos/Auth.dto';
-import { IUserRepository } from '../../repositories/IUserRepository';
-import { ILoginRepository } from '../../repositories/ILoginRepository';
-import { IPasswordService } from '../../services/IPasswordService';
-import { IAuthService } from '../../services/IAuthService';
+import { User } from '../../../domain/entities/User';
+import { LoginDTO, GoogleLoginDTO, AuthResponse } from '../../../infrastructure/http/dto/Auth.dto';
+import { IUserRepository } from '../../../domain/repositories/IUserRepository';
+import { ILoginRepository } from '../../../domain/repositories/ILoginRepository';
+import { IPasswordService } from '../../../domain/services/IPasswordService';
+import { IAuthService } from '../../../domain/services/IAuthService';
 import { InvalidCredentialsError } from '../../../shared/errors/UserErrors';
 
 export class AuthUseCase {

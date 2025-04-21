@@ -7,5 +7,5 @@ export type CreateLoginDTO = {
   export type UpdateLoginDTO = Partial<{
     email: string;
     googleId?: string;
-    password: string; // Senha em texto puro, será hasheada antes de salvar
+    password: string;
   }>;

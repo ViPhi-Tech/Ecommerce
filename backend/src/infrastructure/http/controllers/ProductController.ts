@@ -1,14 +1,19 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { CreateProductUseCase } from "../../../domain/use-cases/product/CreateProductUseCase";
+import { CreateProductUseCase } from "../../../application/use-cases/product/CreateProductUseCase";
+import { UpdateStockUseCase } from "../../../application/use-cases/product/UpdateStockUseCase";
+
+import { FindByIdProductUseCase } from "../../../application/use-cases/product/FindByIdProductUseCase";
 import {ApiResponse} from "../../../shared/types/apiResponse";
-import { ProductCreateDTO } from "../../../shared/dtos/Product.dto";
+import {ProductCreateDTO, ProductID, ProductUpdateStock} from "../dto/Product.dto";
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 
 
 export class ProductController {
     constructor(
-        private createProductUseCase: CreateProductUseCase
+        private createProductUseCase: CreateProductUseCase,
+        private findProductByIdUseCase: FindByIdProductUseCase,
+        private updateStockUseCase: UpdateStockUseCase,
     ) {}
 
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
@@ -20,5 +25,30 @@ export class ProductController {
             console.log(error)
             return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false,  descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR});
         }
-    }
+    };
+
+
+    async findById(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try{
+            const ProductID = request.body as ProductID
+            const product = await this.findProductByIdUseCase.execute(ProductID)
+            return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: product})
+        } catch (error) {
+            console.log(error)
+            return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false,  descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR});
+        }
+
+    };
+
+
+    async updateStock(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try{
+            const stock = request.body as ProductUpdateStock
+            const data_stock = await this.updateStockUseCase.execute(stock)
+            return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_stock})
+        } catch (error) {
+            console.log(error)
+            return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false,  descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR});
+        }
+    };
 }

@@ -1,9 +1,9 @@
-import { User } from '../../entities/User';
-import { UpdateUserDTO } from '../../../shared/dtos/User.dto';
-import { UpdateLoginDTO } from '../../../shared/dtos/Login.dto';
-import { IUserRepository } from '../../repositories/IUserRepository';
-import { ILoginRepository } from '../../repositories/ILoginRepository';
-import { IPasswordService } from '../../services/IPasswordService';
+import { User } from '../../../domain/entities/User';
+import { UpdateUserDTO } from '../../../infrastructure/http/dto/User.dto';
+import { UpdateLoginDTO } from '../../../infrastructure/http/dto/Login.dto';
+import { IUserRepository } from '../../../domain/repositories/IUserRepository';
+import { ILoginRepository } from '../../../domain/repositories/ILoginRepository';
+import { IPasswordService } from '../../../domain/services/IPasswordService';
 import { UserNotFoundError, EmailAlreadyExistsError } from '../../../shared/errors/UserErrors';
 
 export class UpdateUserUseCase {

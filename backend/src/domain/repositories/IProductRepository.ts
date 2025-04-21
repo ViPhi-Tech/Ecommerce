@@ -1,11 +1,10 @@
-import { Product } from "../entities/Product";
-import {ProductCreateDTO, ProductDTO} from "../../shared/dtos/Product.dto";
+import { Product, Stock } from "../entities/Product";
 
 export interface IProductRepository {
-    create(data: ProductCreateDTO): Promise<Product>;
+    create(data: Product): Promise<Product>;
     findById(id: number): Promise<Product | null>;
     findAll(): Promise<Product[]>;
-    update(id: number, data: Partial<ProductDTO>): Promise<Product>;
+    update(id: number, data: Partial<Product>): Promise<Product>;
     delete(id: number): Promise<void>;
-    updateStock(sku: number, quantity: number): Promise<void>;
+    updateStock(sku: number, quantity: number, companyId?: number): Promise<Stock>;
 }
