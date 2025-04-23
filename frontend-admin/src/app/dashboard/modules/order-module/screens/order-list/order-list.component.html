@@ -1,6 +1,23 @@
 <div class="p-8">
   <div class="pb-3">
-    <p class="text-xl">Lista de pedidos</p>
+    <h1 class="text-3xl font-bold">Lista de pedidos</h1>
   </div>
   <fuse-table [data]="orders()" [config]="tableConfig()" />
 </div>
+
+<ng-template #productName let-product>
+  <div class="flex items-center">
+    <div class="flex items-center gap-3">
+      <img
+        [alt]="product?.name"
+        loading="lazy"
+        decoding="async"
+        data-nimg="1"
+        class="h-[40px] w-[40px] rounded-md"
+        src="https://kzmqjhjoo59803yt4ajr.lite.vusercontent.net/placeholder.svg?height=200&width=200"
+        style="color: transparent"
+      />
+      {{ product?.name }}
+    </div>
+  </div>
+</ng-template>

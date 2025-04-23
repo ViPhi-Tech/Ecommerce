@@ -1,3 +1,5 @@
+import { TemplateRef } from '@angular/core';
+
 export interface TableConfig {
   rowsPerPageOptions?: number[];
   rowsPerPage?: number;
@@ -15,6 +17,8 @@ export interface TableColumn {
   sortable?: boolean;
   filter?: boolean;
   customClass?: string;
+  actionButtons?: ActionButtons[];
+  template?: TemplateRef<any | null>;
 }
 
 export interface HeaderButton {
@@ -28,3 +32,23 @@ export interface HeaderButton {
   link?: unknown[] | string;
   action: () => void;
 }
+
+export interface ActionButtons {
+  icon: string;
+  iconType?: string; // e.g., "material", "font-awesome"
+  color?: string; // e.g., "primary", "accent", "warn"
+  tooltip: string;
+  show: (rowData: any) => boolean;
+  action: (rowData: any, rowIndex?: number) => void;
+}
+
+export const DEFAULT_TABLE_CONFIG: TableConfig = {
+  rowsPerPageOptions: [10, 20, 50],
+  rowsPerPage: 10,
+  paginator: true,
+  pageLinkSize: 5,
+  showCurrentPageReport: true,
+  emptyMessage: 'Nenhum registro encontrado',
+  columns: [],
+  headerButtons: [],
+};
