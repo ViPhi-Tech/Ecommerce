@@ -12,7 +12,7 @@ import { CartStore } from '../../../../store/cart.store';
   imports: [ButtonModule, SelectModule, ReactiveFormsModule, CurrencyPipe],
 })
 export class ProductListComponent implements OnInit {
-  private cartStore = inject(CartStore)
+  private cartStore = inject(CartStore);
 
   products: any[] | undefined;
 

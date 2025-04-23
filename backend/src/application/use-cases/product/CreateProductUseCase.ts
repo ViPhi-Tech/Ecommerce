@@ -1,4 +1,4 @@
-import { CreateProductInput } from "../../dto/product/CreateProductInput";
+// import { CreateProductInput } from "../../dto/product/CreateProductInput";
 import { Product } from "../../../domain/entities/Product";
 import { IProductRepository } from "../../../domain/repositories/IProductRepository";
 
@@ -8,7 +8,7 @@ export class CreateProductUseCase {
   ) {
 
   }
-  async execute(input: CreateProductInput): Promise<Product> {
+  async execute(input: any): Promise<Product> {
 
     return await this.productRepository.create({name:input.name, ean:input.ean, price:input.price, sku:input.sku, companyId: input.companyId ?? null});
   }
