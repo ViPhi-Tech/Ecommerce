@@ -7,6 +7,7 @@ import { MessageModule } from 'primeng/message';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { AuthResponse } from '../../shared/interfaces/auth.interfaces';
+import { translate } from '../../shared/constants/deParaTextos';
 
 @Component({
   selector: 'fuse-login',
@@ -25,7 +26,9 @@ export class LoginComponent implements OnInit {
     password: ['', Validators.required],
   });
 
+
   loading = signal(false);
+  errorMessage = signal('');
 
   constructor() {
     this.form.get('email')?.addAsyncValidators(emailAsyncValidator);
@@ -42,11 +45,10 @@ export class LoginComponent implements OnInit {
         next: (res: AuthResponse) => {
           this.authService.setToken(res?.accessToken);
           this.router.navigate(['dashboard']);
+          this.loading.set(false);
         },
-        error: err => {
-          console.error('Login failed', err);
-        },
-        complete: () => {
+        error: ({error}: any) => {
+          this.errorMessage.set(translate(error?.descricao));
           this.loading.set(false);
         },
       });
