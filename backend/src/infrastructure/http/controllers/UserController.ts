@@ -1,10 +1,10 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { CreateUserUseCase } from '../../../domain/use-cases/user/CreateUserUseCase';
-import { GetUserUseCase } from '../../../domain/use-cases/user/GetUserUseCase';
-import { UpdateUserUseCase } from '../../../domain/use-cases/user/UpdateUserUseCase';
-import { DeleteUserUseCase } from '../../../domain/use-cases/user/DeleteUserUseCase';
-import { CreateUserDTO, UpdateUserDTO } from '../../../shared/dtos/User.dto';
-import { UpdateLoginDTO } from '../../../shared/dtos/Login.dto';
+import { CreateUserUseCase } from '../../../application/use-cases/user/CreateUserUseCase';
+import { GetUserUseCase } from '../../../application/use-cases/user/GetUserUseCase';
+import { UpdateUserUseCase } from '../../../application/use-cases/user/UpdateUserUseCase';
+import { DeleteUserUseCase } from '../../../application/use-cases/user/DeleteUserUseCase';
+import { CreateUserDTO, UpdateUserDTO } from '../dto/User.dto';
+import { UpdateLoginDTO } from '../dto/Login.dto';
 import { EmailAlreadyExistsError, UserNotFoundError } from '../../../shared/errors/UserErrors';
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 import { HTTP_STATUS} from "../../../shared/types/httpStatus";

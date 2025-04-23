@@ -1,5 +1,5 @@
-import { IUserRepository } from '../../repositories/IUserRepository';
-import { ILoginRepository } from '../../repositories/ILoginRepository';
+import { IUserRepository } from '../../../domain/repositories/IUserRepository';
+import { ILoginRepository } from '../../../domain/repositories/ILoginRepository';
 import { UserNotFoundError, NullValueError } from '../../../shared/errors/UserErrors';
 
 export class DeleteUserUseCase {

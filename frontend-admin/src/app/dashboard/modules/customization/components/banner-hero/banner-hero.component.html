@@ -1,0 +1,39 @@
+<div class="space-y-6 max-w-5xl mx-auto">
+  <div class="relative border rounded-lg overflow-hidden transition-opacity opacity-100">
+    <div class="absolute top-2 right-2 z-10 flex gap-2"><button
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-secondary text-secondary-foreground hover:bg-secondary/80 h-8 w-8 rounded-full opacity-70 hover:opacity-100"
+        draggable="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-grip-vertical h-4 w-4">
+          <circle cx="9" cy="12" r="1"></circle>
+          <circle cx="9" cy="5" r="1"></circle>
+          <circle cx="9" cy="19" r="1"></circle>
+          <circle cx="15" cy="12" r="1"></circle>
+          <circle cx="15" cy="5" r="1"></circle>
+          <circle cx="15" cy="19" r="1"></circle>
+        </svg><span class="sr-only">Mover</span></button><button
+        class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-8 w-8 rounded-full opacity-70 hover:opacity-100"><svg
+          xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+          class="lucide lucide-x h-4 w-4">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg><span class="sr-only">Remover</span></button></div>
+    <div class="relative h-[400px] w-full bg-cover bg-center flex items-center justify-center"
+      style="background-image: url(&quot;/placeholder.svg?height=600&amp;width=1200&quot;); color: white;">
+      <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+      <div class="relative text-center px-6 max-w-3xl">`
+        @if (title()) {
+          <h2 class="text-4xl font-bold mb-4">{{title()}}</h2>
+        }
+        @if (subtitle()) {
+          <p class="text-xl mb-6">{{subtitle()}}</p>
+        }
+        @if (buttonText()) {
+          <p-button [label]="buttonText()" [severity]="buttonColor()"/>
+        }
+        
+      </div>
+    </div>
+  </div>
+</div>

@@ -11,6 +11,9 @@ module.exports = {
         'container-background': '#121212',
         'card-background': '#1E1E1E',
       },
+      height: {
+        'screen-without-header': 'calc(100vh - 64px)',
+      },
     },
   },
   plugins: [PrimeUI]

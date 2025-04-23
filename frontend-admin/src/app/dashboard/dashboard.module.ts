@@ -17,6 +17,13 @@ const routes: Routes = [
     },
     children: [
       {
+        path: 'customization',
+        loadChildren: () =>
+          import('./modules/customization/customization.module').then(
+            m => m.CustomizationModule
+          ),
+      },
+      {
         path: 'orders',
         loadChildren: () =>
           import('./modules/order-module/order-module.module').then(

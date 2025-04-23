@@ -1,4 +1,4 @@
-import { AuthUseCase } from '../../../domain/use-cases/auth/AuthUseCase';
+import { AuthUseCase } from '../../../application/use-cases/auth/AuthUseCase';
 import { AuthController } from '../../http/controllers/AuthController';
 import { JwtGoogleAuthService } from '../../services/AuthService';
 import { userRepository, loginRepository, passwordService } from './userDependencies';

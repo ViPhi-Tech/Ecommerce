@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { AuthUseCase } from '../../../domain/use-cases/auth/AuthUseCase';
-import { LoginDTO } from '../../../shared/dtos/Auth.dto';
+import { AuthUseCase } from '../../../application/use-cases/auth/AuthUseCase';
+import { LoginDTO } from '../dto/Auth.dto';
 import { InvalidCredentialsError } from '../../../shared/errors/UserErrors';
 
 export class AuthController {
