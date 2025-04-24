@@ -26,7 +26,6 @@ export class LoginComponent implements OnInit {
     password: ['', Validators.required],
   });
 
-
   loading = signal(false);
   errorMessage = signal('');
 
@@ -47,7 +46,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['dashboard']);
           this.loading.set(false);
         },
-        error: ({error}: any) => {
+        error: ({ error }: any) => {
           this.errorMessage.set(translate(error?.descricao));
           this.loading.set(false);
         },

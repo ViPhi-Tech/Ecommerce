@@ -29,8 +29,12 @@ export class MenuComponent implements OnInit {
     {
       groupTitle: 'Personalização',
       items: [
-        { label: 'Página Inicial', icon: 'lucidePaintbrush', route: 'customization/home' },
-      ]
+        {
+          label: 'Página Inicial',
+          icon: 'lucidePaintbrush',
+          route: 'customization/home',
+        },
+      ],
     },
     {
       groupTitle: 'Cadastros',

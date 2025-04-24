@@ -15,7 +15,7 @@ import { NgIconsModule } from '@ng-icons/core';
     ButtonModule,
     TooltipModule,
     OverlayPanelModule,
-    NgIconsModule
+    NgIconsModule,
   ],
 })
 export class TableActionsComponent implements OnInit {

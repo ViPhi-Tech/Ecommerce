@@ -9,13 +9,10 @@ import { RouterModule } from '@angular/router';
       height: calc(100vh - 64px);
     }
   `,
-  imports: [RouterModule]
+  imports: [RouterModule],
 })
 export class CustomizationComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

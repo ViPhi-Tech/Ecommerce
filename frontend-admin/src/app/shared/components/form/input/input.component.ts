@@ -4,6 +4,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { MessageModule } from 'primeng/message';
+import { TextareaModule } from 'primeng/textarea';
 
 @Component({
   selector: 'fuse-input',
@@ -14,6 +15,7 @@ import { MessageModule } from 'primeng/message';
     ReactiveFormsModule,
     PasswordModule,
     MessageModule,
+    TextareaModule
   ],
 })
 export class InputComponent implements OnInit {
@@ -29,6 +31,8 @@ export class InputComponent implements OnInit {
   step = input<string | number>(1);
   feedback = input<boolean>(false);
   errorMessage = input<string>('');
+
+  rows = input<number>(3);
 
   idRef = signal('input_' + randomId());
 
