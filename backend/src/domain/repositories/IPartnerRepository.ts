@@ -1,9 +1,9 @@
-import { Partner } from "../entities/Partner";
+import { Partner } from '../entities/Partner';
 
-export interface IPartnertRepository {
-    create(data: Partner): Promise<Partner>;
-    findById(id: number): Promise<Partner | null>;
-    findAll(): Promise<Partner[]>;
-    update(id: number, data: Partial<Partner>): Promise<Partner>;
-    delete(id: number): Promise<void>;
+export interface IPartnerRepository {
+  create(partner: Partner): Promise<Partner>;
+  findAll(): Promise<Partner[]>;
+  findById(id: string): Promise<Partner | null>;
+  update(id: string, partner: Partner): Promise<Partner | null>;
+  delete(id: string): Promise<void>;
 }

@@ -2,6 +2,7 @@ import { FastifyInstance } from 'fastify';
 import authRoutes from './AuthRoutes';
 import userRoutes from './UserRoutes';
 import productRoutes from "./ProductRoutes";
+import PartnerRoutes from './PartnerRoutes';
 
 export default async function handleRoutes(fastify: FastifyInstance) {
   // Registrar todas as rotas com o prefixo '/api'
@@ -19,6 +20,7 @@ export default async function handleRoutes(fastify: FastifyInstance) {
     fastify.register(authRoutes, { prefix: '/auth' });
     fastify.register(userRoutes, { prefix: '/user' });
     fastify.register(productRoutes, { prefix: '/product' });
+    fastify.register(PartnerRoutes, { prefix: '/partner' });
 
     fastify.get('/', {
       schema: {
