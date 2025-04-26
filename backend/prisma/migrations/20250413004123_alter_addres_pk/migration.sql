@@ -4,8 +4,8 @@
   - The primary key for the `Address` table will be changed. If it partially fails, the table could be left without primary key constraint.
   - The `id` column on the `Address` table would be dropped and recreated. This will lead to data loss if there is data in the column.
   - The `partnerId` column on the `Address` table would be dropped and recreated. This will lead to data loss if there is data in the column.
-  - The primary key for the `Partner` table will be changed. If it partially fails, the table could be left without primary key constraint.
-  - The `id` column on the `Partner` table would be dropped and recreated. This will lead to data loss if there is data in the column.
+  - The primary key for the `Partner.ts` table will be changed. If it partially fails, the table could be left without primary key constraint.
+  - The `id` column on the `Partner.ts` table would be dropped and recreated. This will lead to data loss if there is data in the column.
 
 */
 -- DropForeignKey
