@@ -1,12 +1,48 @@
-import { Router } from 'express';
-import { PartnerController } from '../controllers/PartnerController';
+import { FastifyInstance, FastifyPluginOptions } from 'fastify';
+import { partnerController } from '../../config/dependencies/partnerDependencies';
+import { partnerCreateJsonSchema, partnerIdJsonSchema, partnerUpdateJsonSchema } from '../dto/Partner.dto';
 
-export const partnerRoutes = (router: Router) => {
-  const partnerController = new PartnerController();
+export default async function partnerRoutes(
+  fastify: FastifyInstance,
+  options: FastifyPluginOptions
+) {
+  fastify.post('/create', {
+    schema: {
+      tags: ['partner'],
+      body: partnerCreateJsonSchema,
+    },
+    handler: partnerController.create.bind(partnerController),
+  });
 
-  router.post('/partners', (req, res) => partnerController.create(req, res));
-  router.get('/partners', (req, res) => partnerController.findAll(req, res));
-  router.get('/partners/:id', (req, res) => partnerController.findById(req, res));
-  router.put('/partners/:id', (req, res) => partnerController.update(req, res));
-  router.delete('/partners/:id', (req, res) => partnerController.delete(req, res));
-};
+  fastify.get('/', {
+    schema: {
+      tags: ['partner'],
+    },
+    handler: partnerController.findAll.bind(partnerController),
+  });
+
+  fastify.get('/:id', {
+    schema: {
+      tags: ['partner'],
+      params: partnerIdJsonSchema,
+    },
+    handler: partnerController.findById.bind(partnerController),
+  });
+
+  fastify.put('/:id', {
+    schema: {
+      tags: ['partner'],
+      params: partnerIdJsonSchema,
+      body: partnerUpdateJsonSchema,
+    },
+    handler: partnerController.update.bind(partnerController),
+  });
+
+  fastify.delete('/:id', {
+    schema: {
+      tags: ['partner'],
+      params: partnerIdJsonSchema,
+    },
+    handler: partnerController.delete.bind(partnerController),
+  });
+}

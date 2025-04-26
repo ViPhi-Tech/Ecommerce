@@ -1,7 +1,11 @@
-import { Request, Response } from 'express';
-import Partner from '../../../domain/entities/Partner';
-import { CreatePartnerUseCase, FindAllPartnerUseCase, FindByIdPartnerUseCase, UpdatePartnerUseCase, DeletePartnerUseCase } from '../../../application/use-cases/partner';
-import { CreatePartnerDTO, UpdatePartnerDTO } from '../dto/Partner.dto';
+import { FastifyRequest, FastifyReply } from 'fastify';
+import { CreatePartnerUseCase } from '../../../application/use-cases/partner/CreatePartnerUseCase';
+import { FindAllPartnerUseCase } from '../../../application/use-cases/partner/FindAllPartnerUseCase';
+import { FindByIdPartnerUseCase } from '../../../application/use-cases/partner/FindByIdPartnerUseCase';
+import { UpdatePartnerUseCase } from '../../../application/use-cases/partner/UpdatePartnerUseCase';
+import { DeletePartnerUseCase } from '../../../application/use-cases/partner/DeletePartnerUseCase';
+import { Partner } from '../../../domain/entities/Partner';
+import { PartnerCreateDTO, PartnerUpdateDTO, PartnerIdDTO } from '../dto/Partner.dto';
 
 export class PartnerController {
   constructor(
@@ -12,73 +16,54 @@ export class PartnerController {
     private readonly deletePartnerUseCase: DeletePartnerUseCase,
   ) {}
 
-  async create(req: Request, res: Response): Promise<void> {
-    try {
-      const { name, email, document, phone } = req.body as CreatePartnerDTO;
-      const partner = new Partner();
-      partner.name = name;
-      partner.email = email;
-      partner.document = document;
-      partner.phone = phone;
+  async create(request: FastifyRequest<{ Body: PartnerCreateDTO }>, reply: FastifyReply): Promise<void> {
+    const partnerData = request.body;
+    const partner = new Partner();
+    partner.name = partnerData.name;
+    partner.email = partnerData.email;
+    partner.document = partnerData.document;
+    partner.phone = partnerData.phone;
 
-      const createdPartner = await this.createPartnerUseCase.execute(partner);
-      res.status(201).json(createdPartner);
-    } catch (error) {
-      res.status(500).json({ error: 'Error creating partner' });
-    }
+    const newPartner = await this.createPartnerUseCase.execute(partner);
+    reply.code(201).send(newPartner);
   }
 
-  async findAll(req: Request, res: Response): Promise<void> {
-    try {
-      const partners = await this.findAllPartnerUseCase.execute();
-      res.json(partners);
-    } catch (error) {
-      res.status(500).json({ error: 'Error finding partners' });
-    }
+  async findAll(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+    const partners = await this.findAllPartnerUseCase.execute();
+    reply.send(partners);
   }
 
-  async findById(req: Request, res: Response): Promise<void> {
-    try {
-      const { id } = req.params;
-      const partner = await this.findByIdPartnerUseCase.execute(id);
-      if (partner) {
-        res.json(partner);
-      } else {
-        res.status(404).json({ error: 'Partner not found' });
-      }
-    } catch (error) {
-      res.status(500).json({ error: 'Error finding partner' });
+  async findById(request: FastifyRequest<{ Params: PartnerIdDTO }>, reply: FastifyReply): Promise<void> {
+    const { id } = request.params;
+    const partner = await this.findByIdPartnerUseCase.execute(String(id));
+    if (!partner) {
+      reply.code(404).send({ message: 'Partner not found' });
+      return;
     }
+    reply.send(partner);
   }
 
-  async update(req: Request, res: Response): Promise<void> {
-    try {
-      const { id } = req.params;
-      const { name, email, document, phone } = req.body as UpdatePartnerDTO;
-      const partner = new Partner();
-      partner.name = name;
-      partner.email = email;
-      partner.document = document;
-      partner.phone = phone;
+  async update(request: FastifyRequest<{ Params: PartnerIdDTO; Body: PartnerUpdateDTO }>, reply: FastifyReply): Promise<void> {
+    const { id } = request.params;
+    const partnerData = request.body;
 
-      const updatedPartner = await this.updatePartnerUseCase.execute(id, partner);
-      if (updatedPartner) {
-        res.json(updatedPartner);
-      } else {
-        res.status(404).json({ error: 'Partner not found' });
-      }
-    } catch (error) {
-      res.status(500).json({ error: 'Error updating partner' });
+    const partner = new Partner();
+    partner.name = partnerData.name;
+    partner.email = partnerData.email;
+    partner.document = partnerData.document;
+    partner.phone = partnerData.phone;
+
+    const updatedPartner = await this.updatePartnerUseCase.execute(String(id), partner);
+    if (!updatedPartner) {
+      reply.code(404).send({ message: 'Partner not found' });
+      return;
     }
+    reply.send(updatedPartner);
   }
 
-  async delete(req: Request, res: Response): Promise<void> {
-    try {
-      const { id } = req.params;
-      await this.deletePartnerUseCase.execute(id);
-      res.status(204).send();
-    } catch (error) {
-      res.status(500).json({ error: 'Error deleting partner' });
-    }
+  async delete(request: FastifyRequest<{ Params: PartnerIdDTO }>, reply: FastifyReply): Promise<void> {
+    const { id } = request.params;
+    await this.deletePartnerUseCase.execute(String(id));
+    reply.code(204).send();
   }
 }
