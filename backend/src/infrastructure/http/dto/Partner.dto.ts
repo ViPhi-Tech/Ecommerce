@@ -9,7 +9,7 @@ export const partnerCreateSchema = z.object({
 });
 
 export const partnerUpdateSchema = z.object({
-  name: z.string().min(1, { message: "Name must be at least 1 character" }).optional(),
+  name: z.string().min(1, { message: "Name is required" }).optional(),
   email: z.string().email({ message: "Invalid email format" }).optional(),
   document: z.string().min(1, { message: "Document must be at least 1 character" }).optional(),
   phone: z.string().min(1, { message: "Phone must be at least 1 character" }).optional(),

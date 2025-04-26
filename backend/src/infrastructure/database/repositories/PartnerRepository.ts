@@ -13,18 +13,18 @@ export class PartnerRepository implements IPartnerRepository {
     return await this.prisma.partner.findMany();
   }
 
-  async findById(id: string): Promise<Partner | null> {
+  async findById(id: number): Promise<Partner | null> {
     return await this.prisma.partner.findUnique({ where: { id } });
   }
 
-  async update(id: string, partner: Partner): Promise<Partner | null> {
+  async update(id: number, partner: Partner): Promise<Partner | null> {
     return await this.prisma.partner.update({
       where: { id },
       data: partner,
     });
   }
 
-  async delete(id: string): Promise<void> {
+  async delete(id: number): Promise<void> {
     await this.prisma.partner.delete({ where: { id } });
   }
 }

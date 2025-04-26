@@ -1,7 +1,7 @@
 
 
-export interface Partner {
-  id: string;
+export class Partner {
+  id: number;
   name: string;
   email: string;
   document: string;
