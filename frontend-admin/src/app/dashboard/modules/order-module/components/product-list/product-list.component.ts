@@ -3,7 +3,7 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
-import { CartStore } from '../../../../store/cart.store';
+import { CartStore } from '../../../../../shared/store/cart.store';
 
 @Component({
   selector: 'fuse-product-list',
@@ -12,7 +12,7 @@ import { CartStore } from '../../../../store/cart.store';
   imports: [ButtonModule, SelectModule, ReactiveFormsModule, CurrencyPipe],
 })
 export class ProductListComponent implements OnInit {
-  private cartStore = inject(CartStore)
+  private cartStore = inject(CartStore);
 
   products: any[] | undefined;
 

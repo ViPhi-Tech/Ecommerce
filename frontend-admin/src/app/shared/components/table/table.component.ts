@@ -8,7 +8,8 @@ import { TableConfig } from '../../interfaces/table.interfaces';
 import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
-import { NgStyle } from '@angular/common';
+import { NgStyle, NgTemplateOutlet } from '@angular/common';
+import { TableActionsComponent } from './components/table-actions/table-actions.component';
 
 @Component({
   selector: 'fuse-table',
@@ -18,11 +19,13 @@ import { NgStyle } from '@angular/common';
     RouterModule,
     SkeletonModule,
     TableModule,
+    TableActionsComponent,
     IconFieldModule,
     InputIconModule,
     InputTextModule,
     ButtonModule,
     NgStyle,
+    NgTemplateOutlet,
   ],
 })
 export class TableComponent implements OnInit {

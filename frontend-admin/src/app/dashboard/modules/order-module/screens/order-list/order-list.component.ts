@@ -3,12 +3,17 @@ import {
   inject,
   OnInit,
   signal,
+  TemplateRef,
+  ViewChild,
   WritableSignal,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreService } from '../../../../../shared/services/core.service';
 import { TableComponent } from '../../../../../shared/components/table/table.component';
-import { TableConfig } from '../../../../../shared/interfaces/table.interfaces';
+import {
+  DEFAULT_TABLE_CONFIG,
+  TableConfig,
+} from '../../../../../shared/interfaces/table.interfaces';
 
 @Component({
   selector: 'fuse-order-list',
@@ -20,6 +25,8 @@ export class OrderListComponent implements OnInit {
   private router = inject(Router);
   private activateRoute = inject(ActivatedRoute);
   private coreService = inject(CoreService);
+
+  @ViewChild('productName', { static: true }) productName!: TemplateRef<any>;
 
   orders = signal([
     {
@@ -85,29 +92,7 @@ export class OrderListComponent implements OnInit {
   ]);
   loading = signal(false);
 
-  tableConfig: WritableSignal<TableConfig> = signal({
-    rowsPerPageOptions: [5, 10, 20],
-    rowsPerPage: 10,
-    paginator: true,
-    pageLinkSize: 5,
-    columns: [
-      { field: 'id', caption: 'ID', sortable: true, filter: true },
-      { field: 'name', caption: 'Nome', sortable: true, filter: true },
-      { field: 'price', caption: 'Preço', sortable: true, filter: true },
-      { field: 'category', caption: 'Categoria', sortable: true, filter: true },
-    ],
-    headerButtons: [
-      {
-        icon: 'pi pi-plus',
-        label: 'Criar Pedido',
-        tooltip: 'Criar Pedido',
-        action: () => {
-          // Exemplo de navegação para o outlet auxiliar "drawer"
-          this.router.navigate(['dashboard', 'orders', 'create']);
-        },
-      },
-    ],
-  });
+  tableConfig: WritableSignal<TableConfig> = signal(DEFAULT_TABLE_CONFIG);
 
   title = '';
 
@@ -116,6 +101,60 @@ export class OrderListComponent implements OnInit {
   ngOnInit() {
     this.activateRoute.data.subscribe(data => {
       this.coreService.adicionarBreadcrumb(data['breadcrumb']);
+    });
+
+    this.tableConfig.set({
+      rowsPerPageOptions: [5, 10, 20],
+      rowsPerPage: 10,
+      paginator: true,
+      pageLinkSize: 5,
+      columns: [
+        { field: 'id', caption: 'ID', sortable: true, filter: true },
+        {
+          field: 'name',
+          caption: 'Nome',
+          sortable: true,
+          filter: true,
+          template: this.productName,
+        },
+        { field: 'price', caption: 'Preço', sortable: true, filter: true },
+        {
+          field: 'category',
+          caption: 'Categoria',
+          sortable: true,
+          filter: true,
+        },
+        {
+          field: 'actions',
+          caption: 'Ações',
+          actionButtons: [
+            {
+              iconType: 'material',
+              icon: 'check',
+              color: 'success',
+              tooltip: 'Confirmar Consolidação',
+              show: data => {
+                return !data?.caixa_consolidado && !data?.caixa_consolidado_dia;
+              },
+              action: (data, index) => {
+                console.log('Confirmar Consolidação', data);
+                console.log('Confirmar Consolidação', index);
+              },
+            },
+          ],
+        },
+      ],
+      headerButtons: [
+        {
+          icon: 'pi pi-plus',
+          label: 'Criar Pedido',
+          tooltip: 'Criar Pedido',
+          action: () => {
+            // Exemplo de navegação para o outlet auxiliar "drawer"
+            this.router.navigate(['dashboard', 'orders', 'create']);
+          },
+        },
+      ],
     });
   }
 }

@@ -18,28 +18,21 @@ export class MenuComponent implements OnInit {
     {
       groupTitle: 'Overview',
       items: [
-        { label: 'Dashboard', icon: 'lucideHouse', route: 'aaaaaaaaaaaaaaaaa' },
         {
           label: 'Pedidos',
           icon: 'lucideFileText',
           route: 'orders',
           visible: true,
         },
+      ],
+    },
+    {
+      groupTitle: 'Personalização',
+      items: [
         {
-          label: 'Organization',
-          icon: 'lucideBuilding2',
-          route: '/organization',
-          visible: true,
-        },
-        {
-          label: 'Projects',
-          icon: 'lucideFolder',
-          route: 'projects',
-          visible: true,
-          items: [
-            { label: 'Usuários', icon: 'lucideUsersRound', route: 'users' },
-            { label: 'Permissões', icon: 'lucideShield', route: 'permissions' },
-          ],
+          label: 'Página Inicial',
+          icon: 'lucidePaintbrush',
+          route: 'customization/home',
         },
       ],
     },
@@ -92,8 +85,8 @@ export class MenuComponent implements OnInit {
     {
       groupTitle: 'Segurança',
       items: [
-        { label: 'Usuários', icon: 'lucideUsersRound', route: 'users' },
         { label: 'Permissões', icon: 'lucideShield', route: 'permissions' },
+        { label: 'Usuários', icon: 'lucideUsersRound', route: 'users' },
       ],
     },
   ];

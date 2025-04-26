@@ -1,0 +1,49 @@
+<div
+  class="flex flex-row justify-content-center align-items-center column-gap-2 p-1"
+>
+  @for (button of actions(); track button) {
+    @if (!button.show || (button.show && button.show(data))) {
+      <ng-container
+        *ngTemplateOutlet="buttonTemplate; context: { $implicit: button }"
+      ></ng-container>
+    }
+  }
+  @if (moreActions()?.length) {
+    <p-button
+      [outlined]="true"
+      [rounded]="true"
+      size="small"
+      icon="pi pi-ellipsis-h"
+      severity="secondary"
+      pTooltip="Mais ações"
+      tooltipPosition="left"
+      (click)="toogleMoreActions(); overlayMoreActions.toggle($event)"
+    >
+    </p-button>
+  }
+</div>
+
+<p-overlayPanel [styleClass]="'overlay-more-actions'" #overlayMoreActions>
+  <div class="flex flex-row gap-2">
+    @for (button of moreActions(); track button) {
+      @if (!button.show || (button.show && button.show(data))) {
+        <ng-container
+          *ngTemplateOutlet="buttonTemplate; context: { $implicit: button }"
+        ></ng-container>
+      }
+    }
+  </div>
+</p-overlayPanel>
+
+<ng-template #buttonTemplate let-button>
+  <p-button
+    [outlined]="button.outlined || false"
+    size="small"
+    [severity]="button.color"
+    [pTooltip]="button.tooltip ?? null"
+    tooltipPosition="left"
+    (click)="button.action(data)"
+  >
+    <ng-icon [name]="button?.icon" />
+  </p-button>
+</ng-template>

@@ -28,6 +28,16 @@
                 errorMessage="Senha inválida"
               />
             </div>
+            @if (errorMessage()) {
+              <p-message
+                severity="error"
+                icon="pi pi-times-circle"
+                styleClass="mt-2"
+                size="small"
+              >
+                {{ errorMessage() }}
+              </p-message>
+            }
             <p-button
               [loading]="loading()"
               [disabled]="form.invalid"

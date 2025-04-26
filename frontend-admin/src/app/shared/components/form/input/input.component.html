@@ -1,8 +1,8 @@
-<div class="w-full label-position {{ labelPosition() }}">
+<div class="w-full label-position {{ labelPosition() }} flex flex-col gap-1">
   @if (label()) {
     <label
       [for]="idRef()"
-      class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-right"
+      class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2"
     >
       {{ label() }}
     </label>
@@ -41,6 +41,17 @@
       [id]="idRef()"
       [feedback]="feedback()"
     />
+  }
+
+  @if (type() === 'textarea') {
+    <textarea
+      pTextarea
+      [formControl]="control()"
+      [placeholder]="placeholder()"
+      [id]="idRef()"
+      [name]="idRef()"
+      [rows]="rows()"
+    ></textarea>
   }
 </div>
 

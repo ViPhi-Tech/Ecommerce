@@ -18,7 +18,12 @@
           <span class="font-bold text-lg">{{
             product?.price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
           }}</span>
-          <p-button (onClick)="addProductToCart(product)" label="Comprar" size="small" icon="pi pi-cart-arrow-down"></p-button>
+          <p-button
+            (onClick)="addProductToCart(product)"
+            label="Comprar"
+            size="small"
+            icon="pi pi-cart-arrow-down"
+          ></p-button>
         </div>
       </div>
     }

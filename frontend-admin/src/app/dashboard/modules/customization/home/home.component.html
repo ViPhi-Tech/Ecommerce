@@ -1,0 +1,78 @@
+<div class="d-flex flex-col customization">
+  <header class="border-b text-xl p-4">
+    <h1 class="text-2xl font-bold">Personalizador de Página Inicial</h1>
+  </header>
+  <div class="flex flex-1 overflow-hidden customization__content">
+    <div class="w-64 border-r p-4 overflow-auto">
+      <h2 class="font-semibold mb-4">Componentes Disponíveis</h2>
+      <div class="space-y-2">
+        @for (component of componentTypes(); track $index) {
+          <button
+            (click)="addComponent(component)"
+            class="inline-flex items-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 w-full justify-start"
+          >
+            {{ component.name }}
+          </button>
+        }
+      </div>
+    </div>
+    <div
+      class="flex-1 overflow-auto p-4 bg-gray-50 dark:bg-container-background"
+    >
+      <div class="space-y-6 max-w-5xl mx-auto">
+        @for (component of components(); track $index) {
+          <span
+            (click)="selectComponent(component)"
+            (keydown.enter)="selectComponent(component)"
+            tabindex="0"
+            class="p-10"
+          >
+            @if (component.type === 'banner-hero') {
+              <fuse-banner-hero [component]="component"></fuse-banner-hero>
+            }
+          </span>
+        } @empty {
+          <div class="border border-dashed rounded-lg p-12 text-center">
+            <p class="text-muted-foreground">
+              Selecione componentes do menu lateral para começar a personalizar
+              sua página inicial
+            </p>
+          </div>
+        }
+      </div>
+    </div>
+    <div class="w-80 border-l p-4 overflow-auto">
+      <div>
+        @if (componentSelected() && form) {
+          <form [formGroup]="form">
+            <div>
+              <h2 class="font-semibold mb-5">Configurações</h2>
+              <div class="space-y-6">
+                @for (
+                  property of componentSelected()?.properties;
+                  track $index
+                ) {
+                  <div>
+                    @if (
+                      property?.type === 'text' || property?.type === 'textarea'
+                    ) {
+                      <fuse-input
+                        [control]="form.get(property?.name)"
+                        [type]="property?.type"
+                        [label]="property?.label"
+                      />
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          </form>
+        } @else {
+          <p class="text-muted-foreground">
+            Selecione um componente para configurar
+          </p>
+        }
+      </div>
+    </div>
+  </div>
+</div>
