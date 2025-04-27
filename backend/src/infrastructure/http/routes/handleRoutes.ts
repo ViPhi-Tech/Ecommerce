@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import authRoutes from './AuthRoutes';
+import authRoutes from "./authRoutes";
 import userRoutes from './UserRoutes'
 import productRoutes from './ProductRoutes'
 import PartnerRoutes from './PartnerRoutes';
