@@ -4,8 +4,12 @@ import { FindAllPartnerUseCase } from '../../../application/use-cases/partner/Fi
 import { FindByIdPartnerUseCase } from '../../../application/use-cases/partner/FindByIdPartnerUseCase';
 import { UpdatePartnerUseCase } from '../../../application/use-cases/partner/UpdatePartnerUseCase';
 import { DeletePartnerUseCase } from '../../../application/use-cases/partner/DeletePartnerUseCase';
-import { Partner } from '../../../domain/entities/Partner';
 import { PartnerCreateDTO, PartnerUpdateDTO, PartnerIdDTO } from '../dto/Partner.dto';
+
+import {ApiResponse} from "../../../shared/types/apiResponse";
+
+import {HTTP_STATUS} from "../../../shared/types/httpStatus";
+import {HTTP_MESSAGES} from "../../../shared/types/httpMessages";
 
 export class PartnerController {
   constructor(
@@ -17,8 +21,8 @@ export class PartnerController {
   ) {}
 
   async create(request: FastifyRequest<{ Body: PartnerCreateDTO }>, reply: FastifyReply): Promise<void> {
-    const partnerData = request.body;
-    const partner = new Partner();
+    const partnerData = request.body as PartnerCreateDTO;
+    const partner = await this.createPartnerUseCase.execute(partnerData)
     partner.name = partnerData.name;
     partner.email = partnerData.email;
     partner.document = partnerData.document;
@@ -35,7 +39,7 @@ export class PartnerController {
 
   async findById(request: FastifyRequest<{ Params: PartnerIdDTO }>, reply: FastifyReply): Promise<void> {
     const { id } = request.params;
-    const partner = await this.findByIdPartnerUseCase.execute(String(id));
+    const partner = await this.findByIdPartnerUseCase.execute(id);
     if (!partner) {
       reply.code(404).send({ message: 'Partner not found' });
       return;
@@ -43,27 +47,21 @@ export class PartnerController {
     reply.send(partner);
   }
 
-  async update(request: FastifyRequest<{ Params: PartnerIdDTO; Body: PartnerUpdateDTO }>, reply: FastifyReply): Promise<void> {
+  async update(request: FastifyRequest<{ Params: PartnerIdDTO; Body: PartnerUpdateDTO }>, reply: FastifyReply): Promise<ApiResponse> {
     const { id } = request.params;
     const partnerData = request.body;
 
-    const partner = new Partner();
-    partner.name = partnerData.name;
-    partner.email = partnerData.email;
-    partner.document = partnerData.document;
-    partner.phone = partnerData.phone;
-
-    const updatedPartner = await this.updatePartnerUseCase.execute(String(id), partner);
+    const updatedPartner = await this.updatePartnerUseCase.execute(id, partnerData);
     if (!updatedPartner) {
-      reply.code(404).send({ message: 'Partner not found' });
-      return;
+      return reply.code(HTTP_STATUS.API_STATUS_NOT_FOUND).send({status: false, descricao: HTTP_MESSAGES.API_STATUS_NOT_FOUND, data: {}})
     }
-    reply.send(updatedPartner);
+    return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false,  descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR});
   }
 
   async delete(request: FastifyRequest<{ Params: PartnerIdDTO }>, reply: FastifyReply): Promise<void> {
     const { id } = request.params;
-    await this.deletePartnerUseCase.execute(String(id));
-    reply.code(204).send();
+    await this.deletePartnerUseCase.execute(id);
+    return reply.code(HTTP_STATUS.API_STATUS_NOT_FOUND).send({status: false, descricao: HTTP_MESSAGES.API_STATUS_NOT_FOUND, data: {}})
+
   }
 }

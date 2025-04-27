@@ -6,13 +6,18 @@ export const partnerCreateSchema = z.object({
   email: z.string().email({ message: "Invalid email format" }),
   document: z.string().min(1, { message: "Document is required" }),
   phone: z.string().min(1, { message: "Phone is required" }),
+  type: z.enum(["RESELLER", "DISTRIBUTOR", "AFFILIATE", "AGENT", "OTHER"], {
+    required_error: "Type is required",
+    invalid_type_error: "Invalid partner type",
+  }),
 });
 
 export const partnerUpdateSchema = z.object({
-  name: z.string().min(1, { message: "Name is required" }).optional(),
-  email: z.string().email({ message: "Invalid email format" }).optional(),
-  document: z.string().min(1, { message: "Document must be at least 1 character" }).optional(),
-  phone: z.string().min(1, { message: "Phone must be at least 1 character" }).optional(),
+  name: z.string().min(1, { message: "Name is required" }),
+  email: z.string().email({ message: "Invalid email format" }),
+  document: z.string().min(1, { message: "Document must be at least 1 character" }),
+  phone: z.string().min(1, { message: "Phone must be at least 1 character" }),
+  type: z.enum(["RESELLER", "DISTRIBUTOR", "AFFILIATE", "AGENT", "OTHER"]),
 });
 
 export const partnerIdSchema = z.object({

@@ -1,9 +1,12 @@
+import { PartnerType } from "@prisma/client";
 
-
-export class Partner {
-  id: number;
+export interface Partner {
+  id?: number;
   name: string;
   email: string;
-  document: string;
-  phone: string;
+  phone?: string | null;
+  companyName?: string | null;
+  document?: string | null;
+  type: PartnerType;
 }
+

@@ -5,10 +5,10 @@ import { FindByIdPartnerUseCase } from '../../../application/use-cases/partner/F
 import { UpdatePartnerUseCase } from '../../../application/use-cases/partner/UpdatePartnerUseCase';
 import { DeletePartnerUseCase } from '../../../application/use-cases/partner/DeletePartnerUseCase';
 import { PartnerController } from '../../http/controllers/PartnerController';
-import { prismaClient } from '../../database/prismaClient';
+import { prisma } from '../../database/prismaClient';
 import { IPartnerRepository } from '../../../domain/repositories/IPartnerRepository';
 
-const partnerRepository: IPartnerRepository = new PartnerRepository(prismaClient);
+const partnerRepository: IPartnerRepository = new PartnerRepository(prisma);
 
 const createPartnerUseCase = new CreatePartnerUseCase(partnerRepository);
 const findAllPartnerUseCase = new FindAllPartnerUseCase(partnerRepository);
