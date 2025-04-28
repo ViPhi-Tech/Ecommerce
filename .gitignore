@@ -1,0 +1,60 @@
+# === Node.js (Backend) ===
+backend/node_modules/
+backend/dist/
+backend/build/
+backend/.env
+backend/.env.*.local
+backend/*.log
+backend/*.tsbuildinfo
+
+# === Angular / Frontends ===
+frontend/node_modules/
+frontend/dist/
+frontend/.angular/
+frontend/.env
+frontend/.env.*.local
+frontend/*.log
+frontend/*.tsbuildinfo
+
+frontend-admin/node_modules/
+frontend-admin/dist/
+frontend-admin/.angular/
+frontend-admin/.env
+frontend-admin/.env.*.local
+frontend-admin/*.log
+frontend-admin/*.tsbuildinfo
+
+frontend-ecommerce/node_modules/
+frontend-ecommerce/dist/
+frontend-ecommerce/.angular/
+frontend-ecommerce/.env
+frontend-ecommerce/.env.*.local
+frontend-ecommerce/*.log
+frontend-ecommerce/*.tsbuildinfo
+
+# === Common ===
+*.log
+logs/
+*.tsbuildinfo
+.env
+.env.*.local
+
+# === IDEs / OS / Editor junk ===
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# === Coverage / Test Output ===
+coverage/
+**/coverage/
+test-output/
+jest-output/
+
+# === Process manager files (optional) ===
+pids/
+*.pid
+*.seed
+*.pid.lock
