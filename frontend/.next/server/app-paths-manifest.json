@@ -1,0 +1,6 @@
+{
+  "/(public)/(home)/cliente/(auth)/login/page": "app/(public)/(home)/cliente/(auth)/login/page.js",
+  "/(private)/cliente/minha-conta/dados-pessoais/page": "app/(private)/cliente/minha-conta/dados-pessoais/page.js",
+  "/(public)/(home)/page": "app/(public)/(home)/page.js",
+  "/_not-found/page": "app/_not-found/page.js"
+}
