@@ -1,60 +1,120 @@
+# ========================
 # === Node.js (Backend) ===
+# ========================
 backend/node_modules/
 backend/dist/
 backend/build/
-backend/.env
-backend/.env.*.local
+backend/.env*
 backend/*.log
 backend/*.tsbuildinfo
+backend/coverage/
+backend/.cache/
 
-# === Angular / Frontends ===
+# ========================
+# === Frontends (Angular) ===
+# ========================
 frontend/node_modules/
 frontend/dist/
 frontend/.angular/
-frontend/.env
-frontend/.env.*.local
+frontend/.env*
 frontend/*.log
 frontend/*.tsbuildinfo
+frontend/.cache/
 
 frontend-admin/node_modules/
 frontend-admin/dist/
 frontend-admin/.angular/
-frontend-admin/.env
-frontend-admin/.env.*.local
+frontend-admin/.env*
 frontend-admin/*.log
 frontend-admin/*.tsbuildinfo
+frontend-admin/.cache/
 
 frontend-ecommerce/node_modules/
 frontend-ecommerce/dist/
 frontend-ecommerce/.angular/
-frontend-ecommerce/.env
-frontend-ecommerce/.env.*.local
+frontend-ecommerce/.env*
 frontend-ecommerce/*.log
 frontend-ecommerce/*.tsbuildinfo
+frontend-ecommerce/.cache/
 
-# === Common ===
+# ========================
+# === Common Ignored Files ===
+# ========================
 *.log
 logs/
 *.tsbuildinfo
 .env
-.env.*.local
-
-# === IDEs / OS / Editor junk ===
-.vscode/
-.idea/
-.DS_Store
-Thumbs.db
+.env.*
+.env.local
+.env.development
+.env.production
+.env.test
+.cache/
+.temp/
+.tmp/
+*.tmp
+*.bak
+*.backup
 *.swp
 *.swo
 
-# === Coverage / Test Output ===
-coverage/
-**/coverage/
-test-output/
-jest-output/
+# ========================
+# === Dependency Directories ===
+# ========================
+**/node_modules/
+**/jspm_packages/
+**/bower_components/
 
-# === Process manager files (optional) ===
-pids/
-*.pid
-*.seed
-*.pid.lock
+# ========================
+# === Build Directories ===
+# ========================
+**/dist/
+**/build/
+**/out/
+**/release/
+
+# ========================
+# === Testing & Coverage ===
+# ========================
+**/coverage/
+**/.nyc_output/
+**/test-output/
+**/jest-output/
+**/e2e/reports/
+**/e2e/screenshots/
+
+# ========================
+# === IDE/Editor Config ===
+# ========================
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# ========================
+# === System Files ===
+# ========================
+.DS_Store
+Thumbs.db
+desktop.ini
+._*
+.Spotlight-V100
+.Trashes
+
+# ========================
+# === Package Manager ===
+# ========================
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+**/.pnp.*
+
+# ========================
+# === Next.js Specific ===
+# ========================
+.next/
+out/
+.next/cache/
