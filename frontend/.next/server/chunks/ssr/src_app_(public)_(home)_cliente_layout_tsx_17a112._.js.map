@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///Users/phillipivalle/MyProjects/nodecom/frontend/src/app/%28public%29/%28home%29/cliente/layout.tsx"],"sourcesContent":["export default function ClienteLayout({\n   children,\n}: {\n   children: React.ReactNode;\n}) {\n   return <>{children}</>;\n}\n"],"names":[],"mappings":";;;;;AAAe,SAAS,cAAc,EACnC,QAAQ,EAGV;IACE,qBAAO;kBAAG;;AACb"}},
-    {"offset": {"line": 17, "column": 0}, "map": {"version":3,"sources":[],"names":[],"mappings":"A"}}]
-}
