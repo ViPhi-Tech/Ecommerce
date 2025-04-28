@@ -1,10 +1,10 @@
 import { IPartnerRepository } from '../../../domain/repositories/IPartnerRepository';
-import { Partner } from '../../../domain/entities/Partner';
+import { PartnerResponse } from '../../dto/partner/PartnerResponse';
 
 export class FindAllPartnerUseCase {
   constructor(private readonly partnerRepository: IPartnerRepository) {}
 
-  async execute(): Promise<Partner[]> {
+  async execute(): Promise<PartnerResponse[]> {
     return this.partnerRepository.findAll();
   }
 }

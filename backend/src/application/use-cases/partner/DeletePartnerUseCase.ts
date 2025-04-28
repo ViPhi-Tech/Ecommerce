@@ -1,5 +1,5 @@
 import { IPartnerRepository } from '../../../domain/repositories/IPartnerRepository';
-import { Partner } from '../../../domain/entities/Partner';
+
 
 export class DeletePartnerUseCase {
   constructor(private partnerRepository: IPartnerRepository) {}
