@@ -13,7 +13,7 @@ export class UserService {
         id: 1,
         name: 'João Silva',
         email: 'joao.silva@example.com',
-        role: 'admin',
+        role: 'kommerz',
       },
       {
         id: 2,

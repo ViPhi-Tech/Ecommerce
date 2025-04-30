@@ -40,6 +40,12 @@ export class MenuComponent implements OnInit {
       groupTitle: 'Cadastros',
       items: [
         {
+          label: 'Estoque global',
+          icon: 'lucideUsersRound',
+          route: 'storage',
+          visible: true,
+        },
+        {
           label: 'Produtos',
           icon: 'lucideUsersRound',
           route: 'products',
