@@ -2,7 +2,8 @@ import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { Drawer, DrawerModule } from 'primeng/drawer';
+import { DialogModule } from 'primeng/dialog';
+import { Drawer } from 'primeng/drawer';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 
@@ -11,7 +12,7 @@ import { TextareaModule } from 'primeng/textarea';
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss'],
   imports: [
-    DrawerModule,
+    DialogModule,
     ButtonModule,
     ReactiveFormsModule,
     InputTextModule,
@@ -39,12 +40,11 @@ export class ProductCreateComponent implements OnInit {
     this.drawerRef.close(e);
   }
 
-  onCloseDrawer() {
-    this.visible.set(false);
+  onHide() {
     setTimeout(() => {
       this.router.navigate([{ outlets: { drawer: null } }], {
         relativeTo: this.activatedRoute.root,
       });
-    }, 300);
+    }, 200);
   }
 }

@@ -27,6 +27,23 @@ export class MenuComponent implements OnInit {
       ],
     },
     {
+      groupTitle: 'Estoque',
+      items: [
+        {
+          label: 'Estoque global',
+          icon: 'lucideArchive',
+          route: 'storage',
+          visible: true,
+        },
+        {
+          label: 'Produtos',
+          icon: 'lucideUsersRound',
+          route: 'products',
+          visible: true,
+        },
+      ]
+    },
+    {
       groupTitle: 'Personalização',
       items: [
         {
@@ -39,18 +56,6 @@ export class MenuComponent implements OnInit {
     {
       groupTitle: 'Cadastros',
       items: [
-        {
-          label: 'Estoque global',
-          icon: 'lucideUsersRound',
-          route: 'storage',
-          visible: true,
-        },
-        {
-          label: 'Produtos',
-          icon: 'lucideUsersRound',
-          route: 'products',
-          visible: true,
-        },
         {
           label: 'Categorias',
           icon: 'lucideTags',
