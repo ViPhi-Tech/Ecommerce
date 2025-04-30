@@ -3,7 +3,7 @@ import { ButtonModule } from 'primeng/button';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
-import { NgIconsModule } from '@ng-icons/core';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'fuse-table-actions',
@@ -15,7 +15,7 @@ import { NgIconsModule } from '@ng-icons/core';
     ButtonModule,
     TooltipModule,
     OverlayPanelModule,
-    NgIconsModule,
+    NgIcon,
   ],
 })
 export class TableActionsComponent implements OnInit {
