@@ -34,11 +34,15 @@ export class InputComponent implements OnInit {
   feedback = input<boolean>(false);
   errorMessage = input<string>('');
 
+  isRequired = signal(false);
+
   rows = input<number>(3);
 
   idRef = signal('input_' + randomId());
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.isRequired.set(!!this.control().validator);
+  }
 }

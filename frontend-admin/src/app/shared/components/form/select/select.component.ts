@@ -1,4 +1,4 @@
-import { Component, input, InputSignal, OnInit } from '@angular/core';
+import { Component, input, InputSignal, OnInit, signal } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 
@@ -23,9 +23,13 @@ export class SelectComponent implements OnInit {
   addictionalPrimeClass = input('w-full');
   addictionalClass = input('');
 
+  isRequired = signal(false);
+
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.isRequired.set(!!this.control().validator);
+  }
 
   onChange: any = () => {};
 }

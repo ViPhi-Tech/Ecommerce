@@ -1,18 +1,28 @@
 import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { Drawer } from 'primeng/drawer';
 import { FormModule } from '../../../../../shared/components/form/form.module';
-import { TabIdEnum } from '../../../../../shared/enums/tabs.create-product.enum';
-import { NgClass } from '@angular/common';
+import { SectionComponent } from '../../../../../shared/components/section/section.component';
 
 @Component({
   selector: 'fuse-product-create',
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss'],
-  imports: [DialogModule, ButtonModule, ReactiveFormsModule, FormModule, NgClass],
+  imports: [
+    DialogModule,
+    ButtonModule,
+    ReactiveFormsModule,
+    FormModule,
+    SectionComponent,
+  ],
 })
 export class ProductCreateComponent implements OnInit {
   private router = inject(Router);
@@ -23,33 +33,33 @@ export class ProductCreateComponent implements OnInit {
 
   formGroup = this.formBuilder.group({});
 
-  
   // signals
   visible = signal(true);
   title = signal('Adicionar Produto');
   subtitle = signal('Preencha os dados do novo produto abaixo');
-  
-  TabIdEnum = TabIdEnum;
-  activeTab = signal<string>(TabIdEnum.BasicInfo);
-  tabs = signal([
-    { id: 'basic-info', icon: '🏷️', label: 'Informações Básicas' },
-    { id: 'images', icon: '🖼️', label: 'Imagens e Mídia' },
-    { id: 'commercial-info', icon: '💲', label: 'Informações Comerciais' },
-    { id: 'stock', icon: '📦', label: 'Estoque e Logística' },
-    { id:  'technical-details', icon: '📐', label: 'Características Técnicas' },
-    { id: 'variations', icon: '🧩', label: 'Variações' },
-    { id: 'publishing', icon: '🌍', label: 'Publicação' },
-  ])
+
+  productForm!: FormGroup;
 
   constructor() {}
 
-  ngOnInit() {
-    console.log(TabIdEnum);
-    
+  ngOnInit(): void {
+    this.productForm = this.formBuilder.group({
+      productName: ['', [Validators.required, Validators.maxLength(255)]],
+      sku: ['', [Validators.required]],
+      category: ['', [Validators.required]],
+      brand: [''],
+      shortDescription: [''],
+      description: ['', [Validators.required]],
+    });
   }
 
-  setActiveTab(tabId: string) {
-    this.activeTab.set(tabId);
+  onSubmit(): void {
+    if (this.productForm.valid) {
+      console.log('Form Data:', this.productForm.value);
+      // Adicione aqui a lógica para enviar os dados do formulário
+    } else {
+      console.log('Formulário inválido');
+    }
   }
 
   closeDrawer(e: Event) {
@@ -64,4 +74,3 @@ export class ProductCreateComponent implements OnInit {
     }, 200);
   }
 }
-

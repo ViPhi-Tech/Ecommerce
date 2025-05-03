@@ -10,15 +10,17 @@ module.exports = {
       backgroundColor: {
         'container-background': '#121212',
         'card-background': '#1E1E1E',
+        'muted': 'hsl(210 40% 96.1%)',
       },
       height: {
         'screen-without-header': 'calc(100vh - 64px)',
       },
       textColor: {
-        'muted-foreground': '#A1A1A1',
+        'muted-foreground': 'rgb(100 116 139)',
+
       },
     },
   },
-  plugins: [PrimeUI]
+  plugins: [PrimeUI, require('tw-bootstrap-grid-optimizer')]
 }
 
