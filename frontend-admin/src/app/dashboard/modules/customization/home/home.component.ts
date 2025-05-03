@@ -1,11 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { CustomizationService } from '../customization.service';
 import { BannerHeroComponent } from '../components/banner-hero/banner-hero.component';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormModule } from '../../../../shared/components/form/form.module';
 
 @Component({

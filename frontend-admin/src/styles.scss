@@ -18,6 +18,10 @@
   @apply bg-white rounded-lg shadow-md p-4 dark:text-white dark:bg-card-background;
 }
 
+.p-button-label {
+  font-weight: 400 !important;
+}
+
 .p-datatable.p-component {
   background-color: transparent;
 
@@ -92,4 +96,8 @@ input {
       color: var(--p-inputtext-invalid-border-color);
     }
   }
+}
+
+.p-datatable-table {
+  min-width: auto !important;
 }

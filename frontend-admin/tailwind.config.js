@@ -14,6 +14,9 @@ module.exports = {
       height: {
         'screen-without-header': 'calc(100vh - 64px)',
       },
+      textColor: {
+        'muted-foreground': '#A1A1A1',
+      },
     },
   },
   plugins: [PrimeUI]

@@ -43,6 +43,17 @@
     />
   }
 
+  @if (type() === 'price') {
+    <p-inputnumber
+      [formControl]="control()"
+      inputId="{{ idRef() }}"
+      mode="currency"
+      currency="BRL"
+      [size]="size()"
+      locale="pt-BR"
+    />
+  }
+
   @if (type() === 'textarea') {
     <textarea
       pTextarea

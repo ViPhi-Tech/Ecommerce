@@ -17,7 +17,7 @@ import {
   lucideTicketPercent,
   lucideFileText,
   lucidePaintbrush,
-  lucideArchive
+  lucideArchive,
 } from '@ng-icons/lucide';
 import { matArrowDropDownOutline } from '@ng-icons/material-icons/outline';
 import { heightAnimation } from '../../../../../shared/utils/animations';

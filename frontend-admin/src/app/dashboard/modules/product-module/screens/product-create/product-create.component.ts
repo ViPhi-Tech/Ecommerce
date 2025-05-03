@@ -4,20 +4,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { Drawer } from 'primeng/drawer';
-import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
+import { FormModule } from '../../../../../shared/components/form/form.module';
+import { TabIdEnum } from '../../../../../shared/enums/tabs.create-product.enum';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'fuse-product-create',
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss'],
-  imports: [
-    DialogModule,
-    ButtonModule,
-    ReactiveFormsModule,
-    InputTextModule,
-    TextareaModule,
-  ],
+  imports: [DialogModule, ButtonModule, ReactiveFormsModule, FormModule, NgClass],
 })
 export class ProductCreateComponent implements OnInit {
   private router = inject(Router);
@@ -28,13 +23,34 @@ export class ProductCreateComponent implements OnInit {
 
   formGroup = this.formBuilder.group({});
 
+  
   // signals
   visible = signal(true);
-  title = signal('Cadastrar Produto');
+  title = signal('Adicionar Produto');
+  subtitle = signal('Preencha os dados do novo produto abaixo');
+  
+  TabIdEnum = TabIdEnum;
+  activeTab = signal<string>(TabIdEnum.BasicInfo);
+  tabs = signal([
+    { id: 'basic-info', icon: '🏷️', label: 'Informações Básicas' },
+    { id: 'images', icon: '🖼️', label: 'Imagens e Mídia' },
+    { id: 'commercial-info', icon: '💲', label: 'Informações Comerciais' },
+    { id: 'stock', icon: '📦', label: 'Estoque e Logística' },
+    { id:  'technical-details', icon: '📐', label: 'Características Técnicas' },
+    { id: 'variations', icon: '🧩', label: 'Variações' },
+    { id: 'publishing', icon: '🌍', label: 'Publicação' },
+  ])
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(TabIdEnum);
+    
+  }
+
+  setActiveTab(tabId: string) {
+    this.activeTab.set(tabId);
+  }
 
   closeDrawer(e: Event) {
     this.drawerRef.close(e);
@@ -48,3 +64,4 @@ export class ProductCreateComponent implements OnInit {
     }, 200);
   }
 }
+

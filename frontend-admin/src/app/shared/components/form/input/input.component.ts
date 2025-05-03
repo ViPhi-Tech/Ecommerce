@@ -5,6 +5,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { PasswordModule } from 'primeng/password';
 import { MessageModule } from 'primeng/message';
 import { TextareaModule } from 'primeng/textarea';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 @Component({
   selector: 'fuse-input',
@@ -15,7 +16,8 @@ import { TextareaModule } from 'primeng/textarea';
     ReactiveFormsModule,
     PasswordModule,
     MessageModule,
-    TextareaModule
+    TextareaModule,
+    InputNumberModule,
   ],
 })
 export class InputComponent implements OnInit {

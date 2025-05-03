@@ -41,7 +41,7 @@ export class MenuComponent implements OnInit {
           route: 'products',
           visible: true,
         },
-      ]
+      ],
     },
     {
       groupTitle: 'Personalização',
