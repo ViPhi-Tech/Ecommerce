@@ -1,25 +1,6 @@
 import { Component, input, model, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import {
-  lucideBuilding2,
-  lucideChartNoAxesColumn,
-  lucideCreditCard,
-  lucideFolder,
-  lucideHouse,
-  lucideMessagesSquare,
-  lucideReceipt,
-  lucideShield,
-  lucideTags,
-  lucideUsersRound,
-  lucideVideo,
-  lucideWallet,
-  lucideTicketPercent,
-  lucideFileText,
-  lucidePaintbrush,
-  lucideArchive,
-} from '@ng-icons/lucide';
-import { matArrowDropDownOutline } from '@ng-icons/material-icons/outline';
+import { NgIcon } from '@ng-icons/core';
 import { heightAnimation } from '../../../../../shared/utils/animations';
 
 export interface MenuItem {
@@ -36,27 +17,6 @@ export interface MenuItem {
   styleUrls: ['./menu-item.component.scss'],
   imports: [RouterModule, NgIcon],
   animations: [heightAnimation],
-  viewProviders: [
-    provideIcons({
-      lucideHouse,
-      lucideChartNoAxesColumn,
-      lucideBuilding2,
-      lucideFolder,
-      lucideWallet,
-      lucideReceipt,
-      lucideCreditCard,
-      lucideUsersRound,
-      lucideShield,
-      lucideMessagesSquare,
-      lucideVideo,
-      lucideTags,
-      matArrowDropDownOutline,
-      lucideTicketPercent,
-      lucideFileText,
-      lucidePaintbrush,
-      lucideArchive,
-    }),
-  ],
 })
 export class MenuItemComponent implements OnInit {
   item = model<MenuItem>({

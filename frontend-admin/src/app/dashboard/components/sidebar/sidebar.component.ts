@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCircleHelp, lucideSettings } from '@ng-icons/lucide';
+import { NgIcon } from '@ng-icons/core';
 import { MenuComponent } from './menu/menu.component';
 
 @Component({
@@ -8,11 +7,5 @@ import { MenuComponent } from './menu/menu.component';
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss'],
   imports: [NgIcon, MenuComponent],
-  viewProviders: [
-    provideIcons({
-      lucideSettings,
-      lucideCircleHelp,
-    }),
-  ],
 })
 export class SidebarComponent {}

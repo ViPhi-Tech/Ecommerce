@@ -1,6 +1,5 @@
 import { Component, model, OnInit, signal } from '@angular/core';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideBadgePlus } from '@ng-icons/lucide';
+import { NgIcon } from '@ng-icons/core';
 import { DrawerModule } from 'primeng/drawer';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputGroupModule } from 'primeng/inputgroup';
@@ -16,7 +15,6 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
     InputGroupAddonModule,
     InputGroupModule,
   ],
-  viewProviders: [provideIcons({ lucideBadgePlus })],
 })
 export class QuickAdminComponent implements OnInit {
   show = signal<boolean>(false);

@@ -1,21 +1,13 @@
 import { Component, computed, input, OnInit } from '@angular/core';
 import { ButtonSeverityType } from '../../../../../shared/types/button.types';
 import { ButtonModule } from 'primeng/button';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideMove, lucideSettings, lucideX } from '@ng-icons/lucide';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'fuse-banner-hero',
   templateUrl: './banner-hero.component.html',
   styleUrls: ['./banner-hero.component.scss'],
   imports: [ButtonModule, NgIcon],
-  providers: [
-    provideIcons({
-      lucideMove,
-      lucideX,
-      lucideSettings,
-    }),
-  ],
 })
 export class BannerHeroComponent implements OnInit {
   component = input({

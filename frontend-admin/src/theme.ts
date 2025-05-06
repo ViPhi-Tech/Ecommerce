@@ -1,13 +1,43 @@
+import { registerLocaleData } from '@angular/common';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import localePt from '@angular/common/locales/pt';
 import { ApplicationConfig, LOCALE_ID } from '@angular/core';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { providePrimeNG } from 'primeng/config';
-import Lara from '@primeng/themes/lara';
-import { definePreset } from '@primeng/themes';
 import { provideRouter } from '@angular/router';
+import { provideIcons } from '@ng-icons/core';
+import {
+  lucideArchive,
+  lucideBadgePlus,
+  lucideBell,
+  lucideBox,
+  lucideBuilding2,
+  lucideChartNoAxesColumn,
+  lucideChevronRight,
+  lucideCircleHelp,
+  lucideCreditCard,
+  lucideFileText,
+  lucideFolder,
+  lucideHouse,
+  lucideMessagesSquare,
+  lucideMoon,
+  lucideMove,
+  lucidePaintbrush,
+  lucideReceipt,
+  lucideSettings,
+  lucideShield,
+  lucideSun,
+  lucideTags,
+  lucideTicketPercent,
+  lucideUsersRound,
+  lucideVideo,
+  lucideWallet,
+  lucideX,
+} from '@ng-icons/lucide';
+import { matArrowDropDownOutline } from '@ng-icons/material-icons/outline';
+import { definePreset } from '@primeng/themes';
+import Lara from '@primeng/themes/lara';
+import { providePrimeNG } from 'primeng/config';
 import { routes } from './app/app.routes';
-import { registerLocaleData } from '@angular/common';
-import localePt from '@angular/common/locales/pt';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { credentialsInterceptor } from './app/shared/interceptors/credentials.interceptor';
 
 const MyPreset = definePreset(Lara, {
@@ -5491,6 +5521,35 @@ export const THEME: ApplicationConfig = {
           darkModeSelector: '.dark',
         },
       },
+    }),
+    provideIcons({
+      matArrowDropDownOutline,
+      lucideBox,
+      lucideBadgePlus,
+      lucideSettings,
+      lucideCircleHelp,
+      lucideSun,
+      lucideMoon,
+      lucideBell,
+      lucideChevronRight,
+      lucideHouse,
+      lucideChartNoAxesColumn,
+      lucideBuilding2,
+      lucideFolder,
+      lucideWallet,
+      lucideReceipt,
+      lucideCreditCard,
+      lucideUsersRound,
+      lucideShield,
+      lucideMessagesSquare,
+      lucideVideo,
+      lucideTags,
+      lucideTicketPercent,
+      lucideFileText,
+      lucidePaintbrush,
+      lucideArchive,
+      lucideMove,
+      lucideX,
     }),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
   ],
