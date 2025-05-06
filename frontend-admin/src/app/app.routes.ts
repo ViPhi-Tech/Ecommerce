@@ -26,6 +26,14 @@ export const routes: Routes = [
 
   // drawers
   {
+    path: 'import',
+    loadChildren: () =>
+      import('./dashboard/modules/import-module/import-drawer.module').then(
+        m => m.ImportDrawerModule
+      ),
+    outlet: 'drawer',
+  },
+  {
     path: 'products',
     loadChildren: () =>
       import('./dashboard/modules/product-module/product-drawer.module').then(

@@ -31,6 +31,7 @@
     "tailwindcss-primeui": "^0.6.1",
     "tslib": "^2.3.0",
     "tw-bootstrap-grid-optimizer": "^1.0.2",
+    "xml2js": "^0.6.2",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
@@ -38,6 +39,7 @@
     "@angular/cli": "^19.2.5",
     "@angular/compiler-cli": "^19.2.0",
     "@types/jasmine": "~5.1.0",
+    "@types/xml2js": "^0.4.14",
     "angular-eslint": "^19.3.0",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",

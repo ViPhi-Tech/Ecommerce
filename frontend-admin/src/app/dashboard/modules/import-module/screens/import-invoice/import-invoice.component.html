@@ -1,0 +1,76 @@
+<p-dialog
+  #dialogRef
+  [header]="title()"
+  [(visible)]="visible"
+  [draggable]="false"
+  (onHide)="onHide()"
+  [modal]="true"
+  [dismissableMask]="true"
+  [closeOnEscape]="true"
+  [closable]="true"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [style]="{ width: '80vw' }"
+>
+  <ng-template #header>
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 class="text-lg font-semibold leading-none tracking-tight">
+        {{ title() }}
+      </h2>
+      <p class="text-sm text-muted-foreground">
+        {{ subtitle() }}
+      </p>
+    </div>
+  </ng-template>
+
+  <div>
+    @if (!invoices().length) {
+      <p-fileupload
+        name="notaFiscal[]"
+        (onSelect)="onUpload($event)"
+        [multiple]="true"
+        maxFileSize="1000000"
+        mode="advanced"
+        [chooseLabel]="'Selecionar arquivo'"
+        [uploadLabel]="'Enviar'"
+        [cancelLabel]="'Cancelar'"
+        [accept]="'.xml'"
+        [auto]="true"
+      >
+        <ng-template #empty>
+          <div>Arraste aqui ou selecione um arquivo</div>
+        </ng-template>
+      </p-fileupload>
+    }
+
+    @if (invoices().length) {
+      @for (invoice of invoices(); track $index) {
+        <fuse-invoice-details [invoice]="invoice"/>
+      }
+    }
+  </div>
+
+  <ng-template #footer>
+    <div class="flex items-center gap-2">
+      <button
+        pButton
+        type="submit"
+        label="Importar"
+        icon="pi pi-check"
+        class="w-[200px]"
+        size="small"
+        [raised]="true"
+      ></button>
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        (click)="closeDrawer($event)"
+        severity="secondary"
+        class="w-[200px]"
+        size="small"
+        [raised]="true"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
