@@ -18,9 +18,11 @@
       }
     </div>
     <div class="flex items-center gap-2 sm:gap-4 ml-auto sm:ml-0">
+      <fuse-quick-admin/>
+
       <button
         type="button"
-        class="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-[#1F1F23] rounded-full transition-colors flex items-center justify-center"
+        class="header-button"
       >
         <ng-icon
           name="lucideBell"
@@ -29,7 +31,7 @@
       </button>
       <button
         (click)="toggleDarkMode()"
-        class="relative cursor-pointer p-2 hover:bg-gray-100 dark:hover:bg-[#1F1F23] rounded-full transition-colors flex items-center justify-center"
+        class="header-button"
       >
         <div class="flex dark:hidden">
           <ng-icon
@@ -62,3 +64,4 @@
     </div>
   </nav>
 </header>
+

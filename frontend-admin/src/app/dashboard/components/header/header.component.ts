@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import {
   lucideMoon,
@@ -8,11 +8,12 @@ import {
 } from '@ng-icons/lucide';
 import { Subscription } from 'rxjs';
 import { CoreService } from '../../../shared/services/core.service';
+import { QuickAdminComponent } from "../quick-admin/quick-admin.component";
 @Component({
   selector: 'fuse-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  imports: [NgIcon],
+  imports: [NgIcon, QuickAdminComponent, QuickAdminComponent],
   viewProviders: [
     provideIcons({ lucideSun, lucideMoon, lucideBell, lucideChevronRight }),
   ],
@@ -21,6 +22,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private coreService = inject(CoreService);
 
   breadcrumb: string[] = [];
+  showAdmin = signal<boolean>(false);
 
   _breadcrumbSubscrition!: Subscription;
 
@@ -32,6 +34,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.breadcrumb = breadcrumb;
       }
     );
+  }
+
+  toggleQuickAdmin() {
+    this.showAdmin.set(!this.showAdmin());
   }
 
   toggleDarkMode() {
