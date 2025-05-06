@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DiscountTicketModuleComponent } from './discount-ticket-module.component';
+import { DiscountTicketComponent } from './discount-ticket.component';
 import { DiscountTicketListComponent } from './screens/discount-ticket-list/discount-ticket-list.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: DiscountTicketModuleComponent,
+    component: DiscountTicketComponent,
     children: [
       {
         path: 'list',
@@ -26,6 +26,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule, RouterModule.forChild(routes)],
-  declarations: [DiscountTicketModuleComponent],
+  declarations: [DiscountTicketComponent],
 })
 export class DiscountTicketModule {}

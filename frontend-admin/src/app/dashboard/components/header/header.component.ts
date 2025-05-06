@@ -8,7 +8,7 @@ import {
 } from '@ng-icons/lucide';
 import { Subscription } from 'rxjs';
 import { CoreService } from '../../../shared/services/core.service';
-import { QuickAdminComponent } from "../quick-admin/quick-admin.component";
+import { QuickAdminComponent } from '../quick-admin/quick-admin.component';
 @Component({
   selector: 'fuse-header',
   templateUrl: './header.component.html',

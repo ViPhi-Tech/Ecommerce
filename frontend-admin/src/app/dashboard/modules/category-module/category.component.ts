@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'fuse-product-module',
+  selector: 'fuse-category-module',
   template: '<router-outlet></router-outlet>',
   standalone: false,
 })
-export class ProductModuleComponent implements OnInit {
+export class CategoryComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}

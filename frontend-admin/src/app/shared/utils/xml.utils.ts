@@ -30,17 +30,17 @@ export class XmlUtils {
         serie: ide.serie,
         dataEmissao: ide.dEmi,
         tipoOperacao: ide.natOp,
-        modelo: ide.mod
+        modelo: ide.mod,
       },
       emitente: {
         nome: emit.xNome,
         cnpj: emit.CNPJ,
-        endereco: emit.enderEmit
+        endereco: emit.enderEmit,
       },
       destinatario: {
         nome: dest.xNome,
         cnpj: dest.CNPJ,
-        endereco: dest.enderDest
+        endereco: dest.enderDest,
       },
       produtos: det.map((item: any) => {
         const prod = item.prod;
@@ -51,7 +51,7 @@ export class XmlUtils {
           unidade: prod.uCom,
           valorUnitario: prod.vUnCom,
           valorTotal: prod.vProd,
-          cfop: prod.CFOP
+          cfop: prod.CFOP,
         };
       }),
       totais: {
@@ -59,12 +59,12 @@ export class XmlUtils {
         valorNF: total.vNF,
         valorICMS: total.vICMS,
         valorPIS: total.vPIS,
-        valorCOFINS: total.vCOFINS
+        valorCOFINS: total.vCOFINS,
       },
       transporte: {
         modalidadeFrete: transp.modFrete,
-        transportadora: transp.transporta
-      }
+        transportadora: transp.transporta,
+      },
     };
   }
 }

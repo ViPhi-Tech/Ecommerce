@@ -44,7 +44,7 @@
 
     @if (invoices().length) {
       @for (invoice of invoices(); track $index) {
-        <fuse-invoice-details [invoice]="invoice"/>
+        <fuse-invoice-details [invoice]="invoice" />
       }
     }
   </div>

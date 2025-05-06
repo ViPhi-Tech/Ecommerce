@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { CategoryModuleComponent } from './category-module.component';
-import { CategoryListComponent } from './screens/category-list/category-list.component';
+import { UserComponent } from './user.component';
+import { UserListComponent } from './screens/user-list/user-list.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: CategoryModuleComponent,
+    component: UserComponent,
     children: [
       {
         path: 'list',
-        component: CategoryListComponent,
+        component: UserListComponent,
         data: {
-          breadcrumb: ['Dashboard', 'Lista de categorias'],
+          breadcrumb: ['Dashboard', 'Lista de usuários'],
         },
       },
       {
@@ -26,6 +26,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule, RouterModule.forChild(routes)],
-  declarations: [CategoryModuleComponent],
+  declarations: [UserComponent],
 })
-export class CategoryModuleModule {}
+export class UserModule {}

@@ -1,8 +1,5 @@
 import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
-import {
-  FormBuilder,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -22,7 +19,7 @@ import { InvoiceDetailsComponent } from '../../../../../shared/components/invoic
     ReactiveFormsModule,
     FormModule,
     FileUploadModule,
-    InvoiceDetailsComponent
+    InvoiceDetailsComponent,
   ],
 })
 export class ImportInvoiceComponent implements OnInit {
@@ -37,7 +34,9 @@ export class ImportInvoiceComponent implements OnInit {
   // signals
   visible = signal(true);
   title = signal('Importar Nota Fiscal');
-  subtitle = signal('Você pode importar uma nota fiscal eletrônica (NF-e) através do arquivo XML.');
+  subtitle = signal(
+    'Você pode importar uma nota fiscal eletrônica (NF-e) através do arquivo XML.'
+  );
 
   uploadedFiles: any[] = [];
 
@@ -45,9 +44,7 @@ export class ImportInvoiceComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {
-      
-  }
+  ngOnInit(): void {}
 
   onUpload(event: any) {
     if (event.files?.length) {
@@ -58,7 +55,7 @@ export class ImportInvoiceComponent implements OnInit {
         try {
           let invoice = await XmlUtils.xmlToJson(xmlString);
           invoice = XmlUtils.beautifyNFe(invoice);
-          this.invoices.update((invoices) => [...invoices, invoice]);
+          this.invoices.update(invoices => [...invoices, invoice]);
           console.log('JSON convertido:', invoice);
         } catch (error) {
           console.error('Erro ao converter XML:', error);

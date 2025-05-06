@@ -5,7 +5,7 @@ import { Component, OnInit } from '@angular/core';
   template: '<router-outlet></router-outlet>',
   standalone: false,
 })
-export class OrderModuleComponent implements OnInit {
+export class OrderComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}

@@ -1,13 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { OrderModuleComponent } from './order-module.component';
+import { OrderComponent } from './order.component';
 import { OrderListComponent } from './screens/order-list/order-list.component';
 import { OrderCreateComponent } from './screens/order-create/order-create.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: OrderModuleComponent,
+    component: OrderComponent,
     children: [
       {
         path: 'list',
@@ -34,6 +34,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule, RouterModule.forChild(routes)],
-  declarations: [OrderModuleComponent],
+  declarations: [OrderComponent],
 })
-export class OrderModuleModule {}
+export class OrderModule {}

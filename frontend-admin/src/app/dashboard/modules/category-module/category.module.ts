@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { InvoiceModuleComponent } from './invoice-module.component';
-import { InvoiceListComponent } from './screens/invoice-list/invoice-list.component';
+import { CategoryComponent } from './category.component';
+import { CategoryListComponent } from './screens/category-list/category-list.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: InvoiceModuleComponent,
+    component: CategoryComponent,
     children: [
       {
         path: 'list',
-        component: InvoiceListComponent,
+        component: CategoryListComponent,
         data: {
-          breadcrumb: ['Dashboard', 'Lista de Notas Fiscais'],
+          breadcrumb: ['Dashboard', 'Lista de categorias'],
         },
       },
       {
@@ -26,6 +26,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule, RouterModule.forChild(routes)],
-  declarations: [InvoiceModuleComponent],
+  declarations: [CategoryComponent],
 })
-export class InvoiceModuleModule {}
+export class CategoryModule {}

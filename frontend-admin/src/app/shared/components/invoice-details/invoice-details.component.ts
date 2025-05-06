@@ -1,4 +1,3 @@
-
 import { Component, input, OnInit } from '@angular/core';
 import { InvoiceDetails } from '../../interfaces/invoice.interface';
 import { CurrencyPipe } from '@angular/common';
@@ -16,6 +15,5 @@ export class InvoiceDetailsComponent implements OnInit {
 
   ngOnInit() {
     console.log('Invoice Details:', this.invoice());
-    
   }
 }

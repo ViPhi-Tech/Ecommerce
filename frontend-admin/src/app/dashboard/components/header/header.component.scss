@@ -1,3 +1,3 @@
 .header-button {
-  @apply p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-[#1F1F23] rounded-full transition-colors flex items-center justify-center
+  @apply p-1.5 sm:p-2 hover:bg-muted dark:hover:bg-muted-dark rounded-full transition-colors flex items-center justify-center;
 }

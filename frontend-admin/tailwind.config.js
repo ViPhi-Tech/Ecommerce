@@ -11,6 +11,7 @@ module.exports = {
         'container-background': '#121212',
         'card-background': '#1E1E1E',
         'muted': 'hsl(210 40% 96.1%)',
+        'muted-dark': '#1F1F23',
       },
       height: {
         'screen-without-header': 'calc(100vh - 64px)',

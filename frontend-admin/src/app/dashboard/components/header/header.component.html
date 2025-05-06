@@ -18,21 +18,15 @@
       }
     </div>
     <div class="flex items-center gap-2 sm:gap-4 ml-auto sm:ml-0">
-      <fuse-quick-admin/>
+      <fuse-quick-admin />
 
-      <button
-        type="button"
-        class="header-button"
-      >
+      <button type="button" class="header-button">
         <ng-icon
           name="lucideBell"
           class="text-xl text-gray-600 dark:text-gray-300 transition-all"
         />
       </button>
-      <button
-        (click)="toggleDarkMode()"
-        class="header-button"
-      >
+      <button (click)="toggleDarkMode()" class="header-button">
         <div class="flex dark:hidden">
           <ng-icon
             name="lucideSun"
@@ -64,4 +58,3 @@
     </div>
   </nav>
 </header>
-

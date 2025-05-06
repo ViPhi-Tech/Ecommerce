@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'fuse-product-module',
+  selector: 'fuse-invoice-module',
   template: '<router-outlet></router-outlet>',
   standalone: false,
 })
-export class DiscountTicketModuleComponent implements OnInit {
+export class InvoiceComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}

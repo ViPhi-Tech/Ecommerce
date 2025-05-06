@@ -2,24 +2,29 @@ import { Component, model, OnInit, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBadgePlus } from '@ng-icons/lucide';
 import { DrawerModule } from 'primeng/drawer';
-
+import { InputTextModule } from 'primeng/inputtext';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 @Component({
   selector: 'fuse-quick-admin',
   templateUrl: './quick-admin.component.html',
   styleUrls: ['./quick-admin.component.scss'],
-  imports: [DrawerModule, NgIcon],
-  viewProviders: [
-    provideIcons({ lucideBadgePlus }),
+  imports: [
+    DrawerModule,
+    NgIcon,
+    InputTextModule,
+    InputGroupAddonModule,
+    InputGroupModule,
   ],
+  viewProviders: [provideIcons({ lucideBadgePlus })],
 })
 export class QuickAdminComponent implements OnInit {
   show = signal<boolean>(false);
-  title = model<string>('Cadastros Rápidos');
+  title = model<string>('Cadastro rápido');
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   toggleQuickAdmin() {
     this.show.set(!this.show());
@@ -28,5 +33,4 @@ export class QuickAdminComponent implements OnInit {
   onCloseDrawer() {
     this.show.set(false);
   }
-
 }

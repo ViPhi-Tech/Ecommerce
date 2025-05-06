@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { UserModuleComponent } from './user-module.component';
-import { UserListComponent } from './screens/user-list/user-list.component';
+import { ProductComponent } from './product.component';
+import { ProductListComponent } from './screens/product-list/product-list.component';
 
 const routes: Routes = [
   {
     path: '',
-    component: UserModuleComponent,
+    component: ProductComponent,
     children: [
       {
         path: 'list',
-        component: UserListComponent,
+        component: ProductListComponent,
         data: {
-          breadcrumb: ['Dashboard', 'Lista de usuários'],
+          breadcrumb: ['Dashboard', 'Lista de produtos'],
         },
       },
       {
@@ -26,6 +26,6 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule, RouterModule.forChild(routes)],
-  declarations: [UserModuleComponent],
+  declarations: [ProductComponent],
 })
-export class UserModuleModule {}
+export class ProductModule {}

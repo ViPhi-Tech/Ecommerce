@@ -26,45 +26,43 @@ const routes: Routes = [
       {
         path: 'orders',
         loadChildren: () =>
-          import('./modules/order-module/order-module.module').then(
-            m => m.OrderModuleModule
+          import('./modules/order-module/order.module').then(
+            m => m.OrderModule
           ),
       },
       {
         path: 'products',
         loadChildren: () =>
-          import('./modules/product-module/product-module.module').then(
-            m => m.ProductModuleModule
+          import('./modules/product-module/product.module').then(
+            m => m.ProductModule
           ),
       },
       {
         path: 'categories',
         loadChildren: () =>
-          import('./modules/category-module/category-module.module').then(
-            m => m.CategoryModuleModule
+          import('./modules/category-module/category.module').then(
+            m => m.CategoryModule
           ),
       },
       {
         path: 'invoices',
         loadChildren: () =>
-          import('./modules/invoice-module/invoice-module.module').then(
-            m => m.InvoiceModuleModule
+          import('./modules/invoice-module/invoice.module').then(
+            m => m.InvoiceModule
           ),
       },
 
       {
         path: 'users',
         loadChildren: () =>
-          import('./modules/user-module/user-module.module').then(
-            m => m.UserModuleModule
-          ),
+          import('./modules/user-module/user.module').then(m => m.UserModule),
       },
 
       {
         path: 'discount-tickets',
         loadChildren: () =>
           import(
-            './modules/discount-ticket-module/discount-ticket-module.module'
+            './modules/discount-ticket-module/discount-ticket.module'
           ).then(m => m.DiscountTicketModule),
       },
     ],
