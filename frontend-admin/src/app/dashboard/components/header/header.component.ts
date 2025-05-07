@@ -2,12 +2,12 @@ import { Component, inject, OnInit, OnDestroy, signal } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { Subscription } from 'rxjs';
 import { CoreService } from '../../../shared/services/core.service';
-import { QuickAdminComponent } from '../quick-admin/quick-admin.component';
+import { QuickAccessComponent } from '../quick-admin/quick-access.component';
 @Component({
   selector: 'fuse-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  imports: [NgIcon, QuickAdminComponent, QuickAdminComponent],
+  imports: [NgIcon, QuickAccessComponent, QuickAccessComponent],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   private coreService = inject(CoreService);
@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     );
   }
 
-  toggleQuickAdmin() {
+  toggleQuickAccess() {
     this.showAdmin.set(!this.showAdmin());
   }
 

@@ -1,0 +1,49 @@
+<button (click)="toggleQuickAccess()" class="header-button">
+  <ng-icon
+    name="lucideBadgePlus"
+    class="text-xl text-gray-600 dark:text-gray-300 transition-all"
+  />
+</button>
+
+<p-drawer
+  #drawerRef
+  [header]="title()"
+  [visible]="show()"
+  (onHide)="onCloseDrawer()"
+  position="right"
+  styleClass="!w-full md:!w-[400px] lg:!w-[400px]"
+  transitionOptions="300ms cubic-bezier(0, 0, 0.2, 1)"
+>
+  <div class="relative mb-4">
+    <p-inputgroup>
+      <p-inputgroup-addon>
+        <i class="pi pi-search"></i>
+      </p-inputgroup-addon>
+      <input pInputText placeholder="Pesquisar" />
+    </p-inputgroup>
+  </div>
+  <nav class="grid gap-2">
+    @for (item of quickAccessItems(); track $index) {
+      <a [href]="item.link" class="quick-access-item">
+        <ng-icon
+          [name]="item.icon"
+          class="text-xl text-gray-600 dark:text-gray-300 transition-all mr-2"
+        ></ng-icon>
+        {{ item.label }}
+      </a>
+    }
+  </nav>
+
+  <ng-template #footer>
+    <div class="flex items-center gap-2">
+      <button
+        pButton
+        type="submit"
+        label="Cadastrar"
+        icon="pi pi-check"
+        class="w-full"
+        severity="success"
+      ></button>
+    </div>
+  </ng-template>
+</p-drawer>
