@@ -19,18 +19,18 @@
       <p-inputgroup-addon>
         <i class="pi pi-search"></i>
       </p-inputgroup-addon>
-      <input pInputText placeholder="Pesquisar" />
+      <input pInputText placeholder="Pesquisar" [formControl]="searchInput" />
     </p-inputgroup>
   </div>
   <nav class="grid gap-2">
-    @for (item of quickAccessItems(); track $index) {
-      <a [href]="item.link" class="quick-access-item">
+    @for (item of quickAccessItemsFiltered(); track $index) {
+      <button (click)="item?.click()" class="quick-access-item">
         <ng-icon
           [name]="item.icon"
           class="text-xl text-gray-600 dark:text-gray-300 transition-all mr-2"
         ></ng-icon>
         {{ item.label }}
-      </a>
+      </button>
     }
   </nav>
 

@@ -18,7 +18,17 @@ module.exports = {
       },
       textColor: {
         'muted-foreground': 'rgb(100 116 139)',
-
+      },
+      borderColor: {
+        'muted': 'hsl(210 40% 96.1%)',
+        'muted-dark': '#1F1F23',
+      },
+      colors: {
+        'muted': 'hsl(210 40% 96.1%)',
+        'muted-dark': '#1F1F23',
+        'container-background': '#121212',
+        'card-background': '#1E1E1E',
+        'muted-foreground': 'rgb(100 116 139)',
       },
     },
   },
