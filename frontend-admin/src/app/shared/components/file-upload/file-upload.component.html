@@ -6,17 +6,17 @@
     chooseLabel="Escolher"
     uploadLabel="Escolher"
     [accept]="accept()"
-    (onUpload)="onUpload($event)"
+    (onUpload)="onTemplatedUpload()" 
+    (onSelect)="onSelectedFiles($event)"
     [customUpload]="true"
     [multiple]="multiple()"
-    (onSelect)="onUpload($event)"
     [showUploadButton]="true"
     [showCancelButton]="false"
     [auto]="true"
     class="w-full"
   >
     <ng-template
-      pTemplate="header"
+      #header
       let-files
       let-chooseCallback="chooseCallback"
       let-clearCallback="clearCallback"
@@ -59,71 +59,94 @@
       </button>
     </ng-template>
 
-    @if (uploadedFiles().length) {
-      <ng-template pTemplate="content">
-        @if (!loading) {
-          <button
-            class="w-full py-3"
-            style="cursor: copy"
-            (click)="fileUploader.advancedFileInput.nativeElement.click()"
-          >
-            <div
-              *ngIf="!uploadedFiles()?.length || multiple()"
-              class="h-full flex flex-column justify-content-center align-items-center"
-            >
-              <i class="pi pi-upload text-900 text-xs mb-2"></i>
-              <span class="font-bold text-900 text-xs mb-1"
-                >Upload de arquivos</span
-              >
-              <span class="font-medium text-600 text-xs text-center"
-                >Arraste ou selecione um arquivo(s)</span
-              >
-            </div>
-          </button>
-        }
-        @if (loading()) {
-          <div class="flex justify-content-center align-items-center p-3">
-            <img
-              src="assets/loader/loader-pdv.gif"
-              width="100"
-              alt="Loading animation"
-            />
-          </div>
-        } @else {
-          @if (uploadedFiles().length) {
-            <div class="flex justify-content-center flex-wrap gap-5">
-              <div
-                *ngFor="let file of uploadedFiles()"
-                class="row w-full flex align-items-center"
-              >
-                <div class="col-3">
-                  <img
-                    [src]="file.file"
-                    [alt]="file.name"
-                    class="w-full h-full border-round shadow-2 max-width"
+    <ng-template
+      #content
+      let-files
+      let-uploadedFiles="uploadedFiles"
+      let-removeFileCallback="removeFileCallback"
+      let-removeUploadedFileCallback="removeUploadedFileCallback"
+    >
+      <div class="flex flex-col gap-8 pt-4">
+        @if (files.length > 0) {
+          <div>
+            <h5>Pendente</h5>
+            <div class="flex flex-wrap gap-4">
+              @for (file of files; track $index) {
+                <div
+                  class="p-8 rounded-border flex flex-col border border-surface items-center gap-4"
+                >
+                  <div>
+                    <img
+                      role="presentation"
+                      [alt]="file.name"
+                      [src]="file.objectURL"
+                      width="100"
+                      height="50"
+                    />
+                  </div>
+                  <span
+                    class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden"
+                    >{{ file.name }}</span
+                  >
+                  <div>{{ formatSize(file.size) }}</div>
+                  <p-badge value="Pendente" severity="warn" />
+                  <p-button
+                    icon="pi pi-times"
+                    (click)="
+                      onRemoveTemplatingFile(
+                        $event,
+                        file,
+                        removeFileCallback,
+                        $index
+                      )
+                    "
+                    [outlined]="true"
+                    [rounded]="true"
+                    severity="danger"
                   />
                 </div>
-                <div
-                  class="col-5 p-fileupload-filename text-limite-personalizado"
-                >
-                  {{ file.name }}
-                </div>
-                <div class="col-2">{{ file.size }}</div>
-                <div class="col-2 flex justify-content-center">
-                  <button
-                    type="button"
-                    class="p-element p-button-icon-only p-button p-component"
-                    (click)="deleteFile($event, file)"
-                  >
-                    <span class="p-button-icon p-c pi pi-times"></span>
-                  </button>
-                </div>
-              </div>
+              }
             </div>
-          }
+          </div>
         }
-      </ng-template>
-    }
+        @if (uploadedFiles.length > 0) {
+          <div>
+            <h5>Completed</h5>
+            <div class="flex flex-wrap gap-4">
+              @for (file of uploadedFiles; track $index) {
+                <div
+                  class="card m-0 px-12 flex flex-col border border-surface items-center gap-4"
+                >
+                  <div>
+                    <img
+                      role="presentation"
+                      [alt]="file.name"
+                      [src]="file.objectURL"
+                      width="100"
+                      height="50"
+                    />
+                  </div>
+                  <span
+                    class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden"
+                    >{{ file.name }}</span
+                  >
+                  <div>{{ formatSize(file.size) }}</div>
+                  <p-badge value="Enviado" class="mt-4" severity="success" />
+                  <p-button
+                    icon="pi pi-times"
+                    (onClick)="removeUploadedFileCallback($index)"
+                    [outlined]="true"
+                    [rounded]="true"
+                    severity="danger"
+                  />
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </ng-template>
+    <ng-template #file></ng-template>
   </p-fileUpload>
 </div>
 
