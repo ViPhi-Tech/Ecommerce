@@ -39,7 +39,7 @@ import {
 import { matArrowDropDownOutline } from '@ng-icons/material-icons/outline';
 import { providePrimeNG } from 'primeng/config';
 import { routes } from './app/app.routes';
-import { credentialsInterceptor } from './app/shared/interceptors/credentials.interceptor';
+import { CoreInterceptor } from './app/shared/interceptors/core.interceptor';
 import { Preset } from './prime.theme';
 
 
@@ -49,7 +49,7 @@ export const THEME: ApplicationConfig = {
   providers: [
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient(withInterceptors([credentialsInterceptor])),
+    provideHttpClient(withInterceptors([CoreInterceptor])),
     providePrimeNG({
       theme: {
         preset: Preset,
