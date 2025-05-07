@@ -24,22 +24,7 @@
 
   <div>
     @if (!invoices().length) {
-      <p-fileupload
-        name="notaFiscal[]"
-        (onSelect)="onUpload($event)"
-        [multiple]="true"
-        maxFileSize="1000000"
-        mode="advanced"
-        [chooseLabel]="'Selecionar arquivo'"
-        [uploadLabel]="'Enviar'"
-        [cancelLabel]="'Cancelar'"
-        [accept]="'.xml'"
-        [auto]="true"
-      >
-        <ng-template #empty>
-          <div>Arraste aqui ou selecione um arquivo</div>
-        </ng-template>
-      </p-fileupload>
+      <fuse-file-upload (uploadedFilesEvent)="onUpload($event)"/>
     }
 
     @if (invoices().length) {

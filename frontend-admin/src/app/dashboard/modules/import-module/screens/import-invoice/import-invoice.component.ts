@@ -8,6 +8,7 @@ import { FormModule } from '../../../../../shared/components/form/form.module';
 import { FileUploadModule } from 'primeng/fileupload';
 import { XmlUtils } from '../../../../../shared/utils/xml.utils';
 import { InvoiceDetailsComponent } from '../../../../../shared/components/invoice-details/invoice-details.component';
+import { FileUploadComponent } from '../../../../../shared/components/file-upload/file-upload.component';
 
 @Component({
   selector: 'fuse-import-invoice',
@@ -20,6 +21,7 @@ import { InvoiceDetailsComponent } from '../../../../../shared/components/invoic
     FormModule,
     FileUploadModule,
     InvoiceDetailsComponent,
+    FileUploadComponent
   ],
 })
 export class ImportInvoiceComponent implements OnInit {
