@@ -25,45 +25,45 @@ export class XmlUtils {
     const det = Array.isArray(infNFe.det) ? infNFe.det : [infNFe.det];
 
     return {
-      ide: {
-        numero: ide.nNF,
-        serie: ide.serie,
-        dataEmissao: ide.dEmi,
-        tipoOperacao: ide.natOp,
-        modelo: ide.mod,
+      identification: {
+        number: ide.nNF,
+        series: ide.serie,
+        issueDate: ide.dEmi,
+        operationType: ide.natOp,
+        model: ide.mod,
       },
-      emitente: {
-        nome: emit.xNome,
+      issuer: {
+        name: emit.xNome,
         cnpj: emit.CNPJ,
-        endereco: emit.enderEmit,
+        address: emit.enderEmit,
       },
-      destinatario: {
-        nome: dest.xNome,
+      recipient: {
+        name: dest.xNome,
         cnpj: dest.CNPJ,
-        endereco: dest.enderDest,
+        address: dest.enderDest,
       },
-      produtos: det.map((item: any) => {
+      products: det.map((item: any) => {
         const prod = item.prod;
         return {
-          numeroItem: item.$?.nItem,
-          descricao: prod.xProd,
-          quantidade: prod.qCom,
-          unidade: prod.uCom,
-          valorUnitario: prod.vUnCom,
-          valorTotal: prod.vProd,
+          itemNumber: item.$?.nItem,
+          description: prod.xProd,
+          quantity: prod.qCom,
+          unit: prod.uCom,
+          unitValue: prod.vUnCom,
+          totalValue: prod.vProd,
           cfop: prod.CFOP,
         };
       }),
-      totais: {
-        valorProdutos: total.vProd,
-        valorNF: total.vNF,
-        valorICMS: total.vICMS,
-        valorPIS: total.vPIS,
-        valorCOFINS: total.vCOFINS,
+      totals: {
+        productValue: total.vProd,
+        invoiceValue: total.vNF,
+        icmsValue: total.vICMS,
+        pisValue: total.vPIS,
+        cofinsValue: total.vCOFINS,
       },
-      transporte: {
-        modalidadeFrete: transp.modFrete,
-        transportadora: transp.transporta,
+      transportation: {
+        freightMode: transp.modFrete,
+        carrier: transp.transporta,
       },
     };
   }
