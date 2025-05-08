@@ -13,7 +13,7 @@ export class XmlUtils {
 
   // Organiza os dados de uma NF-e (modelo simplificado)
   static beautifyNFe(nfeRawJson: any): any {
-    const infNFe = nfeRawJson?.NFe?.infNFe;
+    const infNFe = nfeRawJson?.NFe?.infNFe || nfeRawJson?.nfeProc?.NFe?.infNFe;
 
     if (!infNFe) return null;
 
