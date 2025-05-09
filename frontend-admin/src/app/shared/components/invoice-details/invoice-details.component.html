@@ -1,5 +1,5 @@
 <div class="mt-8 max-w-4xl mx-auto">
-  <h2 class="text-2xl font-bold mb-4">Informações da NFe</h2>
+  <h2 class="text-2xl font-bold mb-4">Informações da Nota Fiscal</h2>
   <div
     class="rounded-lg border bg-card text-card-foreground shadow-sm mb-6"
     data-v0-t="card"
@@ -12,20 +12,24 @@
     <div class="p-6 pt-0">
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div>
-          <p class="text-sm font-medium text-muted-foreground">Número da NFe</p>
-          <p class="text-lg font-semibold">{{ invoice()?.ide?.numero }}</p>
+          <p class="text-sm font-medium text-muted-foreground">
+            Número da Nota
+          </p>
+          <p class="text-lg font-semibold">
+            {{ invoice()?.identification?.number }}
+          </p>
         </div>
         <div>
           <p class="text-sm font-medium text-muted-foreground">
             Data de Emissão
           </p>
-          <p class="text-lg">{{ invoice()?.ide?.dataEmissao }}</p>
+          <p class="text-lg">{{ invoice()?.identification?.issueDate | date: "dd/MM/yyyy" }}</p>
         </div>
         <div>
           <p class="text-sm font-medium text-muted-foreground">Valor Total</p>
           <p class="text-lg font-bold">
             {{
-              invoice()?.totais?.valorNF
+              invoice()?.totals?.invoiceValue
                 | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
             }}
           </p>
@@ -44,15 +48,14 @@
         </h3>
       </div>
       <div class="p-6 pt-0">
-        <p class="font-semibold text-lg">{{ invoice()?.emitente?.nome }}</p>
+        <p class="font-semibold text-lg">{{ invoice()?.issuer?.name }}</p>
+        <p class="text-muted-foreground">CNPJ: {{ invoice()?.issuer?.cnpj }}</p>
         <p class="text-muted-foreground">
-          CNPJ: {{ invoice()?.emitente?.cnpj }}
-        </p>
-        <p class="text-muted-foreground">
-          {{ invoice()?.emitente?.endereco?.xLgr }},
-          {{ invoice()?.emitente?.endereco?.nro }} -
-          {{ invoice()?.emitente?.endereco?.xMun }}/{{
-            invoice()?.emitente?.endereco?.UF
+          {{ invoice()?.issuer?.address?.street }},
+          {{ invoice()?.issuer?.address?.number }} -
+          {{ invoice()?.issuer?.address?.neighborhood }},
+          {{ invoice()?.issuer?.address?.city }}/{{
+            invoice()?.issuer?.address?.state
           }}
         </p>
       </div>
@@ -67,15 +70,16 @@
         </h3>
       </div>
       <div class="p-6 pt-0">
-        <p class="font-semibold text-lg">{{ invoice()?.destinatario?.nome }}</p>
+        <p class="font-semibold text-lg">{{ invoice()?.recipient?.name }}</p>
         <p class="text-muted-foreground">
-          CNPJ: {{ invoice()?.destinatario?.cnpj }}
+          CNPJ: {{ invoice()?.recipient?.cnpj }}
         </p>
         <p class="text-muted-foreground">
-          {{ invoice()?.destinatario?.endereco?.xLgr }},
-          {{ invoice()?.destinatario?.endereco?.nro }} -
-          {{ invoice()?.destinatario?.endereco?.xMun }}/{{
-            invoice()?.destinatario?.endereco?.UF
+          {{ invoice()?.recipient?.address?.street }},
+          {{ invoice()?.recipient?.address?.number }} -
+          {{ invoice()?.recipient?.address?.neighborhood }},
+          {{ invoice()?.recipient?.address?.city }}/{{
+            invoice()?.recipient?.address?.state
           }}
         </p>
       </div>
@@ -110,12 +114,12 @@
               <th
                 class="h-12 px-4 align-middle font-medium text-muted-foreground text-right"
               >
-                Qtd
+                Qtde
               </th>
               <th
                 class="h-12 px-4 align-middle font-medium text-muted-foreground text-right"
               >
-                Valor Unit.
+                Valor Unitário
               </th>
               <th
                 class="h-12 px-4 align-middle font-medium text-muted-foreground text-right"
@@ -125,24 +129,24 @@
             </tr>
           </thead>
           <tbody>
-            @for (product of invoice()?.produtos; track $index) {
+            @for (product of invoice()?.products; track $index) {
               <tr
                 class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
               >
-                <td class="p-4 align-middle">{{ product.numeroItem }}</td>
-                <td class="p-4 align-middle">{{ product.descricao }}</td>
+                <td class="p-4 align-middle">{{ product.itemNumber }}</td>
+                <td class="p-4 align-middle">{{ product.description }}</td>
                 <td class="p-4 align-middle text-right">
-                  {{ product.quantidade }}
+                  {{ product.quantity }}
                 </td>
                 <td class="p-4 align-middle text-right">
                   {{
-                    product.valorUnitario
+                    product.unitValue
                       | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
                   }}
                 </td>
                 <td class="p-4 align-middle text-right">
                   {{
-                    product.valorTotal
+                    product.totalValue
                       | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
                   }}
                 </td>
@@ -157,7 +161,7 @@
         <p class="text-sm text-muted-foreground">Valor Total</p>
         <p class="text-xl font-bold">
           {{
-            invoice()?.totais?.valorNF
+            invoice()?.totals?.invoiceValue
               | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
           }}
         </p>

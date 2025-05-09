@@ -1,88 +1,74 @@
 export interface InvoiceDetails {
-  ide: Ide;
-  emitente: Emitente;
-  destinatario: Destinatario;
-  produtos: Produto[];
-  totais: Totais;
-  transporte: Transporte;
+  identification: Identification;
+  issuer: Issuer;
+  recipient: Recipient;
+  products: Product[];
+  totals: Totals;
+  transportation: Transportation;
 }
 
-export interface Ide {
-  numero: string;
-  serie: string;
-  dataEmissao: string;
-  tipoOperacao: string;
-  modelo: string;
+export interface Identification {
+  number: string;
+  series: string;
+  issueDate: string;
+  operationType: string;
+  model: string;
 }
 
-export interface Emitente {
-  nome: string;
+export interface Issuer {
+  name: string;
   cnpj: string;
-  endereco: Endereco;
+  address: Address;
 }
 
-export interface Endereco {
-  xLgr: string;
-  nro: string;
-  xCpl: string;
-  xBairro: string;
-  cMun: string;
-  xMun: string;
-  UF: string;
-  CEP: string;
-  cPais: string;
-  xPais: string;
-  fone: string;
+export interface Address {
+  street: string;
+  number: string;
+  complement: string;
+  neighborhood: string;
+  cityCode: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  countryCode: string;
+  country: string;
+  phone: string;
 }
 
-export interface Destinatario {
-  nome: string;
+export interface Recipient {
+  name: string;
   cnpj: string;
-  endereco: Endereco2;
+  address: Address;
 }
 
-export interface Endereco2 {
-  xLgr: string;
-  nro: string;
-  xCpl: string;
-  xBairro: string;
-  cMun: string;
-  xMun: string;
-  UF: string;
-  CEP: string;
-  cPais: string;
-  xPais: string;
-  fone: string;
-}
-
-export interface Produto {
-  numeroItem: string;
-  descricao: string;
-  quantidade: string;
-  unidade: string;
-  valorUnitario: string;
-  valorTotal: string;
+export interface Product {
+  itemNumber: string;
+  description: string;
+  quantity: string;
+  unit: string;
+  unitValue: string;
+  totalValue: string;
   cfop: string;
 }
 
-export interface Totais {
-  valorProdutos: string;
-  valorNF: string;
-  valorICMS: string;
-  valorPIS: string;
-  valorCOFINS: string;
+export interface Totals {
+  productValue: string;
+  invoiceValue: string;
+  icmsValue: string;
+  pisValue: string;
+  cofinsValue: string;
 }
 
-export interface Transporte {
-  modalidadeFrete: string;
-  transportadora: Transportadora;
+export interface Transportation {
+  freightMode: string;
+  carrier: Carrier;
 }
 
-export interface Transportadora {
-  CNPJ: string;
-  xNome: string;
-  IE: string;
-  xEnder: string;
-  xMun: string;
-  UF: string;
+export interface Carrier {
+  cnpj: string;
+  name: string;
+  stateRegistration: string;
+  address: string;
+  city: string;
+  state: string;
 }

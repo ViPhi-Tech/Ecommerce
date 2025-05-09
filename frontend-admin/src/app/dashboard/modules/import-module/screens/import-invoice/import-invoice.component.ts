@@ -21,7 +21,7 @@ import { FileUploadComponent } from '../../../../../shared/components/file-uploa
     FormModule,
     FileUploadModule,
     InvoiceDetailsComponent,
-    FileUploadComponent
+    FileUploadComponent,
   ],
 })
 export class ImportInvoiceComponent implements OnInit {
@@ -48,9 +48,11 @@ export class ImportInvoiceComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  onUpload(event: any) {
-    if (event.files?.length) {
-      const file = event.files[0];
+  onUpload(files: any) {
+    console.log('event', files);
+
+    if (files?.length) {
+      const file = files[0];
       const reader = new FileReader();
       reader.onload = async () => {
         const xmlString = reader.result as string;

@@ -5,15 +5,14 @@ export function CoreInterceptor(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> {
-
   const accessToken = localStorage.getItem('accessToken');
 
   const newReq = req.clone({
     withCredentials: true,
     setHeaders: {
       Authorization: accessToken ? `Bearer ${accessToken}` : '',
-      'Content-Type': 'application/json'
-    }
+      'Content-Type': 'application/json',
+    },
   });
 
   return next(newReq);

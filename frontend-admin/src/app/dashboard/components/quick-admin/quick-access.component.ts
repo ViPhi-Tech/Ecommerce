@@ -1,4 +1,11 @@
-import { Component, inject, model, OnDestroy, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  model,
+  OnDestroy,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { DrawerModule } from 'primeng/drawer';
 import { InputTextModule } from 'primeng/inputtext';
@@ -24,7 +31,7 @@ interface QuickAccessItem {
     InputTextModule,
     InputGroupAddonModule,
     InputGroupModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
 })
 export class QuickAccessComponent implements OnInit, OnDestroy {
@@ -44,7 +51,7 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
       click: () => {
         this.toggleQuickAccess();
         this.router.navigate([{ outlets: { drawer: ['products', 'new'] } }]);
-      }
+      },
     },
     {
       label: 'Importação de Nota Fiscal',
@@ -52,52 +59,46 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
       click: () => {
         this.toggleQuickAccess();
         this.router.navigate([{ outlets: { drawer: ['import', 'invoice'] } }]);
-      }
+      },
     },
     {
       label: 'Cadastro de Clientes',
       icon: 'lucideUser',
-      click: () => {
-
-      }
+      click: () => {},
     },
     {
       label: 'Cadastro de Fornecedores',
       icon: 'lucideUsers',
-      click: () => {
-
-      }
+      click: () => {},
     },
     {
       label: 'Relatórios',
       icon: 'lucideChartBar',
-      click: () => {
-
-      }
+      click: () => {},
     },
     {
       label: 'Configurações',
       icon: 'lucideSettings',
-      click: () => {
-
-      }
+      click: () => {},
     },
   ]);
 
   private _searchSubscription!: Subscription;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     this.quickAccessItemsFiltered.set(this.quickAccessItems());
 
-    this._searchSubscription = this.searchInput.valueChanges.subscribe((value = '') => {
-      this.quickAccessItemsFiltered.set(
-        this.quickAccessItems().filter((item) =>
-          item.label.toLowerCase().includes((value ?? '').toLowerCase())
-        )
-      );
-    });
+    this._searchSubscription = this.searchInput.valueChanges.subscribe(
+      (value = '') => {
+        this.quickAccessItemsFiltered.set(
+          this.quickAccessItems().filter(item =>
+            item.label.toLowerCase().includes((value ?? '').toLowerCase())
+          )
+        );
+      }
+    );
   }
 
   toggleQuickAccess() {

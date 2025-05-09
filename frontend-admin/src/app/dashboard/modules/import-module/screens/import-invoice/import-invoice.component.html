@@ -24,7 +24,7 @@
 
   <div>
     @if (!invoices().length) {
-      <fuse-file-upload (uploadedFilesEvent)="onUpload($event)"/>
+      <fuse-file-upload (uploadedFilesEvent)="onUpload($event)" />
     }
 
     @if (invoices().length) {

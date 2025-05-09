@@ -1,4 +1,4 @@
-import { definePreset } from "@primeng/themes";
+import { definePreset } from '@primeng/themes';
 import Lara from '@primeng/themes/lara';
 
 export const Preset = definePreset(Lara, {

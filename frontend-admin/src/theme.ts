@@ -42,7 +42,6 @@ import { routes } from './app/app.routes';
 import { CoreInterceptor } from './app/shared/interceptors/core.interceptor';
 import { Preset } from './prime.theme';
 
-
 registerLocaleData(localePt);
 
 export const THEME: ApplicationConfig = {
