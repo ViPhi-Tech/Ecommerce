@@ -4,11 +4,15 @@ import {
   OnInit,
   signal,
   WritableSignal,
+  OnDestroy,
+  effect,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreService } from '../../../../../shared/services/core.service';
 import { TableComponent } from '../../../../../shared/components/table/table.component';
 import { TableConfig } from '../../../../../shared/interfaces/table.interfaces';
+import { InvoiceService } from '../../invoice.service';
+import { InvoiceDetails } from '../../../../../shared/interfaces/invoice.interface';
 
 @Component({
   selector: 'fuse-invoice-list',
@@ -16,73 +20,13 @@ import { TableConfig } from '../../../../../shared/interfaces/table.interfaces';
   styleUrls: ['./invoice-list.component.scss'],
   imports: [TableComponent],
 })
-export class InvoiceListComponent implements OnInit {
+export class InvoiceListComponent implements OnInit, OnDestroy {
+  private invoiceService = inject(InvoiceService);
   private router = inject(Router);
   private activateRoute = inject(ActivatedRoute);
   private coreService = inject(CoreService);
 
-  invoices = signal([
-    {
-      id: 1,
-      name: 'Produto 1',
-      price: 10.0,
-      category: 'Categoria 1',
-    },
-    {
-      id: 2,
-      name: 'Produto 2',
-      price: 20.0,
-      category: 'Categoria 2',
-    },
-    {
-      id: 3,
-      name: 'Produto 3',
-      price: 30.0,
-      category: 'Categoria 3',
-    },
-    {
-      id: 4,
-      name: 'Produto 4',
-      price: 40.0,
-      category: 'Categoria 4',
-    },
-    {
-      id: 5,
-      name: 'Produto 5',
-      price: 50.0,
-      category: 'Categoria 5',
-    },
-    {
-      id: 6,
-      name: 'Produto 6',
-      price: 60.0,
-      category: 'Categoria 6',
-    },
-    {
-      id: 7,
-      name: 'Produto 7',
-      price: 70.0,
-      category: 'Categoria 7',
-    },
-    {
-      id: 8,
-      name: 'Produto 8',
-      price: 80.0,
-      category: 'Categoria 8',
-    },
-    {
-      id: 9,
-      name: 'Produto 9',
-      price: 90.0,
-      category: 'Categoria 9',
-    },
-    {
-      id: 10,
-      name: 'Produto 10',
-      price: 100.0,
-      category: 'Categoria 10',
-    },
-  ]);
+  invoices = signal<InvoiceDetails[]>([]);
   loading = signal(false);
 
   tableConfig: WritableSignal<TableConfig> = signal({
@@ -98,9 +42,19 @@ export class InvoiceListComponent implements OnInit {
     ],
     headerButtons: [
       {
+        icon: 'pi pi-upload',
+        color: 'secondary',
+        outline: true,
+        label: 'Importar',
+        action: () => {
+          this.router.navigate([
+            { outlets: { drawer: ['import', 'invoice'] } },
+          ]);
+        },
+      },
+      {
         icon: 'pi pi-plus',
-        label: 'Adicionar Nota Fiscal',
-        tooltip: 'Adicionar Nota Fiscal',
+        label: 'Adicionar',
         action: () => {
           this.router.navigate([{ outlets: { drawer: ['invoices', 'new'] } }]);
         },
@@ -110,11 +64,19 @@ export class InvoiceListComponent implements OnInit {
 
   title = '';
 
-  constructor() {}
+  constructor() {
+    effect(() => {
+      if (this.invoiceService.import$()) {
+        console.log(this.invoiceService.import$());
+      }
+    });
+  }
 
   ngOnInit() {
     this.activateRoute.data.subscribe(data => {
       this.coreService.adicionarBreadcrumb(data['breadcrumb']);
     });
   }
+
+  ngOnDestroy(): void {}
 }

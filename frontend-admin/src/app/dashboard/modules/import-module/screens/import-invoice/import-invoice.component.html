@@ -1,5 +1,5 @@
 <p-dialog
-  #dialogRef
+  #drawerRef
   [header]="title()"
   [(visible)]="visible"
   [draggable]="false"
@@ -44,6 +44,7 @@
         class="w-[200px]"
         size="small"
         [raised]="true"
+        (click)="import()"
       ></button>
       <button
         pButton

@@ -18,6 +18,7 @@ import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { BadgeModule } from 'primeng/badge';
 import { ToastModule } from 'primeng/toast';
+import { NgIcon } from '@ng-icons/core';
 
 interface Image {
   file: File;
@@ -28,7 +29,7 @@ interface Image {
 
 @Component({
   selector: 'fuse-file-upload',
-  imports: [FileUpload, ButtonModule, BadgeModule, ToastModule],
+  imports: [FileUpload, ButtonModule, BadgeModule, ToastModule, NgIcon],
   providers: [MessageService],
   templateUrl: './file-upload.component.html',
   styleUrl: './file-upload.component.scss',

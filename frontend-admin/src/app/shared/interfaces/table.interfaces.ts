@@ -1,4 +1,5 @@
 import { TemplateRef } from '@angular/core';
+import { ButtonSeverityType } from '../types/button.types';
 
 export interface TableConfig {
   rowsPerPageOptions?: number[];
@@ -30,6 +31,7 @@ export interface HeaderButton {
   visible?: boolean;
   outline?: boolean;
   link?: unknown[] | string;
+  color?: ButtonSeverityType; // e.g., "success", "info", "warning", "danger"
   action: () => void;
 }
 

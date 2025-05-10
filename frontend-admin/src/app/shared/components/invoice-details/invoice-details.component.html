@@ -23,7 +23,9 @@
           <p class="text-sm font-medium text-muted-foreground">
             Data de Emissão
           </p>
-          <p class="text-lg">{{ invoice()?.identification?.issueDate | date: "dd/MM/yyyy" }}</p>
+          <p class="text-lg">
+            {{ invoice()?.identification?.issueDate | date: 'dd/MM/yyyy' }}
+          </p>
         </div>
         <div>
           <p class="text-sm font-medium text-muted-foreground">Valor Total</p>
