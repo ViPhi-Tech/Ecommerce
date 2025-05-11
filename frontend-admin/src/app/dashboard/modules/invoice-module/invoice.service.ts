@@ -1,12 +1,20 @@
-import { Injectable, signal } from '@angular/core';
-import { InvoiceDetails } from '../../../shared/interfaces/invoice.interface';
+import { Injectable, signal, WritableSignal } from '@angular/core';
+import { InvoiceDetails } from 'app/shared/interfaces/invoice.interface';
 import { Observable, of } from 'rxjs';
+
+interface InvoiceModuleState {
+  invoiceList: InvoiceDetails[];
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class InvoiceService {
   import$ = signal<InvoiceDetails | undefined>(undefined);
+
+  private state: WritableSignal<InvoiceModuleState> = signal({
+    invoiceList: [],
+  });
 
   constructor() {}
 

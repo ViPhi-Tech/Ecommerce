@@ -1,5 +1,5 @@
 import { Component, computed, input, OnInit } from '@angular/core';
-import { ButtonSeverityType } from '../../../../../shared/types/button.types';
+import { ButtonSeverityType } from 'app/shared/types/button.types';
 import { ButtonModule } from 'primeng/button';
 import { NgIcon } from '@ng-icons/core';
 

@@ -6,10 +6,10 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreService } from '../../../../../shared/services/core.service';
-import { TableComponent } from '../../../../../shared/components/table/table.component';
-import { TableConfig } from '../../../../../shared/interfaces/table.interfaces';
-import { FormModule } from '../../../../../shared/components/form/form.module';
+import { CoreService } from 'app/shared/services/core.service';
+import { TableComponent } from 'app/shared/components/table/table.component';
+import { TableConfig } from 'app/shared/interfaces/table.interfaces';
+import { FormModule } from 'app/shared/components/form/form.module';
 import { AuthService } from '../../../../../auth/auth.service';
 
 @Component({

@@ -52,6 +52,8 @@
       inputId="{{ idRef() }}"
       mode="currency"
       currency="BRL"
+      [min]="min()"
+      [max]="max()"
       [size]="size()"
       locale="pt-BR"
     />

@@ -8,11 +8,11 @@ import {
   effect,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreService } from '../../../../../shared/services/core.service';
-import { TableComponent } from '../../../../../shared/components/table/table.component';
-import { TableConfig } from '../../../../../shared/interfaces/table.interfaces';
+import { CoreService } from 'app/shared/services/core.service';
+import { TableComponent } from 'app/shared/components/table/table.component';
+import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 import { InvoiceService } from '../../invoice.service';
-import { InvoiceDetails } from '../../../../../shared/interfaces/invoice.interface';
+import { InvoiceDetails } from 'app/shared/interfaces/invoice.interface';
 
 @Component({
   selector: 'fuse-invoice-list',

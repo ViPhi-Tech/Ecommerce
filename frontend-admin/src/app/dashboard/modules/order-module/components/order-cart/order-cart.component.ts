@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { CartStore } from '../../../../../shared/store/cart.store';
+import { CartStore } from 'app/shared/store/cart.store';
 import { CurrencyPipe } from '@angular/common';
 
 @Component({

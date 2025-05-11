@@ -11,7 +11,7 @@ import { ButtonModule } from 'primeng/button';
 import { Drawer, DrawerModule } from 'primeng/drawer';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { FormModule } from '../../../../../shared/components/form/form.module';
+import { FormModule } from 'app/shared/components/form/form.module';
 
 @Component({
   selector: 'fuse-invoice-create',

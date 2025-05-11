@@ -3,7 +3,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule, Dialog } from 'primeng/dialog';
-import { FormModule } from '../../../../../shared/components/form/form.module';
+import { FormModule } from 'app/shared/components/form/form.module';
 
 @Component({
   selector: 'fuse-discount-ticket-create',

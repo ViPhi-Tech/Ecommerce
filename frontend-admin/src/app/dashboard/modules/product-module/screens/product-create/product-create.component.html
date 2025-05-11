@@ -62,16 +62,17 @@
             <fuse-input
               type="price"
               label="Preço"
-              [control]="productForm.get('category')"
+              [control]="productForm.get('price')"
               placeholder="R$ 0,00"
             />
           </div>
 
           <div class="col-12 md:col-6 mb-6">
             <fuse-input
-              label="Marca / Fabricante"
-              [control]="productForm.get('brand')"
-              placeholder="Selecione uma marca"
+              label="Estoque disponível"
+              type="number"
+              [control]="productForm.get('stock')"
+              placeholder="Adicione a quantidade disponível"
             />
           </div>
 

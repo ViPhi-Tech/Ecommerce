@@ -9,8 +9,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { Drawer } from 'primeng/drawer';
-import { FormModule } from '../../../../../shared/components/form/form.module';
-import { SectionComponent } from '../../../../../shared/components/section/section.component';
+import { SectionComponent } from 'app/shared/components/section/section.component';
+import { FormModule } from 'app/shared/components/form/form.module';
 
 @Component({
   selector: 'fuse-product-create',
@@ -48,6 +48,8 @@ export class ProductCreateComponent implements OnInit {
       sku: ['', [Validators.required]],
       category: ['', [Validators.required]],
       brand: [''],
+      price: ['', [Validators.required]],
+      stock: ['', [Validators.required]],
       shortDescription: [''],
       description: ['', [Validators.required]],
     });

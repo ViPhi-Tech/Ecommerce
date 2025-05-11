@@ -3,7 +3,7 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
-import { CartStore } from '../../../../../shared/store/cart.store';
+import { CartStore } from 'app/shared/store/cart.store';
 
 @Component({
   selector: 'fuse-product-list',

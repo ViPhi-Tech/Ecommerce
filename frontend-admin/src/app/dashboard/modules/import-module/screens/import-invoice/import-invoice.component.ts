@@ -11,15 +11,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { Drawer } from 'primeng/drawer';
-import { FormModule } from '../../../../../shared/components/form/form.module';
+import { FormModule } from 'app/shared/components/form/form.module';
 import { FileUploadModule } from 'primeng/fileupload';
-import { XmlUtils } from '../../../../../shared/utils/xml.utils';
-import { InvoiceDetailsComponent } from '../../../../../shared/components/invoice-details/invoice-details.component';
-import { FileUploadComponent } from '../../../../../shared/components/file-upload/file-upload.component';
+import { XmlUtils } from 'app/shared/utils/xml.utils';
+import { InvoiceDetailsComponent } from 'app/shared/components/invoice-details/invoice-details.component';
+import { FileUploadComponent } from 'app/shared/components/file-upload/file-upload.component';
 import { Subscription } from 'rxjs';
 import { InvoiceService } from '../../../invoice-module/invoice.service';
-import { InvoiceDetails } from '../../../../../shared/interfaces/invoice.interface';
-import { ApiResponse } from '../../../../../shared/interfaces/api-response.interface';
+import { InvoiceDetails } from 'app/shared/interfaces/invoice.interface';
+import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 
 @Component({
   selector: 'fuse-import-invoice',

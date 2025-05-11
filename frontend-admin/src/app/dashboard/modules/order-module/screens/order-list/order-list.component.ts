@@ -8,12 +8,12 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreService } from '../../../../../shared/services/core.service';
-import { TableComponent } from '../../../../../shared/components/table/table.component';
+import { CoreService } from 'app/shared/services/core.service';
+import { TableComponent } from 'app/shared/components/table/table.component';
 import {
   DEFAULT_TABLE_CONFIG,
   TableConfig,
-} from '../../../../../shared/interfaces/table.interfaces';
+} from 'app/shared/interfaces/table.interfaces';
 
 @Component({
   selector: 'fuse-order-list',
