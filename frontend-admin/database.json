@@ -1,7 +1,60 @@
 {
   "products": [
-    { "id": "1", "title": "a title", "views": 100 },
-    { "id": "2", "title": "another title", "views": 200 }
+    {
+      "id": "1",
+      "name": "Camiseta Básica Branca",
+      "sku": "CAM-BAS-BRANCA",
+      "category": "Roupas",
+      "brand": "Marca X",
+      "price": 49.99,
+      "stock": 100,
+      "shortDescription": "Camiseta básica branca de algodão.",
+      "description": "Camiseta confortável feita de algodão 100%, ideal para o dia a dia."
+    },
+    {
+      "id": "2",
+      "name": "Notebook Gamer",
+      "sku": "NOTE-GAMER-123",
+      "category": "Eletrônicos",
+      "brand": "TechPower",
+      "price": 5999.99,
+      "stock": 20,
+      "shortDescription": "Notebook gamer de alta performance.",
+      "description": "Notebook com processador Intel i7, 16GB de RAM e placa de vídeo dedicada para jogos."
+    },
+    {
+      "id": "3",
+      "name": "Smartphone Android",
+      "sku": "SMART-ANDROID-456",
+      "category": "Celulares",
+      "brand": "PhoneTech",
+      "price": 1999.99,
+      "stock": 50,
+      "shortDescription": "Smartphone com sistema Android.",
+      "description": "Smartphone com tela de 6.5 polegadas, câmera de 48MP e bateria de longa duração."
+    },
+    {
+      "id": "4",
+      "name": "Tênis Esportivo",
+      "sku": "TENIS-SPORT-789",
+      "category": "Calçados",
+      "brand": "RunFast",
+      "price": 299.99,
+      "stock": 75,
+      "shortDescription": "Tênis esportivo leve e confortável.",
+      "description": "Tênis ideal para corridas e atividades físicas, com solado antiderrapante."
+    },
+    {
+      "id": "5",
+      "name": "Fone de Ouvido Bluetooth",
+      "sku": "FONE-BLUETOOTH-101",
+      "category": "Acessórios",
+      "brand": "SoundMax",
+      "price": 149.99,
+      "stock": 200,
+      "shortDescription": "Fone de ouvido sem fio com Bluetooth.",
+      "description": "Fone de ouvido com conexão Bluetooth, som de alta qualidade e bateria de longa duração."
+    }
   ],
   "orders": [
     { "id": "1", "text": "a comment about post 1", "postId": "1" },

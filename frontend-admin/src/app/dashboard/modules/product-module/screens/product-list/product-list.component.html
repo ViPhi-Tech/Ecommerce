@@ -1,11 +1,8 @@
 <div class="p-8">
-  <div class="pb-3">
-    <p class="text-xl">Lista de produtos</p>
-  </div>
-  <fuse-table [data]="products()" [config]="tableConfig()">
+  <fuse-table [data]="state.productList()" [loading]="state.loading()" [config]="tableConfig()">
     <ng-container data-headerFilter>
       <fuse-select
-        addictionalPrimeClass="w-[200px]"
+        addictionalPrimeClass="w-full sm:w-[250px]"
         placeholder="Categorias"
         [items]="categorias()"
       />

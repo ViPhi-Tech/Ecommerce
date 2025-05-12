@@ -26,7 +26,7 @@ export class OrderListComponent implements OnInit {
   private activateRoute = inject(ActivatedRoute);
   private coreService = inject(CoreService);
 
-  @ViewChild('productName', { static: true }) productName!: TemplateRef<any>;
+  @ViewChild('name', { static: true }) name!: TemplateRef<any>;
 
   orders = signal([
     {
@@ -99,10 +99,6 @@ export class OrderListComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.activateRoute.data.subscribe(data => {
-      this.coreService.adicionarBreadcrumb(data['breadcrumb']);
-    });
-
     this.tableConfig.set({
       rowsPerPageOptions: [5, 10, 20],
       rowsPerPage: 10,
@@ -115,7 +111,7 @@ export class OrderListComponent implements OnInit {
           caption: 'Nome',
           sortable: true,
           filter: true,
-          template: this.productName,
+          template: this.name,
         },
         { field: 'price', caption: 'Preço', sortable: true, filter: true },
         {

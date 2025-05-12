@@ -115,8 +115,5 @@ export class DiscountTicketListComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.activateRoute.data.subscribe(data => {
-      this.coreService.adicionarBreadcrumb(data['breadcrumb']);
-    });
   }
 }

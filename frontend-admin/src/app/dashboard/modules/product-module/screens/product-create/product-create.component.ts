@@ -44,7 +44,7 @@ export class ProductCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.productForm = this.formBuilder.group({
-      productName: ['', [Validators.required, Validators.maxLength(255)]],
+      name: ['', [Validators.required, Validators.maxLength(255)]],
       sku: ['', [Validators.required]],
       category: ['', [Validators.required]],
       brand: [''],

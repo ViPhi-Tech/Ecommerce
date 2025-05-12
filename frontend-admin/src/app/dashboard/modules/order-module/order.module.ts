@@ -13,14 +13,14 @@ const routes: Routes = [
         path: 'list',
         component: OrderListComponent,
         data: {
-          breadcrumb: ['Dashboard', 'Lista de Pedidos'],
+          title: ['Dashboard', 'Lista de Pedidos'],
         },
       },
       {
         path: 'create',
         component: OrderCreateComponent,
         data: {
-          breadcrumb: ['Dashboard', 'Criar Pedido'],
+          title: ['Dashboard', 'Criar Pedido'],
         },
       },
       {

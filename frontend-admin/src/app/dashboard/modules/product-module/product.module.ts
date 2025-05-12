@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProductComponent } from './product.component';
 import { ProductListComponent } from './screens/product-list/product-list.component';
+import { ProductState } from './product.state';
 
 const routes: Routes = [
   {
@@ -12,7 +13,7 @@ const routes: Routes = [
         path: 'list',
         component: ProductListComponent,
         data: {
-          breadcrumb: ['Dashboard', 'Lista de produtos'],
+          title: ['Dashboard', 'Lista de produtos'],
         },
       },
       {
@@ -27,5 +28,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule, RouterModule.forChild(routes)],
   declarations: [ProductComponent],
+  providers: [ProductState],
 })
 export class ProductModule {}

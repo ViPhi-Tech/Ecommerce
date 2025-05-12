@@ -12,17 +12,23 @@ import { QuickAccessComponent } from '../quick-admin/quick-access.component';
 export class HeaderComponent implements OnInit, OnDestroy {
   private coreService = inject(CoreService);
 
-  breadcrumb: string[] = [];
+  pageTitle = signal({
+    title: '',
+    subTitle: '',
+  })
   showAdmin = signal<boolean>(false);
 
-  _breadcrumbSubscrition!: Subscription;
+  _pageTitleSubscription: Subscription | undefined;
 
   constructor() {}
 
   ngOnInit() {
-    this._breadcrumbSubscrition = this.coreService.breadcrumb$.subscribe(
-      (breadcrumb: string[]) => {
-        this.breadcrumb = breadcrumb;
+    this._pageTitleSubscription = this.coreService.pageTitle$.subscribe(
+      (pageTitle: {
+        title: string;
+        subTitle: string;
+      }) => {
+        this.pageTitle.set(pageTitle);
       }
     );
   }
@@ -40,8 +46,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this._breadcrumbSubscrition) {
-      this._breadcrumbSubscrition.unsubscribe();
-    }
+    this._pageTitleSubscription?.unsubscribe();
   }
 }

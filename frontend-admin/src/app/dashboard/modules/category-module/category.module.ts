@@ -12,7 +12,7 @@ const routes: Routes = [
         path: 'list',
         component: CategoryListComponent,
         data: {
-          breadcrumb: ['Dashboard', 'Lista de categorias'],
+          title: ['Dashboard', 'Lista de categorias'],
         },
       },
       {

@@ -1,20 +1,25 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CoreService {
-  breadcrumbSubject = new BehaviorSubject<string[]>(['']);
-  breadcrumb$ = this.breadcrumbSubject.asObservable();
+
+  private pageTitleSubj = new Subject<{
+    title: string;
+    subTitle: string;
+  }>();
+  pageTitle$ = this.pageTitleSubj.asObservable();
+
 
   constructor() {}
 
-  adicionarBreadcrumb(breadcrumb: string[]) {
-    this.breadcrumbSubject.next(breadcrumb);
+    setPageTitle(title: string, subTitle: string) {
+    this.pageTitleSubj.next({
+      title: title,
+      subTitle: subTitle,
+    });
   }
 
-  clearBreadcrumb() {
-    this.breadcrumbSubject.next(['']);
-  }
 }

@@ -42,21 +42,20 @@ export class InvoiceListComponent implements OnInit, OnDestroy {
     ],
     headerButtons: [
       {
+        icon: 'pi pi-plus',
+        label: 'Adicionar',
+        action: () => {
+          this.router.navigate([{ outlets: { drawer: ['invoices', 'new'] } }]);
+        },
+      },
+      {
         icon: 'pi pi-upload',
-        color: 'secondary',
-        outline: true,
+        color: 'info',
         label: 'Importar',
         action: () => {
           this.router.navigate([
             { outlets: { drawer: ['import', 'invoice'] } },
           ]);
-        },
-      },
-      {
-        icon: 'pi pi-plus',
-        label: 'Adicionar',
-        action: () => {
-          this.router.navigate([{ outlets: { drawer: ['invoices', 'new'] } }]);
         },
       },
     ],
@@ -73,9 +72,10 @@ export class InvoiceListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.activateRoute.data.subscribe(data => {
-      this.coreService.adicionarBreadcrumb(data['breadcrumb']);
-    });
+    this.coreService.setPageTitle(
+      'Notas Fiscais',
+      'Lista de notas fiscais disponíveis'
+    );
   }
 
   ngOnDestroy(): void {}

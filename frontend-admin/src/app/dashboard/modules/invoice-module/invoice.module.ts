@@ -12,7 +12,7 @@ const routes: Routes = [
         path: 'list',
         component: InvoiceListComponent,
         data: {
-          breadcrumb: ['Dashboard', 'Lista de Notas Fiscais'],
+          title: ['Dashboard', 'Lista de Notas Fiscais'],
         },
       },
       {

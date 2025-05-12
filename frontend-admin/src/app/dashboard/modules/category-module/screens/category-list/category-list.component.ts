@@ -116,8 +116,5 @@ export class CategoryListComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.activateRoute.data.subscribe(data => {
-      this.coreService.adicionarBreadcrumb(data['breadcrumb']);
-    });
   }
 }
