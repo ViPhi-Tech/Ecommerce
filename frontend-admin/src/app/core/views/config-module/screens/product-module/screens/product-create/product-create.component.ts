@@ -15,12 +15,7 @@ import { FormModule } from 'app/shared/components/form/form.module';
   selector: 'fuse-product-create',
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss'],
-  imports: [
-    DialogModule,
-    ButtonModule,
-    ReactiveFormsModule,
-    FormModule,
-  ],
+  imports: [DialogModule, ButtonModule, ReactiveFormsModule, FormModule],
 })
 export class ProductCreateComponent implements OnInit {
   private router = inject(Router);
@@ -48,7 +43,7 @@ export class ProductCreateComponent implements OnInit {
     { label: 'Beleza', value: 'beleza' },
     { label: 'Esportes', value: 'esportes' },
     { label: 'Saúde', value: 'saude' },
-  ])
+  ]);
 
   brands = signal([
     { label: 'Apple', value: 'apple' },

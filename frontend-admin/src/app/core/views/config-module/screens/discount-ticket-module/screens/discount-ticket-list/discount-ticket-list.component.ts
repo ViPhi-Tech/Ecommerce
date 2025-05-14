@@ -114,6 +114,5 @@ export class DiscountTicketListComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

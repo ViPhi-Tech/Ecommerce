@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Product, ProductModuleState } from 'app/shared/interfaces/product-module.interface';
+import {
+  Product,
+  ProductModuleState,
+} from 'app/shared/interfaces/product-module.interface';
 import { catchError, finalize, Observable, of, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
@@ -24,28 +27,30 @@ export class ProductState {
     this.setError(null);
     this.setProductList([]);
 
-    this.http.get<Product[]>(`${this.apiUrl}products`).pipe(
-      tap((products) => this.setProductList(products)),
-      catchError((error) => this.handleError(error)),
-      finalize(() => this.setLoading(false))
-    ).subscribe();
+    this.http
+      .get<Product[]>(`${this.apiUrl}products`)
+      .pipe(
+        tap(products => this.setProductList(products)),
+        catchError(error => this.handleError(error)),
+        finalize(() => this.setLoading(false))
+      )
+      .subscribe();
   }
 
-  
   setProductList(productList: any) {
-    this.state.update((state) => ({
+    this.state.update(state => ({
       ...state,
       productList,
     }));
   }
-  
+
   private setLoading(loading: boolean) {
-    this.state.update((state) => ({
+    this.state.update(state => ({
       ...state,
       loading,
     }));
   }
-  
+
   private handleError(error: any): Observable<Product[]> {
     this.setError('Erro ao carregar os produtos');
     console.error('Erro ao buscar produtos:', error);
@@ -53,11 +58,11 @@ export class ProductState {
   }
 
   private setError(error: string | null) {
-    this.state.update((state) => ({
+    this.state.update(state => ({
       ...state,
       error,
     }));
   }
 
-  constructor() { }
+  constructor() {}
 }

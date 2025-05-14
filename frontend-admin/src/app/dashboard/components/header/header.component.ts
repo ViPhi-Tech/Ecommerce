@@ -15,7 +15,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   pageTitle = signal({
     title: '',
     subTitle: '',
-  })
+  });
   showAdmin = signal<boolean>(false);
 
   _pageTitleSubscription: Subscription | undefined;
@@ -24,10 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this._pageTitleSubscription = this.coreService.pageTitle$.subscribe(
-      (pageTitle: {
-        title: string;
-        subTitle: string;
-      }) => {
+      (pageTitle: { title: string; subTitle: string }) => {
         this.pageTitle.set(pageTitle);
       }
     );

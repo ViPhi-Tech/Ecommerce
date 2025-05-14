@@ -115,6 +115,5 @@ export class CategoryListComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 }

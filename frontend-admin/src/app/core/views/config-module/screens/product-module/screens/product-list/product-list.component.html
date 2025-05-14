@@ -1,5 +1,9 @@
 <div class="p-8">
-  <fuse-table [data]="state.productList()" [loading]="state.loading()" [config]="tableConfig()">
+  <fuse-table
+    [data]="state.productList()"
+    [loading]="state.loading()"
+    [config]="tableConfig()"
+  >
     <ng-container data-headerFilter>
       <fuse-select
         addictionalPrimeClass="w-full sm:w-[250px]"

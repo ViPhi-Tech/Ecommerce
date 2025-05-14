@@ -60,8 +60,7 @@ export class ProductListComponent implements OnInit {
     { label: 'Cheque', value: 'check' },
     { label: 'Vale', value: 'voucher' },
   ]);
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit() {
     this.state.getProductList();

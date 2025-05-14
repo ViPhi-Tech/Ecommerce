@@ -98,19 +98,19 @@ input {
     }
   }
 }
-.p-inputnumber{
-  &.ng-touched.ng-invalid input{
+.p-inputnumber {
+  &.ng-touched.ng-invalid input {
     border-color: var(--p-inputtext-invalid-border-color);
     color: var(--p-inputtext-invalid-border-color);
     &::placeholder {
       color: var(--p-inputtext-invalid-border-color);
     }
-  } 
+  }
 }
 
 .p-select.ng-invalid.ng-touched {
   border-color: var(--p-select-invalid-border-color);
-  .p-select-label.p-placeholder{
+  .p-select-label.p-placeholder {
     color: var(--p-select-invalid-placeholder-color);
   }
 }

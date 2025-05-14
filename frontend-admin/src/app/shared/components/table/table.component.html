@@ -14,14 +14,18 @@
     <div
       class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 justify-between items-center"
     >
-      <div class="w-full flex flex-col sm:flex-row sm:w-auto space-y-2-2 sm:space-x-2 sm:space-y-0">
+      <div
+        class="w-full flex flex-col sm:flex-row sm:w-auto space-y-2-2 sm:space-x-2 sm:space-y-0"
+      >
         @for (button of config().headerButtons; track $index) {
           @if (button?.visible !== false) {
             <p-button
               [label]="button?.label"
               [icon]="button?.icon"
               [class]="button?.class"
-              [styleClass]="button?.styleClass + ' w-full mb-2 sm:mb-0 sm:w-auto'"
+              [styleClass]="
+                button?.styleClass + ' w-full mb-2 sm:mb-0 sm:w-auto'
+              "
               [severity]="button?.color || 'primary'"
               [variant]="button?.outline ? 'outlined' : undefined"
               (click)="button?.action()"
