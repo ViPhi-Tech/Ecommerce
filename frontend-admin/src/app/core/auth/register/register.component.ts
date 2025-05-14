@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormModule } from 'app/shared/components/form/form.module';
 import { ButtonModule } from 'primeng/button';
-import { FormModule } from '../../shared/components/form/form.module';
 
 @Component({
   selector: 'fuse-register',

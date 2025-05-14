@@ -54,6 +54,7 @@
 .p-datatable-table {
   border: 1px solid var(--p-datatable-body-cell-border-color);
   border-radius: 5px !important;
+  min-width: auto !important;
 }
 
 .p-datatable-header {
@@ -97,7 +98,19 @@ input {
     }
   }
 }
+.p-inputnumber{
+  &.ng-touched.ng-invalid input{
+    border-color: var(--p-inputtext-invalid-border-color);
+    color: var(--p-inputtext-invalid-border-color);
+    &::placeholder {
+      color: var(--p-inputtext-invalid-border-color);
+    }
+  } 
+}
 
-.p-datatable-table {
-  min-width: auto !important;
+.p-select.ng-invalid.ng-touched {
+  border-color: var(--p-select-invalid-border-color);
+  .p-select-label.p-placeholder{
+    color: var(--p-select-invalid-placeholder-color);
+  }
 }

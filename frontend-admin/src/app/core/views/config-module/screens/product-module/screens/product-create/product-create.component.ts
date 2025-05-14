@@ -9,7 +9,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { Drawer } from 'primeng/drawer';
-import { SectionComponent } from 'app/shared/components/section/section.component';
 import { FormModule } from 'app/shared/components/form/form.module';
 
 @Component({
@@ -21,7 +20,6 @@ import { FormModule } from 'app/shared/components/form/form.module';
     ButtonModule,
     ReactiveFormsModule,
     FormModule,
-    SectionComponent,
   ],
 })
 export class ProductCreateComponent implements OnInit {
@@ -40,6 +38,29 @@ export class ProductCreateComponent implements OnInit {
 
   productForm!: FormGroup;
 
+  categories = signal([
+    { label: 'Eletrônicos', value: 'eletronicos' },
+    { label: 'Roupas', value: 'roupas' },
+    { label: 'Alimentos', value: 'alimentos' },
+    { label: 'Móveis', value: 'moveis' },
+    { label: 'Brinquedos', value: 'brinquedos' },
+    { label: 'Livros', value: 'livros' },
+    { label: 'Beleza', value: 'beleza' },
+    { label: 'Esportes', value: 'esportes' },
+    { label: 'Saúde', value: 'saude' },
+  ])
+
+  brands = signal([
+    { label: 'Apple', value: 'apple' },
+    { label: 'Samsung', value: 'samsung' },
+    { label: 'Sony', value: 'sony' },
+    { label: 'LG', value: 'lg' },
+    { label: 'Nike', value: 'nike' },
+    { label: 'Adidas', value: 'adidas' },
+    { label: 'Puma', value: 'puma' },
+    { label: 'Reebok', value: 'reebok' },
+  ]);
+
   constructor() {}
 
   ngOnInit(): void {
@@ -55,7 +76,11 @@ export class ProductCreateComponent implements OnInit {
     });
   }
 
-  onSubmit(): void {
+  onSubmit(e: Event): void {
+    e.preventDefault();
+    e.stopPropagation();
+
+    this.productForm.markAllAsTouched();
     if (this.productForm.valid) {
       console.log('Form Data:', this.productForm.value);
       // Adicione aqui a lógica para enviar os dados do formulário

@@ -22,6 +22,7 @@ export class ProductState {
   getProductList(): void {
     this.setLoading(true);
     this.setError(null);
+    this.setProductList([]);
 
     this.http.get<Product[]>(`${this.apiUrl}products`).pipe(
       tap((products) => this.setProductList(products)),

@@ -38,7 +38,7 @@ export class MenuComponent implements OnInit {
         {
           label: 'Produtos',
           icon: 'lucideUsersRound',
-          route: 'products',
+          route: 'config/products',
           visible: true,
         },
       ],
@@ -59,13 +59,13 @@ export class MenuComponent implements OnInit {
         {
           label: 'Categorias',
           icon: 'lucideTags',
-          route: 'categories',
+          route: 'config/categories',
           visible: true,
         },
         {
           label: 'Cupons',
           icon: 'lucideTicketPercent',
-          route: 'discount-tickets',
+          route: 'config/discount-tickets',
           visible: true,
         },
       ],
@@ -82,7 +82,7 @@ export class MenuComponent implements OnInit {
         {
           label: 'Notas Fiscais',
           icon: 'lucideReceipt',
-          route: '/dashboard/invoices',
+          route: 'config/invoices',
           visible: true,
         },
         {

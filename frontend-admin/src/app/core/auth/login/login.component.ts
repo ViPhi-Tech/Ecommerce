@@ -1,13 +1,13 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { FormModule } from '../../shared/components/form/form.module';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { emailAsyncValidator } from '../../shared/validators/validators';
 import { MessageModule } from 'primeng/message';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
-import { AuthResponse } from '../../shared/interfaces/auth.interfaces';
-import { translate } from '../../shared/constants/deParaTextos';
+import { FormModule } from 'app/shared/components/form/form.module';
+import { emailAsyncValidator } from 'app/shared/validators/validators';
+import { translate } from 'app/shared/constants/deParaTextos';
+import { AuthResponse } from 'app/shared/interfaces/auth.interfaces';
 
 @Component({
   selector: 'fuse-login',
