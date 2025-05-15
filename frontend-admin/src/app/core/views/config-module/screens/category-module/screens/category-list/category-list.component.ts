@@ -5,10 +5,11 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
+import { CategoryState } from '../../category.state';
 
 @Component({
   selector: 'fuse-category-list',
@@ -18,72 +19,8 @@ import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 })
 export class CategoryListComponent implements OnInit {
   private router = inject(Router);
-  private activateRoute = inject(ActivatedRoute);
   private coreService = inject(CoreService);
-
-  categorys = signal([
-    {
-      id: 1,
-      name: 'Categoria 1',
-      price: 10.0,
-      category: 'Categoria 1',
-    },
-    {
-      id: 2,
-      name: 'Categoria 2',
-      price: 20.0,
-      category: 'Categoria 2',
-    },
-    {
-      id: 3,
-      name: 'Categoria 3',
-      price: 30.0,
-      category: 'Categoria 3',
-    },
-    {
-      id: 4,
-      name: 'Categoria 4',
-      price: 40.0,
-      category: 'Categoria 4',
-    },
-    {
-      id: 5,
-      name: 'Categoria 5',
-      price: 50.0,
-      category: 'Categoria 5',
-    },
-    {
-      id: 6,
-      name: 'Categoria 6',
-      price: 60.0,
-      category: 'Categoria 6',
-    },
-    {
-      id: 7,
-      name: 'Categoria 7',
-      price: 70.0,
-      category: 'Categoria 7',
-    },
-    {
-      id: 8,
-      name: 'Categoria 8',
-      price: 80.0,
-      category: 'Categoria 8',
-    },
-    {
-      id: 9,
-      name: 'Categoria 9',
-      price: 90.0,
-      category: 'Categoria 9',
-    },
-    {
-      id: 10,
-      name: 'Categoria 10',
-      price: 100.0,
-      category: 'Categoria 10',
-    },
-  ]);
-  loading = signal(false);
+  state = inject(CategoryState);
 
   tableConfig: WritableSignal<TableConfig> = signal({
     rowsPerPageOptions: [5, 10, 20],
@@ -93,13 +30,17 @@ export class CategoryListComponent implements OnInit {
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'name', caption: 'Nome', sortable: true, filter: true },
-      { field: 'price', caption: 'Preço', sortable: true, filter: true },
-      { field: 'category', caption: 'Categoria', sortable: true, filter: true },
+      { field: 'description', caption: 'Descrição', sortable: false, filter: true },
+      { field: 'parentCategoryId', caption: 'Categoria Pai', sortable: true, filter: true },
+      { field: 'createdAt', caption: 'Data de Criação', sortable: true, filter: true },
+      { field: 'updatedAt', caption: 'Última Atualização', sortable: true, filter: true },
+      { field: 'isActive', caption: 'Ativo', sortable: true, filter: true },
+      { field: 'imageUrl', caption: 'Imagem', sortable: false, filter: false },
     ],
     headerButtons: [
       {
         icon: 'pi pi-plus',
-        label: 'Adicionar Categoria',
+        label: 'Adicionar',
         tooltip: 'Adicionar Categoria',
         action: () => {
           // Exemplo de navegação para o outlet auxiliar "drawer"
@@ -111,9 +52,10 @@ export class CategoryListComponent implements OnInit {
     ],
   });
 
-  title = '';
-
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.state.getCategoryList();
+    this.coreService.setPageTitle('Categorias', 'Lista de categorias disponíveis');
+  }
 }

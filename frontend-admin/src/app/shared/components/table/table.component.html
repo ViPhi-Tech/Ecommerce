@@ -7,8 +7,9 @@
   [loading]="loading()"
   [showLoader]="false"
   [paginator]="true"
+  [scrollable]="true"
   [globalFilterFields]="globalFilterFields()"
-  [tableStyle]="{ 'min-width': '75rem' }"
+  [tableStyle]="{'min-width': '50rem'}"
 >
   <ng-template #caption>
     <div
@@ -23,6 +24,7 @@
               [label]="button?.label"
               [icon]="button?.icon"
               [class]="button?.class"
+              [pTooltip]="button?.tooltip" tooltipPosition="right" 
               [styleClass]="
                 button?.styleClass + ' w-full mb-2 sm:mb-0 sm:w-auto'
               "

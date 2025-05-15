@@ -35,39 +35,6 @@ export class MenuComponent implements OnInit {
           route: 'storage',
           visible: true,
         },
-        {
-          label: 'Produtos',
-          icon: 'lucideUsersRound',
-          route: 'config/products',
-          visible: true,
-        },
-      ],
-    },
-    {
-      groupTitle: 'Personalização',
-      items: [
-        {
-          label: 'Página Inicial',
-          icon: 'lucidePaintbrush',
-          route: 'customization/home',
-        },
-      ],
-    },
-    {
-      groupTitle: 'Cadastros',
-      items: [
-        {
-          label: 'Categorias',
-          icon: 'lucideTags',
-          route: 'config/categories',
-          visible: true,
-        },
-        {
-          label: 'Cupons',
-          icon: 'lucideTicketPercent',
-          route: 'config/discount-tickets',
-          visible: true,
-        },
       ],
     },
     {

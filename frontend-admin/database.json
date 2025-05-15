@@ -62,5 +62,58 @@
   ],
   "invoices": {
     "name": "typicode"
+  },
+  "categories": [
+  {
+    "id": "1",
+    "name": "Eletrônicos",
+    "description": "Produtos eletrônicos e acessórios",
+    "parentCategoryId": null,
+    "createdAt": "2023-01-01T10:00:00Z",
+    "updatedAt": "2023-05-01T12:00:00Z",
+    "isActive": true,
+    "imageUrl": "https://example.com/images/electronics.jpg"
+  },
+  {
+    "id": "2",
+    "name": "Celulares",
+    "description": "Smartphones e acessórios",
+    "parentCategoryId": "1",
+    "createdAt": "2023-02-01T11:00:00Z",
+    "updatedAt": "2023-05-02T13:00:00Z",
+    "isActive": true,
+    "imageUrl": "https://example.com/images/cellphones.jpg"
+  },
+  {
+    "id": "3",
+    "name": "Eletrodomésticos",
+    "description": "Aparelhos para sua casa",
+    "parentCategoryId": null,
+    "createdAt": "2023-03-01T14:00:00Z",
+    "updatedAt": "2023-05-03T15:00:00Z",
+    "isActive": true,
+    "imageUrl": "https://example.com/images/home-appliances.jpg"
+  },
+  {
+    "id": "4",
+    "name": "Informática",
+    "description": "Computadores, notebooks e acessórios",
+    "parentCategoryId": "1",
+    "createdAt": "2023-04-01T16:00:00Z",
+    "updatedAt": "2023-05-04T17:00:00Z",
+    "isActive": true,
+    "imageUrl": "https://example.com/images/computers.jpg"
+  },
+  {
+    "id": "5",
+    "name": "Moda",
+    "description": "Roupas, calçados e acessórios",
+    "parentCategoryId": null,
+    "createdAt": "2023-05-01T18:00:00Z",
+    "updatedAt": "2023-05-05T19:00:00Z",
+    "isActive": true,
+    "imageUrl": "https://example.com/images/fashion.jpg"
   }
+]
+  
 }

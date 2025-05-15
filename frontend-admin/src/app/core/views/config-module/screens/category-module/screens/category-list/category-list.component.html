@@ -1,10 +1,7 @@
 <div class="p-8">
-  <div class="pb-3">
-    <p class="text-xl">Lista de categorias</p>
-  </div>
   <fuse-table
-    title="Lista de categorias"
-    [data]="categorys()"
+    [data]="state.categoryList()"
+    [loading]="state.loading()"
     [config]="tableConfig()"
   />
 </div>

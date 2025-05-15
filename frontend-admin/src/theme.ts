@@ -29,6 +29,7 @@ import {
   lucideSettings,
   lucideShield,
   lucideShoppingCart,
+  lucideStore,
   lucideSun,
   lucideTags,
   lucideTicketPercent,
@@ -98,6 +99,7 @@ export const THEME: ApplicationConfig = {
       lucidePackage,
       lucideTruck,
       lucideShoppingCart,
+      lucideStore
     }),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
   ],

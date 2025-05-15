@@ -10,6 +10,7 @@ import { RouterModule } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import { NgStyle, NgTemplateOutlet } from '@angular/common';
 import { TableActionsComponent } from './components/table-actions/table-actions.component';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'fuse-table',
@@ -26,6 +27,7 @@ import { TableActionsComponent } from './components/table-actions/table-actions.
     ButtonModule,
     NgStyle,
     NgTemplateOutlet,
+    TooltipModule
   ],
 })
 export class TableComponent implements OnInit {

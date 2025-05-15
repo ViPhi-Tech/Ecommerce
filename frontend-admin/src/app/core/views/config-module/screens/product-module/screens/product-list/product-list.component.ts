@@ -5,7 +5,7 @@ import {
   signal,
   WritableSignal,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
@@ -20,7 +20,6 @@ import { ProductState } from '../../product.state';
 })
 export class ProductListComponent implements OnInit {
   private router = inject(Router);
-  private activateRoute = inject(ActivatedRoute);
   private coreService = inject(CoreService);
   state = inject(ProductState);
 

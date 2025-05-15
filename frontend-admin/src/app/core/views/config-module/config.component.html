@@ -1,15 +1,18 @@
 <div class="container mx-auto py-8 px-4">
   <header class="mb-10">
-    <div class="mb-8 text-center">
-      <h1 class="text-3xl font-bold tracking-tight">Sistema de Cadastros</h1>
-      <p class="text-muted-foreground mt-2">Selecione uma opção para começar</p>
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold tracking-tight">Cadastros</h1>
+      <p class="text-muted-foreground mt-2">
+        Cadastre seus dados e informações para uma melhor experiência com o
+        sistema.
+      </p>
     </div>
   </header>
 
   <div
     class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
   >
-    @for (item of items(); track $index) {
+    @for (item of itemsCrud(); track $index) {
       <fuse-card-item
         [title]="item?.title"
         [description]="item?.description"
