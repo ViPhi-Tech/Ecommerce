@@ -6,7 +6,148 @@
   >
     <ng-container data-headerFilter>
       <fuse-table-filter>
-        teste
+        <div class="space-y-4">
+          <div class="space-y-2">
+            <h4 class="font-medium leading-none">Categorias</h4>
+            <div class="shrink-0 bg-border h-[1px] w-full"></div>
+            <div class="grid gap-2">
+              <div class="flex items-center space-x-2">
+                <button
+                  type="button"
+                  value="on"
+                  class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                  id="category-Eletrônicos"
+                ></button
+                ><label
+                  for="category-Eletrônicos"
+                  class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >Eletrônicos</label
+                >
+              </div>
+              <div class="flex items-center space-x-2">
+                <button
+                  type="button"
+                  role="checkbox"
+                  aria-checked="false"
+                  data-state="unchecked"
+                  value="on"
+                  class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                  id="category-Acessórios"
+                ></button
+                ><label
+                  for="category-Acessórios"
+                  class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >Acessórios</label
+                >
+              </div>
+              <div class="flex items-center space-x-2">
+                <button
+                  type="button"
+                  role="checkbox"
+                  aria-checked="false"
+                  data-state="unchecked"
+                  value="on"
+                  class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                  id="category-Móveis"
+                ></button
+                ><label
+                  for="category-Móveis"
+                  class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >Móveis</label
+                >
+              </div>
+              <div class="flex items-center space-x-2">
+                <button
+                  type="button"
+                  role="checkbox"
+                  aria-checked="false"
+                  data-state="unchecked"
+                  value="on"
+                  class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                  id="category-Fotografia"
+                ></button
+                ><label
+                  for="category-Fotografia"
+                  class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >Fotografia</label
+                >
+              </div>
+            </div>
+          </div>
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="font-medium leading-none">Preço</h4>
+              <div class="text-xs text-muted-foreground">
+                R$0.00 - R$4999.99
+              </div>
+            </div>
+            <div class="shrink-0 bg-border h-[1px] w-full"></div>
+            <span
+              dir="ltr"
+              class="relative flex w-full touch-none select-none items-center pt-4"
+              style="--radix-slider-thumb-transform: translateX(-50%)"
+              ><span
+                class="relative h-2 w-full grow overflow-hidden rounded-full bg-secondary"
+                ><span
+                  class="absolute h-full bg-primary"
+                  style="left: 0%; right: 0%"
+                ></span></span
+              ><span
+                style="
+                  transform: var(--radix-slider-thumb-transform);
+                  position: absolute;
+                  left: calc(0% + 10px);
+                "
+                ><span
+                  role="slider"
+                  aria-valuemin="0"
+                  aria-valuemax="4999.99"
+                  aria-orientation="horizontal"
+                  data-orientation="horizontal"
+                  tabindex="0"
+                  class="block h-5 w-5 rounded-full border-2 border-primary bg-background ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+                  data-radix-collection-item=""
+                  aria-label="Minimum"
+                  aria-valuenow="0"
+                ></span></span
+            ></span>
+          </div>
+          <div class="space-y-2">
+            <h4 class="font-medium leading-none">Estoque</h4>
+            <div
+              data-orientation="horizontal"
+              role="none"
+              class="shrink-0 bg-border h-[1px] w-full"
+            ></div>
+            <div class="flex items-center space-x-2">
+              <button
+                type="button"
+                role="checkbox"
+                aria-checked="false"
+                data-state="unchecked"
+                value="on"
+                class="peer h-4 w-4 shrink-0 rounded-sm border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+                id="in-stock"
+              ></button
+              ><label
+                for="in-stock"
+                class="text-sm leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                >Apenas itens em estoque</label
+              >
+            </div>
+          </div>
+          <div class="flex justify-between pt-2">
+            <button
+              class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3"
+            >
+              Limpar</button
+            ><button
+              class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-9 rounded-md px-3"
+            >
+              Aplicar
+            </button>
+          </div>
+        </div>
       </fuse-table-filter>
     </ng-container>
   </fuse-table>
