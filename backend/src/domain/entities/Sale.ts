@@ -6,7 +6,7 @@ export interface Sale {
     createdAt: Date;
     updatedAt: Date;
     
-    clientId?: number;
+    clientId?: number | null;
     
     items: SaleItem[];
 }

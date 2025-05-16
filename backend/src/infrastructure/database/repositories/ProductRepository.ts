@@ -50,5 +50,5 @@ export class ProductRepository implements IProductRepository {
               quantity: quantity
             }
           });
-        }
+    };
 }

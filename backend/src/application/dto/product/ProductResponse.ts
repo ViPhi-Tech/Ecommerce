@@ -1,4 +1,5 @@
 export interface ProductResponse {
+    id?: number;
     name: string;
     ean: string;
     price: number;
