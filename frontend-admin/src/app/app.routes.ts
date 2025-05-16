@@ -9,7 +9,8 @@ export const routes: Routes = [
 
   {
     path: 'auth',
-    loadChildren: () => import('./auth/auth.module').then(m => m.AuthModule),
+    loadChildren: () =>
+      import('app/core/auth/auth.module').then(m => m.AuthModule),
   },
 
   {
@@ -28,48 +29,48 @@ export const routes: Routes = [
   {
     path: 'import',
     loadChildren: () =>
-      import('./dashboard/modules/import-module/import-drawer.module').then(
-        m => m.ImportDrawerModule
-      ),
+      import(
+        'app/core/views/config-module/screens/import-module/import-drawer.module'
+      ).then(m => m.ImportDrawerModule),
     outlet: 'drawer',
   },
   {
     path: 'products',
     loadChildren: () =>
-      import('./dashboard/modules/product-module/product-drawer.module').then(
-        m => m.ProductDrawerModule
-      ),
+      import(
+        'app/core/views/config-module/screens/product-module/product-drawer.module'
+      ).then(m => m.ProductDrawerModule),
     outlet: 'drawer',
   },
   {
     path: 'categories',
     loadChildren: () =>
-      import('./dashboard/modules/category-module/category-drawer.module').then(
-        m => m.CategoryDrawerModule
-      ),
+      import(
+        'app/core/views/config-module/screens/category-module/category-drawer.module'
+      ).then(m => m.CategoryDrawerModule),
     outlet: 'drawer',
   },
   {
     path: 'invoices',
     loadChildren: () =>
-      import('./dashboard/modules/invoice-module/invoice-drawer.module').then(
-        m => m.InvoiceDrawerModule
-      ),
+      import(
+        'app/core/views/config-module/screens/invoice-module/invoice-drawer.module'
+      ).then(m => m.InvoiceDrawerModule),
     outlet: 'drawer',
   },
   {
     path: 'users',
     loadChildren: () =>
-      import('./dashboard/modules/user-module/user-drawer.module').then(
-        m => m.UserDrawerModule
-      ),
+      import(
+        'app/core/views/config-module/screens/user-module/user-drawer.module'
+      ).then(m => m.UserDrawerModule),
     outlet: 'drawer',
   },
   {
     path: 'discount-tickets',
     loadChildren: () =>
       import(
-        './dashboard/modules/discount-ticket-module/discount-ticket-drawer.module'
+        'app/core/views/config-module/screens/discount-ticket-module/discount-ticket-drawer.module'
       ).then(m => m.DiscountTicketDrawerModule),
     outlet: 'drawer',
   },

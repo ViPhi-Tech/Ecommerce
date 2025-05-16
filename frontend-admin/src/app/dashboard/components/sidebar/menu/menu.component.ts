@@ -35,39 +35,6 @@ export class MenuComponent implements OnInit {
           route: 'storage',
           visible: true,
         },
-        {
-          label: 'Produtos',
-          icon: 'lucideUsersRound',
-          route: 'products',
-          visible: true,
-        },
-      ],
-    },
-    {
-      groupTitle: 'Personalização',
-      items: [
-        {
-          label: 'Página Inicial',
-          icon: 'lucidePaintbrush',
-          route: 'customization/home',
-        },
-      ],
-    },
-    {
-      groupTitle: 'Cadastros',
-      items: [
-        {
-          label: 'Categorias',
-          icon: 'lucideTags',
-          route: 'categories',
-          visible: true,
-        },
-        {
-          label: 'Cupons',
-          icon: 'lucideTicketPercent',
-          route: 'discount-tickets',
-          visible: true,
-        },
       ],
     },
     {
@@ -82,7 +49,7 @@ export class MenuComponent implements OnInit {
         {
           label: 'Notas Fiscais',
           icon: 'lucideReceipt',
-          route: '/dashboard/invoices',
+          route: 'config/invoices',
           visible: true,
         },
         {

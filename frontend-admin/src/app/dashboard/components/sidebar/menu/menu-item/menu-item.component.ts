@@ -1,7 +1,7 @@
 import { Component, input, model, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
-import { heightAnimation } from '../../../../../shared/utils/animations';
+import { heightAnimation } from 'app/shared/utils/animations';
 
 export interface MenuItem {
   label: string;

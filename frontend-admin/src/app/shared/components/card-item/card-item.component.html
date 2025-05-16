@@ -1,0 +1,19 @@
+<a [routerLink]="href()" class="block">
+  <div
+    class="rounded-lg border-l-4 bg-card text-card-foreground shadow-sm h-full transition-all hover:shadow-md hover:-translate-y-1"
+    [style.borderLeftColor]="color()"
+    data-v0-t="card"
+  >
+    <div class="flex items-center space-x-4 p-6 pb-2">
+      <ng-icon [name]="icon()" [color]="color()" size="32"></ng-icon>
+      <h3 class="text-2xl font-semibold leading-none tracking-tight">
+        {{ title() }}
+      </h3>
+    </div>
+    <div class="p-6 pt-0">
+      <p class="text-sm text-muted-foreground">
+        {{ description() }}
+      </p>
+    </div>
+  </div>
+</a>

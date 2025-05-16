@@ -31,39 +31,11 @@ const routes: Routes = [
           ),
       },
       {
-        path: 'products',
+        path: 'config',
         loadChildren: () =>
-          import('./modules/product-module/product.module').then(
-            m => m.ProductModule
+          import('app/core/views/config-module/config.module').then(
+            m => m.ConfigModule
           ),
-      },
-      {
-        path: 'categories',
-        loadChildren: () =>
-          import('./modules/category-module/category.module').then(
-            m => m.CategoryModule
-          ),
-      },
-      {
-        path: 'invoices',
-        loadChildren: () =>
-          import('./modules/invoice-module/invoice.module').then(
-            m => m.InvoiceModule
-          ),
-      },
-
-      {
-        path: 'users',
-        loadChildren: () =>
-          import('./modules/user-module/user.module').then(m => m.UserModule),
-      },
-
-      {
-        path: 'discount-tickets',
-        loadChildren: () =>
-          import(
-            './modules/discount-ticket-module/discount-ticket.module'
-          ).then(m => m.DiscountTicketModule),
       },
     ],
   },

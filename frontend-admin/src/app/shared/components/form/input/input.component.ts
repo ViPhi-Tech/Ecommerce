@@ -31,15 +31,17 @@ export class InputComponent implements OnInit {
   labelPosition = input<'top' | 'left'>('top');
 
   step = input<string | number>(1);
-  feedback = input<boolean>(false);
-  errorMessage = input<string>('');
-
-  isRequired = signal(false);
 
   rows = input<number>(3);
 
   idRef = signal('input_' + randomId());
 
+  min = input<number>(0);
+  max = input<number>(Number.MAX_SAFE_INTEGER);
+
+  isRequired = signal(false);
+  feedback = input<boolean>(false);
+  errorMessage = input<string>('');
   constructor() {}
 
   ngOnInit() {

@@ -8,12 +8,12 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreService } from '../../../../../shared/services/core.service';
-import { TableComponent } from '../../../../../shared/components/table/table.component';
+import { CoreService } from 'app/shared/services/core.service';
+import { TableComponent } from 'app/shared/components/table/table.component';
 import {
   DEFAULT_TABLE_CONFIG,
   TableConfig,
-} from '../../../../../shared/interfaces/table.interfaces';
+} from 'app/shared/interfaces/table.interfaces';
 
 @Component({
   selector: 'fuse-order-list',
@@ -26,7 +26,7 @@ export class OrderListComponent implements OnInit {
   private activateRoute = inject(ActivatedRoute);
   private coreService = inject(CoreService);
 
-  @ViewChild('productName', { static: true }) productName!: TemplateRef<any>;
+  @ViewChild('name', { static: true }) name!: TemplateRef<any>;
 
   orders = signal([
     {
@@ -99,10 +99,6 @@ export class OrderListComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.activateRoute.data.subscribe(data => {
-      this.coreService.adicionarBreadcrumb(data['breadcrumb']);
-    });
-
     this.tableConfig.set({
       rowsPerPageOptions: [5, 10, 20],
       rowsPerPage: 10,
@@ -115,7 +111,7 @@ export class OrderListComponent implements OnInit {
           caption: 'Nome',
           sortable: true,
           filter: true,
-          template: this.productName,
+          template: this.name,
         },
         { field: 'price', caption: 'Preço', sortable: true, filter: true },
         {

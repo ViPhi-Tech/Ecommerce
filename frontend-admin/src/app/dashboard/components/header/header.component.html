@@ -3,18 +3,17 @@
     class="px-3 sm:px-6 flex items-center justify-between bg-white dark:bg-container-background border-b border-gray-200 dark:border-[#1F1F23] h-full"
   >
     <div
-      class="font-medium text-sm hidden sm:flex items-center space-x-1 truncate max-w-[300px]"
+      class="font-medium text-sm hidden sm:flex sm:flex-col items-center sm:items-start space-x-1 sm:space-x-0 truncate max-w-[300px]"
     >
-      @for (item of breadcrumb; track $index) {
-        <div class="flex items-center">
-          {{ item }}
-        </div>
-        @if ($index < breadcrumb.length - 1) {
-          <ng-icon
-            name="lucideChevronRight"
-            class="text-gray-400 dark:text-gray-300"
-          ></ng-icon>
-        }
+      @if (pageTitle().title) {
+        <span class="text-gray-600 dark:text-gray-300 text-xl">
+          {{ pageTitle().title }}
+        </span>
+      }
+      @if (pageTitle().subTitle) {
+        <span class="text-xs text-gray-500 font-light dark:text-muted-dark">
+          {{ pageTitle().subTitle }}
+        </span>
       }
     </div>
     <div class="flex items-center gap-2 sm:gap-4 ml-auto sm:ml-0">

@@ -7,34 +7,29 @@
   [loading]="loading()"
   [showLoader]="false"
   [paginator]="true"
+  scrollHeight="flex"
+  [scrollable]="true"
   [globalFilterFields]="globalFilterFields()"
-  [tableStyle]="{ 'min-width': '75rem' }"
+  [tableStyle]="{ 'min-width': '50rem' }"
 >
   <ng-template #caption>
-    <div class="flex justify-between items-center">
-      <div>
-        <ng-content select="[data-headerFilter]"></ng-content>
-      </div>
-
-      <div class="flex gap-2">
-        <p-iconfield class="small" iconPosition="left">
-          <p-inputicon class="pi pi-search" />
-          <input
-            pInputText
-            pSize="small"
-            type="text"
-            (input)="search($event, dt2)"
-            placeholder="Pesquisar"
-          />
-        </p-iconfield>
-
+    <div
+      class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 justify-between items-center"
+    >
+      <div
+        class="w-full flex flex-col sm:flex-row sm:w-auto space-y-2-2 sm:space-x-2 sm:space-y-0"
+      >
         @for (button of config().headerButtons; track $index) {
           @if (button?.visible !== false) {
             <p-button
               [label]="button?.label"
               [icon]="button?.icon"
               [class]="button?.class"
-              [styleClass]="button?.styleClass"
+              [pTooltip]="button?.tooltip"
+              tooltipPosition="right"
+              [styleClass]="
+                button?.styleClass + ' w-full mb-2 sm:mb-0 sm:w-auto'
+              "
               [severity]="button?.color || 'primary'"
               [variant]="button?.outline ? 'outlined' : undefined"
               (click)="button?.action()"
@@ -43,6 +38,22 @@
             </p-button>
           }
         }
+      </div>
+
+      <div class="flex flex-col w-full sm:w-auto sm:flex-row gap-2">
+        <ng-content select="[data-headerFilter]"></ng-content>
+
+        <p-iconfield class="small" iconPosition="left">
+          <p-inputicon class="pi pi-search" />
+          <input
+            pInputText
+            pSize="small"
+            type="text"
+            class="w-full sm:w-[250px]"
+            (input)="search($event, dt2)"
+            placeholder="Pesquisar"
+          />
+        </p-iconfield>
       </div>
     </div>
   </ng-template>
@@ -70,7 +81,32 @@
             >
             </ng-container>
           } @else {
-            {{ rowData?.[column?.field || ''] }}
+            @if (column?.type === 'date') {
+              {{ rowData?.[column?.field || ''] | date: 'dd/MM/yyyy' }}
+            } @else if (column?.type === 'datetime') {
+              {{ rowData?.[column?.field || ''] | date: 'dd/MM/yyyy HH:mm' }}
+            } @else if (column?.type === 'currency') {
+              {{
+                rowData?.[column?.field || '']
+                  | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+              }}
+            } @else if (column?.type === 'activeOrNot') {
+              @if (rowData?.[column?.field || ''] === true) {
+                <ng-icon
+                  size="18"
+                  color="rgb(15, 181, 126)"
+                  name="lucideCircleCheckBig"
+                ></ng-icon>
+              } @else if (rowData?.[column?.field || ''] === false) {
+                <ng-icon
+                  size="18"
+                  color="rgb(255, 0, 1)"
+                  name="lucideCircleSlash2"
+                ></ng-icon>
+              }
+            } @else {
+              {{ rowData?.[column?.field || ''] }}
+            }
           }
         </td>
       }
