@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProductComponent } from './product.component';
 import { ProductListComponent } from './screens/product-list/product-list.component';
-import { ProductState } from './product.state';
+import { ProductState } from 'app/shared/store/product.state';
 
 const routes: Routes = [
   {

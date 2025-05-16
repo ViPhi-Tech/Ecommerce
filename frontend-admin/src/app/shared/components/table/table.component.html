@@ -7,9 +7,10 @@
   [loading]="loading()"
   [showLoader]="false"
   [paginator]="true"
+  scrollHeight="flex"
   [scrollable]="true"
   [globalFilterFields]="globalFilterFields()"
-  [tableStyle]="{'min-width': '50rem'}"
+  [tableStyle]="{ 'min-width': '50rem' }"
 >
   <ng-template #caption>
     <div
@@ -24,7 +25,8 @@
               [label]="button?.label"
               [icon]="button?.icon"
               [class]="button?.class"
-              [pTooltip]="button?.tooltip" tooltipPosition="right" 
+              [pTooltip]="button?.tooltip"
+              tooltipPosition="right"
               [styleClass]="
                 button?.styleClass + ' w-full mb-2 sm:mb-0 sm:w-auto'
               "
@@ -79,7 +81,32 @@
             >
             </ng-container>
           } @else {
-            {{ rowData?.[column?.field || ''] }}
+            @if (column?.type === 'date') {
+              {{ rowData?.[column?.field || ''] | date: 'dd/MM/yyyy' }}
+            } @else if (column?.type === 'datetime') {
+              {{ rowData?.[column?.field || ''] | date: 'dd/MM/yyyy HH:mm' }}
+            } @else if (column?.type === 'currency') {
+              {{
+                rowData?.[column?.field || '']
+                  | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+              }}
+            } @else if (column?.type === 'activeOrNot') {
+              @if (rowData?.[column?.field || ''] === true) {
+                <ng-icon
+                  size="18"
+                  color="rgb(15, 181, 126)"
+                  name="lucideCircleCheckBig"
+                ></ng-icon>
+              } @else if (rowData?.[column?.field || ''] === false) {
+                <ng-icon
+                  size="18"
+                  color="rgb(255, 0, 1)"
+                  name="lucideCircleSlash2"
+                ></ng-icon>
+              }
+            } @else {
+              {{ rowData?.[column?.field || ''] }}
+            }
           }
         </td>
       }

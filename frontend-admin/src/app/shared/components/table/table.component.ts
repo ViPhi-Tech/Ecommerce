@@ -8,9 +8,15 @@ import { TableConfig } from '../../interfaces/table.interfaces';
 import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
-import { NgStyle, NgTemplateOutlet } from '@angular/common';
+import {
+  CurrencyPipe,
+  DatePipe,
+  NgStyle,
+  NgTemplateOutlet,
+} from '@angular/common';
 import { TableActionsComponent } from './components/table-actions/table-actions.component';
 import { TooltipModule } from 'primeng/tooltip';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'fuse-table',
@@ -27,7 +33,10 @@ import { TooltipModule } from 'primeng/tooltip';
     ButtonModule,
     NgStyle,
     NgTemplateOutlet,
-    TooltipModule
+    TooltipModule,
+    DatePipe,
+    CurrencyPipe,
+    NgIcon,
   ],
 })
 export class TableComponent implements OnInit {

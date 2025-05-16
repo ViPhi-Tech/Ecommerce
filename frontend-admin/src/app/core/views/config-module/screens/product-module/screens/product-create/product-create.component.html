@@ -42,11 +42,10 @@
         </div>
 
         <div class="col-12 md:col-6 mb-6">
-          <fuse-select
+          <fuse-input
             label="Categoria"
-            [items]="categories()"
             [control]="productForm.get('category')"
-            placeholder="Selecione uma cetegoria"
+            placeholder="Adicione uma cetegoria"
           />
         </div>
 
@@ -104,16 +103,6 @@
     <div class="flex items-center gap-2">
       <button
         pButton
-        type="submit"
-        label="Cadastrar"
-        icon="pi pi-check"
-        class="w-[200px]"
-        size="small"
-        (click)="onSubmit($event)"
-        [raised]="true"
-      ></button>
-      <button
-        pButton
         type="button"
         label="Cancelar"
         icon="pi pi-times"
@@ -121,7 +110,15 @@
         severity="secondary"
         class="w-[200px]"
         size="small"
-        [raised]="true"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Cadastrar"
+        icon="pi pi-check"
+        class="w-[200px]"
+        size="small"
+        (click)="onSubmit($event)"
       ></button>
     </div>
   </ng-template>

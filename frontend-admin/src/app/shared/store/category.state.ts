@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Category, CategoryModuleState } from 'app/shared/interfaces/category-module.interface';
+import {
+  Category,
+  CategoryModuleState,
+} from 'app/shared/interfaces/category-module.interface';
 import { catchError, finalize, Observable, of, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
 

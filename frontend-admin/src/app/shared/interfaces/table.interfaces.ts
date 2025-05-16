@@ -14,6 +14,7 @@ export interface TableConfig {
 
 export interface TableColumn {
   field: string | number;
+  type?: string;
   caption: string;
   sortable?: boolean;
   filter?: boolean;

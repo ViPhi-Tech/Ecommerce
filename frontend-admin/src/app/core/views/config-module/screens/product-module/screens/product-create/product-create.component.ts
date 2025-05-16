@@ -22,7 +22,7 @@ export class ProductCreateComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
 
-  @ViewChild('drawerRef') drawerRef!: Drawer;
+  @ViewChild('dialogRef') dialogRef!: Drawer;
 
   formGroup = this.formBuilder.group({});
 
@@ -85,7 +85,7 @@ export class ProductCreateComponent implements OnInit {
   }
 
   closeDrawer(e: Event) {
-    this.drawerRef.close(e);
+    this.dialogRef.close(e);
   }
 
   onHide() {

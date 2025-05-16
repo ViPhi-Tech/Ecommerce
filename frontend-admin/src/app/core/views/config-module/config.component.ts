@@ -6,7 +6,6 @@ import { Component, OnInit, signal } from '@angular/core';
   standalone: false,
 })
 export class ConfigComponent implements OnInit {
-
   itemsCrud = signal([
     {
       title: 'Produtos',
@@ -22,7 +21,7 @@ export class ConfigComponent implements OnInit {
       color: 'rgb(59 130 246 / var(--tw-text-opacity, 1))',
       href: 'categories',
     },
-  
+
     {
       title: 'Clientes',
       description: 'Gerencie sua base de clientes',

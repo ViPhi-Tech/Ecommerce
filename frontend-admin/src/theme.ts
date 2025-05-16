@@ -14,10 +14,13 @@ import {
   lucideChartBar,
   lucideChartNoAxesColumn,
   lucideChevronRight,
+  lucideCircleCheckBig,
   lucideCircleHelp,
+  lucideCircleSlash2,
   lucideCloudUpload,
   lucideCreditCard,
   lucideFileText,
+  lucideFilter,
   lucideFolder,
   lucideHouse,
   lucideMessagesSquare,
@@ -41,7 +44,7 @@ import {
   lucideWallet,
   lucideX,
 } from '@ng-icons/lucide';
-import { matArrowDropDownOutline } from '@ng-icons/material-icons/outline';
+import { matArrowDropDownOutline, matKeyboardArrowDownOutline } from '@ng-icons/material-icons/outline';
 import { providePrimeNG } from 'primeng/config';
 import { routes } from './app/app.routes';
 import { CoreInterceptor } from './app/shared/interceptors/core.interceptor';
@@ -99,7 +102,11 @@ export const THEME: ApplicationConfig = {
       lucidePackage,
       lucideTruck,
       lucideShoppingCart,
-      lucideStore
+      lucideStore,
+      lucideCircleSlash2,
+      lucideCircleCheckBig,
+      lucideFilter,
+      matKeyboardArrowDownOutline,
     }),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
   ],

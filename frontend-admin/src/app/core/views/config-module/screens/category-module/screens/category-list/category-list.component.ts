@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
-import { CategoryState } from '../../category.state';
+import { CategoryState } from 'app/shared/store/category.state';
 
 @Component({
   selector: 'fuse-category-list',
@@ -30,11 +30,39 @@ export class CategoryListComponent implements OnInit {
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'name', caption: 'Nome', sortable: true, filter: true },
-      { field: 'description', caption: 'Descrição', sortable: false, filter: true },
-      { field: 'parentCategoryId', caption: 'Categoria Pai', sortable: true, filter: true },
-      { field: 'createdAt', caption: 'Data de Criação', sortable: true, filter: true },
-      { field: 'updatedAt', caption: 'Última Atualização', sortable: true, filter: true },
-      { field: 'isActive', caption: 'Ativo', sortable: true, filter: true },
+      {
+        field: 'description',
+        caption: 'Descrição',
+        sortable: false,
+        filter: true,
+      },
+      {
+        field: 'parentCategoryId',
+        caption: 'Categoria Pai',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'createdAt',
+        caption: 'Data de Criação',
+        type: 'date',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'updatedAt',
+        caption: 'Última Atualização',
+        type: 'date',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'isActive',
+        caption: 'Ativo',
+        type: 'activeOrNot',
+        sortable: true,
+        filter: true,
+      },
       { field: 'imageUrl', caption: 'Imagem', sortable: false, filter: false },
     ],
     headerButtons: [
@@ -56,6 +84,9 @@ export class CategoryListComponent implements OnInit {
 
   ngOnInit() {
     this.state.getCategoryList();
-    this.coreService.setPageTitle('Categorias', 'Lista de categorias disponíveis');
+    this.coreService.setPageTitle(
+      'Categorias',
+      'Lista de categorias disponíveis'
+    );
   }
 }

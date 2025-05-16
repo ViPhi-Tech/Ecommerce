@@ -91,7 +91,7 @@
     "parentCategoryId": null,
     "createdAt": "2023-03-01T14:00:00Z",
     "updatedAt": "2023-05-03T15:00:00Z",
-    "isActive": true,
+    "isActive": false,
     "imageUrl": "https://example.com/images/home-appliances.jpg"
   },
   {
@@ -111,7 +111,7 @@
     "parentCategoryId": null,
     "createdAt": "2023-05-01T18:00:00Z",
     "updatedAt": "2023-05-05T19:00:00Z",
-    "isActive": true,
+    "isActive": false,
     "imageUrl": "https://example.com/images/fashion.jpg"
   }
 ]

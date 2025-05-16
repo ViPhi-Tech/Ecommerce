@@ -5,6 +5,7 @@
 
 * {
   font-family: 'Poppins', sans-serif;
+  font-size: 14px;
 }
 
 :root {
@@ -73,6 +74,12 @@
   }
 }
 
+.p-datatable-thead > tr > th,
+.p-datatable-sort-icon,
+.p-datatable-sort-badge {
+  text-wrap-mode: nowrap;
+}
+
 .p-inputtext {
   width: 100%;
 }
@@ -85,6 +92,16 @@
       &::placeholder {
         color: var(--p-inputtext-invalid-border-color);
       }
+    }
+  }
+}
+
+textarea {
+  &.ng-touched.ng-invalid {
+    border-color: var(--p-inputtext-invalid-border-color);
+    color: var(--p-inputtext-invalid-border-color);
+    &::placeholder {
+      color: var(--p-inputtext-invalid-border-color);
     }
   }
 }

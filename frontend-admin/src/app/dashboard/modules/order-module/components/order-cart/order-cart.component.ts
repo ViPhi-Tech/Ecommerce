@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { CartStore } from 'app/shared/store/cart.store';
 import { CurrencyPipe } from '@angular/common';
+import { CartStore } from 'app/shared/store/cart.state';
 
 @Component({
   selector: 'fuse-order-cart',
