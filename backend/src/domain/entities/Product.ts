@@ -1,16 +1,22 @@
 export interface Product {
     id?: number;
     name: string;
-    ean: string;
-    price: number;
+    description?: string | null;
     sku: string;
-    stock?: number;
-    companyId: number | null
+    price: number;
+    quantity?: number;
+    ean: string;
+    companyId: number | null;
+    stock?: Stock | null;
 }
 
 export interface Stock {
-    id: number;
-    companyId?: number;
+    id?: number;
     productId: number;
     quantity: number;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
+
+
+

@@ -8,7 +8,7 @@ import path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
-const server = fastify({ logger: true });
+const server = fastify({ logger: false });
 
 server.register(cors, {
   origin: ['http://localhost:3000', 'http://localhost:4200', 'http://127.0.0.1:4200'],
