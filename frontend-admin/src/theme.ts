@@ -44,7 +44,10 @@ import {
   lucideWallet,
   lucideX,
 } from '@ng-icons/lucide';
-import { matArrowDropDownOutline, matKeyboardArrowDownOutline } from '@ng-icons/material-icons/outline';
+import {
+  matArrowDropDownOutline,
+  matKeyboardArrowDownOutline,
+} from '@ng-icons/material-icons/outline';
 import { providePrimeNG } from 'primeng/config';
 import { routes } from './app/app.routes';
 import { CoreInterceptor } from './app/shared/interceptors/core.interceptor';
