@@ -1,18 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { ProductCreateComponent } from './screens/reseller-create/product-create.component';
+import { ResellerCreateComponent } from './screens/reseller-create/reseller-create.component';
 
 const routes: Routes = [
   {
     path: 'new',
-    component: ProductCreateComponent,
-    data: { title: 'Cadastro de produto' },
+    component: ResellerCreateComponent,
+    data: { title: 'Cadastro de revendedores' },
   },
   {
     path: ':id',
-    component: ProductCreateComponent,
-    data: { title: 'Editar produto' },
+    component: ResellerCreateComponent,
+    data: { title: 'Editar revendedor' },
   },
 ];
 

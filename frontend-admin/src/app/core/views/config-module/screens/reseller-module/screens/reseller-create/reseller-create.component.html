@@ -24,11 +24,11 @@
 
   <form class="flex flex-col gap-4">
     <div>
-      <form [formGroup]="productForm" class="row">
+      <form [formGroup]="resellerForm" class="row">
         <div class="col-12 md:col-6 mb-6">
           <fuse-input
             label="Nome do Produto"
-            [control]="productForm.get('name')"
+            [control]="resellerForm.get('name')"
             placeholder="Ex: Smartphone Galaxy S22 Ultra"
           />
         </div>
@@ -36,7 +36,7 @@
         <div class="col-12 md:col-6 mb-6">
           <fuse-input
             label="Código/SKU"
-            [control]="productForm.get('sku')"
+            [control]="resellerForm.get('sku')"
             placeholder="Ex: SM-S22U-256GB-BLK"
           />
         </div>
@@ -44,7 +44,7 @@
         <div class="col-12 md:col-6 mb-6">
           <fuse-input
             label="Categoria"
-            [control]="productForm.get('category')"
+            [control]="resellerForm.get('category')"
             placeholder="Adicione uma cetegoria"
           />
         </div>
@@ -52,7 +52,7 @@
         <div class="col-12 md:col-6 mb-6">
           <fuse-input
             label="Marca / Fabricante"
-            [control]="productForm.get('brand')"
+            [control]="resellerForm.get('brand')"
             placeholder="Ex: Samsung"
           />
         </div>
@@ -61,7 +61,7 @@
           <fuse-input
             type="price"
             label="Preço"
-            [control]="productForm.get('price')"
+            [control]="resellerForm.get('price')"
             placeholder="R$ 0,00"
           />
         </div>
@@ -70,7 +70,7 @@
           <fuse-input
             label="Estoque disponível"
             type="number"
-            [control]="productForm.get('stock')"
+            [control]="resellerForm.get('stock')"
             placeholder="Adicione a quantidade disponível"
           />
         </div>
@@ -79,7 +79,7 @@
           <fuse-input
             type="textarea"
             label="Descrição curta"
-            [control]="productForm.get('shortDescription')"
+            [control]="resellerForm.get('shortDescription')"
             placeholder="Breve descrição do produto (máx. 255 caracteres)"
           />
         </div>
@@ -89,7 +89,7 @@
             type="textarea"
             label="Descrição"
             [rows]="5"
-            [control]="productForm.get('description')"
+            [control]="resellerForm.get('description')"
             placeholder="Descrição detalhada do produto, características, benefícios, etc."
           />
         </div>
