@@ -7,14 +7,18 @@ export class ProductRepository implements IProductRepository {
     constructor(private prisma: PrismaClient) {
     }
 
-    async create(data: Product): Promise<Product> {
+    async create(data: ProductCreateDTO): Promise<Product> {
         return this.prisma.product.create({
             data
         });
-    }
+    };
 
-    async findAll(): Promise<Product[]> {
-        return this.prisma.product.findMany();
+    async findAll(): Promise<(Product)[]> {
+      return this.prisma.product.findMany({
+        include: {
+          stock: true
+        }
+      });
     }
 
     async findById(id: number): Promise<Product | null> {
@@ -36,16 +40,12 @@ export class ProductRepository implements IProductRepository {
     async updateStock(sku: number, quantity: number, companyId: number): Promise<Stock> {
         return this.prisma.stock.upsert({
             where: {
-              companyId_productId: {
-                companyId: companyId,
-                productId: sku
-              }
+              productId: sku
             },
             update: {
               quantity: quantity
             },
             create: {
-              companyId: companyId,
               productId: sku,
               quantity: quantity
             }

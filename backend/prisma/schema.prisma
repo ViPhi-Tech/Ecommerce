@@ -57,7 +57,6 @@ model Company {
 
   users    User[]
   products Product[]
-  stocks   Stock[]
 }
 
 model Product {
@@ -71,14 +70,14 @@ model Product {
   ean         String  @default("0")
   isActive    Boolean @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  companyId Int?
-  company   Company? @relation(fields: [companyId], references: [id])
+  companyId   Int?
+  company     Company? @relation(fields: [companyId], references: [id])
 
-  stocks    Stock[] // Um produto pode ter vários registros de estoque (para diferentes empresas)
-  saleItems SaleItem[]
+  stock       Stock?   @relation("ProductStock") // Definindo a relação no Product
+  saleItems   SaleItem[]
 }
 
 model Sale {
@@ -150,17 +149,14 @@ model Address {
 
 model Stock {
   id        Int      @id @default(autoincrement())
-  companyId Int // ID da empresa que possui este estoque
-  productId Int // ID do produto referente a este estoque
-  quantity  Int      @default(0) // Quantidade disponível
+  productId Int      @unique // Chave única para cada produto (garante relação 1:1)
+  quantity  Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  company   Company         @relation(fields: [companyId], references: [id])
-  product   Product         @relation(fields: [productId], references: [id])
-  movements StockMovement[] // Relação 1:N com as movimentações do estoque
+  product   Product  @relation("ProductStock", fields: [productId], references: [id]) // Relacionando com o Product
+  movements StockMovement[] // Relacionamento 1:N com StockMovement
 
-  @@unique([companyId, productId]) // Garante que uma empresa tenha um único registro por produto
 }
 
 model StockMovement {
@@ -171,7 +167,7 @@ model StockMovement {
   createdAt DateTime     @default(now()) // Data da movimentação
   updatedAt DateTime     @updatedAt // Data da última atualização da movimentação
 
-  stock Stock @relation(fields: [stockId], references: [id]) // Relaciona com o modelo Stock
+  stock     Stock        @relation(fields: [stockId], references: [id]) // Relaciona com o modelo Stock
 }
 
 enum MovementType {

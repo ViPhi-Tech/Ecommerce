@@ -27,6 +27,14 @@ export default async function productRoutes(
         handler: productController.findById.bind(productController)
     });
 
+    fastify.get('/all', {
+        schema: {
+            tags: ['product']
+        },
+        preValidation: [authenticate],
+        handler: productController.findAll.bind(productController)
+    });
+    
     fastify.post('/update/stock', {
         schema: {
             tags: ['product'],
