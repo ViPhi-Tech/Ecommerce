@@ -37,6 +37,12 @@ const routes: Routes = [
   },
 
   {
+    path: 'resellers',
+    loadChildren: () =>
+      import('./screens/reseller-module/reseller.module').then(m => m.ResellerModule),
+  },
+
+  {
     path: 'discount-tickets',
     loadChildren: () =>
       import('./screens/discount-ticket-module/discount-ticket.module').then(

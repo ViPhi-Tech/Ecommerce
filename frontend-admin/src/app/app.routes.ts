@@ -69,6 +69,14 @@ export const routes: Routes = [
     outlet: 'drawer',
   },
   {
+    path: 'resellers',
+    loadChildren: () =>
+      import(
+        'app/core/views/config-module/screens/reseller-module/reseller-drawer.module'
+      ).then(m => m.ResellerDrawerModule),
+    outlet: 'drawer',
+  },
+  {
     path: 'discount-tickets',
     loadChildren: () =>
       import(
