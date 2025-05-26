@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { isAuthGuard } from './shared/guards/is-auth.guard';
+// import { isAuthGuard } from './shared/guards/is-auth.guard';
 
 export const routes: Routes = [
   {
@@ -18,7 +18,7 @@ export const routes: Routes = [
     path: 'dashboard',
     loadChildren: () =>
       import('./dashboard/dashboard.module').then(m => m.DashboardModule),
-    canActivate: [isAuthGuard],
+    // canActivate: [isAuthGuard],
   },
 
   {
