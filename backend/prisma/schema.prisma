@@ -78,6 +78,10 @@ model Product {
 
   stock       Stock?   @relation("ProductStock") // Definindo a relação no Product
   saleItems   SaleItem[]
+
+  categoryId  Int?
+  category    Category?  @relation(fields: [categoryId], references: [id])
+
 }
 
 model Sale {
@@ -173,4 +177,14 @@ model StockMovement {
 enum MovementType {
   IN
   OUT
+}
+
+
+model Category {
+  id      Int       @id   @default(autoincrement())
+  name    String    
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  produtos Product[]
 }

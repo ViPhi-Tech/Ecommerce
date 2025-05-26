@@ -1,55 +1,29 @@
-/*
-  Warnings:
-
-  - You are about to drop the column `full_name` on the `Company` table. All the data in the column will be lost.
-  - You are about to drop the column `is_active` on the `Company` table. All the data in the column will be lost.
-  - You are about to drop the column `google_id` on the `Login` table. All the data in the column will be lost.
-  - You are about to drop the column `hashed_password` on the `Login` table. All the data in the column will be lost.
-  - You are about to drop the column `company_id` on the `User` table. All the data in the column will be lost.
-  - You are about to drop the column `full_name` on the `User` table. All the data in the column will be lost.
-  - You are about to drop the column `is_active` on the `User` table. All the data in the column will be lost.
-  - You are about to drop the column `login_id` on the `User` table. All the data in the column will be lost.
-  - A unique constraint covering the columns `[googleId]` on the table `Login` will be added. If there are existing duplicate values, this will fail.
-  - A unique constraint covering the columns `[loginId]` on the table `User` will be added. If there are existing duplicate values, this will fail.
-  - Added the required column `fullName` to the `Company` table without a default value. This is not possible if the table is not empty.
-
-*/
 -- CreateEnum
 CREATE TYPE "PartnerType" AS ENUM ('RESELLER', 'DISTRIBUTOR', 'AFFILIATE', 'AGENT', 'OTHER');
 
--- DropForeignKey
-ALTER TABLE "User" DROP CONSTRAINT "User_company_id_fkey";
+-- CreateEnum
+CREATE TYPE "MovementType" AS ENUM ('IN', 'OUT');
 
--- DropForeignKey
-ALTER TABLE "User" DROP CONSTRAINT "User_login_id_fkey";
+-- CreateTable
+CREATE TABLE "Login" (
+    "id" SERIAL NOT NULL,
+    "email" TEXT NOT NULL,
+    "googleId" TEXT,
+    "hashedPassword" TEXT,
 
--- DropIndex
-DROP INDEX "Login_google_id_key";
+    CONSTRAINT "Login_pkey" PRIMARY KEY ("id")
+);
 
--- DropIndex
-DROP INDEX "User_login_id_key";
+-- CreateTable
+CREATE TABLE "User" (
+    "id" SERIAL NOT NULL,
+    "fullName" TEXT,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "loginId" INTEGER,
+    "companyId" INTEGER,
 
--- AlterTable
-ALTER TABLE "Company" DROP COLUMN "full_name",
-DROP COLUMN "is_active",
-ADD COLUMN     "fullName" TEXT NOT NULL,
-ADD COLUMN     "isActive" BOOLEAN NOT NULL DEFAULT true;
-
--- AlterTable
-ALTER TABLE "Login" DROP COLUMN "google_id",
-DROP COLUMN "hashed_password",
-ADD COLUMN     "googleId" TEXT,
-ADD COLUMN     "hashedPassword" TEXT;
-
--- AlterTable
-ALTER TABLE "User" DROP COLUMN "company_id",
-DROP COLUMN "full_name",
-DROP COLUMN "is_active",
-DROP COLUMN "login_id",
-ADD COLUMN     "companyId" INTEGER,
-ADD COLUMN     "fullName" TEXT,
-ADD COLUMN     "isActive" BOOLEAN NOT NULL DEFAULT true,
-ADD COLUMN     "loginId" INTEGER;
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
+);
 
 -- CreateTable
 CREATE TABLE "Client" (
@@ -67,6 +41,16 @@ CREATE TABLE "Client" (
 );
 
 -- CreateTable
+CREATE TABLE "Company" (
+    "id" SERIAL NOT NULL,
+    "fullName" TEXT NOT NULL,
+    "document" TEXT NOT NULL,
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+
+    CONSTRAINT "Company_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "Product" (
     "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
@@ -75,10 +59,12 @@ CREATE TABLE "Product" (
     "price" DOUBLE PRECISION NOT NULL,
     "cost" DOUBLE PRECISION,
     "quantity" INTEGER NOT NULL DEFAULT 0,
+    "ean" TEXT NOT NULL DEFAULT '0',
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "companyId" INTEGER,
+    "categoryId" INTEGER,
 
     CONSTRAINT "Product_pkey" PRIMARY KEY ("id")
 );
@@ -109,7 +95,7 @@ CREATE TABLE "SaleItem" (
 
 -- CreateTable
 CREATE TABLE "Partner" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "phone" TEXT,
@@ -122,6 +108,64 @@ CREATE TABLE "Partner" (
 
     CONSTRAINT "Partner_pkey" PRIMARY KEY ("id")
 );
+
+-- CreateTable
+CREATE TABLE "Address" (
+    "id" SERIAL NOT NULL,
+    "street" TEXT NOT NULL,
+    "number" TEXT NOT NULL,
+    "city" TEXT NOT NULL,
+    "state" TEXT NOT NULL,
+    "zipCode" TEXT NOT NULL,
+    "complement" TEXT,
+    "partnerId" INTEGER,
+    "clientId" INTEGER,
+    "userId" INTEGER,
+
+    CONSTRAINT "Address_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Stock" (
+    "id" SERIAL NOT NULL,
+    "productId" INTEGER NOT NULL,
+    "quantity" INTEGER NOT NULL DEFAULT 0,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Stock_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "StockMovement" (
+    "id" SERIAL NOT NULL,
+    "stockId" INTEGER NOT NULL,
+    "type" "MovementType" NOT NULL,
+    "quantity" INTEGER NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "StockMovement_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Category" (
+    "id" SERIAL NOT NULL,
+    "name" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Category_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Login_email_key" ON "Login"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Login_googleId_key" ON "Login"("googleId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_loginId_key" ON "User"("loginId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Client_document_key" ON "Client"("document");
@@ -139,10 +183,16 @@ CREATE UNIQUE INDEX "Product_sku_key" ON "Product"("sku");
 CREATE UNIQUE INDEX "Partner_email_key" ON "Partner"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Login_googleId_key" ON "Login"("googleId");
+CREATE UNIQUE INDEX "Address_partnerId_key" ON "Address"("partnerId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "User_loginId_key" ON "User"("loginId");
+CREATE UNIQUE INDEX "Address_clientId_key" ON "Address"("clientId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Address_userId_key" ON "Address"("userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Stock_productId_key" ON "Stock"("productId");
 
 -- AddForeignKey
 ALTER TABLE "User" ADD CONSTRAINT "User_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -157,6 +207,9 @@ ALTER TABLE "Client" ADD CONSTRAINT "Client_loginId_fkey" FOREIGN KEY ("loginId"
 ALTER TABLE "Product" ADD CONSTRAINT "Product_companyId_fkey" FOREIGN KEY ("companyId") REFERENCES "Company"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Product" ADD CONSTRAINT "Product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "Sale" ADD CONSTRAINT "Sale_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -164,3 +217,18 @@ ALTER TABLE "SaleItem" ADD CONSTRAINT "SaleItem_saleId_fkey" FOREIGN KEY ("saleI
 
 -- AddForeignKey
 ALTER TABLE "SaleItem" ADD CONSTRAINT "SaleItem_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Address" ADD CONSTRAINT "Address_partnerId_fkey" FOREIGN KEY ("partnerId") REFERENCES "Partner"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Address" ADD CONSTRAINT "Address_clientId_fkey" FOREIGN KEY ("clientId") REFERENCES "Client"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Address" ADD CONSTRAINT "Address_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Stock" ADD CONSTRAINT "Stock_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "StockMovement" ADD CONSTRAINT "StockMovement_stockId_fkey" FOREIGN KEY ("stockId") REFERENCES "Stock"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

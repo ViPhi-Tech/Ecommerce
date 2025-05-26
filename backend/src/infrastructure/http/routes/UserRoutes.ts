@@ -18,15 +18,9 @@ export default async function userRoutes(
         properties: {
           fullName: { type: 'string' },
           isActive: { type: 'boolean' },
-          login: {
-            type: 'object',
-            required: ['email', 'password'],
-            properties: {
-              email: { type: 'string', format: 'email' },
-              googleId: { type: 'string' },
-              password: { type: 'string', minLength: 6 }
-            }
-          }
+          email: { type: 'string', format: 'email' },
+          googleId: { type: 'string' },
+          password: { type: 'string', minLength: 6 }
         }
       }
     },
