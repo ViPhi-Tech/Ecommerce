@@ -44,7 +44,11 @@ export const productUpdateStockSchema = z.object({
 
 
 export const productCategorySchema = z.object({
-    name: z.string().min(1, {message: "Nome da categoria"})
+    name: z.string().min(1, {message: "Nome da categoria"}),
+    id: z.number().min(1, {message: "ID da categoria"}),
+    isActive: z.boolean().optional(),
+    createdAt: z.date().optional(),
+    updatedAt: z.date().optional(),
 });
 
 export const productUpdateStockJsonSchema = zodToJsonSchema(productUpdateStockSchema);
