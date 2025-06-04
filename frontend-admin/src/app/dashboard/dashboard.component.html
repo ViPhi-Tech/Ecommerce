@@ -9,7 +9,9 @@
     >
       <fuse-header />
       <div class="space-y-4">
-        <router-outlet></router-outlet>
+         <!-- <div [@routeAnimations]="prepareRoute(outlet)" style="display: contents"> -->
+          <router-outlet #outlet="outlet"></router-outlet>
+        <!-- </div> -->
       </div>
     </div>
   </div>
