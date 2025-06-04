@@ -4,6 +4,7 @@ import { SelectModule } from 'primeng/select';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { CartStore } from 'app/shared/store/cart.state';
+import { sleep } from 'app/shared/utils/utils';
 
 @Component({
   selector: 'fuse-product-list',
@@ -79,7 +80,11 @@ export class ProductListComponent implements OnInit {
     ];
   }
 
-  addProductToCart(product: any) {
+  async addProductToCart(product: any) {
+    product.loading = true;
+
+    await sleep(1000); // Simulating a delay for adding the product to the cart
+    product.loading = false;
     this.cartStore.addItem(product);
   }
 }

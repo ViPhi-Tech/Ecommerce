@@ -43,11 +43,9 @@ export class MenuItemComponent implements OnInit {
   }
 
   onMouseEnter() {
-    console.log('Mouse enter');
     this.toggleMenu(true);
   }
   onMouseLeave() {
-    console.log('Mouse enter');
     this.toggleMenu(false);
   }
 }

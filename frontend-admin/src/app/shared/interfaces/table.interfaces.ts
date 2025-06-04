@@ -41,7 +41,7 @@ export interface ActionButtons {
   iconType?: string; // e.g., "material", "font-awesome"
   color?: string; // e.g., "primary", "accent", "warn"
   tooltip: string;
-  show: (rowData: any) => boolean;
+  show?: (rowData: any) => boolean;
   action: (rowData: any, rowIndex?: number) => void;
 }
 

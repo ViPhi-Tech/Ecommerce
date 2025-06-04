@@ -7,7 +7,7 @@ export interface CartState {
   total: number;
   totalQuantity: number;
   quantityItems: number;
-  frete: number;
+  shipment: number;
 }
 
 export interface CartItem {
@@ -16,6 +16,7 @@ export interface CartItem {
   price: number;
   quantity: number;
   discountPercent: number;
+  loading?: boolean;
 }
 
 @Injectable({
@@ -29,12 +30,12 @@ export class CartStore {
     total: 0,
     totalQuantity: 0,
     quantityItems: 0,
-    frete: 0,
+    shipment: 0,
   });
 
   public cartItems = computed(() => this.state().cartItems);
   public discount = computed(() => this.state().discount);
-  public frete = computed(() => this.state().frete);
+  public shipment = computed(() => this.state().shipment);
   public subTotal = computed(() => this.state().subTotal);
   public total = computed(() => this.state().total);
   public totalQuantity = computed(() => this.state().totalQuantity);
@@ -108,12 +109,12 @@ export class CartStore {
     this.updateCartCalculations();
   }
 
-  public setFrete(frete: number) {
+  public setShipment(shipment: number) {
     this.state.update(state => ({
       ...state,
-      frete,
+      shipment,
     }));
-    this.updateTotalWithFrete();
+    this.updateTotalWithShipment();
   }
 
   private updateCartCalculations() {
@@ -147,7 +148,7 @@ export class CartStore {
           return itemSubtotal - itemDiscount;
         })
         .reduce((total, itemTotal) => total + itemTotal, 0) +
-      this.state().frete;
+      this.state().shipment;
 
     // Cálculo da quantidade total
     const totalQuantity = cartItems
@@ -167,10 +168,10 @@ export class CartStore {
     }));
   }
 
-  private updateTotalWithFrete() {
+  private updateTotalWithShipment() {
     this.state.update(state => ({
       ...state,
-      total: state.subTotal - state.discount + state.frete,
+      total: state.subTotal - state.discount + state.shipment,
     }));
   }
 

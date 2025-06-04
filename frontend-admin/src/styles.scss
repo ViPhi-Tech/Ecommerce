@@ -46,6 +46,36 @@
   }
 }
 
+@keyframes slideLeftToRightFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-left-to-right-fade-in {
+  animation: slideLeftToRightFadeIn 0.3s ease;
+}
+
+@keyframes slideRightToLeftFadeOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+}
+
+.slide-right-to-left-fade-out {
+  animation: slideRightToLeftFadeOut 0.2s ease forwards;
+}
+
 .p-iconfield.small {
   .p-inputicon {
     top: 43%;
@@ -55,6 +85,7 @@
 .p-datatable-table {
   border: 1px solid var(--p-datatable-body-cell-border-color);
   border-radius: 5px !important;
+  min-width: auto !important;
 }
 
 .p-datatable-header {

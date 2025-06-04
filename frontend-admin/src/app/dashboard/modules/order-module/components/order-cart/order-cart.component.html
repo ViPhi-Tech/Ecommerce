@@ -26,18 +26,24 @@
     >
       <div
         class="h-full w-full rounded-[inherit]"
-        style="overflow: hidden scroll"
+        style="overflow: hidden auto"
       >
-        <div style="min-width: 100%; display: table">
-          <div class="space-y-1">
+        <div class="h-full" style="min-width: 100%; display: table">
+          <div class="space-y-1 h-full">
             @for (item of cartStore.cartItems(); track $index) {
-              <div>
+              <div
+                [ngClass]="
+                  removingItems[item.id]
+                    ? 'slide-right-to-left-fade-out'
+                    : 'slide-left-to-right-fade-in'
+                "
+              >
                 <div class="flex items-start gap-4 py-4">
                   <div
                     class="relative h-16 w-16 overflow-hidden rounded-md bg-muted"
                   >
                     <img
-                      alt="Tênis Casual"
+                      [alt]="item.name"
                       loading="lazy"
                       decoding="async"
                       data-nimg="fill"
@@ -59,7 +65,7 @@
                         (click)="removeItem(item.id)"
                         class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-6 w-6 text-muted-foreground"
                       >
-                        x
+                        <ng-icon style="color: red;" name="lucideTrash2"></ng-icon>
                       </button>
                     </div>
                     <div class="mt-1 text-sm text-muted-foreground">
@@ -93,7 +99,8 @@
                     </div>
                     <div class="mt-2 flex items-center">
                       <button
-                        (click)="minusItemQuantity(item.id)"
+                        (click)="minusItemQuantity(item)"
+                        [disabled]="item.loading"
                         class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-7 w-7 rounded-full"
                       >
                         -</button
@@ -101,7 +108,8 @@
                         item.quantity
                       }}</span
                       ><button
-                        (click)="plusItemQuantity(item.id)"
+                        [disabled]="item.loading"
+                        (click)="plusItemQuantity(item)"
                         class="inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-7 w-7 rounded-full"
                       >
                         +
@@ -114,6 +122,15 @@
                   role="none"
                   class="shrink-0 bg-border h-[1px] w-full"
                 ></div>
+              </div>
+            } @empty {
+              <div
+                class="flex items-center justify-center flex-col h-full px-10"
+              >
+                <p class="text-muted-foreground text-xl">Carrinho vazio</p>
+                <p class="text-center mt-5">
+                  Adicione produtos ao seu carrinho para finalizar o pedido.
+                </p>
               </div>
             }
           </div>
@@ -129,19 +146,19 @@
               | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
           }}</span>
         </div>
-        <div class="flex justify-between">
-          <span class="text-sm">Frete</span>
-          @if (cartStore.frete() === 0) {
+        <!-- <div class="flex justify-between">
+          <span class="text-sm">Shipment</span>
+          @if (cartStore.shipment() === 0) {
             <span class="text-sm font-medium">Grátis</span>
           } @else {
             <span class="text-sm font-medium"
               >{{
-                cartStore.frete()
+                cartStore.shipment()
                   | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
               }}
             </span>
           }
-        </div>
+        </div> -->
         <div
           data-orientation="horizontal"
           role="none"

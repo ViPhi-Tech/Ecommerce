@@ -7,24 +7,27 @@ import {
   ViewChild,
   WritableSignal,
 } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import {
   DEFAULT_TABLE_CONFIG,
   TableConfig,
 } from 'app/shared/interfaces/table.interfaces';
+import { OrderState } from '../../states/order.state';
+import { TableFilterComponent } from 'app/shared/components/table/components/table-filter/table-filter.component';
 
 @Component({
   selector: 'fuse-order-list',
   templateUrl: './order-list.component.html',
   styleUrls: ['./order-list.component.scss'],
-  imports: [TableComponent],
+  imports: [TableComponent, TableFilterComponent],
+  providers: [OrderState],
 })
 export class OrderListComponent implements OnInit {
   private router = inject(Router);
-  private activateRoute = inject(ActivatedRoute);
   private coreService = inject(CoreService);
+  state = inject(OrderState);
 
   @ViewChild('name', { static: true }) name!: TemplateRef<any>;
 
@@ -99,6 +102,14 @@ export class OrderListComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
+    this.coreService.setPageTitle(
+      'Lista de Pedidos',
+      'Listagem com os pedidos realizados'
+    );
+    this.setTableConfig();
+  }
+
+  setTableConfig() {
     this.tableConfig.set({
       rowsPerPageOptions: [5, 10, 20],
       rowsPerPage: 10,
@@ -106,35 +117,44 @@ export class OrderListComponent implements OnInit {
       pageLinkSize: 5,
       columns: [
         { field: 'id', caption: 'ID', sortable: true, filter: true },
+        { field: 'customer', caption: 'Cliente', sortable: true, filter: true },
+        { field: 'date', caption: 'Data', sortable: true, filter: true },
         {
-          field: 'name',
-          caption: 'Nome',
-          sortable: true,
-          filter: true,
-          template: this.name,
-        },
-        { field: 'price', caption: 'Preço', sortable: true, filter: true },
-        {
-          field: 'category',
-          caption: 'Categoria',
+          field: 'total',
+          caption: 'Valor Total',
           sortable: true,
           filter: true,
         },
+        { field: 'status', caption: 'Status', sortable: true, filter: true },
         {
           field: 'actions',
           caption: 'Ações',
           actionButtons: [
             {
               iconType: 'material',
-              icon: 'check',
-              color: 'success',
-              tooltip: 'Confirmar Consolidação',
-              show: data => {
-                return !data?.caixa_consolidado && !data?.caixa_consolidado_dia;
-              },
+              icon: 'visibility',
+              color: 'info',
+              tooltip: 'Visualizar Pedido',
               action: (data, index) => {
-                console.log('Confirmar Consolidação', data);
-                console.log('Confirmar Consolidação', index);
+                console.log('Visualizar Pedido', data, index);
+              },
+            },
+            {
+              iconType: 'material',
+              icon: 'edit',
+              color: 'primary',
+              tooltip: 'Editar Pedido',
+              action: (data, index) => {
+                console.log('Editar Pedido', data, index);
+              },
+            },
+            {
+              iconType: 'material',
+              icon: 'delete',
+              color: 'warn',
+              tooltip: 'Excluir Pedido',
+              action: (data, index) => {
+                console.log('Excluir Pedido', data, index);
               },
             },
           ],

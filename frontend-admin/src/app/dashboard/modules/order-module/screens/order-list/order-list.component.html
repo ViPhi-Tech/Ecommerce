@@ -1,8 +1,15 @@
 <div class="p-8">
-  <div class="pb-3">
-    <h1 class="text-3xl font-bold">Lista de pedidos</h1>
-  </div>
-  <fuse-table [data]="orders()" [config]="tableConfig()" />
+  <fuse-table
+    [data]="state.orderList()"
+    [loading]="state.loading()"
+    [config]="tableConfig()"
+  >
+    <ng-container data-headerFilter>
+      <fuse-table-filter>
+        <div class="space-y-4"></div>
+      </fuse-table-filter>
+    </ng-container>
+  </fuse-table>
 </div>
 
 <ng-template #name let-product>

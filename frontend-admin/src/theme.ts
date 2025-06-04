@@ -43,6 +43,7 @@ import {
   lucideVideo,
   lucideWallet,
   lucideX,
+  lucideTrash2
 } from '@ng-icons/lucide';
 import {
   matArrowDropDownOutline,
@@ -109,6 +110,7 @@ export const THEME: ApplicationConfig = {
       lucideCircleSlash2,
       lucideCircleCheckBig,
       lucideFilter,
+      lucideTrash2,
       matKeyboardArrowDownOutline,
     }),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
