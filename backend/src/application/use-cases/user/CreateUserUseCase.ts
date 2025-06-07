@@ -1,5 +1,6 @@
 import { User } from '../../../domain/entities/User';
-import { CreateUserDTO} from "../../../infrastructure/http/dto/User.dto";
+// import { CreateUserDTO} from "../../../infrastructure/http/dto/User.dto";
+import { CreateUserInput } from '../../dto/user/CreateUserInput';
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 import { ILoginRepository } from '../../../domain/repositories/ILoginRepository';
 import { IPasswordService } from '../../../domain/services/IPasswordService';
@@ -12,7 +13,7 @@ export class CreateUserUseCase {
     private passwordService: IPasswordService
   ) {}
 
-  async execute(data: CreateUserDTO): Promise<User> {
+  async execute(data: CreateUserInput): Promise<User> {
     // Verificar se já existe um login com o email fornecido
     const existingLogin = await this.loginRepository.findByEmail(data.email);
     if (existingLogin) {

@@ -3,6 +3,7 @@ export interface CreateCategoryInput {
   name: string;
   isActive?: boolean | null;
   companyId?: number | null;
+  categoryId?: Category | null;
 }
 
 export interface Category extends CreateCategoryInput {
