@@ -1,14 +1,14 @@
 import { Product } from "./Product";
 
-export interface SaleItem {
-    id: number;
-    saleId: number;
+export interface OrderItem {
+    id?: number;
+    saleId?: number;
     productId: number;
     quantity: number;
     price: number;
 
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 
     product?: Product;
 }
