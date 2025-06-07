@@ -4,13 +4,14 @@ import { CreateOrderUseCase } from "../../../application/use-cases/order/CreateO
 import { FindByIdOrderUseCase } from "../../../application/use-cases/order/FindByIdOrderUseCase";
 import { FindAllOrderUseCase } from "../../../application/use-cases/order/FindAllOrderUseCase";
 import { OrderController } from "../../http/controllers/OrderController";
-
+import { ProductRepository } from "../../database/repositories/ProductRepository";
 // repository com o prism
 
 export const orderRepository = new OrderRepository(prisma);
-
+const productRepository = new ProductRepository(prisma);
 // Use cases com o repository
-export const createOrderUseCase = new CreateOrderUseCase(orderRepository);
+export const createOrderUseCase = new CreateOrderUseCase(orderRepository, productRepository);
+
 export const findByIdOrderUseCase = new FindByIdOrderUseCase(orderRepository);
 export const findAllOrderUseCase = new FindAllOrderUseCase(orderRepository);
 

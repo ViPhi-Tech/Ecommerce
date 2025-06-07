@@ -51,4 +51,18 @@ export class ProductRepository implements IProductRepository {
             }
           });
     };
+
+
+    async updateMultipleStocks(items: { sku: number; quantity: number }[]): Promise<Stock[]> {
+      const operations = items.map(({ sku, quantity }) => 
+        this.prisma.stock.upsert({
+          where: { productId: sku },
+          update: { quantity: { decrement: quantity } },
+          create: { productId: sku, quantity: -quantity }
+        })
+      );
+      
+      return await this.prisma.$transaction(operations);
+    };
+    
 }

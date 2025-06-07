@@ -7,4 +7,5 @@ export interface IProductRepository {
     update(id: number, data: Partial<Product>): Promise<Product>;
     delete(id: number): Promise<void>;
     updateStock(sku: number, quantity: number, companyId?: number): Promise<Stock>;
+    updateMultipleStocks(items: { sku: number; quantity: number }[]): Promise<Stock[]>;
 }
