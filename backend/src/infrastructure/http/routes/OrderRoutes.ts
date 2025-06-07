@@ -17,38 +17,21 @@ export default async function saleRoutes(
         handler: orderController.create.bind(orderController)
     });
 
-    // fastify.get('/:id', {
-    //     schema: {
-    //         tags: ['sale'],
-    //         params: saleIdJsonSchema
-    //     },
-    //     preValidation: [authenticate],
-    //     handler: saleController.findById.bind(saleController)
-    // });
+     fastify.get('/:id', {
+         schema: {
+             tags: ['order'],
+             params: orderIdJsonSchema
+         },
+         preValidation: [authenticate],
+         handler: orderController.findById.bind(orderController)
+     });
 
-    // fastify.get('/all', {
-    //     schema: {
-    //         tags: ['sale']
-    //     },
-    //     preValidation: [authenticate],
-    //     handler: saleController.findAll.bind(saleController)
-    // });
+     fastify.get('/all', {
+         schema: {
+             tags: ['order']
+         },
+         preValidation: [authenticate],
+         handler: orderController.findAll.bind(orderController)
+     });
 
-    // fastify.put('/update', {
-    //     schema: {
-    //         tags: ['sale'],
-    //         body: saleUpdateJsonSchema
-    //     },
-    //     preValidation: [authenticate],
-    //     handler: saleController.update.bind(saleController)
-    // });
-
-    // fastify.delete('/:id', {
-    //     schema: {
-    //         tags: ['sale'],
-    //         params: saleIdJsonSchema
-    //     },
-    //     preValidation: [authenticate],
-    //     handler: saleController.delete.bind(saleController)
-    // });
 }
