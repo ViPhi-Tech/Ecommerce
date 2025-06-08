@@ -30,7 +30,20 @@ function createWindow() {
   });
 }
 
-app.on('ready', createWindow);
+// Adiciona o nome do aplicativo
+app.setName('Kommerz');
+
+app.on('ready', () => {
+  createWindow();
+
+  const { globalShortcut } = require('electron');
+
+  globalShortcut.register('Ctrl+I', () => {
+    if (mainWindow) {
+      mainWindow.webContents.openDevTools();
+    }
+  });
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();

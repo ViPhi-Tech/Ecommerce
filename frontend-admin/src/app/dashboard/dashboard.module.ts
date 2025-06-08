@@ -22,6 +22,7 @@ const routes: Routes = [
           import('./modules/customization/customization.module').then(
             m => m.CustomizationModule
           ),
+        data: { animation: 'customization' },
       },
       {
         path: 'orders',

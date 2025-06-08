@@ -14,6 +14,7 @@ const routes: Routes = [
       import('./screens/product-module/product.module').then(
         m => m.ProductModule
       ),
+    data: { animation: 'products' },
   },
   {
     path: 'categories',
@@ -21,6 +22,7 @@ const routes: Routes = [
       import('./screens/category-module/category.module').then(
         m => m.CategoryModule
       ),
+    data: { animation: 'categories' },
   },
   {
     path: 'invoices',

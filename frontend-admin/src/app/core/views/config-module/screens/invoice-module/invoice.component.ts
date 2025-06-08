@@ -22,6 +22,6 @@ export class InvoiceComponent implements OnInit {
     if (!outlet || !outlet.isActivated) {
       return 'none';
     }
-    return outlet.activatedRoute.url;
+    return outlet.activatedRoute.snapshot.data['animation'] || 'none';
   }
 }

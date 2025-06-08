@@ -7,12 +7,12 @@ const routes: Routes = [
   {
     path: 'new',
     component: ProductCreateComponent,
-    data: { title: 'Cadastro de produto' },
+    data: { title: 'Cadastro de produto', animation: 'new-product' },
   },
   {
     path: ':id',
     component: ProductCreateComponent,
-    data: { title: 'Editar produto' },
+    data: { title: 'Editar produto', animation: 'edit-product' },
   },
 ];
 
