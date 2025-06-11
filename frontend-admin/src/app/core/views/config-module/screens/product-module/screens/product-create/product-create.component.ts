@@ -25,14 +25,14 @@ export class ProductCreateComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
 
-  private service = inject(ProductService);
+  private productService = inject(ProductService);
 
   @ViewChild('drawerRef') drawerRef!: Drawer;
 
   formGroup = this.formBuilder.group({});
 
   // signals
-  visible = signal(true);
+  visible = signal(false);
   title = signal('Adicionar Produto');
   subtitle = signal('Preencha os dados do novo produto abaixo');
 
@@ -76,6 +76,28 @@ export class ProductCreateComponent implements OnInit {
       shortDescription: [''],
       description: ['', [Validators.required]],
     });
+
+    // pegar o id da rota, se existir
+    this.activatedRoute.params.pipe(takeUntilDestroyed(this.destroyedRef)).subscribe((params) => {
+      const id = params['id'];
+      if (id) {
+        this.loadProduct(id);
+      }else {
+        this.visible.set(true);
+      }
+    });
+  }
+
+  loadProduct(id: string): void {
+    this.productService.getProductById(id).pipe(takeUntilDestroyed(this.destroyedRef)).subscribe({
+      next: (response: ApiResponse) => {
+        this.productForm.patchValue(response.dados);
+        this.visible.set(true);
+      },
+      error: (error: ApiResponse) => {
+        console.error('Error loading product:', error);
+      },
+    });
   }
 
   onSubmit(e: Event): void {
@@ -88,7 +110,7 @@ export class ProductCreateComponent implements OnInit {
       return;
     } 
 
-    this.service.createProduct(this.productForm.value).pipe(takeUntilDestroyed(this.destroyedRef)).subscribe({
+    this.productService.createProduct(this.productForm.value).pipe(takeUntilDestroyed(this.destroyedRef)).subscribe({
       next: (response: ApiResponse) => {
         console.log('Product created successfully:', response);
         this.onCloseDrawer();

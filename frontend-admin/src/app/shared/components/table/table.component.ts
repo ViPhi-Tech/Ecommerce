@@ -68,4 +68,11 @@ export class TableComponent implements OnInit {
   search($event: any, dt2: any) {
     dt2.filterGlobal($event?.target?.value, 'contains');
   }
+
+  onRowClick(rowData: any, rowIndex: number) {
+    const config = this.config();
+    if (config && typeof config.rowClick === 'function') {
+      config.rowClick(rowData, rowIndex);
+    }
+  }
 }

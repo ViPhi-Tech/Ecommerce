@@ -6,6 +6,7 @@ import {
 } from 'app/shared/interfaces/product-module.interface';
 import { catchError, finalize, Observable, of, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
+import { ApiResponse } from '../interfaces/api-response.interface';
 
 @Injectable()
 export class ProductState {
@@ -28,9 +29,9 @@ export class ProductState {
     this.setProductList([]);
 
     this.http
-      .get<Product[]>(`${this.apiUrl}products`)
+      .get<ApiResponse<Product[]>>(`${this.apiUrl}product/all`)
       .pipe(
-        tap(products => this.setProductList(products)),
+        tap(data => this.setProductList(data.dados)),
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
       )

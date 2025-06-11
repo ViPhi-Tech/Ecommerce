@@ -5,13 +5,13 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { RouterModule, Routes } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { LogoComponent } from './components/logo/logo.component';
-// import { isAuthGuard } from '../shared/guards/is-auth.guard';
+import { isAuthGuard } from 'app/shared/guards/is-auth.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: DashboardComponent,
-    // canActivate: [isAuthGuard],
+    canActivate: [isAuthGuard],
     data: {
       breadcrumb: 'Dashboard',
     },
