@@ -29,17 +29,14 @@ export class ProductListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    rowClick: (rowData: any) => {
+      this.router.navigate([{ outlets: { drawer: ['products', rowData?.id] } }]);
+    },
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'name', caption: 'Nome', sortable: true, filter: true },
-      {
-        field: 'price',
-        caption: 'Preço',
-        type: 'currency',
-        sortable: true,
-        filter: true,
-      },
-      { field: 'category', caption: 'Categoria', sortable: true, filter: true },
+      { field: 'initialPrice', caption: 'Preço Inicial', type: 'currency', sortable: true, filter: true },
+      { field: 'finalPrice', caption: 'Preço Final', type: 'currency', sortable: true, filter: true },
     ],
     headerButtons: [
       {

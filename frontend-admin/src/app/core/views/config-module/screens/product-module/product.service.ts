@@ -7,9 +7,13 @@ import { environments } from 'src/environments/environments';
 @Injectable()
 export class ProductService {
   private http = inject(HttpClient);
-  private apiUrl = environments.apiUrl + '/products';
+  private apiUrl = environments.apiUrl + 'product';
 
   constructor() {}
+
+  getProductById(productId: string): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/${productId}`);
+  }
 
   // Define methods for product operations here
   createProduct(productData: any): Observable<ApiResponse> {

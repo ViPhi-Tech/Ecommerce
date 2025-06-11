@@ -63,7 +63,7 @@
     </tr>
   </ng-template>
   <ng-template #body let-rowData let-rowIndex="rowIndex">
-    <tr>
+    <tr (click)="onRowClick(rowData, rowIndex)">
       @for (column of config().columns; track $index) {
         <td>
           @if (column.field === 'actions' && column?.actionButtons?.length) {

@@ -10,6 +10,7 @@ export interface TableConfig {
   emptyMessage?: string;
   columns: TableColumn[];
   headerButtons?: HeaderButton[];
+  rowClick?: (rowData: any, rowIndex: number) => void;
 }
 
 export interface TableColumn {

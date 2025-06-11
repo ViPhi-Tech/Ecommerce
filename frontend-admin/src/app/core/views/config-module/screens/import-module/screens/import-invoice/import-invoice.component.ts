@@ -86,7 +86,7 @@ export class ImportInvoiceComponent implements OnInit, OnDestroy {
       .importInvoice(this.invoices()[0])
       .subscribe({
         next: (response: ApiResponse) => {
-          this.invoiceService.updateimportInvoice(response?.data);
+          this.invoiceService.updateimportInvoice(response?.dados);
           this.closeDrawer();
         },
       });
