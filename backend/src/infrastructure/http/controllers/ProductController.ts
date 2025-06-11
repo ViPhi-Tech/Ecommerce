@@ -44,7 +44,7 @@ export class ProductController {
 
     async findById(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const ProductID = request.body as ProductID
+            const ProductID = request.params as ProductID
             const product = await this.findProductByIdUseCase.execute(ProductID)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: product})
         } catch (error) {
