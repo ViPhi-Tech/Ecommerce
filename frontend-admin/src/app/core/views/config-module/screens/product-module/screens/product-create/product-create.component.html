@@ -1,19 +1,14 @@
-<p-dialog
-  #dialogRef
-  [header]="title()"
-  [(visible)]="visible"
-  [draggable]="false"
-  (onHide)="onHide()"
-  [modal]="true"
-  [dismissableMask]="true"
-  [closeOnEscape]="true"
-  [closable]="true"
-  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-  [style]="{ width: '80vw' }"
+<p-drawer
+   #drawerRef
+  [visible]="visible()"
+  (onHide)="onCloseDrawer()"
+  position="right"
+  styleClass="!w-full md:!w-[80vw] lg:!w-[80vw]"
+  transitionOptions="300ms cubic-bezier(0, 0, 0.2, 1)"
 >
   <ng-template #header>
     <div class="flex flex-col space-y-1.5 text-center sm:text-left">
-      <h2 class="text-lg font-semibold leading-none tracking-tight">
+      <h2 class="text-2xl font-semibold leading-none tracking-tight">
         Adicionar Produto
       </h2>
       <p class="text-sm text-muted-foreground">
@@ -60,8 +55,17 @@
         <div class="col-12 md:col-6 mb-6">
           <fuse-input
             type="price"
-            label="Preço"
-            [control]="productForm.get('price')"
+            label="Preço inicial"
+            [control]="productForm.get('initialPrice')"
+            placeholder="R$ 0,00"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-6">
+          <fuse-input
+            type="price"
+            label="Preço final"
+            [control]="productForm.get('finalPrice')"
             placeholder="R$ 0,00"
           />
         </div>
@@ -100,18 +104,9 @@
   </form>
 
   <ng-template #footer>
-    <div class="flex items-center gap-2">
-      <button
-        pButton
-        type="button"
-        label="Cancelar"
-        icon="pi pi-times"
-        (click)="closeDrawer($event)"
-        severity="secondary"
-        class="w-[200px]"
-        size="small"
-      ></button>
-      <button
+    <div class="w-full justify-end flex items-center gap-4">
+      <div class="flex gap-2">
+        <button
         pButton
         type="submit"
         label="Cadastrar"
@@ -119,7 +114,19 @@
         class="w-[200px]"
         size="small"
         (click)="onSubmit($event)"
-      ></button>
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          icon="pi pi-times"
+          (click)="closeDrawer($event)"
+          severity="secondary"
+          class="w-[200px]"
+          size="small"
+        ></button>
+      </div>
     </div>
   </ng-template>
-</p-dialog>
+</p-drawer>

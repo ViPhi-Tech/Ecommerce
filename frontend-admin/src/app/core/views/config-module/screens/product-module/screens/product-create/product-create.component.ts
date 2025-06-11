@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -7,22 +7,27 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { Drawer } from 'primeng/drawer';
+import { Drawer, DrawerModule } from 'primeng/drawer';
 import { FormModule } from 'app/shared/components/form/form.module';
-
+import { ProductService } from '../../product.service';
+import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 @Component({
   selector: 'fuse-product-create',
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss'],
-  imports: [DialogModule, ButtonModule, ReactiveFormsModule, FormModule],
+  imports: [DrawerModule, ButtonModule, ReactiveFormsModule, FormModule],
+  providers: [ProductService],
 })
 export class ProductCreateComponent implements OnInit {
+  destroyedRef = inject(DestroyRef);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
 
-  @ViewChild('dialogRef') dialogRef!: Drawer;
+  private service = inject(ProductService);
+
+  @ViewChild('drawerRef') drawerRef!: Drawer;
 
   formGroup = this.formBuilder.group({});
 
@@ -63,8 +68,10 @@ export class ProductCreateComponent implements OnInit {
       name: ['', [Validators.required, Validators.maxLength(255)]],
       sku: ['', [Validators.required]],
       category: ['', [Validators.required]],
+      image: [''],
       brand: [''],
-      price: ['', [Validators.required]],
+      initialPrice: [0, [Validators.required]],
+      finalPrice: [0, [Validators.required]],
       stock: ['', [Validators.required]],
       shortDescription: [''],
       description: ['', [Validators.required]],
@@ -76,23 +83,35 @@ export class ProductCreateComponent implements OnInit {
     e.stopPropagation();
 
     this.productForm.markAllAsTouched();
-    if (this.productForm.valid) {
-      console.log('Form Data:', this.productForm.value);
-      // Adicione aqui a lógica para enviar os dados do formulário
-    } else {
+    if (!this.productForm.valid) {
       console.log('Formulário inválido');
-    }
+      return;
+    } 
+
+    this.service.createProduct(this.productForm.value).pipe(takeUntilDestroyed(this.destroyedRef)).subscribe({
+      next: (response: ApiResponse) => {
+        console.log('Product created successfully:', response);
+        this.onCloseDrawer();
+      },
+      error: (error: ApiResponse) => {
+        console.error('Error creating product:', error);
+      },
+    });
+
+    console.log('Form Data:', this.productForm.value);
   }
 
   closeDrawer(e: Event) {
-    this.dialogRef.close(e);
+    this.drawerRef.close(e);
   }
 
-  onHide() {
+  onCloseDrawer() {
+    this.visible.set(false);
     setTimeout(() => {
       this.router.navigate([{ outlets: { drawer: null } }], {
         relativeTo: this.activatedRoute.root,
       });
-    }, 200);
+    }, 300);
   }
+
 }
