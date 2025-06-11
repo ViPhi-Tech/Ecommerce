@@ -78,7 +78,7 @@ export class ProductController {
 
     async delete (request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const product = request.body as ProductID
+            const product = request.params as ProductID
             const data_product = await this.deleteProductUseCase.execute(product.id)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product})
         } catch (error) {

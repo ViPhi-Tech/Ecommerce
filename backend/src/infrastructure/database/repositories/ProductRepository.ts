@@ -35,6 +35,10 @@ export class ProductRepository implements IProductRepository {
     }
 
     async delete(id: number): Promise<void> {
+      const deleted = await this.prisma.product.delete({
+        where: {id}
+      });
+      console.log(deleted)
     };
 
     async updateStock(sku: number, quantity: number, companyId: number): Promise<Stock> {
