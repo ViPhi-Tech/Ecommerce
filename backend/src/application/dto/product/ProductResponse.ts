@@ -2,7 +2,11 @@ export interface ProductResponse {
   id?: number;
   name: string;
   ean: string;
-  price: number;
+  initialPrice: number;
+  finalPrice: number;
+  image?: string | null;
+  description?: string | null;
+  shortDescription?: string | null;
   sku: string;
   companyId?: number | null;
   stock?: {

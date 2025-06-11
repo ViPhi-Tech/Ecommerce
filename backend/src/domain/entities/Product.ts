@@ -2,8 +2,11 @@ export interface Product {
     id?: number;
     name: string;
     description?: string | null;
+    shortDescription?: string | null;
+    initialPrice: number;
+    finalPrice: number;
+    image?: string | null;
     sku: string;
-    price: number;
     quantity?: number;
     ean: string;
     companyId: number | null;

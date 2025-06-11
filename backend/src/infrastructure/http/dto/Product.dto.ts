@@ -5,7 +5,11 @@ export const productSchemaDTO = z.object({
         name: z.string().min(1, { message: "Nome é obrigatório" }),
         ean: z.string().min(1, { message: "EAN é obrigatório" }),
         description: z.string().optional(),
-        price: z.number().min(0, { message: "Preço deve ser maior que zero" }),
+        shortDescription: z.string().optional(),
+        initialPrice: z.number().min(0, { message: "Preço inicial deve ser maior que zero" }),
+        finalPrice: z.number().min(0, { message: "Preço final deve ser maior que zero" }),
+        brand: z.string().optional(),
+        image: z.string().optional(),
         sku: z.string().min(1, { message: "SKU é obrigatório" }),
         companyId: z.number().min(1, { message: "ID da tabela (company)" }),
 })
@@ -14,7 +18,11 @@ export const productCreateSchema = z.object({
     name: z.string().min(1, { message: "Nome é obrigatório" }),
     ean: z.string().min(1, { message: "EAN é obrigatório" }),
     description: z.string().optional(),
-    price: z.number().min(0, { message: "Preço deve ser maior que zero" }),
+    shortDescription: z.string().optional(),
+    initialPrice: z.number().min(0, { message: "Preço inicial deve ser maior que zero" }),
+    finalPrice: z.number().min(0, { message: "Preço final deve ser maior que zero" }),
+    brand: z.string().optional(),
+    image: z.string().optional(),
     sku: z.string().min(1, { message: "SKU é obrigatório" }),
     cost: z.number().optional(),
     companyId: z.number().min(1, { message: "ID da tabela (company)" }),
@@ -30,6 +38,11 @@ export const productUpdateSchema = z.object({
     name: z.string().min(1, { message: "Nome é obrigatório" }),
     ean: z.string().min(1, { message: "EAN é obrigatório" }),
     description: z.string().optional(),
+    shortDescription: z.string().optional(),
+    initialPrice: z.number().min(0, { message: "Preço inicial deve ser maior que zero" }),
+    finalPrice: z.number().min(0, { message: "Preço final deve ser maior que zero" }),
+    brand: z.string().optional(),
+    image: z.string().optional(),
     price: z.number().min(0, { message: "Preço deve ser maior que zero" }),
     sku: z.string().min(1, { message: "SKU é obrigatório" }),
     cost: z.number().optional(),
@@ -37,7 +50,6 @@ export const productUpdateSchema = z.object({
 
 
 export const productUpdateStockSchema = z.object({
-    companyId: z.number().min(1, { message: "ID da tabela (company)" }).optional(),
     productId: z.number().min(1, { message: "ID da tabela (product)" }),
     quantity: z.number().min(1, { message: "Quantidade atualizada do produto" })
 });

@@ -60,15 +60,22 @@ model Company {
 }
 
 model Product {
-  id          Int     @id @default(autoincrement())
-  name        String
-  description String?
-  sku         String  @unique
-  price       Float
-  cost        Float?
-  quantity    Int     @default(0)
-  ean         String  @default("0")
-  isActive    Boolean @default(true)
+  id                Int     @id @default(autoincrement())
+  name              String
+  description       String?
+  sku               String  @unique
+  cost              Float?
+  quantity          Int     @default(0)
+  ean               String  @default("0")
+  isActive          Boolean @default(true)
+  
+  shortDescription  String?
+  brand             String?
+
+  initialPrice      Float   @default(0)
+  finalPrice        Float   @default(0)
+
+  image          String?
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -76,7 +83,7 @@ model Product {
   companyId   Int?
   company     Company? @relation(fields: [companyId], references: [id])
 
-  stock       Stock?   @relation("ProductStock") // Definindo a relação no Product
+  stock       Stock?   @relation("ProductStock")
   orderItems   OrderItem[]
 
   categoryId  Int?
