@@ -145,6 +145,7 @@ input {
     }
   }
 }
+
 .p-inputnumber {
   &.ng-touched.ng-invalid input {
     border-color: var(--p-inputtext-invalid-border-color);
