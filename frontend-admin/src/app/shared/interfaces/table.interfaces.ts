@@ -20,6 +20,7 @@ export interface TableColumn {
   sortable?: boolean;
   filter?: boolean;
   customClass?: string;
+  actionButtonsType?: 'buttons' | 'dropdown'; // Type of action buttons, can be 'buttons' or 'dropdown'
   actionButtons?: ActionButtons[];
   template?: TemplateRef<any | null>;
 }
@@ -38,12 +39,13 @@ export interface HeaderButton {
 }
 
 export interface ActionButtons {
-  icon: string;
+  label?: string; // Optional label for the button
+  icon?: string;
   iconType?: string; // e.g., "material", "font-awesome"
   color?: string; // e.g., "primary", "accent", "warn"
   tooltip: string;
   show?: (rowData: any) => boolean;
-  action: (rowData: any, rowIndex?: number) => void;
+  action: (rowData: any, rowIndex?: number | string) => void;
 }
 
 export const DEFAULT_TABLE_CONFIG: TableConfig = {

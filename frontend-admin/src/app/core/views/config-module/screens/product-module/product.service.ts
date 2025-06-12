@@ -19,5 +19,4 @@ export class ProductService {
   createProduct(productData: any): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(this.apiUrl, productData);
   }
-  
 }

@@ -63,12 +63,16 @@
     </tr>
   </ng-template>
   <ng-template #body let-rowData let-rowIndex="rowIndex">
-    <tr (click)="onRowClick(rowData, rowIndex)">
+    <tr
+      [class.cursor-pointer]="config().rowClick"
+      (click)="onRowClick(rowData, rowIndex)"
+    >
       @for (column of config().columns; track $index) {
         <td>
           @if (column.field === 'actions' && column?.actionButtons?.length) {
             <fuse-table-actions
-              [buttons]="column?.actionButtons"
+              [type]="column?.actionButtonsType || 'buttons'"
+              [buttons]="column?.actionButtons || []"
               [data]="rowData"
               [rowIndex]="rowIndex"
             ></fuse-table-actions>

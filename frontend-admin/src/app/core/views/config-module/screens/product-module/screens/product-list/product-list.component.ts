@@ -30,13 +30,46 @@ export class ProductListComponent implements OnInit {
     paginator: true,
     pageLinkSize: 5,
     rowClick: (rowData: any) => {
-      this.router.navigate([{ outlets: { drawer: ['products', rowData?.id] } }]);
+      this.router.navigate([
+        { outlets: { drawer: ['products', rowData?.id] } },
+      ]);
     },
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'name', caption: 'Nome', sortable: true, filter: true },
-      { field: 'initialPrice', caption: 'Preço Inicial', type: 'currency', sortable: true, filter: true },
-      { field: 'finalPrice', caption: 'Preço Final', type: 'currency', sortable: true, filter: true },
+      {
+        field: 'initialPrice',
+        caption: 'Preço Inicial',
+        type: 'currency',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'finalPrice',
+        caption: 'Preço Final',
+        type: 'currency',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'actions',
+        caption: 'Ações',
+        actionButtonsType: 'dropdown',
+        actionButtons: [
+          {
+            icon: 'heroPencilSquare',
+            label: 'Editar',
+            tooltip: 'Editar Produto',
+            action: (rowData: any) => {
+              // Exemplo de navegação para o outlet auxiliar "drawer"
+              console.log(rowData);
+              this.router.navigate([
+                { outlets: { drawer: ['products', rowData?.id] } },
+              ]);
+            },
+          },
+        ],
+      },
     ],
     headerButtons: [
       {

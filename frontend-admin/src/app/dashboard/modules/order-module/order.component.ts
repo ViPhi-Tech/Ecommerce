@@ -13,7 +13,7 @@ import { routeAnimations } from 'app/shared/utils/animations';
   standalone: false,
 })
 export class OrderComponent implements OnInit {
-  protected route = inject(ActivatedRoute)
+  protected route = inject(ActivatedRoute);
   constructor() {}
 
   ngOnInit() {}
