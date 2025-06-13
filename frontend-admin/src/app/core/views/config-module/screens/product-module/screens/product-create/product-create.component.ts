@@ -19,18 +19,21 @@ import { FormModule } from 'app/shared/components/form/form.module';
 import { ProductService } from '../../product.service';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MessageService } from 'primeng/api';
+
 @Component({
   selector: 'fuse-product-create',
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss'],
   imports: [DrawerModule, ButtonModule, ReactiveFormsModule, FormModule],
-  providers: [ProductService],
+  providers: [ProductService, MessageService],
 })
 export class ProductCreateComponent implements OnInit {
   destroyedRef = inject(DestroyRef);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
+  private toast = inject(MessageService);
 
   private productService = inject(ProductService);
 
@@ -96,19 +99,20 @@ export class ProductCreateComponent implements OnInit {
           this.loadProduct(id);
         } else {
           this.visible.set(true);
-          // this.productForm.patchValue({
-          //   name: 'teste ',
-          //   ean: '7891234567890',
-          //   sku: '321ndocn3`',
-          //   category: 'categoria',
-          //   image: '',
-          //   brand: 'marca',
-          //   initialPrice: 90,
-          //   finalPrice: 150,
-          //   stock: 90,
-          //   shortDescription: 'Descrição curta',
-          //   description: 'Descrição longa',
-          // });
+            // Gerar um número aleatório de 13 dígitos diretamente no objeto
+            this.productForm.patchValue({
+              name: 'teste ',
+              ean: Array.from({ length: 13 }, () => Math.floor(Math.random() * 10)).join(''),
+              sku: Array.from({ length: 13 }, () => Math.floor(Math.random() * 10)).join(''),
+              category: 'categoria',
+              image: '',
+              brand: 'marca',
+              initialPrice: 90,
+              finalPrice: 150,
+              stock: 90,
+              shortDescription: 'Descrição curta',
+              description: 'Descrição longa',
+            });
         }
       });
   }
@@ -121,9 +125,18 @@ export class ProductCreateComponent implements OnInit {
         next: (response: ApiResponse) => {
           this.productForm.patchValue(response.dados);
           this.visible.set(true);
+          this.toast.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Produto carregado com sucesso!',
+          });
         },
-        error: (error: ApiResponse) => {
-          console.error('Error loading product:', error);
+        error: () => {
+          this.toast.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao carregar produto',
+          });
         },
       });
   }
@@ -134,9 +147,11 @@ export class ProductCreateComponent implements OnInit {
 
     this.productForm.markAllAsTouched();
     if (!this.productForm.valid) {
-      console.log('Formulário inválido');
-      console.log('Form Errors:', this.productForm.errors);
-      console.log('Form Values:', this.productForm.value);
+      this.toast.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'Por favor, preencha todos os campos obrigatórios.',
+      });
       return;
     }
 
@@ -144,16 +159,22 @@ export class ProductCreateComponent implements OnInit {
       .upsertProduct(this.productForm.value)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
-        next: (response: ApiResponse) => {
-          console.log('Product created successfully:', response);
+        next: () => {
+          this.toast.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Produto criado com sucesso!',
+          });
           this.onCloseDrawer();
         },
-        error: (error: ApiResponse) => {
-          console.error('Error creating product:', error);
+        error: () => {
+          this.toast.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao criar produto',
+          });
         },
       });
-
-    console.log('Form Data:', this.productForm.value);
   }
 
   closeDrawer(e: Event) {

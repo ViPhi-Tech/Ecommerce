@@ -27,6 +27,14 @@ export function CoreInterceptor(
     headers['Content-Type'] = 'application/json';
   }
 
+  const headers: Record<string, string> = {
+    Authorization: accessToken ? `Bearer ${accessToken}` : '',
+  };
+
+  if (req.method === 'POST' || req.method === 'PUT') {
+    headers['Content-Type'] = 'application/json';
+  }
+
   const newReq = req.clone({
     withCredentials: true,
     setHeaders: headers,
