@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
@@ -8,6 +8,8 @@ import { environments } from 'src/environments/environments';
 export class ProductService {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl + 'product';
+
+  refreshProductList$ = signal<any>(undefined);
 
   constructor() {}
 
@@ -27,5 +29,9 @@ export class ProductService {
 
   deleteProduct(productId: string): Observable<ApiResponse> {
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${productId}`);
+  }
+
+  refreshProductList() {
+    this.refreshProductList$.set(Math.random());
   }
 }

@@ -1,6 +1,7 @@
 import {
   Component,
   DestroyRef,
+  effect,
   inject,
   OnInit,
   signal,
@@ -120,7 +121,13 @@ export class ProductListComponent implements OnInit {
     { label: 'Cheque', value: 'check' },
     { label: 'Vale', value: 'voucher' },
   ]);
-  constructor() {}
+  constructor() {
+    effect(() => {
+      if (this.productService.refreshProductList$()) {
+        this.state.getProductList();
+      }
+    });
+  }
 
   ngOnInit() {
     this.state.getProductList();
@@ -128,8 +135,6 @@ export class ProductListComponent implements OnInit {
   }
 
   deleteProduct(productId: string) {
-    console.log(`Solicitação de exclusão do produto com ID: ${productId}`);
-
     this.confirmationService.confirm({
       message: 'Você tem certeza que deseja excluir este produto?',
       header: 'Confirmação de Exclusão',
@@ -144,16 +149,14 @@ export class ProductListComponent implements OnInit {
           .pipe(takeUntilDestroyed(this.destroyedRef))
           .subscribe({
             next: () => {
-              console.log(`Produto com ID ${productId} excluído.`);
-              this.state.getProductList();
+              this.productService.refreshProductList();
             },
-            error: error => {
+            error: () => {
               this.toast.add({
                 severity: 'error',
                 summary: 'Erro',
                 detail: 'Erro ao excluir produto',  
               });
-              console.error('Erro ao excluir produto:', error);
             },
           });
       },

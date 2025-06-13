@@ -46,6 +46,7 @@ export class ProductCreateComponent implements OnInit {
   visible = signal(false);
   title = signal('Adicionar Produto');
   subtitle = signal('Preencha os dados do novo produto abaixo');
+  submitButtonLabel = signal('Salvar');
 
   productForm!: FormGroup;
 
@@ -97,10 +98,10 @@ export class ProductCreateComponent implements OnInit {
       .subscribe(params => {
         const id = params['id'];
         if (id) {
+          this.title.set('Editar Produto');
           this.loadProduct(id);
         } else {
           this.visible.set(true);
-            // Gerar um número aleatório de 13 dígitos diretamente no objeto
             this.productForm.patchValue({
               name: 'teste ',
               ean: Array.from({ length: 13 }, () => Math.floor(Math.random() * 10)).join(''),
@@ -161,6 +162,7 @@ export class ProductCreateComponent implements OnInit {
             summary: 'Sucesso',
             detail: 'Produto criado com sucesso!',
           });
+          this.productService.refreshProductList();
           this.onCloseDrawer();
         },
         error: () => {
