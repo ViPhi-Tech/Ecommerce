@@ -13,8 +13,7 @@ import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { ProductState } from 'app/shared/store/product.state';
 import { TableFilterComponent } from 'app/shared/components/table/components/table-filter/table-filter.component';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmationService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProductService } from '../../product.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -26,13 +25,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TableComponent,
     FormModule,
     TableFilterComponent,
-    ConfirmDialogModule,
   ],
-  providers: [ConfirmationService, ProductService],
+  providers: [ProductService],
 })
 export class ProductListComponent implements OnInit {
   private router = inject(Router);
   private coreService = inject(CoreService);
+  private toast = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
   private productService = inject(ProductService);
   private destroyedRef = inject(DestroyRef);
@@ -139,7 +138,6 @@ export class ProductListComponent implements OnInit {
       rejectLabel: 'Não',
       acceptButtonStyleClass: 'p-button-danger',
       rejectButtonStyleClass: 'p-button-secondary',
-      key: 'confirmDelete',
       accept: () => {
         this.productService
           .deleteProduct(productId)
@@ -150,6 +148,11 @@ export class ProductListComponent implements OnInit {
               this.state.getProductList();
             },
             error: error => {
+              this.toast.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: 'Erro ao excluir produto',  
+              });
               console.error('Erro ao excluir produto:', error);
             },
           });

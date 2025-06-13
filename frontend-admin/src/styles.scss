@@ -162,3 +162,8 @@ input {
     color: var(--p-select-invalid-placeholder-color);
   }
 }
+
+
+.p-toast {
+  z-index: 99999 !important;
+}

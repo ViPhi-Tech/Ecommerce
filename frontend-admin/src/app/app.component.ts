@@ -2,10 +2,13 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LoaderComponent } from './shared/components/loader/loader.component';
 import { ToastModule } from 'primeng/toast';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @Component({
   selector: 'fuse-root',
-  imports: [RouterModule, LoaderComponent, ToastModule],
+  imports: [RouterModule, LoaderComponent, ToastModule, ConfirmDialogModule],
+  providers: [MessageService, ConfirmationService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
