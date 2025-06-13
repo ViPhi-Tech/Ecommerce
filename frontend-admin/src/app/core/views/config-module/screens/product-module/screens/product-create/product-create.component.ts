@@ -20,13 +20,14 @@ import { ProductService } from '../../product.service';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'fuse-product-create',
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss'],
-  imports: [DrawerModule, ButtonModule, ReactiveFormsModule, FormModule],
-  providers: [ProductService, MessageService],
+  imports: [DrawerModule, ButtonModule, ReactiveFormsModule, FormModule, ToastModule],
+  providers: [ProductService],
 })
 export class ProductCreateComponent implements OnInit {
   destroyedRef = inject(DestroyRef);
@@ -125,11 +126,6 @@ export class ProductCreateComponent implements OnInit {
         next: (response: ApiResponse) => {
           this.productForm.patchValue(response.dados);
           this.visible.set(true);
-          this.toast.add({
-            severity: 'success',
-            summary: 'Sucesso',
-            detail: 'Produto carregado com sucesso!',
-          });
         },
         error: () => {
           this.toast.add({
