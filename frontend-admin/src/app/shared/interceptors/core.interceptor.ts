@@ -19,12 +19,17 @@ export function CoreInterceptor(
 
   const accessToken = localStorage.getItem('accessToken');
 
+  const headers: Record<string, string> = {
+    Authorization: accessToken ? `Bearer ${accessToken}` : '',
+  };
+
+  if (req.method === 'POST' || req.method === 'PUT') {
+    headers['Content-Type'] = 'application/json';
+  }
+
   const newReq = req.clone({
     withCredentials: true,
-    setHeaders: {
-      Authorization: accessToken ? `Bearer ${accessToken}` : '',
-      'Content-Type': 'application/json',
-    },
+    setHeaders: headers,
   });
 
   return next(newReq).pipe(

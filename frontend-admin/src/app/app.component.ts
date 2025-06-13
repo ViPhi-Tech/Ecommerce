@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LoaderComponent } from './shared/components/loader/loader.component';
+import { ToastModule } from 'primeng/toast';
+
 @Component({
   selector: 'fuse-root',
-  imports: [RouterModule, LoaderComponent],
+  imports: [RouterModule, LoaderComponent, ToastModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })

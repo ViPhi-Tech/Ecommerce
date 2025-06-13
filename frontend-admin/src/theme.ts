@@ -56,11 +56,13 @@ import { providePrimeNG } from 'primeng/config';
 import { routes } from './app/app.routes';
 import { CoreInterceptor } from './app/shared/interceptors/core.interceptor';
 import { Preset } from './prime.theme';
+import { MessageService } from 'primeng/api';
 
 registerLocaleData(localePt);
 
 export const THEME: ApplicationConfig = {
   providers: [
+    MessageService,
     provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([CoreInterceptor])),

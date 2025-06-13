@@ -35,6 +35,13 @@ export class MenuComponent implements OnInit {
           route: 'config/products',
           visible: true,
         },
+        // categorias
+        {
+          label: 'Categorias',
+          icon: 'lucideTags',
+          route: 'config/categories',
+          visible: true,
+        },
       ]
     }
     // {
