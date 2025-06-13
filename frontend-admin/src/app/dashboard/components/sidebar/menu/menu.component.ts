@@ -26,6 +26,17 @@ export class MenuComponent implements OnInit {
         },
       ],
     },
+    {
+      groupTitle: 'Cadastros',
+      items: [
+        {
+          label: 'Produtos',
+          icon: 'lucideBox',
+          route: 'config/products',
+          visible: true,
+        },
+      ]
+    }
     // {
     //   groupTitle: 'Estoque',
     //   items: [
