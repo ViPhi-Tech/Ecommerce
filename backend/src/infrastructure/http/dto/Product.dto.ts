@@ -43,7 +43,6 @@ export const productUpdateSchema = z.object({
     finalPrice: z.number().min(0, { message: "Preço final deve ser maior que zero" }),
     brand: z.string().optional(),
     image: z.string().optional(),
-    price: z.number().min(0, { message: "Preço deve ser maior que zero" }),
     sku: z.string().min(1, { message: "SKU é obrigatório" }),
     cost: z.number().optional(),
 })

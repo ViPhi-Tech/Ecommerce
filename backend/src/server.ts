@@ -14,7 +14,8 @@ const server = fastify({ logger: true });
 
 server.register(cors, {
   origin: ['http://localhost:3000', 'http://localhost:4200', 'http://127.0.0.1:4200'],
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE']
 });
 server.register(swagger);
 server.register(cookie)

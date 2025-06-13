@@ -18,14 +18,7 @@ export function CoreInterceptor(
   }
 
   const accessToken = localStorage.getItem('accessToken');
-  
-  const headers: Record<string, string> = {
-    Authorization: accessToken ? `Bearer ${accessToken}` : '',
-  };
 
-  if (['POST', 'PUT', 'PATCH'].includes(req.method)) {
-    headers['Content-Type'] = 'application/json';
-  }
 
   const headers: Record<string, string> = {
     Authorization: accessToken ? `Bearer ${accessToken}` : '',
