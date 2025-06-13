@@ -96,19 +96,19 @@ export class ProductCreateComponent implements OnInit {
           this.loadProduct(id);
         } else {
           this.visible.set(true);
-          this.productForm.patchValue({
-            name: 'teste ',
-            ean: '7891234567890',
-            sku: '321ndocn3`',
-            category: 'categoria',
-            image: '',
-            brand: 'marca',
-            initialPrice: 90,
-            finalPrice: 150,
-            stock: 90,
-            shortDescription: 'Descrição curta',
-            description: 'Descrição longa',
-          });
+          // this.productForm.patchValue({
+          //   name: 'teste ',
+          //   ean: '7891234567890',
+          //   sku: '321ndocn3`',
+          //   category: 'categoria',
+          //   image: '',
+          //   brand: 'marca',
+          //   initialPrice: 90,
+          //   finalPrice: 150,
+          //   stock: 90,
+          //   shortDescription: 'Descrição curta',
+          //   description: 'Descrição longa',
+          // });
         }
       });
   }
