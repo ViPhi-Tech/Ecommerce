@@ -5,6 +5,7 @@ import productRoutes from './ProductRoutes'
 import PartnerRoutes from './PartnerRoutes';
 import categoryRoutes from './Category';
 import orderRoutes from './OrderRoutes';
+import fileRoutes from './File';
 
 export default async function handleRoutes(fastify: FastifyInstance) {
   fastify.get(
@@ -26,6 +27,7 @@ export default async function handleRoutes(fastify: FastifyInstance) {
       fastify.register(PartnerRoutes, { prefix: '/partner' })
       fastify.register(categoryRoutes, { prefix: '/category' })
       fastify.register(orderRoutes, { prefix: '/order' })
+      fastify.register(fileRoutes, { prefix: '/file' })
       fastify.get(
         '/',
         {

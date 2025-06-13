@@ -6,6 +6,8 @@ import swagger from './infrastructure/plugins/swagger';
 import dotenv from 'dotenv';
 import path from 'path';
 
+import cloudinary from './infrastructure/plugins/cloudinary';
+
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const server = fastify({ logger: true });
@@ -16,6 +18,7 @@ server.register(cors, {
 });
 server.register(swagger);
 server.register(cookie)
+server.register(cloudinary)
 // server.register(jwt);
 // server.register(cache);
 

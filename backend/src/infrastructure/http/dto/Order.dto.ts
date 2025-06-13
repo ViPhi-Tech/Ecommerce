@@ -1,7 +1,5 @@
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import { productSchemaDTO } from './Product.dto';
-
 export const orderItemSchemaDTO = z.object({
   productId: z.number().min(1, { message: "ProductId is required" }),
   quantity: z.number().min(1, { message: "Quantity must be greater than zero" }),
