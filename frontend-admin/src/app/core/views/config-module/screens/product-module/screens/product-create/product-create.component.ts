@@ -72,7 +72,9 @@ export class ProductCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.productForm = this.formBuilder.group({
+      id: [''],
       name: ['', [Validators.required, Validators.maxLength(255)]],
+      ean: ['', [Validators.required]],
       sku: ['', [Validators.required]],
       category: ['', [Validators.required]],
       image: [''],
@@ -82,6 +84,7 @@ export class ProductCreateComponent implements OnInit {
       stock: ['', [Validators.required]],
       shortDescription: [''],
       description: ['', [Validators.required]],
+      companyId: ['1'],
     });
 
     // pegar o id da rota, se existir
@@ -93,6 +96,19 @@ export class ProductCreateComponent implements OnInit {
           this.loadProduct(id);
         } else {
           this.visible.set(true);
+          this.productForm.patchValue({
+            name: 'teste ',
+            ean: '7891234567890',
+            sku: '321ndocn3`',
+            category: 'categoria',
+            image: '',
+            brand: 'marca',
+            initialPrice: 90,
+            finalPrice: 150,
+            stock: 90,
+            shortDescription: 'Descrição curta',
+            description: 'Descrição longa',
+          });
         }
       });
   }
@@ -119,11 +135,13 @@ export class ProductCreateComponent implements OnInit {
     this.productForm.markAllAsTouched();
     if (!this.productForm.valid) {
       console.log('Formulário inválido');
+      console.log('Form Errors:', this.productForm.errors);
+      console.log('Form Values:', this.productForm.value);
       return;
     }
 
     this.productService
-      .createProduct(this.productForm.value)
+      .upsertProduct(this.productForm.value)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: (response: ApiResponse) => {

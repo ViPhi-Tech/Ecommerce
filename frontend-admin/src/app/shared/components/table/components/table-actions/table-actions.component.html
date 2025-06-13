@@ -57,33 +57,41 @@
 @if (type() === 'dropdown') {
   <p-button
     [outlined]="true"
-    [rounded]="true"
     size="small"
     icon="pi pi-ellipsis-h"
     severity="secondary"
-    pTooltip="Mais ações"
     tooltipPosition="left"
     (click)="toogleMoreActions($event); panelDropdown.toggle($event)"
   >
   </p-button>
 
-  <p-popover #panelDropdown [dismissable]="true">
-    <div class="flex flex-col gap-4">
-      <ng-container *ngFor="let action of actions()">
-        <p-button
-          [label]="action.label"
-          [icon]="action.icon"
-          [class]="action.class"
-          [pTooltip]="action.tooltip"
-          tooltipPosition="right"
-          [styleClass]="action.styleClass"
-          [severity]="action.color || 'primary'"
-          [variant]="action.outline ? 'outlined' : undefined"
-          (click)="action.action(data(), rowIndex())"
-          size="small"
+  <p-popover #panelDropdown [dismissable]="true" styleClass="popover-actions">
+    <div
+      role="menu"
+      class="z-50 min-w-[8rem] overflow-hidden rounded-md border dark:border-[#1F1F23] bg-popover p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 w-[200px]"
+    >
+      <div class="px-2 py-1.5 text-sm font-semibold">Ações</div>
+      <div class="-mx-1 my-1 h-px bg-muted dark:bg-[#1F1F23]"></div>
+      @for (action of actions(); track $index) {
+        <button
+          class="relative cursor-pointer flex w-full select-none items-center gap-2 rounded-sm px-2 py-1.5 outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+          (click)="
+            toogleMoreActions($event);
+            panelDropdown.toggle($event);
+            action.action(data(), rowIndex())
+          "
         >
-        </p-button>
-      </ng-container>
+          <ng-icon
+            [name]="action.icon"
+            [ngClass]="!action.colorIcon ? 'dark:text-white text-black' : ''"
+            [color]="action.colorIcon"
+            size="18"
+          ></ng-icon>
+          <span class="ml-2 text-sm" [ngStyle]="{ color: action.colorText }">{{
+            action.label
+          }}</span>
+        </button>
+      }
     </div>
   </p-popover>
 }
