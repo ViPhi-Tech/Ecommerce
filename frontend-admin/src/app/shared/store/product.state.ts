@@ -29,7 +29,9 @@ export class ProductState {
     this.setProductList([]);
 
     this.http
-      .get<ApiResponse<Product[]>>(`${this.apiUrl}product/all`)
+      .get<ApiResponse<Product[]>>(`${this.apiUrl}product/all`, {
+        headers: { 'Skip-Loader': 'true' },
+      })
       .pipe(
         tap(data => this.setProductList(data.dados)),
         catchError(error => this.handleError(error)),

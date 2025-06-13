@@ -5,3 +5,7 @@
 .overlay-more-actions .p-button {
   width: auto !important;
 }
+
+::ng-deep .popover-actions .p-popover-content {
+  padding: 0 !important;
+}

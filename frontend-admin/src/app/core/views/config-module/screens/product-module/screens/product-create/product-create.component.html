@@ -1,5 +1,5 @@
 <p-drawer
-   #drawerRef
+  #drawerRef
   [visible]="visible()"
   (onHide)="onCloseDrawer()"
   position="right"
@@ -20,11 +20,20 @@
   <form class="flex flex-col gap-4">
     <div>
       <form [formGroup]="productForm" class="row">
-        <div class="col-12 md:col-6 mb-6">
+        <div class="col-12 md:col-12 mb-6">
           <fuse-input
             label="Nome do Produto"
             [control]="productForm.get('name')"
             placeholder="Ex: Smartphone Galaxy S22 Ultra"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-6">
+          <fuse-input
+            label="Ean"
+            type="number"
+            [control]="productForm.get('ean')"
+            placeholder="Ex: 7891234567890"
           />
         </div>
 
@@ -107,13 +116,13 @@
     <div class="w-full justify-end flex items-center gap-4">
       <div class="flex gap-2">
         <button
-        pButton
-        type="submit"
-        label="Cadastrar"
-        icon="pi pi-check"
-        class="w-[200px]"
-        size="small"
-        (click)="onSubmit($event)"
+          pButton
+          type="submit"
+          label="Cadastrar"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+          (click)="onSubmit($event)"
         ></button>
 
         <button

@@ -1,49 +1,97 @@
-<div
-  class="flex flex-row justify-content-center align-items-center column-gap-2 p-1"
->
-  @for (button of actions(); track button) {
-    @if (!button.show || (button.show && button.show(data))) {
-      <ng-container
-        *ngTemplateOutlet="buttonTemplate; context: { $implicit: button }"
-      ></ng-container>
-    }
-  }
-  @if (moreActions()?.length) {
-    <p-button
-      [outlined]="true"
-      [rounded]="true"
-      size="small"
-      icon="pi pi-ellipsis-h"
-      severity="secondary"
-      pTooltip="Mais ações"
-      tooltipPosition="left"
-      (click)="toogleMoreActions(); overlayMoreActions.toggle($event)"
-    >
-    </p-button>
-  }
-</div>
-
-<p-overlayPanel [styleClass]="'overlay-more-actions'" #overlayMoreActions>
-  <div class="flex flex-row gap-2">
-    @for (button of moreActions(); track button) {
+@if (type() === 'buttons') {
+  <div
+    class="flex flex-row justify-content-center align-items-center column-gap-2 p-1"
+  >
+    @for (button of actions(); track button) {
       @if (!button.show || (button.show && button.show(data))) {
         <ng-container
           *ngTemplateOutlet="buttonTemplate; context: { $implicit: button }"
         ></ng-container>
       }
     }
+    @if (moreActions()?.length) {
+      <p-button
+        [outlined]="true"
+        [rounded]="true"
+        size="small"
+        icon="pi pi-ellipsis-h"
+        severity="secondary"
+        pTooltip="Mais ações"
+        tooltipPosition="left"
+        (click)="toogleMoreActions($event); overlayMoreActions.toggle($event)"
+      >
+      </p-button>
+    }
   </div>
-</p-overlayPanel>
 
-<ng-template #buttonTemplate let-button>
+  <p-overlayPanel [styleClass]="'overlay-more-actions'" #overlayMoreActions>
+    <div class="flex flex-row gap-2">
+      @for (button of moreActions(); track button) {
+        @if (!button.show || (button.show && button.show(data))) {
+          <ng-container
+            *ngTemplateOutlet="buttonTemplate; context: { $implicit: button }"
+          ></ng-container>
+        }
+      }
+    </div>
+  </p-overlayPanel>
+
+  <ng-template #buttonTemplate let-button>
+    <p-button
+      [outlined]="button.outlined || false"
+      size="small"
+      [severity]="button.color"
+      [pTooltip]="button.tooltip ?? null"
+      tooltipPosition="left"
+      (click)="button.action(data)"
+    >
+      <ng-icon
+        [name]="button?.icon"
+        [color]="button.color || '#fff'"
+        size="16"
+      />
+    </p-button>
+  </ng-template>
+}
+
+@if (type() === 'dropdown') {
   <p-button
-    [outlined]="button.outlined || false"
+    [outlined]="true"
     size="small"
-    [severity]="button.color"
-    [pTooltip]="button.tooltip ?? null"
+    icon="pi pi-ellipsis-h"
+    severity="secondary"
     tooltipPosition="left"
-    (click)="button.action(data)"
+    (click)="toogleMoreActions($event); panelDropdown.toggle($event)"
   >
-    <ng-icon [name]="button?.icon" />
   </p-button>
-</ng-template>
+
+  <p-popover #panelDropdown [dismissable]="true" styleClass="popover-actions">
+    <div
+      role="menu"
+      class="z-50 min-w-[8rem] overflow-hidden rounded-md border dark:border-[#1F1F23] bg-popover p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 w-[200px]"
+    >
+      <div class="px-2 py-1.5 text-sm font-semibold">Ações</div>
+      <div class="-mx-1 my-1 h-px bg-muted dark:bg-[#1F1F23]"></div>
+      @for (action of actions(); track $index) {
+        <button
+          class="relative cursor-pointer flex w-full select-none items-center gap-2 rounded-sm px-2 py-1.5 outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50"
+          (click)="
+            toogleMoreActions($event);
+            panelDropdown.toggle($event);
+            action.action(data(), rowIndex())
+          "
+        >
+          <ng-icon
+            [name]="action.icon"
+            [ngClass]="!action.colorIcon ? 'dark:text-white text-black' : ''"
+            [color]="action.colorIcon"
+            size="18"
+          ></ng-icon>
+          <span class="ml-2 text-sm" [ngStyle]="{ color: action.colorText }">{{
+            action.label
+          }}</span>
+        </button>
+      }
+    </div>
+  </p-popover>
+}

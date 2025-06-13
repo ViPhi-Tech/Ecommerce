@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   OnInit,
   signal,
@@ -12,16 +13,30 @@ import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { ProductState } from 'app/shared/store/product.state';
 import { TableFilterComponent } from 'app/shared/components/table/components/table-filter/table-filter.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
+import { ProductService } from '../../product.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'fuse-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
-  imports: [TableComponent, FormModule, TableFilterComponent],
+  imports: [
+    TableComponent,
+    FormModule,
+    TableFilterComponent,
+    ConfirmDialogModule,
+  ],
+  providers: [ConfirmationService, ProductService],
 })
 export class ProductListComponent implements OnInit {
   private router = inject(Router);
   private coreService = inject(CoreService);
+  private confirmationService = inject(ConfirmationService);
+  private productService = inject(ProductService);
+  private destroyedRef = inject(DestroyRef);
+
   state = inject(ProductState);
 
   tableConfig: WritableSignal<TableConfig> = signal({
@@ -30,13 +45,56 @@ export class ProductListComponent implements OnInit {
     paginator: true,
     pageLinkSize: 5,
     rowClick: (rowData: any) => {
-      this.router.navigate([{ outlets: { drawer: ['products', rowData?.id] } }]);
+      this.router.navigate([
+        { outlets: { drawer: ['products', rowData?.id] } },
+      ]);
     },
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'name', caption: 'Nome', sortable: true, filter: true },
-      { field: 'initialPrice', caption: 'Preço Inicial', type: 'currency', sortable: true, filter: true },
-      { field: 'finalPrice', caption: 'Preço Final', type: 'currency', sortable: true, filter: true },
+      {
+        field: 'initialPrice',
+        caption: 'Preço Inicial',
+        type: 'currency',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'finalPrice',
+        caption: 'Preço Final',
+        type: 'currency',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'actions',
+        caption: 'Ações',
+        actionButtonsType: 'dropdown',
+        actionButtons: [
+          {
+            icon: 'lucideSquarePen',
+            label: 'Editar',
+            tooltip: 'Editar Produto',
+            action: (rowData: any) => {
+              // Exemplo de navegação para o outlet auxiliar "drawer"
+              console.log(rowData);
+              this.router.navigate([
+                { outlets: { drawer: ['products', rowData?.id] } },
+              ]);
+            },
+          },
+          {
+            icon: 'lucideTrash2',
+            label: 'Excluir',
+            colorText: '#EF4444',
+            colorIcon: '#EF4444',
+            tooltip: 'Excluir Produto',
+            action: (rowData: any) => {
+              this.deleteProduct(rowData?.id);
+            },
+          },
+        ],
+      },
     ],
     headerButtons: [
       {
@@ -70,7 +128,32 @@ export class ProductListComponent implements OnInit {
     this.coreService.setPageTitle('Produtos', 'Lista de produtos disponíveis');
   }
 
-  log() {
-    console.log('log');
+  deleteProduct(productId: string) {
+    console.log(`Solicitação de exclusão do produto com ID: ${productId}`);
+
+    this.confirmationService.confirm({
+      message: 'Você tem certeza que deseja excluir este produto?',
+      header: 'Confirmação de Exclusão',
+      icon: 'pi pi-exclamation-triangle text-red-500',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      acceptButtonStyleClass: 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-secondary',
+      key: 'confirmDelete',
+      accept: () => {
+        this.productService
+          .deleteProduct(productId)
+          .pipe(takeUntilDestroyed(this.destroyedRef))
+          .subscribe({
+            next: () => {
+              console.log(`Produto com ID ${productId} excluído.`);
+              this.state.getProductList();
+            },
+            error: error => {
+              console.error('Erro ao excluir produto:', error);
+            },
+          });
+      },
+    });
   }
 }

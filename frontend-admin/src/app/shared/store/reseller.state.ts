@@ -2,7 +2,10 @@ import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { catchError, finalize, Observable, of, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
-import { Reseller, ResellerModuleState } from '../interfaces/reseller-module.interface';
+import {
+  Reseller,
+  ResellerModuleState,
+} from '../interfaces/reseller-module.interface';
 
 @Injectable()
 export class ResellerState {

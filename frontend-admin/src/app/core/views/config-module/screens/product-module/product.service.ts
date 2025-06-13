@@ -16,8 +16,16 @@ export class ProductService {
   }
 
   // Define methods for product operations here
-  createProduct(productData: any): Observable<ApiResponse> {
-    return this.http.post<ApiResponse>(this.apiUrl, productData);
+  upsertProduct(productData: any): Observable<ApiResponse> {
+    if (productData.id) {
+      // Update existing product
+      return this.http.put<ApiResponse>(`${this.apiUrl}/update`, productData);
+    }
+    // Create new product
+    return this.http.post<ApiResponse>(`${this.apiUrl}/create`, productData);
   }
-  
+
+  deleteProduct(productId: string): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.apiUrl}/${productId}`);
+  }
 }

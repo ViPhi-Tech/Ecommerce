@@ -41,7 +41,9 @@ const routes: Routes = [
   {
     path: 'resellers',
     loadChildren: () =>
-      import('./screens/reseller-module/reseller.module').then(m => m.ResellerModule),
+      import('./screens/reseller-module/reseller.module').then(
+        m => m.ResellerModule
+      ),
   },
 
   {

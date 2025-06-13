@@ -43,12 +43,15 @@ import {
   lucideVideo,
   lucideWallet,
   lucideX,
-  lucideTrash2
+  lucideTrash2,
+  lucideSquarePen,
 } from '@ng-icons/lucide';
 import {
   matArrowDropDownOutline,
   matKeyboardArrowDownOutline,
 } from '@ng-icons/material-icons/outline';
+import { heroPencilSquare } from '@ng-icons/heroicons/outline';
+
 import { providePrimeNG } from 'primeng/config';
 import { routes } from './app/app.routes';
 import { CoreInterceptor } from './app/shared/interceptors/core.interceptor';
@@ -111,7 +114,9 @@ export const THEME: ApplicationConfig = {
       lucideCircleCheckBig,
       lucideFilter,
       lucideTrash2,
+      lucideSquarePen,
       matKeyboardArrowDownOutline,
+      heroPencilSquare,
     }),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
   ],

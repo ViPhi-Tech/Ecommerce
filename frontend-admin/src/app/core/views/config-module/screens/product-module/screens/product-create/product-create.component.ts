@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -11,7 +18,7 @@ import { Drawer, DrawerModule } from 'primeng/drawer';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { ProductService } from '../../product.service';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 @Component({
   selector: 'fuse-product-create',
   templateUrl: './product-create.component.html',
@@ -65,7 +72,9 @@ export class ProductCreateComponent implements OnInit {
 
   ngOnInit(): void {
     this.productForm = this.formBuilder.group({
+      id: [''],
       name: ['', [Validators.required, Validators.maxLength(255)]],
+      ean: ['', [Validators.required]],
       sku: ['', [Validators.required]],
       category: ['', [Validators.required]],
       image: [''],
@@ -75,29 +84,48 @@ export class ProductCreateComponent implements OnInit {
       stock: ['', [Validators.required]],
       shortDescription: [''],
       description: ['', [Validators.required]],
+      companyId: ['1'],
     });
 
     // pegar o id da rota, se existir
-    this.activatedRoute.params.pipe(takeUntilDestroyed(this.destroyedRef)).subscribe((params) => {
-      const id = params['id'];
-      if (id) {
-        this.loadProduct(id);
-      }else {
-        this.visible.set(true);
-      }
-    });
+    this.activatedRoute.params
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe(params => {
+        const id = params['id'];
+        if (id) {
+          this.loadProduct(id);
+        } else {
+          this.visible.set(true);
+          // this.productForm.patchValue({
+          //   name: 'teste ',
+          //   ean: '7891234567890',
+          //   sku: '321ndocn3`',
+          //   category: 'categoria',
+          //   image: '',
+          //   brand: 'marca',
+          //   initialPrice: 90,
+          //   finalPrice: 150,
+          //   stock: 90,
+          //   shortDescription: 'Descrição curta',
+          //   description: 'Descrição longa',
+          // });
+        }
+      });
   }
 
   loadProduct(id: string): void {
-    this.productService.getProductById(id).pipe(takeUntilDestroyed(this.destroyedRef)).subscribe({
-      next: (response: ApiResponse) => {
-        this.productForm.patchValue(response.dados);
-        this.visible.set(true);
-      },
-      error: (error: ApiResponse) => {
-        console.error('Error loading product:', error);
-      },
-    });
+    this.productService
+      .getProductById(id)
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe({
+        next: (response: ApiResponse) => {
+          this.productForm.patchValue(response.dados);
+          this.visible.set(true);
+        },
+        error: (error: ApiResponse) => {
+          console.error('Error loading product:', error);
+        },
+      });
   }
 
   onSubmit(e: Event): void {
@@ -107,18 +135,23 @@ export class ProductCreateComponent implements OnInit {
     this.productForm.markAllAsTouched();
     if (!this.productForm.valid) {
       console.log('Formulário inválido');
+      console.log('Form Errors:', this.productForm.errors);
+      console.log('Form Values:', this.productForm.value);
       return;
-    } 
+    }
 
-    this.productService.createProduct(this.productForm.value).pipe(takeUntilDestroyed(this.destroyedRef)).subscribe({
-      next: (response: ApiResponse) => {
-        console.log('Product created successfully:', response);
-        this.onCloseDrawer();
-      },
-      error: (error: ApiResponse) => {
-        console.error('Error creating product:', error);
-      },
-    });
+    this.productService
+      .upsertProduct(this.productForm.value)
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe({
+        next: (response: ApiResponse) => {
+          console.log('Product created successfully:', response);
+          this.onCloseDrawer();
+        },
+        error: (error: ApiResponse) => {
+          console.error('Error creating product:', error);
+        },
+      });
 
     console.log('Form Data:', this.productForm.value);
   }
@@ -135,5 +168,4 @@ export class ProductCreateComponent implements OnInit {
       });
     }, 300);
   }
-
 }

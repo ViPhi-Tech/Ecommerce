@@ -1,9 +1,12 @@
-import { Component, Input, OnInit, signal } from '@angular/core';
+import { Component, input, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
+import { ActionButtons } from 'app/shared/interfaces/table.interfaces';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { PopoverModule } from 'primeng/popover';
 
 @Component({
   selector: 'fuse-table-actions',
@@ -15,13 +18,16 @@ import { NgIcon } from '@ng-icons/core';
     ButtonModule,
     TooltipModule,
     OverlayPanelModule,
+    PopoverModule,
+    SplitButtonModule,
     NgIcon,
   ],
 })
 export class TableActionsComponent implements OnInit {
-  @Input() data: any;
-  @Input() buttons: any;
-  @Input() rowIndex: any;
+  data = input();
+  buttons = input<ActionButtons[]>([]);
+  rowIndex = input('');
+  type = input<string>('buttons');
 
   actions = signal<any>([]);
   moreActions = signal<any>([]);
@@ -31,14 +37,19 @@ export class TableActionsComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.createActionButtons();
+    if (this.type() === 'buttons') {
+      this.createActionButtons();
+    }
+    if (this.type() === 'dropdown') {
+      this.createActionDropdown();
+    }
   }
 
   createActionButtons() {
     const buttonRef: any = [];
 
-    if (this.buttons?.length) {
-      for (const btn of this.buttons) {
+    if (this.buttons()?.length) {
+      for (const btn of this.buttons()) {
         if (!btn.show || (btn.show && btn.show(this.data))) {
           buttonRef.push(btn);
         }
@@ -59,12 +70,19 @@ export class TableActionsComponent implements OnInit {
     }
   }
 
-  toogleMoreActions() {
+  createActionDropdown() {
+    this.actions.set(this.buttons());
+  }
+
+  toogleMoreActions(event: MouseEvent) {
+    event.stopPropagation();
+    event.preventDefault();
+
     this.showMoreActions = !this.showMoreActions;
   }
 
   clickAction(config: any) {
-    config.action(this.data, this.rowIndex);
+    config.action(this.data(), this.rowIndex());
   }
 
   isDesktop() {

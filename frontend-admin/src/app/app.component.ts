@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { LoaderComponent } from './shared/components/loader/loader.component';
 @Component({
   selector: 'fuse-root',
-  imports: [RouterModule],
+  imports: [RouterModule, LoaderComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
