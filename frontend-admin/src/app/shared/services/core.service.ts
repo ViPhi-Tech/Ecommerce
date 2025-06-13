@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CoreService {
+  private loadingSubject = new BehaviorSubject<boolean>(false);
+  loading$ = this.loadingSubject.asObservable();
+
   private pageTitleSubj = new Subject<{
     title: string;
     subTitle: string;
@@ -18,5 +21,13 @@ export class CoreService {
       title: title,
       subTitle: subTitle,
     });
+  }
+
+  showLoader(): void {
+    this.loadingSubject.next(true);
+  }
+
+  hideLoader(): void {
+    this.loadingSubject.next(false);
   }
 }
