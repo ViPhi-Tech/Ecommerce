@@ -16,10 +16,16 @@ export class AuthService {
   constructor() {}
 
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post(`${this.apiUrl}auth/token/angular`, {
-      email,
-      password,
-    }) as Observable<AuthResponse>;
+    return this.http.post(
+      `${this.apiUrl}auth/token/angular`,
+      {
+        email,
+        password,
+      },
+      {
+        headers: { 'Skip-Loader': 'true' },
+      }
+    ) as Observable<AuthResponse>;
   }
 
   setToken(token: string, name = 'accessToken') {

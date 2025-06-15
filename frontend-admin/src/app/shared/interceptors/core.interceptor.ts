@@ -19,7 +19,6 @@ export function CoreInterceptor(
 
   const accessToken = localStorage.getItem('accessToken');
 
-
   const headers: Record<string, string> = {
     Authorization: accessToken ? `Bearer ${accessToken}` : '',
   };
@@ -33,7 +32,6 @@ export function CoreInterceptor(
     setHeaders: headers,
   });
 
-  
   return next(newReq).pipe(
     finalize(() => {
       if (!skipLoader) {

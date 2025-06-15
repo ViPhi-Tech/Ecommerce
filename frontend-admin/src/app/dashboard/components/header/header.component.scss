@@ -1,3 +1,7 @@
 .header-button {
   @apply p-1.5 sm:p-2 hover:bg-muted dark:hover:bg-muted-dark rounded-full transition-colors flex items-center justify-center;
 }
+
+::ng-deep .popover-actions .p-popover-content {
+  padding: 0 !important;
+}

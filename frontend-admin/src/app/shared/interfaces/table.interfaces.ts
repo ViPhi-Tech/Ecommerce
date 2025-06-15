@@ -23,6 +23,9 @@ export interface TableColumn {
   actionButtonsType?: 'buttons' | 'dropdown'; // Type of action buttons, can be 'buttons' or 'dropdown'
   actionButtons?: ActionButtons[];
   template?: TemplateRef<any | null>;
+  headerAlign?: 'left' | 'center' | 'right'; // Alignment of the header
+  align?: 'left' | 'center' | 'right'; // Alignment of the column
+  style?: string; // Custom CSS styles for the column
 }
 
 export interface HeaderButton {

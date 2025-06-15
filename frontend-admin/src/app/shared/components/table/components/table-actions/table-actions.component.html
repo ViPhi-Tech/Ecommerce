@@ -1,7 +1,5 @@
 @if (type() === 'buttons') {
-  <div
-    class="flex flex-row justify-content-center align-items-center column-gap-2 p-1"
-  >
+  <div class="flex justify-center align-center gap-2 p-1">
     @for (button of actions(); track button) {
       @if (!button.show || (button.show && button.show(data))) {
         <ng-container
@@ -13,6 +11,7 @@
       <p-button
         [outlined]="true"
         [rounded]="true"
+        variant="text"
         size="small"
         icon="pi pi-ellipsis-h"
         severity="secondary"
@@ -24,7 +23,7 @@
     }
   </div>
 
-  <p-overlayPanel [styleClass]="'overlay-more-actions'" #overlayMoreActions>
+  <p-popover [styleClass]="'overlay-more-actions'" #overlayMoreActions>
     <div class="flex flex-row gap-2">
       @for (button of moreActions(); track button) {
         @if (!button.show || (button.show && button.show(data))) {
@@ -34,22 +33,19 @@
         }
       }
     </div>
-  </p-overlayPanel>
+  </p-popover>
 
   <ng-template #buttonTemplate let-button>
     <p-button
       [outlined]="button.outlined || false"
       size="small"
       [severity]="button.color"
+      [variant]="button.variant || null"
       [pTooltip]="button.tooltip ?? null"
       tooltipPosition="left"
-      (click)="button.action(data)"
+      (click)="button.action(data(), rowIndex())"
     >
-      <ng-icon
-        [name]="button?.icon"
-        [color]="button.color || '#fff'"
-        size="16"
-      />
+      <ng-icon [name]="button?.icon" [color]="button.colorIcon" size="16" />
     </p-button>
   </ng-template>
 }

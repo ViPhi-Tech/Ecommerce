@@ -9,7 +9,7 @@
   <ng-template #header>
     <div class="flex flex-col space-y-1.5 text-center sm:text-left">
       <h2 class="text-2xl font-semibold leading-none tracking-tight">
-        {{title()}}
+        {{ title() }}
       </h2>
       <p class="text-sm text-muted-foreground">
         Preencha os dados do novo produto abaixo
@@ -64,7 +64,7 @@
         <div class="col-12 md:col-6 mb-6">
           <fuse-input
             type="price"
-            label="Preço inicial"
+            label="Preço de custo"
             [control]="productForm.get('initialPrice')"
             placeholder="R$ 0,00"
           />
@@ -73,7 +73,7 @@
         <div class="col-12 md:col-6 mb-6">
           <fuse-input
             type="price"
-            label="Preço final"
+            label="Preço de venda"
             [control]="productForm.get('finalPrice')"
             placeholder="R$ 0,00"
           />
@@ -140,4 +140,4 @@
   </ng-template>
 </p-drawer>
 
-<p-toast baseZIndex="9000"/>
+<p-toast baseZIndex="9000" />

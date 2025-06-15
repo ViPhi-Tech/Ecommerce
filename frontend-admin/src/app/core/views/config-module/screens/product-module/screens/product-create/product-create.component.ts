@@ -26,7 +26,13 @@ import { ToastModule } from 'primeng/toast';
   selector: 'fuse-product-create',
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss'],
-  imports: [DrawerModule, ButtonModule, ReactiveFormsModule, FormModule, ToastModule],
+  imports: [
+    DrawerModule,
+    ButtonModule,
+    ReactiveFormsModule,
+    FormModule,
+    ToastModule,
+  ],
   providers: [ProductService],
 })
 export class ProductCreateComponent implements OnInit {
@@ -102,19 +108,23 @@ export class ProductCreateComponent implements OnInit {
           this.loadProduct(id);
         } else {
           this.visible.set(true);
-            this.productForm.patchValue({
-              name: 'teste ',
-              ean: Array.from({ length: 13 }, () => Math.floor(Math.random() * 10)).join(''),
-              sku: Array.from({ length: 13 }, () => Math.floor(Math.random() * 10)).join(''),
-              category: 'categoria',
-              image: '',
-              brand: 'marca',
-              initialPrice: 90,
-              finalPrice: 150,
-              stock: 90,
-              shortDescription: 'Descrição curta',
-              description: 'Descrição longa',
-            });
+          this.productForm.patchValue({
+            name: 'teste ',
+            ean: Array.from({ length: 13 }, () =>
+              Math.floor(Math.random() * 10)
+            ).join(''),
+            sku: Array.from({ length: 13 }, () =>
+              Math.floor(Math.random() * 10)
+            ).join(''),
+            category: 'categoria',
+            image: '',
+            brand: 'marca',
+            initialPrice: 90,
+            finalPrice: 150,
+            stock: 90,
+            shortDescription: 'Descrição curta',
+            description: 'Descrição longa',
+          });
         }
       });
   }

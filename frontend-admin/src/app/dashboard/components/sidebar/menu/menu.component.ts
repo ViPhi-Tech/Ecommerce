@@ -42,8 +42,8 @@ export class MenuComponent implements OnInit {
           route: 'config/categories',
           visible: true,
         },
-      ]
-    }
+      ],
+    },
     // {
     //   groupTitle: 'Estoque',
     //   items: [

@@ -104,6 +104,10 @@
   }
 }
 
+.p-datatable-thead > tr > th {
+  @apply px-4 py-3 text-left text-sm font-semibold text-muted-foreground;
+}
+
 .p-datatable-thead > tr > th,
 .p-datatable-sort-icon,
 .p-datatable-sort-badge {
@@ -163,7 +167,10 @@ input {
   }
 }
 
-
 .p-toast {
   z-index: 99999 !important;
+}
+
+::ng-deep .popover-actions .p-popover-content {
+  padding: 0 !important;
 }

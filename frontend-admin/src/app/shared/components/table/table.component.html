@@ -58,7 +58,16 @@
   <ng-template #header>
     <tr>
       @for (column of config().columns; track $index) {
-        <th>{{ column?.caption }}</th>
+        <th
+          [ngClass]="{
+            'text-left': column?.headerAlign === 'left',
+            'text-right': column?.headerAlign === 'right',
+            'text-center':
+              column?.headerAlign === 'center' || column.caption === 'Ações',
+          }"
+        >
+          {{ column?.caption }}
+        </th>
       }
     </tr>
   </ng-template>
@@ -68,7 +77,14 @@
       (click)="onRowClick(rowData, rowIndex)"
     >
       @for (column of config().columns; track $index) {
-        <td>
+        <td
+          [ngClass]="{
+            'text-left': column?.align === 'left',
+            'text-right': column?.align === 'right',
+            'text-center':
+              column?.align === 'center' || column.caption === 'Ações',
+          }"
+        >
           @if (column.field === 'actions' && column?.actionButtons?.length) {
             <fuse-table-actions
               [type]="column?.actionButtonsType || 'buttons'"

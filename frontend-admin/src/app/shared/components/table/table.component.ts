@@ -11,6 +11,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import {
   CurrencyPipe,
   DatePipe,
+  NgClass,
   NgStyle,
   NgTemplateOutlet,
 } from '@angular/common';
@@ -37,6 +38,7 @@ import { NgIcon } from '@ng-icons/core';
     DatePipe,
     CurrencyPipe,
     NgIcon,
+    NgClass,
   ],
 })
 export class TableComponent implements OnInit {

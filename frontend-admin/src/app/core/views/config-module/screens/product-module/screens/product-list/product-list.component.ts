@@ -22,11 +22,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'fuse-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
-  imports: [
-    TableComponent,
-    FormModule,
-    TableFilterComponent,
-  ],
+  imports: [TableComponent, FormModule, TableFilterComponent],
   providers: [ProductService],
 })
 export class ProductListComponent implements OnInit {
@@ -44,24 +40,19 @@ export class ProductListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
-    rowClick: (rowData: any) => {
-      this.router.navigate([
-        { outlets: { drawer: ['products', rowData?.id] } },
-      ]);
-    },
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'name', caption: 'Nome', sortable: true, filter: true },
       {
         field: 'initialPrice',
-        caption: 'Preço Inicial',
+        caption: 'Preço de Custo',
         type: 'currency',
         sortable: true,
         filter: true,
       },
       {
         field: 'finalPrice',
-        caption: 'Preço Final',
+        caption: 'Preço de Venda',
         type: 'currency',
         sortable: true,
         filter: true,
@@ -69,12 +60,13 @@ export class ProductListComponent implements OnInit {
       {
         field: 'actions',
         caption: 'Ações',
-        actionButtonsType: 'dropdown',
+        actionButtonsType: 'buttons',
         actionButtons: [
           {
             icon: 'lucideSquarePen',
             label: 'Editar',
             tooltip: 'Editar Produto',
+            variant: 'text',
             action: (rowData: any) => {
               // Exemplo de navegação para o outlet auxiliar "drawer"
               console.log(rowData);
@@ -86,6 +78,7 @@ export class ProductListComponent implements OnInit {
           {
             icon: 'lucideTrash2',
             label: 'Excluir',
+            variant: 'text',
             colorText: '#EF4444',
             colorIcon: '#EF4444',
             tooltip: 'Excluir Produto',
@@ -149,13 +142,18 @@ export class ProductListComponent implements OnInit {
           .pipe(takeUntilDestroyed(this.destroyedRef))
           .subscribe({
             next: () => {
+              this.toast.add({
+                severity: 'success',
+                summary: 'Sucesso',
+                detail: 'Produto excluído com sucesso',
+              });
               this.productService.refreshProductList();
             },
             error: () => {
               this.toast.add({
                 severity: 'error',
                 summary: 'Erro',
-                detail: 'Erro ao excluir produto',  
+                detail: 'Erro ao excluir produto',
               });
             },
           });

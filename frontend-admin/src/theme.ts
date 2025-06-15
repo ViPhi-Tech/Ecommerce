@@ -45,6 +45,7 @@ import {
   lucideX,
   lucideTrash2,
   lucideSquarePen,
+  lucideLogOut,
 } from '@ng-icons/lucide';
 import {
   matArrowDropDownOutline,
@@ -117,6 +118,7 @@ export const THEME: ApplicationConfig = {
       lucideFilter,
       lucideTrash2,
       lucideSquarePen,
+      lucideLogOut,
       matKeyboardArrowDownOutline,
       heroPencilSquare,
     }),
