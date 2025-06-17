@@ -10,10 +10,8 @@ import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 import { CategoryState } from 'app/shared/store/category.state';
-import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
-import { TableFilterComponent } from 'app/shared/components/table/components/table-filter/table-filter.component';
-import { NgTemplateOutlet } from '@angular/common';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
   selector: 'fuse-category-list',
@@ -21,10 +19,9 @@ import { NgTemplateOutlet } from '@angular/common';
   styleUrls: ['./category-list.component.scss'],
   imports: [
     TableComponent,
-    NgIcon,
     ButtonModule,
-    TableFilterComponent,
-    NgTemplateOutlet,
+    DialogModule,
+    ButtonModule
   ],
 })
 export class CategoryListComponent implements OnInit {
@@ -32,50 +29,14 @@ export class CategoryListComponent implements OnInit {
   private coreService = inject(CoreService);
   state = inject(CategoryState);
 
+  visible = false
+
   tableConfig: WritableSignal<TableConfig> = signal({
     rowsPerPageOptions: [5, 10, 20],
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
-    columns: [
-      { field: 'id', caption: 'ID', sortable: true, filter: true },
-      { field: 'name', caption: 'Nome', sortable: true, filter: true },
-      {
-        field: 'description',
-        caption: 'Descrição',
-        sortable: false,
-        filter: true,
-      },
-      {
-        field: 'parentCategoryId',
-        caption: 'Categoria Pai',
-        sortable: true,
-        filter: true,
-      },
-      {
-        field: 'createdAt',
-        caption: 'Data de Criação',
-        type: 'date',
-        sortable: true,
-        filter: true,
-      },
-      {
-        field: 'updatedAt',
-        caption: 'Última Atualização',
-        type: 'date',
-        sortable: true,
-        filter: true,
-      },
-      {
-        field: 'isActive',
-        caption: 'Ativo',
-        type: 'activeOrNot',
-        sortable: true,
-        filter: true,
-      },
-      { field: 'imageUrl', caption: 'Imagem', sortable: false, filter: false },
-    ],
-    headerButtons: [
+     headerButtons: [
       {
         icon: 'pi pi-plus',
         label: 'Adicionar',
@@ -88,9 +49,52 @@ export class CategoryListComponent implements OnInit {
         },
       },
     ],
+    columns: [
+      { field: 'id', caption: 'ID', sortable: true, filter: true },
+      { field: 'name', caption: 'Nome', sortable: true, filter: true },
+      {
+        field: 'actions',
+        caption: 'Ações',
+        actionButtonsType: 'buttons',
+        actionButtons: [
+          {
+            icon: 'lucideSquarePen',
+            label: 'Editar',
+            tooltip: 'Editar Categoria',
+            variant: 'text',
+            action: (rowData: any) => {
+              // Exemplo de navegação para o outlet auxiliar "drawer"
+              console.log(rowData);
+              this.router.navigate([
+                { outlets: { drawer: ['categories', rowData?.id] } },
+              ]);
+            },
+          },
+          {
+            icon: 'lucideTrash2',
+            label: 'Excluir',
+            variant: 'text',
+            colorText: '#EF4444',
+            colorIcon: '#EF4444',
+            tooltip: 'Excluir Categoria',
+            action: (rowData: any) => {
+              this.deleteCategory(rowData?.id);
+            },
+          },
+        ],
+      },
+    ],
   });
 
   constructor() {}
+
+  deleteCategory(id: number) {
+    this.visible = true;
+    // Aqui você pode implementar a lógica para excluir a categoria
+    // Por exemplo, chamar um serviço para excluir a categoria pelo ID
+    console.log(`Categoria com ID ${id} excluída.`);
+    // Após a exclusão, você pode atualizar a lista de categorias ou fechar o diálogo
+  }
 
   ngOnInit() {
     this.state.getCategoryList();

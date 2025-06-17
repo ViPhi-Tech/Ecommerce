@@ -41,7 +41,7 @@ export class CategoryController {
 
     async findById(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const categoryID = request.body as CategoryID
+            const categoryID = request.params as CategoryID
             const category = await this.findCategoryByIdUseCase.execute(categoryID.id)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: category})
         } catch (error) {

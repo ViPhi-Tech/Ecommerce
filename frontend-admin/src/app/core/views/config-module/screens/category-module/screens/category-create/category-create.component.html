@@ -1,70 +1,60 @@
-<p-drawer
-  #drawerRef
-  [header]="title()"
-  [visible]="visible()"
-  (onHide)="onCloseDrawer()"
-  position="right"
-  styleClass="!w-full md:!w-[80vw] lg:!w-[80vw]"
-  transitionOptions="300ms cubic-bezier(0, 0, 0.2, 1)"
+<p-dialog
+  #dialogRef
+  [(visible)]="visible"
+  (onHide)="onCloseDialog()"
+  [modal]="true"
+  [closeOnEscape]="true"
+  styleClass="max-w-[600px] w-full"
 >
-  <form class="flex flex-col gap-4">
-    <!-- Nome do Produto -->
-    <div class="flex flex-col gap-2">
-      <label for="name" class="font-medium">Nome</label>
-      <input
-        id="name"
-        type="text"
-        pInputText
-        name="name"
-        required
-        placeholder="Nome do Produto"
-      />
-    </div>
-    <!-- Descrição do Produto -->
-    <div class="flex flex-col gap-2">
-      <label for="description" class="font-medium">Descrição</label>
-      <textarea
-        id="description"
-        pTextarea
-        name="description"
-        required
-        placeholder="Descrição do Produto"
-        rows="4"
-      ></textarea>
-    </div>
-    <!-- Preço do Produto -->
-    <div class="flex flex-col gap-2">
-      <label for="price" class="font-medium">Preço</label>
-      <input
-        id="price"
-        type="number"
-        pInputText
-        name="price"
-        required
-        placeholder="Preço do Produto"
-      />
-    </div>
-  </form>
-
-  <ng-template #footer>
-    <div class="flex items-center gap-2">
-      <button
-        pButton
-        type="submit"
-        label="Cadastrar"
-        icon="pi pi-check"
-        class="w-full"
-        severity="success"
-      ></button>
-      <button
-        pButton
-        type="button"
-        label="Cancelar"
-        icon="pi pi-times"
-        class="w-full"
-        (click)="closeDrawer($event)"
-        severity="danger"
-      ></button>
+  <ng-template #header>
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 class="text-2xl font-semibold leading-none tracking-tight">
+        {{ title() }}
+      </h2>
+      <p class="text-sm text-muted-foreground">
+        Preencha os dados da nova categoria abaixo
+      </p>
     </div>
   </ng-template>
-</p-drawer>
+
+  <div class="flex flex-col gap-4">
+    <div>
+      <form [formGroup]="categoryForm" class="row">
+        <div class="col-12 md:col-12 mb-6">
+          <fuse-input
+            label="Nome da Categoria"
+            [control]="categoryForm.get('name')"
+            placeholder="Ex: Eletrônicos"
+          />
+        </div>
+
+      </form>
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <div class="w-full justify-end flex items-center gap-4">
+      <div class="flex gap-2">
+        <button
+          pButton
+          type="submit"
+          label="Salvar"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          icon="pi pi-times"
+          (click)="closeDialog($event)"
+          severity="secondary"
+          class="w-[200px]"
+          size="small"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
