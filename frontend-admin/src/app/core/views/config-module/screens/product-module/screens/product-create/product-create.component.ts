@@ -98,6 +98,12 @@ export class ProductCreateComponent implements OnInit {
       companyId: ['1'],
     });
 
+    this.productForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe(value => {
+        console.log(value);
+      });
+
     // pegar o id da rota, se existir
     this.activatedRoute.params
       .pipe(takeUntilDestroyed(this.destroyedRef))

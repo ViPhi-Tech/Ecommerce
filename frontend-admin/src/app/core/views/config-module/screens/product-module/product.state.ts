@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
+import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import {
   Product,
   ProductModuleState,
 } from 'app/shared/interfaces/product-module.interface';
 import { catchError, finalize, Observable, of, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
-import { ApiResponse } from '../interfaces/api-response.interface';
 
 @Injectable()
 export class ProductState {
@@ -15,6 +15,9 @@ export class ProductState {
 
   private state = signal<ProductModuleState>({
     productList: [],
+    view:
+      (localStorage.getItem('productView') as ProductModuleState['view']) ||
+      'table',
     loading: false,
     error: null,
   });
@@ -22,6 +25,7 @@ export class ProductState {
   productList = computed(() => this.state().productList);
   loading = computed(() => this.state().loading);
   error = computed(() => this.state().error);
+  currentView = computed(() => this.state().view);
 
   getProductList(): void {
     this.setLoading(true);
@@ -45,6 +49,14 @@ export class ProductState {
       ...state,
       productList,
     }));
+  }
+
+  setView(view: ProductModuleState['view']) {
+    this.state.update(state => ({
+      ...state,
+      view,
+    }));
+    localStorage.setItem('productView', view);
   }
 
   private setLoading(loading: boolean) {

@@ -11,19 +11,29 @@ import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
-import { FormModule } from 'app/shared/components/form/form.module';
-import { ProductState } from 'app/shared/store/product.state';
 import { TableFilterComponent } from 'app/shared/components/table/components/table-filter/table-filter.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProductService } from '../../product.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { heightAnimation } from 'app/shared/utils/animations';
+import { NgIcon } from '@ng-icons/core';
+import { ButtonModule } from 'primeng/button';
+import { ProductState } from '../../product.state';
+import { CurrencyPipe, NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'fuse-product-list',
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
-  imports: [TableComponent, FormModule, TableFilterComponent],
-  providers: [ProductService],
+  animations: [heightAnimation],
+  imports: [
+    TableComponent,
+    TableFilterComponent,
+    NgIcon,
+    ButtonModule,
+    NgTemplateOutlet,
+    CurrencyPipe,
+  ],
 })
 export class ProductListComponent implements OnInit {
   private router = inject(Router);

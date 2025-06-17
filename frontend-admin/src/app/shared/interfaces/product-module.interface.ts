@@ -2,6 +2,7 @@ export interface ProductModuleState {
   productList: Product[];
   loading: boolean;
   error: string | null;
+  view: 'table' | 'list'; // Tipo de visualização atual (tabela ou lista)
 }
 
 export interface Product {

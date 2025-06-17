@@ -8,7 +8,7 @@
       class="flex-1 bg-white dark:bg-container-background w-[100vw] lg:max-w-[calc(100vw-250px)]"
     >
       <fuse-header />
-      <div class="space-y-4">
+      <div class="space-y-4 max-h-[calc(100vh-64px)] overflow-y-auto">
         <!-- <div [@routeAnimations]="prepareRoute(outlet)" style="display: contents"> -->
         <router-outlet #outlet="outlet"></router-outlet>
         <!-- </div> -->

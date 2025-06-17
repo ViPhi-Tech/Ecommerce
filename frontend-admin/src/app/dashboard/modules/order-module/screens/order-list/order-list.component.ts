@@ -14,14 +14,25 @@ import {
   DEFAULT_TABLE_CONFIG,
   TableConfig,
 } from 'app/shared/interfaces/table.interfaces';
-import { OrderState } from '../../states/order.state';
 import { TableFilterComponent } from 'app/shared/components/table/components/table-filter/table-filter.component';
+import { OrderState } from '../../order.state';
+import { CommonModule } from '@angular/common';
+import { NgIcon } from '@ng-icons/core';
+import { ButtonModule } from 'primeng/button';
+import { heightAnimation } from 'app/shared/utils/animations';
 
 @Component({
   selector: 'fuse-order-list',
   templateUrl: './order-list.component.html',
   styleUrls: ['./order-list.component.scss'],
-  imports: [TableComponent, TableFilterComponent],
+  animations: [heightAnimation],
+  imports: [
+    TableComponent,
+    TableFilterComponent,
+    CommonModule,
+    NgIcon,
+    ButtonModule,
+  ],
   providers: [OrderState],
 })
 export class OrderListComponent implements OnInit {
@@ -30,70 +41,6 @@ export class OrderListComponent implements OnInit {
   state = inject(OrderState);
 
   @ViewChild('name', { static: true }) name!: TemplateRef<any>;
-
-  orders = signal([
-    {
-      id: 1,
-      name: 'Produto 1',
-      price: 10.0,
-      category: 'Categoria 1',
-    },
-    {
-      id: 2,
-      name: 'Produto 2',
-      price: 20.0,
-      category: 'Categoria 2',
-    },
-    {
-      id: 3,
-      name: 'Produto 3',
-      price: 30.0,
-      category: 'Categoria 3',
-    },
-    {
-      id: 4,
-      name: 'Produto 4',
-      price: 40.0,
-      category: 'Categoria 4',
-    },
-    {
-      id: 5,
-      name: 'Produto 5',
-      price: 50.0,
-      category: 'Categoria 5',
-    },
-    {
-      id: 6,
-      name: 'Produto 6',
-      price: 60.0,
-      category: 'Categoria 6',
-    },
-    {
-      id: 7,
-      name: 'Produto 7',
-      price: 70.0,
-      category: 'Categoria 7',
-    },
-    {
-      id: 8,
-      name: 'Produto 8',
-      price: 80.0,
-      category: 'Categoria 8',
-    },
-    {
-      id: 9,
-      name: 'Produto 9',
-      price: 90.0,
-      category: 'Categoria 9',
-    },
-    {
-      id: 10,
-      name: 'Produto 10',
-      price: 100.0,
-      category: 'Categoria 10',
-    },
-  ]);
-  loading = signal(false);
 
   tableConfig: WritableSignal<TableConfig> = signal(DEFAULT_TABLE_CONFIG);
 
@@ -107,6 +54,7 @@ export class OrderListComponent implements OnInit {
       'Listagem com os pedidos realizados'
     );
     this.setTableConfig();
+    this.state.getOrderList();
   }
 
   setTableConfig() {
@@ -116,42 +64,52 @@ export class OrderListComponent implements OnInit {
       paginator: true,
       pageLinkSize: 5,
       columns: [
-        { field: 'id', caption: 'ID', sortable: true, filter: true },
-        { field: 'customer', caption: 'Cliente', sortable: true, filter: true },
-        { field: 'date', caption: 'Data', sortable: true, filter: true },
+        { field: 'id', caption: 'Cód. Pedido', sortable: true, filter: true },
         {
-          field: 'total',
-          caption: 'Valor Total',
+          field: 'customerName',
+          caption: 'Cliente',
+          sortable: true,
+          filter: true,
+        },
+        {
+          field: 'totalAmount',
+          caption: 'Valor',
           sortable: true,
           filter: true,
         },
         { field: 'status', caption: 'Status', sortable: true, filter: true },
         {
+          field: 'createdAt',
+          caption: 'Data de Criação',
+          sortable: true,
+          filter: true,
+        },
+        {
           field: 'actions',
           caption: 'Ações',
           actionButtons: [
             {
-              iconType: 'material',
-              icon: 'visibility',
+              icon: 'lucideEye',
               color: 'info',
+              variant: 'text',
               tooltip: 'Visualizar Pedido',
               action: (data, index) => {
                 console.log('Visualizar Pedido', data, index);
               },
             },
             {
-              iconType: 'material',
-              icon: 'edit',
+              icon: 'lucideSquarePen',
               color: 'primary',
+              variant: 'text',
               tooltip: 'Editar Pedido',
               action: (data, index) => {
                 console.log('Editar Pedido', data, index);
               },
             },
             {
-              iconType: 'material',
-              icon: 'delete',
+              icon: 'lucideTrash2',
               color: 'warn',
+              variant: 'text',
               tooltip: 'Excluir Pedido',
               action: (data, index) => {
                 console.log('Excluir Pedido', data, index);
@@ -166,7 +124,6 @@ export class OrderListComponent implements OnInit {
           label: 'Criar Pedido',
           tooltip: 'Criar Pedido',
           action: () => {
-            // Exemplo de navegação para o outlet auxiliar "drawer"
             this.router.navigate(['dashboard', 'orders', 'create']);
           },
         },
