@@ -14,6 +14,9 @@ export class CategoryState {
 
   private state = signal<CategoryModuleState>({
     categoryList: [],
+    view:
+      (localStorage.getItem('categoryView') as CategoryModuleState['view']) ||
+      'table',
     loading: false,
     error: null,
   });
@@ -21,6 +24,7 @@ export class CategoryState {
   categoryList = computed(() => this.state().categoryList);
   loading = computed(() => this.state().loading);
   error = computed(() => this.state().error);
+  currentView = computed(() => this.state().view);
 
   getCategoryList(): void {
     this.setLoading(true);
@@ -42,6 +46,14 @@ export class CategoryState {
       ...state,
       categoryList,
     }));
+  }
+
+  setView(view: CategoryModuleState['view']) {
+    this.state.update(state => ({
+      ...state,
+      view,
+    }));
+    localStorage.setItem('categoryView', view);
   }
 
   private setLoading(loading: boolean) {

@@ -74,22 +74,4 @@ export const routes: Routes = [
     outlet: 'drawer',
     data: { animation: 'users' },
   },
-  {
-    path: 'resellers',
-    loadChildren: () =>
-      import(
-        'app/core/views/config-module/screens/reseller-module/reseller-drawer.module'
-      ).then(m => m.ResellerDrawerModule),
-    outlet: 'drawer',
-    data: { animation: 'resellers' },
-  },
-  {
-    path: 'discount-tickets',
-    loadChildren: () =>
-      import(
-        'app/core/views/config-module/screens/discount-ticket-module/discount-ticket-drawer.module'
-      ).then(m => m.DiscountTicketDrawerModule),
-    outlet: 'drawer',
-    data: { animation: 'discount-tickets' },
-  },
 ];

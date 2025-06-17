@@ -10,12 +10,22 @@ import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 import { CategoryState } from 'app/shared/store/category.state';
+import { NgIcon } from '@ng-icons/core';
+import { ButtonModule } from 'primeng/button';
+import { TableFilterComponent } from 'app/shared/components/table/components/table-filter/table-filter.component';
+import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'fuse-category-list',
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss'],
-  imports: [TableComponent],
+  imports: [
+    TableComponent,
+    NgIcon,
+    ButtonModule,
+    TableFilterComponent,
+    NgTemplateOutlet,
+  ],
 })
 export class CategoryListComponent implements OnInit {
   private router = inject(Router);
