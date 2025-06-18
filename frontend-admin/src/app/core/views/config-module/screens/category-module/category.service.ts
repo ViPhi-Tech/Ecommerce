@@ -1,15 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class CategoryService {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl + 'category';
 
-  refreshCategoryList$ = signal<any>(undefined);
+   private refreshSubj = new Subject<any>();
+  refresh$ = this.refreshSubj.asObservable();
 
   constructor() {}
 
@@ -34,6 +37,7 @@ export class CategoryService {
   }
 
   refreshCategoryList() {
-    this.refreshCategoryList$.set(Math.random());
+    this.refreshSubj.next(true);
   }
+
 }

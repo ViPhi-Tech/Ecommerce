@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   OnInit,
   signal,
@@ -12,6 +13,10 @@ import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 import { CategoryState } from 'app/shared/store/category.state';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { CategoryService } from '../../category.service';
+import { JsonPipe } from '@angular/common';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'fuse-category-list',
@@ -21,10 +26,15 @@ import { DialogModule } from 'primeng/dialog';
     TableComponent,
     ButtonModule,
     DialogModule,
-    ButtonModule
+    ButtonModule,
+    JsonPipe
   ],
 })
 export class CategoryListComponent implements OnInit {
+  private toast = inject(MessageService);
+  private categoryService = inject(CategoryService);
+  private destroyedRef = inject(DestroyRef);
+  private confirmationService = inject(ConfirmationService);
   private router = inject(Router);
   private coreService = inject(CoreService);
   state = inject(CategoryState);
@@ -86,16 +96,9 @@ export class CategoryListComponent implements OnInit {
     ],
   });
 
-  constructor() {}
-
-  deleteCategory(id: number) {
-    this.visible = true;
-    // Aqui você pode implementar a lógica para excluir a categoria
-    // Por exemplo, chamar um serviço para excluir a categoria pelo ID
-    console.log(`Categoria com ID ${id} excluída.`);
-    // Após a exclusão, você pode atualizar a lista de categorias ou fechar o diálogo
+  constructor() {
   }
-
+  
   ngOnInit() {
     this.state.getCategoryList();
     this.coreService.setPageTitle(
@@ -103,4 +106,39 @@ export class CategoryListComponent implements OnInit {
       'Lista de categorias disponíveis'
     );
   }
+
+  deleteCategory(id: string) {
+     this.confirmationService.confirm({
+      message: 'Você tem certeza que deseja excluir esta categoria?',
+      header: 'Confirmação de Exclusão',
+      icon: 'pi pi-exclamation-triangle text-red-500',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      acceptButtonStyleClass: 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-secondary',
+      accept: () => {
+        this.categoryService
+          .deleteCategory(id)
+          .pipe(takeUntilDestroyed(this.destroyedRef))
+          .subscribe({
+            next: () => {
+              this.toast.add({
+                severity: 'success',
+                summary: 'Sucesso',
+                detail: 'Categoria excluída com sucesso',
+              });
+              this.state.getCategoryList();
+            },
+            error: () => {
+              this.toast.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: 'Erro ao excluir categoria',
+              });
+            },
+          });
+      },
+    });
+  }
+
 }

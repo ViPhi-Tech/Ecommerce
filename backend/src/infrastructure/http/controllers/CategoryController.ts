@@ -63,7 +63,7 @@ export class CategoryController {
 
     async delete(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const category = request.body as CategoryID
+            const category = request.params as CategoryID
             const data_category = await this.deleteCategoryUseCase.execute(category.id)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_category})
         } catch (error) {

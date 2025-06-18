@@ -9,7 +9,9 @@ import { environments } from 'src/environments/environments';
 import { ApiResponse } from '../interfaces/api-response.interface';
 import { lastValueFrom } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class CategoryState {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl;
@@ -51,6 +53,8 @@ export class CategoryState {
       ...state,
       categoryList,
     }));
+
+    console.log('Category list updated:', this.state().categoryList);
   }
 
   setView(view: CategoryModuleState['view']) {

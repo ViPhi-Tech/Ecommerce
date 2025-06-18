@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,6 +10,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { MessageService } from 'primeng/api';
 import { CategoryService } from '../../category.service';
+import { CategoryState } from 'app/shared/store/category.state';
+import { CoreService } from 'app/shared/services/core.service';
 
 @Component({
   selector: 'fuse-category-create',
@@ -23,12 +25,13 @@ import { CategoryService } from '../../category.service';
     TextareaModule,
     FormModule,
   ],
-  providers: [CategoryService]
 })
 export class CategoryCreateComponent implements OnInit {
   destroyedRef = inject(DestroyRef);
   private router = inject(Router);
+  private coreService = inject(CoreService);
   private categoryService = inject(CategoryService);
+  private state = inject(CategoryState);
   private toast = inject(MessageService);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
@@ -37,7 +40,7 @@ export class CategoryCreateComponent implements OnInit {
 
   categoryForm = this.formBuilder.group({
     id: [''],
-    name: [''],
+    name: ['', [Validators.required]],
   });
 
   // signals
@@ -78,7 +81,44 @@ export class CategoryCreateComponent implements OnInit {
       });
   }
 
-  closeDialog(e: Event) {
+  onSubmit(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+
+    if (this.categoryForm.invalid) {
+      this.toast.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'Preencha todos os campos obrigatórios.',
+      });
+      return;
+    }
+
+    this.categoryService
+      .upsertCategory(this.categoryForm.value)
+      .subscribe({
+        next: () => {
+          this.toast.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: this.categoryForm.value.id ? 'Categoria atualizada com sucesso!' : 'Categoria criada com sucesso!',
+          });
+          
+          this.state.getCategoryList();
+          this.closeDialog();
+        },
+        error: () => {
+          this.toast.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao salvar categoria',
+          });
+        },
+      });
+  }
+
+  closeDialog(e = new Event('close')): void {
     this.dialogRef.close(e);
   }
 

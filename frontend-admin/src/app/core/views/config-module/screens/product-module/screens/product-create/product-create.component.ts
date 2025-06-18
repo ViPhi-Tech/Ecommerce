@@ -176,7 +176,7 @@ export class ProductCreateComponent implements OnInit {
           this.toast.add({
             severity: 'success',
             summary: 'Sucesso',
-            detail: 'Produto criado com sucesso!',
+            detail: this.productForm.value.id ? 'Produto atualizado com sucesso!' : 'Produto criado com sucesso!',
           });
           this.productService.refreshProductList();
           this.onCloseDrawer();
