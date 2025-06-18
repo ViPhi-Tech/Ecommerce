@@ -1,4 +1,3 @@
-// src/plugins/swagger.ts
 import fp from 'fastify-plugin';
 import { FastifyInstance } from 'fastify';
 import swagger from '@fastify/swagger';
@@ -12,15 +11,17 @@ export default fp(async (fastify: FastifyInstance) => {
                 description: 'Documentação da API com Swagger',
                 version: '1.0.0',
             },
-            host: 'localhost:8000',
-            schemes: ['http'],
+            // Define o host para o Swagger UI usar ao fazer requisições.
+            // 'localhost' é o que o navegador verá via Nginx na porta 80.
+            host: 'localhost', 
+            schemes: ['http', 'https'], // Suporta HTTP e HTTPS
             consumes: ['application/json'],
             produces: ['application/json'],
         },
     });
 
     await fastify.register(swaggerUi, {
-        routePrefix: '/docs',
+        routePrefix: '/api/docs', // O caminho que você acessa no navegador para a documentação
         uiConfig: {
             docExpansion: 'none',
             deepLinking: false,

@@ -16,7 +16,7 @@ export default async function handleRoutes(fastify: FastifyInstance) {
       },
     },
     async (request, reply) => {
-      return reply.redirect('/docs')
+      return reply.redirect('/api/docs')
     }
   )
   fastify.register(
@@ -36,7 +36,7 @@ export default async function handleRoutes(fastify: FastifyInstance) {
           },
         },
         async (request, reply) => {
-          return reply.redirect('/docs')
+          return reply.redirect('/api/docs')
         }
       )
     },

@@ -1,0 +1,26 @@
+services:
+  backend:
+    build: ./backend
+    container_name: ecommerce-backend
+    expose:
+      - "8000"
+    environment:
+      - DATABASE_URL=postgresql://ecommerce_owner:npg_w2kxdjcJ6XfK@ep-winter-glade-a80jmuki-pooler.eastus2.azure.neon.tech/ecommerce?sslmode=require
+      - GOOGLE_CLIENT_ID=967076664114-ljo025p069vbtttibd30e4k646grccg7.apps.googleusercontent.com
+      - GOOGLE_CLIENT_SECRET=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
+      - GOOGLE_REDIRECT_URI=https://59a2-187-53-112-208.ngrok-free.app/auth/callback
+      - SECRET_KEY=I7r8W1S0h5T9F4l9P2aZ7J1kV3R0A2qD6X1N0YwT5O8M1Z3A
+      - NODE_ENV=production
+      - PORT=8000
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .                         # <-- VOLTE PARA A RAIZ DO PROJETO
+      dockerfile: frontend-admin/Dockerfile # <-- INDIQUE O CAMINHO CORRETO PARA O DOCKERFILE
+    container_name: ecommerce-frontend-1
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped

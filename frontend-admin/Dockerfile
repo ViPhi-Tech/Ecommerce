@@ -1,33 +1,27 @@
-# Etapa 1: Construção da aplicação Angular
-FROM node:18 AS build
+# DENTRO DE frontend-admin/Dockerfile
 
-# Define o diretório de trabalho dentro do container
+# --- Estágio 1: Build do Angular ---
+# O nome do estágio pode ser diferente (ex: build, angular_build), ajuste o seu
+FROM node:22-alpine AS angular_build
 WORKDIR /app
 
-# Copia os arquivos de configuração e dependências
-COPY package.json package-lock.json ./
-
-# Instala as dependências
+# CORRIJA ESTAS LINHAS:
+# Adicione "frontend-admin/" no início dos caminhos
+COPY frontend-admin/package.json frontend-admin/package-lock.json ./
 RUN npm install
+COPY frontend-admin/. .
+RUN npm run build
 
-# Copia o restante do código da aplicação
-COPY . .
 
-# Compila a aplicação Angular para produção
-RUN npm run build -- --configuration production
+# --- Estágio 2: Servidor Nginx ---
+# O nome do estágio pode ser diferente (ex: final, final_serve), ajuste o seu
+FROM nginx:alpine AS final_serve
 
-# Etapa 2: Servir a aplicação com Nginx
-FROM nginx:alpine
+# ESTA LINHA JÁ ESTAVA CORRETA E AGORA VAI FUNCIONAR:
+# Ela busca o arquivo a partir do contexto raiz (.)
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
-# Copia os arquivos compilados da etapa anterior para o diretório padrão do Nginx
-COPY --from=build /app/dist/kommerz /usr/share/nginx/html
+# Copia os arquivos compilados do Angular
+COPY --from=angular_build /app/dist/kommerz/browser /usr/share/nginx/html
 
-# Copia o arquivo de configuração do Nginx (opcional)
-# Você pode criar um arquivo nginx.conf personalizado, se necessário
-# COPY nginx.conf /etc/nginx/nginx.conf
-
-# Expõe a porta 80 para acessar a aplicação
 EXPOSE 80
-
-# Comando para iniciar o Nginx
-CMD ["nginx", "-g", "daemon off;"]

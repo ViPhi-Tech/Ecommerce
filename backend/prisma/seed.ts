@@ -69,7 +69,8 @@ async function main() {
                 data: {
                     name: `Item Especial ${i + 1}`,
                     sku: `AESPC${1000 + i}`,
-                    price: Number((Math.random() * 120 + 15).toFixed(2)),
+                    initialPrice: Number((Math.random() * 120 + 15).toFixed(2)),
+                    finalPrice: Number((Math.random() * 100 + 10).toFixed(2)),
                     cost: Number((Math.random() * 60 + 10).toFixed(2)),
                     quantity: Math.floor(Math.random() * 80) + 1,
                     company: { connect: { id: company.id } },
@@ -79,15 +80,15 @@ async function main() {
     )
 
     // Cria uma venda com 3 itens
-    const sale = await prisma.sale.create({
+    const sale = await prisma.order.create({
         data: {
-            total: produtos.slice(0, 3).reduce((acc, p) => acc + p.price, 0),
+            total: produtos.slice(0, 3).reduce((acc, p) => acc + p.finalPrice, 0),
             client: { connect: { id: client.id } },
             items: {
                 create: produtos.slice(0, 3).map((p) => ({
                     product: { connect: { id: p.id } },
                     quantity: 1 + Math.floor(Math.random() * 2),
-                    price: p.price,
+                    price: p.initialPrice,
                 })),
             },
         },
@@ -122,7 +123,6 @@ async function main() {
 main()
     .catch((e) => {
         console.error("Erro ao executar seed:", e)
-        process.exit(1)
     })
     .finally(() => {
         prisma.$disconnect()

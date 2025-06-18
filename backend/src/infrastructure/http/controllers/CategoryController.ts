@@ -17,7 +17,7 @@ export class CategoryController {
         private deleteCategoryUseCase: DeleteCategoryUseCase,
         private findAllCategoryUseCase: FindAllCategoryUseCase
     ) {}
-
+    
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try {
             const categoryData = request.body as CategoryCreateDTO;
