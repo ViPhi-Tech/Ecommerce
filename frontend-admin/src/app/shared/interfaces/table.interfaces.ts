@@ -44,6 +44,7 @@ export interface HeaderButton {
 export interface ActionButtons {
   label?: string; // Optional label for the button
   icon?: string;
+  variant?: 'text' | 'outlined' | 'filled'; // e.g., "text", "outlined", "filled"
   iconType?: string; // e.g., "material", "font-awesome"
   color?: string; // e.g., "primary", "accent", "warn"
   tooltip: string;

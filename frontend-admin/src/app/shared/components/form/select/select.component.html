@@ -10,17 +10,25 @@
       }
     </label>
   }
-  <p-select
-    [options]="items()"
-    [size]="size()"
-    [formControl]="control()"
-    [optionLabel]="labelRef()"
-    [optionValue]="valueRef()"
-    [placeholder]="placeholder()"
-    [filter]="true"
-    [filterBy]="labelRef()"
-    appendTo="body"
-    [class]="addictionalPrimeClass()"
-    [styleClass]="addictionalClass()"
-  />
+  <div class="flex items-center">
+    <p-select
+      [options]="items()"
+      [size]="size()"
+      [formControl]="control()"
+      [optionLabel]="labelRef()"
+      [optionValue]="valueRef()"
+      [placeholder]="placeholder()"
+      [filter]="true"
+      [filterBy]="labelRef()"
+      appendTo="body"
+      [class]="addictionalPrimeClass()"
+      [styleClass]="addictionalClass()"
+      class="animate-fadein"
+    />
+    @if (quickAdd()) {
+      <p-button variant="text" (onClick)="redirectToQuickAdd()" class="animate-fadein" severity="success">
+        <ng-icon name="lucideBadgePlus"/>
+      </p-button>
+    }
+  </div>
 </div>

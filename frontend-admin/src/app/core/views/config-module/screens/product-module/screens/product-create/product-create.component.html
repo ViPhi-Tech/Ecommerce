@@ -1,26 +1,16 @@
-<p-drawer
-  #drawerRef
-  [visible]="visible()"
-  (onHide)="onCloseDrawer()"
-  position="right"
-  styleClass="!w-full md:!w-[80vw] lg:!w-[80vw]"
-  transitionOptions="300ms cubic-bezier(0, 0, 0.2, 1)"
->
-  <ng-template #header>
-    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
-      <h2 class="text-2xl font-semibold leading-none tracking-tight">
-        {{ title() }}
-      </h2>
-      <p class="text-sm text-muted-foreground">
-        Preencha os dados do novo produto abaixo
-      </p>
-    </div>
-  </ng-template>
+<div class="p-8 animate-fade-in">
 
-  <form class="flex flex-col gap-4">
+  <h2 class="text-2xl font-semibold leading-none tracking-tight">
+    {{ title() }}
+  </h2>
+  <p class="text-sm text-muted-foreground">
+    Preencha os dados do novo produto abaixo
+  </p>
+
+  <form class="flex flex-col gap-4 mt-3 scroll-form">
     <div>
-      <form [formGroup]="productForm" class="row">
-        <div class="col-12 md:col-12 mb-6">
+      <form [formGroup]="productForm" class="row space-y-4">
+        <div class="col-12 md:col-12">
           <fuse-input
             label="Nome do Produto"
             [control]="productForm.get('name')"
@@ -28,7 +18,7 @@
           />
         </div>
 
-        <div class="col-12 md:col-6 mb-6">
+        <div class="col-12 md:col-6">
           <fuse-input
             label="Ean"
             type="number"
@@ -37,7 +27,7 @@
           />
         </div>
 
-        <div class="col-12 md:col-6 mb-6">
+        <div class="col-12 md:col-6">
           <fuse-input
             label="Código/SKU"
             [control]="productForm.get('sku')"
@@ -45,15 +35,19 @@
           />
         </div>
 
-        <div class="col-12 md:col-6 mb-6">
-          <fuse-input
+        <div class="col-12 md:col-6">
+          <fuse-select
             label="Categoria"
-            [control]="productForm.get('category')"
+            [items]="categoryState.categoryList()"
+            valueRef="id"
+            labelRef="name"
+            [quickAdd]="['categories', 'new']"
+            [control]="productForm.get('categoryId')"
             placeholder="Adicione uma cetegoria"
           />
         </div>
 
-        <div class="col-12 md:col-6 mb-6">
+        <div class="col-12 md:col-6">
           <fuse-input
             label="Marca / Fabricante"
             [control]="productForm.get('brand')"
@@ -61,7 +55,7 @@
           />
         </div>
 
-        <div class="col-12 md:col-6 mb-6">
+        <div class="col-12 md:col-6">
           <fuse-input
             type="price"
             label="Preço de custo"
@@ -70,7 +64,7 @@
           />
         </div>
 
-        <div class="col-12 md:col-6 mb-6">
+        <div class="col-12 md:col-6">
           <fuse-input
             type="price"
             label="Preço de venda"
@@ -79,7 +73,7 @@
           />
         </div>
 
-        <div class="col-12 md:col-6 mb-6">
+        <div class="col-12 md:col-6">
           <fuse-input
             label="Estoque disponível"
             type="number"
@@ -88,7 +82,7 @@
           />
         </div>
 
-        <div class="col-12 mb-6">
+        <div class="col-12">
           <fuse-input
             type="textarea"
             label="Descrição curta"
@@ -97,7 +91,7 @@
           />
         </div>
 
-        <div class="col-12 mb-6">
+        <div class="col-12">
           <fuse-input
             type="textarea"
             label="Descrição"
@@ -108,36 +102,35 @@
         </div>
       </form>
       <!-- <fuse-section title="Informações Básicas do Produto">
-      </fuse-section> -->
+        </fuse-section> -->
     </div>
   </form>
 
-  <ng-template #footer>
-    <div class="w-full justify-end flex items-center gap-4">
-      <div class="flex gap-2">
-        <button
-          pButton
-          type="submit"
-          [label]="submitButtonLabel()"
-          icon="pi pi-check"
-          class="w-[200px]"
-          size="small"
-          (click)="onSubmit($event)"
-        ></button>
+  <div class="w-full justify-end flex items-center gap-4 mt-4">
+    <div class="flex gap-2">
+      <button
+        pButton
+        type="submit"
+        [label]="submitButtonLabel()"
+        icon="pi pi-check"
+        class="w-[200px]"
+        size="small"
+        (click)="onSubmit($event)"
+      ></button>
 
-        <button
-          pButton
-          type="button"
-          label="Cancelar"
-          icon="pi pi-times"
-          (click)="closeDrawer($event)"
-          severity="secondary"
-          class="w-[200px]"
-          size="small"
-        ></button>
-      </div>
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        (click)="back()"
+        severity="secondary"
+        class="w-[200px]"
+        size="small"
+      ></button>
     </div>
-  </ng-template>
-</p-drawer>
+  </div>
+</div>
+
 
 <p-toast baseZIndex="9000" />

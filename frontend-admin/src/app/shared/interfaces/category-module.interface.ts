@@ -2,6 +2,7 @@ export interface CategoryModuleState {
   categoryList: Category[];
   loading: boolean;
   error: string | null;
+  view: 'table' | 'list'; // Tipo de visualização atual (tabela ou lista)
 }
 
 export interface Category {

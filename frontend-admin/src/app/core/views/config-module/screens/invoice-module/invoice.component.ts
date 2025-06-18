@@ -1,15 +1,13 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
-import { routeAnimations } from 'app/shared/utils/animations';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'fuse-invoice-module',
   template: `
-    <div [@routeAnimations]="prepareRoute(outlet)" style="display: contents">
+    <div style="display: contents">
       <router-outlet #outlet="outlet"></router-outlet>
     </div>
   `,
-  animations: [routeAnimations],
   standalone: false,
 })
 export class InvoiceComponent implements OnInit {
@@ -17,11 +15,4 @@ export class InvoiceComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {}
-
-  prepareRoute(outlet: RouterOutlet | null) {
-    if (!outlet || !outlet.isActivated) {
-      return 'none';
-    }
-    return outlet.activatedRoute.snapshot.data['animation'] || 'none';
-  }
 }

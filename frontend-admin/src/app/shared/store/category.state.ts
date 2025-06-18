@@ -6,14 +6,23 @@ import {
 } from 'app/shared/interfaces/category-module.interface';
 import { catchError, finalize, Observable, of, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
+import { lastValueFrom } from 'rxjs';
+import { CategoryService } from 'app/core/views/config-module/screens/category-module/category.service';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class CategoryState {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl;
 
+  private categoryService = inject(CategoryService);
+
   private state = signal<CategoryModuleState>({
     categoryList: [],
+    view:
+      (localStorage.getItem('categoryView') as CategoryModuleState['view']) ||
+      'table',
     loading: false,
     error: null,
   });
@@ -21,20 +30,20 @@ export class CategoryState {
   categoryList = computed(() => this.state().categoryList);
   loading = computed(() => this.state().loading);
   error = computed(() => this.state().error);
+  currentView = computed(() => this.state().view);
 
   getCategoryList(): void {
     this.setLoading(true);
     this.setError(null);
     this.setCategoryList([]);
 
-    this.http
-      .get<Category[]>(`${this.apiUrl}categories`)
-      .pipe(
-        tap(categories => this.setCategoryList(categories)),
+    lastValueFrom(
+      this.categoryService.getCategories().pipe(
+        tap(data => this.setCategoryList(data.dados)),
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
       )
-      .subscribe();
+    );
   }
 
   setCategoryList(categoryList: any) {
@@ -42,6 +51,16 @@ export class CategoryState {
       ...state,
       categoryList,
     }));
+
+    console.log('Category list updated:', this.state().categoryList);
+  }
+
+  setView(view: CategoryModuleState['view']) {
+    this.state.update(state => ({
+      ...state,
+      view,
+    }));
+    localStorage.setItem('categoryView', view);
   }
 
   private setLoading(loading: boolean) {

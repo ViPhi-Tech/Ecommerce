@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ProductComponent } from './product.component';
 import { ProductListComponent } from './screens/product-list/product-list.component';
-import { ProductState } from 'app/shared/store/product.state';
+import { ProductState } from './product.state';
+import { ProductService } from './product.service';
 
 const routes: Routes = [
   {
@@ -17,6 +18,20 @@ const routes: Routes = [
         },
       },
       {
+        path: 'new',
+        loadComponent: () =>
+          import('./screens/product-create/product-create.component').then(
+            m => m.ProductCreateComponent
+          ),
+      },
+      {
+        path: 'edit/:id',
+        loadComponent: () =>
+          import('./screens/product-create/product-create.component').then(
+            m => m.ProductCreateComponent
+          ),
+      },
+      {
         path: '',
         redirectTo: 'list',
         pathMatch: 'full',
@@ -28,6 +43,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule, RouterModule.forChild(routes)],
   declarations: [ProductComponent],
-  providers: [ProductState],
+  providers: [ProductState, ProductService],
 })
 export class ProductModule {}

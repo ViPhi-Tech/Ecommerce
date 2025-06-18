@@ -37,22 +37,6 @@ const routes: Routes = [
     loadChildren: () =>
       import('./screens/user-module/user.module').then(m => m.UserModule),
   },
-
-  {
-    path: 'resellers',
-    loadChildren: () =>
-      import('./screens/reseller-module/reseller.module').then(
-        m => m.ResellerModule
-      ),
-  },
-
-  {
-    path: 'discount-tickets',
-    loadChildren: () =>
-      import('./screens/discount-ticket-module/discount-ticket.module').then(
-        m => m.DiscountTicketModule
-      ),
-  },
 ];
 
 @NgModule({
