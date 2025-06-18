@@ -6,8 +6,8 @@ import {
 } from 'app/shared/interfaces/category-module.interface';
 import { catchError, finalize, Observable, of, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
-import { ApiResponse } from '../interfaces/api-response.interface';
 import { lastValueFrom } from 'rxjs';
+import { CategoryService } from 'app/core/views/config-module/screens/category-module/category.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +15,8 @@ import { lastValueFrom } from 'rxjs';
 export class CategoryState {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl;
+
+  private categoryService = inject(CategoryService);
 
   private state = signal<CategoryModuleState>({
     categoryList: [],
@@ -36,15 +38,11 @@ export class CategoryState {
     this.setCategoryList([]);
 
     lastValueFrom(
-      this.http
-        .get<ApiResponse<Category[]>>(`${this.apiUrl}category/all`, {
-          headers: { 'Skip-Loader': 'true' },
-        })
-        .pipe(
-          tap(data => this.setCategoryList(data.dados)),
-          catchError(error => this.handleError(error)),
-          finalize(() => this.setLoading(false))
-        )
+      this.categoryService.getCategories().pipe(
+        tap(data => this.setCategoryList(data.dados)),
+        catchError(error => this.handleError(error)),
+        finalize(() => this.setLoading(false))
+      )
     );
   }
 

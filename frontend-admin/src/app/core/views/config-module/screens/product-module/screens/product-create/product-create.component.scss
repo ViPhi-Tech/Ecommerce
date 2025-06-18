@@ -2,3 +2,8 @@
   color: #007bff !important;
   font-weight: 600;
 }
+
+.scroll-form {
+  overflow-y: auto;
+  height: calc(100vh - 220px)
+}

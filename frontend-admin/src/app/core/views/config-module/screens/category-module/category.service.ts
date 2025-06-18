@@ -1,24 +1,32 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
+import { Category } from 'app/shared/interfaces/category-module.interface';
 import { Observable, Subject } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CategoryService {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl + 'category';
 
-   private refreshSubj = new Subject<any>();
+  private refreshSubj = new Subject<any>();
   refresh$ = this.refreshSubj.asObservable();
 
   constructor() {}
 
+  getCategories(skipLoader = true): Observable<ApiResponse> {
+    const headers = skipLoader ? { 'Skip-Loader': 'true' } : undefined;
+    return this.http.get<ApiResponse<Category[]>>(`${this.apiUrl}/all`, {
+      headers,
+    });
+  }
+
   getCategoryById(categoryId: string): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.apiUrl}/${categoryId}`, {
-      params: { id: categoryId }
+      params: { id: categoryId },
     });
   }
 
@@ -39,5 +47,4 @@ export class CategoryService {
   refreshCategoryList() {
     this.refreshSubj.next(true);
   }
-
 }

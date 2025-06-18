@@ -21,6 +21,8 @@ import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { CoreService } from 'app/shared/services/core.service';
+import { CategoryState } from 'app/shared/store/category.state';
 
 @Component({
   selector: 'fuse-product-create',
@@ -38,11 +40,13 @@ import { ToastModule } from 'primeng/toast';
 export class ProductCreateComponent implements OnInit {
   destroyedRef = inject(DestroyRef);
   private router = inject(Router);
+  private coreService = inject(CoreService);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
   private toast = inject(MessageService);
 
   private productService = inject(ProductService);
+  categoryState = inject(CategoryState);
 
   @ViewChild('drawerRef') drawerRef!: Drawer;
 
@@ -56,38 +60,19 @@ export class ProductCreateComponent implements OnInit {
 
   productForm!: FormGroup;
 
-  categories = signal([
-    { label: 'Eletrônicos', value: 'eletronicos' },
-    { label: 'Roupas', value: 'roupas' },
-    { label: 'Alimentos', value: 'alimentos' },
-    { label: 'Móveis', value: 'moveis' },
-    { label: 'Brinquedos', value: 'brinquedos' },
-    { label: 'Livros', value: 'livros' },
-    { label: 'Beleza', value: 'beleza' },
-    { label: 'Esportes', value: 'esportes' },
-    { label: 'Saúde', value: 'saude' },
-  ]);
-
-  brands = signal([
-    { label: 'Apple', value: 'apple' },
-    { label: 'Samsung', value: 'samsung' },
-    { label: 'Sony', value: 'sony' },
-    { label: 'LG', value: 'lg' },
-    { label: 'Nike', value: 'nike' },
-    { label: 'Adidas', value: 'adidas' },
-    { label: 'Puma', value: 'puma' },
-    { label: 'Reebok', value: 'reebok' },
-  ]);
+  categories = signal([]);
 
   constructor() {}
 
   ngOnInit(): void {
+    this.coreService.setPageTitle('', '');
+
     this.productForm = this.formBuilder.group({
       id: [''],
       name: ['', [Validators.required, Validators.maxLength(255)]],
       ean: ['', [Validators.required]],
       sku: ['', [Validators.required]],
-      category: ['', [Validators.required]],
+      categoryId: ['', [Validators.required]],
       image: [''],
       brand: [''],
       initialPrice: [0, [Validators.required]],
@@ -97,12 +82,6 @@ export class ProductCreateComponent implements OnInit {
       description: ['', [Validators.required]],
       companyId: ['1'],
     });
-
-    this.productForm.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyedRef))
-      .subscribe(value => {
-        console.log(value);
-      });
 
     // pegar o id da rota, se existir
     this.activatedRoute.params
@@ -114,44 +93,38 @@ export class ProductCreateComponent implements OnInit {
           this.loadProduct(id);
         } else {
           this.visible.set(true);
-          this.productForm.patchValue({
-            name: 'teste ',
-            ean: Array.from({ length: 13 }, () =>
-              Math.floor(Math.random() * 10)
-            ).join(''),
-            sku: Array.from({ length: 13 }, () =>
-              Math.floor(Math.random() * 10)
-            ).join(''),
-            category: 'categoria',
-            image: '',
-            brand: 'marca',
-            initialPrice: 90,
-            finalPrice: 150,
-            stock: 90,
-            shortDescription: 'Descrição curta',
-            description: 'Descrição longa',
-          });
+          this.loadProduct();
         }
       });
   }
 
-  loadProduct(id: string): void {
-    this.productService
-      .getProductById(id)
+  loadProduct(id?: string): void {
+    this.categoryState.getCategoryList();
+    
+    if (!id) {
+      return;
+    }
+
+    this.productService.getProductById(id)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: (response: ApiResponse) => {
-          this.productForm.patchValue(response.dados);
           this.visible.set(true);
+          this.productForm.patchValue(response.dados);
         },
-        error: () => {
+        error: error => {
           this.toast.add({
             severity: 'error',
             summary: 'Erro',
             detail: 'Erro ao carregar produto',
           });
+          console.error('Erro ao carregar produto:', error);
         },
       });
+  }
+
+  getCategories() {
+    
   }
 
   onSubmit(e: Event): void {
@@ -176,7 +149,9 @@ export class ProductCreateComponent implements OnInit {
           this.toast.add({
             severity: 'success',
             summary: 'Sucesso',
-            detail: this.productForm.value.id ? 'Produto atualizado com sucesso!' : 'Produto criado com sucesso!',
+            detail: this.productForm.value.id
+              ? 'Produto atualizado com sucesso!'
+              : 'Produto criado com sucesso!',
           });
           this.productService.refreshProductList();
           this.onCloseDrawer();
@@ -191,8 +166,9 @@ export class ProductCreateComponent implements OnInit {
       });
   }
 
-  closeDrawer(e: Event) {
-    this.drawerRef.close(e);
+  back() {
+    this.onCloseDrawer();
+    this.router.navigate(['dashboard/config/products'])
   }
 
   onCloseDrawer() {

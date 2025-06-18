@@ -14,7 +14,6 @@ import { CategoryState } from 'app/shared/store/category.state';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { CategoryService } from '../../category.service';
-import { JsonPipe } from '@angular/common';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -22,13 +21,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   selector: 'fuse-category-list',
   templateUrl: './category-list.component.html',
   styleUrls: ['./category-list.component.scss'],
-  imports: [
-    TableComponent,
-    ButtonModule,
-    DialogModule,
-    ButtonModule,
-    JsonPipe
-  ],
+  imports: [TableComponent, ButtonModule, DialogModule, ButtonModule],
 })
 export class CategoryListComponent implements OnInit {
   private toast = inject(MessageService);
@@ -39,14 +32,14 @@ export class CategoryListComponent implements OnInit {
   private coreService = inject(CoreService);
   state = inject(CategoryState);
 
-  visible = false
+  visible = false;
 
   tableConfig: WritableSignal<TableConfig> = signal({
     rowsPerPageOptions: [5, 10, 20],
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
-     headerButtons: [
+    headerButtons: [
       {
         icon: 'pi pi-plus',
         label: 'Adicionar',
@@ -96,9 +89,8 @@ export class CategoryListComponent implements OnInit {
     ],
   });
 
-  constructor() {
-  }
-  
+  constructor() {}
+
   ngOnInit() {
     this.state.getCategoryList();
     this.coreService.setPageTitle(
@@ -108,7 +100,7 @@ export class CategoryListComponent implements OnInit {
   }
 
   deleteCategory(id: string) {
-     this.confirmationService.confirm({
+    this.confirmationService.confirm({
       message: 'Você tem certeza que deseja excluir esta categoria?',
       header: 'Confirmação de Exclusão',
       icon: 'pi pi-exclamation-triangle text-red-500',
@@ -140,5 +132,4 @@ export class CategoryListComponent implements OnInit {
       },
     });
   }
-
 }

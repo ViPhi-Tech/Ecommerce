@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -52,7 +59,7 @@ export class CategoryCreateComponent implements OnInit {
   ngOnInit() {
     this.activatedRoute.params
       .pipe(takeUntilDestroyed(this.destroyedRef))
-      .subscribe((params) => {
+      .subscribe(params => {
         if (params['id']) {
           this.loadCategory(params['id']);
           this.title.set('Editar Categoria');
@@ -85,7 +92,6 @@ export class CategoryCreateComponent implements OnInit {
     event.preventDefault();
     event.stopPropagation();
 
-
     if (this.categoryForm.invalid) {
       this.toast.add({
         severity: 'warn',
@@ -95,27 +101,27 @@ export class CategoryCreateComponent implements OnInit {
       return;
     }
 
-    this.categoryService
-      .upsertCategory(this.categoryForm.value)
-      .subscribe({
-        next: () => {
-          this.toast.add({
-            severity: 'success',
-            summary: 'Sucesso',
-            detail: this.categoryForm.value.id ? 'Categoria atualizada com sucesso!' : 'Categoria criada com sucesso!',
-          });
-          
-          this.state.getCategoryList();
-          this.closeDialog();
-        },
-        error: () => {
-          this.toast.add({
-            severity: 'error',
-            summary: 'Erro',
-            detail: 'Erro ao salvar categoria',
-          });
-        },
-      });
+    this.categoryService.upsertCategory(this.categoryForm.value).subscribe({
+      next: () => {
+        this.toast.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: this.categoryForm.value.id
+            ? 'Categoria atualizada com sucesso!'
+            : 'Categoria criada com sucesso!',
+        });
+
+        this.state.getCategoryList();
+        this.closeDialog();
+      },
+      error: () => {
+        this.toast.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao salvar categoria',
+        });
+      },
+    });
   }
 
   closeDialog(e = new Event('close')): void {
