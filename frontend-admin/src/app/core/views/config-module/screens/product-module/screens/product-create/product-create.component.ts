@@ -77,7 +77,7 @@ export class ProductCreateComponent implements OnInit {
       brand: [''],
       initialPrice: [0, [Validators.required]],
       finalPrice: [0, [Validators.required]],
-      stock: ['', [Validators.required]],
+      quantity: ['', [Validators.required]],
       shortDescription: [''],
       description: ['', [Validators.required]],
       companyId: ['1'],
