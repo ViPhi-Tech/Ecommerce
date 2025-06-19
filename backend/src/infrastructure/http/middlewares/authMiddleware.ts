@@ -29,7 +29,7 @@ export async function authenticate(request: FastifyRequest, reply: FastifyReply)
 
     // Verificar o token
     const decoded = jwt.verify(token, JWT_SECRET);
-    console.log('Token decodificado:', decoded);
+    //console.log('Token decodificado:', decoded);
 
     // Adicionar o usuário decodificado à requisição
     request.user = decoded as any;

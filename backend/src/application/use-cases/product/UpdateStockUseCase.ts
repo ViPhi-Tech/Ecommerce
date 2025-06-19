@@ -10,11 +10,23 @@ export class UpdateStockUseCase {
     }
     async execute(input: UpdateStockInput): Promise<Stock> {
 
-        return await this.productRepository.updateStock(
+        const updatedStock = await this.productRepository.updateStock(
             input.productId,
             input.quantity,
             input.companyId
         );
+
+        // Determina o tipo baseado na quantidade ou usa o tipo fornecido
+        const movementType = input.quantity > 0 ? 'IN' : 'OUT';
+
+        await this.productRepository.upsertStockMovement({
+            sotckId: updatedStock?.id ?? 0,
+            quantity: Math.abs(input.quantity),
+            type: movementType,
+            user: input.user
+        });
+
+        return updatedStock;
 
     }
 }

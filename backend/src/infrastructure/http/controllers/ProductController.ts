@@ -26,9 +26,12 @@ export class ProductController {
             const productData = request.body as ProductCreateDTO;
             const product = await this.createProductUseCase.execute(productData)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: product})
-        } catch (error) {
+        } catch (error: any) {
             console.log(error)
-            return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false,  descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR});
+            return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ 
+                status: false,  
+                descricao: error.message || HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR
+            });
         }
     };
 

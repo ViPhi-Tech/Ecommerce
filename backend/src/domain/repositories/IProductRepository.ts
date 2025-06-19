@@ -1,4 +1,4 @@
-import { Product, Stock } from "../entities/Product";
+import { Product, Stock, stockMovement } from "../entities/Product";
 
 export interface IProductRepository {
     create(data: Product): Promise<Product>;
@@ -8,4 +8,5 @@ export interface IProductRepository {
     delete(id: number): Promise<void>;
     updateStock(sku: number, quantity: number, companyId?: number): Promise<Stock>;
     updateMultipleStocks(items: { sku: number; quantity: number }[]): Promise<Stock[]>;
+    upsertStockMovement(data: stockMovement): Promise<void>
 }

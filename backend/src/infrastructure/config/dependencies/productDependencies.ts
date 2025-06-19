@@ -10,12 +10,12 @@ import {ProductController} from "../../http/controllers/ProductController";
 
 export const productRepository = new ProductRepository(prisma);
 
-const createProductUseCase = new CreateProductUseCase(productRepository);
 const findByIdProductUseCase = new FindByIdProductUseCase(productRepository);
 const updateStockUseCase = new UpdateStockUseCase(productRepository);
 const updateProductUseCase = new UpdateProductUseCase(productRepository);
 const deleteProductUseCase = new DeleteProductUseCase(productRepository);
 const findAllProductUseCase = new FindAllProductUseCase(productRepository);
+const createProductUseCase = new CreateProductUseCase(productRepository, updateStockUseCase);
 
 export const productController = new ProductController(
     createProductUseCase,

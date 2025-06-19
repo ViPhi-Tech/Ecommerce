@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { Product, Stock } from '../../../domain/entities/Product';
+import { Product, Stock, stockMovement } from '../../../domain/entities/Product';
 import { IProductRepository } from "../../../domain/repositories/IProductRepository";
 import {ProductCreateDTO, ProductDTO} from "../../http/dto/Product.dto";
 
@@ -8,13 +8,21 @@ export class ProductRepository implements IProductRepository {
     }
 
     async create(data: ProductCreateDTO): Promise<Product> {
-        return this.prisma.product.create({
-            data
+        const created = await this.prisma.product.create({
+            data,
+            include :{
+              stock: true
+            }
         });
+        console.log(created)
+        return created
     };
 
     async findAll(): Promise<(Product)[]> {
       return this.prisma.product.findMany({
+        where: {
+          isActive: true
+        },
         include: {
           stock: true
         }
@@ -23,7 +31,7 @@ export class ProductRepository implements IProductRepository {
 
     async findById(id: number): Promise<Product | null> {
         return this.prisma.product.findUnique({
-            where: {id}
+            where: {id, isActive: true}
         });
     }
 
@@ -35,10 +43,12 @@ export class ProductRepository implements IProductRepository {
     }
 
     async delete(id: number): Promise<void> {
-      const deleted = await this.prisma.product.delete({
-        where: {id}
+      await this.prisma.product.update({
+        where: {id},
+        data: {
+          isActive: false
+        }
       });
-      console.log(deleted)
     };
 
     async updateStock(sku: number, quantity: number, companyId: number): Promise<Stock> {
@@ -68,5 +78,16 @@ export class ProductRepository implements IProductRepository {
       
       return await this.prisma.$transaction(operations);
     };
+
+
+    async upsertStockMovement(data: stockMovement): Promise<void> {
+        await this.prisma.stockMovement.create({
+          data: {
+            stockId: data.sotckId,
+            quantity: data.quantity,
+            type: data.type as 'IN' | 'OUT'
+          }
+        })
+    }
     
 }

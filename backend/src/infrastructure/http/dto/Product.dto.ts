@@ -26,6 +26,8 @@ export const productCreateSchema = z.object({
     sku: z.string().min(1, { message: "SKU é obrigatório" }),
     cost: z.number().optional(),
     companyId: z.number().min(1, { message: "ID da tabela (company)" }),
+    categoryId: z.number().min(1, { message: "ID da tabela (category)" }),
+    quantity: z.number().min(0),
 });
 
 export const productIDSchema = z.object({

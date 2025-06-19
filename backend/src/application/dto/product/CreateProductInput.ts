@@ -2,6 +2,7 @@ export interface CreateProductInput {
     id?: number
     name: string;
     ean: string;
+    brand?: string | null;
     initialPrice: number;
     finalPrice: number,
     description?: string | null;
@@ -9,4 +10,7 @@ export interface CreateProductInput {
     image?: string | null;
     sku: string;
     companyId?: number | null;
+    categoryId?: number | null;
+    quantity?: number;
+    user?: number | null;
   }
