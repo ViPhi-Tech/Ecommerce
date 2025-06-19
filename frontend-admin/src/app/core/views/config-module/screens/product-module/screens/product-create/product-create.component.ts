@@ -53,35 +53,19 @@ export class ProductCreateComponent implements OnInit {
   formGroup = this.formBuilder.group({});
 
   // signals
-  visible = signal(false);
   title = signal('Adicionar Produto');
   subtitle = signal('Preencha os dados do novo produto abaixo');
   submitButtonLabel = signal('Salvar');
+  isLoading = signal(true);
 
   productForm!: FormGroup;
-
-  categories = signal([]);
 
   constructor() {}
 
   ngOnInit(): void {
     this.coreService.setPageTitle('', '');
 
-    this.productForm = this.formBuilder.group({
-      id: [''],
-      name: ['', [Validators.required, Validators.maxLength(255)]],
-      ean: ['', [Validators.required]],
-      sku: ['', [Validators.required]],
-      categoryId: ['', [Validators.required]],
-      image: [''],
-      brand: [''],
-      initialPrice: [0, [Validators.required]],
-      finalPrice: [0, [Validators.required]],
-      quantity: ['', [Validators.required]],
-      shortDescription: [''],
-      description: ['', [Validators.required]],
-      companyId: ['1'],
-    });
+    this.initForm();
 
     // pegar o id da rota, se existir
     this.activatedRoute.params
@@ -90,18 +74,27 @@ export class ProductCreateComponent implements OnInit {
         const id = params['id'];
         if (id) {
           this.title.set('Editar Produto');
-          this.loadProduct(id);
+          this.loadInfos(id);
+          this.coreService.setPageTitle(
+            'Editar Produto',
+            'Preencha os dados do produto abaixo'
+          );
+          this.blockFields()
         } else {
-          this.visible.set(true);
-          this.loadProduct();
+          this.coreService.setPageTitle(
+            'Adicionar Produto',
+            'Preencha os dados do novo produto abaixo'
+          );
+          this.loadInfos();
         }
       });
   }
 
-  loadProduct(id?: string): void {
-    this.categoryState.getCategoryList();
+  async loadInfos(id?: string): Promise<void> {
+    await this.categoryState.getCategoryList();
     
     if (!id) {
+      this.isLoading.set(false);
       return;
     }
 
@@ -109,10 +102,11 @@ export class ProductCreateComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: (response: ApiResponse) => {
-          this.visible.set(true);
           this.productForm.patchValue(response.dados);
+          this.isLoading.set(false);
         },
         error: error => {
+          this.isLoading.set(false);
           this.toast.add({
             severity: 'error',
             summary: 'Erro',
@@ -123,8 +117,22 @@ export class ProductCreateComponent implements OnInit {
       });
   }
 
-  getCategories() {
-    
+  initForm(): void {
+    this.productForm = this.formBuilder.group({
+      id: [''],
+      name: ['', [Validators.required, Validators.maxLength(255)]],
+      ean: ['', [Validators.required]],
+      sku: ['', [Validators.required]],
+      categoryId: ['', [Validators.required]],
+      image: [''],
+      brand: [''],
+      initialPrice: [0, [Validators.min(.01), Validators.required]],
+      finalPrice: [0, [Validators.min(.01), Validators.required]],
+      quantity: ['', [Validators.required]],
+      shortDescription: [''],
+      description: ['', [Validators.required]],
+      companyId: ['1'],
+    });
   }
 
   onSubmit(e: Event): void {
@@ -142,7 +150,7 @@ export class ProductCreateComponent implements OnInit {
     }
 
     this.productService
-      .upsertProduct(this.productForm.value)
+      .upsertProduct(this.productForm.getRawValue())
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: () => {
@@ -153,8 +161,7 @@ export class ProductCreateComponent implements OnInit {
               ? 'Produto atualizado com sucesso!'
               : 'Produto criado com sucesso!',
           });
-          this.productService.refreshProductList();
-          this.onCloseDrawer();
+          this.back();
         },
         error: () => {
           this.toast.add({
@@ -166,17 +173,13 @@ export class ProductCreateComponent implements OnInit {
       });
   }
 
-  back() {
-    this.onCloseDrawer();
-    this.router.navigate(['dashboard/config/products'])
+  blockFields() {
+    this.productForm.get('sku')?.disable();
+    this.productForm.get('ean')?.disable();
+    this.productForm.get('quantity')?.disable();
   }
 
-  onCloseDrawer() {
-    this.visible.set(false);
-    setTimeout(() => {
-      this.router.navigate([{ outlets: { drawer: null } }], {
-        relativeTo: this.activatedRoute.root,
-      });
-    }, 300);
+  back() {
+    this.router.navigate(['dashboard/config/products'])
   }
 }

@@ -2,9 +2,10 @@
   (onmouseenter)="onMouseEnter()"
   (onmouseleave)="onMouseLeave()"
   (click)="toggleMenu(!item().visible)"
-  routerLinkActive="text-gray-900 dark:text-white dark:bg-[#1F1F23] bg-primary-700 dark:bg-[#1F1F23]"
+  routerLinkActive="menu-item-active"
+  [routerLinkActiveOptions]="{ exact: true }"
   [routerLink]="item().route"
-  class="flex items-center px-3 py-2 mb-1 rounded-md transition-colors text-white dark:text-gray-300 dark:hover:text-white hover:bg-primary-700 dark:hover:bg-[#1F1F23] {{
+  class="menu-item {{
     addictionalClass()
   }}"
 >

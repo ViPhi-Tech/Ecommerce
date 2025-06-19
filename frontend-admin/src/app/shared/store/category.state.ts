@@ -32,12 +32,12 @@ export class CategoryState {
   error = computed(() => this.state().error);
   currentView = computed(() => this.state().view);
 
-  getCategoryList(): void {
+  async getCategoryList(): Promise<void> {
     this.setLoading(true);
     this.setError(null);
     this.setCategoryList([]);
 
-    lastValueFrom(
+    await lastValueFrom(
       this.categoryService.getCategories().pipe(
         tap(data => this.setCategoryList(data.dados)),
         catchError(error => this.handleError(error)),
@@ -51,8 +51,6 @@ export class CategoryState {
       ...state,
       categoryList,
     }));
-
-    console.log('Category list updated:', this.state().categoryList);
   }
 
   setView(view: CategoryModuleState['view']) {

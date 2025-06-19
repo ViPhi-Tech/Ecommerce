@@ -6,6 +6,7 @@ import { PasswordModule } from 'primeng/password';
 import { MessageModule } from 'primeng/message';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'fuse-input',
@@ -18,6 +19,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
     MessageModule,
     TextareaModule,
     InputNumberModule,
+    SkeletonModule
   ],
 })
 export class InputComponent implements OnInit {
@@ -40,8 +42,10 @@ export class InputComponent implements OnInit {
   max = input<number>(Number.MAX_SAFE_INTEGER);
 
   isRequired = signal(false);
+  isLoading = input<boolean>(false);
   feedback = input<boolean>(false);
   errorMessage = input<string>('');
+
   constructor() {}
 
   ngOnInit() {

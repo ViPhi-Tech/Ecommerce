@@ -21,7 +21,7 @@ export class MenuComponent implements OnInit {
         {
           label: 'Pedidos',
           icon: 'lucideFileText',
-          route: 'orders',
+          route: '/dashboard/orders',
           visible: true,
         },
       ],
@@ -30,64 +30,58 @@ export class MenuComponent implements OnInit {
       groupTitle: 'Cadastros',
       items: [
         {
-          label: 'Produtos',
-          icon: 'lucideBox',
-          route: 'config/products',
-          visible: true,
+          label: 'Estoque',
+          icon: 'lucideArchive',
+          visible: false,
+          items: [
+            {
+              label: 'Produtos',
+              icon: 'lucideBox',
+              parent: 'Estoque',
+              route: '/dashboard/config/products/list',
+              visible: true,
+            },
+            {
+              label: 'Novo Produto',
+              icon: 'lucidePlus',
+              parent: 'Estoque',
+              route: '/dashboard/config/products/new',
+              visible: true,
+            },
+            {
+              label: 'Categorias',
+              icon: 'lucideTags',
+              route: '/dashboard/config/categories/list',
+              visible: true,
+            },
+            
+          ]
         },
         // categorias
-        {
-          label: 'Categorias',
-          icon: 'lucideTags',
-          route: 'config/categories',
-          visible: true,
-        },
+        
       ],
     },
-    // {
-    //   groupTitle: 'Estoque',
-    //   items: [
-    //     {
-    //       label: 'Estoque global',
-    //       icon: 'lucideArchive',
-    //       route: 'storage',
-    //       visible: true,
-    //     },
-    //   ],
-    // },
-    // {
-    //   groupTitle: 'Financeiro',
-    //   items: [
-    //     {
-    //       label: 'Transações',
-    //       icon: 'lucideWallet',
-    //       route: 'transactions',
-    //       visible: true,
-    //     },
-    //     {
-    //       label: 'Notas Fiscais',
-    //       icon: 'lucideReceipt',
-    //       route: 'config/invoices',
-    //       visible: true,
-    //     },
-    //     {
-    //       label: 'Pagamentos',
-    //       icon: 'lucideCreditCard',
-    //       route: 'payments',
-    //       visible: true,
-    //     },
-    //   ],
-    // },
-    // {
-    //   groupTitle: 'Segurança',
-    //   items: [
-    //     { label: 'Permissões', icon: 'lucideShield', route: 'permissions' },
-    //     { label: 'Usuários', icon: 'lucideUsersRound', route: 'users' },
-    //   ],
-    // },
   ];
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.updateMenuVisibility();
+  }
+
+  updateMenuVisibility() {
+    const currentRoute = window.location.pathname;
+    this.menu.forEach(group => {
+      group.items.forEach(item => {
+        if (item.route && currentRoute.startsWith(item.route)) {
+          item.visible = true;
+        } else if (item.items) {
+          item.visible = item.items.some(subItem => 
+            subItem.route && currentRoute.startsWith(subItem.route)
+          );
+        }
+      });
+    });
+    this.menu = [...this.menu];
+  }
 }

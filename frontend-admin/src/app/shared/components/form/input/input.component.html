@@ -1,5 +1,5 @@
 <div class="w-full label-position {{ labelPosition() }} flex flex-col gap-1">
-  @if (label()) {
+  @if (label() && !isLoading()) {
     <label
       [for]="idRef()"
       class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2"
@@ -11,7 +11,7 @@
     </label>
   }
 
-  @if (type() === 'text') {
+  @if (type() === 'text' && !isLoading()) {
     <input
       pInputText
       [formControl]="control()"
@@ -23,7 +23,7 @@
     />
   }
 
-  @if (type() === 'number') {
+  @if (type() === 'number' && !isLoading()) {
     <input
       type="number"
       pInputText
@@ -36,7 +36,7 @@
     />
   }
 
-  @if (type() === 'password') {
+  @if (type() === 'password' && !isLoading()) {
     <p-password
       [formControl]="control()"
       styleClass="w-full"
@@ -46,7 +46,7 @@
     />
   }
 
-  @if (type() === 'price') {
+  @if (type() === 'price' && !isLoading()) {
     <p-inputnumber
       [formControl]="control()"
       inputId="{{ idRef() }}"
@@ -59,7 +59,7 @@
     />
   }
 
-  @if (type() === 'textarea') {
+  @if (type() === 'textarea' && !isLoading()) {
     <textarea
       pTextarea
       [formControl]="control()"
@@ -68,6 +68,16 @@
       [name]="idRef()"
       [rows]="rows()"
     ></textarea>
+  }
+
+  @if(isLoading()) {
+    <p-skeleton height="1rem" styleClass="mb-2" width="100px" />
+    
+    @if (type() === 'textarea') {
+      <p-skeleton height="6rem" styleClass="mb-2" width="100%" />
+    } @else {
+      <p-skeleton height="2rem" styleClass="mb-2" width="100%" />
+    }
   }
 </div>
 

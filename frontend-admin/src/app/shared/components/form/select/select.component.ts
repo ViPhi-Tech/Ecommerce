@@ -4,12 +4,13 @@ import { Router } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'fuse-select',
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
-  imports: [SelectModule, ReactiveFormsModule, NgIcon, ButtonModule],
+  imports: [SelectModule, ReactiveFormsModule, NgIcon, ButtonModule, SkeletonModule],
 })
 export class SelectComponent implements OnInit {
   private router = inject(Router);
@@ -29,6 +30,7 @@ export class SelectComponent implements OnInit {
   addictionalClass = input('');
 
   isRequired = signal(false);
+  isLoading = input<boolean>(false);
   quickAdd = input<any[]>([]);
 
   constructor() {}

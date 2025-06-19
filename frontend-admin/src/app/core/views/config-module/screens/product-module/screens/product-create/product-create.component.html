@@ -1,17 +1,10 @@
 <div class="p-8 animate-fade-in">
-
-  <h2 class="text-2xl font-semibold leading-none tracking-tight">
-    {{ title() }}
-  </h2>
-  <p class="text-sm text-muted-foreground">
-    Preencha os dados do novo produto abaixo
-  </p>
-
   <form class="flex flex-col gap-4 mt-3 scroll-form">
     <div>
       <form [formGroup]="productForm" class="row space-y-4">
         <div class="col-12 md:col-12">
           <fuse-input
+            [isLoading]="isLoading()"
             label="Nome do Produto"
             [control]="productForm.get('name')"
             placeholder="Ex: Smartphone Galaxy S22 Ultra"
@@ -20,6 +13,7 @@
 
         <div class="col-12 md:col-6">
           <fuse-input
+            [isLoading]="isLoading()"
             label="Ean"
             type="number"
             [control]="productForm.get('ean')"
@@ -29,6 +23,7 @@
 
         <div class="col-12 md:col-6">
           <fuse-input
+            [isLoading]="isLoading()"
             label="Código/SKU"
             [control]="productForm.get('sku')"
             placeholder="Ex: SM-S22U-256GB-BLK"
@@ -41,6 +36,7 @@
             [items]="categoryState.categoryList()"
             valueRef="id"
             labelRef="name"
+            [isLoading]="isLoading()"
             [quickAdd]="['categories', 'new']"
             [control]="productForm.get('categoryId')"
             placeholder="Adicione uma cetegoria"
@@ -49,6 +45,7 @@
 
         <div class="col-12 md:col-6">
           <fuse-input
+            [isLoading]="isLoading()"
             label="Marca / Fabricante"
             [control]="productForm.get('brand')"
             placeholder="Ex: Samsung"
@@ -57,8 +54,10 @@
 
         <div class="col-12 md:col-6">
           <fuse-input
+            [isLoading]="isLoading()"
             type="price"
             label="Preço de custo"
+            [min]="1"
             [control]="productForm.get('initialPrice')"
             placeholder="R$ 0,00"
           />
@@ -66,6 +65,7 @@
 
         <div class="col-12 md:col-6">
           <fuse-input
+            [isLoading]="isLoading()"
             type="price"
             label="Preço de venda"
             [control]="productForm.get('finalPrice')"
@@ -75,15 +75,17 @@
 
         <div class="col-12 md:col-6">
           <fuse-input
-            label="Estoque disponível"
+            [isLoading]="isLoading()"
+            label="Estoque inicial"
             type="number"
             [control]="productForm.get('quantity')"
-            placeholder="Adicione a quantidade disponível"
+            placeholder="Adicione a quantidade inicial em estoque"
           />
         </div>
 
         <div class="col-12">
           <fuse-input
+            [isLoading]="isLoading()"
             type="textarea"
             label="Descrição curta"
             [control]="productForm.get('shortDescription')"
@@ -93,6 +95,7 @@
 
         <div class="col-12">
           <fuse-input
+            [isLoading]="isLoading()"
             type="textarea"
             label="Descrição"
             [rows]="5"

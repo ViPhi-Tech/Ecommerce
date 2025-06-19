@@ -1,34 +1,39 @@
 <div class="w-full label-position {{ labelPosition() }}">
-  @if (label()) {
-    <label
-      for="icondisplay"
-      class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-right"
-    >
-      {{ label() }}
-      @if (isRequired()) {
-        <span class="text-red-500">*</span>
-      }
-    </label>
-  }
-  <div class="flex items-center">
-    <p-select
-      [options]="items()"
-      [size]="size()"
-      [formControl]="control()"
-      [optionLabel]="labelRef()"
-      [optionValue]="valueRef()"
-      [placeholder]="placeholder()"
-      [filter]="true"
-      [filterBy]="labelRef()"
-      appendTo="body"
-      [class]="addictionalPrimeClass()"
-      [styleClass]="addictionalClass()"
-      class="animate-fadein"
-    />
-    @if (quickAdd()) {
-      <p-button variant="text" (onClick)="redirectToQuickAdd()" class="animate-fadein" severity="success">
-        <ng-icon name="lucideBadgePlus"/>
-      </p-button>
+  @if (!isLoading()) {
+    @if (label()) {
+      <label
+        for="icondisplay"
+        class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-right"
+      >
+        {{ label() }}
+        @if (isRequired()) {
+          <span class="text-red-500">*</span>
+        }
+      </label>
     }
-  </div>
+    <div class="flex items-center">
+      <p-select
+        [options]="items()"
+        [size]="size()"
+        [formControl]="control()"
+        [optionLabel]="labelRef()"
+        [optionValue]="valueRef()"
+        [placeholder]="placeholder()"
+        [filter]="true"
+        [filterBy]="labelRef()"
+        appendTo="body"
+        [class]="addictionalPrimeClass()"
+        [styleClass]="addictionalClass()"
+        class="animate-fadein"
+      />
+      @if (quickAdd()) {
+        <p-button variant="text" (onClick)="redirectToQuickAdd()" class="animate-fadein" severity="success">
+          <ng-icon name="lucideBadgePlus"/>
+        </p-button>
+      }
+    </div>
+  } @else {
+    <p-skeleton height="1rem" styleClass="mb-2" width="100px" />
+    <p-skeleton height="2rem" styleClass="mb-2" width="100%" />
+  }
 </div>

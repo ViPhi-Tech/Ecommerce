@@ -6,7 +6,8 @@ import { heightAnimation } from 'app/shared/utils/animations';
 export interface MenuItem {
   label: string;
   icon: string;
-  route: string;
+  parent?: string;
+  route?: string;
   items?: MenuItem[];
   visible?: boolean;
 }
