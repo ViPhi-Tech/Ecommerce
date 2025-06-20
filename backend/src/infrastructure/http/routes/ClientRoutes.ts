@@ -29,7 +29,7 @@ export default async function clientRoutes(
     handler: clientController.findById.bind(clientController),
   });
 
-  fastify.put('/:id', {
+  fastify.put('/update/:id', {
     schema: {
       tags: ['client'],
       params: clientIdJsonSchema,
@@ -38,7 +38,7 @@ export default async function clientRoutes(
     handler: clientController.update.bind(clientController),
   });
 
-  fastify.delete('/:id', {
+  fastify.delete('/delete/:id', {
     schema: {
       tags: ['client'],
       params: clientIdJsonSchema,

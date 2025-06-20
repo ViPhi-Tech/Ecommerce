@@ -72,7 +72,7 @@ export class ClientController {
   async delete(request: FastifyRequest<{ Params: ClientID }>, reply: FastifyReply): Promise<ApiResponse> {
     try {
       await this.deleteClientUseCase.execute(request.params.id);
-      return reply.code(204).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: {}});
+      return reply.code(HTTP_STATUS.API_STATUS_NO_CONTENT).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: {}});
     } catch (error: any) {
       return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({status:false, descricao: error.message || HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR })
     }

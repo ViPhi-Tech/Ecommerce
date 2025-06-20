@@ -11,11 +11,15 @@ export class ClientRepository implements IClientRepository {
   }
 
   async findAll(): Promise<Client[]> {
-    return this.prisma.client.findMany() as any;
+    return this.prisma.client.findMany(
+      {
+        where: { isActive: true }
+      }
+    ) as any;
   }
 
   async findById(id: number): Promise<Client | null> {
-    return this.prisma.client.findUnique({ where: { id } }) as any;
+    return this.prisma.client.findUnique({ where: { id, isActive: true } }) as any;
   }
 
   async update(id: number, data: ClientUpdateDTO): Promise<Client> {
@@ -23,6 +27,14 @@ export class ClientRepository implements IClientRepository {
   }
 
   async delete(id: number): Promise<void> {
-    await this.prisma.client.delete({ where: { id } });
+    const deleted = await this.prisma.client.update(
+      {
+        where: { id },
+        data : {
+          isActive: false
+        }
+      }
+    );
+    console.log(deleted)
   }
 } 

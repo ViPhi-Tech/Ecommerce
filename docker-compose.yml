@@ -16,8 +16,8 @@ services:
 
   frontend:
     build:
-      context: .                         # <-- VOLTE PARA A RAIZ DO PROJETO
-      dockerfile: frontend-admin/Dockerfile # <-- INDIQUE O CAMINHO CORRETO PARA O DOCKERFILE
+      context: .                        
+      dockerfile: frontend-admin/Dockerfile
     container_name: ecommerce-frontend-1
     ports:
       - "80:80"
