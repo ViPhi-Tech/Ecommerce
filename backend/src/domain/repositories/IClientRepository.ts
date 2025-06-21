@@ -5,5 +5,6 @@ export interface IClientRepository {
   findAll(): Promise<Client[]>;
   findById(id: number): Promise<Client | null>;
   update(id: number, data: Partial<Client>): Promise<Client>;
+  findByDocument(document: string): Promise<Client | null>;
   delete(id: number): Promise<void>;
 } 

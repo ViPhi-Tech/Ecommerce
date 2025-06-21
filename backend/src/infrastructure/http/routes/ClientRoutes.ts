@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { clientController } from '../../config/dependencies/clientDependencies';
-import { clientCreateJsonSchema, clientIdJsonSchema, clientUpdateJsonSchema } from '../dto/Client.dto';
+import { clientCreateJsonSchema, clientIdJsonSchema, clientUpdateJsonSchema, clientDocumentJsonSchema } from '../dto/Client.dto';
 
 export default async function clientRoutes(
   fastify: FastifyInstance,
@@ -14,14 +14,14 @@ export default async function clientRoutes(
     handler: clientController.create.bind(clientController),
   });
 
-  fastify.get('/', {
+  fastify.get('/getAll', {
     schema: {
       tags: ['client'],
     },
     handler: clientController.findAll.bind(clientController),
   });
 
-  fastify.get('/:id', {
+  fastify.get('findById/:id', {
     schema: {
       tags: ['client'],
       params: clientIdJsonSchema,
@@ -45,4 +45,17 @@ export default async function clientRoutes(
     },
     handler: clientController.delete.bind(clientController),
   });
+
+
+  fastify.get('findByDocument/:document', {
+    schema: {
+      tags: ['client'],
+      params: clientDocumentJsonSchema
+    },
+
+    handler: clientController.findyByDocument.bind(clientController)
+  });
+
+
+
 }

@@ -24,6 +24,10 @@ export const clientIDSchema = z.object({
   id: z.number().min(1, { message: 'ID do cliente é obrigatório' })
 });
 
+export const clientDocumentSchema = z.object({
+  document: z.string().min(1, {message: 'Documento do cliente'})
+});
+
 export const clientUpdateSchema = z.object({
   id: z.number().min(1, { message: 'ID do cliente é obrigatório' }),
   fullName: z.string().min(1, { message: 'Nome é obrigatório' }),
@@ -37,8 +41,11 @@ export const clientJsonSchema = zodToJsonSchema(clientSchemaDTO);
 export const clientCreateJsonSchema = zodToJsonSchema(clientCreateSchema);
 export const clientIdJsonSchema = zodToJsonSchema(clientIDSchema);
 export const clientUpdateJsonSchema = zodToJsonSchema(clientUpdateSchema);
+export const clientDocumentJsonSchema = zodToJsonSchema(clientDocumentSchema)
+
 
 export type ClientDTO = z.infer<typeof clientSchemaDTO>;
 export type ClientCreateDTO = z.infer<typeof clientCreateSchema>;
 export type ClientID = z.infer<typeof clientIDSchema>;
 export type ClientUpdateDTO = z.infer<typeof clientUpdateSchema>;
+export type ClientDocument = z.infer<typeof clientDocumentSchema>;

@@ -35,6 +35,15 @@ export class ClientRepository implements IClientRepository {
         }
       }
     );
-    console.log(deleted)
+  };
+
+  async findByDocument(document: string): Promise<Client  | null> {
+    return await this.prisma.client.findUnique(
+      {
+        where: {
+          document: document, isActive: true
+        }
+      }
+    )
   }
 } 

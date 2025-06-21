@@ -1,13 +1,16 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { ClientCreateDTO, ClientUpdateDTO, ClientID } from '../dto/Client.dto';
+import { ClientCreateDTO, ClientUpdateDTO, ClientID, ClientDocument } from '../dto/Client.dto';
 import { CreateClientUseCase } from '../../../application/use-cases/client/CreateClientUseCase';
 import { FindAllClientUseCase } from '../../../application/use-cases/client/FindAllClientUseCase';
 import { FindByIdClientUseCase } from '../../../application/use-cases/client/FindByIdClientUseCase';
+import { FindClientByDocument } from '../../../application/use-cases/client/FindClientByDocument';
 import { UpdateClientUseCase } from '../../../application/use-cases/client/UpdateClientUseCase';
 import { DeleteClientUseCase } from '../../../application/use-cases/client/DeleteClientUseCase';
 import { ApiResponse } from '../../../shared/types/apiResponse';
 import { HTTP_MESSAGES } from '../../../shared/types/httpMessages';
 import { HTTP_STATUS } from '../../../shared/types/httpStatus';
+
+
 
 export class ClientController {
   constructor(
@@ -16,6 +19,7 @@ export class ClientController {
     private findByIdClientUseCase: FindByIdClientUseCase,
     private updateClientUseCase: UpdateClientUseCase,
     private deleteClientUseCase: DeleteClientUseCase,
+    private findClientByDocument: FindClientByDocument
   ) {}
 
   async create(request: FastifyRequest<{ Body: ClientCreateDTO }>, reply: FastifyReply): Promise<ApiResponse> {
@@ -29,7 +33,7 @@ export class ClientController {
         descricao: error.message || HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR
     });
   }
-  }
+  };
 
   async findAll(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
     try {
@@ -45,7 +49,7 @@ export class ClientController {
         descricao: error.message || HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR
       });
     }
-  }
+  };
 
   async findById(request: FastifyRequest<{ Params: ClientID }>, reply: FastifyReply):Promise<ApiResponse> {
     try {
@@ -56,7 +60,7 @@ export class ClientController {
       return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({status:false, descricao: error.message || HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR })
     }
 
-  }
+  };
 
   async update(request: FastifyRequest<{ Params: ClientID; Body: ClientUpdateDTO }>, reply: FastifyReply): Promise<ApiResponse> {
     try {
@@ -67,7 +71,7 @@ export class ClientController {
 
     }
 
-  }
+  };
 
   async delete(request: FastifyRequest<{ Params: ClientID }>, reply: FastifyReply): Promise<ApiResponse> {
     try {
@@ -77,5 +81,15 @@ export class ClientController {
       return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({status:false, descricao: error.message || HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR })
     }
 
+  };
+
+  async findyByDocument(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse>{
+    try {
+      const body = request.params as ClientDocument
+      const client = await this.findClientByDocument.execute(body.document)
+      return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: client});
+    } catch (error: any) {
+      return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({status: false, descricao: error.message || HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR})
+    }
   }
 } 
