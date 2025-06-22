@@ -19,7 +19,7 @@ import { SkeletonModule } from 'primeng/skeleton';
     MessageModule,
     TextareaModule,
     InputNumberModule,
-    SkeletonModule
+    SkeletonModule,
   ],
 })
 export class InputComponent implements OnInit {
@@ -51,5 +51,4 @@ export class InputComponent implements OnInit {
   ngOnInit() {
     this.isRequired.set(!!this.control().validator);
   }
-
 }

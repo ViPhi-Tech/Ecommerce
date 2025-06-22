@@ -27,8 +27,13 @@
         class="animate-fadein"
       />
       @if (quickAdd()) {
-        <p-button variant="text" (onClick)="redirectToQuickAdd()" class="animate-fadein" severity="success">
-          <ng-icon name="lucideBadgePlus"/>
+        <p-button
+          variant="text"
+          (onClick)="redirectToQuickAdd()"
+          class="animate-fadein"
+          severity="success"
+        >
+          <ng-icon name="lucideBadgePlus" />
         </p-button>
       }
     </div>

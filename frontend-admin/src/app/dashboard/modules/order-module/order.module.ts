@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { OrderComponent } from './order.component';
 import { OrderListComponent } from './screens/order-list/order-list.component';
 import { OrderCreateComponent } from './screens/order-create/order-create.component';
+import { OrderClientComponent } from './screens/order-client/order-client.component';
 
 const routes: Routes = [
   {
@@ -14,6 +15,13 @@ const routes: Routes = [
         component: OrderListComponent,
         data: {
           title: ['Dashboard', 'Lista de Pedidos'],
+        },
+      },
+      {
+        path: 'client',
+        component: OrderClientComponent,
+        data: {
+          title: ['Dashboard', 'Selecionar Cliente'],
         },
       },
       {

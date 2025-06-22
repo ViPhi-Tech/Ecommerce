@@ -80,7 +80,10 @@ export class ProductListComponent implements OnInit {
             action: (rowData: any) => {
               // Exemplo de navegação para o outlet auxiliar "drawer"
               console.log(rowData);
-              this.router.navigate(['dashboard/config/products/edit', rowData?.id]);
+              this.router.navigate([
+                'dashboard/config/products/edit',
+                rowData?.id,
+              ]);
             },
           },
           {

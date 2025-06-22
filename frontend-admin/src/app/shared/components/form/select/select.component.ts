@@ -1,4 +1,11 @@
-import { Component, inject, input, InputSignal, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  input,
+  InputSignal,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
@@ -10,7 +17,13 @@ import { SkeletonModule } from 'primeng/skeleton';
   selector: 'fuse-select',
   templateUrl: './select.component.html',
   styleUrls: ['./select.component.scss'],
-  imports: [SelectModule, ReactiveFormsModule, NgIcon, ButtonModule, SkeletonModule],
+  imports: [
+    SelectModule,
+    ReactiveFormsModule,
+    NgIcon,
+    ButtonModule,
+    SkeletonModule,
+  ],
 })
 export class SelectComponent implements OnInit {
   private router = inject(Router);
@@ -42,8 +55,6 @@ export class SelectComponent implements OnInit {
   onChange: any = () => {};
 
   redirectToQuickAdd() {
-    this.router.navigate([
-      { outlets: { drawer: this.quickAdd() } },
-    ]);
+    this.router.navigate([{ outlets: { drawer: this.quickAdd() } }]);
   }
 }

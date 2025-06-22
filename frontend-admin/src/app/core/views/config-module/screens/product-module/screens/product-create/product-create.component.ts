@@ -79,7 +79,7 @@ export class ProductCreateComponent implements OnInit {
             'Editar Produto',
             'Preencha os dados do produto abaixo'
           );
-          this.blockFields()
+          this.blockFields();
         } else {
           this.coreService.setPageTitle(
             'Adicionar Produto',
@@ -92,13 +92,14 @@ export class ProductCreateComponent implements OnInit {
 
   async loadInfos(id?: string): Promise<void> {
     await this.categoryState.getCategoryList();
-    
+
     if (!id) {
       this.isLoading.set(false);
       return;
     }
 
-    this.productService.getProductById(id)
+    this.productService
+      .getProductById(id)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: (response: ApiResponse) => {
@@ -126,8 +127,8 @@ export class ProductCreateComponent implements OnInit {
       categoryId: ['', [Validators.required]],
       image: [''],
       brand: [''],
-      initialPrice: [0, [Validators.min(.01), Validators.required]],
-      finalPrice: [0, [Validators.min(.01), Validators.required]],
+      initialPrice: [0, [Validators.min(0.01), Validators.required]],
+      finalPrice: [0, [Validators.min(0.01), Validators.required]],
       quantity: ['', [Validators.required]],
       shortDescription: [''],
       description: ['', [Validators.required]],
@@ -180,6 +181,6 @@ export class ProductCreateComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['dashboard/config/products'])
+    this.router.navigate(['dashboard/config/products']);
   }
 }

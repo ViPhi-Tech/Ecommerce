@@ -70,9 +70,9 @@
     ></textarea>
   }
 
-  @if(isLoading()) {
+  @if (isLoading()) {
     <p-skeleton height="1rem" styleClass="mb-2" width="100px" />
-    
+
     @if (type() === 'textarea') {
       <p-skeleton height="6rem" styleClass="mb-2" width="100%" />
     } @else {
