@@ -72,7 +72,7 @@ export class OrderListComponent implements OnInit {
           filter: true,
         },
         {
-          field: 'totalAmount',
+          field: 'valor',
           caption: 'Valor',
           sortable: true,
           filter: true,

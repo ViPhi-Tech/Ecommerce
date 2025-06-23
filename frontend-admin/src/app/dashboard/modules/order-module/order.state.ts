@@ -10,27 +10,6 @@ export class OrderState {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl;
 
-  default = [
-    {
-      id: 1,
-      customerName: 'João Silva',
-      totalAmount: 150.0,
-      status: 'Pendente',
-      createdAt: new Date('2023-10-01'),
-      updatedAt: new Date('2023-10-01'),
-      isActive: true,
-    },
-    {
-      id: 2,
-      customerName: 'Maria Oliveira',
-      totalAmount: 200.0,
-      status: 'Concluído',
-      createdAt: new Date('2023-10-02'),
-      updatedAt: new Date('2023-10-02'),
-      isActive: true,
-    },
-  ];
-
   private state = signal<OrderModuleState>({
     orderList: [],
     view:
@@ -48,16 +27,24 @@ export class OrderState {
   getOrderList(): void {
     this.setLoading(true);
     this.setError(null);
-    this.setOrderList([...this.default]); // Set default data initially
+    this.setOrderList([]);
 
     lastValueFrom(
-      this.http.get<Order[]>(`${this.apiUrl}orders`).pipe(
+      this.http.get<Order[] | { data: Order[] }>(`${this.apiUrl}order/all`).pipe(
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
       )
     )
-      .then(orders => {
-        this.setOrderList(orders && orders.length ? orders : [...this.default]);
+      .then(response => {
+        
+        const orders = Array.isArray(response) ? response : response.data;
+
+        if (orders && orders.length > 0) {
+          this.setOrderList(orders);
+        } else {
+          this.setOrderList([]);
+          this.setError('Nenhum pedido encontrado.');
+        }
       })
       .catch(error => {
         this.setError('Erro ao carregar a lista de pedidos');
@@ -66,9 +53,16 @@ export class OrderState {
   }
 
   setOrderList(orderList: Order[]) {
+    const transformedOrders = orderList.map(order => {
+      return {
+        ...order,
+        customerName: order.client?.fullName,
+      };
+    });
+
     this.state.update(state => ({
       ...state,
-      orderList,
+      orderList: transformedOrders,
     }));
   }
 

@@ -8,10 +8,15 @@ export interface OrderModuleState {
 export interface Order {
   id: string | number; // Identificador único do pedido
   customerName: string; // Nome do cliente
-  totalAmount: number; // Valor total do pedido
+  total: number; // Valor total do pedido
   status: string; // Status do pedido
   createdAt: Date; // Data de criação
   updatedAt: Date; // Data da última atualização
   isActive: boolean; // Indica se o pedido está ativo
   imageUrl?: string; // URL de uma imagem representativa do pedido
+  client: Client
+}
+
+export interface Client {
+    fullName: string;
 }
