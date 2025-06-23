@@ -38,6 +38,11 @@ const routes: Routes = [
             m => m.ConfigModule
           ),
       },
+      {
+        path: '**',
+        redirectTo: 'orders',
+        pathMatch: 'full',
+      },
     ],
   },
 ];

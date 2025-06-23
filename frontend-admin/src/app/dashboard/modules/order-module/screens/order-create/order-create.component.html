@@ -1,9 +1,6 @@
 <div class="flex animate-fade-in">
-  <div class="w-full p-8 h-[calc(100vh-65px)] overflow-y-auto">
+  <div class="w-full h-[calc(100vh-65px)] overflow-y-auto">
     <fuse-order-header />
-    <fuse-product-search />
-    <div class="py-5"></div>
-    <fuse-product-list />
+    <router-outlet></router-outlet>
   </div>
-  <fuse-order-cart />
 </div>

@@ -1,0 +1,29 @@
+.order-step {
+  .icon {
+    @apply relative z-10 flex items-center justify-center w-16 h-16 rounded-full border-2 transition-all duration-300 bg-muted text-gray-700
+  }
+
+  .text {
+    @apply mt-2 text-sm font-medium text-gray-700 transition-colors duration-300;
+  }
+
+  &.active {
+    .icon {
+      @apply bg-blue-500 border-blue-500 text-white;
+    }
+
+    .text {
+      @apply text-blue-500;
+    }
+  }
+
+  &.completed {
+    .icon {
+      @apply bg-green-500 border-green-500 text-white;
+    }
+
+    .text {
+      @apply text-green-500;
+    }
+  }
+}
