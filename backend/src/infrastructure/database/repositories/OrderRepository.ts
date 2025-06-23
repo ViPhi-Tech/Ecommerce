@@ -10,6 +10,7 @@ export class OrderRepository implements IOrderRepository {
     return this.prisma.order.findMany({
         include: {
             items: true,
+            client: true
         },
     });
   }
