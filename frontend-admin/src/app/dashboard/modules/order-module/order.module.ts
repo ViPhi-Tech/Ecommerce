@@ -3,7 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { OrderComponent } from './order.component';
 import { OrderListComponent } from './screens/order-list/order-list.component';
 import { OrderCreateComponent } from './screens/order-create/order-create.component';
-import { OrderClientComponent } from './screens/order-client/order-client.component';
+import { OrderClientComponent } from './screens/order-create/screens/order-client/order-client.component';
+import { OrderProductsComponent } from './screens/order-create/screens/order-products/order-products.component';
 
 const routes: Routes = [
   {
@@ -18,19 +19,25 @@ const routes: Routes = [
         },
       },
       {
-        path: 'client',
-        component: OrderClientComponent,
-        data: {
-          title: ['Dashboard', 'Selecionar Cliente'],
-        },
-      },
-      {
-        path: 'create',
+        path: ':id',
         component: OrderCreateComponent,
-        data: {
-          title: ['Dashboard', 'Criar Pedido'],
-        },
+        children: [
+          {
+            path: 'client',
+            component: OrderClientComponent,
+          },
+          {
+            path: 'products',
+            component: OrderProductsComponent,
+          },
+          {
+            path: '**',
+            redirectTo: 'client',
+            pathMatch: 'full',
+          },
+        ],
       },
+
       {
         path: '',
         redirectTo: 'list',

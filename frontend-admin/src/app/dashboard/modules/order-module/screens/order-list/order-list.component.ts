@@ -124,7 +124,7 @@ export class OrderListComponent implements OnInit {
           label: 'Criar Pedido',
           tooltip: 'Criar Pedido',
           action: () => {
-            this.router.navigate(['dashboard', 'orders', 'client']);
+            this.router.navigate(['dashboard', 'orders', '22']);
           },
         },
       ],
