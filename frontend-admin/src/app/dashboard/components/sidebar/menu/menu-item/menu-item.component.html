@@ -5,9 +5,7 @@
   routerLinkActive="menu-item-active"
   [routerLinkActiveOptions]="{ exact: true }"
   [routerLink]="item().route"
-  class="menu-item {{
-    addictionalClass()
-  }}"
+  class="menu-item {{ addictionalClass() }}"
 >
   <ng-icon size="16" [name]="item().icon" class="mr-3" />
   {{ item().label }}

@@ -54,11 +54,9 @@ export class MenuComponent implements OnInit {
               route: '/dashboard/config/categories/list',
               visible: true,
             },
-            
-          ]
+          ],
         },
         // categorias
-        
       ],
     },
   ];
@@ -76,8 +74,8 @@ export class MenuComponent implements OnInit {
         if (item.route && currentRoute.startsWith(item.route)) {
           item.visible = true;
         } else if (item.items) {
-          item.visible = item.items.some(subItem => 
-            subItem.route && currentRoute.startsWith(subItem.route)
+          item.visible = item.items.some(
+            subItem => subItem.route && currentRoute.startsWith(subItem.route)
           );
         }
       });
