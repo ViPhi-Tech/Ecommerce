@@ -35,14 +35,39 @@ export class OrderHeaderComponent implements OnInit {
     })
   );
 
-  orderCode = signal(0);
   completePercent = signal(0);
+  showSteps = signal(false);
+  orderCode = signal(0);
   orderSteps = signal<OrderStep[]>([
     { label: 'Cliente', icon: 'lucideUser', perc: 0, step: 1, path: 'client' },
-    { label: 'Produtos', icon: 'lucideBox', perc: 25, step: 2,  path: 'products' },
-    { label: 'Entrega', icon: 'lucideTruck', perc: 50, step: 3, path: 'delivery' },
-    { label: 'Pagamento', icon: 'lucideCreditCard', perc: 75, step: 4, path: 'payment' },
-    { label: 'Resumo', icon: 'lucideCheck', perc: 100, step: 5, path: 'summary' },
+    {
+      label: 'Produtos',
+      icon: 'lucideBox',
+      perc: 25,
+      step: 2,
+      path: 'products',
+    },
+    {
+      label: 'Entrega',
+      icon: 'lucideTruck',
+      perc: 50,
+      step: 3,
+      path: 'delivery',
+    },
+    {
+      label: 'Pagamento',
+      icon: 'lucideCreditCard',
+      perc: 75,
+      step: 4,
+      path: 'payment',
+    },
+    {
+      label: 'Resumo',
+      icon: 'lucideCheck',
+      perc: 100,
+      step: 5,
+      path: 'summary',
+    },
   ]);
 
   constructor() {
@@ -59,7 +84,7 @@ export class OrderHeaderComponent implements OnInit {
 
     this.setupOrderSteps();
     this.calculateCompletePercent();
-    
+
     this.router.events.subscribe(() => {
       this.setupOrderSteps();
       this.calculateCompletePercent();
@@ -73,7 +98,12 @@ export class OrderHeaderComponent implements OnInit {
   }
 
   setupOrderSteps() {
-    const steps = this.orderSteps().map(step => ({ ...step, active: false, completed: false, disabled: false }));
+    const steps = this.orderSteps().map(step => ({
+      ...step,
+      active: false,
+      completed: false,
+      disabled: false,
+    }));
     const currentStepPath = this.router.url.split('/').pop() || '';
     const activeIndex = steps.findIndex(step => step.path === currentStepPath);
 
@@ -90,7 +120,7 @@ export class OrderHeaderComponent implements OnInit {
     const steps = this.orderSteps();
     const maxPerc = steps
       .filter(step => step.completed || step.active)
-      .reduce((max, step) => step.perc > max ? step.perc : max, 0);
+      .reduce((max, step) => (step.perc > max ? step.perc : max), 0);
     this.completePercent.set(maxPerc);
   }
 

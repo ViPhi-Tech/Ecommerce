@@ -19,10 +19,18 @@ export class MenuComponent implements OnInit {
       groupTitle: 'Overview',
       items: [
         {
-          label: 'Pedidos',
-          icon: 'lucideFileText',
-          route: '/dashboard/orders',
+          label: 'Comercial',
+          icon: 'lucideStore',
           visible: true,
+          items: [
+            {
+              label: 'Pedidos',
+              icon: 'lucideFileText',
+              route: '/dashboard/orders/list',
+              parent: 'Comercial',
+              visible: true,
+            },
+          ],
         },
       ],
     },

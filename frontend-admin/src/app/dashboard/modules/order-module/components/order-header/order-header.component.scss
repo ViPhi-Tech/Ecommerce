@@ -1,6 +1,14 @@
+:hosy {
+  position: relative;
+}
+
+.steps-container {
+  @apply absolute z-10 bg-white w-[400px] mx-auto p-6 animate-fadeindown rounded-md border-b border-l border-r dark:border-[#52525b];
+}
+
 .order-step {
   .icon {
-    @apply relative z-10 flex items-center justify-center w-16 h-16 rounded-full border-2 transition-all duration-300 bg-muted text-gray-700
+    @apply relative z-10 flex items-center justify-center w-16 h-16 rounded-full border-2 transition-all duration-300 bg-muted text-gray-700;
   }
 
   .text {

@@ -7,24 +7,29 @@
       <div
         class="rounded-lg border border-gray-200 dark:border-[#1F1F23] bg-card text-card-foreground shadow-sm overflow-hidden"
       >
-        <div class="aspect-square relative"></div>
+        <div class="aspect-video relative"></div>
         <div class="p-4">
           <h3 class="font-medium line-clamp-2 min-h-[48px]">
             {{ product?.name }}
           </h3>
           <p class="text-muted-foreground text-sm">{{ product?.category }}</p>
         </div>
-        <div class="p-4 pt-0 flex justify-between items-center">
-          <span class="font-bold text-lg">{{
-            product?.price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
-          }}</span>
-          <p-button
-            (onClick)="addProductToCart(product)"
-            [loading]="product?.loading"
-            label="Comprar"
-            size="small"
-            icon="pi pi-cart-arrow-down"
-          ></p-button>
+        <div class="p-4 pt-0 flex flex-col justify-between items-center">
+          <div class="mb-2">
+            <span class="font-bold text-lg">{{
+              product?.price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+            }}</span>
+          </div>
+          <div class="w-full">
+            <p-button
+              styleClass="w-full"
+              (onClick)="addProductToCart(product)"
+              [loading]="product?.loading"
+              label="Adicionar"
+              size="small"
+              icon="pi pi-cart-arrow-down"
+            ></p-button>
+          </div>
         </div>
       </div>
     }
