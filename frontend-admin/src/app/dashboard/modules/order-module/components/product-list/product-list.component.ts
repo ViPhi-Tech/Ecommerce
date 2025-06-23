@@ -5,6 +5,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { CartStore } from 'app/shared/store/cart.state';
 import { sleep } from 'app/shared/utils/utils';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'fuse-product-list',
@@ -13,6 +14,8 @@ import { sleep } from 'app/shared/utils/utils';
   imports: [ButtonModule, SelectModule, ReactiveFormsModule, CurrencyPipe],
 })
 export class ProductListComponent implements OnInit {
+  private toast = inject(MessageService);
+
   private cartStore = inject(CartStore);
 
   products: any[] | undefined;
@@ -86,5 +89,11 @@ export class ProductListComponent implements OnInit {
     await sleep(1000); // Simulating a delay for adding the product to the cart
     product.loading = false;
     this.cartStore.addItem(product);
+    this.toast.add({
+      severity: 'success',
+      summary: 'Produto adicionado ao carrinho',
+      detail: `${product.name} foi adicionado com sucesso!`,
+      life: 3000,
+    });
   }
 }
