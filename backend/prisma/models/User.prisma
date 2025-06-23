@@ -1,0 +1,23 @@
+model Login {
+  id             Int     @id @default(autoincrement())
+  email          String  @unique
+  googleId       String? @unique
+  hashedPassword String?
+
+  user   User?
+  client Client?
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  fullName String?
+  isActive Boolean @default(true)
+
+  loginId   Int? @unique
+  companyId Int?
+
+  company Company? @relation(fields: [companyId], references: [id])
+  login   Login?   @relation(fields: [loginId], references: [id])
+
+  address Address?
+}

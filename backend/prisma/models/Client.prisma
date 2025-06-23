@@ -1,0 +1,17 @@
+model Client {
+  id       Int     @id @default(autoincrement())
+  fullName String?
+  document String? @unique
+  email    String? @unique
+  phone    String?
+  isActive Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  loginId Int?   @unique
+  login   Login? @relation(fields: [loginId], references: [id])
+
+  orders   Order[]
+  address Address?
+}
