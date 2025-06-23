@@ -15,7 +15,8 @@
         </div>
         <div class="relative flex justify-between">
           @for (step of orderSteps(); track $index) {
-            <div class="order-step flex flex-col items-center group w-[55px] step"
+            <button class="order-step flex flex-col items-center group w-[55px] step"
+              (click)="selectStep(step)"
               [ngClass]="{'completed': step.completed, 'active': step.active, 'disabled': !step.active && !step.completed}"
             >
               <div
@@ -30,7 +31,7 @@
                   {{ step.label }}
                 </p>
               </div>
-            </div>
+            </button>
           }
         </div>
       </div>

@@ -35,7 +35,7 @@ export class OrderHeaderComponent implements OnInit {
     })
   );
 
-  orderCode = signal('00000100');
+  orderCode = signal(0);
   completePercent = signal(0);
   orderSteps = signal<OrderStep[]>([
     { label: 'Cliente', icon: 'lucideUser', perc: 0, step: 1, path: 'client' },
@@ -45,7 +45,11 @@ export class OrderHeaderComponent implements OnInit {
     { label: 'Resumo', icon: 'lucideCheck', perc: 100, step: 5, path: 'summary' },
   ]);
 
-  constructor() {}
+  constructor() {
+    this.activatedRoute.params.subscribe(params => {
+      this.orderCode.set(params['id'] || 0);
+    });
+  }
 
   ngOnInit() {
     this.coreService.setPageTitle(
@@ -55,6 +59,17 @@ export class OrderHeaderComponent implements OnInit {
 
     this.setupOrderSteps();
     this.calculateCompletePercent();
+    
+    this.router.events.subscribe(() => {
+      this.setupOrderSteps();
+      this.calculateCompletePercent();
+    });
+  }
+
+  selectStep(step: OrderStep) {
+    this.setupOrderSteps();
+    this.calculateCompletePercent();
+    this.router.navigate(['/dashboard/orders/', this.orderCode(), step.path]);
   }
 
   setupOrderSteps() {
