@@ -1,38 +1,33 @@
 model Product {
-  id                Int     @id @default(autoincrement())
-  name              String
-  description       String?
-  sku               String  @unique
-  cost              Float?
-  quantity          Int     @default(0)
-  ean               String  @default("0")
-  isActive          Boolean @default(true)
-  
-  shortDescription  String?
-  brand             String?
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String?
+  sku         String  @unique
+  cost        Float?
+  quantity    Int     @default(0)
+  ean         String  @default("0")
+  isActive    Boolean @default(true)
 
-  initialPrice      Float   @default(0)
-  finalPrice        Float   @default(0)
+  shortDescription String?
+  brand            String?
 
-  image          String?
+  initialPrice Float @default(0)
+  finalPrice   Float @default(0)
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  image String?
 
-  companyId   Int?
-  company     Company? @relation(fields: [companyId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  stock       Stock?   @relation("ProductStock")
-  orderItems   OrderItem[]
+  companyId Int?
+  company   Company? @relation(fields: [companyId], references: [id])
 
-  categoryId  Int?
-  category    Category?  @relation(fields: [categoryId], references: [id])
+  stock      Stock?      @relation("ProductStock")
+  orderItems OrderItem[]
 
-
+  categoryId Int?
+  category   Category? @relation(fields: [categoryId], references: [id])
 }
-
-
-
 
 model Partner {
   id          Int         @id @default(autoincrement())
@@ -82,9 +77,8 @@ model Stock {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  product   Product  @relation("ProductStock", fields: [productId], references: [id]) // Relacionando com o Product
+  product   Product         @relation("ProductStock", fields: [productId], references: [id]) // Relacionando com o Product
   movements StockMovement[] // Relacionamento 1:N com StockMovement
-
 }
 
 model StockMovement {
@@ -95,7 +89,7 @@ model StockMovement {
   createdAt DateTime     @default(now()) // Data da movimentação
   updatedAt DateTime     @updatedAt // Data da última atualização da movimentação
 
-  stock     Stock        @relation(fields: [stockId], references: [id]) // Relaciona com o modelo Stock
+  stock Stock @relation(fields: [stockId], references: [id]) // Relaciona com o modelo Stock
 }
 
 enum MovementType {
@@ -103,9 +97,8 @@ enum MovementType {
   OUT
 }
 
-
 model Category {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
   isActive  Boolean? @default(true)
   createdAt DateTime @default(now())
