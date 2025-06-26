@@ -12,6 +12,6 @@ model Client {
   loginId Int?   @unique
   login   Login? @relation(fields: [loginId], references: [id])
 
-  orders   Order[]
+  orders  Order[]
   address Address?
 }
