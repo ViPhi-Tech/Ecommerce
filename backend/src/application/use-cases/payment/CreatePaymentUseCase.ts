@@ -8,6 +8,5 @@ export class CreatePaymentUseCase {
 
     async execute(data: CreatePaymentInput): Promise<ResponsePayment> {
         return await this.paymentRepository.create(data)
-    })
-
+    }
 }

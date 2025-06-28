@@ -1,20 +1,20 @@
 model Payment {
   id        Int      @id @default(autoincrement())
   value     Float
-  typeId    Int      // Foreign key for PaymentType
-  statusId  Int      // Foreign key for PaymentStatus
+  typeId    String      
+  statusId  String      
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   order   Order         @relation(fields: [orderId], references: [id])
   orderId Int
-  type    PaymentType  @relation(fields: [typeId], references: [id])
-  status  PaymentStatus @relation(fields: [statusId], references: [id])
+  type    PaymentType  @relation(fields: [typeId], references: [name])
+  status  PaymentStatus @relation(fields: [statusId], references: [name])
 }
 
 model PaymentType {
-  id        Int       @id @default(autoincrement())
-  name      String
+  name      String    @id
+  label     String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 
@@ -22,8 +22,8 @@ model PaymentType {
 }
 
 model PaymentStatus {
-  id        Int      @id @default(autoincrement())
-  name      String
+  name      String   @id
+  label     String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
