@@ -1,10 +1,10 @@
 import { Order } from "../../../domain/entities/Order";
 import { OrderItem } from "../../../domain/entities/OrderItem";
 import { IOrderRepository } from "../../../domain/repositories/IOrderRepository";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 
 export class OrderRepository implements IOrderRepository {
-  constructor(private prisma: PrismaClient) {}
+  constructor(private prisma:  PrismaClient | Prisma.TransactionClient) {}
 
   async findAll(): Promise<Order[]> {
     return this.prisma.order.findMany({
@@ -82,5 +82,31 @@ export class OrderRepository implements IOrderRepository {
         }
       );
     }
+  }
+
+
+  // ✅ NOVO MÉTODO COM tx
+  async createWithTx(data: Partial<Order>, tx: Prisma.TransactionClient): Promise<Order> {
+    return await tx.order.create({
+      data: {
+        clientId: data.clientId!,
+        total: data.total!,
+      },
+    });
+  }
+
+  async createItemsWithTx(orderId: number, items: OrderItem[], tx: Prisma.TransactionClient): Promise<OrderItem[]> {
+    await tx.orderItem.createMany({
+      data: items.map((item) => ({
+        orderId,
+        productId: item.productId,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+    });
+
+    return await tx.orderItem.findMany({
+      where: { orderId },
+    });
   }
 }
