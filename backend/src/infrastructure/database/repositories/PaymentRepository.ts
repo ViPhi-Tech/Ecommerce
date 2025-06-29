@@ -2,11 +2,24 @@ import { IPaymentRepository } from "../../../domain/repositories/IPaymentReposit
 import { PrismaClient } from "@prisma/client";
 import { Payment } from "../../../domain/entities/Payment";
 import { PaymentCreateDTO, PaymentUpdateDTO } from "../../http/dto/Payment.dto";
-export class paymentRepository implements IPaymentRepository {
+export class PaymentRepository implements IPaymentRepository {
     constructor(
         private prisma: PrismaClient
     ) {}
 
+
+    async createMany(orderId: number, payments: Payment[]): Promise<Payment[]> {
+  // Cria os pagamentos em lote
+    await this.prisma.payment.createMany({
+        data: payments
+    });
+
+    return await this.prisma.payment.findMany({
+        where: {
+        orderId
+        }
+    });
+    }
 
     async create(data: PaymentCreateDTO): Promise<Payment> {
         return await this.prisma.payment.create({

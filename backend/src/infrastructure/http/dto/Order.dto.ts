@@ -12,7 +12,7 @@ export const orderCreateSchemaDTO = z.object({
   clientId: z.number().min(1, { message: "Client ID is required" }),
   total: z.number().min(0, { message: "Total must be greater than or equal to zero" }),
   items: z.array(orderItemSchemaDTO).min(1, { message: "At least one item is required" }),
-  payment: PaymentLabel
+  payments: z.array(PaymentLabel)
 });
 
 export const orderSchemaDTO = z.object({

@@ -1,3 +1,4 @@
+
 export interface OrderCreateItem {
     productId: number;
     quantity: number;
@@ -8,4 +9,8 @@ export interface CreateOrderInput {
     clientId: number;
     total: number;
     items: OrderCreateItem[];
+    payments: {
+        typeId: string;
+        value: number
+    }[]
 }

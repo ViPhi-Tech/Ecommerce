@@ -6,14 +6,15 @@ import { FindAllOrderUseCase } from "../../../application/use-cases/order/FindAl
 import { OrderController } from "../../http/controllers/OrderController";
 import { ProductRepository } from "../../database/repositories/ProductRepository";
 import { PrismaTransactionRunner } from "../../database/PrismaTransactionRunner";
-
+import { PaymentRepository } from "../../database/repositories/PaymentRepository";
 
 const transactionRunner = new PrismaTransactionRunner();
 
 export const orderRepository = new OrderRepository(prisma);
 const productRepository = new ProductRepository(prisma);
+const paymentRepository = new PaymentRepository(prisma)
 // Use cases com o repository
-export const createOrderUseCase = new CreateOrderUseCase(transactionRunner, orderRepository, productRepository);
+export const createOrderUseCase = new CreateOrderUseCase(transactionRunner, orderRepository, productRepository, paymentRepository);
 
 export const findByIdOrderUseCase = new FindByIdOrderUseCase(orderRepository);
 export const findAllOrderUseCase = new FindAllOrderUseCase(orderRepository);
