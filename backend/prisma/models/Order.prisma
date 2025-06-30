@@ -11,6 +11,8 @@ model Order {
   items OrderItem[] // Relação 1:N com os itens do pedido
 
   payments Payment[]
+
+  invoice Invoice[]
 }
 
 model OrderItem {

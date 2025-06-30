@@ -1,0 +1,17 @@
+model Invoice {
+  id          Int      @id @default(autoincrement())
+  external_id String   @unique    @default(uuid())
+  number      String   @unique                        // Número da nota
+  series      String?                                // Série da nota (opcional)
+  status      String                                 // Ex: 'issued', 'canceled', 'pending'
+  issueDate   DateTime                               // Data de emissão
+  dueDate     DateTime?                              // Data de vencimento (se aplicável)
+  totalAmount Float                                 // Valor total da nota
+  taxAmount   Float?                                // Total de impostos (opcional)
+  clientId    Int?                                  // FK para cliente
+  client      Client?   @relation(fields: [clientId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  orderId     Int
+  order       Order?    @relation(fields: [orderId], references: [id])
+}
