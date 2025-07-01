@@ -9,8 +9,6 @@ model Product {
   isActive    Boolean @default(true)
 
   shortDescription String?
-  brand            String?
-
   initialPrice Float @default(0)
   finalPrice   Float @default(0)
 
@@ -27,6 +25,9 @@ model Product {
 
   categoryId Int?
   category   Category? @relation(fields: [categoryId], references: [id])
+
+  brandId Int?
+  brand   Brand? @relation(fields: [brandId], references: [id])
 }
 
 model Partner {

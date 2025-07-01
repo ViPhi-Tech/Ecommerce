@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Product, Stock, stockMovement } from '../../../domain/entities/Product';
 import { IProductRepository } from "../../../domain/repositories/IProductRepository";
-import {ProductCreateDTO, ProductDTO} from "../../http/dto/Product.dto";
+import {ProductCreateDTO, ProductUpdateDTO} from "../../http/dto/Product.dto";
 
 export class ProductRepository implements IProductRepository {
     constructor(private prisma: PrismaClient) {
@@ -35,7 +35,7 @@ export class ProductRepository implements IProductRepository {
         });
     }
 
-    async update(id: number, data: Partial<ProductDTO>): Promise<Product> {
+    async update(id: number, data: ProductUpdateDTO): Promise<Product> {
         return this.prisma.product.update({
             where: {id},
             data

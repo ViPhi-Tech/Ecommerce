@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { orderController } from "../../config/dependencies/orderDependencies";
 import { authenticate } from "../middlewares/authMiddleware";
-import { orderIdJsonSchema, orderCreateJsonSchema, orderUpdateJsonSchema } from '../dto/Order.dto';
+import { orderIdJsonSchema, orderCreateJsonSchema, orderUpdateJsonSchema, createPreOrderJsonSchema } from '../dto/Order.dto';
 
 export default async function saleRoutes(
     fastify: FastifyInstance,
@@ -33,5 +33,14 @@ export default async function saleRoutes(
          preValidation: [authenticate],
          handler: orderController.findAll.bind(orderController)
      });
+
+     fastify.post('/create/preOrder', {
+        schema: {
+            tags: ['order'],
+            body: createPreOrderJsonSchema
+        },
+        preValidation: [authenticate],
+        handler: orderController.createPreOrder.bind(orderController)
+     })
 
 }

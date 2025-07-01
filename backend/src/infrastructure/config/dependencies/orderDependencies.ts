@@ -1,6 +1,7 @@
 import { prisma } from "../../database/prismaClient";
 import { OrderRepository } from "../../database/repositories/OrderRepository";
 import { CreateOrderUseCase } from "../../../application/use-cases/order/CreateOrderUseCase";
+import { CreatePreOrderUseCase } from "../../../application/use-cases/order/CreatePreOrderUseCase";
 import { FindByIdOrderUseCase } from "../../../application/use-cases/order/FindByIdOrderUseCase";
 import { FindAllOrderUseCase } from "../../../application/use-cases/order/FindAllOrderUseCase";
 import { OrderController } from "../../http/controllers/OrderController";
@@ -15,6 +16,7 @@ const productRepository = new ProductRepository(prisma);
 const paymentRepository = new PaymentRepository(prisma)
 // Use cases com o repository
 export const createOrderUseCase = new CreateOrderUseCase(transactionRunner, orderRepository, productRepository, paymentRepository);
+export const createPreOrderUseCase = new CreatePreOrderUseCase(orderRepository);
 
 export const findByIdOrderUseCase = new FindByIdOrderUseCase(orderRepository);
 export const findAllOrderUseCase = new FindAllOrderUseCase(orderRepository);
@@ -23,5 +25,6 @@ export const findAllOrderUseCase = new FindAllOrderUseCase(orderRepository);
 export const orderController = new OrderController(
      createOrderUseCase,
      findByIdOrderUseCase,
-     findAllOrderUseCase
+     findAllOrderUseCase,
+     createPreOrderUseCase
 );

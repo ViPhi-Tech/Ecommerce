@@ -84,29 +84,14 @@ export class OrderRepository implements IOrderRepository {
     }
   }
 
-
-  // ✅ NOVO MÉTODO COM tx
-  async createWithTx(data: Partial<Order>, tx: Prisma.TransactionClient): Promise<Order> {
-    return await tx.order.create({
+  async createPreOrder(clientId: number): Promise<Order> {
+    return await this.prisma.order.create({
       data: {
-        clientId: data.clientId!,
-        total: data.total!,
+        clientId,
+        total: 0,
       },
     });
   }
-
-  async createItemsWithTx(orderId: number, items: OrderItem[], tx: Prisma.TransactionClient): Promise<OrderItem[]> {
-    await tx.orderItem.createMany({
-      data: items.map((item) => ({
-        orderId,
-        productId: item.productId,
-        quantity: item.quantity,
-        price: item.price,
-      })),
-    });
-
-    return await tx.orderItem.findMany({
-      where: { orderId },
-    });
-  }
+  
+ 
 }

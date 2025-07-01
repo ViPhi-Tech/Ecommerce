@@ -21,7 +21,7 @@ export const productCreateSchema = z.object({
     shortDescription: z.string().optional(),
     initialPrice: z.number().min(0, { message: "Preço inicial deve ser maior que zero" }),
     finalPrice: z.number().min(0, { message: "Preço final deve ser maior que zero" }),
-    brand: z.string().optional(),
+    brandId: z.number().optional(),
     image: z.string().optional(),
     sku: z.string().min(1, { message: "SKU é obrigatório" }),
     cost: z.number().optional(),
@@ -73,4 +73,5 @@ export const productUpdateJsonSchema = zodToJsonSchema(productUpdateSchema);
 export type ProductCreateDTO = z.infer<typeof productCreateSchema>;
 export type ProductDTO = z.infer<typeof productSchemaDTO>;
 export type ProductID = z.infer<typeof productIDSchema>;
-export type ProductUpdateStock = z.infer<typeof productUpdateStockSchema>
+export type ProductUpdateStock = z.infer<typeof productUpdateStockSchema>;
+export type ProductUpdateDTO = z.infer<typeof productCreateSchema>;

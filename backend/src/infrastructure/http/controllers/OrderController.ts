@@ -2,17 +2,19 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { CreateOrderUseCase } from '../../../application/use-cases/order/CreateOrderUseCase';
 import { FindByIdOrderUseCase } from '../../../application/use-cases/order/FindByIdOrderUseCase';
 import { FindAllOrderUseCase } from '../../../application/use-cases/order/FindAllOrderUseCase';
+import { CreatePreOrderUseCase } from '../../../application/use-cases/order/CreatePreOrderUseCase';
 import { ApiResponse } from "../../../shared/types/apiResponse";
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 
-import { OrderCreateDTO, OrderID } from "../dto/Order.dto";
+import { OrderCreateDTO, OrderID, CreatePreOrderDTO } from "../dto/Order.dto";
 
 export class OrderController {
     constructor(
         private createOrderUseCase: CreateOrderUseCase,
         private findByIdOrderUseCase: FindByIdOrderUseCase,
         private findallOrderUseCase: FindAllOrderUseCase,
+        private createPreOrderUseCase: CreatePreOrderUseCase
     ) {}
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
@@ -58,5 +60,13 @@ export class OrderController {
                 description: error instanceof Error? error.message : 'An unknown error occurred',
             });
         }
+    };
+
+    async createPreOrder(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        const client = request.body as CreatePreOrderDTO
+        return reply.status(HTTP_STATUS.API_STATUS_SUCCESS).send({
+            status: HTTP_MESSAGES.API_STATUS_SUCCESS,
+            data: await this.createPreOrderUseCase.execute(client.clientId),
+        });
     }
 }

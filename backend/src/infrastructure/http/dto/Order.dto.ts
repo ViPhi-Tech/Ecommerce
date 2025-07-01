@@ -33,15 +33,22 @@ export const orderUpdateSchema = z.object({
   items: z.array(orderItemSchemaDTO).min(1, { message: "At least one item is required" })
 });
 
+export const createPreOrder = z.object({
+  clientId: z.number().min(1, { message: "Client ID is required" }),
+})
+
 // JSON Schema conversions
 export const orderJsonSchema = zodToJsonSchema(orderSchemaDTO);
 export const orderIdJsonSchema = zodToJsonSchema(orderIDSchema);
 export const orderUpdateJsonSchema = zodToJsonSchema(orderUpdateSchema);
 export const orderItemJsonSchema = zodToJsonSchema(orderItemSchemaDTO);
 export const orderCreateJsonSchema = zodToJsonSchema(orderCreateSchemaDTO);
+export const createPreOrderJsonSchema = zodToJsonSchema(createPreOrder);
+
 // Type exports
 export type OrderDTO = z.infer<typeof orderSchemaDTO>;
 export type OrderID = z.infer<typeof orderIDSchema>;
 export type OrderItemDTO = z.infer<typeof orderItemSchemaDTO>;
 export type OrderUpdateDTO = z.infer<typeof orderUpdateSchema>;
 export type OrderCreateDTO = z.infer<typeof orderCreateSchemaDTO>;
+export type CreatePreOrderDTO = z.infer<typeof createPreOrder>;

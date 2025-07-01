@@ -7,4 +7,5 @@ export interface IOrderRepository {
     findAll(): Promise<Order[]>;
     update(id: number, data: Partial<Order>): Promise<Order>;
     delete(id: number): Promise<void>;
+    createPreOrder(clientId: number): Promise<Order>
 }
