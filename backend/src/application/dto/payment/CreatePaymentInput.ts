@@ -1,6 +1,6 @@
 export interface CreatePaymentInput {
     value: number,
     typeId: string,
-    statusId: number,
+    statusId: string,
     orderId: number,
 }

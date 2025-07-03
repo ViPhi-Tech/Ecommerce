@@ -1,5 +1,5 @@
 export interface ResponsePayment {
-    id: number,
+    id?: number,
     value: number,
     typeId: string,
     statusId: string,
