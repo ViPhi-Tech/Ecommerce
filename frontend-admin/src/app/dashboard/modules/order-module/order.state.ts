@@ -116,5 +116,4 @@ export class OrderState extends BaseState<OrderModuleState> {
     }));
     localStorage.setItem('orderView', view);
   }
-
 }

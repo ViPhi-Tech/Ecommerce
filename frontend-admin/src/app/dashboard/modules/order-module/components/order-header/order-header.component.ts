@@ -28,7 +28,7 @@ export class OrderHeaderComponent implements OnInit {
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
   private coreService = inject(CoreService);
-  
+
   private state = inject(OrderState);
 
   today = signal(
@@ -75,7 +75,6 @@ export class OrderHeaderComponent implements OnInit {
   ]);
 
   constructor() {
-    
     this.state.refreshOrder$
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {

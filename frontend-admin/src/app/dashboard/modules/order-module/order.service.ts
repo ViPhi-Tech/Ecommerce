@@ -14,13 +14,15 @@ export class OrderService {
   constructor() {}
 
   getOrders(): Observable<Order[] | { data: Order[] }> {
-    return this.http.get<Order[] | { data: Order[] }>(`${this.apiUrl}order/all`)
+    return this.http.get<Order[] | { data: Order[] }>(
+      `${this.apiUrl}order/all`
+    );
   }
 
   createPreOrder(clientId: string | number): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}order/create/preOrder`, {
-      clientId
-    })
+      clientId,
+    });
   }
 
   getOrderById(orderId: string | number): Observable<Order> {

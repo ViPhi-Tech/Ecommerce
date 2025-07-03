@@ -1,18 +1,35 @@
-import { Component, OnInit, OnDestroy, inject, DestroyRef } from '@angular/core';
-import { Router, NavigationEnd, RouterModule, ActivatedRoute } from '@angular/router';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  inject,
+  DestroyRef,
+} from '@angular/core';
+import {
+  Router,
+  NavigationEnd,
+  RouterModule,
+  ActivatedRoute,
+} from '@angular/router';
 import { filter } from 'rxjs';
 import { OrderState } from '../../order.state';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductSearchComponent } from '../../components/product-search/product-search.component';
 import { OrderCartComponent } from '../../components/order-cart/order-cart.component';
 import { NgIcon } from '@ng-icons/core';
-import { ProductListComponent } from "../../components/product-list/product-list.component";
+import { ProductListComponent } from '../../components/product-list/product-list.component';
 
 @Component({
   selector: 'fuse-order-create',
   templateUrl: './order-create.component.html',
   styleUrls: ['./order-create.component.scss'],
-  imports: [RouterModule, ProductSearchComponent, OrderCartComponent, NgIcon, ProductListComponent],
+  imports: [
+    RouterModule,
+    ProductSearchComponent,
+    OrderCartComponent,
+    NgIcon,
+    ProductListComponent,
+  ],
 })
 export class OrderCreateComponent implements OnInit, OnDestroy {
   private router = inject(Router);
@@ -28,8 +45,7 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
     this.detectChildRouteChanges();
   }
 
-  ngOnDestroy() {
-  }
+  ngOnDestroy() {}
 
   private async loadOrderData() {
     const orderId = this.activatedRoute.snapshot.paramMap.get('id');
@@ -56,7 +72,6 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
     const orderId = url.split('/')[url.split('/').length - 2]; // Supondo que o ID do pedido esteja antes do módulo atual
     if (orderId !== 'new') {
       await this.orderState.getOrderById(orderId);
-
     }
   }
 
@@ -69,5 +84,4 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
     console.log('Navegou para a rota padrão');
     // Implementar lógica padrão
   }
-
 }

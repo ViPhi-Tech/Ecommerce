@@ -32,18 +32,18 @@ export const routes: Routes = [
   {
     path: 'import',
     loadChildren: () =>
-      import(
-        'app/dashboard/modules/import-module/import-drawer.module'
-      ).then(m => m.ImportDrawerModule),
+      import('app/dashboard/modules/import-module/import-drawer.module').then(
+        m => m.ImportDrawerModule
+      ),
     outlet: 'drawer',
     data: { animation: 'import' },
   },
   {
     path: 'products',
     loadChildren: () =>
-      import(
-        'app/dashboard/modules/product-module/product-drawer.module'
-      ).then(m => m.ProductDrawerModule),
+      import('app/dashboard/modules/product-module/product-drawer.module').then(
+        m => m.ProductDrawerModule
+      ),
     outlet: 'drawer',
     data: { animation: 'products' },
   },
@@ -59,18 +59,18 @@ export const routes: Routes = [
   {
     path: 'invoices',
     loadChildren: () =>
-      import(
-        'app/dashboard/modules/invoice-module/invoice-drawer.module'
-      ).then(m => m.InvoiceDrawerModule),
+      import('app/dashboard/modules/invoice-module/invoice-drawer.module').then(
+        m => m.InvoiceDrawerModule
+      ),
     outlet: 'drawer',
     data: { animation: 'invoices' },
   },
   {
     path: 'users',
     loadChildren: () =>
-      import(
-        'app/dashboard/modules/user-module/user-drawer.module'
-      ).then(m => m.UserDrawerModule),
+      import('app/dashboard/modules/user-module/user-drawer.module').then(
+        m => m.UserDrawerModule
+      ),
     outlet: 'drawer',
     data: { animation: 'users' },
   },

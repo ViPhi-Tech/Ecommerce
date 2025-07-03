@@ -13,7 +13,6 @@ export class ClientService {
   constructor() {}
 
   getClients(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}client/getAll`)
+    return this.http.get<any>(`${this.apiUrl}client/getAll`);
   }
-
 }

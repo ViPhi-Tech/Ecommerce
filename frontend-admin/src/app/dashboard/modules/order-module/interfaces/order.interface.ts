@@ -15,9 +15,9 @@ export interface Order {
   updatedAt: Date; // Data da última atualização
   isActive: boolean; // Indica se o pedido está ativo
   imageUrl?: string; // URL de uma imagem representativa do pedido
-  client: Client
+  client: Client;
 }
 
 export interface Client {
-    fullName: string;
+  fullName: string;
 }

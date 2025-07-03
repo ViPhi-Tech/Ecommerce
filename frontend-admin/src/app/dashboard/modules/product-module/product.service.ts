@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductService {
   private http = inject(HttpClient);

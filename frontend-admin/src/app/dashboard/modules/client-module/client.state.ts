@@ -43,11 +43,12 @@ export class ClientState {
       return clients;
     }
 
-    return clients.filter(client =>
-      client.fullName?.toLowerCase().includes(search) ||
-      client.document?.toLowerCase().includes(search) ||
-      client.phone?.toLowerCase().includes(search) ||
-      client.email?.toLowerCase().includes(search)
+    return clients.filter(
+      client =>
+        client.fullName?.toLowerCase().includes(search) ||
+        client.document?.toLowerCase().includes(search) ||
+        client.phone?.toLowerCase().includes(search) ||
+        client.email?.toLowerCase().includes(search)
     );
   });
 
