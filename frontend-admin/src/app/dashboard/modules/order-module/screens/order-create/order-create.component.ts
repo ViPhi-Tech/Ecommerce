@@ -1,15 +1,17 @@
 import { Component, OnInit, OnDestroy, inject, DestroyRef } from '@angular/core';
 import { Router, NavigationEnd, RouterModule, ActivatedRoute } from '@angular/router';
-import { OrderHeaderComponent } from '../../components/order-header/order-header.component';
 import { filter } from 'rxjs';
 import { OrderState } from '../../order.state';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ProductSearchComponent } from '../../components/product-search/product-search.component';
+import { OrderCartComponent } from '../../components/order-cart/order-cart.component';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'fuse-order-create',
   templateUrl: './order-create.component.html',
   styleUrls: ['./order-create.component.scss'],
-  imports: [OrderHeaderComponent, RouterModule],
+  imports: [RouterModule, ProductSearchComponent, OrderCartComponent, NgIcon],
 })
 export class OrderCreateComponent implements OnInit, OnDestroy {
   private router = inject(Router);
@@ -17,7 +19,7 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
 
   private destroyRef = inject(DestroyRef);
   private orderState = inject(OrderState);
-  
+
   constructor() {}
 
   ngOnInit() {

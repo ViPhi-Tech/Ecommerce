@@ -63,6 +63,16 @@ export class OrderListComponent implements OnInit {
       rowsPerPage: 10,
       paginator: true,
       pageLinkSize: 5,
+      headerButtons: [
+        {
+          icon: 'pi pi-plus',
+          label: 'Criar Pedido',
+          tooltip: 'Criar Pedido',
+          action: () => {
+            this.router.navigate(['dashboard', 'orders', 'new']);
+          },
+        },
+      ],
       columns: [
         { field: 'id', caption: 'Cód. Pedido', sortable: true, filter: true },
         {
@@ -118,16 +128,6 @@ export class OrderListComponent implements OnInit {
               },
             },
           ],
-        },
-      ],
-      headerButtons: [
-        {
-          icon: 'pi pi-plus',
-          label: 'Criar Pedido',
-          tooltip: 'Criar Pedido',
-          action: () => {
-            this.router.navigate(['dashboard', 'orders', 'new']);
-          },
         },
       ],
     });
