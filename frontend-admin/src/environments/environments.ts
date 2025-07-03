@@ -1,3 +1,3 @@
 export const environments = {
-  apiUrl: 'http://localhost:8000/api/',
+  apiUrl: 'https://ecom-back-pk5h.onrender.com/api/',
 };
