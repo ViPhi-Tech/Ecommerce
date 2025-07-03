@@ -72,8 +72,9 @@ export class OrderListComponent implements OnInit {
           filter: true,
         },
         {
-          field: 'valor',
+          field: 'total',
           caption: 'Valor',
+          type: 'currency',
           sortable: true,
           filter: true,
         },
@@ -81,6 +82,7 @@ export class OrderListComponent implements OnInit {
         {
           field: 'createdAt',
           caption: 'Data de Criação',
+          type: 'datetime',
           sortable: true,
           filter: true,
         },
@@ -124,7 +126,7 @@ export class OrderListComponent implements OnInit {
           label: 'Criar Pedido',
           tooltip: 'Criar Pedido',
           action: () => {
-            this.router.navigate(['dashboard', 'orders', '22']);
+            this.router.navigate(['dashboard', 'orders', 'new']);
           },
         },
       ],

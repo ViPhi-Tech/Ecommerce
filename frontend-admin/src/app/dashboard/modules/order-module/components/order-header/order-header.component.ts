@@ -1,9 +1,11 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
 import { CoreService } from 'app/shared/services/core.service';
 import { ButtonModule } from 'primeng/button';
+import { OrderState } from '../../order.state';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export interface OrderStep {
   label: string;
@@ -24,8 +26,10 @@ export interface OrderStep {
 })
 export class OrderHeaderComponent implements OnInit {
   private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private coreService = inject(CoreService); // Assuming CoreService is provided in the app
+  private destroyRef = inject(DestroyRef);
+  private coreService = inject(CoreService);
+  
+  private state = inject(OrderState);
 
   today = signal(
     new Date().toLocaleDateString('pt-BR', {
@@ -37,7 +41,7 @@ export class OrderHeaderComponent implements OnInit {
 
   completePercent = signal(0);
   showSteps = signal(false);
-  orderCode = signal(0);
+  orderCode = signal<string | number>(``);
   orderSteps = signal<OrderStep[]>([
     { label: 'Cliente', icon: 'lucideUser', perc: 0, step: 1, path: 'client' },
     {
@@ -71,12 +75,21 @@ export class OrderHeaderComponent implements OnInit {
   ]);
 
   constructor() {
-    this.activatedRoute.params.subscribe(params => {
-      this.orderCode.set(params['id'] || 0);
-    });
+    
+    this.state.refreshOrder$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        const order = this.state.orderDetails();
+        this.orderCode.set(order.id);
+        this.orderDifinitions();
+      });
   }
 
   ngOnInit() {
+    this.orderDifinitions();
+  }
+
+  orderDifinitions() {
     this.coreService.setPageTitle(
       `Pedido #${this.orderCode()}`,
       `Realizado em ${this.today()}`
@@ -85,10 +98,8 @@ export class OrderHeaderComponent implements OnInit {
     this.setupOrderSteps();
     this.calculateCompletePercent();
 
-    this.router.events.subscribe(() => {
-      this.setupOrderSteps();
-      this.calculateCompletePercent();
-    });
+    this.setupOrderSteps();
+    this.calculateCompletePercent();
   }
 
   selectStep(step: OrderStep) {
