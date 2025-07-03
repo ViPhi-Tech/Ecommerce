@@ -1,5 +1,6 @@
 export interface OrderModuleState {
   orderList: Order[];
+  orderDetails: Order; // Detalhes do pedido atual, pode ser null se não houver detalhes carregados
   view: 'table' | 'list'; // Tipo de visualização atual (tabela ou lista)
   loading: boolean;
   error: string | null;

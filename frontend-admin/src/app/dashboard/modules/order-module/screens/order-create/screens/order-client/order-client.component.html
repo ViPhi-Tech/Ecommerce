@@ -16,48 +16,56 @@
             ></ng-icon>
             <input
               type="text"
-              class="flex h-10 w-full bg-background px-3 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none md:text-sm pl-10 pr-4 py-3 text-lg border-2 border-gray-200 focus:border-primaryrounded-lg"
+              class="flex h-10 w-full bg-background px-3 ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none md:text-sm pl-10 pr-4 py-3 text-lg border-2 border-gray-200 focus:border-primary rounded-lg"
               placeholder="Buscar por nome, CPF ou telefone..."
               autocomplete="off"
-              value=""
+              [value]="clientState.searchTerm()"
+              (input)="onSearchChange($event)"
             />
           </div>
-          <div
-            class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto"
-          >
-            <div class="p-3 border-b border-gray-100 bg-gray-50">
-              <p class="text-sm text-gray-600 font-medium">5 clientes encontrados</p>
-            </div>
+          @if (clientState.searchTerm() && clientState.clientFil().length > 0) {
             <div
-              class="p-4 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
+              class="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 rounded-lg shadow-lg z-50 max-h-80 overflow-y-auto"
             >
-              <div class="flex items-start gap-3">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  class="lucide lucide-credit-card w-4 h-4 text-green-500"
-                >
-                  <rect width="20" height="14" x="2" y="5" rx="2"></rect>
-                  <line x1="2" x2="22" y1="10" y2="10"></line>
-                </svg>
-                <div class="flex-1 min-w-0">
-                  <h4 class="font-medium text-gray-900 truncate">Maria Silva Santos</h4>
-                  <div class="mt-1 space-y-1">
-                    <p class="text-sm text-gray-600">CPF: 123.456.789-01</p>
-                    <p class="text-sm text-gray-600">Tel: (11) 99999-9999</p>
-                    <p class="text-sm text-gray-500">m</p>
-                  </div>
+              @if (clientState.clientFil().length) {
+                <div class="p-3 border-b border-gray-100 bg-gray-50">
+                  <p class="text-sm text-gray-600 font-medium">{{clientState.clientFil().length}} clientes encontrados</p>
                 </div>
-              </div>
+              }
+              @for (client of clientState.clientFil(); track $index) {
+                <div>
+                  <button (click)="createOrder(client)"
+                  class="w-full text-left p-4 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0 transition-colors"
+                >
+                  <div class="flex items-start gap-3">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      class="lucide lucide-credit-card w-4 h-4 text-green-500"
+                    >
+                      <rect width="20" height="14" x="2" y="5" rx="2"></rect>
+                      <line x1="2" x2="22" y1="10" y2="10"></line>
+                    </svg>
+                    <div class="flex-1 min-w-0">
+                      <h4 class="font-medium text-gray-900 truncate">{{client?.fullName}}</h4>
+                      <div class="mt-1 space-y-1">
+                        <p class="text-sm text-gray-600">CPF: {{client?.document}}</p>
+                        <p class="text-sm text-gray-600">Tel: {{client?.phone}}</p>
+                      </div>
+                    </div>
+                  </div>
+                </button>
+                </div>
+              }
             </div>
-          </div>
+          }
         </div>
       </div>
     </div>
