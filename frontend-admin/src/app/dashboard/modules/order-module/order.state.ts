@@ -1,20 +1,21 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { catchError, finalize, Observable, of, Subject } from 'rxjs';
+import { catchError, finalize, Subject } from 'rxjs';
 import { Order, OrderModuleState } from './interfaces/order.interface';
 import { lastValueFrom } from 'rxjs';
 import { OrderService } from './order.service';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
+import { BaseState } from 'app/shared/store/base.state';
 
 @Injectable({
   providedIn: 'root',
 })
-export class OrderState {
+export class OrderState extends BaseState<OrderModuleState> {
   private orderService = inject(OrderService);
 
   private refreshOrderSubject = new Subject<Order>();
   refreshOrder$ = this.refreshOrderSubject.asObservable();
 
-  private state = signal<OrderModuleState>({
+  protected state = signal<OrderModuleState>({
     orderList: [],
     orderDetails: {} as Order, // Inicializa com um objeto vazio ou pode ser null se não houver detalhes carregados
     view:
@@ -26,13 +27,11 @@ export class OrderState {
 
   orderList = computed(() => this.state().orderList);
   orderDetails = computed(() => this.state().orderDetails);
-  loading = computed(() => this.state().loading);
-  error = computed(() => this.state().error);
   currentView = computed(() => this.state().view);
 
   createPreOrder(clientId: string | number): Promise<Order> {
     this.setLoading(true);
-    this.setError(null);
+    this.clearError();
 
     return lastValueFrom(
       this.orderService.createPreOrder(clientId).pipe(
@@ -46,7 +45,7 @@ export class OrderState {
 
   getOrderList(): void {
     this.setLoading(true);
-    this.setError(null);
+    this.clearError();
     this.setOrderList([]);
 
     lastValueFrom(
@@ -86,7 +85,7 @@ export class OrderState {
 
   getOrderById(orderId: string | number): Promise<Order> {
     this.setLoading(true);
-    this.setError(null);
+    this.clearError();
 
     return lastValueFrom(
       this.orderService.getOrderById(orderId).pipe(
@@ -118,25 +117,4 @@ export class OrderState {
     localStorage.setItem('orderView', view);
   }
 
-  setLoading(loading: boolean) {
-    this.state.update(state => ({
-      ...state,
-      loading,
-    }));
-  }
-
-  handleError(error: any): Observable<any> {
-    this.setError('Erro ao carregar dados');
-    console.error('Erro ao buscar dados:', error);
-    return of(null);
-  }
-
-  setError(error: string | null) {
-    this.state.update(state => ({
-      ...state,
-      error,
-    }));
-  }
-
-  constructor() {}
 }
