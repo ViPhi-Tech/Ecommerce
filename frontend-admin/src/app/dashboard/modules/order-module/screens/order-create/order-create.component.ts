@@ -6,12 +6,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductSearchComponent } from '../../components/product-search/product-search.component';
 import { OrderCartComponent } from '../../components/order-cart/order-cart.component';
 import { NgIcon } from '@ng-icons/core';
+import { ProductListComponent } from "../../components/product-list/product-list.component";
 
 @Component({
   selector: 'fuse-order-create',
   templateUrl: './order-create.component.html',
   styleUrls: ['./order-create.component.scss'],
-  imports: [RouterModule, ProductSearchComponent, OrderCartComponent, NgIcon],
+  imports: [RouterModule, ProductSearchComponent, OrderCartComponent, NgIcon, ProductListComponent],
 })
 export class OrderCreateComponent implements OnInit, OnDestroy {
   private router = inject(Router);

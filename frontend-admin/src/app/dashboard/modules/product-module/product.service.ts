@@ -4,7 +4,9 @@ import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ProductService {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl + 'product';

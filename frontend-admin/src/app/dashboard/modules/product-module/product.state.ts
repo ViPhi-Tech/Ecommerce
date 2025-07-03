@@ -8,7 +8,9 @@ import {
 import { catchError, finalize, Observable, of, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ProductState {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl;

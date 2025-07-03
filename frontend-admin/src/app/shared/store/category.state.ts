@@ -7,7 +7,7 @@ import {
 import { catchError, finalize, Observable, of, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
 import { lastValueFrom } from 'rxjs';
-import { CategoryService } from 'app/core/views/config-module/screens/category-module/category.service';
+import { CategoryService } from 'app/dashboard/modules/category-module/category.service';
 
 @Injectable({
   providedIn: 'root',

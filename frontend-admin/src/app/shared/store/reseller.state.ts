@@ -7,7 +7,9 @@ import {
   ResellerModuleState,
 } from '../interfaces/reseller-module.interface';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class ResellerState {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl;

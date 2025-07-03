@@ -33,7 +33,7 @@ export const routes: Routes = [
     path: 'import',
     loadChildren: () =>
       import(
-        'app/core/views/config-module/screens/import-module/import-drawer.module'
+        'app/dashboard/modules/import-module/import-drawer.module'
       ).then(m => m.ImportDrawerModule),
     outlet: 'drawer',
     data: { animation: 'import' },
@@ -42,7 +42,7 @@ export const routes: Routes = [
     path: 'products',
     loadChildren: () =>
       import(
-        'app/core/views/config-module/screens/product-module/product-drawer.module'
+        'app/dashboard/modules/product-module/product-drawer.module'
       ).then(m => m.ProductDrawerModule),
     outlet: 'drawer',
     data: { animation: 'products' },
@@ -51,7 +51,7 @@ export const routes: Routes = [
     path: 'categories',
     loadChildren: () =>
       import(
-        'app/core/views/config-module/screens/category-module/category-drawer.module'
+        'app/dashboard/modules/category-module/category-drawer.module'
       ).then(m => m.CategoryDrawerModule),
     outlet: 'drawer',
     data: { animation: 'categories' },
@@ -60,7 +60,7 @@ export const routes: Routes = [
     path: 'invoices',
     loadChildren: () =>
       import(
-        'app/core/views/config-module/screens/invoice-module/invoice-drawer.module'
+        'app/dashboard/modules/invoice-module/invoice-drawer.module'
       ).then(m => m.InvoiceDrawerModule),
     outlet: 'drawer',
     data: { animation: 'invoices' },
@@ -69,7 +69,7 @@ export const routes: Routes = [
     path: 'users',
     loadChildren: () =>
       import(
-        'app/core/views/config-module/screens/user-module/user-drawer.module'
+        'app/dashboard/modules/user-module/user-drawer.module'
       ).then(m => m.UserDrawerModule),
     outlet: 'drawer',
     data: { animation: 'users' },

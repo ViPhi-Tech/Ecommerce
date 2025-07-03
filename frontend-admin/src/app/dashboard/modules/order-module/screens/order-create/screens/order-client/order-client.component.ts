@@ -1,7 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
-import { ClientState } from 'app/core/views/config-module/screens/client-module/client.state';
+import { ClientState } from 'app/dashboard/modules/client-module/client.state';
 import { OrderState } from 'app/dashboard/modules/order-module/order.state';
 import { Client } from 'app/shared/interfaces/client-module.interface';
 

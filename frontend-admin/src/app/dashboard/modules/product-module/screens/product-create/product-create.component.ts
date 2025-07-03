@@ -35,7 +35,6 @@ import { CategoryState } from 'app/shared/store/category.state';
     FormModule,
     ToastModule,
   ],
-  providers: [ProductService],
 })
 export class ProductCreateComponent implements OnInit {
   destroyedRef = inject(DestroyRef);
