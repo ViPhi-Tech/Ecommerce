@@ -43,4 +43,13 @@ export default async function saleRoutes(
         handler: orderController.createPreOrder.bind(orderController)
      })
 
+     fastify.patch('/update', {
+         schema: {
+            tags: ['order'],
+            body: orderCreateJsonSchema
+         },
+         preValidation: [authenticate],
+         handler: orderController.updateOrder.bind(orderController)
+     })
+
 }

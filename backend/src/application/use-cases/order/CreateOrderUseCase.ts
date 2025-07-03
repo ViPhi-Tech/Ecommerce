@@ -44,7 +44,7 @@ export class CreateOrderUseCase {
         statusId: 'pending'
       });
     }
-
+    
     await this.paymentRepository.createMany(order.id, enrichedPayments);
     
     return {
@@ -55,6 +55,4 @@ export class CreateOrderUseCase {
     };
   });
 }
-
-
 }

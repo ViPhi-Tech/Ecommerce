@@ -8,13 +8,15 @@ import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 
 import { OrderCreateDTO, OrderID, CreatePreOrderDTO } from "../dto/Order.dto";
+import { UpdateOrderUseCase } from '../../../application/use-cases/order/UpdateOrderUseCase';
 
 export class OrderController {
     constructor(
         private createOrderUseCase: CreateOrderUseCase,
         private findByIdOrderUseCase: FindByIdOrderUseCase,
         private findallOrderUseCase: FindAllOrderUseCase,
-        private createPreOrderUseCase: CreatePreOrderUseCase
+        private createPreOrderUseCase: CreatePreOrderUseCase,
+        private updateOrderUseCase: UpdateOrderUseCase
     ) {}
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
@@ -68,5 +70,21 @@ export class OrderController {
             status: HTTP_MESSAGES.API_STATUS_SUCCESS,
             data: await this.createPreOrderUseCase.execute(client.clientId),
         });
+    };
+
+    async updateOrder(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try {
+            const order = request.body as OrderCreateDTO
+            return reply.status(HTTP_STATUS.API_STATUS_SUCCESS).send({
+                status: true,
+                descricao: HTTP_MESSAGES.API_STATUS_SUCCESS,
+                data: await this.updateOrderUseCase.execute(order.clientId, order)
+            });
+        } catch (error) {
+            return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
+                status: false,
+                descricao: error instanceof Error? error.message : HTTP_MESSAGES.API_STATUS_BAD_REQUEST
+            });
+        }
     }
 }
