@@ -1,7 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { CartState } from '../order-cart/order-cart.state';
 
 interface DeliveryType {
   id: string;
@@ -20,6 +21,8 @@ interface DeliveryType {
   imports: [NgIcon, DialogModule, ButtonModule],
 })
 export class DeliveryTypesComponent implements OnInit {
+  public cartState = inject(CartState);
+
   visible = signal(false);
 
   // Dados dos tipos de entrega
@@ -27,7 +30,7 @@ export class DeliveryTypesComponent implements OnInit {
     {
       id: 'retirada',
       name: 'Retirada na Loja',
-      description: 'Retire seu pedido em nossa loja',
+      description: 'Retire em nossa loja',
       icon: 'lucideStore',
       iconColor: '#2563eb', // Azul direto
       price: 0,
@@ -56,16 +59,13 @@ export class DeliveryTypesComponent implements OnInit {
     },
   ]);
 
-  // Tipo de entrega selecionado - agora salva o objeto inteiro
-  selectedDeliveryType = signal<DeliveryType | null>(null);
-
   constructor() {}
 
   ngOnInit() {}
 
   // Métodos para lidar com seleções
   onDeliveryTypeChange(deliveryType: DeliveryType) {
-    this.selectedDeliveryType.set(deliveryType);
+    this.cartState.setDeliveryType(deliveryType);
     this.visible.set(false);
     console.log('Tipo de entrega selecionado:', deliveryType);
   }

@@ -2,13 +2,13 @@
 <button
   type="button"
   class="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer w-full text-left"
-  [class.border-blue-500]="selectedDeliveryType()"
-  [class.bg-blue-50]="selectedDeliveryType()"
-  [class.border-dashed]="!selectedDeliveryType()"
-  [class.border-gray-300]="!selectedDeliveryType()"
+  [class.border-blue-500]="cartState.deliveryType()"
+  [class.bg-blue-50]="cartState.deliveryType()"
+  [class.border-dashed]="!cartState.deliveryType()"
+  [class.border-gray-300]="!cartState.deliveryType()"
   (click)="visible.set(true)"
 >
-  @if (selectedDeliveryType(); as selected) {
+  @if (cartState.deliveryType(); as selected) {
     <!-- Tipo de entrega selecionado -->
     <div class="flex items-center gap-3 flex-1 ml-4">      <ng-icon
         [name]="selected.icon"
@@ -66,10 +66,10 @@
               (click)="onDeliveryTypeChange(deliveryType)"
               class="w-full flex space-x-3 py-4 px-6 border rounded-lg hover:bg-gray-50"
               [class.border-blue-500]="
-                selectedDeliveryType()?.id === deliveryType.id
+                cartState.deliveryType()?.id === deliveryType.id
               "
               [class.bg-blue-50]="
-                selectedDeliveryType()?.id === deliveryType.id
+                cartState.deliveryType()?.id === deliveryType.id
               "
             >
               <label

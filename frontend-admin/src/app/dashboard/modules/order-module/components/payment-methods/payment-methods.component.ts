@@ -1,7 +1,8 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
+import { CartState } from '../order-cart/order-cart.state';
 
 interface PaymentMethod {
   id: string;
@@ -19,6 +20,8 @@ interface PaymentMethod {
   imports: [NgIcon, DialogModule, ButtonModule],
 })
 export class PaymentMethodsComponent implements OnInit {
+  public cartState = inject(CartState);
+
   visible = signal(false);
   // Dados das formas de pagamento
   paymentMethods = signal<PaymentMethod[]>([
@@ -54,15 +57,12 @@ export class PaymentMethodsComponent implements OnInit {
     },
   ]);
 
-  // Forma de pagamento selecionada - agora salva o objeto inteiro
-  selectedPaymentMethod = signal<PaymentMethod | null>(null);
-
   constructor() {}
 
   ngOnInit() {}
 
   onPaymentMethodChange(paymentMethod: PaymentMethod) {
-    this.selectedPaymentMethod.set(paymentMethod);
+    this.cartState.setPaymentMethod(paymentMethod);
     this.visible.set(false);
   }
 }

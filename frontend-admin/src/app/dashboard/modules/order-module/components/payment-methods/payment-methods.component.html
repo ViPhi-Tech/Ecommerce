@@ -2,13 +2,13 @@
 <button
   type="button"
   class="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer w-full text-left"
-  [class.border-blue-500]="selectedPaymentMethod()"
-  [class.bg-blue-50]="selectedPaymentMethod()"
-  [class.border-dashed]="!selectedPaymentMethod()"
-  [class.border-gray-300]="!selectedPaymentMethod()"
+  [class.border-blue-500]="cartState.paymentMethod()"
+  [class.bg-blue-50]="cartState.paymentMethod()"
+  [class.border-dashed]="!cartState.paymentMethod()"
+  [class.border-gray-300]="!cartState.paymentMethod()"
   (click)="visible.set(true)"
 >
-  @if (selectedPaymentMethod(); as selected) {
+  @if (cartState.paymentMethod(); as selected) {
     <!-- Forma de pagamento selecionada -->    <div class="flex items-center gap-3 flex-1 ml-4">
       <ng-icon
         [name]="selected.icon"
@@ -68,10 +68,10 @@
               (click)="onPaymentMethodChange(paymentMethod)"
               class="w-full flex space-x-3 py-4 px-6 border rounded-lg hover:bg-gray-50"
               [class.border-blue-500]="
-                selectedPaymentMethod()?.id === paymentMethod.id
+                cartState.paymentMethod()?.id === paymentMethod.id
               "
               [class.bg-blue-50]="
-                selectedPaymentMethod()?.id === paymentMethod.id
+                cartState.paymentMethod()?.id === paymentMethod.id
               "
             >
               <label

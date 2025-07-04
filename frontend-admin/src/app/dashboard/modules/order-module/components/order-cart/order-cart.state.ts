@@ -8,6 +8,9 @@ export interface ICartState {
   totalQuantity: number;
   quantityItems: number;
   shipment: number;
+  paymentMethod: any; // Adicionando paymentMethod ao estado
+  deliveryType: any; // Adicionando deliveryType ao estado
+  client: any; // Adicionando client ao estado
 }
 
 export interface CartItem {
@@ -33,6 +36,7 @@ export class CartState {
     shipment: 0,
     paymentMethod: null, // Adicionando paymentMethod ao estado inicial
     deliveryType: null, // Adicionando deliveryType ao estado inicial
+    client: null, // Adicionando client ao estado inicial
   });
 
   public cartItems = computed(() => this.state().cartItems);
@@ -42,6 +46,9 @@ export class CartState {
   public total = computed(() => this.state().total);
   public totalQuantity = computed(() => this.state().totalQuantity);
   public quantityItems = computed(() => this.state().quantityItems);
+  public paymentMethod = computed(() => this.state().paymentMethod);
+  public deliveryType = computed(() => this.state().deliveryType);
+  public client = computed(() => this.state().client);
 
   constructor() {}
 
@@ -175,6 +182,27 @@ export class CartState {
     this.state.update(state => ({
       ...state,
       total: state.subTotal - state.discount + state.shipment,
+    }));
+  }
+
+  public setDeliveryType(deliveryType: any) {
+    this.state.update(state => ({
+      ...state,
+      deliveryType,
+    }));
+  }
+
+  public setPaymentMethod(paymentMethod: any) {
+    this.state.update(state => ({
+      ...state,
+      paymentMethod,
+    }));
+  }
+
+  public setClient(client: any) {
+    this.state.update(state => ({
+      ...state,
+      client,
     }));
   }
 

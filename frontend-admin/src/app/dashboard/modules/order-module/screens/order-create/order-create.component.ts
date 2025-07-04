@@ -19,6 +19,7 @@ import { OrderCartComponent } from '../../components/order-cart/order-cart.compo
 import { ProductListComponent } from '../../components/product-list/product-list.component';
 import { DeliveryTypesComponent } from '../../components/delivery-types/delivery-types.component';
 import { PaymentMethodsComponent } from '../../components/payment-methods/payment-methods.component';
+import { ClientSelectionComponent } from '../../components/client-selection/client-selection.component';
 import { CoreService } from 'app/shared/services/core.service';
 import { CartState } from '../../components/order-cart/order-cart.state';
 
@@ -33,6 +34,7 @@ import { CartState } from '../../components/order-cart/order-cart.state';
     ProductListComponent,
     DeliveryTypesComponent,
     PaymentMethodsComponent,
+    ClientSelectionComponent,
   ],
 })
 export class OrderCreateComponent implements OnInit, OnDestroy {
