@@ -78,8 +78,8 @@
                         <!-- Preço com desconto -->
                         <span class="text-sm font-medium">
                           {{
-                            item.price -
-                              (item.price * item.discountPercent) / 100
+                            item.finalPrice -
+                              (item.finalPrice * item.discountPercent) / 100
                               | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
                           }}
                         </span>
@@ -88,7 +88,7 @@
                           class="text-sm line-through ml-2 text-muted-foreground"
                         >
                           {{
-                            item.price
+                            item.finalPrice
                               | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
                           }}
                         </span>
@@ -96,7 +96,7 @@
                         <!-- Apenas o preço normal quando não há desconto -->
                         <span class="text-sm">
                           {{
-                            item.price
+                            item.finalPrice
                               | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
                           }}
                         </span>

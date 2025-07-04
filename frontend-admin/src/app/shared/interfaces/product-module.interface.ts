@@ -1,7 +1,7 @@
-export interface ProductModuleState {
+import { BaseModuleState } from 'app/shared/store/base.state';
+
+export interface ProductModuleState extends BaseModuleState {
   productList: Product[];
-  loading: boolean;
-  error: string | null;
   view: 'table' | 'list'; // Tipo de visualização atual (tabela ou lista)
 }
 
@@ -10,8 +10,12 @@ export interface Product {
   sku: string;
   category: string;
   brand: string;
-  price: number;
+  initialPrice: number;
+  finalPrice: number;
   stock: number;
   shortDescription: string;
   description: string;
+  imageUrl: string;
+
+  loading?: boolean; // Indica se o produto está sendo carregado
 }

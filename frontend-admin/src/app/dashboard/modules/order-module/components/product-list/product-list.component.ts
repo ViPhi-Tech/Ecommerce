@@ -6,6 +6,7 @@ import { CurrencyPipe } from '@angular/common';
 import { CartStore } from 'app/shared/store/cart.state';
 import { sleep } from 'app/shared/utils/utils';
 import { MessageService } from 'primeng/api';
+import { ProductState } from 'app/dashboard/modules/product-module/product.state';
 
 @Component({
   selector: 'fuse-product-list',
@@ -16,71 +17,14 @@ import { MessageService } from 'primeng/api';
 export class ProductListComponent implements OnInit {
   private toast = inject(MessageService);
 
+  productState = inject(ProductState);
   private cartStore = inject(CartStore);
-
-  products: any[] | undefined;
 
   constructor() {}
 
-  ngOnInit() {
-    this.products = [
-      {
-        id: 1,
-        name: 'Smartphone Galaxy S23',
-        price: 4999.99,
-        category: 'Eletrônicos',
-        image: '/placeholder.svg?height=200&width=200',
-      },
-      {
-        id: 2,
-        name: 'Notebook Dell Inspiron',
-        price: 3599.9,
-        category: 'Computadores',
-        image: '/placeholder.svg?height=200&width=200',
-      },
-      {
-        id: 3,
-        name: 'Smart TV 55 polegadas',
-        price: 2899.0,
-        category: 'Eletrônicos',
-        image: '/placeholder.svg?height=200&width=200',
-      },
-      {
-        id: 4,
-        name: 'Fone de Ouvido Bluetooth',
-        price: 299.9,
-        category: 'Acessórios',
-        image: '/placeholder.svg?height=200&width=200',
-      },
-      {
-        id: 5,
-        name: 'Cafeteira Elétrica',
-        price: 189.9,
-        category: 'Eletrodomésticos',
-        image: '/placeholder.svg?height=200&width=200',
-      },
-      {
-        id: 6,
-        name: 'Tênis Esportivo',
-        price: 249.9,
-        category: 'Calçados',
-        image: '/placeholder.svg?height=200&width=200',
-      },
-      {
-        id: 7,
-        name: 'Mochila para Notebook',
-        price: 159.9,
-        category: 'Acessórios',
-        image: '/placeholder.svg?height=200&width=200',
-      },
-      {
-        id: 8,
-        name: 'Relógio Inteligente',
-        price: 599.9,
-        category: 'Eletrônicos',
-        image: '/placeholder.svg?height=200&width=200',
-      },
-    ];
+  async ngOnInit() {
+    await this.productState.getProductList();
+    console.log(this.productState.productList());
   }
 
   async addProductToCart(product: any) {

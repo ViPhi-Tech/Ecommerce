@@ -13,7 +13,7 @@ export interface CartState {
 export interface CartItem {
   id: number;
   name: string;
-  price: number;
+  finalPrice: number;
   quantity: number;
   discountPercent: number;
   loading?: boolean;
@@ -122,19 +122,20 @@ export class CartStore {
       ...item,
       discountPercent: item.discountPercent || 0,
       quantity: item.quantity || 0,
-      price: item.price || 0,
+      finalPrice: item.finalPrice || 0,
     }));
 
     // Cálculo do subTotal
     const subTotal = cartItems
-      .map(item => item.price * item.quantity)
+      .map(item => item.finalPrice * item.quantity)
       .reduce((total, itemSubtotal) => total + itemSubtotal, 0);
 
     // Cálculo do desconto
     const discount =
       cartItems
         .map(
-          item => ((item.price * item.discountPercent) / 100) * item.quantity
+          item =>
+            ((item.finalPrice * item.discountPercent) / 100) * item.quantity
         )
         .reduce((total, itemDiscount) => total + itemDiscount, 0) || 0;
 
@@ -142,9 +143,9 @@ export class CartStore {
     const total =
       cartItems
         .map(item => {
-          const itemSubtotal = item.price * item.quantity;
+          const itemSubtotal = item.finalPrice * item.quantity;
           const itemDiscount =
-            ((item.price * item.discountPercent) / 100) * item.quantity;
+            ((item.finalPrice * item.discountPercent) / 100) * item.quantity;
           return itemSubtotal - itemDiscount;
         })
         .reduce((total, itemTotal) => total + itemTotal, 0) +
@@ -175,7 +176,7 @@ export class CartStore {
     }));
   }
 
-  public clearCart() {
+  public resetCart() {
     this.state.update(state => ({
       ...state,
       cartItems: [],

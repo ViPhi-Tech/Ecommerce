@@ -1,21 +1,24 @@
-import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import {
   Product,
   ProductModuleState,
 } from 'app/shared/interfaces/product-module.interface';
-import { catchError, finalize, Observable, of, tap } from 'rxjs';
+import { BaseState } from 'app/shared/store/base.state';
+import { catchError, finalize, lastValueFrom } from 'rxjs';
 import { environments } from 'src/environments/environments';
+import { ProductService } from './product.service';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root',
 })
-export class ProductState {
+export class ProductState extends BaseState<ProductModuleState> {
+  private productService = inject(ProductService);
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl;
 
-  private state = signal<ProductModuleState>({
+  protected state = signal<ProductModuleState>({
     productList: [],
     view:
       (localStorage.getItem('productView') as ProductModuleState['view']) ||
@@ -25,28 +28,39 @@ export class ProductState {
   });
 
   productList = computed(() => this.state().productList);
-  loading = computed(() => this.state().loading);
-  error = computed(() => this.state().error);
   currentView = computed(() => this.state().view);
 
-  getProductList(): void {
+  async getProductList(): Promise<void> {
     this.setLoading(true);
-    this.setError(null);
+    this.clearError();
     this.setProductList([]);
 
-    this.http
-      .get<ApiResponse<Product[]>>(`${this.apiUrl}product/all`, {
-        headers: { 'Skip-Loader': 'true' },
+    await lastValueFrom(
+      this.http
+        .get<ApiResponse<Product[]>>(`${this.apiUrl}product/all`, {
+          headers: { 'Skip-Loader': 'true' },
+        })
+        .pipe(
+          catchError(error => this.handleError(error)),
+          finalize(() => this.setLoading(false))
+        )
+    )
+      .then((response: any) => {
+        const products = Array.isArray(response) ? response : response.dados;
+        if (products && products.length > 0) {
+          this.setProductList(products);
+        } else {
+          this.setProductList([]);
+          this.setError('Nenhum produto encontrado.');
+        }
       })
-      .pipe(
-        tap(data => this.setProductList(data.dados)),
-        catchError(error => this.handleError(error)),
-        finalize(() => this.setLoading(false))
-      )
-      .subscribe();
+      .catch(error => {
+        this.setError('Erro ao carregar a lista de produtos');
+        console.error('Erro ao buscar produtos:', error);
+      });
   }
 
-  setProductList(productList: any) {
+  setProductList(productList: Product[]) {
     this.state.update(state => ({
       ...state,
       productList,
@@ -61,25 +75,7 @@ export class ProductState {
     localStorage.setItem('productView', view);
   }
 
-  private setLoading(loading: boolean) {
-    this.state.update(state => ({
-      ...state,
-      loading,
-    }));
+  constructor() {
+    super();
   }
-
-  private handleError(error: any): Observable<Product[]> {
-    this.setError('Erro ao carregar os produtos');
-    console.error('Erro ao buscar produtos:', error);
-    return of([]);
-  }
-
-  private setError(error: string | null) {
-    this.state.update(state => ({
-      ...state,
-      error,
-    }));
-  }
-
-  constructor() {}
 }

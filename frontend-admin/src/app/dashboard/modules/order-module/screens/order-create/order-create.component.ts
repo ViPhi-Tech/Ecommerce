@@ -16,8 +16,11 @@ import { OrderState } from '../../order.state';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductSearchComponent } from '../../components/product-search/product-search.component';
 import { OrderCartComponent } from '../../components/order-cart/order-cart.component';
-import { NgIcon } from '@ng-icons/core';
 import { ProductListComponent } from '../../components/product-list/product-list.component';
+import { DeliveryTypesComponent } from '../../components/delivery-types/delivery-types.component';
+import { PaymentMethodsComponent } from '../../components/payment-methods/payment-methods.component';
+import { CartStore } from 'app/shared/store/cart.state';
+import { CoreService } from 'app/shared/services/core.service';
 
 @Component({
   selector: 'fuse-order-create',
@@ -27,16 +30,19 @@ import { ProductListComponent } from '../../components/product-list/product-list
     RouterModule,
     ProductSearchComponent,
     OrderCartComponent,
-    NgIcon,
     ProductListComponent,
+    DeliveryTypesComponent,
+    PaymentMethodsComponent,
   ],
 })
 export class OrderCreateComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
-
   private destroyRef = inject(DestroyRef);
+
+  private coreService = inject(CoreService);
   private orderState = inject(OrderState);
+  private cartState = inject(CartStore);
 
   constructor() {}
 
@@ -52,7 +58,9 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
     if (orderId && orderId !== 'new') {
       await this.orderState.getOrderById(orderId);
     } else {
+      this.coreService.setPageTitle('Nova Venda', 'Criar uma nova venda');
       this.orderState.resetOrder();
+      this.cartState.resetCart();
     }
   }
 

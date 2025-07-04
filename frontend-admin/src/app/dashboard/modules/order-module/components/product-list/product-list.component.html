@@ -1,9 +1,9 @@
-<div>
+<div class="mt-4">
   <h2 class="text-xl font-semibold mb-4">Todos os produtos</h2>
   <div
     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
   >
-    @for (product of products; track $index) {
+    @for (product of productState.productList(); track $index) {
       <div
         class="rounded-lg border border-gray-200 dark:border-[#1F1F23] bg-card text-card-foreground shadow-sm overflow-hidden"
       >
@@ -17,7 +17,8 @@
         <div class="p-4 pt-0 flex flex-col justify-between items-center">
           <div class="mb-2">
             <span class="font-bold text-lg">{{
-              product?.price | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+              product?.finalPrice
+                | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
             }}</span>
           </div>
           <div class="w-full">
