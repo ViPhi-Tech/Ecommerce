@@ -20,7 +20,6 @@ interface PaymentMethod {
 })
 export class PaymentMethodsComponent implements OnInit {
   visible = signal(false);
-
   // Dados das formas de pagamento
   paymentMethods = signal<PaymentMethod[]>([
     {
@@ -28,30 +27,30 @@ export class PaymentMethodsComponent implements OnInit {
       name: 'PIX',
       description: 'Pagamento instantâneo',
       icon: 'lucideSmartphone',
-      iconColor: 'text-green-600',
+      iconColor: '#16a34a', // Verde direto
       discount: '5% desconto',
-      discountColor: 'text-green-600',
+      discountColor: '#16a34a', // Verde direto
     },
     {
       id: 'cartao',
       name: 'Cartão de Crédito/Débito',
       description: 'Visa, Mastercard, Elo',
       icon: 'lucideCreditCard',
-      iconColor: 'text-blue-600',
+      iconColor: '#2563eb', // Azul direto
     },
     {
       id: 'dinheiro',
       name: 'Dinheiro',
       description: 'Pagamento na entrega/retirada',
       icon: 'lucideBanknote',
-      iconColor: 'text-green-700',
+      iconColor: '#15803d', // Verde escuro direto
     },
     {
       id: 'carteira',
       name: 'Carteira Digital',
       description: 'PicPay, PayPal, Mercado Pago',
       icon: 'lucideWallet',
-      iconColor: 'text-purple-600',
+      iconColor: '#9333ea', // Roxo direto
     },
   ]);
 

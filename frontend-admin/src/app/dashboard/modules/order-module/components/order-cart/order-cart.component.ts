@@ -1,9 +1,9 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CurrencyPipe, NgClass } from '@angular/common';
-import { CartItem, CartStore } from 'app/shared/store/cart.state';
 import { NgIcon } from '@ng-icons/core';
 import { sleep } from 'app/shared/utils/utils';
+import { CartItem, CartState } from './order-cart.state';
 
 @Component({
   selector: 'fuse-order-cart',
@@ -12,7 +12,7 @@ import { sleep } from 'app/shared/utils/utils';
   imports: [ButtonModule, CurrencyPipe, NgClass, NgIcon],
 })
 export class OrderCartComponent implements OnInit {
-  cartStore = inject(CartStore);
+  cartState = inject(CartState);
   private cdr = inject(ChangeDetectorRef);
 
   // Mapeia os itens que estão sendo removidos
@@ -29,7 +29,7 @@ export class OrderCartComponent implements OnInit {
     this.cdr?.detectChanges();
 
     await sleep(200); // Simula um atraso para a animação de remoção
-    this.cartStore?.removeItem?.(item);
+    this.cartState?.removeItem?.(item);
     if (this.removingItems) delete this.removingItems[item];
   }
 
@@ -37,7 +37,7 @@ export class OrderCartComponent implements OnInit {
     item.loading = true;
     await sleep(500);
     item.loading = false;
-    this.cartStore?.updateItemQuantity?.(item?.id, 1, true);
+    this.cartState?.updateItemQuantity?.(item?.id, 1, true);
   }
 
   async minusItemQuantity(item: CartItem) {
@@ -45,18 +45,18 @@ export class OrderCartComponent implements OnInit {
       if (this.removingItems) this.removingItems[item.id] = true;
       this.cdr?.detectChanges();
       await sleep(200); // Simula um atraso para a animação de remoção
-      this.cartStore?.updateItemQuantity?.(item?.id, -1, true);
+      this.cartState?.updateItemQuantity?.(item?.id, -1, true);
       if (this.removingItems) delete this.removingItems[item.id];
     } else {
       item.loading = true;
       await sleep(500);
       item.loading = false;
-      this.cartStore?.updateItemQuantity?.(item?.id, -1, true);
+      this.cartState?.updateItemQuantity?.(item?.id, -1, true);
     }
   }
 
   checkout() {
-    const cart = this.cartStore.getCartData();
+    const cart = this.cartState.getCartData();
     console.log('cart', cart);
   }
 }

@@ -1,6 +1,6 @@
 import { computed, Injectable, signal, WritableSignal } from '@angular/core';
 
-export interface CartState {
+export interface ICartState {
   cartItems: CartItem[];
   discount: number;
   subTotal: number;
@@ -22,8 +22,8 @@ export interface CartItem {
 @Injectable({
   providedIn: 'root',
 })
-export class CartStore {
-  private state: WritableSignal<CartState> = signal({
+export class CartState {
+  private state: WritableSignal<ICartState> = signal({
     cartItems: [],
     discount: 0,
     subTotal: 0,
@@ -31,6 +31,8 @@ export class CartStore {
     totalQuantity: 0,
     quantityItems: 0,
     shipment: 0,
+    paymentMethod: null, // Adicionando paymentMethod ao estado inicial
+    deliveryType: null, // Adicionando deliveryType ao estado inicial
   });
 
   public cartItems = computed(() => this.state().cartItems);

@@ -19,8 +19,8 @@ import { OrderCartComponent } from '../../components/order-cart/order-cart.compo
 import { ProductListComponent } from '../../components/product-list/product-list.component';
 import { DeliveryTypesComponent } from '../../components/delivery-types/delivery-types.component';
 import { PaymentMethodsComponent } from '../../components/payment-methods/payment-methods.component';
-import { CartStore } from 'app/shared/store/cart.state';
 import { CoreService } from 'app/shared/services/core.service';
+import { CartState } from '../../components/order-cart/order-cart.state';
 
 @Component({
   selector: 'fuse-order-create',
@@ -42,7 +42,7 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
 
   private coreService = inject(CoreService);
   private orderState = inject(OrderState);
-  private cartState = inject(CartStore);
+  private cartState = inject(CartState);
 
   constructor() {}
 

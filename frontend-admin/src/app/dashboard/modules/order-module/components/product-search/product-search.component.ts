@@ -3,7 +3,7 @@ import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { CurrencyPipe } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { CartStore } from 'app/shared/store/cart.state';
+import { CartState } from '../order-cart/order-cart.state';
 
 @Component({
   selector: 'fuse-product-search',
@@ -12,7 +12,7 @@ import { CartStore } from 'app/shared/store/cart.state';
   imports: [ButtonModule, SelectModule, CurrencyPipe, ReactiveFormsModule],
 })
 export class ProductSearchComponent implements OnInit {
-  private cartStore = inject(CartStore);
+  private cartState = inject(CartState);
   products: any[] | undefined;
 
   selectedProduct = new FormControl();

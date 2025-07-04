@@ -8,11 +8,11 @@
         <div
           class="flex items-center gap-1 rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary"
         >
-          @if (cartStore.quantityItems() === 1) {
+          @if (cartState.quantityItems() === 1) {
             <span class="text-xs font-medium">1 item</span>
           } @else {
             <span class="text-xs font-medium"
-              >{{ cartStore.quantityItems() }} itens</span
+              >{{ cartState.quantityItems() }} itens</span
             >
           }
         </div>
@@ -32,7 +32,7 @@
       >
         <div class="h-full" style="min-width: 100%; display: table">
           <div class="space-y-1 h-full">
-            @for (item of cartStore.cartItems(); track $index) {
+            @for (item of cartState.cartItems(); track $index) {
               <div
                 [ngClass]="
                   removingItems[item.id]
@@ -147,18 +147,18 @@
         <div class="flex justify-between">
           <span class="text-sm">Subtotal</span
           ><span class="text-sm font-medium">{{
-            cartStore.subTotal()
+            cartState.subTotal()
               | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
           }}</span>
         </div>
         <!-- <div class="flex justify-between">
           <span class="text-sm">Shipment</span>
-          @if (cartStore.shipment() === 0) {
+          @if (cartState.shipment() === 0) {
             <span class="text-sm font-medium">Grátis</span>
           } @else {
             <span class="text-sm font-medium"
               >{{
-                cartStore.shipment()
+                cartState.shipment()
                   | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
               }}
             </span>
@@ -172,7 +172,7 @@
         <div class="flex justify-between">
           <span class="text-base font-medium">Total</span
           ><span class="text-base font-medium">{{
-            cartStore.total() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+            cartState.total() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
           }}</span>
         </div>
       </div>

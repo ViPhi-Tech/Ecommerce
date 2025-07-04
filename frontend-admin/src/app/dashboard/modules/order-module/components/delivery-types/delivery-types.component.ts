@@ -29,30 +29,30 @@ export class DeliveryTypesComponent implements OnInit {
       name: 'Retirada na Loja',
       description: 'Retire seu pedido em nossa loja',
       icon: 'lucideStore',
-      iconColor: 'text-blue-600',
+      iconColor: '#2563eb', // Azul direto
       price: 0,
       priceLabel: 'Grátis',
-      priceColor: 'text-green-600',
+      priceColor: '#16a34a', // Verde direto
     },
     {
       id: 'delivery',
       name: 'Delivery',
       description: 'Entrega em sua casa',
       icon: 'lucideTruck',
-      iconColor: 'text-orange-600',
+      iconColor: '#ea580c', // Laranja direto
       price: 8.0,
       priceLabel: 'R$ 8,00',
-      priceColor: 'text-gray-600',
+      priceColor: '#4b5563', // Cinza direto
     },
     {
       id: 'expressa',
       name: 'Entrega Expressa',
       description: 'Entrega em até 30 minutos',
       icon: 'lucideMapPin',
-      iconColor: 'text-red-600',
+      iconColor: '#dc2626', // Vermelho direto
       price: 15.0,
       priceLabel: 'R$ 15,00',
-      priceColor: 'text-gray-600',
+      priceColor: '#4b5563', // Cinza direto
     },
   ]);
 

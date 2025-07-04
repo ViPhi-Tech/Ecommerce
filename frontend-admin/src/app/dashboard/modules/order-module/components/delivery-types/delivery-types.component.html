@@ -10,10 +10,10 @@
 >
   @if (selectedDeliveryType(); as selected) {
     <!-- Tipo de entrega selecionado -->
-    <div class="flex items-center gap-3 flex-1 ml-4">
-      <ng-icon
+    <div class="flex items-center gap-3 flex-1 ml-4">      <ng-icon
         [name]="selected.icon"
-        [class]="'h-5 w-5 ' + selected.iconColor"
+        [class]="'h-5 w-5'"
+        [style.color]="selected.iconColor"
       />
       <div>
         <div class="font-medium">{{ selected.name }}</div>
@@ -21,8 +21,7 @@
           {{ selected.description }}
         </div>
       </div>
-    </div>
-    <span [class]="selected.priceColor + ' font-medium'">{{
+    </div>    <span [style.color]="selected.priceColor" class="font-medium">{{
       selected.priceLabel
     }}</span>
   } @else {
@@ -76,10 +75,10 @@
               <label
                 class="text-sm font-medium text-left leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-3 cursor-pointer flex-1"
                 [for]="deliveryType.id"
-              >
-                <ng-icon
+              >                <ng-icon
                   [name]="deliveryType.icon"
-                  [class]="'h-5 w-5 ' + deliveryType.iconColor"
+                  [class]="'h-5 w-5'"
+                  [style.color]="deliveryType.iconColor"
                 />
                 <div>
                   <div class="font-medium">{{ deliveryType.name }}</div>
@@ -87,8 +86,7 @@
                     {{ deliveryType.description }}
                   </div>
                 </div>
-              </label>
-              <span [class]="deliveryType.priceColor + ' font-medium'">{{
+              </label>              <span [style.color]="deliveryType.priceColor" class="font-medium">{{
                 deliveryType.priceLabel
               }}</span>
             </button>
