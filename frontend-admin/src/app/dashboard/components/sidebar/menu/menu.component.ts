@@ -40,7 +40,7 @@ export class MenuComponent implements OnInit {
         {
           label: 'Estoque',
           icon: 'lucideArchive',
-          visible: false,
+          visible: true,
           items: [
             {
               label: 'Produtos',
@@ -72,22 +72,22 @@ export class MenuComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.updateMenuVisibility();
+    // this.updateMenuVisibility();
   }
 
   updateMenuVisibility() {
-    const currentRoute = window.location.pathname;
-    this.menu.forEach(group => {
-      group.items.forEach(item => {
-        if (item.route && currentRoute.startsWith(item.route)) {
-          item.visible = true;
-        } else if (item.items) {
-          item.visible = item.items.some(
-            subItem => subItem.route && currentRoute.startsWith(subItem.route)
-          );
-        }
-      });
-    });
-    this.menu = [...this.menu];
+    // const currentRoute = window.location.pathname;
+    // this.menu.forEach(group => {
+    //   group.items.forEach(item => {
+    //     if (item.route && currentRoute.startsWith(item.route)) {
+    //       item.visible = true;
+    //     } else if (item.items) {
+    //       item.visible = item.items.some(
+    //         subItem => subItem.route && currentRoute.startsWith(subItem.route)
+    //       );
+    //     }
+    //   });
+    // });
+    // this.menu = [...this.menu];
   }
 }

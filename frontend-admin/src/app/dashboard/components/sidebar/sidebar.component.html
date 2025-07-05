@@ -1,10 +1,10 @@
 <nav
-  class="fixed max-h-screen h-full inset-y-0 left-0 z-[70] bg-primary-600 dark:bg-container-background transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static border-r border-gray-200 dark:border-[#1F1F23] -translate-x-full"
+  [ngClass]="{'compact-sidebar': compactMode()}"
+  class="sidebar"
 >
   <div class="h-full flex flex-col">
     <!-- Exemplo de logo -->
-    <a
-      href="https://kokonutui.com/"
+    <button
       target="_blank"
       rel="noopener noreferrer"
       class="h-16 px-6 flex items-center border-b border-gray-200 dark:border-[#1F1F23]"
@@ -28,7 +28,7 @@
           >Kommerz</span
         >
       </div>
-    </a>
+    </button>
 
     <!-- Menu dinâmico -->
     <fuse-menu />

@@ -1,0 +1,30 @@
+::ng-deep .sidebar {
+  @apply hidden lg:block w-[250px] fixed max-h-screen h-full inset-y-0 left-0 z-[70] bg-primary-600 dark:bg-container-background transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static border-r border-gray-200 dark:border-[#1F1F23] -translate-x-full;
+  transition: width 0.3s ease-in-out;
+}
+
+::ng-deep .compact-sidebar {
+  width: 65px; /* Largura reduzida para o modo compacto */
+
+  .menu {
+    @apply space-y-0 !important;
+  }
+  .menu-group {
+    // deixar invisível mas preservar o espaço
+    @apply hidden;
+  }
+
+  .menu-item {
+    @apply px-3 !important;
+
+    ng-icon {
+      @apply mr-0 !important;
+    }
+
+    .menu-item-label, .menu-item-arrow {
+      @apply hidden
+    }
+  }
+
+
+}

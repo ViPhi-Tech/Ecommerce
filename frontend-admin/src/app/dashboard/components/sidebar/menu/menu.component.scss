@@ -5,3 +5,10 @@
     font-size: 16px;
   }
 }
+
+.menu { 
+  @apply overflow-y-auto py-4 px-4 space-y-6;
+}
+.menu-group {
+  @apply px-3 mb-2 text-xs font-semibold uppercase tracking-wider text-white dark:text-gray-400 animate-fadein;
+}

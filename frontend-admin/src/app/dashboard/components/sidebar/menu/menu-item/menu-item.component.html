@@ -8,10 +8,10 @@
   class="menu-item {{ addictionalClass() }}"
 >
   <ng-icon size="16" [name]="item().icon" class="mr-3" />
-  {{ item().label }}
+  <span class="menu-item-label animate-fadein">{{ item().label }}</span>
 
   @if (item().items?.length) {
-    <ng-icon size="16" class="ml-auto" name="matArrowDropDownOutline" />
+    <ng-icon size="16" class="ml-auto menu-item-arrow" name="matArrowDropDownOutline" />
   }
 </a>
 @if (item().items?.length) {
