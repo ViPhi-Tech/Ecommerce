@@ -30,7 +30,7 @@ export class ProductListComponent implements OnInit {
   async addProductToCart(product: any) {
     product.loading = true;
 
-    await sleep(1000); // Simulating a delay for adding the product to the cart
+    // await sleep(1000); // Simulating a delay for adding the product to the cart
     product.loading = false;
     this.cartState.addItem(product);
     this.toast.add({

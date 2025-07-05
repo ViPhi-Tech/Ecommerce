@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output, signal } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -24,6 +24,8 @@ export class DeliverySelectionComponent implements OnInit {
   public cartState = inject(CartState);
 
   visible = signal(false);
+
+  @Output() deliveryTypeSelected = new EventEmitter<DeliveryType>();
 
   // Dados dos tipos de entrega
   deliveryTypes = signal<DeliveryType[]>([
@@ -66,7 +68,6 @@ export class DeliverySelectionComponent implements OnInit {
   // Métodos para lidar com seleções
   onDeliveryTypeChange(deliveryType: DeliveryType) {
     this.cartState.setDeliveryType(deliveryType);
-    this.visible.set(false);
-    console.log('Tipo de entrega selecionado:', deliveryType);
+    this.deliveryTypeSelected.emit(deliveryType);
   }
 }

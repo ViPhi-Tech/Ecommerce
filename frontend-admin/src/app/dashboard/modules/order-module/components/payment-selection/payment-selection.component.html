@@ -11,73 +11,119 @@
 </div>
 <div class="p-6 pt-0">
   <div class="grid gap-2" style="outline: none">
-    <div class="space-y-4">
+    <div class="grid grid-cols-2 gap-4">
       @for (paymentMethod of paymentMethods(); track paymentMethod.id) {
         <button
           (click)="onPaymentMethodChange(paymentMethod)"
-          class="w-full flex space-x-3 py-4 px-6 border rounded-lg hover:bg-gray-50 transition-colors"
+          class="w-full flex flex-col space-y-3 py-4 px-6 border rounded-lg hover:bg-gray-50 transition-colors h-max"
           [class.border-blue-500]="isPaymentMethodSelected(paymentMethod.id)"
           [class.bg-blue-50]="isPaymentMethodSelected(paymentMethod.id)"
           [class.border-green-500]="isPaymentMethodSelected(paymentMethod.id)"
           [class.bg-green-50]="isPaymentMethodSelected(paymentMethod.id)"
         >
-          <label
-            class="text-sm font-medium text-left leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-3 cursor-pointer flex-1"
-            [for]="paymentMethod.id"
-          >
-            <div
-              class="flex items-center justify-center w-5 h-5 rounded border-2 transition-colors"
-              [class.border-green-500]="
-                isPaymentMethodSelected(paymentMethod.id)
-              "
-              [class.bg-green-500]="isPaymentMethodSelected(paymentMethod.id)"
-              [class.border-gray-300]="
-                !isPaymentMethodSelected(paymentMethod.id)
-              "
+          <div class="flex space-x-3">
+            <label
+              class="text-sm font-medium text-left leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-3 cursor-pointer flex-1"
+              [for]="paymentMethod.id"
             >
-              @if (isPaymentMethodSelected(paymentMethod.id)) {
-                <ng-icon name="lucideCheck" class="h-3 w-3 text-white" />
-              }
-            </div>
-            <ng-icon
-              [name]="paymentMethod.icon"
-              [class]="'h-5 w-5'"
-              [style.color]="paymentMethod.iconColor"
-            />
-            <div>
-              <div class="font-medium">{{ paymentMethod.name }}</div>
-              <div class="text-sm text-gray-500">
-                {{ paymentMethod.description }}
+              <div
+                class="flex items-center justify-center w-5 h-5 rounded border-2 transition-colors"
+                [class.border-green-500]="
+                  isPaymentMethodSelected(paymentMethod.id)
+                "
+                [class.bg-green-500]="isPaymentMethodSelected(paymentMethod.id)"
+                [class.border-gray-300]="
+                  !isPaymentMethodSelected(paymentMethod.id)
+                "
+              >
+                @if (isPaymentMethodSelected(paymentMethod.id)) {
+                  <ng-icon name="lucideCheck" class="h-3 w-3 text-white" />
+                }
               </div>
-            </div>
-          </label>
+              <ng-icon
+                [name]="paymentMethod.icon"
+                [class]="'h-5 w-5'"
+                [style.color]="paymentMethod.iconColor"
+              />
+              <div>
+                <div class="font-medium">{{ paymentMethod.name }}</div>
+                <div class="text-sm text-gray-500">
+                  {{ paymentMethod.description }}
+                </div>
+              </div>
+            </label>
 
-          @if (paymentMethod.discount) {
-            <span [style.color]="paymentMethod.discountColor" class="text-sm">{{
-              paymentMethod.discount
-            }}</span>
+            @if (paymentMethod.discount) {
+              <span [style.color]="paymentMethod.discountColor" class="text-sm">{{
+                paymentMethod.discount
+              }}</span>
+            }
+          </div>
+          @if (isPaymentMethodSelected(paymentMethod.id)) {
+            <button class="flex items-center gap-3 border-t pt-4 border-gray-200" (click)="$event.stopPropagation()">
+              <span class="text-sm font-medium">Valor a pagar:</span>
+              <p-inputNumber
+                [ngModel]="getPaymentMethodValue(paymentMethod.id)"
+                (ngModelChange)="onPaymentValueChange(paymentMethod.id, $event)"
+                (onBlur)="onPaymentValueBlur(paymentMethod.id)"
+                mode="currency"
+                currency="BRL"
+                locale="pt-BR"
+                [min]="0"
+                [max]="this.cartState.total()"
+                styleClass="w-32"
+                (click)="$event.stopPropagation()"
+                (focus)="$event.stopPropagation()"
+              />
+            </button>
           }
+
+
         </button>
       }
     </div>
   </div>
-  <div class="flex justify-between items-center gap-2 mt-6">
-    <div class="text-sm text-gray-600">
-      @if (cartState.paymentMethods().length > 0) {
-        {{ cartState.paymentMethods().length }} método(s) selecionado(s)
-      } @else {
-        Nenhum método selecionado
-      }
-    </div>
-    <div class="flex gap-2">
-      @if (cartState.paymentMethods().length > 0) {
-        <p-button
-          label="Limpar tudo"
-          severity="secondary"
-          [text]="true"
-          (click)="cartState.clearPaymentMethods()"
-        />
-      }
+  <div class="flex flex-col gap-4 mt-6">
+    @if (cartState.paymentMethods().length > 0) {
+      <div class="border rounded-lg p-4 bg-gray-50">
+        <h4 class="font-medium text-sm mb-3">Resumo do Pagamento</h4>
+        <div class="space-y-2">
+          <div class="flex justify-between text-sm">
+            <span>Total do pedido:</span>
+            <span class="font-medium">{{ cartState.total() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+          </div>
+          <div class="flex justify-between text-sm">
+            <span>Total pago:</span>
+            <span class="font-medium">{{ getTotalPaid() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+          </div>
+          <div class="flex justify-between text-sm border-t pt-2">
+            <span>Restante:</span>
+            <span class="font-medium" [class.text-green-600]="getRemainingAmount() === 0" [class.text-red-600]="getRemainingAmount() > 0">
+              {{ getRemainingAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <div class="flex justify-between items-center gap-2">
+      <div class="text-sm text-gray-600">
+        @if (cartState.paymentMethods().length > 0) {
+          {{ cartState.paymentMethods().length }} método(s) selecionado(s)
+        } @else {
+          Nenhum método selecionado
+        }
+      </div>
+      <div class="flex gap-2">
+        @if (cartState.paymentMethods().length > 0) {
+          <p-button
+            label="Limpar tudo"
+            severity="secondary"
+            [text]="true"
+            (click)="cartState.clearPaymentMethods()"
+          />
+        }
+      </div>
     </div>
   </div>
 </div>

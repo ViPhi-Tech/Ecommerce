@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { OrderService } from '../../order.service';
 import { lastValueFrom } from 'rxjs';
+import { BaseState } from 'app/shared/store/base.state';
+import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 
 export interface ICartState {
   cartItems: CartItem[];
@@ -19,6 +21,8 @@ export interface ICartState {
   paymentMethods: any[]; // Alterando para múltiplos métodos de pagamento
   deliveryType: any; // Adicionando deliveryType ao estado
   client: any; // Adicionando client ao estado
+  loading: boolean; // Adicionando loading para satisfazer BaseModuleState
+  error: any; // Adicionando error para satisfazer BaseModuleState
 }
 
 export interface CartItem {
@@ -33,10 +37,10 @@ export interface CartItem {
 @Injectable({
   providedIn: 'root',
 })
-export class CartState {
-  private orderService = inject(OrderService); // Injetando o serviço de pedidos, se necessário
+export class CartState extends BaseState<ICartState> {
+  private orderService = inject(OrderService);
 
-  private state: WritableSignal<ICartState> = signal({
+  protected state: WritableSignal<ICartState> = signal({
     cartItems: [],
     discount: 0,
     subTotal: 0,
@@ -47,6 +51,9 @@ export class CartState {
     paymentMethods: [], // Alterando para múltiplos métodos de pagamento
     deliveryType: null, // Adicionando deliveryType ao estado inicial
     client: null, // Adicionando client ao estado inicial
+    loading: false, // Inicializando loading
+    error: null, // Inicializando error
+    finishing: false, // Adicionando finishing ao estado inicial
   });
 
   public cartItems = computed(() => this.state().cartItems);
@@ -60,7 +67,6 @@ export class CartState {
   public deliveryType = computed(() => this.state().deliveryType);
   public client = computed(() => this.state().client);
 
-  constructor() {}
 
   public getCartData() {
     return this.state();
@@ -202,6 +208,13 @@ export class CartState {
     }));
   }
 
+  public clearDeliveryType() {
+    this.state.update(state => ({
+      ...state,
+      deliveryType: null,
+    }));
+  }
+
   public addPaymentMethod(paymentMethod: any) {
     this.state.update(state => {
       // Verifica se o método já existe
@@ -210,10 +223,14 @@ export class CartState {
       );
 
       if (existingIndex === -1) {
-        // Se não existe, adiciona
+        // Se não existe, adiciona com valor inicial
+        const paymentMethodWithValue = {
+          ...paymentMethod,
+          value: paymentMethod.value || 0
+        };
         return {
           ...state,
-          paymentMethods: [...state.paymentMethods, paymentMethod],
+          paymentMethods: [...state.paymentMethods, paymentMethodWithValue],
         };
       } else {
         // Se já existe, remove
@@ -225,6 +242,17 @@ export class CartState {
         };
       }
     });
+  }
+
+  public updatePaymentMethodValue(paymentMethodId: string, value: number) {
+    this.state.update(state => ({
+      ...state,
+      paymentMethods: state.paymentMethods.map(pm =>
+        pm.id === paymentMethodId
+          ? { ...pm, value }
+          : pm
+      ),
+    }));
   }
 
   public removePaymentMethod(paymentMethodId: string) {
@@ -243,6 +271,15 @@ export class CartState {
     }));
   }
 
+  getRemainingAmount(): number {
+    const total = this.state().total;
+    const paidAmount = this.state().paymentMethods.reduce(
+      (sum, pm) => sum + (pm.value || 0),
+      0
+    );
+    return Math.max(0, total - paidAmount);
+  }
+
   public isPaymentMethodSelected(paymentMethodId: string): boolean {
     return this.state().paymentMethods.some(pm => pm.id === paymentMethodId);
   }
@@ -254,8 +291,27 @@ export class CartState {
     }));
   }
 
-  async checkout(data: any) {
-    await lastValueFrom(this.orderService.createOrder(data));
+  public clearClient() {
+    this.state.update(state => ({
+      ...state,
+      client: null,
+    }));
+  }
+
+  async checkout(data: any): Promise<ApiResponse> {
+    this.setLoading(true);
+    return await lastValueFrom(this.orderService.createOrder(data))
+      .then((response: any) => {
+        this.resetCart();
+        this.setLoading(false);
+        return response;
+      })
+      .catch((error: any) => {
+        this.setError(error);
+        this.setLoading(false);
+        throw error; // Re-throw the error to handle it in the component
+      })
+      .finally(() => this.setLoading(false));
   }
 
   public resetCart() {
