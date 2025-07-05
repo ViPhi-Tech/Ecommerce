@@ -1,199 +1,83 @@
-<!-- Botão de seleção de forma de pagamento -->
-<button
-  type="button"
-  class="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer w-full text-left h-full"
-  [class.border-blue-500]="cartState.paymentMethods().length > 0"
-  [class.bg-blue-50]="cartState.paymentMethods().length > 0"
-  [class.border-dashed]="cartState.paymentMethods().length === 0"
-  [class.border-gray-300]="cartState.paymentMethods().length === 0"
-  (click)="visible.set(true)"
->
-  @if (cartState.paymentMethods().length > 0) {
-    <!-- Formas de pagamento selecionadas -->
-    <div class="flex items-center gap-3 flex-1 ml-4">
-      @if (cartState.paymentMethods().length === 1) {
-        <!-- Exibir apenas um método -->
-        <ng-icon
-          [name]="cartState.paymentMethods()[0].icon"
-          [class]="'h-5 w-5'"
-          [style.color]="cartState.paymentMethods()[0].iconColor"
-        />
-        <div>
-          <div class="font-medium">
-            {{ cartState.paymentMethods()[0].name }}
-          </div>
-          <div class="text-sm text-gray-500">
-            {{ cartState.paymentMethods()[0].description }}
-          </div>
-        </div>
-      } @else {
-        <!-- Exibir múltiplos métodos -->
-        <div class="flex -space-x-2">
-          @for (method of cartState.paymentMethods(); track method.id) {
+<div class="flex flex-col space-y-1.5 p-6">
+  <h3
+    class="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2"
+  >
+    <ng-icon name="lucideCreditCard" class="h-5 w-5" />
+    Formas de Pagamento
+  </h3>
+  <p class="text-sm text-muted-foreground">
+    Escolha uma ou mais formas de pagamento para seu pedido
+  </p>
+</div>
+<div class="p-6 pt-0">
+  <div class="grid gap-2" style="outline: none">
+    <div class="space-y-4">
+      @for (paymentMethod of paymentMethods(); track paymentMethod.id) {
+        <button
+          (click)="onPaymentMethodChange(paymentMethod)"
+          class="w-full flex space-x-3 py-4 px-6 border rounded-lg hover:bg-gray-50 transition-colors"
+          [class.border-blue-500]="isPaymentMethodSelected(paymentMethod.id)"
+          [class.bg-blue-50]="isPaymentMethodSelected(paymentMethod.id)"
+          [class.border-green-500]="isPaymentMethodSelected(paymentMethod.id)"
+          [class.bg-green-50]="isPaymentMethodSelected(paymentMethod.id)"
+        >
+          <label
+            class="text-sm font-medium text-left leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-3 cursor-pointer flex-1"
+            [for]="paymentMethod.id"
+          >
             <div
-              class="flex items-center justify-center w-8 h-8 rounded-full border-2 border-white bg-gray-100"
-            >
-              <ng-icon
-                [name]="method.icon"
-                [class]="'h-4 w-4'"
-                [style.color]="method.iconColor"
-              />
-            </div>
-          }
-        </div>
-        <div>
-          <div class="font-medium">
-            {{ cartState.paymentMethods().length }} métodos selecionados
-          </div>
-          <div class="text-sm text-gray-500">
-            @for (
-              method of cartState.paymentMethods();
-              track method.id;
-              let last = $last
-            ) {
-              {{ method.name }}
-              @if (!last) {
-                ,
-              }
-            }
-          </div>
-        </div>
-      }
-    </div>
-
-    <!-- Mostrar desconto apenas se um método com desconto estiver selecionado -->
-    @for (method of cartState.paymentMethods(); track method.id) {
-      @if (method.discount) {
-        <span [style.color]="method.discountColor" class="text-sm">{{
-          method.discount
-        }}</span>
-      }
-    }
-  } @else {
-    <!-- Placeholder quando nenhuma forma está selecionada -->
-    <div class="flex items-center gap-3 flex-1 ml-4">
-      <ng-icon name="lucideCreditCard" class="h-5 w-5 text-gray-400" />
-      <div>
-        <div class="font-medium text-gray-600">
-          Selecionar formas de pagamento
-        </div>
-        <div class="text-sm text-gray-400">Clique para escolher como pagar</div>
-      </div>
-    </div>
-  }
-
-  <ng-icon name="lucideChevronDown" class="h-4 w-4 text-gray-400" />
-</button>
-
-<p-dialog
-  header="Selecione uma forma de pagamento"
-  [modal]="true"
-  [(visible)]="visible"
-  [style]="{ width: '100%', maxWidth: '600px' }"
->
-  <ng-template #headless>
-    <div class="flex flex-col space-y-1.5 p-6">
-      <h3
-        class="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2"
-      >
-        <ng-icon name="lucideCreditCard" class="h-5 w-5" />
-        Formas de Pagamento
-      </h3>
-      <p class="text-sm text-muted-foreground">
-        Escolha uma ou mais formas de pagamento para seu pedido
-      </p>
-    </div>
-    <div class="p-6 pt-0">
-      <div class="grid gap-2" style="outline: none">
-        <div class="space-y-4">
-          @for (paymentMethod of paymentMethods(); track paymentMethod.id) {
-            <button
-              (click)="onPaymentMethodChange(paymentMethod)"
-              class="w-full flex space-x-3 py-4 px-6 border rounded-lg hover:bg-gray-50 transition-colors"
-              [class.border-blue-500]="
-                isPaymentMethodSelected(paymentMethod.id)
-              "
-              [class.bg-blue-50]="isPaymentMethodSelected(paymentMethod.id)"
+              class="flex items-center justify-center w-5 h-5 rounded border-2 transition-colors"
               [class.border-green-500]="
                 isPaymentMethodSelected(paymentMethod.id)
               "
-              [class.bg-green-50]="isPaymentMethodSelected(paymentMethod.id)"
+              [class.bg-green-500]="isPaymentMethodSelected(paymentMethod.id)"
+              [class.border-gray-300]="
+                !isPaymentMethodSelected(paymentMethod.id)
+              "
             >
-              <label
-                class="text-sm font-medium text-left leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-3 cursor-pointer flex-1"
-                [for]="paymentMethod.id"
-              >
-                <div
-                  class="flex items-center justify-center w-5 h-5 rounded border-2 transition-colors"
-                  [class.border-green-500]="
-                    isPaymentMethodSelected(paymentMethod.id)
-                  "
-                  [class.bg-green-500]="
-                    isPaymentMethodSelected(paymentMethod.id)
-                  "
-                  [class.border-gray-300]="
-                    !isPaymentMethodSelected(paymentMethod.id)
-                  "
-                >
-                  @if (isPaymentMethodSelected(paymentMethod.id)) {
-                    <ng-icon name="lucideCheck" class="h-3 w-3 text-white" />
-                  }
-                </div>
-                <ng-icon
-                  [name]="paymentMethod.icon"
-                  [class]="'h-5 w-5'"
-                  [style.color]="paymentMethod.iconColor"
-                />
-                <div>
-                  <div class="font-medium">{{ paymentMethod.name }}</div>
-                  <div class="text-sm text-gray-500">
-                    {{ paymentMethod.description }}
-                  </div>
-                </div>
-              </label>
-
-              @if (paymentMethod.discount) {
-                <span
-                  [style.color]="paymentMethod.discountColor"
-                  class="text-sm"
-                  >{{ paymentMethod.discount }}</span
-                >
+              @if (isPaymentMethodSelected(paymentMethod.id)) {
+                <ng-icon name="lucideCheck" class="h-3 w-3 text-white" />
               }
-            </button>
-          }
-        </div>
-      </div>
-      <div class="flex justify-between items-center gap-2 mt-6">
-        <div class="text-sm text-gray-600">
-          @if (cartState.paymentMethods().length > 0) {
-            {{ cartState.paymentMethods().length }} método(s) selecionado(s)
-          } @else {
-            Nenhum método selecionado
-          }
-        </div>
-        <div class="flex gap-2">
-          @if (cartState.paymentMethods().length > 0) {
-            <p-button
-              label="Limpar tudo"
-              severity="secondary"
-              [text]="true"
-              (click)="cartState.clearPaymentMethods()"
+            </div>
+            <ng-icon
+              [name]="paymentMethod.icon"
+              [class]="'h-5 w-5'"
+              [style.color]="paymentMethod.iconColor"
             />
+            <div>
+              <div class="font-medium">{{ paymentMethod.name }}</div>
+              <div class="text-sm text-gray-500">
+                {{ paymentMethod.description }}
+              </div>
+            </div>
+          </label>
+
+          @if (paymentMethod.discount) {
+            <span [style.color]="paymentMethod.discountColor" class="text-sm">{{
+              paymentMethod.discount
+            }}</span>
           }
-          <p-button
-            label="Cancelar"
-            severity="secondary"
-            [outlined]="true"
-            (click)="visible.set(false)"
-          />
-          <p-button
-            label="Confirmar"
-            severity="success"
-            (click)="closeModal()"
-            [disabled]="cartState.paymentMethods().length === 0"
-          />
-        </div>
-      </div>
+        </button>
+      }
     </div>
-  </ng-template>
-</p-dialog>
+  </div>
+  <div class="flex justify-between items-center gap-2 mt-6">
+    <div class="text-sm text-gray-600">
+      @if (cartState.paymentMethods().length > 0) {
+        {{ cartState.paymentMethods().length }} método(s) selecionado(s)
+      } @else {
+        Nenhum método selecionado
+      }
+    </div>
+    <div class="flex gap-2">
+      @if (cartState.paymentMethods().length > 0) {
+        <p-button
+          label="Limpar tudo"
+          severity="secondary"
+          [text]="true"
+          (click)="cartState.clearPaymentMethods()"
+        />
+      }
+    </div>
+  </div>
+</div>

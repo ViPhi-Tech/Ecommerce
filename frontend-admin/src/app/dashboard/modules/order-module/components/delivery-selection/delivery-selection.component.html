@@ -1,112 +1,51 @@
-<!-- Botão de seleção de tipo de entrega -->
-<button
-  type="button"
-  class="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer w-full text-left h-full"
-  [class.border-blue-500]="cartState.deliveryType()"
-  [class.bg-blue-50]="cartState.deliveryType()"
-  [class.border-dashed]="!cartState.deliveryType()"
-  [class.border-gray-300]="!cartState.deliveryType()"
-  (click)="visible.set(true)"
->
-  @if (cartState.deliveryType(); as selected) {
-    <!-- Tipo de entrega selecionado -->
-    <div class="flex items-center gap-3 flex-1 ml-4">
-      <ng-icon
-        [name]="selected.icon"
-        [class]="'h-5 w-5'"
-        [style.color]="selected.iconColor"
-      />
-      <div>
-        <div class="font-medium">{{ selected.name }}</div>
-        <div class="text-sm text-gray-500">
-          {{ selected.description }}
-        </div>
-      </div>
+<div class="flex flex-col space-y-1.5 p-6">
+  <h3
+    class="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2"
+  >
+    <ng-icon name="lucideTruck" class="h-5 w-5" />
+    Tipo de Entrega
+  </h3>
+  <p class="text-sm text-muted-foreground">
+    Selecione como deseja receber seu pedido
+  </p>
+</div>
+<div class="p-6 pt-0">
+  <div class="grid gap-2" style="outline: none">
+    <div class="space-y-4">
+      @for (deliveryType of deliveryTypes(); track deliveryType.id) {
+        <button
+          (click)="onDeliveryTypeChange(deliveryType)"
+          class="w-full flex space-x-3 py-4 px-6 border rounded-lg hover:bg-gray-50"
+          [class.border-blue-500]="
+            cartState.deliveryType()?.id === deliveryType.id
+          "
+          [class.bg-blue-50]="
+            cartState.deliveryType()?.id === deliveryType.id
+          "
+        >
+          <label
+            class="text-sm font-medium text-left leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-3 cursor-pointer flex-1"
+            [for]="deliveryType.id"
+          >
+            <ng-icon
+              [name]="deliveryType.icon"
+              [class]="'h-5 w-5'"
+              [style.color]="deliveryType.iconColor"
+            />
+            <div>
+              <div class="font-medium">{{ deliveryType.name }}</div>
+              <div class="text-sm text-gray-500">
+                {{ deliveryType.description }}
+              </div>
+            </div>
+          </label>
+          <span
+            [style.color]="deliveryType.priceColor"
+            class="font-medium"
+            >{{ deliveryType.priceLabel }}</span
+          >
+        </button>
+      }
     </div>
-    <span [style.color]="selected.priceColor" class="font-medium">{{
-      selected.priceLabel
-    }}</span>
-  } @else {
-    <!-- Placeholder quando nenhum tipo está selecionado -->
-    <div class="flex items-center gap-3 flex-1 ml-4">
-      <ng-icon name="lucideTruck" class="h-5 w-5 text-gray-400" />
-      <div>
-        <div class="font-medium text-gray-600">Selecionar tipo de entrega</div>
-        <div class="text-sm text-gray-400">
-          Clique para escolher como receber
-        </div>
-      </div>
-    </div>
-  }
-
-  <ng-icon name="lucideChevronDown" class="h-4 w-4 text-gray-400" />
-</button>
-
-<p-dialog
-  header="Selecione um tipo de entrega"
-  [modal]="true"
-  [(visible)]="visible"
-  [style]="{ width: '100%', maxWidth: '600px' }"
->
-  <ng-template #headless>
-    <div class="flex flex-col space-y-1.5 p-6">
-      <h3
-        class="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2"
-      >
-        <ng-icon name="lucideTruck" class="h-5 w-5" />
-        Tipo de Entrega
-      </h3>
-      <p class="text-sm text-muted-foreground">
-        Selecione como deseja receber seu pedido
-      </p>
-    </div>
-    <div class="p-6 pt-0">
-      <div class="grid gap-2" style="outline: none">
-        <div class="space-y-4">
-          @for (deliveryType of deliveryTypes(); track deliveryType.id) {
-            <button
-              (click)="onDeliveryTypeChange(deliveryType)"
-              class="w-full flex space-x-3 py-4 px-6 border rounded-lg hover:bg-gray-50"
-              [class.border-blue-500]="
-                cartState.deliveryType()?.id === deliveryType.id
-              "
-              [class.bg-blue-50]="
-                cartState.deliveryType()?.id === deliveryType.id
-              "
-            >
-              <label
-                class="text-sm font-medium text-left leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-3 cursor-pointer flex-1"
-                [for]="deliveryType.id"
-              >
-                <ng-icon
-                  [name]="deliveryType.icon"
-                  [class]="'h-5 w-5'"
-                  [style.color]="deliveryType.iconColor"
-                />
-                <div>
-                  <div class="font-medium">{{ deliveryType.name }}</div>
-                  <div class="text-sm text-gray-500">
-                    {{ deliveryType.description }}
-                  </div>
-                </div>
-              </label>
-              <span
-                [style.color]="deliveryType.priceColor"
-                class="font-medium"
-                >{{ deliveryType.priceLabel }}</span
-              >
-            </button>
-          }
-        </div>
-      </div>
-      <div class="flex justify-end gap-2 mt-4">
-        <p-button
-          label="Cancelar"
-          severity="secondary"
-          [outlined]="true"
-          (click)="visible.set(false)"
-        />
-      </div>
-    </div>
-  </ng-template>
-</p-dialog>
+  </div>
+</div>

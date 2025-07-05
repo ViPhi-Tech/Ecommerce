@@ -9,6 +9,7 @@ import { StepperModule } from 'primeng/stepper';
 import { DeliverySelectionComponent } from '../delivery-selection/delivery-selection.component';
 import { DialogModule } from 'primeng/dialog';
 import { PaymentSelectionComponent } from '../payment-selection/payment-selection.component';
+import { ClientState } from 'app/dashboard/modules/client-module/client.state';
 
 @Component({
   selector: 'fuse-order-cart',
@@ -29,6 +30,7 @@ import { PaymentSelectionComponent } from '../payment-selection/payment-selectio
 export class OrderCartComponent implements OnInit {
   cartState = inject(CartState);
   private cdr = inject(ChangeDetectorRef);
+  private clientState = inject(ClientState);
 
   // Mapeia os itens que estão sendo removidos
   removingItems: Record<string | number, boolean> = {};
@@ -37,7 +39,9 @@ export class OrderCartComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.clientState.getClientList();
+  }
 
   getCartData() {}
 
@@ -70,6 +74,10 @@ export class OrderCartComponent implements OnInit {
       item.loading = false;
       this.cartState?.updateItemQuantity?.(item?.id, -1, true);
     }
+  }
+
+  showOrderCheckout() {
+    this.showCheckout = true;
   }
 
   checkout() {

@@ -52,7 +52,7 @@ export class ClientState {
     );
   });
 
-  async getClientList(options: { skipLoader?: boolean }): Promise<void> {
+  async getClientList(options: { skipLoader?: boolean } = {}): Promise<void> {
     this.setLoading(true);
     this.setError(null);
     this.setClientList([]);

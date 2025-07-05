@@ -35,10 +35,7 @@ export class ClientSelectionComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-    // Carrega a lista de clientes quando o componente é inicializado
-    this.clientState.getClientList({ skipLoader: true });
-  }
+  ngOnInit() {}
 
   onClientChange(client: Client) {
     this.cartState.setClient(client);

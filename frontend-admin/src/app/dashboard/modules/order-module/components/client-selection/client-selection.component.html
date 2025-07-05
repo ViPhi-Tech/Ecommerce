@@ -1,49 +1,3 @@
-<!-- Botão de seleção de cliente
-<button
-  type="button"
-  class="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer w-full text-left"
-  [class.border-blue-500]="cartState.client()"
-  [class.bg-blue-50]="cartState.client()"
-  [class.border-dashed]="!cartState.client()"
-  [class.border-gray-300]="!cartState.client()"
-  (click)="visible.set(true)"
->
-  @if (cartState.client(); as selected) {
-    <div class="flex items-center gap-3 flex-1 ml-4">
-      <ng-icon name="lucideUser" class="h-5 w-5" style="color: #2563eb" />
-      <div>
-        <div class="font-medium">{{ selected.fullName }}</div>
-        <div class="text-sm text-gray-500">
-          @if (selected.phone) {
-            {{ selected.phone }}
-          }
-        </div>
-      </div>
-    </div>
-  } @else {
-    <div class="flex items-center gap-3 flex-1 ml-4">
-      <ng-icon name="lucideUser" class="h-5 w-5 text-gray-400" />
-      <div>
-        <div class="font-medium text-gray-600">Selecionar cliente</div>
-        <div class="text-sm text-gray-400">Clique para escolher um cliente</div>
-      </div>
-    </div>
-  }
-
-  <ng-icon name="lucideChevronDown" class="h-4 w-4 text-gray-400" />
-</button>
-
-<p-dialog
-  header="Selecione um cliente"
-  [modal]="true"
-  [visible]="show()"
-  [style]="{ width: '100%', maxWidth: '700px' }"
->
-  <ng-template #headless>
-
-  </ng-template>
-</p-dialog> -->
-
 <div class="flex flex-col space-y-1.5 p-6">
   <h3
     class="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2"
@@ -120,21 +74,5 @@
         }
       }
     </div>
-  </div>
-  <div class="flex justify-between gap-2 mt-4">
-    <!-- <p-button
-          label="Novo Cliente"
-          severity="secondary"
-          [outlined]="true"
-          icon="pi pi-plus"
-          (click)="show.set(false)"
-        /> -->
-    <div></div>
-    <p-button
-      label="Cancelar"
-      severity="secondary"
-      [outlined]="true"
-      (click)="close()"
-    />
   </div>
 </div>
