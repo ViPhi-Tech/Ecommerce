@@ -4,6 +4,7 @@ import { StockMovementComponent } from './stock-movement.component';
 import { StockMovementListComponent } from './screens/stock-movement-list/stock-movement-list.component';
 import { StockMovementState } from './stock-movement.state';
 import { StockMovementService } from './stock-movement.service';
+import { StockInboundComponent } from './screens/stock-inbound/stock-inbound.component';
 
 const routes: Routes = [
   {
@@ -18,10 +19,10 @@ const routes: Routes = [
         },
       },
       {
-        path: 'product/:productId',
-        component: StockMovementListComponent,
+        path: 'inbound',
+        component: StockInboundComponent,
         data: {
-          title: ['Dashboard', 'Movimentos de estoque do produto'],
+          title: ['Dashboard', 'Entradas de estoque'],
         },
       },
       {

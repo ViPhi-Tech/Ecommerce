@@ -14,7 +14,6 @@ interface IMovementItem {
   imports: [NgIcon],
 })
 export class MovementItemComponent implements OnInit {
-
   data = input<IMovementItem>();
 
   constructor() {}

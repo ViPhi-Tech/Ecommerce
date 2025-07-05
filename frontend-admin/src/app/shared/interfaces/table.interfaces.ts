@@ -47,6 +47,8 @@ export interface ActionButtons {
   variant?: 'text' | 'outlined' | 'filled'; // e.g., "text", "outlined", "filled"
   iconType?: string; // e.g., "material", "font-awesome"
   color?: string; // e.g., "primary", "accent", "warn"
+  colorText?: string; // Custom text color
+  colorIcon?: string; // Custom icon color
   tooltip: string;
   show?: (rowData: any) => boolean;
   action: (rowData: any, rowIndex?: number | string) => void;

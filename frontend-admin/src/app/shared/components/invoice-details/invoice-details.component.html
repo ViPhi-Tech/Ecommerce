@@ -1,173 +1,133 @@
-<div class="mt-8 max-w-4xl mx-auto">
-  <h2 class="text-2xl font-bold mb-4">Informações da Nota Fiscal</h2>
-  <div
-    class="rounded-lg border bg-card text-card-foreground shadow-sm mb-6"
-    data-v0-t="card"
-  >
-    <div class="flex flex-col space-y-1.5 p-6">
-      <h3 class="text-2xl font-semibold leading-none tracking-tight">
-        Dados Gerais
-      </h3>
-    </div>
-    <div class="p-6 pt-0">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div>
-          <p class="text-sm font-medium text-muted-foreground">
-            Número da Nota
-          </p>
-          <p class="text-lg font-semibold">
-            {{ invoice()?.identification?.number }}
-          </p>
-        </div>
-        <div>
-          <p class="text-sm font-medium text-muted-foreground">
-            Data de Emissão
-          </p>
-          <p class="text-lg">
-            {{ invoice()?.identification?.issueDate | date: 'dd/MM/yyyy' }}
-          </p>
-        </div>
-        <div>
-          <p class="text-sm font-medium text-muted-foreground">Valor Total</p>
-          <p class="text-lg font-bold">
-            {{
-              invoice()?.totals?.invoiceValue
-                | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
-            }}
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-    <div
-      class="rounded-lg border bg-card text-card-foreground shadow-sm"
-      data-v0-t="card"
+<div class="space-y-4">
+  <div>
+    <p-panel
+      header="Informações do fornecedor"
+      [toggleable]="true"
+      [collapsed]="true"
     >
-      <div class="flex flex-col space-y-1.5 p-6">
-        <h3 class="text-2xl font-semibold leading-none tracking-tight">
-          Emitente
-        </h3>
-      </div>
-      <div class="p-6 pt-0">
-        <p class="font-semibold text-lg">{{ invoice()?.issuer?.name }}</p>
-        <p class="text-muted-foreground">CNPJ: {{ invoice()?.issuer?.cnpj }}</p>
-        <p class="text-muted-foreground">
-          {{ invoice()?.issuer?.address?.street }},
-          {{ invoice()?.issuer?.address?.number }} -
-          {{ invoice()?.issuer?.address?.neighborhood }},
-          {{ invoice()?.issuer?.address?.city }}/{{
-            invoice()?.issuer?.address?.state
-          }}
-        </p>
-      </div>
-    </div>
-    <div
-      class="rounded-lg border bg-card text-card-foreground shadow-sm"
-      data-v0-t="card"
-    >
-      <div class="flex flex-col space-y-1.5 p-6">
-        <h3 class="text-2xl font-semibold leading-none tracking-tight">
-          Destinatário
-        </h3>
-      </div>
-      <div class="p-6 pt-0">
-        <p class="font-semibold text-lg">{{ invoice()?.recipient?.name }}</p>
-        <p class="text-muted-foreground">
-          CNPJ: {{ invoice()?.recipient?.cnpj }}
-        </p>
-        <p class="text-muted-foreground">
-          {{ invoice()?.recipient?.address?.street }},
-          {{ invoice()?.recipient?.address?.number }} -
-          {{ invoice()?.recipient?.address?.neighborhood }},
-          {{ invoice()?.recipient?.address?.city }}/{{
-            invoice()?.recipient?.address?.state
-          }}
-        </p>
-      </div>
-    </div>
-  </div>
-  <div
-    class="rounded-lg border bg-card text-card-foreground shadow-sm"
-    data-v0-t="card"
-  >
-    <div class="flex flex-col space-y-1.5 p-6">
-      <h3 class="text-2xl font-semibold leading-none tracking-tight">
-        Produtos e Serviços
-      </h3>
-    </div>
-    <div class="p-6 pt-0">
-      <div class="relative w-full overflow-auto">
-        <table class="w-full caption-bottom text-sm">
-          <thead class="[&amp;_tr]:border-b">
-            <tr
-              class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-            >
-              <th
-                class="h-12 px-4 text-left align-middle font-medium text-muted-foreground"
-              >
-                Código
-              </th>
-              <th
-                class="h-12 px-4 text-left align-middle font-medium text-muted-foreground"
-              >
-                Descrição
-              </th>
-              <th
-                class="h-12 px-4 align-middle font-medium text-muted-foreground text-right"
-              >
-                Qtde
-              </th>
-              <th
-                class="h-12 px-4 align-middle font-medium text-muted-foreground text-right"
-              >
-                Valor Unitário
-              </th>
-              <th
-                class="h-12 px-4 align-middle font-medium text-muted-foreground text-right"
-              >
+      <div
+        class="rounded-lg border bg-card text-card-foreground shadow-sm mb-6"
+        data-v0-t="card"
+      >
+        <div class="flex flex-col space-y-1.5 p-6">
+          <h3 class="text-2xl font-semibold leading-none tracking-tight">
+            Dados Gerais
+          </h3>
+        </div>
+        <div class="p-6 pt-0">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <p class="text-sm font-medium text-muted-foreground">
+                Número da Nota
+              </p>
+              <p class="text-lg font-semibold">
+                {{ invoice()?.identification?.number }}
+              </p>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-muted-foreground">
+                Data de Emissão
+              </p>
+              <p class="text-lg">
+                {{ invoice()?.identification?.issueDate | date: 'dd/MM/yyyy' }}
+              </p>
+            </div>
+            <div>
+              <p class="text-sm font-medium text-muted-foreground">
                 Valor Total
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (product of invoice()?.products; track $index) {
-              <tr
-                class="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-              >
-                <td class="p-4 align-middle">{{ product.itemNumber }}</td>
-                <td class="p-4 align-middle">{{ product.description }}</td>
-                <td class="p-4 align-middle text-right">
-                  {{ product.quantity }}
-                </td>
-                <td class="p-4 align-middle text-right">
-                  {{
-                    product.unitValue
-                      | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
-                  }}
-                </td>
-                <td class="p-4 align-middle text-right">
-                  {{
-                    product.totalValue
-                      | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
-                  }}
-                </td>
-              </tr>
-            }
-          </tbody>
-        </table>
+              </p>
+              <p class="text-lg font-bold">
+                {{
+                  invoice()?.totals?.invoiceValue
+                    | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+                }}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="items-center p-6 pt-0 flex justify-end">
-      <div class="text-right">
-        <p class="text-sm text-muted-foreground">Valor Total</p>
-        <p class="text-xl font-bold">
-          {{
-            invoice()?.totals?.invoiceValue
-              | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
-          }}
-        </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div
+          class="rounded-lg border bg-card text-card-foreground shadow-sm"
+          data-v0-t="card"
+        >
+          <div class="flex flex-col space-y-1.5 p-6">
+            <h3 class="text-2xl font-semibold leading-none tracking-tight">
+              Emitente
+            </h3>
+          </div>
+          <div class="p-6 pt-0">
+            <p class="font-semibold text-lg">{{ invoice()?.issuer?.name }}</p>
+            <p class="text-muted-foreground">
+              CNPJ: {{ invoice()?.issuer?.cnpj }}
+            </p>
+            <p class="text-muted-foreground">
+              {{ invoice()?.issuer?.address?.street }},
+              {{ invoice()?.issuer?.address?.number }} -
+              {{ invoice()?.issuer?.address?.neighborhood }},
+              {{ invoice()?.issuer?.address?.city }}/{{
+                invoice()?.issuer?.address?.state
+              }}
+            </p>
+          </div>
+        </div>
+        <div
+          class="rounded-lg border bg-card text-card-foreground shadow-sm"
+          data-v0-t="card"
+        >
+          <div class="flex flex-col space-y-1.5 p-6">
+            <h3 class="text-2xl font-semibold leading-none tracking-tight">
+              Destinatário
+            </h3>
+          </div>
+          <div class="p-6 pt-0">
+            <p class="font-semibold text-lg">
+              {{ invoice()?.recipient?.name }}
+            </p>
+            <p class="text-muted-foreground">
+              CNPJ: {{ invoice()?.recipient?.cnpj }}
+            </p>
+            <p class="text-muted-foreground">
+              {{ invoice()?.recipient?.address?.street }},
+              {{ invoice()?.recipient?.address?.number }} -
+              {{ invoice()?.recipient?.address?.neighborhood }},
+              {{ invoice()?.recipient?.address?.city }}/{{
+                invoice()?.recipient?.address?.state
+              }}
+            </p>
+          </div>
+        </div>
       </div>
-    </div>
+    </p-panel>
+  </div>
+
+  <div>
+    <p-panel header="Produtos e Serviços" [toggleable]="true">
+      <div class="pt-0">
+        <fuse-table
+          [data]="invoice()?.products"
+          [config]="tableConfig()"
+        ></fuse-table>
+      </div>
+    </p-panel>
   </div>
 </div>
+
+<ng-template #statusProductTemplate let-product>
+  <div class="flex justify-center items-center">
+    <ng-icon
+      [pTooltip]="
+        product.status === 'found'
+          ? 'Produto encontrado no sistema'
+          : 'Produto não encontrado no sistema'
+      "
+      tooltipPosition="right"
+      [class]="product.status === 'found' ? 'text-green-500' : 'text-red-500'"
+      size="16"
+      [name]="
+        product.status === 'found' ? 'lucideCircleCheck' : 'lucideCircleMinus'
+      "
+    />
+  </div>
+</ng-template>

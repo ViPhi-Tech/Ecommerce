@@ -49,7 +49,7 @@ export class SelectComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.isRequired.set(!!this.control().validator);
+    this.isRequired.set(!!this.control()?.validator);
   }
 
   onChange: any = () => {};

@@ -32,8 +32,7 @@
             ],
             "styles": ["src/styles.scss"],
             "scripts": [],
-            "allowedCommonJsDependencies": ["xml2js", "timers"],
-            "externalDependencies": ["timers"]
+            "allowedCommonJsDependencies": ["xml2js"]
           },
           "configurations": {
             "production": {

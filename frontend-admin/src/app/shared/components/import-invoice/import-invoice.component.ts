@@ -7,19 +7,17 @@ import {
   OnDestroy,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { Drawer } from 'primeng/drawer';
+import { Dialog, DialogModule } from 'primeng/dialog';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { FileUploadModule } from 'primeng/fileupload';
 import { XmlUtils } from 'app/shared/utils/xml.utils';
 import { InvoiceDetailsComponent } from 'app/shared/components/invoice-details/invoice-details.component';
 import { FileUploadComponent } from 'app/shared/components/file-upload/file-upload.component';
 import { Subscription } from 'rxjs';
-import { InvoiceService } from '../../../invoice-module/invoice.service';
 import { InvoiceDetails } from 'app/shared/interfaces/invoice.interface';
-import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
+import { ImportInvoiceService } from './import-invoice.service';
+import { ProductState } from 'app/dashboard/modules/product-module/product.state';
 
 @Component({
   selector: 'fuse-import-invoice',
@@ -36,44 +34,53 @@ import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
   ],
 })
 export class ImportInvoiceComponent implements OnInit, OnDestroy {
-  private invoiceService = inject(InvoiceService);
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
+  private importInvoiceService = inject(ImportInvoiceService);
   private formBuilder = inject(FormBuilder);
+  private productState = inject(ProductState);
 
-  @ViewChild('drawerRef') drawerRef!: Drawer;
+  @ViewChild('dialogRef') dialogRef!: Dialog;
 
   formGroup = this.formBuilder.group({});
 
   // signals
-  visible = signal(true);
+  visible = signal(false);
   title = signal('Importar Nota Fiscal');
   subtitle = signal(
     'Você pode importar uma nota fiscal eletrônica (NF-e) através do arquivo XML.'
   );
+  nfModel = signal('55');
 
   uploadedFiles: any[] = [];
-
+  loading = signal(false);
   invoices = signal<InvoiceDetails[]>([]);
 
   private _importSubscription: Subscription | undefined;
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.importInvoiceService.openDialog$.subscribe(data => {
+      this.openDialog(data);
+    });
+  }
 
   onUpload(files: any) {
     if (files?.length) {
+      this.loading.set(true);
       const file = files[0];
       const reader = new FileReader();
       reader.onload = async () => {
         const xmlString = reader.result as string;
         try {
           let invoice = await XmlUtils.xmlToJson(xmlString);
-          invoice = XmlUtils.beautifyNFe(invoice);
+          await this.productState.getProductList();
+          const products = this.productState.productList();
+          invoice = XmlUtils.beautifyNFe(invoice, this.nfModel(), products);
           this.invoices.update(invoices => [...invoices, invoice]);
+          this.loading.set(false);
         } catch (error) {
           console.error('Erro ao converter XML:', error);
+          this.loading.set(false);
         }
       };
 
@@ -81,27 +88,19 @@ export class ImportInvoiceComponent implements OnInit, OnDestroy {
     }
   }
 
-  import() {
-    this._importSubscription = this.invoiceService
-      .importInvoice(this.invoices()[0])
-      .subscribe({
-        next: (response: ApiResponse) => {
-          this.invoiceService.updateimportInvoice(response?.dados);
-          this.closeDrawer();
-        },
-      });
+  import() {}
+
+  openDialog(data: any) {
+    this.visible.set(true);
+    this.nfModel.set(data.nfModel || '55');
   }
 
-  closeDrawer(e: Event = new Event('click')) {
-    this.drawerRef?.close(e);
+  closeDialog(e = new Event('close')): void {
+    this.dialogRef.close(e);
   }
 
-  onHide() {
-    setTimeout(() => {
-      this.router.navigate([{ outlets: { drawer: null } }], {
-        relativeTo: this.activatedRoute.root,
-      });
-    }, 200);
+  onCloseDialog() {
+    this.visible.set(false);
   }
 
   ngOnDestroy(): void {

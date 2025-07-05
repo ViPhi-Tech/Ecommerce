@@ -1,7 +1,7 @@
 <!-- Botão de seleção de forma de pagamento -->
 <button
   type="button"
-  class="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer w-full text-left"
+  class="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer w-full text-left h-full"
   [class.border-blue-500]="cartState.paymentMethods().length > 0"
   [class.bg-blue-50]="cartState.paymentMethods().length > 0"
   [class.border-dashed]="cartState.paymentMethods().length === 0"

@@ -25,7 +25,12 @@ import { MovementItemComponent } from '../../components/movement-item/movement-i
   templateUrl: './stock-movement-list.component.html',
   styleUrls: ['./stock-movement-list.component.scss'],
   animations: [heightAnimation],
-  imports: [NgIcon, ButtonModule, SimpleIndicatorComponent, MovementItemComponent],
+  imports: [
+    NgIcon,
+    ButtonModule,
+    SimpleIndicatorComponent,
+    MovementItemComponent,
+  ],
 })
 export class StockMovementListComponent implements OnInit {
   private router = inject(Router);
@@ -238,5 +243,9 @@ export class StockMovementListComponent implements OnInit {
       default:
         return type;
     }
+  }
+
+  newInbound() {
+    this.router.navigate(['dashboard/stock-movements/inbound']);
   }
 }

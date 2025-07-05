@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ImportInvoiceComponent } from './screens/import-invoice/import-invoice.component';
+import { ImportInvoiceComponent } from '../../../shared/components/import-invoice/import-invoice.component';
 
 const routes: Routes = [
   {

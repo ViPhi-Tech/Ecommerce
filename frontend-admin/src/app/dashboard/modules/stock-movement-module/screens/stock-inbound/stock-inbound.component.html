@@ -1,0 +1,57 @@
+<div class="p-8 animate-fade-in">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-xl font-bold">Nova entrada de produtos</h1>
+  </div>
+
+  <p-tabs value="0">
+    <p-tablist>
+      <p-tab value="0">Dados de Entrada</p-tab>
+      <p-tab value="1">Produtos</p-tab>
+    </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        <form [formGroup]="inboundData">
+          <div class="space-y-4">
+            <div class="flex flex-col gap-1">
+              <label
+                [for]="'xmlFileInput'"
+                class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2"
+              >
+                Arquivo XML
+              </label>
+              <p-button
+                (onClick)="importXml()"
+                [disabled]="!inboundData.get('nfModel')?.valid"
+                label="Importar dados de arquivo XML"
+                icon="pi pi-upload"
+              />
+            </div>
+
+            <div>
+              <fuse-input
+                [control]="inboundData.get('nfModel')"
+                type="radio"
+                label="Modelo"
+                [items]="nfModel()"
+              />
+            </div>
+          </div>
+        </form>
+      </p-tabpanel>
+
+      <p-tabpanel value="1">
+        <p class="m-0">
+          Sed ut perspiciatis unde omnis iste natus error sit voluptatem
+          accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae
+          ab illo inventore veritatis et quasi architecto beatae vitae dicta
+          sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit
+          aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos
+          qui ratione voluptatem sequi nesciunt. Consectetur, adipisci velit,
+          sed quia non numquam eius modi.
+        </p>
+      </p-tabpanel>
+    </p-tabpanels>
+  </p-tabs>
+</div>
+
+<fuse-import-invoice />

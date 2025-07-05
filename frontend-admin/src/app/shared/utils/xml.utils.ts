@@ -11,7 +11,24 @@ export class XmlUtils {
   }
 
   // Organiza os dados de uma NF-e (modelo simplificado)
-  static beautifyNFe(nfeRawJson: any): any {
+  static beautifyNFe(
+    nfeRawJson: any,
+    nfModel = '55',
+    stockProducts: any[]
+  ): any {
+    switch (nfModel) {
+      // case '01': // Nota Fiscal (Mod. 01)
+      //   return this.beautifyNFeMod01(infNFe);
+      // case '04': // Nota Fiscal Produtor (Mod. 04)
+      //   return this.beautifyNFeMod04(infNFe);
+      case '55': // Nota Fiscal Eletrônica (Mod. 55)
+        return this.beautifyNFeMod55(nfeRawJson, stockProducts);
+      default:
+        return this.beautifyNFeMod55(nfeRawJson, stockProducts);
+    }
+  }
+
+  static beautifyNFeMod55(nfeRawJson: any, stockProducts: any[]): any {
     const infNFe = nfeRawJson?.NFe?.infNFe || nfeRawJson?.nfeProc?.NFe?.infNFe;
 
     if (!infNFe) return null;
@@ -22,6 +39,41 @@ export class XmlUtils {
     const total = infNFe?.total?.ICMSTot || {};
     const transp = infNFe?.transp || {};
     const det = Array.isArray(infNFe?.det) ? infNFe.det : [infNFe?.det];
+
+    let products = det.map((item: any) => {
+      const prod = item?.prod;
+      const imposto = item?.imposto;
+
+      return {
+        itemNumber: item?.$?.nItem,
+        sku: prod?.cProd,
+        ean: prod?.cEAN,
+        description: prod?.xProd,
+        ncm: prod?.NCM,
+        cfop: prod?.CFOP,
+        // Comercial
+        unit: prod?.uCom,
+        quantity: prod?.qCom,
+        unitValue: prod?.vUnCom,
+        totalValue: prod?.vProd,
+        // Tributação
+        eanTrib: prod?.cEANTrib,
+        unitTrib: prod?.uTrib,
+        quantityTrib: prod?.qTrib,
+        unitValueTrib: prod?.vUnTrib,
+        indTot: prod?.indTot,
+        // Impostos
+        taxes: {
+          totalTaxValue: imposto?.vTotTrib,
+          icms: imposto?.ICMS,
+          ipi: imposto?.IPI,
+          pis: imposto?.PIS,
+          cofins: imposto?.COFINS,
+        },
+      };
+    });
+
+    products = XmlUtils.productInStockValidation(products, stockProducts);
 
     return {
       identification: {
@@ -65,18 +117,7 @@ export class XmlUtils {
           phone: dest?.enderDest?.fone,
         },
       },
-      products: det.map((item: any) => {
-        const prod = item?.prod;
-        return {
-          itemNumber: item?.$?.nItem,
-          description: prod?.xProd,
-          quantity: prod?.qCom,
-          unit: prod?.uCom,
-          unitValue: prod?.vUnCom,
-          totalValue: prod?.vProd,
-          cfop: prod?.CFOP,
-        };
-      }),
+      products,
       totals: {
         productValue: total?.vProd,
         invoiceValue: total?.vNF,
@@ -89,5 +130,18 @@ export class XmlUtils {
         carrier: transp?.transporta,
       },
     };
+  }
+
+  static productInStockValidation(productsXML: any[], stockProducts: any[]) {
+    return productsXML.map(product => {
+      const hasSameEan = stockProducts.some(item => item.ean === product.ean);
+      const hasSameSku = stockProducts.some(item => item.sku === product.sku);
+      debugger;
+      const status = hasSameEan || hasSameSku ? 'found' : 'not-found';
+      return {
+        ...product,
+        status: status,
+      };
+    });
   }
 }

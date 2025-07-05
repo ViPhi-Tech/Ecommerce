@@ -7,18 +7,22 @@ import { MessageModule } from 'primeng/message';
 import { TextareaModule } from 'primeng/textarea';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { SkeletonModule } from 'primeng/skeleton';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { NgClass } from '@angular/common';
 
 @Component({
   selector: 'fuse-input',
   templateUrl: './input.component.html',
   styleUrls: ['./input.component.scss'],
   imports: [
+    NgClass,
     InputTextModule,
     ReactiveFormsModule,
     PasswordModule,
     MessageModule,
     TextareaModule,
     InputNumberModule,
+    RadioButtonModule,
     SkeletonModule,
   ],
 })
@@ -29,8 +33,10 @@ export class InputComponent implements OnInit {
   type = input<string>('text');
   placeholder = input<string>('');
   addictionalClass = input<string>('');
+  items = input<any[]>([]);
   size = input<'large' | 'small'>('small');
   labelPosition = input<'top' | 'left'>('top');
+  radioDirection = input<'row' | 'col'>('row');
 
   step = input<string | number>(1);
 
@@ -49,6 +55,6 @@ export class InputComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.isRequired.set(!!this.control().validator);
+    this.isRequired.set(!!this.control()?.validator);
   }
 }

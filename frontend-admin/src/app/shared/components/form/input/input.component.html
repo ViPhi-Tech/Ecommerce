@@ -70,6 +70,25 @@
     ></textarea>
   }
 
+  @if (type() === 'radio' && !isLoading()) {
+    <div
+      class="flex gap-4"
+      [ngClass]="{ 'flex-col': radioDirection() === 'col' }"
+    >
+      @for (item of items(); track $index) {
+        <div class="field-checkbox">
+          <p-radiobutton
+            [inputId]="item.key"
+            name="item"
+            [value]="item.value"
+            [formControl]="control()"
+          />
+          <label [for]="item.key" class="ml-2">{{ item.label }}</label>
+        </div>
+      }
+    </div>
+  }
+
   @if (isLoading()) {
     <p-skeleton height="1rem" styleClass="mb-2" width="100px" />
 

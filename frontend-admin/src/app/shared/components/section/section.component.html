@@ -1,6 +1,12 @@
-<div class="fuse-section">
+<div
+  class="fuse-section"
+  [ngClass]="{ 'border border-muted dark:border-muted-dark': bordered() }"
+>
   <div class="space-y-6 p-4">
     <div class="flex items-center gap-2 mb-2">
+      @if (icon()) {
+        <ng-icon [name]="icon()" class="h-5 w-5 text-muted" />
+      }
       <h2 class="fuse-section-title">
         {{ title() }}
       </h2>

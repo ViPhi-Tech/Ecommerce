@@ -1,9 +1,9 @@
 <p-dialog
-  #drawerRef
+  #dialogRef
   [header]="title()"
   [(visible)]="visible"
   [draggable]="false"
-  (onHide)="onHide()"
+  (onHide)="onCloseDialog()"
   [modal]="true"
   [dismissableMask]="true"
   [closeOnEscape]="true"
@@ -23,11 +23,15 @@
   </ng-template>
 
   <div>
-    @if (!invoices().length) {
+    @if (!invoices().length && !loading()) {
       <fuse-file-upload (uploadedFilesEvent)="onUpload($event)" />
     }
 
-    @if (invoices().length) {
+    @if (loading()) {
+      <p>Carregando...</p>
+    }
+
+    @if (invoices().length && !loading()) {
       @for (invoice of invoices(); track $index) {
         <fuse-invoice-details [invoice]="invoice" />
       }
@@ -38,6 +42,17 @@
     <div class="flex items-center gap-2">
       <button
         pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        (click)="closeDialog()"
+        severity="secondary"
+        class="w-[200px]"
+        size="small"
+        [raised]="true"
+      ></button>
+      <button
+        pButton
         type="submit"
         label="Importar"
         icon="pi pi-check"
@@ -45,17 +60,6 @@
         size="small"
         [raised]="true"
         (click)="import()"
-      ></button>
-      <button
-        pButton
-        type="button"
-        label="Cancelar"
-        icon="pi pi-times"
-        (click)="closeDrawer($event)"
-        severity="secondary"
-        class="w-[200px]"
-        size="small"
-        [raised]="true"
       ></button>
     </div>
   </ng-template>
