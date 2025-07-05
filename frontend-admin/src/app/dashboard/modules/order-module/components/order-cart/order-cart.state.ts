@@ -8,7 +8,7 @@ export interface ICartState {
   totalQuantity: number;
   quantityItems: number;
   shipment: number;
-  paymentMethod: any; // Adicionando paymentMethod ao estado
+  paymentMethods: any[]; // Alterando para múltiplos métodos de pagamento
   deliveryType: any; // Adicionando deliveryType ao estado
   client: any; // Adicionando client ao estado
 }
@@ -34,7 +34,7 @@ export class CartState {
     totalQuantity: 0,
     quantityItems: 0,
     shipment: 0,
-    paymentMethod: null, // Adicionando paymentMethod ao estado inicial
+    paymentMethods: [], // Alterando para múltiplos métodos de pagamento
     deliveryType: null, // Adicionando deliveryType ao estado inicial
     client: null, // Adicionando client ao estado inicial
   });
@@ -46,7 +46,7 @@ export class CartState {
   public total = computed(() => this.state().total);
   public totalQuantity = computed(() => this.state().totalQuantity);
   public quantityItems = computed(() => this.state().quantityItems);
-  public paymentMethod = computed(() => this.state().paymentMethod);
+  public paymentMethods = computed(() => this.state().paymentMethods);
   public deliveryType = computed(() => this.state().deliveryType);
   public client = computed(() => this.state().client);
 
@@ -192,11 +192,43 @@ export class CartState {
     }));
   }
 
-  public setPaymentMethod(paymentMethod: any) {
+  public addPaymentMethod(paymentMethod: any) {
+    this.state.update(state => {
+      // Verifica se o método já existe
+      const existingIndex = state.paymentMethods.findIndex(pm => pm.id === paymentMethod.id);
+      
+      if (existingIndex === -1) {
+        // Se não existe, adiciona
+        return {
+          ...state,
+          paymentMethods: [...state.paymentMethods, paymentMethod],
+        };
+      } else {
+        // Se já existe, remove
+        return {
+          ...state,
+          paymentMethods: state.paymentMethods.filter(pm => pm.id !== paymentMethod.id),
+        };
+      }
+    });
+  }
+
+  public removePaymentMethod(paymentMethodId: string) {
     this.state.update(state => ({
       ...state,
-      paymentMethod,
+      paymentMethods: state.paymentMethods.filter(pm => pm.id !== paymentMethodId),
     }));
+  }
+
+  public clearPaymentMethods() {
+    this.state.update(state => ({
+      ...state,
+      paymentMethods: [],
+    }));
+  }
+
+  public isPaymentMethodSelected(paymentMethodId: string): boolean {
+    return this.state().paymentMethods.some(pm => pm.id === paymentMethodId);
   }
 
   public setClient(client: any) {

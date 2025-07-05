@@ -62,7 +62,15 @@ export class PaymentMethodsComponent implements OnInit {
   ngOnInit() {}
 
   onPaymentMethodChange(paymentMethod: PaymentMethod) {
-    this.cartState.setPaymentMethod(paymentMethod);
+    this.cartState.addPaymentMethod(paymentMethod);
+    // Não fechamos mais o modal automaticamente para permitir múltiplas seleções
+  }
+
+  closeModal() {
     this.visible.set(false);
+  }
+
+  isPaymentMethodSelected(paymentMethodId: string): boolean {
+    return this.cartState.isPaymentMethodSelected(paymentMethodId);
   }
 }
