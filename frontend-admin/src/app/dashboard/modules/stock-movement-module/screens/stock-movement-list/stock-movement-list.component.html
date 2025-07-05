@@ -1,0 +1,27 @@
+<div class="p-8 animate-fade-in">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-xl font-bold">
+        Listagem de Movimentações
+    </h1>
+    <div class="flex gap-1">
+      <p-button
+        [variant]="state.currentView() === 'list' ? undefined : 'outlined'"
+        (onClick)="state.setView('list')"
+        >
+        <ng-icon name="lucideList" />
+      </p-button>
+      <p-button
+        [variant]="state.currentView() === 'table' ? undefined : 'outlined'"
+        (onClick)="state.setView('table')"
+      >
+        <ng-icon name="lucideTable" />
+      </p-button>
+    </div>
+  </div>
+
+  <div>
+    
+  </div>
+</div>
+
+

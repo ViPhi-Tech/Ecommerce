@@ -6,10 +6,10 @@ import { heightAnimation } from 'app/shared/utils/animations';
 export interface MenuItem {
   label: string;
   icon: string;
-  parent?: string;
   route?: string;
   items?: MenuItem[];
   visible?: boolean;
+  tree?: number; // Used to indicate the level of the menu item in a tree structure
 }
 
 @Component({
@@ -28,7 +28,7 @@ export class MenuItemComponent implements OnInit {
     visible: true,
   });
 
-  addictionalClass = input<string>();
+  addictionalClass = input<any>();
 
   constructor() {}
 

@@ -27,9 +27,15 @@ export class MenuComponent implements OnInit {
               label: 'Pedidos',
               icon: 'lucideFileText',
               route: '/dashboard/orders/list',
-              parent: 'Comercial',
+              tree: 7,
               visible: true,
             },
+            {
+              label: 'Novo Pedido',
+              icon: 'lucidePlus',
+              route: '/dashboard/orders/new',
+              tree: 7,
+            }
           ],
         },
       ],
@@ -43,28 +49,22 @@ export class MenuComponent implements OnInit {
           visible: true,
           items: [
             {
+              label: 'Movimentações',
+              icon: 'lucideActivity',
+              tree: 7,
+              visible: true,
+              route: '/dashboard/stock-movements/list',
+            },
+            {
               label: 'Produtos',
               icon: 'lucideBox',
-              parent: 'Estoque',
+              tree: 7,
               route: '/dashboard/products/list',
               visible: true,
             },
-            {
-              label: 'Novo Produto',
-              icon: 'lucidePlus',
-              parent: 'Estoque',
-              route: '/dashboard/products/new',
-              visible: true,
-            },
-            {
-              label: 'Categorias',
-              icon: 'lucideTags',
-              route: '/dashboard/categories/list',
-              visible: true,
-            },
+            
           ],
         },
-        // categorias
       ],
     },
   ];

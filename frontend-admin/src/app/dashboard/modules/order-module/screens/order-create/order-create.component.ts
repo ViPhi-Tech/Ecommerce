@@ -34,7 +34,6 @@ import { CartState } from '../../components/order-cart/order-cart.state';
     ProductListComponent,
     DeliveryTypesComponent,
     PaymentMethodsComponent,
-    ClientSelectionComponent,
   ],
 })
 export class OrderCreateComponent implements OnInit, OnDestroy {

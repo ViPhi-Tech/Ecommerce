@@ -48,6 +48,15 @@ export const routes: Routes = [
     data: { animation: 'products' },
   },
   {
+    path: 'stock-movements',
+    loadChildren: () =>
+      import('app/dashboard/modules/stock-movement-module/stock-movement-drawer.module').then(
+        m => m.StockMovementDrawerModule
+      ),
+    outlet: 'drawer',
+    data: { animation: 'stock-movements' },
+  },
+  {
     path: 'categories',
     loadChildren: () =>
       import(

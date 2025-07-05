@@ -1,0 +1,76 @@
+/* StockMovementListComponent styles */
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-left {
+  animation: slideInLeft 0.3s ease-in-out;
+}
+
+.animate-right {
+  animation: slideInRight 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.stock-movement-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.stock-movement-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.movement-type-badge {
+  font-size: 0.75rem;
+  font-weight: 500;
+  padding: 0.25rem 0.5rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.movement-type-in {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.movement-type-out {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.movement-type-adjustment {
+  background-color: #fef3c7;
+  color: #92400e;
+}

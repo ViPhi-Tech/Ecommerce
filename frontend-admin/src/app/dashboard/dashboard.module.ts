@@ -40,6 +40,14 @@ const routes: Routes = [
         data: { animation: 'products' },
       },
       {
+        path: 'stock-movements',
+        loadChildren: () =>
+          import('./modules/stock-movement-module/stock-movement.module').then(
+            m => m.StockMovementModule
+          ),
+        data: { animation: 'stock-movements' },
+      },
+      {
         path: 'categories',
         loadChildren: () =>
           import('./modules/category-module/category.module').then(

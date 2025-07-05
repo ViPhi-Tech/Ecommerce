@@ -18,7 +18,7 @@
   <div [@heightAnimation]="item().visible ? 'in' : 'out'">
     @for (item of item().items; track $index) {
       <div>
-        <fuse-menu-item addictionalClass="pl-7" [item]="item" />
+        <fuse-menu-item addictionalClass="pl-{{item.tree}}" [item]="item" />
       </div>
     }
   </div>
