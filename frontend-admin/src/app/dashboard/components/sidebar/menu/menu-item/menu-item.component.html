@@ -11,14 +11,18 @@
   <span class="menu-item-label animate-fadein">{{ item().label }}</span>
 
   @if (item().items?.length) {
-    <ng-icon size="16" class="ml-auto menu-item-arrow" name="matArrowDropDownOutline" />
+    <ng-icon
+      size="16"
+      class="ml-auto menu-item-arrow"
+      name="matArrowDropDownOutline"
+    />
   }
 </a>
 @if (item().items?.length) {
   <div [@heightAnimation]="item().visible ? 'in' : 'out'">
     @for (item of item().items; track $index) {
       <div>
-        <fuse-menu-item addictionalClass="pl-{{item.tree}}" [item]="item" />
+        <fuse-menu-item addictionalClass="pl-7" [item]="item" />
       </div>
     }
   </div>

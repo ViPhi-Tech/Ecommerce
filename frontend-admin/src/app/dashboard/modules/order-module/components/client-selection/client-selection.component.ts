@@ -43,16 +43,17 @@ export class ClientSelectionComponent implements OnInit {
   get filteredClients() {
     const clients = this.clientState.clientList();
     const search = this.searchTerm().toLowerCase();
-    
+
     if (!search) {
       return clients;
     }
-    
-    return clients.filter(client =>
-      client.fullName.toLowerCase().includes(search) ||
-      client.email.toLowerCase().includes(search) ||
-      client.document?.toLowerCase().includes(search) ||
-      client.phone?.toLowerCase().includes(search)
+
+    return clients.filter(
+      client =>
+        client.fullName.toLowerCase().includes(search) ||
+        client.email.toLowerCase().includes(search) ||
+        client.document?.toLowerCase().includes(search) ||
+        client.phone?.toLowerCase().includes(search)
     );
   }
 }

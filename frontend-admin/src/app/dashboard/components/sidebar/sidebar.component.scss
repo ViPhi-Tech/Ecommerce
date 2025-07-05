@@ -21,10 +21,9 @@
       @apply mr-0 !important;
     }
 
-    .menu-item-label, .menu-item-arrow {
-      @apply hidden
+    .menu-item-label,
+    .menu-item-arrow {
+      @apply hidden;
     }
   }
-
-
 }

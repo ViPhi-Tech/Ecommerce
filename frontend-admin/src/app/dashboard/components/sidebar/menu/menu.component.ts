@@ -35,13 +35,13 @@ export class MenuComponent implements OnInit {
               icon: 'lucidePlus',
               route: '/dashboard/orders/new',
               tree: 7,
-            }
+            },
           ],
         },
       ],
     },
     {
-      groupTitle: 'Cadastros',
+      groupTitle: 'Operacional',
       items: [
         {
           label: 'Estoque',
@@ -62,7 +62,6 @@ export class MenuComponent implements OnInit {
               route: '/dashboard/products/list',
               visible: true,
             },
-            
           ],
         },
       ],

@@ -9,9 +9,7 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
-import { TableComponent } from 'app/shared/components/table/table.component';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
-import { TableFilterComponent } from 'app/shared/components/table/components/table-filter/table-filter.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { StockMovementService } from '../../stock-movement.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -19,16 +17,15 @@ import { heightAnimation } from 'app/shared/utils/animations';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { StockMovementState } from '../../stock-movement.state';
+import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/simple-indicator.component';
+import { MovementItemComponent } from '../../components/movement-item/movement-item.component';
 
 @Component({
   selector: 'fuse-stock-movement-list',
   templateUrl: './stock-movement-list.component.html',
   styleUrls: ['./stock-movement-list.component.scss'],
   animations: [heightAnimation],
-  imports: [
-    NgIcon,
-    ButtonModule,
-  ],
+  imports: [NgIcon, ButtonModule, SimpleIndicatorComponent, MovementItemComponent],
 })
 export class StockMovementListComponent implements OnInit {
   private router = inject(Router);
@@ -50,27 +47,52 @@ export class StockMovementListComponent implements OnInit {
     pageLinkSize: 5,
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
-      { field: 'productName', caption: 'Produto', sortable: true, filter: true },
-      { field: 'productSku', caption: 'SKU', sortable: true, filter: true },
-      { 
-        field: 'type', 
-        caption: 'Tipo', 
-        sortable: true, 
+      {
+        field: 'productName',
+        caption: 'Produto',
+        sortable: true,
         filter: true,
-        type: 'custom'
       },
-      { field: 'quantity', caption: 'Quantidade', sortable: true, filter: true },
-      { field: 'previousStock', caption: 'Estoque Anterior', sortable: true, filter: true },
-      { field: 'currentStock', caption: 'Estoque Atual', sortable: true, filter: true },
+      { field: 'productSku', caption: 'SKU', sortable: true, filter: true },
+      {
+        field: 'type',
+        caption: 'Tipo',
+        sortable: true,
+        filter: true,
+        type: 'custom',
+      },
+      {
+        field: 'quantity',
+        caption: 'Quantidade',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'previousStock',
+        caption: 'Estoque Anterior',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'currentStock',
+        caption: 'Estoque Atual',
+        sortable: true,
+        filter: true,
+      },
       { field: 'reason', caption: 'Motivo', sortable: true, filter: true },
-      { 
-        field: 'createdAt', 
-        caption: 'Data', 
+      {
+        field: 'createdAt',
+        caption: 'Data',
         type: 'date',
-        sortable: true, 
-        filter: true 
+        sortable: true,
+        filter: true,
       },
-      { field: 'createdBy', caption: 'Criado Por', sortable: true, filter: true },
+      {
+        field: 'createdBy',
+        caption: 'Criado Por',
+        sortable: true,
+        filter: true,
+      },
       {
         field: 'actions',
         caption: 'Ações',
@@ -134,13 +156,19 @@ export class StockMovementListComponent implements OnInit {
   ngOnInit() {
     // Verifica se está visualizando movimentos de um produto específico
     this.productId = this.route.snapshot.paramMap.get('productId');
-    
+
     this.loadStockMovements();
-    
+
     if (this.productId) {
-      this.coreService.setPageTitle('Movimentos de Estoque', `Movimentos do produto ${this.productId}`);
+      this.coreService.setPageTitle(
+        'Movimentos de Estoque',
+        `Movimentos do produto ${this.productId}`
+      );
     } else {
-      this.coreService.setPageTitle('Movimentos de Estoque', 'Lista de movimentos de estoque');
+      this.coreService.setPageTitle(
+        'Movimentos de Estoque',
+        'Lista de movimentos de estoque'
+      );
     }
   }
 

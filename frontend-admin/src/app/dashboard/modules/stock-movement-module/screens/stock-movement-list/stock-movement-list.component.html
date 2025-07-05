@@ -1,13 +1,11 @@
 <div class="p-8 animate-fade-in">
   <div class="flex justify-between items-center mb-4">
-    <h1 class="text-xl font-bold">
-        Listagem de Movimentações
-    </h1>
+    <h1 class="text-xl font-bold">Listagem de Movimentações</h1>
     <div class="flex gap-1">
       <p-button
         [variant]="state.currentView() === 'list' ? undefined : 'outlined'"
         (onClick)="state.setView('list')"
-        >
+      >
         <ng-icon name="lucideList" />
       </p-button>
       <p-button
@@ -19,9 +17,30 @@
     </div>
   </div>
 
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <fuse-simple-indicator
+      title="Saldo Total"
+      value="38"
+      variant="info"
+      icon="lucidePackage"
+    ></fuse-simple-indicator>
+
+    <fuse-simple-indicator
+      title="Entradas no Mês"
+      value="127"
+      variant="success"
+      icon="lucideArrowUp"
+    ></fuse-simple-indicator>
+
+    <fuse-simple-indicator
+      title="Saídas no Mês"
+      value="89"
+      variant="error"
+      icon="lucideArrowDown"
+    ></fuse-simple-indicator>
+  </div>
+
   <div>
-    
+    <fuse-movement-item />
   </div>
 </div>
-
-

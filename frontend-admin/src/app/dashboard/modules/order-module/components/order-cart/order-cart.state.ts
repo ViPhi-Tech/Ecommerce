@@ -195,8 +195,10 @@ export class CartState {
   public addPaymentMethod(paymentMethod: any) {
     this.state.update(state => {
       // Verifica se o método já existe
-      const existingIndex = state.paymentMethods.findIndex(pm => pm.id === paymentMethod.id);
-      
+      const existingIndex = state.paymentMethods.findIndex(
+        pm => pm.id === paymentMethod.id
+      );
+
       if (existingIndex === -1) {
         // Se não existe, adiciona
         return {
@@ -207,7 +209,9 @@ export class CartState {
         // Se já existe, remove
         return {
           ...state,
-          paymentMethods: state.paymentMethods.filter(pm => pm.id !== paymentMethod.id),
+          paymentMethods: state.paymentMethods.filter(
+            pm => pm.id !== paymentMethod.id
+          ),
         };
       }
     });
@@ -216,7 +220,9 @@ export class CartState {
   public removePaymentMethod(paymentMethodId: string) {
     this.state.update(state => ({
       ...state,
-      paymentMethods: state.paymentMethods.filter(pm => pm.id !== paymentMethodId),
+      paymentMethods: state.paymentMethods.filter(
+        pm => pm.id !== paymentMethodId
+      ),
     }));
   }
 

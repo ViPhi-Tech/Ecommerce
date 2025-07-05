@@ -1,0 +1,71 @@
+/* Component específico para simple-indicator */
+:host {
+  display: block;
+}
+
+.bg-card {
+  background-color: white;
+}
+
+.text-card-foreground {
+  color: #374151;
+}
+
+.shadow-2xs {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Variantes de cores para sucesso */
+.text-green-600 {
+  color: #16a34a;
+}
+
+.bg-green-100 {
+  background-color: #dcfce7;
+}
+
+/* Variantes de cores para warning */
+.text-yellow-600 {
+  color: #ca8a04;
+}
+
+.bg-yellow-100 {
+  background-color: #fef3c7;
+}
+
+/* Variantes de cores para error */
+.text-red-600 {
+  color: #dc2626;
+}
+
+.bg-red-100 {
+  background-color: #fee2e2;
+}
+
+/* Variantes de cores para info */
+.text-blue-600 {
+  color: #2563eb;
+}
+
+.bg-blue-100 {
+  background-color: #dbeafe;
+}
+
+/* Estilos responsivos */
+@media (max-width: 640px) {
+  .p-6 {
+    padding: 1rem;
+  }
+
+  .text-2xl {
+    font-size: 1.5rem;
+  }
+
+  .h-12 {
+    height: 2.5rem;
+  }
+
+  .w-12 {
+    width: 2.5rem;
+  }
+}

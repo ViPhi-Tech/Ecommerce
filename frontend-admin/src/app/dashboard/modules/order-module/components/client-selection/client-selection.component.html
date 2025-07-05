@@ -11,11 +11,7 @@
   @if (cartState.client(); as selected) {
     <!-- Cliente selecionado -->
     <div class="flex items-center gap-3 flex-1 ml-4">
-      <ng-icon
-        name="lucideUser"
-        class="h-5 w-5"
-        style="color: #2563eb"
-      />
+      <ng-icon name="lucideUser" class="h-5 w-5" style="color: #2563eb" />
       <div>
         <div class="font-medium">{{ selected.fullName }}</div>
         <div class="text-sm text-gray-500">
@@ -30,9 +26,7 @@
     <div class="flex items-center gap-3 flex-1 ml-4">
       <ng-icon name="lucideUser" class="h-5 w-5 text-gray-400" />
       <div>
-        <div class="font-medium text-gray-600">
-          Selecionar cliente
-        </div>
+        <div class="font-medium text-gray-600">Selecionar cliente</div>
         <div class="text-sm text-gray-400">Clique para escolher um cliente</div>
       </div>
     </div>
@@ -96,12 +90,8 @@
               <button
                 (click)="onClientChange(client)"
                 class="w-full flex space-x-3 py-4 px-6 border rounded-lg hover:bg-gray-50 text-left"
-                [class.border-blue-500]="
-                  cartState.client()?.id === client.id
-                "
-                [class.bg-blue-50]="
-                  cartState.client()?.id === client.id
-                "
+                [class.border-blue-500]="cartState.client()?.id === client.id"
+                [class.bg-blue-50]="cartState.client()?.id === client.id"
               >
                 <div class="flex items-center gap-3 cursor-pointer flex-1">
                   <ng-icon

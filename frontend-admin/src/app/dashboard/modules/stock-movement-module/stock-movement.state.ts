@@ -21,8 +21,9 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
   protected state = signal<StockMovementModuleState>({
     stockMovementList: [],
     view:
-      (localStorage.getItem('stockMovementView') as StockMovementModuleState['view']) ||
-      'table',
+      (localStorage.getItem(
+        'stockMovementView'
+      ) as StockMovementModuleState['view']) || 'table',
     loading: false,
     error: null,
   });
@@ -46,7 +47,9 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
         )
     )
       .then((response: any) => {
-        const stockMovements = Array.isArray(response) ? response : response.dados;
+        const stockMovements = Array.isArray(response)
+          ? response
+          : response.dados;
         if (stockMovements && stockMovements.length > 0) {
           this.setStockMovementList(stockMovements);
         } else {
@@ -66,26 +69,36 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
 
     await lastValueFrom(
       this.http
-        .get<ApiResponse<StockMovement[]>>(`${this.apiUrl}stock-movement/product/${productId}`, {
-          headers: { 'Skip-Loader': 'true' },
-        })
+        .get<ApiResponse<StockMovement[]>>(
+          `${this.apiUrl}stock-movement/product/${productId}`,
+          {
+            headers: { 'Skip-Loader': 'true' },
+          }
+        )
         .pipe(
           catchError(error => this.handleError(error)),
           finalize(() => this.setLoading(false))
         )
     )
       .then((response: any) => {
-        const stockMovements = Array.isArray(response) ? response : response.dados;
+        const stockMovements = Array.isArray(response)
+          ? response
+          : response.dados;
         if (stockMovements && stockMovements.length > 0) {
           this.setStockMovementList(stockMovements);
         } else {
           this.setStockMovementList([]);
-          this.setError('Nenhum movimento de estoque encontrado para este produto.');
+          this.setError(
+            'Nenhum movimento de estoque encontrado para este produto.'
+          );
         }
       })
       .catch(error => {
         this.setError('Erro ao carregar movimentos de estoque do produto');
-        console.error('Erro ao buscar movimentos de estoque do produto:', error);
+        console.error(
+          'Erro ao buscar movimentos de estoque do produto:',
+          error
+        );
       });
   }
 

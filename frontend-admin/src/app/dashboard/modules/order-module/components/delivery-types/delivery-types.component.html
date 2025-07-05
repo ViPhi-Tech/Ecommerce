@@ -10,7 +10,8 @@
 >
   @if (cartState.deliveryType(); as selected) {
     <!-- Tipo de entrega selecionado -->
-    <div class="flex items-center gap-3 flex-1 ml-4">      <ng-icon
+    <div class="flex items-center gap-3 flex-1 ml-4">
+      <ng-icon
         [name]="selected.icon"
         [class]="'h-5 w-5'"
         [style.color]="selected.iconColor"
@@ -21,7 +22,8 @@
           {{ selected.description }}
         </div>
       </div>
-    </div>    <span [style.color]="selected.priceColor" class="font-medium">{{
+    </div>
+    <span [style.color]="selected.priceColor" class="font-medium">{{
       selected.priceLabel
     }}</span>
   } @else {
@@ -75,7 +77,8 @@
               <label
                 class="text-sm font-medium text-left leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-3 cursor-pointer flex-1"
                 [for]="deliveryType.id"
-              >                <ng-icon
+              >
+                <ng-icon
                   [name]="deliveryType.icon"
                   [class]="'h-5 w-5'"
                   [style.color]="deliveryType.iconColor"
@@ -86,9 +89,12 @@
                     {{ deliveryType.description }}
                   </div>
                 </div>
-              </label>              <span [style.color]="deliveryType.priceColor" class="font-medium">{{
-                deliveryType.priceLabel
-              }}</span>
+              </label>
+              <span
+                [style.color]="deliveryType.priceColor"
+                class="font-medium"
+                >{{ deliveryType.priceLabel }}</span
+              >
             </button>
           }
         </div>

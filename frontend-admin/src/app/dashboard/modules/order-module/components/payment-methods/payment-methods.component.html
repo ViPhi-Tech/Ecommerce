@@ -19,7 +19,9 @@
           [style.color]="cartState.paymentMethods()[0].iconColor"
         />
         <div>
-          <div class="font-medium">{{ cartState.paymentMethods()[0].name }}</div>
+          <div class="font-medium">
+            {{ cartState.paymentMethods()[0].name }}
+          </div>
           <div class="text-sm text-gray-500">
             {{ cartState.paymentMethods()[0].description }}
           </div>
@@ -28,7 +30,9 @@
         <!-- Exibir múltiplos métodos -->
         <div class="flex -space-x-2">
           @for (method of cartState.paymentMethods(); track method.id) {
-            <div class="flex items-center justify-center w-8 h-8 rounded-full border-2 border-white bg-gray-100">
+            <div
+              class="flex items-center justify-center w-8 h-8 rounded-full border-2 border-white bg-gray-100"
+            >
               <ng-icon
                 [name]="method.icon"
                 [class]="'h-4 w-4'"
@@ -38,16 +42,25 @@
           }
         </div>
         <div>
-          <div class="font-medium">{{ cartState.paymentMethods().length }} métodos selecionados</div>
+          <div class="font-medium">
+            {{ cartState.paymentMethods().length }} métodos selecionados
+          </div>
           <div class="text-sm text-gray-500">
-            @for (method of cartState.paymentMethods(); track method.id; let last = $last) {
-              {{ method.name }}@if (!last) {, }
+            @for (
+              method of cartState.paymentMethods();
+              track method.id;
+              let last = $last
+            ) {
+              {{ method.name }}
+              @if (!last) {
+                ,
+              }
             }
           </div>
         </div>
       }
     </div>
-    
+
     <!-- Mostrar desconto apenas se um método com desconto estiver selecionado -->
     @for (method of cartState.paymentMethods(); track method.id) {
       @if (method.discount) {
@@ -97,19 +110,31 @@
             <button
               (click)="onPaymentMethodChange(paymentMethod)"
               class="w-full flex space-x-3 py-4 px-6 border rounded-lg hover:bg-gray-50 transition-colors"
-              [class.border-blue-500]="isPaymentMethodSelected(paymentMethod.id)"
+              [class.border-blue-500]="
+                isPaymentMethodSelected(paymentMethod.id)
+              "
               [class.bg-blue-50]="isPaymentMethodSelected(paymentMethod.id)"
-              [class.border-green-500]="isPaymentMethodSelected(paymentMethod.id)"
+              [class.border-green-500]="
+                isPaymentMethodSelected(paymentMethod.id)
+              "
               [class.bg-green-50]="isPaymentMethodSelected(paymentMethod.id)"
             >
               <label
                 class="text-sm font-medium text-left leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex items-center gap-3 cursor-pointer flex-1"
                 [for]="paymentMethod.id"
               >
-                <div class="flex items-center justify-center w-5 h-5 rounded border-2 transition-colors"
-                     [class.border-green-500]="isPaymentMethodSelected(paymentMethod.id)"
-                     [class.bg-green-500]="isPaymentMethodSelected(paymentMethod.id)"
-                     [class.border-gray-300]="!isPaymentMethodSelected(paymentMethod.id)">
+                <div
+                  class="flex items-center justify-center w-5 h-5 rounded border-2 transition-colors"
+                  [class.border-green-500]="
+                    isPaymentMethodSelected(paymentMethod.id)
+                  "
+                  [class.bg-green-500]="
+                    isPaymentMethodSelected(paymentMethod.id)
+                  "
+                  [class.border-gray-300]="
+                    !isPaymentMethodSelected(paymentMethod.id)
+                  "
+                >
                   @if (isPaymentMethodSelected(paymentMethod.id)) {
                     <ng-icon name="lucideCheck" class="h-3 w-3 text-white" />
                   }
@@ -126,11 +151,13 @@
                   </div>
                 </div>
               </label>
-              
+
               @if (paymentMethod.discount) {
-                <span [style.color]="paymentMethod.discountColor" class="text-sm">{{
-                  paymentMethod.discount
-                }}</span>
+                <span
+                  [style.color]="paymentMethod.discountColor"
+                  class="text-sm"
+                  >{{ paymentMethod.discount }}</span
+                >
               }
             </button>
           }
