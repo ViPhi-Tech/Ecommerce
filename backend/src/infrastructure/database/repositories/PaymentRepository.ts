@@ -1,6 +1,6 @@
 import { IPaymentRepository } from "../../../domain/repositories/IPaymentRepository";
 import { PrismaClient } from "@prisma/client";
-import { Payment } from "../../../domain/entities/Payment";
+import { Payment, PaymentType } from "../../../domain/entities/Payment";
 import { PaymentCreateDTO, PaymentUpdateDTO } from "../../http/dto/Payment.dto";
 export class PaymentRepository implements IPaymentRepository {
     constructor(
@@ -32,5 +32,13 @@ export class PaymentRepository implements IPaymentRepository {
             where: {id},
             data: {statusId: status}
         })
+    };
+
+    async getAll(): Promise<PaymentType[]> {
+        return this.prisma.paymentType.findMany().then(types => types.map(type => ({
+            ...type,
+            createdAt: type.createdAt.toISOString(),
+            updatedAt: type.updatedAt.toISOString()
+        })))
     }
 }

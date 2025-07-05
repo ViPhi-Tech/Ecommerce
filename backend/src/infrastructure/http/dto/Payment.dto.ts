@@ -39,12 +39,21 @@ export const paymentUpdateSchema = z.object({
   paymentDate: z.date().optional()
 });
 
+export const paymentTypeSchema = z.object({
+  name: z.string().default('credit_card'),
+  label: z.string().default('Cartão de Crédito'),
+  createdAt: z.string().default('2024-01-01T00:00:00Z'),
+  updatedAt: z.string().default('2024-01-01T01:00:00Z')
+});
+
 export const paymentJsonSchema = zodToJsonSchema(paymentSchemaDTO);
 export const paymentCreateJsonSchema = zodToJsonSchema(paymentCreateSchema);
 export const paymentIdJsonSchema = zodToJsonSchema(paymentIDSchema);
 export const paymentUpdateJsonSchema = zodToJsonSchema(paymentUpdateSchema);
+export const paymentTypeJsonSchema = zodToJsonSchema(paymentTypeSchema)
 
 export type PaymentDTO = z.infer<typeof paymentSchemaDTO>;
 export type PaymentCreateDTO = z.infer<typeof paymentCreateSchema>;
 export type PaymentID = z.infer<typeof paymentIDSchema>;
 export type PaymentUpdateDTO = z.infer<typeof paymentUpdateSchema>;
+export type PaymentTypeDTO = z.infer<typeof paymentTypeSchema>;
