@@ -17,9 +17,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProductSearchComponent } from '../../components/product-search/product-search.component';
 import { OrderCartComponent } from '../../components/order-cart/order-cart.component';
 import { ProductListComponent } from '../../components/product-list/product-list.component';
-import { DeliveryTypesComponent } from '../../components/delivery-types/delivery-types.component';
-import { PaymentMethodsComponent } from '../../components/payment-methods/payment-methods.component';
-import { ClientSelectionComponent } from '../../components/client-selection/client-selection.component';
 import { CoreService } from 'app/shared/services/core.service';
 import { CartState } from '../../components/order-cart/order-cart.state';
 
@@ -32,8 +29,6 @@ import { CartState } from '../../components/order-cart/order-cart.state';
     ProductSearchComponent,
     OrderCartComponent,
     ProductListComponent,
-    DeliveryTypesComponent,
-    PaymentMethodsComponent,
   ],
 })
 export class OrderCreateComponent implements OnInit, OnDestroy {

@@ -1,4 +1,12 @@
-import { computed, Injectable, signal, WritableSignal } from '@angular/core';
+import {
+  computed,
+  inject,
+  Injectable,
+  signal,
+  WritableSignal,
+} from '@angular/core';
+import { OrderService } from '../../order.service';
+import { lastValueFrom } from 'rxjs';
 
 export interface ICartState {
   cartItems: CartItem[];
@@ -26,6 +34,8 @@ export interface CartItem {
   providedIn: 'root',
 })
 export class CartState {
+  private orderService = inject(OrderService); // Injetando o serviço de pedidos, se necessário
+
   private state: WritableSignal<ICartState> = signal({
     cartItems: [],
     discount: 0,
@@ -242,6 +252,10 @@ export class CartState {
       ...state,
       client,
     }));
+  }
+
+  async checkout(data: any) {
+    await lastValueFrom(this.orderService.createOrder(data));
   }
 
   public resetCart() {

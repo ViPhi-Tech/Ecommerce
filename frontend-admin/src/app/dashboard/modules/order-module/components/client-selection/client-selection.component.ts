@@ -1,4 +1,12 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  inject,
+  model,
+  OnInit,
+  Output,
+  signal,
+} from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
@@ -18,25 +26,31 @@ export class ClientSelectionComponent implements OnInit {
   public cartState = inject(CartState);
   public clientState = inject(ClientState);
 
-  visible = signal(false);
+  show = model(false);
+
+  @Output() closeClientSelection = new EventEmitter<any>();
+  @Output() clientSelected = new EventEmitter<any>();
+
   searchTerm = signal('');
 
   constructor() {}
 
   ngOnInit() {
     // Carrega a lista de clientes quando o componente é inicializado
-    this.clientState.getClientList();
+    this.clientState.getClientList({ skipLoader: true });
   }
 
   onClientChange(client: Client) {
     this.cartState.setClient(client);
-    this.visible.set(false);
+    this.clientSelected.emit(client);
+    this.close();
   }
 
   onSearchChange(event: Event) {
     const target = event.target as HTMLInputElement;
     this.searchTerm.set(target.value);
     this.clientState.setSearchTerm(target.value);
+    this.clientSelected.emit(target.value);
   }
 
   // Getter para filtrar clientes com base no termo de busca
@@ -55,5 +69,10 @@ export class ClientSelectionComponent implements OnInit {
         client.document?.toLowerCase().includes(search) ||
         client.phone?.toLowerCase().includes(search)
     );
+  }
+
+  close() {
+    this.show.set(false);
+    this.closeClientSelection.emit();
   }
 }

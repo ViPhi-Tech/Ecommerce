@@ -15,11 +15,11 @@ interface PaymentMethod {
 }
 
 @Component({
-  selector: 'fuse-payment-methods',
-  templateUrl: './payment-methods.component.html',
+  selector: 'fuse-payment-selection',
+  templateUrl: './payment-selection.component.html',
   imports: [NgIcon, DialogModule, ButtonModule],
 })
-export class PaymentMethodsComponent implements OnInit {
+export class PaymentSelectionComponent implements OnInit {
   public cartState = inject(CartState);
 
   visible = signal(false);
@@ -35,25 +35,26 @@ export class PaymentMethodsComponent implements OnInit {
       discountColor: '#16a34a', // Verde direto
     },
     {
-      id: 'cartao',
-      name: 'Cartão de Crédito/Débito',
+      id: 'credit',
+      name: 'Cartão de Crédito',
+      description: 'Visa, Mastercard, Elo',
+      icon: 'lucideCreditCard',
+      iconColor: '#2563eb', // Azul direto
+    },
+
+    {
+      id: 'debit',
+      name: 'Cartão de Débito',
       description: 'Visa, Mastercard, Elo',
       icon: 'lucideCreditCard',
       iconColor: '#2563eb', // Azul direto
     },
     {
-      id: 'dinheiro',
+      id: 'money',
       name: 'Dinheiro',
       description: 'Pagamento na entrega/retirada',
       icon: 'lucideBanknote',
       iconColor: '#15803d', // Verde escuro direto
-    },
-    {
-      id: 'carteira',
-      name: 'Carteira Digital',
-      description: 'PicPay, PayPal, Mercado Pago',
-      icon: 'lucideWallet',
-      iconColor: '#9333ea', // Roxo direto
     },
   ]);
 

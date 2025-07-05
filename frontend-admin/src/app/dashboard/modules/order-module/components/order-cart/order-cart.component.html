@@ -177,7 +177,7 @@
         </div>
       </div>
       <p-button
-        (onClick)="checkout()"
+        (onClick)="showCheckout = true"
         styleClass="w-full mt-5"
         label="Finalizar Compra"
         icon="pi pi-check"
@@ -185,3 +185,34 @@
     </div>
   </div>
 </div>
+
+<p-dialog [(visible)]="showCheckout" header="Finalizar Pedido" [modal]="true" [style]="{ width: '100%', maxWidth: '800px' }">
+  <div class="card flex justify-center">
+    <p-stepper [value]="1" class="basis-[50rem]">
+      <p-step-list>
+        <p-step [value]="1">Cliente</p-step>
+        <p-step [value]="2">Entrega</p-step>
+        <p-step [value]="3">Pagamento</p-step>
+      </p-step-list>
+      <p-step-panels>
+        <p-step-panel [value]="1">
+          <ng-template #content let-activateCallback="activateCallback">
+            <fuse-client-selection/>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="2">
+          <ng-template #content let-activateCallback="activateCallback">
+            <fuse-delivery-selection></fuse-delivery-selection>
+          </ng-template>
+        </p-step-panel>
+
+        <p-step-panel [value]="3">
+          <ng-template #content let-activateCallback="activateCallback">
+            <fuse-payment-selection></fuse-payment-selection>
+          </ng-template>
+        </p-step-panel>
+      </p-step-panels>
+    </p-stepper>
+  </div>
+</p-dialog>

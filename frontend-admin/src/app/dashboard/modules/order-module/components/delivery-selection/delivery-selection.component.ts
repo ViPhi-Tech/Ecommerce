@@ -16,11 +16,11 @@ interface DeliveryType {
 }
 
 @Component({
-  selector: 'fuse-delivery-types',
-  templateUrl: './delivery-types.component.html',
+  selector: 'fuse-delivery-selection',
+  templateUrl: './delivery-selection.component.html',
   imports: [NgIcon, DialogModule, ButtonModule],
 })
-export class DeliveryTypesComponent implements OnInit {
+export class DeliverySelectionComponent implements OnInit {
   public cartState = inject(CartState);
 
   visible = signal(false);

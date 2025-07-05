@@ -4,12 +4,27 @@ import { CurrencyPipe, NgClass } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 import { sleep } from 'app/shared/utils/utils';
 import { CartItem, CartState } from './order-cart.state';
+import { ClientSelectionComponent } from '../client-selection/client-selection.component';
+import { StepperModule } from 'primeng/stepper';
+import { DeliverySelectionComponent } from '../delivery-selection/delivery-selection.component';
+import { DialogModule } from 'primeng/dialog';
+import { PaymentSelectionComponent } from '../payment-selection/payment-selection.component';
 
 @Component({
   selector: 'fuse-order-cart',
   templateUrl: './order-cart.component.html',
   styleUrls: ['./order-cart.component.scss'],
-  imports: [ButtonModule, CurrencyPipe, NgClass, NgIcon],
+  imports: [
+    ButtonModule,
+    CurrencyPipe,
+    NgClass,
+    NgIcon,
+    ClientSelectionComponent,
+    DeliverySelectionComponent,
+    PaymentSelectionComponent,
+    StepperModule,
+    DialogModule,
+  ],
 })
 export class OrderCartComponent implements OnInit {
   cartState = inject(CartState);
@@ -17,6 +32,8 @@ export class OrderCartComponent implements OnInit {
 
   // Mapeia os itens que estão sendo removidos
   removingItems: Record<string | number, boolean> = {};
+
+  showCheckout = false;
 
   constructor() {}
 
@@ -57,6 +74,19 @@ export class OrderCartComponent implements OnInit {
 
   checkout() {
     const cart = this.cartState.getCartData();
-    console.log('cart', cart);
+    const data = {
+      clientId: 1,
+      total: 0,
+      items: cart.cartItems.map((item: CartItem) => ({
+        productId: item.id,
+        quantity: item.quantity,
+        price: item.finalPrice,
+      })),
+      payments: cart.paymentMethods.map((payment: any) => ({
+        typeId: payment.method,
+        amount: payment.amount,
+      })),
+    };
+    this.cartState.checkout(data);
   }
 }

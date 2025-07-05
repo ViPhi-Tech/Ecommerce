@@ -1,4 +1,4 @@
-<!-- Botão de seleção de cliente -->
+<!-- Botão de seleção de cliente
 <button
   type="button"
   class="flex items-center space-x-3 p-4 border rounded-lg hover:bg-gray-50 cursor-pointer w-full text-left"
@@ -9,7 +9,6 @@
   (click)="visible.set(true)"
 >
   @if (cartState.client(); as selected) {
-    <!-- Cliente selecionado -->
     <div class="flex items-center gap-3 flex-1 ml-4">
       <ng-icon name="lucideUser" class="h-5 w-5" style="color: #2563eb" />
       <div>
@@ -22,7 +21,6 @@
       </div>
     </div>
   } @else {
-    <!-- Placeholder quando nenhum cliente está selecionado -->
     <div class="flex items-center gap-3 flex-1 ml-4">
       <ng-icon name="lucideUser" class="h-5 w-5 text-gray-400" />
       <div>
@@ -38,102 +36,105 @@
 <p-dialog
   header="Selecione um cliente"
   [modal]="true"
-  [(visible)]="visible"
+  [visible]="show()"
   [style]="{ width: '100%', maxWidth: '700px' }"
 >
   <ng-template #headless>
-    <div class="flex flex-col space-y-1.5 p-6">
-      <h3
-        class="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2"
-      >
-        <ng-icon name="lucideUser" class="h-5 w-5" />
-        Selecionar Cliente
-      </h3>
-      <p class="text-sm text-muted-foreground">
-        Escolha o cliente para este pedido
-      </p>
-    </div>
-    <div class="p-6 pt-0">
-      <!-- Campo de busca -->
-      <div class="mb-4">
-        <div class="relative">
-          <ng-icon
-            name="lucideSearch"
-            class="absolute left-3 top-2.5 h-4 w-4 text-gray-400"
-          />
-          <input
-            type="text"
-            placeholder="Buscar por nome, email, telefone ou documento..."
-            class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            [value]="searchTerm()"
-            (input)="onSearchChange($event)"
-          />
-        </div>
-      </div>
 
-      <div class="grid gap-2" style="outline: none">
-        <div class="space-y-4 max-h-96 overflow-y-auto">
-          @if (clientState.loading()) {
-            <div class="flex items-center justify-center py-8">
-              <p class="text-gray-500">Carregando clientes...</p>
-            </div>
-          } @else if (clientState.error()) {
-            <div class="flex items-center justify-center py-8">
-              <p class="text-red-500">{{ clientState.error() }}</p>
-            </div>
-          } @else if (filteredClients.length === 0) {
-            <div class="flex items-center justify-center py-8">
-              <p class="text-gray-500">Nenhum cliente encontrado</p>
-            </div>
-          } @else {
-            @for (client of filteredClients; track client.id) {
-              <button
-                (click)="onClientChange(client)"
-                class="w-full flex space-x-3 py-4 px-6 border rounded-lg hover:bg-gray-50 text-left"
-                [class.border-blue-500]="cartState.client()?.id === client.id"
-                [class.bg-blue-50]="cartState.client()?.id === client.id"
-              >
-                <div class="flex items-center gap-3 cursor-pointer flex-1">
-                  <ng-icon
-                    name="lucideUser"
-                    class="h-5 w-5"
-                    style="color: #2563eb"
-                  />
-                  <div>
-                    <div class="font-medium">{{ client.fullName }}</div>
-                    <div class="text-sm text-gray-500">
-                      {{ client.email }}
-                      @if (client.phone) {
-                        - {{ client.phone }}
-                      }
-                    </div>
-                    @if (client.document) {
-                      <div class="text-xs text-gray-400">
-                        {{ client.document }}
-                      </div>
-                    }
-                  </div>
-                </div>
-              </button>
-            }
-          }
+  </ng-template>
+</p-dialog> -->
+
+<div class="flex flex-col space-y-1.5 p-6">
+  <h3
+    class="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2"
+  >
+    <ng-icon name="lucideUser" class="h-5 w-5" />
+    Selecionar Cliente
+  </h3>
+  <p class="text-sm text-muted-foreground">
+    Escolha o cliente para este pedido
+  </p>
+</div>
+<div class="p-6 pt-0">
+  <!-- Campo de busca -->
+  <div class="mb-4">
+    <div class="relative">
+      <ng-icon
+        name="lucideSearch"
+        class="absolute left-3 top-2.5 h-4 w-4 text-gray-400"
+      />
+      <input
+        type="text"
+        placeholder="Buscar por nome, email, telefone ou documento..."
+        class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        [value]="searchTerm()"
+        (input)="onSearchChange($event)"
+      />
+    </div>
+  </div>
+
+  <div class="grid gap-2" style="outline: none">
+    <div class="space-y-4 max-h-96 overflow-y-auto">
+      @if (clientState.loading()) {
+        <div class="flex items-center justify-center py-8">
+          <p class="text-gray-500">Carregando clientes...</p>
         </div>
-      </div>
-      <div class="flex justify-between gap-2 mt-4">
-        <p-button
+      } @else if (clientState.error()) {
+        <div class="flex items-center justify-center py-8">
+          <p class="text-red-500">{{ clientState.error() }}</p>
+        </div>
+      } @else if (filteredClients.length === 0) {
+        <div class="flex items-center justify-center py-8">
+          <p class="text-gray-500">Nenhum cliente encontrado</p>
+        </div>
+      } @else {
+        @for (client of filteredClients; track client.id) {
+          <button
+            (click)="onClientChange(client)"
+            class="w-full flex space-x-3 py-4 px-6 border rounded-lg hover:bg-gray-50 text-left"
+            [class.border-blue-500]="cartState.client()?.id === client.id"
+            [class.bg-blue-50]="cartState.client()?.id === client.id"
+          >
+            <div class="flex items-center gap-3 cursor-pointer flex-1">
+              <ng-icon
+                name="lucideUser"
+                class="h-5 w-5"
+                style="color: #2563eb"
+              />
+              <div>
+                <div class="font-medium">{{ client.fullName }}</div>
+                <div class="text-sm text-gray-500">
+                  {{ client.email }}
+                  @if (client.phone) {
+                    - {{ client.phone }}
+                  }
+                </div>
+                @if (client.document) {
+                  <div class="text-xs text-gray-400">
+                    {{ client.document }}
+                  </div>
+                }
+              </div>
+            </div>
+          </button>
+        }
+      }
+    </div>
+  </div>
+  <div class="flex justify-between gap-2 mt-4">
+    <!-- <p-button
           label="Novo Cliente"
           severity="secondary"
           [outlined]="true"
           icon="pi pi-plus"
-          (click)="visible.set(false)"
-        />
-        <p-button
-          label="Cancelar"
-          severity="secondary"
-          [outlined]="true"
-          (click)="visible.set(false)"
-        />
-      </div>
-    </div>
-  </ng-template>
-</p-dialog>
+          (click)="show.set(false)"
+        /> -->
+    <div></div>
+    <p-button
+      label="Cancelar"
+      severity="secondary"
+      [outlined]="true"
+      (click)="close()"
+    />
+  </div>
+</div>

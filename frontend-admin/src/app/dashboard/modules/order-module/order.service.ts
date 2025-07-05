@@ -19,6 +19,10 @@ export class OrderService {
     );
   }
 
+  createOrder(data: any): Observable<Order> {
+    return this.http.post<Order>(`${this.apiUrl}order/create`, data);
+  }
+
   createPreOrder(clientId: string | number): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}order/create/preOrder`, {
       clientId,
