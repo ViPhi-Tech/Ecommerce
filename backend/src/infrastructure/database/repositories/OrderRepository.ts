@@ -37,7 +37,11 @@ export class OrderRepository implements IOrderRepository {
     return this.prisma.order.findUnique({
       where: { id },
       include: {
-        items: true,
+        items: {
+          include: {
+            product: true, // Include product details in the order items
+          },
+        }
       },
     });
   }
