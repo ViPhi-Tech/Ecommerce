@@ -12,7 +12,6 @@ export function CoreInterceptor(
 
   // Verifica se o cabeçalho 'Skip-Loader' está presente
   const skipLoader = req.headers.has('Skip-Loader');
-  console.log(skipLoader);
 
   if (!skipLoader) {
     coreService.showLoader();

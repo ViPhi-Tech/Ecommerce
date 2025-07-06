@@ -52,4 +52,12 @@ export abstract class BaseState<T extends BaseModuleState> {
     this.setError(errorMessage);
     return of(null);
   }
+
+  // Método que altera o estado de uma propriedade específica
+  protected updateState<K extends keyof T>(key: K, value: T[K]): void {
+    this.state.update(state => ({
+      ...state,
+      [key]: value,
+    }));
+  }
 }

@@ -285,17 +285,11 @@ export class CartState extends BaseState<ICartState> {
   }
 
   public setClient(client: any) {
-    this.state.update(state => ({
-      ...state,
-      client,
-    }));
+    this.updateState('client', client);
   }
 
   public clearClient() {
-    this.state.update(state => ({
-      ...state,
-      client: null,
-    }));
+    this.updateState('client', null);
   }
 
   async checkout(data: any): Promise<ApiResponse> {
