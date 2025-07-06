@@ -61,17 +61,11 @@ export class ProductState extends BaseState<ProductModuleState> {
   }
 
   setProductList(productList: Product[]) {
-    this.state.update(state => ({
-      ...state,
-      productList,
-    }));
+    this.updateState('productList', productList);
   }
 
   setView(view: ProductModuleState['view']) {
-    this.state.update(state => ({
-      ...state,
-      view,
-    }));
+    this.updateState('view', view);
     localStorage.setItem('productView', view);
   }
 

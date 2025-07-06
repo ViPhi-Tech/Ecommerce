@@ -24,14 +24,14 @@ export class MenuComponent implements OnInit {
           visible: true,
           items: [
             {
-              label: 'Pedidos',
-              icon: 'lucideFileText',
+              label: 'Vendas',
+              icon: 'lucideShoppingCart',
               route: '/dashboard/orders/list',
               tree: 7,
               visible: true,
             },
             {
-              label: 'Novo Pedido',
+              label: 'Nova Venda',
               icon: 'lucidePlus',
               route: '/dashboard/orders/new',
               tree: 7,

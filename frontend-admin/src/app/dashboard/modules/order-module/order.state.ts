@@ -77,10 +77,7 @@ export class OrderState extends BaseState<OrderModuleState> {
       };
     });
 
-    this.state.update(state => ({
-      ...state,
-      orderList: transformedOrders,
-    }));
+    this.updateState('orderList', transformedOrders);
   }
 
   getOrderById(orderId: string | number): Promise<Order> {
@@ -93,27 +90,18 @@ export class OrderState extends BaseState<OrderModuleState> {
         finalize(() => this.setLoading(false))
       )
     ).then((response: ApiResponse<Order>) => {
-      this.state.update(state => ({
-        ...state,
-        orderDetails: response.data,
-      }));
+      this.updateState('orderDetails', response.data);
       this.refreshOrderSubject.next(response.data); // Notifica que os detalhes do pedido foram atualizados
       return response.data;
     });
   }
 
   resetOrder() {
-    this.state.update(state => ({
-      ...state,
-      orderDetails: {} as Order, // Reseta os detalhes do pedido
-    }));
+    this.updateState('orderDetails', {} as Order);
   }
 
   setView(view: 'table' | 'list') {
-    this.state.update(state => ({
-      ...state,
-      view,
-    }));
+    this.updateState('view', view);
     localStorage.setItem('orderView', view);
   }
 }
