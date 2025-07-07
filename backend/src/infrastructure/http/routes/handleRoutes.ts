@@ -9,7 +9,7 @@ import fileRoutes from './File';
 import clientRoutes from './ClientRoutes';
 import invoiceRoutes from './InvoiceRoutes';
 import brandRoutes from './Brand';
-import paymentRoutes from './paymentRoutes';
+import paymentRoutes from './PaymentRoutes';
 
 export default async function handleRoutes(fastify: FastifyInstance) {
   fastify.get(
