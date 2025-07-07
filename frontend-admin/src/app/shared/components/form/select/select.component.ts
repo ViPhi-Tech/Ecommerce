@@ -42,6 +42,7 @@ export class SelectComponent implements OnInit {
   addictionalPrimeClass = input('w-full');
   addictionalClass = input('');
 
+  canSearch = input<boolean>(true);
   isRequired = signal(false);
   isLoading = input<boolean>(false);
   quickAdd = input<any[]>([]);

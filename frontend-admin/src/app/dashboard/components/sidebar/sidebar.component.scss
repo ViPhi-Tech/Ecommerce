@@ -1,5 +1,5 @@
 ::ng-deep .sidebar {
-  @apply hidden lg:block w-[250px] fixed max-h-screen h-full inset-y-0 left-0 z-[70] bg-primary-600 dark:bg-container-background transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static border-r border-gray-200 dark:border-[#1F1F23] -translate-x-full;
+  @apply hidden lg:block w-[250px] fixed max-h-screen h-full inset-y-0 left-0 z-[70] bg-primary-600 dark:bg-container-background transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static border-r border-gray-200 dark:border-dark -translate-x-full;
   transition: width 0.3s ease-in-out;
 }
 

@@ -19,14 +19,15 @@
         [optionLabel]="labelRef()"
         [optionValue]="valueRef()"
         [placeholder]="placeholder()"
-        [filter]="true"
+        [filter]="canSearch()"
         [filterBy]="labelRef()"
         appendTo="body"
         [class]="addictionalPrimeClass()"
         [styleClass]="addictionalClass()"
+        show
         class="animate-fadein"
       />
-      @if (quickAdd()) {
+      @if (quickAdd().length > 0) {
         <p-button
           variant="text"
           (onClick)="redirectToQuickAdd()"

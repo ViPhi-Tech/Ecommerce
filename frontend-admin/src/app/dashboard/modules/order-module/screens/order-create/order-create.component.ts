@@ -14,7 +14,6 @@ import {
 import { filter } from 'rxjs';
 import { OrderState } from '../../order.state';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ProductSearchComponent } from '../../components/product-search/product-search.component';
 import { OrderCartComponent } from '../../components/order-cart/order-cart.component';
 import { ProductListComponent } from '../../components/product-list/product-list.component';
 import { CoreService } from 'app/shared/services/core.service';
@@ -26,7 +25,6 @@ import { CartState } from '../../components/order-cart/order-cart.state';
   styleUrls: ['./order-create.component.scss'],
   imports: [
     RouterModule,
-    ProductSearchComponent,
     OrderCartComponent,
     ProductListComponent,
   ],
