@@ -105,8 +105,6 @@ export class ProductState extends BaseState<ProductModuleState> {
   }
 
   setSearchTerm(searchTerm: string) {
-    console.log('Saving search term:', searchTerm);
-
     this.updateState('searchTerm', searchTerm);
   }
 

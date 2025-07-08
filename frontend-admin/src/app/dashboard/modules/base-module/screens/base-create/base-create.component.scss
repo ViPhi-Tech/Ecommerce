@@ -1,0 +1,10 @@
+.activeTabLink {
+  color: #007bff !important;
+  font-weight: 600;
+}
+
+.scroll-form {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: calc(100vh - 175px);
+}

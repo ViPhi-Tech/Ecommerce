@@ -10,12 +10,12 @@ import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
-import { CategoryState } from 'app/shared/store/category.state';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { CategoryService } from '../../category.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CategoryState } from '../../category.state';
 
 @Component({
   selector: 'fuse-category-list',

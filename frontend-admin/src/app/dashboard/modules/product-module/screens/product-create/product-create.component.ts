@@ -22,7 +22,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { CoreService } from 'app/shared/services/core.service';
-import { CategoryState } from 'app/shared/store/category.state';
+import { CategoryState } from 'app/dashboard/modules/category-module/category.state';
 
 @Component({
   selector: 'fuse-product-create',

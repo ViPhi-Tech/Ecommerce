@@ -17,8 +17,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { MessageService } from 'primeng/api';
 import { CategoryService } from '../../category.service';
-import { CategoryState } from 'app/shared/store/category.state';
 import { CoreService } from 'app/shared/services/core.service';
+import { CategoryState } from '../../category.state';
 
 @Component({
   selector: 'fuse-category-create',
