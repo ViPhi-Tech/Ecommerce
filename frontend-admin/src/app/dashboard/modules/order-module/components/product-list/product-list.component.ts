@@ -1,18 +1,32 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { CurrencyPipe } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { ProductState } from 'app/dashboard/modules/product-module/product.state';
 import { CartState } from '../order-cart/order-cart.state';
-import { ProductSearchComponent } from './components/product-search/product-search.component';
-import { FormModule } from "../../../../../shared/components/form/form.module";
+import { ProductFilterComponent } from './components/product-filter/product-filter.component';
+import { FormModule } from '../../../../../shared/components/form/form.module';
+import { NgIcon } from '@ng-icons/core';
+import { SelectButtonModule } from 'primeng/selectbutton';
 
 @Component({
   selector: 'fuse-product-list',
   templateUrl: './product-list.component.html',
-  imports: [ButtonModule, SelectModule, ReactiveFormsModule, CurrencyPipe, ProductSearchComponent, FormModule, ReactiveFormsModule]
+  imports: [
+    ButtonModule,
+    SelectModule,
+    ReactiveFormsModule,
+    CurrencyPipe,
+    ProductFilterComponent,
+    FormModule,
+    FormsModule,
+    SelectButtonModule,
+    ReactiveFormsModule,
+    NgIcon,
+    CommonModule,
+  ],
 })
 export class ProductListComponent implements OnInit {
   private toast = inject(MessageService);
@@ -20,15 +34,12 @@ export class ProductListComponent implements OnInit {
   productState = inject(ProductState);
   private cartState = inject(CartState);
 
-  filterSelected = new FormControl('all');
+  productView = signal<'list' | 'grid'>('list');
 
-  filters = signal([
-    { label: 'Todos', value: 'all' },
-    { label: 'Maior Preço', value: 'high-price' },
-    { label: 'Menor Preço', value: 'low-price' },
-    { label: 'A-Z', value: 'az' },
-    { label: 'Z-A', value: 'za' },
-  ])
+  viewItems = signal([
+    { label: 'Lista', value: 'list', icon: 'lucideList' },
+    { label: 'Grade', value: 'grid', icon: 'lucideGrid3x3' },
+  ]);
 
   constructor() {}
 

@@ -54,13 +54,18 @@
             </label>
 
             @if (paymentMethod.discount) {
-              <span [style.color]="paymentMethod.discountColor" class="text-sm">{{
-                paymentMethod.discount
-              }}</span>
+              <span
+                [style.color]="paymentMethod.discountColor"
+                class="text-sm"
+                >{{ paymentMethod.discount }}</span
+              >
             }
           </div>
           @if (isPaymentMethodSelected(paymentMethod.id)) {
-            <button class="flex items-center gap-3 border-t pt-4 border-gray-200" (click)="$event.stopPropagation()">
+            <button
+              class="flex items-center gap-3 border-t pt-4 border-gray-200"
+              (click)="$event.stopPropagation()"
+            >
               <span class="text-sm font-medium">Valor a pagar:</span>
               <p-inputNumber
                 [ngModel]="getPaymentMethodValue(paymentMethod.id)"
@@ -77,8 +82,6 @@
               />
             </button>
           }
-
-
         </button>
       }
     </div>
@@ -90,16 +93,27 @@
         <div class="space-y-2">
           <div class="flex justify-between text-sm">
             <span>Total do pedido:</span>
-            <span class="font-medium">{{ cartState.total() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+            <span class="font-medium">{{
+              cartState.total() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+            }}</span>
           </div>
           <div class="flex justify-between text-sm">
             <span>Total pago:</span>
-            <span class="font-medium">{{ getTotalPaid() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+            <span class="font-medium">{{
+              getTotalPaid() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+            }}</span>
           </div>
           <div class="flex justify-between text-sm border-t pt-2">
             <span>Restante:</span>
-            <span class="font-medium" [class.text-green-600]="getRemainingAmount() === 0" [class.text-red-600]="getRemainingAmount() > 0">
-              {{ getRemainingAmount() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            <span
+              class="font-medium"
+              [class.text-green-600]="getRemainingAmount() === 0"
+              [class.text-red-600]="getRemainingAmount() > 0"
+            >
+              {{
+                getRemainingAmount()
+                  | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+              }}
             </span>
           </div>
         </div>

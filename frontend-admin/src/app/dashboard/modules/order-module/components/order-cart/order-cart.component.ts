@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, ChangeDetectorRef, signal } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  ChangeDetectorRef,
+  signal,
+} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CurrencyPipe, NgClass } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';

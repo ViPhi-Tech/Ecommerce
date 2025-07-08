@@ -75,12 +75,18 @@ export class PaymentSelectionComponent implements OnInit {
       });
     }
 
-    if (this.isPaymentMethodSelected(paymentMethod.id) || this.getTotalToPay() <= 0) {
+    if (
+      this.isPaymentMethodSelected(paymentMethod.id) ||
+      this.getTotalToPay() <= 0
+    ) {
       // Se já está selecionado, remove
       this.cartState.removePaymentMethod(paymentMethod.id);
     } else {
       // Se não está selecionado, adiciona com valor inicial
-      const paymentMethodWithValue = { ...paymentMethod, value: this.getRemainingAmount() };
+      const paymentMethodWithValue = {
+        ...paymentMethod,
+        value: this.getRemainingAmount(),
+      };
       this.cartState.addPaymentMethod(paymentMethodWithValue);
     }
   }
@@ -91,18 +97,25 @@ export class PaymentSelectionComponent implements OnInit {
 
   onPaymentValueBlur(paymentMethodId: string) {
     if (this.getTotalToPay() < this.getRemainingAmount()) {
-      this.cartState.updatePaymentMethodValue(paymentMethodId, this.getRemainingAmount());
+      this.cartState.updatePaymentMethodValue(
+        paymentMethodId,
+        this.getRemainingAmount()
+      );
     }
   }
 
   getPaymentMethodValue(paymentMethodId: string): number {
-    const paymentMethod = this.cartState.paymentMethods().find(pm => pm.id === paymentMethodId);
+    const paymentMethod = this.cartState
+      .paymentMethods()
+      .find(pm => pm.id === paymentMethodId);
     return paymentMethod?.value || 0;
   }
 
   // Calcula o total pago considerando os valores dos métodos de pagamento
   getTotalPaid(): number {
-    return this.cartState.paymentMethods().reduce((sum, pm) => sum + (pm.value || 0), 0);
+    return this.cartState
+      .paymentMethods()
+      .reduce((sum, pm) => sum + (pm.value || 0), 0);
   }
 
   // Calcula o valor restante a pagar considerando os métodos de pagamento

@@ -1,0 +1,21 @@
+<div class="flex space-x-4">
+  <p-iconfield class="small" iconPosition="left" class="w-full">
+    <p-inputicon class="pi pi-search" />
+    <input
+      pInputText
+      pSize="small"
+      type="text"
+      class="w-full"
+      (input)="onSearchChange($event)"
+      placeholder="Buscar produto por nome, categoria ou código..."
+    />
+  </p-iconfield>
+  <fuse-select
+    addictionalClass="min-w-[200px]"
+    placeholder="Filtrar por"
+    [items]="filters()"
+    [canSearch]="false"
+    (changeValue)="onFilterChange($event)"
+    [control]="filterSelected"
+  />
+</div>

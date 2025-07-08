@@ -67,7 +67,6 @@ export class CartState extends BaseState<ICartState> {
   public deliveryType = computed(() => this.state().deliveryType);
   public client = computed(() => this.state().client);
 
-
   public getCartData() {
     return this.state();
   }
@@ -226,7 +225,7 @@ export class CartState extends BaseState<ICartState> {
         // Se não existe, adiciona com valor inicial
         const paymentMethodWithValue = {
           ...paymentMethod,
-          value: paymentMethod.value || 0
+          value: paymentMethod.value || 0,
         };
         return {
           ...state,
@@ -248,9 +247,7 @@ export class CartState extends BaseState<ICartState> {
     this.state.update(state => ({
       ...state,
       paymentMethods: state.paymentMethods.map(pm =>
-        pm.id === paymentMethodId
-          ? { ...pm, value }
-          : pm
+        pm.id === paymentMethodId ? { ...pm, value } : pm
       ),
     }));
   }

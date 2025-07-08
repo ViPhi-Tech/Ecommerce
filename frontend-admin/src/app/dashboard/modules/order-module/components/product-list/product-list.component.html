@@ -1,42 +1,107 @@
 <div>
   <h2 class="text-xl font-semibold mb-4">Todos os produtos</h2>
-  <fuse-product-search />
-  <div class="py-4 flex justify-end">
-    <fuse-select addictionalClass="min-w-[200px]" placeholder="Filtrar por" [items]="filters()" [canSearch]="false" [control]="filterSelected"/>
+  <fuse-product-filter />
+  <div class="mt-4">
+    <div class="flex justify-between items-center mb-4">
+      <div class="flex items-center gap-2">
+        <ng-icon name="lucideFilter" />
+        <span class="text-sm text-muted-foreground"
+          >{{ productState.orderProductList().length }} produtos
+          encontrados</span
+        >
+      </div>
+      <div>
+        <p-selectbutton
+          [options]="viewItems()"
+          [(ngModel)]="productView"
+          optionLabel="justify"
+          optionValue="value"
+        >
+          <ng-template #item let-item>
+            <ng-icon [name]="item.icon" />
+          </ng-template>
+        </p-selectbutton>
+      </div>
+    </div>
   </div>
   <div
-    class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4"
+    [ngClass]="{
+      'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4': productView() === 'grid',
+      'flex flex-col gap-4': productView() === 'list'
+    }"
   >
-    @for (product of productState.productList(); track $index) {
-      <div
-        class="rounded-lg border border-gray-200 dark:border-dark bg-card text-card-foreground shadow-sm overflow-hidden"
+    @for (product of productState.orderProductList(); track $index) {
+      <ng-container
+        [ngTemplateOutlet]="productView() === 'grid' ? gridView : listView"
+        [ngTemplateOutletContext]="{ $implicit: product }"
       >
-        <div class="aspect-video relative"></div>
-        <div class="p-4">
-          <h3 class="font-medium line-clamp-2 min-h-[48px]">
-            {{ product?.name }}
-          </h3>
-          <p class="text-muted-foreground text-sm">{{ product?.category }}</p>
-        </div>
-        <div class="p-4 pt-0 flex flex-col justify-between items-center">
-          <div class="mb-2">
-            <span class="font-bold text-lg">{{
-              product?.finalPrice
-                | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
-            }}</span>
-          </div>
-          <div class="w-full">
-            <p-button
-              styleClass="w-full"
-              (onClick)="addProductToCart(product)"
-              [loading]="product?.loading"
-              label="Adicionar"
-              size="small"
-              icon="pi pi-cart-arrow-down"
-            ></p-button>
-          </div>
-        </div>
-      </div>
+      </ng-container>
     }
   </div>
 </div>
+
+<ng-template #listView let-product>
+  <div class="animate-left">
+    <div
+      class="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+    >
+      <div class="flex items-center gap-4">
+        
+        <div>
+          <h3 class="font-semibold">{{ product?.name }}</h3>
+          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+            <span>União</span><span>•</span><span>789100005550</span>
+          </div>
+        </div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div
+          class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
+        >
+          Mercearia
+        </div>
+        <span class="font-bold text-lg">{{
+          product?.finalPrice | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+        }}</span>
+        <p-button
+          (onClick)="addProductToCart(product)"
+          [loading]="product?.loading"
+          label="Adicionar"
+          size="small"
+          icon="pi pi-cart-arrow-down"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #gridView let-product>
+  <div
+    class="animate-right rounded-lg border border-gray-200 dark:border-dark bg-card text-card-foreground shadow-sm overflow-hidden"
+  >
+    <div class="aspect-video relative"></div>
+    <div class="p-4">
+      <h3 class="font-semibold line-clamp-2 min-h-[48px]">
+        {{ product?.name }}
+      </h3>
+      <p class="text-muted-foreground text-sm">{{ product?.category }}</p>
+    </div>
+    <div class="p-4 pt-0 flex flex-col justify-between items-center">
+      <div class="mb-2">
+        <span class="font-bold text-lg">{{
+          product?.finalPrice | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+        }}</span>
+      </div>
+      <div class="w-full">
+        <p-button
+          styleClass="w-full"
+          (onClick)="addProductToCart(product)"
+          [loading]="product?.loading"
+          label="Adicionar"
+          size="small"
+          icon="pi pi-cart-arrow-down"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+</ng-template>

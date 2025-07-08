@@ -1,9 +1,11 @@
 import {
   Component,
+  EventEmitter,
   inject,
   input,
   InputSignal,
   OnInit,
+  Output,
   signal,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -47,13 +49,17 @@ export class SelectComponent implements OnInit {
   isLoading = input<boolean>(false);
   quickAdd = input<any[]>([]);
 
+  @Output() changeValue = new EventEmitter<any>();
+
   constructor() {}
 
   ngOnInit() {
     this.isRequired.set(!!this.control()?.validator);
   }
 
-  onChange: any = () => {};
+  onChange: any = (value: any) => {
+    this.changeValue.emit(value);
+  };
 
   redirectToQuickAdd() {
     this.router.navigate([{ outlets: { drawer: this.quickAdd() } }]);

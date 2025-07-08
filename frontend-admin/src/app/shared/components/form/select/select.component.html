@@ -24,7 +24,7 @@
         appendTo="body"
         [class]="addictionalPrimeClass()"
         [styleClass]="addictionalClass()"
-        show
+        (onChange)="onChange($event)"
         class="animate-fadein"
       />
       @if (quickAdd().length > 0) {

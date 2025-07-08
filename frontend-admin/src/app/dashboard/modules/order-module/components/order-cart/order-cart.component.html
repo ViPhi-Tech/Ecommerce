@@ -187,7 +187,12 @@
   </div>
 </div>
 
-<p-dialog [(visible)]="showCheckout" header="Finalizar Pedido" [modal]="true" [style]="{ width: '100%', maxWidth: '800px' }">
+<p-dialog
+  [(visible)]="showCheckout"
+  header="Finalizar Pedido"
+  [modal]="true"
+  [style]="{ width: '100%', maxWidth: '800px' }"
+>
   <div class="flex justify-center">
     <p-stepper [(value)]="step" class="basis-[50rem]">
       <p-step-list>
@@ -196,16 +201,17 @@
         <p-step [value]="3">Pagamento</p-step>
       </p-step-list>
       <p-step-panels>
-
         <p-step-panel [value]="1">
           <ng-template #content>
-            <fuse-client-selection (clientSelected)="onClientSelected()"/>
+            <fuse-client-selection (clientSelected)="onClientSelected()" />
           </ng-template>
         </p-step-panel>
 
         <p-step-panel [value]="2">
           <ng-template #content>
-            <fuse-delivery-selection (deliveryTypeSelected)="onDeliverySelected()"></fuse-delivery-selection>
+            <fuse-delivery-selection
+              (deliveryTypeSelected)="onDeliverySelected()"
+            ></fuse-delivery-selection>
           </ng-template>
         </p-step-panel>
 
@@ -218,13 +224,30 @@
     </p-stepper>
   </div>
   <ng-template #footer>
-   <div class="flex pt-6 justify-between w-full">
-    @if (step > 1) {
-      <p-button label="Voltar" icon="pi pi-arrow-left" iconPos="left" (onClick)="step = step - 1" />
-    }@else {
-      <p-button label="Cancelar" icon="pi pi-times" iconPos="left" (onClick)="showCheckout = false" />
-    }
-      <p-button [loading]="this.cartState.loading()" [disabled]="step === 3 && cartState.getRemainingAmount() > 0" [label]="step === 3 ? 'Finalizar Pedido' : 'Próximo'" icon="pi pi-check" iconPos="right" (onClick)="step === 3 ? checkout() : step = step + 1" />
+    <div class="flex pt-6 justify-between w-full">
+      @if (step > 1) {
+        <p-button
+          label="Voltar"
+          icon="pi pi-arrow-left"
+          iconPos="left"
+          (onClick)="step = step - 1"
+        />
+      } @else {
+        <p-button
+          label="Cancelar"
+          icon="pi pi-times"
+          iconPos="left"
+          (onClick)="showCheckout = false"
+        />
+      }
+      <p-button
+        [loading]="this.cartState.loading()"
+        [disabled]="step === 3 && cartState.getRemainingAmount() > 0"
+        [label]="step === 3 ? 'Finalizar Pedido' : 'Próximo'"
+        icon="pi pi-check"
+        iconPos="right"
+        (onClick)="step === 3 ? checkout() : (step = step + 1)"
+      />
     </div>
   </ng-template>
 </p-dialog>

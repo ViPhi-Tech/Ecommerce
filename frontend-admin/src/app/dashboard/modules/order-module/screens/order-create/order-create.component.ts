@@ -23,11 +23,7 @@ import { CartState } from '../../components/order-cart/order-cart.state';
   selector: 'fuse-order-create',
   templateUrl: './order-create.component.html',
   styleUrls: ['./order-create.component.scss'],
-  imports: [
-    RouterModule,
-    OrderCartComponent,
-    ProductListComponent,
-  ],
+  imports: [RouterModule, OrderCartComponent, ProductListComponent],
 })
 export class OrderCreateComponent implements OnInit, OnDestroy {
   private router = inject(Router);
