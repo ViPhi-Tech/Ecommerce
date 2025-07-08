@@ -16,58 +16,57 @@ interface MenuGroup {
 export class MenuComponent implements OnInit {
   menu: MenuGroup[] = [
     {
-      groupTitle: 'Overview',
+      groupTitle: 'Comercial',
       items: [
         {
-          label: 'Comercial',
-          icon: 'lucideStore',
+          label: 'Vendas',
+          icon: 'lucideShoppingCart',
+          route: '/dashboard/orders/list',
           visible: true,
-          items: [
-            {
-              label: 'Vendas',
-              icon: 'lucideShoppingCart',
-              route: '/dashboard/orders/list',
-              tree: 7,
-              visible: true,
-            },
-            {
-              label: 'Nova Venda',
-              icon: 'lucidePlus',
-              route: '/dashboard/orders/new',
-              tree: 7,
-            },
-          ],
+        },
+        {
+          label: 'Nova Venda',
+          icon: 'lucidePlus',
+          route: '/dashboard/orders/new',
         },
       ],
     },
     {
-      groupTitle: 'Operacional',
+      groupTitle: 'Estoque',
       items: [
         {
-          label: 'Estoque',
-          icon: 'lucideArchive',
+          label: 'Produtos',
+          icon: 'lucideBox',
+          route: '/dashboard/products/list',
           visible: true,
-          items: [
-            {
-              label: 'Movimentações',
-              icon: 'lucideActivity',
-              tree: 7,
-              visible: true,
-              route: '/dashboard/stock-movements/list',
-            },
-            {
-              label: 'Produtos',
-              icon: 'lucideBox',
-              tree: 7,
-              route: '/dashboard/products/list',
-              visible: true,
-            },
-          ],
+        },
+        {
+          label: 'Movimentações',
+          icon: 'lucideActivity',
+          visible: true,
+          route: '/dashboard/stock-movements/list',
         },
       ],
     },
     {
-      groupTitle: 'Acesso',
+      groupTitle: 'Financeiro',
+      items: [
+        {
+          label: 'Contas a Pagar',
+          icon: 'lucideCreditCard',
+          route: '/dashboard/bills/list',
+          visible: true,
+        },
+        {
+          label: 'Contas a Receber',
+          icon: 'lucideDollarSign',
+          route: '/dashboard/receivables/list',
+          visible: true,
+        },
+      ],
+    },
+    {
+      groupTitle: 'Acessos',
       items: [
         {
           label: 'Usuários',

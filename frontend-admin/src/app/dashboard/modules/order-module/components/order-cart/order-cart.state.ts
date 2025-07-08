@@ -49,7 +49,7 @@ export class CartState extends BaseState<ICartState> {
     quantityItems: 0,
     shipment: 0,
     paymentMethods: [], // Alterando para múltiplos métodos de pagamento
-    deliveryType: null, // Adicionando deliveryType ao estado inicial
+    deliveryType: 'retirada', // Adicionando deliveryType ao estado inicial
     client: null, // Adicionando client ao estado inicial
     loading: false, // Inicializando loading
     error: null, // Inicializando error

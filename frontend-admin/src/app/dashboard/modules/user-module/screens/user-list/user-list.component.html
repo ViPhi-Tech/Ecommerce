@@ -1,20 +1,18 @@
 <div class="p-8 animate-fade-in">
-  <div class="flex justify-between items-center mb-4">
+  <div class="mb-4">
     <h1 class="text-xl font-bold">Lista de Usuários</h1>
-    <div class="animate-left">
-      <fuse-table
-        [data]="state.userList()"
-        [loading]="state.loading()"
-        [config]="tableConfig()"
-      >
-        <ng-container data-headerFilter>
-          <fuse-table-filter>
-            <div class="space-y-4">
-              <!-- Filtros podem ser adicionados aqui -->
-            </div>
-          </fuse-table-filter>
-        </ng-container>
-      </fuse-table>
-    </div>
+    <fuse-table
+      [data]="state.userList()"
+      [loading]="state.loading()"
+      [config]="tableConfig()"
+    >
+      <ng-container data-headerFilter>
+        <fuse-table-filter>
+          <div class="space-y-4">
+            <!-- Filtros podem ser adicionados aqui -->
+          </div>
+        </fuse-table-filter>
+      </ng-container>
+    </fuse-table>
 </div>
 

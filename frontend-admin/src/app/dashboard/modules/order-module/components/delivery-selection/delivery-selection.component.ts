@@ -46,31 +46,33 @@ export class DeliverySelectionComponent implements OnInit {
       priceLabel: 'Grátis',
       priceColor: '#16a34a', // Verde direto
     },
-    {
-      id: 'delivery',
-      name: 'Delivery',
-      description: 'Entrega em sua casa',
-      icon: 'lucideTruck',
-      iconColor: '#ea580c', // Laranja direto
-      price: 8.0,
-      priceLabel: 'R$ 8,00',
-      priceColor: '#4b5563', // Cinza direto
-    },
-    {
-      id: 'expressa',
-      name: 'Entrega Expressa',
-      description: 'Entrega em até 30 minutos',
-      icon: 'lucideMapPin',
-      iconColor: '#dc2626', // Vermelho direto
-      price: 15.0,
-      priceLabel: 'R$ 15,00',
-      priceColor: '#4b5563', // Cinza direto
-    },
+    // {
+    //   id: 'delivery',
+    //   name: 'Delivery',
+    //   description: 'Entrega em sua casa',
+    //   icon: 'lucideTruck',
+    //   iconColor: '#ea580c', // Laranja direto
+    //   price: 8.0,
+    //   priceLabel: 'R$ 8,00',
+    //   priceColor: '#4b5563', // Cinza direto
+    // },
+    // {
+    //   id: 'expressa',
+    //   name: 'Entrega Expressa',
+    //   description: 'Entrega em até 30 minutos',
+    //   icon: 'lucideMapPin',
+    //   iconColor: '#dc2626', // Vermelho direto
+    //   price: 15.0,
+    //   priceLabel: 'R$ 15,00',
+    //   priceColor: '#4b5563', // Cinza direto
+    // },
   ]);
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.cartState.setDeliveryType(this.deliveryTypes()[0]); // Define o tipo de entrega padrão
+  }
 
   // Métodos para lidar com seleções
   onDeliveryTypeChange(deliveryType: DeliveryType) {
