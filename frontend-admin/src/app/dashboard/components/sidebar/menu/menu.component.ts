@@ -54,7 +54,7 @@ export class MenuComponent implements OnInit {
         {
           label: 'Contas a Pagar',
           icon: 'lucideCreditCard',
-          route: '/dashboard/bills/list',
+          route: '/dashboard/accounts-payable/list',
           visible: true,
         },
         {

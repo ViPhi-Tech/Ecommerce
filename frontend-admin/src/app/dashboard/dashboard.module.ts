@@ -76,6 +76,14 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'accounts-payable',
+        loadChildren: () =>
+          import('./modules/accounts-payable-module/accounts-payable.module').then(
+            m => m.AccountsPayableModule
+          ),
+        data: { animation: 'accounts-payable' },
+      },
+      {
         path: '**',
         redirectTo: 'orders',
         pathMatch: 'full',
