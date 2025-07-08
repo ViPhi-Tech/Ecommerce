@@ -29,10 +29,9 @@ export class ProductFilterComponent implements OnInit {
   selectedProduct = new FormControl();
   searchTerm = signal('');
 
-  filterSelected = new FormControl('all');
+  filterSelected = new FormControl('');
 
   filters = signal([
-    { label: 'Todos', value: 'all' },
     { label: 'Maior Preço', value: 'high-price' },
     { label: 'Menor Preço', value: 'low-price' },
     { label: 'A-Z', value: 'az' },

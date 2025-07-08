@@ -66,6 +66,17 @@ export class MenuComponent implements OnInit {
         },
       ],
     },
+    {
+      groupTitle: 'Acesso',
+      items: [
+        {
+          label: 'Usuários',
+          icon: 'lucideUsers',
+          route: '/dashboard/users/list',
+          visible: true,
+        },
+      ],
+    },
   ];
 
   constructor() {}

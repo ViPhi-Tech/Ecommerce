@@ -10,7 +10,7 @@ const routes: Routes = [
     data: { title: 'Cadastro de usuário', animation: 'new-user' },
   },
   {
-    path: ':id',
+    path: 'edit/:id',
     component: UserCreateComponent,
     data: { title: 'Editar usuário', animation: 'edit-user' },
   },

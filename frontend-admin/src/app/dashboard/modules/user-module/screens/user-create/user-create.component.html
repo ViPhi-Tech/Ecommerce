@@ -1,70 +1,74 @@
-<p-drawer
-  #drawerRef
-  [header]="title()"
-  [visible]="visible()"
-  (onHide)="onCloseDrawer()"
-  position="right"
-  styleClass="!w-full md:!w-[80vw] lg:!w-[80vw]"
-  transitionOptions="300ms cubic-bezier(0, 0, 0.2, 1)"
->
-  <form class="flex flex-col gap-4">
-    <!-- Nome do Produto -->
-    <div class="flex flex-col gap-2">
-      <label for="name" class="font-medium">Nome</label>
-      <input
-        id="name"
-        type="text"
-        pInputText
-        name="name"
-        required
-        placeholder="Nome do Produto"
-      />
-    </div>
-    <!-- Descrição do Produto -->
-    <div class="flex flex-col gap-2">
-      <label for="description" class="font-medium">Descrição</label>
-      <textarea
-        id="description"
-        pTextarea
-        name="description"
-        required
-        placeholder="Descrição do Produto"
-        rows="4"
-      ></textarea>
-    </div>
-    <!-- Preço do Produto -->
-    <div class="flex flex-col gap-2">
-      <label for="price" class="font-medium">Preço</label>
-      <input
-        id="price"
-        type="number"
-        pInputText
-        name="price"
-        required
-        placeholder="Preço do Produto"
-      />
+@if (userForm) {
+  <form [formGroup]="userForm" class="flex flex-col gap-4">
+    <div class="grid grid-cols-12 gap-4">
+      <div class="col-12">
+        <fuse-input
+          [isLoading]="isLoading()"
+          label="Nome completo"
+          [control]="userForm.get('fullName')"
+          placeholder="Digite o nome completo do usuário"
+        />
+      </div>
+
+      <div class="col-12">
+        <fuse-input
+          [isLoading]="isLoading()"
+          type="email"
+          label="Email"
+          [control]="userForm.get('email')"
+          placeholder="Digite o email do usuário"
+        />
+      </div>
+
+      <div class="col-12">
+        <fuse-input
+          [isLoading]="isLoading()"
+          type="password"
+          label="Senha"
+          [control]="userForm.get('password')"
+          placeholder="Digite a senha do usuário"
+        />
+      </div>
+
+      <div class="col-12">
+        <fuse-input
+          [isLoading]="isLoading()"
+          type="radio"
+          label="Status"
+          [control]="userForm.get('isActive')"
+          [items]="[
+            { key: 'active', label: 'Ativo', value: true },
+            { key: 'inactive', label: 'Inativo', value: false }
+          ]"
+        />
+      </div>
     </div>
   </form>
 
-  <ng-template #footer>
-    <div class="flex items-center gap-2">
+  <div class="w-full justify-end flex items-center gap-4 mt-4">
+    <div class="flex gap-2">
       <button
         pButton
         type="submit"
-        label="Cadastrar"
+        [label]="submitButtonLabel()"
         icon="pi pi-check"
-        class="w-full"
-        severity="success"
+        class="w-[200px]"
+        size="small"
+        [loading]="isLoading()"
+        (click)="onSubmit($event)"
       ></button>
+
       <button
         pButton
         type="button"
         label="Cancelar"
         icon="pi pi-times"
-        class="w-full"
-        (click)="closeDrawer($event)"
-        severity="danger"
+        (click)="closeDrawer()"
+        severity="secondary"
+        class="w-[200px]"
+        size="small"
       ></button>
     </div>
-  </ng-template>
-</p-drawer>
+  </div>
+}
+

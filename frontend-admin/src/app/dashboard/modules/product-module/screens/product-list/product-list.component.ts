@@ -50,6 +50,17 @@ export class ProductListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    headerButtons: [
+      {
+        icon: 'pi pi-plus',
+        label: 'Adicionar',
+        tooltip: 'Adicionar Produto',
+        action: () => {
+          // Exemplo de navegação para o outlet auxiliar "drawer"
+          this.router.navigate(['dashboard/products/new']);
+        },
+      },
+    ],
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'name', caption: 'Nome', sortable: true, filter: true },
@@ -79,9 +90,8 @@ export class ProductListComponent implements OnInit {
             variant: 'text',
             action: (rowData: any) => {
               // Exemplo de navegação para o outlet auxiliar "drawer"
-              console.log(rowData);
               this.router.navigate([
-                'dashboard/config/products/edit',
+                'dashboard/products/',
                 rowData?.id,
               ]);
             },
@@ -98,17 +108,6 @@ export class ProductListComponent implements OnInit {
             },
           },
         ],
-      },
-    ],
-    headerButtons: [
-      {
-        icon: 'pi pi-plus',
-        label: 'Adicionar',
-        tooltip: 'Adicionar Produto',
-        action: () => {
-          // Exemplo de navegação para o outlet auxiliar "drawer"
-          this.router.navigate(['dashboard/config/products/new']);
-        },
       },
     ],
   });
