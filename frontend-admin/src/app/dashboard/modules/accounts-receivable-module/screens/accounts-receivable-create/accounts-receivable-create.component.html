@@ -1,0 +1,64 @@
+<h1>Nova Conta a Pagar</h1>
+<!-- Formulário para criar conta a pagar -->
+
+<div class="p-8 animate-fade-in">
+  <form class="flex flex-col gap-4 mt-3 scroll-form">
+    <div>
+      <form [formGroup]="accountsReceivableForm" class="row space-y-4">
+        <div class="col-12 md:col-12">
+          <fuse-input
+            [isLoading]="isLoading()"
+            label="Descrição"
+            [control]="accountsReceivableForm.get('description')"
+            placeholder="Ex: Conta de energia"
+          />
+        </div>
+        <div class="col-12 md:col-6">
+          <fuse-input
+            [isLoading]="isLoading()"
+            label="Data de Vencimento"
+            [control]="accountsReceivableForm.get('dueDate')"
+            type="date"
+          />
+        </div>
+        <div class="col-12 md:col-6">
+          <fuse-input
+            [isLoading]="isLoading()"
+            label="Valor"
+            [control]="accountsReceivableForm.get('amount')"
+            type="number"
+            placeholder="Ex: 100.00"
+          />
+        </div>
+      </form>
+    </div>
+  </form>
+
+  <div class="w-full justify-end flex items-center gap-4 mt-4">
+    <div class="flex gap-2">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        (click)="back()"
+        outlined="true"
+        severity="secondary"
+        class="w-[200px]"
+        size="small"
+      ></button>
+
+      <button
+        pButton
+        type="submit"
+        [label]="submitButtonLabel()"
+        icon="pi pi-check"
+        class="w-[200px]"
+        size="small"
+        (click)="onSubmit($event)"
+      ></button>
+    </div>
+  </div>
+</div>
+
+<p-toast baseZIndex="9000" />

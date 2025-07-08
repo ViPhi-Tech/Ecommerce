@@ -27,7 +27,6 @@ import { CoreService } from 'app/shared/services/core.service';
   selector: 'fuse-accounts-payable-create',
   templateUrl: './accounts-payable-create.component.html',
   styleUrls: ['./accounts-payable-create.component.scss'],
-  standalone: true,
   imports: [
     DrawerModule,
     ButtonModule,

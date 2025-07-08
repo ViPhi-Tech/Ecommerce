@@ -60,7 +60,7 @@ export class MenuComponent implements OnInit {
         {
           label: 'Contas a Receber',
           icon: 'lucideDollarSign',
-          route: '/dashboard/receivables/list',
+          route: '/dashboard/accounts-receivable/list',
           visible: true,
         },
       ],

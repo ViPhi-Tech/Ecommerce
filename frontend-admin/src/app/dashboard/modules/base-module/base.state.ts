@@ -9,7 +9,7 @@ import { BaseService } from './base.service';
 
 export interface BaseModuleState extends BaseModuleStateInterface {
   baseList: Base[];
-  view: 'table' | 'list'; // Tipo de visualização atual (tabela ou lista)
+  view?: 'table' | 'list'; // Tipo de visualização atual (tabela ou lista)
 }
 
 export interface Base {
@@ -20,9 +20,6 @@ export interface Base {
   providedIn: 'root',
 })
 export class BaseState extends BaseStateClass<BaseModuleState> {
-  private http = inject(HttpClient);
-  private apiUrl = environments.apiUrl;
-
   private service = inject(BaseService);
 
   protected state = signal<BaseModuleState>({

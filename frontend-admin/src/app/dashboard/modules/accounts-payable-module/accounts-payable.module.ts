@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountsPayableComponent } from './accounts-payable.component';
-import { AccountsPayableState } from './accounts-payable.state';
-import { AccountsPayableService } from './accounts-payable.service';
 import { AccountsPayableListComponent } from './screens/accounts-payable-list/accounts-payable-list.component';
 
 const routes: Routes = [
@@ -43,6 +41,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   declarations: [AccountsPayableComponent],
-  providers: [AccountsPayableState, AccountsPayableService],
+  providers: [],
 })
 export class AccountsPayableModule {}

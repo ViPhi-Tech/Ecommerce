@@ -84,6 +84,14 @@ const routes: Routes = [
         data: { animation: 'accounts-payable' },
       },
       {
+        path: 'accounts-receivable',
+        loadChildren: () =>
+          import('./modules/accounts-receivable-module/accounts-receivable.module').then(
+            m => m.AccountsReceivableModule
+          ),
+        data: { animation: 'accounts-receivable' },
+      },
+      {
         path: '**',
         redirectTo: 'orders',
         pathMatch: 'full',

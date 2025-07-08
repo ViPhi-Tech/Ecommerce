@@ -11,11 +11,11 @@ import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { AccountsPayableService } from '../../accounts-payable.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { heightAnimation } from 'app/shared/utils/animations';
-import { AccountsPayableState } from '../../accounts-payable.state';
 import { TableComponent } from 'app/shared/components/table/table.component';
+import { AccountsPayableService } from '../../accounts-payable.service';
+import { AccountsPayableState } from '../../accounts-payable.state';
 
 @Component({
   selector: 'fuse-accounts-payable-list',
