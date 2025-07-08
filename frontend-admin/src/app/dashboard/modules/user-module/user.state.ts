@@ -19,8 +19,7 @@ export class UserState extends BaseState<UserModuleState> {
   protected state = signal<UserModuleState>({
     userList: [],
     view:
-      (localStorage.getItem('userView') as UserModuleState['view']) ||
-      'table',
+      (localStorage.getItem('userView') as UserModuleState['view']) || 'table',
     loading: false,
     error: null,
     searchTerm: '',
@@ -39,9 +38,10 @@ export class UserState extends BaseState<UserModuleState> {
     let filteredUsers = [...userList];
 
     if (searchTerm.trim()) {
-      filteredUsers = filteredUsers.filter(user =>
-        user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+      filteredUsers = filteredUsers.filter(
+        user =>
+          user.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
     return filteredUsers;
@@ -63,7 +63,9 @@ export class UserState extends BaseState<UserModuleState> {
         )
     )
       .then((response: any) => {
-        const users = Array.isArray(response) ? response : response.dados || response.data;
+        const users = Array.isArray(response)
+          ? response
+          : response.dados || response.data;
         if (users && users.length > 0) {
           this.setUserList(users);
         } else {

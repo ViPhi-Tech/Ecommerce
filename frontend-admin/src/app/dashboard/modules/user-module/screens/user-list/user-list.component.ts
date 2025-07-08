@@ -26,11 +26,7 @@ import { NgTemplateOutlet } from '@angular/common';
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss'],
   animations: [heightAnimation],
-  imports: [
-    TableComponent,
-    TableFilterComponent,
-    ButtonModule,
-  ],
+  imports: [TableComponent, TableFilterComponent, ButtonModule],
 })
 export class UserListComponent implements OnInit {
   private router = inject(Router);
@@ -67,7 +63,9 @@ export class UserListComponent implements OnInit {
             icon: 'pi pi-pencil',
             tooltip: 'Editar usuário',
             action: (rowData: any) => {
-              this.router.navigate([{ outlets: { drawer: ['users', 'edit', rowData.id] } }]);
+              this.router.navigate([
+                { outlets: { drawer: ['users', 'edit', rowData.id] } },
+              ]);
             },
           },
           {
@@ -128,7 +126,7 @@ export class UserListComponent implements OnInit {
           });
           this.state.getUserList();
         },
-        error: (error) => {
+        error: error => {
           this.toast.add({
             severity: 'error',
             summary: 'Erro',

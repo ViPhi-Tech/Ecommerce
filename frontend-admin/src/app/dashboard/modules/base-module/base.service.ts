@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
+import { Base } from './base.state';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,10 @@ export class BaseService {
   refreshBaseList$ = signal<any>(undefined);
 
   constructor() {}
+
+  getAll() {
+    return this.http.get<ApiResponse<Base[]>>(`${this.apiUrl}/all`);
+  }
 
   getBaseById(baseId: string): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.apiUrl}/${baseId}`);

@@ -26,8 +26,9 @@
   </div>
   <div
     [ngClass]="{
-      'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4': productView() === 'grid',
-      'flex flex-col gap-4': productView() === 'list'
+      'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4':
+        productView() === 'grid',
+      'flex flex-col gap-4': productView() === 'list',
     }"
   >
     @for (product of productState.orderProductList(); track $index) {
@@ -46,7 +47,6 @@
       class="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
     >
       <div class="flex items-center gap-4">
-        
         <div>
           <h3 class="font-semibold">{{ product?.name }}</h3>
           <div class="flex items-center gap-2 text-sm text-muted-foreground">

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
+import { Product } from 'app/shared/interfaces/product-module.interface';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
@@ -14,6 +15,12 @@ export class ProductService {
   refreshProductList$ = signal<any>(undefined);
 
   constructor() {}
+
+  getAll(skipLoader: boolean): Observable<ApiResponse<Product[]>> {
+    return this.http.get<ApiResponse<Product[]>>(`${this.apiUrl}/all`, {
+      headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
+    });
+  }
 
   getProductById(productId: string): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.apiUrl}/${productId}`);

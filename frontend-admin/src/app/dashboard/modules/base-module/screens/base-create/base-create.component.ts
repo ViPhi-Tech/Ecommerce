@@ -79,7 +79,6 @@ export class BaseCreateComponent implements OnInit {
             'Editar Base',
             'Preencha os dados do base abaixo'
           );
-          this.blockFields();
         } else {
           this.coreService.setPageTitle(
             'Adicionar Base',
@@ -122,17 +121,6 @@ export class BaseCreateComponent implements OnInit {
     this.baseForm = this.formBuilder.group({
       id: [''],
       name: ['', [Validators.required, Validators.maxLength(255)]],
-      ean: ['', [Validators.required]],
-      sku: ['', [Validators.required]],
-      categoryId: ['', [Validators.required]],
-      image: [''],
-      brand: [''],
-      initialPrice: [0, [Validators.min(0.01), Validators.required]],
-      finalPrice: [0, [Validators.min(0.01), Validators.required]],
-      quantity: ['', [Validators.required]],
-      shortDescription: [''],
-      description: ['', [Validators.required]],
-      companyId: ['1'],
     });
   }
 
@@ -172,12 +160,6 @@ export class BaseCreateComponent implements OnInit {
           });
         },
       });
-  }
-
-  blockFields() {
-    this.baseForm.get('sku')?.disable();
-    this.baseForm.get('ean')?.disable();
-    this.baseForm.get('quantity')?.disable();
   }
 
   back() {

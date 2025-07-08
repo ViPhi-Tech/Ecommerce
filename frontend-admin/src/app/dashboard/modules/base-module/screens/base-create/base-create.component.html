@@ -10,99 +10,6 @@
             placeholder="Ex: Smartphone Galaxy S22 Ultra"
           />
         </div>
-
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            label="Ean"
-            type="number"
-            [control]="baseForm.get('ean')"
-            placeholder="Ex: 7891234567890"
-          />
-        </div>
-
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            label="Código/SKU"
-            [control]="baseForm.get('sku')"
-            placeholder="Ex: SM-S22U-256GB-BLK"
-          />
-        </div>
-
-        <div class="col-12 md:col-6">
-          <fuse-select
-            label="Categoria"
-            [items]="categoryState.categoryList()"
-            valueRef="id"
-            labelRef="name"
-            [isLoading]="isLoading()"
-            [quickAdd]="['categories', 'new']"
-            [control]="baseForm.get('categoryId')"
-            placeholder="Adicione uma cetegoria"
-          />
-        </div>
-
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            label="Marca / Fabricante"
-            [control]="baseForm.get('brand')"
-            placeholder="Ex: Samsung"
-          />
-        </div>
-
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            type="price"
-            label="Preço de custo"
-            [min]="1"
-            [control]="baseForm.get('initialPrice')"
-            placeholder="R$ 0,00"
-          />
-        </div>
-
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            type="price"
-            label="Preço de venda"
-            [control]="baseForm.get('finalPrice')"
-            placeholder="R$ 0,00"
-          />
-        </div>
-
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            label="Estoque inicial"
-            type="number"
-            [control]="baseForm.get('quantity')"
-            placeholder="Adicione a quantidade inicial em estoque"
-          />
-        </div>
-
-        <div class="col-12">
-          <fuse-input
-            [isLoading]="isLoading()"
-            type="textarea"
-            label="Descrição curta"
-            [control]="baseForm.get('shortDescription')"
-            placeholder="Breve descrição do base (máx. 255 caracteres)"
-          />
-        </div>
-
-        <div class="col-12">
-          <fuse-input
-            [isLoading]="isLoading()"
-            type="textarea"
-            label="Descrição"
-            [rows]="5"
-            [control]="baseForm.get('description')"
-            placeholder="Descrição detalhada do base, características, benefícios, etc."
-          />
-        </div>
       </form>
       <!-- <fuse-section title="Informações Básicas do Base">
         </fuse-section> -->
@@ -132,7 +39,6 @@
         size="small"
         (click)="onSubmit($event)"
       ></button>
-
     </div>
   </div>
 </div>

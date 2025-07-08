@@ -1,5 +1,4 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import {
   Product,
   ProductModuleState,
@@ -8,6 +7,7 @@ import { BaseState } from 'app/shared/store/base.state';
 import { catchError, finalize, lastValueFrom } from 'rxjs';
 import { environments } from 'src/environments/environments';
 import { HttpClient } from '@angular/common/http';
+import { ProductService } from './product.service';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +15,8 @@ import { HttpClient } from '@angular/common/http';
 export class ProductState extends BaseState<ProductModuleState> {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl;
+
+  private productService = inject(ProductService);
 
   protected state = signal<ProductModuleState>({
     productList: [],
@@ -61,16 +63,13 @@ export class ProductState extends BaseState<ProductModuleState> {
     return filteredProducts;
   });
 
-  async getProductList(): Promise<void> {
+  async getProductList(skipLoader = true): Promise<void> {
     this.setLoading(true);
     this.clearError();
     this.setProductList([]);
 
     await lastValueFrom(
-      this.http
-        .get<ApiResponse<Product[]>>(`${this.apiUrl}product/all`, {
-          headers: { 'Skip-Loader': 'true' },
-        })
+      this.productService.getAll(skipLoader)
         .pipe(
           catchError(error => this.handleError(error)),
           finalize(() => this.setLoading(false))

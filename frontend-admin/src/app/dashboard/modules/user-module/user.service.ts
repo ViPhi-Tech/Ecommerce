@@ -3,7 +3,11 @@ import { inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
-import { User, UserCreate, UserUpdate } from 'app/shared/interfaces/user-module.interface';
+import {
+  User,
+  UserCreate,
+  UserUpdate,
+} from 'app/shared/interfaces/user-module.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -25,10 +29,15 @@ export class UserService {
   }
 
   // Define methods for user operations here
-  upsertUser(userData: UserCreate | UserUpdate & { id?: string }): Observable<ApiResponse> {
+  upsertUser(
+    userData: UserCreate | (UserUpdate & { id?: string })
+  ): Observable<ApiResponse> {
     if (userData?.id) {
       // Update existing user
-      return this.http.put<ApiResponse>(`${this.apiUrl}/update/${userData?.id}`, userData);
+      return this.http.put<ApiResponse>(
+        `${this.apiUrl}/update/${userData?.id}`,
+        userData
+      );
     }
     // Create new user
     return this.http.post<ApiResponse>(`${this.apiUrl}/create`, userData);

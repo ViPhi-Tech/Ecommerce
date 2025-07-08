@@ -122,10 +122,7 @@ export class BaseListComponent implements OnInit {
   }
 
   editBase(baseId: string) {
-    this.router.navigate([
-      'dashboard/bases/edit/',
-      baseId,
-    ]);
+    this.router.navigate(['dashboard/bases/edit/', baseId]);
   }
 
   deleteBase(baseId: string) {

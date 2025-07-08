@@ -86,7 +86,7 @@ export class UserCreateComponent implements OnInit {
       .getUserById(id)
       .pipe(takeUntilDestroyed())
       .subscribe({
-        next: (response) => {
+        next: response => {
           const user = response.data || response;
           this.userForm.patchValue({
             fullName: user.fullName,
@@ -95,7 +95,7 @@ export class UserCreateComponent implements OnInit {
           });
           this.isLoading.set(false);
         },
-        error: (error) => {
+        error: error => {
           console.error('Error loading user:', error);
           this.toast.add({
             severity: 'error',
@@ -137,7 +137,7 @@ export class UserCreateComponent implements OnInit {
             this.userService.refreshUserList();
             this.closeDrawer();
           },
-          error: (error) => {
+          error: error => {
             console.error('Error saving user:', error);
             this.toast.add({
               severity: 'error',

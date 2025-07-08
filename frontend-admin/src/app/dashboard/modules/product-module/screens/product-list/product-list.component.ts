@@ -134,10 +134,7 @@ export class ProductListComponent implements OnInit {
   }
 
   editProduct(productId: string) {
-    this.router.navigate([
-      'dashboard/products/edit/',
-      productId,
-    ]);
+    this.router.navigate(['dashboard/products/edit/', productId]);
   }
 
   deleteProduct(productId: string) {
