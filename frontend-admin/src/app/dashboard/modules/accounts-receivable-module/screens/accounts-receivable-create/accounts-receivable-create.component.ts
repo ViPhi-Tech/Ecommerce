@@ -48,7 +48,7 @@ export class AccountsReceivableCreateComponent implements OnInit {
 
   formGroup = this.formBuilder.group({});
 
-  title = signal('Adicionar Conta a Pagar');
+  title = signal('Adicionar Conta a Receber');
   subtitle = signal('Preencha os dados da nova conta a pagar abaixo');
   submitButtonLabel = signal('Salvar');
   isLoading = signal(true);
@@ -65,15 +65,15 @@ export class AccountsReceivableCreateComponent implements OnInit {
       .subscribe(params => {
         const id = params['id'];
         if (id) {
-          this.title.set('Editar Conta a Pagar');
+          this.title.set('Editar Conta a Receber');
           this.loadInfos(id);
           this.coreService.setPageTitle(
-            'Editar Conta a Pagar',
+            'Editar Conta a Receber',
             'Preencha os dados da conta a pagar abaixo'
           );
         } else {
           this.coreService.setPageTitle(
-            'Adicionar Conta a Pagar',
+            'Adicionar Conta a Receber',
             'Preencha os dados da nova conta a pagar abaixo'
           );
           this.loadInfos();

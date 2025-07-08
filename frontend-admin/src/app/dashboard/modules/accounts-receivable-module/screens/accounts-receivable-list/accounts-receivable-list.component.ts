@@ -43,7 +43,7 @@ export class AccountsReceivableListComponent implements OnInit {
       {
         icon: 'pi pi-plus',
         label: 'Adicionar',
-        tooltip: 'Adicionar Conta a Pagar',
+        tooltip: 'Adicionar Conta a Receber',
         action: () => {
           this.router.navigate(['dashboard/accounts-receivable/new']);
         },
@@ -62,7 +62,7 @@ export class AccountsReceivableListComponent implements OnInit {
           {
             icon: 'lucideSquarePen',
             label: 'Editar',
-            tooltip: 'Editar Conta a Pagar',
+            tooltip: 'Editar Conta a Receber',
             variant: 'text',
             action: (rowData: any) => {
               this.edit(rowData?.id);
@@ -74,7 +74,7 @@ export class AccountsReceivableListComponent implements OnInit {
             variant: 'text',
             colorText: '#EF4444',
             colorIcon: '#EF4444',
-            tooltip: 'Excluir Conta a Pagar',
+            tooltip: 'Excluir Conta a Receber',
             action: (rowData: any) => {
               this.delete(rowData?.id);
             },
@@ -94,7 +94,7 @@ export class AccountsReceivableListComponent implements OnInit {
 
   ngOnInit() {
     this.state.getAccountsReceivableList();
-    this.coreService.setPageTitle('Contas a Pagar', 'Lista de contas a pagar');
+    this.coreService.setPageTitle('Contas a Receber', 'Lista de contas a pagar');
   }
 
   edit(id: string) {
