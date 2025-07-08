@@ -89,11 +89,7 @@ export class ProductListComponent implements OnInit {
             tooltip: 'Editar Produto',
             variant: 'text',
             action: (rowData: any) => {
-              // Exemplo de navegação para o outlet auxiliar "drawer"
-              this.router.navigate([
-                'dashboard/products/',
-                rowData?.id,
-              ]);
+              this.editProduct(rowData?.id);
             },
           },
           {
@@ -135,6 +131,13 @@ export class ProductListComponent implements OnInit {
   ngOnInit() {
     this.state.getProductList();
     this.coreService.setPageTitle('Produtos', 'Lista de produtos disponíveis');
+  }
+
+  editProduct(productId: string) {
+    this.router.navigate([
+      'dashboard/products/edit/',
+      productId,
+    ]);
   }
 
   deleteProduct(productId: string) {

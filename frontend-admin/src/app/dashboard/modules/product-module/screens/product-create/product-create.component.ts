@@ -180,6 +180,6 @@ export class ProductCreateComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['dashboard/config/products']);
+    this.router.navigate(['dashboard/products/list']);
   }
 }
