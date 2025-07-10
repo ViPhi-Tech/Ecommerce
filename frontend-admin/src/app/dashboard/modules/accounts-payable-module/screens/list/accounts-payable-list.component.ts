@@ -1,7 +1,6 @@
 import {
   Component,
   DestroyRef,
-  effect,
   inject,
   OnInit,
   signal,
@@ -20,9 +19,8 @@ import { AccountsPayableState } from '../../accounts-payable.state';
 @Component({
   selector: 'fuse-accounts-payable-list',
   templateUrl: './accounts-payable-list.component.html',
-  styleUrls: ['./accounts-payable-list.component.scss'],
   animations: [heightAnimation],
-  imports: [TableComponent]
+  imports: [TableComponent],
 })
 export class AccountsPayableListComponent implements OnInit {
   private router = inject(Router);
@@ -45,15 +43,33 @@ export class AccountsPayableListComponent implements OnInit {
         label: 'Adicionar',
         tooltip: 'Adicionar Conta a Pagar',
         action: () => {
-          this.router.navigate(['dashboard/accounts-payable/new']);
+          this.router.navigate([{ outlets: { drawer: ['accounts-payable', 'new'] } }]);
         },
       },
     ],
     columns: [
-      { field: 'id', caption: 'ID', sortable: true, filter: true },
-      { field: 'description', caption: 'Descrição', sortable: true, filter: true },
-      { field: 'dueDate', caption: 'Data de Vencimento', type: 'date', sortable: true, filter: true },
-      { field: 'amount', caption: 'Valor', type: 'currency', sortable: true, filter: true },
+      // { field: 'id', caption: 'ID', sortable: true, filter: true },
+      {
+        field: 'provider',
+        caption: 'Fornecedor',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'description',
+        caption: 'Descrição',
+      },
+      {
+        field: 'dueDate',
+        caption: 'Data de Vencimento',
+        sortable: true,
+      },
+      {
+        field: 'amount',
+        caption: 'Valor',
+        type: 'currency',
+        sortable: true,
+      },
       {
         field: 'actions',
         caption: 'Ações',
@@ -85,15 +101,13 @@ export class AccountsPayableListComponent implements OnInit {
   });
 
   constructor() {
-    effect(() => {
-      if (this.accountsPayableService.refreshAccountsPayableList$()) {
-        this.state.getAccountsPayableList();
-      }
-    });
+    
   }
 
-  ngOnInit() {
-    this.state.getAccountsPayableList();
+  async ngOnInit() {
+    await this.state.getAccountsPayableList();
+    console.log('Accounts Payable List:', this.state.accountsPayableList());
+    
     this.coreService.setPageTitle('Contas a Pagar', 'Lista de contas a pagar');
   }
 

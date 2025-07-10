@@ -65,10 +65,29 @@ export class TableComponent implements OnInit {
     return fields;
   });
 
+  exportColumns = computed(() => {
+    return this.config().columns
+      .map((col) => {
+        return {
+          title: col.caption,
+          dataKey: col.field,
+          type: col.type || 'text',
+          headerAlign: col.headerAlign || 'left',
+        };
+      });
+  });
   ngOnInit() {}
 
   search($event: any, dt2: any) {
     dt2.filterGlobal($event?.target?.value, 'contains');
+  }
+
+  clearFilters(dt2: any) {
+    dt2.clear();
+  }
+
+  exportTable(dt2: any) {
+    dt2?.exportCSV()
   }
 
   onRowClick(rowData: any, rowIndex: number) {

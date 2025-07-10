@@ -41,17 +41,33 @@
       <div class="flex flex-col w-full sm:w-auto sm:flex-row gap-2">
         <ng-content select="[data-headerFilter]"></ng-content>
 
-        <p-iconfield class="small" iconPosition="left">
-          <p-inputicon class="pi pi-search" />
-          <input
-            pInputText
-            pSize="small"
-            type="text"
-            class="w-full sm:w-[250px]"
-            (input)="search($event, dt2)"
-            placeholder="Pesquisar"
-          />
-        </p-iconfield>
+        <div class="flex items-center gap-2 w-full sm:w-auto">
+          <p-iconfield class="small" iconPosition="left">
+            <p-inputicon class="pi pi-search" />
+            <input
+              pInputText
+              pSize="small"
+              type="text"
+              class="w-full sm:w-[250px]"
+              (input)="search($event, dt2)"
+              placeholder="Pesquisar"
+            />
+          </p-iconfield>
+          <p-button size="small" pTooltip="Limpar filtros" (click)="clearFilters(dt2)">
+            <ng-icon
+              name="lucideFilter"
+            ></ng-icon>
+          </p-button>
+          <!-- // export -->
+          <p-button
+            size="small"
+            pTooltip="Exportar tabela"
+            (click)="exportTable(dt2)"
+          >
+            <ng-icon name="lucideFileChartColumn"></ng-icon>
+          </p-button>
+        </div>
+
       </div>
     </div>
   </ng-template>
@@ -59,6 +75,7 @@
     <tr>
       @for (column of config().columns; track $index) {
         <th
+          pSortableColumn="{{column?.sortable ? column?.field : ''}}"
           [ngClass]="{
             'text-left': column?.headerAlign === 'left',
             'text-right': column?.headerAlign === 'right',
@@ -67,6 +84,9 @@
           }"
         >
           {{ column?.caption }}
+          @if(column?.sortable) {
+            <p-sortIcon class="ml-2" field="{{column?.field}}" />
+          }
         </th>
       }
     </tr>
@@ -100,9 +120,9 @@
             </ng-container>
           } @else {
             @if (column?.type === 'date') {
-              {{ rowData?.[column?.field || ''] | date: 'dd/MM/yyyy' }}
+              {{ rowData?.[column?.field || ''] | date: 'dd/MM/yyyy':'pt-BR' }}
             } @else if (column?.type === 'datetime') {
-              {{ rowData?.[column?.field || ''] | date: 'dd/MM/yyyy HH:mm' }}
+              {{ rowData?.[column?.field || ''] | date: 'dd/MM/yyyy HH:mm':'UTC' }}
             } @else if (column?.type === 'currency') {
               {{
                 rowData?.[column?.field || '']

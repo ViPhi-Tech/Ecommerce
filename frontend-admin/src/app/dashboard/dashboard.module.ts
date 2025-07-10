@@ -78,17 +78,17 @@ const routes: Routes = [
       {
         path: 'accounts-payable',
         loadChildren: () =>
-          import('./modules/accounts-payable-module/accounts-payable.module').then(
-            m => m.AccountsPayableModule
-          ),
+          import(
+            './modules/accounts-payable-module/accounts-payable.module'
+          ).then(m => m.AccountsPayableModule),
         data: { animation: 'accounts-payable' },
       },
       {
         path: 'accounts-receivable',
         loadChildren: () =>
-          import('./modules/accounts-receivable-module/accounts-receivable.module').then(
-            m => m.AccountsReceivableModule
-          ),
+          import(
+            './modules/accounts-receivable-module/accounts-receivable.module'
+          ).then(m => m.AccountsReceivableModule),
         data: { animation: 'accounts-receivable' },
       },
       {

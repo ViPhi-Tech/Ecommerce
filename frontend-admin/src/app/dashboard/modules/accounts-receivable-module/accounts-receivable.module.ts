@@ -18,16 +18,16 @@ const routes: Routes = [
       {
         path: 'new',
         loadComponent: () =>
-          import('./screens/accounts-receivable-create/accounts-receivable-create.component').then(
-            m => m.AccountsReceivableCreateComponent
-          ),
+          import(
+            './screens/accounts-receivable-create/accounts-receivable-create.component'
+          ).then(m => m.AccountsReceivableCreateComponent),
       },
       {
         path: 'edit/:id',
         loadComponent: () =>
-          import('./screens/accounts-receivable-create/accounts-receivable-create.component').then(
-            m => m.AccountsReceivableCreateComponent
-          ),
+          import(
+            './screens/accounts-receivable-create/accounts-receivable-create.component'
+          ).then(m => m.AccountsReceivableCreateComponent),
       },
       {
         path: '',

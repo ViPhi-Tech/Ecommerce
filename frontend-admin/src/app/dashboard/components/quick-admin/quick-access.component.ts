@@ -61,6 +61,15 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
         this.router.navigate([{ outlets: { drawer: ['import', 'invoice'] } }]);
       },
     },
+    // contas a pagar
+    {
+      label: 'Cadastro de Contas a Pagar',
+      icon: 'lucideFileText',
+      click: () => {
+        this.toggleQuickAccess();
+        this.router.navigate([{ outlets: { drawer: ['accounts-payable', 'new'] } }]);
+      },
+    },
     {
       label: 'Cadastro de Clientes',
       icon: 'lucideUser',

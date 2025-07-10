@@ -22,7 +22,7 @@ import { TableComponent } from 'app/shared/components/table/table.component';
   templateUrl: './accounts-receivable-list.component.html',
   styleUrls: ['./accounts-receivable-list.component.scss'],
   animations: [heightAnimation],
-  imports: [TableComponent]
+  imports: [TableComponent],
 })
 export class AccountsReceivableListComponent implements OnInit {
   private router = inject(Router);
@@ -51,9 +51,26 @@ export class AccountsReceivableListComponent implements OnInit {
     ],
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
-      { field: 'description', caption: 'Descrição', sortable: true, filter: true },
-      { field: 'dueDate', caption: 'Data de Vencimento', type: 'date', sortable: true, filter: true },
-      { field: 'amount', caption: 'Valor', type: 'currency', sortable: true, filter: true },
+      {
+        field: 'description',
+        caption: 'Descrição',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'dueDate',
+        caption: 'Data de Vencimento',
+        type: 'date',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'amount',
+        caption: 'Valor',
+        type: 'currency',
+        sortable: true,
+        filter: true,
+      },
       {
         field: 'actions',
         caption: 'Ações',
@@ -94,7 +111,10 @@ export class AccountsReceivableListComponent implements OnInit {
 
   ngOnInit() {
     this.state.getAccountsReceivableList();
-    this.coreService.setPageTitle('Contas a Receber', 'Lista de contas a pagar');
+    this.coreService.setPageTitle(
+      'Contas a Receber',
+      'Lista de contas a pagar'
+    );
   }
 
   edit(id: string) {

@@ -20,11 +20,15 @@ export class DatePickerComponent implements OnInit {
   labelPosition = input('top');
   size = input<'large' | 'small'>('small');
 
+  isLoading = input(false);
+  isRequired = signal(false);
   idRef = signal(randomId());
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.isRequired.set(!!this.control()?.validator);
+  }
 
   onChange: any = () => {};
 }

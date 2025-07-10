@@ -98,7 +98,7 @@
 }
 
 .ng-invalid.ng-touched {
-  & > .p-password {
+  & > .p-password, & > .p-datepicker {
     input {
       border-color: var(--p-inputtext-invalid-border-color);
       color: var(--p-inputtext-invalid-border-color);
@@ -107,6 +107,7 @@
       }
     }
   }
+
 }
 
 textarea {
@@ -152,4 +153,9 @@ input {
 
 ::ng-deep .popover-actions .p-popover-content {
   padding: 0 !important;
+}
+
+
+.p-datepicker-panel{
+  min-width: max-content !important;
 }

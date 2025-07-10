@@ -83,4 +83,14 @@ export const routes: Routes = [
     outlet: 'drawer',
     data: { animation: 'users' },
   },
+  // accounts payable
+  {
+    path: 'accounts-payable',
+    loadChildren: () =>
+      import(
+        'app/dashboard/modules/accounts-payable-module/accounts-payable-drawer.module' // Adjust the path as necessary
+      ).then(m => m.AccountsPayableDrawerModule),
+    outlet: 'drawer',
+    data: { animation: 'accounts-payable' },
+  }
 ];

@@ -2,11 +2,11 @@
   @if (label() && !isLoading()) {
     <label
       [for]="idRef()"
-      class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2"
+      class="label"
     >
       {{ label() }}
       @if (isRequired()) {
-        <span class="text-red-500">*</span>
+        <span class="text-red-500 lh-0">*</span>
       }
     </label>
   }
@@ -69,6 +69,7 @@
       [rows]="rows()"
     ></textarea>
   }
+  
 
   @if (type() === 'radio' && !isLoading()) {
     <div

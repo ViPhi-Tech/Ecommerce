@@ -69,11 +69,10 @@ export class ProductState extends BaseState<ProductModuleState> {
     this.setProductList([]);
 
     await lastValueFrom(
-      this.productService.getAll(skipLoader)
-        .pipe(
-          catchError(error => this.handleError(error)),
-          finalize(() => this.setLoading(false))
-        )
+      this.productService.getAll(skipLoader).pipe(
+        catchError(error => this.handleError(error)),
+        finalize(() => this.setLoading(false))
+      )
     )
       .then((response: any) => {
         const products = Array.isArray(response) ? response : response.dados;

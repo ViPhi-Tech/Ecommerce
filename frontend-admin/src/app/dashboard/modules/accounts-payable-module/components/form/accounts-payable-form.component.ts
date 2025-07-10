@@ -1,42 +1,27 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  signal,
-  ViewChild,
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { Drawer, DrawerModule } from 'primeng/drawer';
-import { FormModule } from 'app/shared/components/form/form.module';
-import { AccountsPayableService } from '../../accounts-payable.service';
-import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
+import { Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { CoreService } from 'app/shared/services/core.service';
+import { MessageService } from 'primeng/api';
+import { Drawer } from 'primeng/drawer';
+import { AccountsPayableService } from '../../accounts-payable.service';
+import { FormModule } from 'app/shared/components/form/form.module';
+import { CheckboxModule } from 'primeng/checkbox';
+import dayjs from 'dayjs';
 
 @Component({
-  selector: 'fuse-accounts-payable-create',
-  templateUrl: './accounts-payable-create.component.html',
-  styleUrls: ['./accounts-payable-create.component.scss'],
+  selector: 'fuse-accounts-payable-form',
+  templateUrl: './accounts-payable-form.component.html',
   imports: [
-    DrawerModule,
-    ButtonModule,
     ReactiveFormsModule,
     FormModule,
-    ToastModule,
-  ],
+    CheckboxModule
+  ]
 })
-export class AccountsPayableCreateComponent implements OnInit {
-  destroyedRef = inject(DestroyRef);
+export class AccountsPayableFormComponent implements OnInit {
+destroyedRef = inject(DestroyRef);
   private router = inject(Router);
   private coreService = inject(CoreService);
   private activatedRoute = inject(ActivatedRoute);
@@ -55,11 +40,12 @@ export class AccountsPayableCreateComponent implements OnInit {
 
   accountsPayableForm!: FormGroup;
 
-  constructor() {}
+  constructor() {
+    this.initForm();
+  }
 
   ngOnInit(): void {
     this.coreService.setPageTitle('', '');
-    this.initForm();
     this.activatedRoute.params
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe(params => {
@@ -109,8 +95,13 @@ export class AccountsPayableCreateComponent implements OnInit {
   initForm(): void {
     this.accountsPayableForm = this.formBuilder.group({
       id: [''],
+      provider: ['', [Validators.required]],
       description: ['', [Validators.required, Validators.maxLength(255)]],
+      dueDateOriginal: [{value: '', disabled: true}],
+      issueDate: [dayjs().format('DD/MM/YYYY'), Validators.required],
       dueDate: ['', Validators.required],
+      competenceDate: ['', Validators.required],
+      recurringPurchase: [false],
       amount: ['', Validators.required],
     });
   }
@@ -119,6 +110,9 @@ export class AccountsPayableCreateComponent implements OnInit {
     e.preventDefault();
     e.stopPropagation();
     this.accountsPayableForm.markAllAsTouched();
+
+    const formValue = this.accountsPayableForm.getRawValue();
+    console.log('Form Value:', formValue);
     if (!this.accountsPayableForm.valid) {
       this.toast.add({
         severity: 'error',
@@ -127,8 +121,10 @@ export class AccountsPayableCreateComponent implements OnInit {
       });
       return;
     }
+    
+    
     this.accountsPayableService
-      .upsert(this.accountsPayableForm.getRawValue())
+      .upsert(formValue)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: () => {

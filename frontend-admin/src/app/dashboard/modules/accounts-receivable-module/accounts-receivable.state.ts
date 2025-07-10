@@ -27,11 +27,12 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
     this.setAccountsReceivableList([]);
 
     await lastValueFrom(
-      this.service.getAll()
-        .pipe(
-          catchError(() => this.handleError('Erro ao carregar a lista de contas a pagar')),
-          finalize(() => this.setLoading(false))
-        )
+      this.service.getAll().pipe(
+        catchError(() =>
+          this.handleError('Erro ao carregar a lista de contas a pagar')
+        ),
+        finalize(() => this.setLoading(false))
+      )
     )
       .then((response: any) => {
         const items = Array.isArray(response) ? response : response.dados;
@@ -51,5 +52,4 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
   setAccountsReceivableList(list: any[]) {
     this.updateState('accountsReceivableList', list);
   }
-
 }

@@ -39,11 +39,10 @@ export class BaseState extends BaseStateClass<BaseModuleState> {
     this.setBaseList([]);
 
     await lastValueFrom(
-      this.service.getAll()
-        .pipe(
-          catchError(error => this.handleError(error)),
-          finalize(() => this.setLoading(false))
-        )
+      this.service.getAll().pipe(
+        catchError(error => this.handleError(error)),
+        finalize(() => this.setLoading(false))
+      )
     )
       .then((response: any) => {
         const bases = Array.isArray(response) ? response : response.dados;
