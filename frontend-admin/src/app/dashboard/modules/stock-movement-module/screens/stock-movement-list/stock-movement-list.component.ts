@@ -245,6 +245,10 @@ export class StockMovementListComponent implements OnInit {
     }
   }
 
+  newOutbound() {
+    this.router.navigate(['dashboard/stock-movements/outbound']);
+  }
+
   newInbound() {
     this.router.navigate(['dashboard/stock-movements/inbound']);
   }

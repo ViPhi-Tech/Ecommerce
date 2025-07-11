@@ -1,21 +1,4 @@
 <div class="p-8 animate-fade-in space-y-4">
-  <div class="flex justify-between items-center mb-4">
-    <h1 class="text-xl font-bold">Listagem de Movimentações</h1>
-    <div class="flex gap-1">
-      <p-button
-        [variant]="state.currentView() === 'list' ? undefined : 'outlined'"
-        (onClick)="state.setView('list')"
-      >
-        <ng-icon name="lucideList" />
-      </p-button>
-      <p-button
-        [variant]="state.currentView() === 'table' ? undefined : 'outlined'"
-        (onClick)="state.setView('table')"
-      >
-        <ng-icon name="lucideTable" />
-      </p-button>
-    </div>
-  </div>
 
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <fuse-simple-indicator
@@ -40,11 +23,26 @@
     ></fuse-simple-indicator>
   </div>
 
-  <div>
+  <div class="space-x-4">
     <p-button label="Nova Entrada" (onClick)="newInbound()"></p-button>
+    <p-button label="Nova Saída" severity="danger" (onClick)="newOutbound()"></p-button>
   </div>
 
   <div>
-    <fuse-movement-item />
+    <div class="flex justify-between items-center mb-4">
+      <h1 class="text-xl font-bold">Listagem de Movimentações</h1>
+    </div>
+
+    <div class="space-y-4">
+      <div>
+        <fuse-movement-item />
+      </div>
+      <div>
+        <fuse-movement-item />
+      </div>
+      <div>
+        <fuse-movement-item />
+      </div>
+    </div>
   </div>
 </div>

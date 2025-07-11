@@ -19,6 +19,7 @@ module.exports = {
       },
       textColor: {
         'muted-foreground': 'rgb(100 116 139)',
+        'muted': 'hsl(210 40% 96.1%)',
       },
       borderColor: {
         'muted': 'hsl(210 40% 96.1%)',
