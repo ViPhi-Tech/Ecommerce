@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { CoreService } from 'app/shared/services/core.service';
 import { TabsModule } from 'primeng/tabs';
 import { ButtonModule } from 'primeng/button';
@@ -16,6 +16,7 @@ import { Dialog, DialogModule } from 'primeng/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { DEFAULT_TABLE_CONFIG, TableConfig } from 'app/shared/interfaces/table.interfaces';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'fuse-inbound',
@@ -35,6 +36,7 @@ export class InboundComponent implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
+  private destroyRef = inject(DestroyRef);
   private coreService = inject(CoreService);
 
   @ViewChild('dialogRef') dialogRef!: Dialog;
@@ -73,6 +75,11 @@ export class InboundComponent implements OnInit {
     this.inboundData = this.fb.group({
       nfModel: [this.nfModel()[0].value, [Validators.required]],
       products: [[]],
+      identification: [],
+      issuer: [],
+      recipient: [],
+      totals: [],
+      transportation: []
     });
   }
 
@@ -92,14 +99,16 @@ export class InboundComponent implements OnInit {
     });
   }
 
+  onSubmit() {
+    console.log('Form submitted:', this.inboundData.value);
+  }
+
   importXml() {
     this.importInvoiceService.openDialog(this.inboundData.getRawValue());
   }
 
   onImportNFe() {
-    this.importInvoiceService.onImport$.subscribe((data) => {
-      console.log('Importing NFe data:', data);
-      
+    this.importInvoiceService.onImport$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
       if (data) {
         this.inboundData.patchValue({
           ...data

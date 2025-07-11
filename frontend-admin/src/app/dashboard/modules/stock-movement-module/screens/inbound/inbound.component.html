@@ -62,7 +62,32 @@
     </p-tabs>
   </div>
 
-  <ng-template #footer></ng-template>
+  <ng-template #footer>
+    <div class="w-full justify-end flex items-center gap-4">
+      <div class="flex gap-2">
+        <button
+          pButton
+          type="submit"
+          label="Salvar"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+          (click)="onSubmit()"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          icon="pi pi-times"
+          (click)="closeDialog($event)"
+          severity="secondary"
+          class="w-[200px]"
+          size="small"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
 </p-dialog>
 
 <fuse-import-invoice />
