@@ -70,6 +70,14 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
         this.router.navigate([{ outlets: { drawer: ['accounts-payable', 'new'] } }]);
       },
     },
+     {
+      label: 'Entrada de Produtos',
+      icon: 'lucidePackagePlus',
+      click: () => {
+        this.toggleQuickAccess();
+        this.router.navigate([{ outlets: { drawer: ['inbound', 'new'] } }]);
+      },
+    },
     {
       label: 'Cadastro de Clientes',
       icon: 'lucideUser',

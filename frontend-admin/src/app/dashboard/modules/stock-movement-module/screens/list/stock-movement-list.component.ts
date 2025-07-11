@@ -14,7 +14,6 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { StockMovementService } from '../../stock-movement.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { heightAnimation } from 'app/shared/utils/animations';
-import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { StockMovementState } from '../../stock-movement.state';
 import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/simple-indicator.component';
@@ -26,7 +25,6 @@ import { MovementItemComponent } from '../../components/movement-item/movement-i
   styleUrls: ['./stock-movement-list.component.scss'],
   animations: [heightAnimation],
   imports: [
-    NgIcon,
     ButtonModule,
     SimpleIndicatorComponent,
     MovementItemComponent,
@@ -244,12 +242,12 @@ export class StockMovementListComponent implements OnInit {
         return type;
     }
   }
-
-  newOutbound() {
-    this.router.navigate(['dashboard/stock-movements/outbound']);
+  
+  newInbound() {
+    this.router.navigate([{ outlets: { drawer: ['inbound', 'new'] } }]);
   }
 
-  newInbound() {
-    this.router.navigate(['dashboard/stock-movements/inbound']);
+  newOutbound() {
+    this.router.navigate([{ outlets: { drawer: ['outbound', 'new'] } }]);
   }
 }

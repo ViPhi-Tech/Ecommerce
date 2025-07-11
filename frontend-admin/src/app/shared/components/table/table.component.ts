@@ -45,7 +45,7 @@ export class TableComponent implements OnInit {
   constructor() {}
 
   title: InputSignal<string> = input('');
-  data: InputSignal<any> = input();
+  data: InputSignal<any> = input([]);
   loading = input(false);
   config: InputSignal<TableConfig> = input(TABLE_CONFIG, {
     transform: (value: TableConfig) => {
@@ -59,8 +59,8 @@ export class TableComponent implements OnInit {
   // Campos de filtro
   globalFilterFields = computed(() => {
     let fields: string[] = [];
-    if (this.data().length) {
-      fields = this.data().length > 0 ? Object.keys(this.data()[0]) : [];
+    if (this.data()?.length) {
+      fields = this.data()?.length > 0 ? Object.keys(this.data()?.[0]) : [];
     }
     return fields;
   });

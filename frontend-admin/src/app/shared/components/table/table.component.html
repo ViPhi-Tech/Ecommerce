@@ -99,6 +99,7 @@
       @for (column of config().columns; track $index) {
         <td
           [ngClass]="{
+            'text-nowrap': !config().textWrap,
             'text-left': column?.align === 'left',
             'text-right': column?.align === 'right',
             'text-center':

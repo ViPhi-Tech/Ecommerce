@@ -17,7 +17,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { MessageService } from 'primeng/api';
 import { CategoryService } from '../../category.service';
-import { CoreService } from 'app/shared/services/core.service';
 import { CategoryState } from '../../category.state';
 
 @Component({
@@ -36,7 +35,6 @@ import { CategoryState } from '../../category.state';
 export class CategoryCreateComponent implements OnInit {
   destroyedRef = inject(DestroyRef);
   private router = inject(Router);
-  private coreService = inject(CoreService);
   private categoryService = inject(CategoryService);
   private state = inject(CategoryState);
   private toast = inject(MessageService);

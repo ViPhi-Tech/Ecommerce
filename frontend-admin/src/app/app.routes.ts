@@ -47,15 +47,7 @@ export const routes: Routes = [
     outlet: 'drawer',
     data: { animation: 'products' },
   },
-  {
-    path: 'stock-movements',
-    loadChildren: () =>
-      import(
-        'app/dashboard/modules/stock-movement-module/stock-movement-drawer.module'
-      ).then(m => m.StockMovementDrawerModule),
-    outlet: 'drawer',
-    data: { animation: 'stock-movements' },
-  },
+  
   {
     path: 'categories',
     loadChildren: () =>
@@ -83,7 +75,6 @@ export const routes: Routes = [
     outlet: 'drawer',
     data: { animation: 'users' },
   },
-  // accounts payable
   {
     path: 'accounts-payable',
     loadChildren: () =>
@@ -92,5 +83,15 @@ export const routes: Routes = [
       ).then(m => m.AccountsPayableDrawerModule),
     outlet: 'drawer',
     data: { animation: 'accounts-payable' },
+  },
+
+  // dialogs
+  {
+    path: '',
+    loadChildren: () =>
+      import('app/shared/modules/dialogs/dialogs.module').then(
+        m => m.DialogsModule
+      ),
+    outlet: 'drawer',
   }
 ];

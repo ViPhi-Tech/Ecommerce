@@ -53,9 +53,9 @@ export class XmlUtils {
         cfop: prod?.CFOP,
         // Comercial
         unit: prod?.uCom,
-        quantity: prod?.qCom,
-        unitValue: prod?.vUnCom,
-        totalValue: prod?.vProd,
+        quantity: parseFloat(prod?.qCom || 0),
+        unitValue: parseFloat(prod?.vUnCom || 0),
+        totalValue: parseFloat(prod?.vProd || 0),
         // Tributação
         eanTrib: prod?.cEANTrib,
         unitTrib: prod?.uTrib,
@@ -136,7 +136,6 @@ export class XmlUtils {
     return productsXML.map(product => {
       const hasSameEan = stockProducts.some(item => item.ean === product.ean);
       const hasSameSku = stockProducts.some(item => item.sku === product.sku);
-      debugger;
       const status = hasSameEan || hasSameSku ? 'found' : 'not-found';
       return {
         ...product,

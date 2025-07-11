@@ -52,7 +52,7 @@ export class ImportInvoiceComponent implements OnInit, OnDestroy {
 
   uploadedFiles: any[] = [];
   loading = signal(false);
-  invoices = signal<InvoiceDetails[]>([]);
+  invoice = signal<InvoiceDetails | undefined>(undefined);
 
   private _importSubscription: Subscription | undefined;
 
@@ -76,7 +76,7 @@ export class ImportInvoiceComponent implements OnInit, OnDestroy {
           await this.productState.getProductList();
           const products = this.productState.productList();
           invoice = XmlUtils.beautifyNFe(invoice, this.nfModel(), products);
-          this.invoices.update(invoices => [...invoices, invoice]);
+          this.invoice.set(invoice);
           this.loading.set(false);
         } catch (error) {
           console.error('Erro ao converter XML:', error);
@@ -88,7 +88,16 @@ export class ImportInvoiceComponent implements OnInit, OnDestroy {
     }
   }
 
-  import() {}
+  import() {
+    if (this.invoice()) {
+      this.importInvoiceService.importInvoices(this.invoice());
+      this.closeDialog();
+      this.invoice.set(undefined);
+      this.uploadedFiles = [];
+    } else {
+      console.warn('Nenhuma nota fiscal para importar.');
+    }
+  }
 
   openDialog(data: any) {
     this.visible.set(true);
@@ -101,6 +110,9 @@ export class ImportInvoiceComponent implements OnInit, OnDestroy {
 
   onCloseDialog() {
     this.visible.set(false);
+    this.invoice.set(undefined);
+    this.uploadedFiles = [];
+    
   }
 
   ngOnDestroy(): void {

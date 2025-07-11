@@ -23,7 +23,7 @@
   </ng-template>
 
   <div>
-    @if (!invoices().length && !loading()) {
+    @if (!invoice() && !loading()) {
       <fuse-file-upload (uploadedFilesEvent)="onUpload($event)" />
     }
 
@@ -31,36 +31,35 @@
       <p>Carregando...</p>
     }
 
-    @if (invoices().length && !loading()) {
-      @for (invoice of invoices(); track $index) {
-        <fuse-invoice-details [invoice]="invoice" />
-      }
+    @if (invoice() && !loading()) {
+        <fuse-invoice-details [invoice]="invoice()" />
     }
   </div>
 
   <ng-template #footer>
-    <div class="flex items-center gap-2">
-      <button
-        pButton
-        type="button"
-        label="Cancelar"
-        icon="pi pi-times"
-        (click)="closeDialog()"
-        severity="secondary"
-        class="w-[200px]"
-        size="small"
-        [raised]="true"
-      ></button>
-      <button
-        pButton
-        type="submit"
-        label="Importar"
-        icon="pi pi-check"
-        class="w-[200px]"
-        size="small"
-        [raised]="true"
-        (click)="import()"
-      ></button>
-    </div>
+    @if (invoice()) {
+
+      <div class="flex items-center gap-2">
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          icon="pi pi-times"
+          (click)="closeDialog()"
+          severity="secondary"
+          class="w-[200px]"
+          size="small"
+        ></button>
+        <button
+          pButton
+          type="submit"
+          label="Importar"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+          (click)="import()"
+        ></button>
+      </div>
+    }
   </ng-template>
 </p-dialog>

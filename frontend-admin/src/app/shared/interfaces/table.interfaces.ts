@@ -8,6 +8,7 @@ export interface TableConfig {
   pageLinkSize: number;
   showCurrentPageReport?: boolean;
   emptyMessage?: string;
+  textWrap?: boolean;
   columns: TableColumn[];
   headerButtons?: HeaderButton[];
   rowClick?: (rowData: any, rowIndex: number) => void;
@@ -59,6 +60,7 @@ export const DEFAULT_TABLE_CONFIG: TableConfig = {
   rowsPerPage: 10,
   paginator: true,
   pageLinkSize: 5,
+  textWrap: false,
   showCurrentPageReport: true,
   emptyMessage: 'Nenhum registro encontrado',
   columns: [],
