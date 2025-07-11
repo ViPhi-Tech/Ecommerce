@@ -10,68 +10,70 @@
   [globalFilterFields]="globalFilterFields()"
   [tableStyle]="{ 'min-width': 'auto' }"
 >
-  <ng-template #caption>
-    <div
-      class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 justify-between items-center"
-    >
+  @if (config().showHeader) {
+    <ng-template #caption>
       <div
-        class="w-full flex flex-col sm:flex-row sm:w-auto space-y-2-2 sm:space-x-2 sm:space-y-0"
+        class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 justify-between items-center"
       >
-        @for (button of config().headerButtons; track $index) {
-          @if (button?.visible !== false) {
-            <p-button
-              [label]="button?.label"
-              [icon]="button?.icon"
-              [class]="button?.class"
-              [pTooltip]="button?.tooltip"
-              tooltipPosition="right"
-              [styleClass]="
-                button?.styleClass + ' w-full mb-2 sm:mb-0 sm:w-auto'
-              "
-              [severity]="button?.color || 'primary'"
-              [variant]="button?.outline ? 'outlined' : undefined"
-              (click)="button?.action()"
-              size="small"
-            >
-            </p-button>
+        <div
+          class="w-full flex flex-col sm:flex-row sm:w-auto space-y-2-2 sm:space-x-2 sm:space-y-0"
+        >
+          @for (button of config().headerButtons; track $index) {
+            @if (button?.visible !== false) {
+              <p-button
+                [label]="button?.label"
+                [icon]="button?.icon"
+                [class]="button?.class"
+                [pTooltip]="button?.tooltip"
+                tooltipPosition="right"
+                [styleClass]="
+                  button?.styleClass + ' w-full mb-2 sm:mb-0 sm:w-auto'
+                "
+                [severity]="button?.color || 'primary'"
+                [variant]="button?.outline ? 'outlined' : undefined"
+                (click)="button?.action()"
+                size="small"
+              >
+              </p-button>
+            }
           }
-        }
-      </div>
+        </div>
 
-      <div class="flex flex-col w-full sm:w-auto sm:flex-row gap-2">
-        <ng-content select="[data-headerFilter]"></ng-content>
+        <div class="flex flex-col w-full sm:w-auto sm:flex-row gap-2">
+          <ng-content select="[data-headerFilter]"></ng-content>
 
-        <div class="flex items-center gap-2 w-full sm:w-auto">
-          <p-iconfield class="small" iconPosition="left">
-            <p-inputicon class="pi pi-search" />
-            <input
-              pInputText
-              pSize="small"
-              type="text"
-              class="w-full sm:w-[250px]"
-              (input)="search($event, dt2)"
-              placeholder="Pesquisar"
-            />
-          </p-iconfield>
-          <p-button
-            size="small"
-            pTooltip="Limpar filtros"
-            (click)="clearFilters(dt2)"
-          >
-            <ng-icon name="lucideFilter"></ng-icon>
-          </p-button>
-          <!-- // export -->
-          <p-button
-            size="small"
-            pTooltip="Exportar tabela"
-            (click)="exportTable(dt2)"
-          >
-            <ng-icon name="lucideFileChartColumn"></ng-icon>
-          </p-button>
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <p-iconfield class="small" iconPosition="left">
+              <p-inputicon class="pi pi-search" />
+              <input
+                pInputText
+                pSize="small"
+                type="text"
+                class="w-full sm:w-[250px]"
+                (input)="search($event, dt2)"
+                placeholder="Pesquisar"
+              />
+            </p-iconfield>
+            <p-button
+              size="small"
+              pTooltip="Limpar filtros"
+              (click)="clearFilters(dt2)"
+            >
+              <ng-icon name="lucideFilter"></ng-icon>
+            </p-button>
+            <!-- // export -->
+            <p-button
+              size="small"
+              pTooltip="Exportar tabela"
+              (click)="exportTable(dt2)"
+            >
+              <ng-icon name="lucideFileChartColumn"></ng-icon>
+            </p-button>
+          </div>
         </div>
       </div>
-    </div>
-  </ng-template>
+    </ng-template>
+  }
   <ng-template #header>
     <tr>
       @for (column of config().columns; track $index) {

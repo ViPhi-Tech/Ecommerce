@@ -1,4 +1,4 @@
-import { Component, input, InputSignal, OnInit, signal } from '@angular/core';
+import { Component, EventEmitter, input, InputSignal, OnInit, Output, signal } from '@angular/core';
 import { randomId } from '../../../utils/utils';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -52,9 +52,14 @@ export class InputComponent implements OnInit {
   feedback = input<boolean>(false);
   errorMessage = input<string>('');
 
+  @Output() blurInput = new EventEmitter<any>();
   constructor() {}
 
   ngOnInit() {
     this.isRequired.set(!!this.control()?.validator);
+  }
+
+  blurInputComponent(value: any) {
+    this.blurInput.emit(value);
   }
 }

@@ -27,6 +27,7 @@ import {
   TableConfig,
 } from 'app/shared/interfaces/table.interfaces';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SearchProductComponent } from "app/shared/components/search-product/search-product.component";
 
 @Component({
   selector: 'fuse-inbound',
@@ -40,6 +41,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     ImportInvoiceComponent,
     DialogModule,
     TableComponent,
+    SearchProductComponent,
   ],
 })
 export class InboundComponent implements OnInit {
@@ -98,6 +100,7 @@ export class InboundComponent implements OnInit {
       ...DEFAULT_TABLE_CONFIG,
       emptyMessage: 'Nenhum produto selecionado',
       textWrap: false,
+      showHeader: false,
       columns: [
         { field: 'description', caption: 'Nome' },
         { field: 'sku', caption: 'SKU' },

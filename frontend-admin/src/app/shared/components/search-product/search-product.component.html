@@ -1,1 +1,26 @@
-<p>search-product works!</p>
+<div class="relative">
+  <fuse-input [control]="searchControl" (blurInput)="onSearchBlur()" placeholder="Pesquisar produto"></fuse-input>
+
+  @if (products() && products().length > 0) {
+    <!-- uma div absolute -->
+    <div class="absolute top-10 left-0 right-0 bg-white border dark:border-dark rounded-s-md z-10 max-h-[300px] overflow-y-auto">
+      @for (item of products(); track $index) {
+        <div class="relative flex border-b dark:border-b-dark select-none items-center text-sm outline-none cursor-pointer py-3 px-3  hover:bg-slate-200 transition-colors duration-200">
+          <div class="w-full">
+            <div class="flex justify-between w-full">
+              <div>
+                <span class="font-medium">{{ item?.sku }} - {{ item?.name }}</span>
+              </div>
+              <span class="text-sm text-muted-foreground">{{ item?.finalPrice | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}</span>
+            </div>
+            <div>
+              <span class="text-sm text-muted-foreground">Estoque atual: <strong>{{ item?.stock?.quantity }}</strong></span>
+            </div>
+          </div>
+        </div>
+
+      }
+    </div>
+  }
+
+</div>

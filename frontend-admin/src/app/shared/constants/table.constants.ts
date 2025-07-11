@@ -5,6 +5,7 @@ export const TABLE_CONFIG: TableConfig = {
   rowsPerPage: 10,
   paginator: true,
   pageLinkSize: 5,
+  showHeader: true,
   showCurrentPageReport: true,
   emptyMessage: 'Nenhum registro encontrado',
   columns: [],

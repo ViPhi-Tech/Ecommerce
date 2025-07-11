@@ -17,6 +17,7 @@
       [placeholder]="placeholder()"
       [id]="idRef()"
       [name]="idRef()"
+      (blur)="blurInputComponent($event)"
     />
   }
 
@@ -30,6 +31,7 @@
       [id]="idRef()"
       [name]="idRef()"
       [step]="step()"
+      (onBlur)="blurInputComponent($event)"
     />
   }
 
@@ -40,6 +42,7 @@
       [size]="size()"
       [id]="idRef()"
       [feedback]="feedback()"
+      (onBlur)="blurInputComponent($event)"
     />
   }
 
@@ -53,6 +56,7 @@
       [max]="max()"
       [size]="size()"
       locale="pt-BR"
+      (onBlur)="blurInputComponent($event)"
     />
   }
 
@@ -64,6 +68,7 @@
       [id]="idRef()"
       [name]="idRef()"
       [rows]="rows()"
+      (onBlur)="blurInputComponent($event)"
     ></textarea>
   }
 
