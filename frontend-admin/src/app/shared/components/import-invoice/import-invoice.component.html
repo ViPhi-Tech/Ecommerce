@@ -32,14 +32,23 @@
     }
 
     @if (invoice() && !loading()) {
-        <fuse-invoice-details [invoice]="invoice()" />
+      <fuse-invoice-details [invoice]="invoice()" />
     }
   </div>
 
   <ng-template #footer>
     @if (invoice()) {
-
       <div class="flex items-center gap-2">
+        <button
+          pButton
+          type="submit"
+          label="Importar"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+          (click)="import()"
+        ></button>
+
         <button
           pButton
           type="button"
@@ -49,15 +58,6 @@
           severity="secondary"
           class="w-[200px]"
           size="small"
-        ></button>
-        <button
-          pButton
-          type="submit"
-          label="Importar"
-          icon="pi pi-check"
-          class="w-[200px]"
-          size="small"
-          (click)="import()"
         ></button>
       </div>
     }

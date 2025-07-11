@@ -35,7 +35,16 @@
   <ng-template #footer>
     <div class="w-full justify-end flex items-center gap-4">
       <div class="flex gap-2">
-        
+        <button
+          pButton
+          type="submit"
+          label="Salvar"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+          (click)="onSubmit($event)"
+        ></button>
+
         <button
           pButton
           type="button"
@@ -46,17 +55,6 @@
           class="w-[200px]"
           size="small"
         ></button>
-
-        <button
-          pButton
-          type="submit"
-          label="Salvar"
-          icon="pi pi-check"
-          class="w-[200px]"
-          size="small"
-          (click)="onSubmit($event)"
-        ></button>
-        
       </div>
     </div>
   </ng-template>

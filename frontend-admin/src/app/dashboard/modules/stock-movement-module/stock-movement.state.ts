@@ -31,20 +31,16 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
   stockMovementList = computed(() => this.state().stockMovementList);
   currentView = computed(() => this.state().view);
 
-  async getStockMovementList(): Promise<void> {
+  async getStockMovementList(filter: any): Promise<void> {
     this.setLoading(true);
     this.clearError();
     this.setStockMovementList([]);
 
     await lastValueFrom(
-      this.http
-        .get<ApiResponse<StockMovement[]>>(`${this.apiUrl}stock-movement/all`, {
-          headers: { 'Skip-Loader': 'true' },
-        })
-        .pipe(
-          catchError(error => this.handleError(error)),
-          finalize(() => this.setLoading(false))
-        )
+      this.stockMovementService.getAll(filter, true).pipe(
+        catchError(error => this.handleError(error)),
+        finalize(() => this.setLoading(false))
+      )
     )
       .then((response: any) => {
         const stockMovements = Array.isArray(response)

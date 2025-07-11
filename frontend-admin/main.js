@@ -17,7 +17,7 @@ function createWindow() {
 
   mainWindow.loadURL(
     url.format({
-      pathname: path.join(__dirname, '/dist/kommerz/browser/index.html'),
+      pathname: path.join(__dirname, '/dist/sellup/browser/index.html'),
       protocol: 'file:',
       slashes: true,
     })
@@ -31,7 +31,7 @@ function createWindow() {
 }
 
 // Adiciona o nome do aplicativo
-app.setName('Kommerz');
+app.setName('Sellup');
 
 app.on('ready', () => {
   createWindow();

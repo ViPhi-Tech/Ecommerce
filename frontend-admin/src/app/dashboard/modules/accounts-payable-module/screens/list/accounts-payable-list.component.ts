@@ -43,7 +43,9 @@ export class AccountsPayableListComponent implements OnInit {
         label: 'Adicionar',
         tooltip: 'Adicionar Conta a Pagar',
         action: () => {
-          this.router.navigate([{ outlets: { drawer: ['accounts-payable', 'new'] } }]);
+          this.router.navigate([
+            { outlets: { drawer: ['accounts-payable', 'new'] } },
+          ]);
         },
       },
     ],
@@ -100,14 +102,12 @@ export class AccountsPayableListComponent implements OnInit {
     ],
   });
 
-  constructor() {
-    
-  }
+  constructor() {}
 
   async ngOnInit() {
     await this.state.getAccountsPayableList();
     console.log('Accounts Payable List:', this.state.accountsPayableList());
-    
+
     this.coreService.setPageTitle('Contas a Pagar', 'Lista de contas a pagar');
   }
 

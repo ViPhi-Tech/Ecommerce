@@ -13,7 +13,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'kommerz';
+  title = 'sellup';
 
   constructor() {
     // Check if the theme is set in localStorage and apply it

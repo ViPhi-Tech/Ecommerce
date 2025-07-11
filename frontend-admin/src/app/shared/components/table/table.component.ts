@@ -66,15 +66,14 @@ export class TableComponent implements OnInit {
   });
 
   exportColumns = computed(() => {
-    return this.config().columns
-      .map((col) => {
-        return {
-          title: col.caption,
-          dataKey: col.field,
-          type: col.type || 'text',
-          headerAlign: col.headerAlign || 'left',
-        };
-      });
+    return this.config().columns.map(col => {
+      return {
+        title: col.caption,
+        dataKey: col.field,
+        type: col.type || 'text',
+        headerAlign: col.headerAlign || 'left',
+      };
+    });
   });
   ngOnInit() {}
 
@@ -87,7 +86,7 @@ export class TableComponent implements OnInit {
   }
 
   exportTable(dt2: any) {
-    dt2?.exportCSV()
+    dt2?.exportCSV();
   }
 
   onRowClick(rowData: any, rowIndex: number) {

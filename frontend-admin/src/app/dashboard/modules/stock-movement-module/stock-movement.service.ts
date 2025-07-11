@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
@@ -15,9 +15,17 @@ export class StockMovementService {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl + 'stock-movement';
 
-  refreshStockMovementList$ = signal<any>(undefined);
-
   constructor() {}
+
+  getAll(
+    filter: { date: string; type: string },
+    skipLoader: boolean
+  ): Observable<ApiResponse<StockMovement[]>> {
+    return this.http.get<ApiResponse<StockMovement[]>>(`${this.apiUrl}/all`, {
+      params: filter,
+      headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
+    });
+  }
 
   getStockMovementById(stockMovementId: string): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(`${this.apiUrl}/${stockMovementId}`);
@@ -52,9 +60,5 @@ export class StockMovementService {
 
   deleteStockMovement(stockMovementId: string): Observable<ApiResponse> {
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${stockMovementId}`);
-  }
-
-  refreshStockMovementList() {
-    this.refreshStockMovementList$.set(Math.random());
   }
 }

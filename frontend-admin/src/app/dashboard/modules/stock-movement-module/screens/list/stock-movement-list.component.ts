@@ -1,7 +1,6 @@
 import {
   Component,
   DestroyRef,
-  effect,
   inject,
   OnInit,
   signal,
@@ -18,6 +17,8 @@ import { ButtonModule } from 'primeng/button';
 import { StockMovementState } from '../../stock-movement.state';
 import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/simple-indicator.component';
 import { MovementItemComponent } from '../../components/movement-item/movement-item.component';
+import { FormModule } from 'app/shared/components/form/form.module';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'fuse-stock-movement-list',
@@ -28,10 +29,13 @@ import { MovementItemComponent } from '../../components/movement-item/movement-i
     ButtonModule,
     SimpleIndicatorComponent,
     MovementItemComponent,
+    FormModule,
+    ReactiveFormsModule,
   ],
 })
 export class StockMovementListComponent implements OnInit {
   private router = inject(Router);
+  private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private coreService = inject(CoreService);
   private toast = inject(MessageService);
@@ -142,19 +146,18 @@ export class StockMovementListComponent implements OnInit {
 
   title = '';
 
+  maxDate = signal(new Date());
   movementTypes = signal([
     { label: 'Entrada', value: 'IN' },
     { label: 'Saída', value: 'OUT' },
-    { label: 'Ajuste', value: 'ADJUSTMENT' },
   ]);
 
-  constructor() {
-    effect(() => {
-      if (this.stockMovementService.refreshStockMovementList$()) {
-        this.loadStockMovements();
-      }
-    });
-  }
+  formFilter = this.formBuilder.group({
+    type: [null],
+    date: [new Date()],
+  });
+
+  constructor() {}
 
   ngOnInit() {
     // Verifica se está visualizando movimentos de um produto específico
@@ -175,12 +178,12 @@ export class StockMovementListComponent implements OnInit {
     }
   }
 
+  onFilterChange() {
+    this.loadStockMovements();
+  }
+
   private loadStockMovements() {
-    if (this.productId) {
-      this.state.getStockMovementsByProduct(this.productId);
-    } else {
-      this.state.getStockMovementList();
-    }
+    this.state.getStockMovementList(this.formFilter.getRawValue());
   }
 
   deleteStockMovement(stockMovementId: string) {
@@ -203,7 +206,7 @@ export class StockMovementListComponent implements OnInit {
                 summary: 'Sucesso',
                 detail: 'Movimento de estoque excluído com sucesso',
               });
-              this.stockMovementService.refreshStockMovementList();
+              this.loadStockMovements();
             },
             error: () => {
               this.toast.add({
@@ -242,7 +245,7 @@ export class StockMovementListComponent implements OnInit {
         return type;
     }
   }
-  
+
   newInbound() {
     this.router.navigate([{ outlets: { drawer: ['inbound', 'new'] } }]);
   }

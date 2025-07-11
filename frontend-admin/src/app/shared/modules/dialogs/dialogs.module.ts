@@ -6,7 +6,7 @@ import { OutboundComponent } from 'app/dashboard/modules/stock-movement-module/s
 
 const routes: Routes = [
   {
-    path: "inbound",
+    path: 'inbound',
     children: [
       {
         path: 'new',
@@ -19,7 +19,7 @@ const routes: Routes = [
     ],
   },
   {
-    path: "outbound",
+    path: 'outbound',
     children: [
       {
         path: 'new',
@@ -30,7 +30,7 @@ const routes: Routes = [
         component: OutboundComponent,
       },
     ],
-  }
+  },
 ];
 
 @NgModule({

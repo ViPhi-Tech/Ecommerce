@@ -47,7 +47,7 @@ export const routes: Routes = [
     outlet: 'drawer',
     data: { animation: 'products' },
   },
-  
+
   {
     path: 'categories',
     loadChildren: () =>
@@ -93,5 +93,5 @@ export const routes: Routes = [
         m => m.DialogsModule
       ),
     outlet: 'drawer',
-  }
+  },
 ];

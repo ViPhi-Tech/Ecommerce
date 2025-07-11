@@ -38,6 +38,16 @@
     <div class="flex gap-2">
       <button
         pButton
+        type="submit"
+        [label]="submitButtonLabel()"
+        icon="pi pi-check"
+        class="w-[200px]"
+        size="small"
+        (click)="onSubmit($event)"
+      ></button>
+
+      <button
+        pButton
         type="button"
         label="Cancelar"
         icon="pi pi-times"
@@ -46,16 +56,6 @@
         severity="secondary"
         class="w-[200px]"
         size="small"
-      ></button>
-
-      <button
-        pButton
-        type="submit"
-        [label]="submitButtonLabel()"
-        icon="pi pi-check"
-        class="w-[200px]"
-        size="small"
-        (click)="onSubmit($event)"
       ></button>
     </div>
   </div>

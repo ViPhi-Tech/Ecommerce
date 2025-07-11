@@ -19,6 +19,7 @@ export class DatePickerComponent implements OnInit {
   addictionalClassPrime = input('');
   labelPosition = input('top');
   size = input<'large' | 'small'>('small');
+  maxDate = input<Date | null>(null);
 
   isLoading = input(false);
   isRequired = signal(false);

@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { CoreService } from 'app/shared/services/core.service';
 import { TabsModule } from 'primeng/tabs';
 import { ButtonModule } from 'primeng/button';
@@ -15,7 +22,10 @@ import { ImportInvoiceService } from 'app/shared/components/import-invoice/impor
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableComponent } from 'app/shared/components/table/table.component';
-import { DEFAULT_TABLE_CONFIG, TableConfig } from 'app/shared/interfaces/table.interfaces';
+import {
+  DEFAULT_TABLE_CONFIG,
+  TableConfig,
+} from 'app/shared/interfaces/table.interfaces';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
@@ -29,7 +39,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     ReactiveFormsModule,
     ImportInvoiceComponent,
     DialogModule,
-    TableComponent
+    TableComponent,
   ],
 })
 export class InboundComponent implements OnInit {
@@ -57,7 +67,7 @@ export class InboundComponent implements OnInit {
   subtitle = signal('Cadastro de nova entrada de produtos');
 
   tableConfig = signal<TableConfig>(DEFAULT_TABLE_CONFIG);
-  
+
   constructor() {
     this.initForm();
     this.initProductsTable();
@@ -79,22 +89,23 @@ export class InboundComponent implements OnInit {
       issuer: [],
       recipient: [],
       totals: [],
-      transportation: []
+      transportation: [],
     });
   }
 
   initProductsTable() {
     this.tableConfig.set({
       ...DEFAULT_TABLE_CONFIG,
+      emptyMessage: 'Nenhum produto selecionado',
       textWrap: false,
       columns: [
-        { field: 'description', caption: 'Nome'},
-        { field: 'sku', caption: 'SKU'},
-        { field: 'ean', caption: 'EAN'},
-        { field: 'ncm', caption: 'NCM'},
-        { field: 'quantity', caption: 'Quantidade', sortable: true, },
-        { field: 'unitValue', caption: 'Valor Unitário', sortable: true, },
-        { field: 'totalValue', caption: 'Valor Total', sortable: true, },
+        { field: 'description', caption: 'Nome' },
+        { field: 'sku', caption: 'SKU' },
+        { field: 'ean', caption: 'EAN' },
+        { field: 'ncm', caption: 'NCM' },
+        { field: 'quantity', caption: 'Quantidade', sortable: true },
+        { field: 'unitValue', caption: 'Valor Unitário', sortable: true },
+        { field: 'totalValue', caption: 'Valor Total', sortable: true },
       ],
     });
   }
@@ -108,13 +119,15 @@ export class InboundComponent implements OnInit {
   }
 
   onImportNFe() {
-    this.importInvoiceService.onImport$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((data) => {
-      if (data) {
-        this.inboundData.patchValue({
-          ...data
-        });
-      }
-    });
+    this.importInvoiceService.onImport$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(data => {
+        if (data) {
+          this.inboundData.patchValue({
+            ...data,
+          });
+        }
+      });
   }
 
   closeDialog(e = new Event('close')): void {

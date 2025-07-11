@@ -22,8 +22,7 @@ import { CoreInterceptor } from './app/shared/interceptors/core.interceptor';
 import { Preset } from './prime.theme';
 import { MessageService } from 'primeng/api';
 
-registerLocaleData(localePt, "pt-BR");
-
+registerLocaleData(localePt, 'pt-BR');
 
 export const THEME: ApplicationConfig = {
   providers: [
@@ -47,7 +46,7 @@ export const THEME: ApplicationConfig = {
         monthNames: [
           'Janeiro',
           'Fevereiro',
-          'Março',        
+          'Março',
           'Abril',
           'Maio',
           'Junho',
@@ -67,24 +66,8 @@ export const THEME: ApplicationConfig = {
           'Sexta-feira',
           'Sábado',
         ],
-        dayNamesShort: [
-          'Dom',
-          'Seg',
-          'Ter',
-          'Qua',
-          'Qui',
-          'Sex',
-          'Sáb',
-        ],
-        dayNamesMin: [
-          'Dom',
-          'Seg',
-          'Ter',
-          'Qua',
-          'Qui',
-          'Sex',
-          'Sab',
-        ],
+        dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+        dayNamesMin: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
         today: 'Hoje',
         clear: 'Limpar',
         weekHeader: 'Sem',
@@ -175,8 +158,8 @@ export const THEME: ApplicationConfig = {
           zoomOut: 'Afastar',
           rotateRight: 'Girar à direita',
           rotateLeft: 'Girar à esquerda',
-        }
-      }
+        },
+      },
     }),
     importProvidersFrom(NgIconsModule.withIcons(lucideIcons)),
     provideIcons({
@@ -184,6 +167,6 @@ export const THEME: ApplicationConfig = {
       matKeyboardArrowDownOutline,
       heroPencilSquare,
     }),
-    { provide: LOCALE_ID, useValue: "pt-BR" },
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
   ],
 };

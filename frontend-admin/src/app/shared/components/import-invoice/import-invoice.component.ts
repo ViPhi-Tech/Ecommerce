@@ -112,7 +112,6 @@ export class ImportInvoiceComponent implements OnInit, OnDestroy {
     this.visible.set(false);
     this.invoice.set(undefined);
     this.uploadedFiles = [];
-    
   }
 
   ngOnDestroy(): void {

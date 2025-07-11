@@ -1,10 +1,7 @@
 <div class="w-full label-position {{ labelPosition() }}">
   @if (!isLoading()) {
     @if (label()) {
-      <label
-        for="icondisplay"
-        class="label"
-      >
+      <label for="icondisplay" class="label">
         {{ label() }}
         @if (isRequired()) {
           <span class="text-red-500">*</span>

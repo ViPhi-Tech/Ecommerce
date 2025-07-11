@@ -5,7 +5,7 @@
   [modal]="true"
   [closeOnEscape]="true"
   [draggable]="false"
-  styleClass="w-full md: w-[900px]"
+  styleClass="w-full md:w-[900px]"
 >
   <ng-template #header>
     <div class="flex flex-col space-y-1.5 text-center sm:text-left">
@@ -20,45 +20,32 @@
 
   <div class="animate-fade-in">
     <p-tabs value="0">
-      <p-tablist>
-        <p-tab value="0">Dados de Saída</p-tab>
-        <p-tab value="1">Produtos</p-tab>
-      </p-tablist>
-      <p-tabpanels>
-        <p-tabpanel value="0">
-          <form [formGroup]="outboundData">
-            <div class="space-y-4">
-              <div class="flex flex-col gap-1">
-                <label [for]="'xmlFileInput'" class="label">
-                  Arquivo XML
-                </label>
-                <p-button
-                  (onClick)="importXml()"
-                  [disabled]="!outboundData.get('nfModel')?.valid"
-                  label="Importar dados de arquivo XML"
-                  icon="pi pi-upload"
-                />
-              </div>
+      <form [formGroup]="outboundData">
+        <div class="space-y-4">
+          <div class="flex flex-col gap-1">
+            <label [for]="'xmlFileInput'" class="label"> Arquivo XML </label>
+            <p-button
+              (onClick)="importXml()"
+              [disabled]="!outboundData.get('nfModel')?.valid"
+              label="Importar dados de arquivo XML"
+              icon="pi pi-upload"
+            />
+          </div>
 
-              <div>
-                <fuse-input
-                  [control]="outboundData.get('nfModel')"
-                  type="radio"
-                  label="Modelo"
-                  [items]="nfModel()"
-                />
-              </div>
-            </div>
-          </form>
-        </p-tabpanel>
-
-        <p-tabpanel value="1">
-          <fuse-table
-            [data]="outboundData.get('products')?.value"
-            [config]="tableConfig()"
-          ></fuse-table>
-        </p-tabpanel>
-      </p-tabpanels>
+          <div>
+            <fuse-input
+              [control]="outboundData.get('nfModel')"
+              type="radio"
+              label="Modelo"
+              [items]="nfModel()"
+            />
+          </div>
+        </div>
+      </form>
+      <fuse-table
+        [data]="outboundData.get('products')?.value"
+        [config]="tableConfig()"
+      ></fuse-table>
     </p-tabs>
   </div>
 

@@ -36,7 +36,7 @@ import { AccountsPayableFormComponent } from '../../components/form/accounts-pay
         </div>
       </ng-template>
 
-      <fuse-accounts-payable-form #formComponent/>
+      <fuse-accounts-payable-form #formComponent />
 
       <ng-template #footer>
         <div class="flex gap-2">
@@ -63,14 +63,9 @@ import { AccountsPayableFormComponent } from '../../components/form/accounts-pay
           ></button>
         </div>
       </ng-template>
-      
     </p-dialog>
   `,
-  imports: [
-    DialogModule,
-    ButtonModule,
-    AccountsPayableFormComponent
-  ],
+  imports: [DialogModule, ButtonModule, AccountsPayableFormComponent],
 })
 export class AccountsPayableCreateDrawerComponent implements OnInit {
   @ViewChild('formComponent') formComponent!: AccountsPayableFormComponent;

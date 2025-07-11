@@ -1,6 +1,18 @@
-import { Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { CoreService } from 'app/shared/services/core.service';
@@ -14,14 +26,10 @@ import dayjs from 'dayjs';
 @Component({
   selector: 'fuse-accounts-payable-form',
   templateUrl: './accounts-payable-form.component.html',
-  imports: [
-    ReactiveFormsModule,
-    FormModule,
-    CheckboxModule
-  ]
+  imports: [ReactiveFormsModule, FormModule, CheckboxModule],
 })
 export class AccountsPayableFormComponent implements OnInit {
-destroyedRef = inject(DestroyRef);
+  destroyedRef = inject(DestroyRef);
   private router = inject(Router);
   private coreService = inject(CoreService);
   private activatedRoute = inject(ActivatedRoute);
@@ -97,7 +105,7 @@ destroyedRef = inject(DestroyRef);
       id: [''],
       provider: ['', [Validators.required]],
       description: ['', [Validators.required, Validators.maxLength(255)]],
-      dueDateOriginal: [{value: '', disabled: true}],
+      dueDateOriginal: [{ value: '', disabled: true }],
       issueDate: [dayjs().format('DD/MM/YYYY'), Validators.required],
       dueDate: ['', Validators.required],
       competenceDate: ['', Validators.required],
@@ -121,8 +129,7 @@ destroyedRef = inject(DestroyRef);
       });
       return;
     }
-    
-    
+
     this.accountsPayableService
       .upsert(formValue)
       .pipe(takeUntilDestroyed(this.destroyedRef))

@@ -3,13 +3,10 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'fuse-search-product',
   templateUrl: './search-product.component.html',
-  styleUrls: ['./search-product.component.css']
+  styleUrls: ['./search-product.component.css'],
 })
 export class SearchProductComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

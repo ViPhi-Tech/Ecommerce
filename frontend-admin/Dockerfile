@@ -22,6 +22,6 @@ FROM nginx:alpine AS final_serve
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Copia os arquivos compilados do Angular
-COPY --from=angular_build /app/dist/kommerz/browser /usr/share/nginx/html
+COPY --from=angular_build /app/dist/sellup/browser /usr/share/nginx/html
 
 EXPOSE 80

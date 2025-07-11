@@ -1,5 +1,4 @@
 <div class="p-8 animate-fade-in space-y-4">
-
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <fuse-simple-indicator
       title="Saldo Total"
@@ -23,14 +22,36 @@
     ></fuse-simple-indicator>
   </div>
 
-  <div class="space-x-4">
-    <p-button label="Nova Entrada" (onClick)="newInbound()"></p-button>
-    <p-button label="Nova Saída" severity="danger" (onClick)="newOutbound()"></p-button>
-  </div>
-
   <div>
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-xl font-bold">Listagem de Movimentações</h1>
+      <div>
+        <form [formGroup]="formFilter" class="flex items-center gap-4">
+          <p-button
+            label="Nova Entrada"
+            (onClick)="newInbound()"
+            size="small"
+          ></p-button>
+          <p-button
+            label="Nova Saída"
+            severity="danger"
+            (onClick)="newOutbound()"
+            size="small"
+          ></p-button>
+          <fuse-datepicker
+            placeholder="Filtrar por data"
+            [maxDate]="maxDate()"
+            [control]="formFilter.get('date')"
+          />
+          <fuse-select
+            addictionalClass="min-w-[200px]"
+            placeholder="Filtrar por"
+            [items]="movementTypes()"
+            [canSearch]="false"
+            [control]="formFilter.get('type')"
+          />
+        </form>
+      </div>
     </div>
 
     <div class="space-y-4">

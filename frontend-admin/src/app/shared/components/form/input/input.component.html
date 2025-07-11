@@ -1,9 +1,6 @@
 <div class="w-full label-position {{ labelPosition() }} flex flex-col gap-1">
   @if (label() && !isLoading()) {
-    <label
-      [for]="idRef()"
-      class="label"
-    >
+    <label [for]="idRef()" class="label">
       {{ label() }}
       @if (isRequired()) {
         <span class="text-red-500 lh-0">*</span>
@@ -69,7 +66,6 @@
       [rows]="rows()"
     ></textarea>
   }
-  
 
   @if (type() === 'radio' && !isLoading()) {
     <div
