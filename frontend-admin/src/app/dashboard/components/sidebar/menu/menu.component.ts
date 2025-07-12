@@ -76,6 +76,23 @@ export class MenuComponent implements OnInit {
         },
       ],
     },
+    {
+      groupTitle: 'Cadastros',
+      items: [
+        {
+          label: 'Clientes',
+          icon: 'lucideUser',
+          route: '/dashboard/clients/list',
+          visible: true,
+        },
+        {
+          label: 'Categorias',
+          icon: 'lucideTag',
+          route: '/dashboard/categories/list',
+          visible: true,
+        }
+      ],
+    },
   ];
 
   constructor() {}

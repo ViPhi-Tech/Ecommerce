@@ -8,6 +8,13 @@ import { LogoComponent } from './components/logo/logo.component';
 import { isAuthGuard } from 'app/shared/guards/is-auth.guard';
 import { categoryRoutes } from './modules/category-module/category.routing';
 import { productRoutes } from './modules/product-module/product.routing';
+import { userRoutes } from './modules/user-module/user.routing';
+import { orderRoutes } from './modules/order-module/order.routing';
+import { invoiceRoutes } from './modules/invoice-module/invoice.routing';
+import { accountsPayableRoutes } from './modules/accounts-payable-module/accounts-payable.routing';
+import { accountsReceivableRoutes } from './modules/accounts-receivable-module/accounts-receivable.routing';
+import { stockMovementRoutes } from './modules/stock-movement-module/stock-movement.routing';
+import { customizationRoutes } from './modules/customization/customization.routing';
 
 const routes: Routes = [
   {
@@ -20,18 +27,12 @@ const routes: Routes = [
     children: [
       {
         path: 'customization',
-        loadChildren: () =>
-          import('./modules/customization/customization.module').then(
-            m => m.CustomizationModule
-          ),
+        children: customizationRoutes,
         data: { animation: 'customization' },
       },
       {
         path: 'orders',
-        loadChildren: () =>
-          import('./modules/order-module/order.module').then(
-            m => m.OrderModule
-          ),
+        children: orderRoutes,
       },
       {
         path: 'products',
@@ -39,10 +40,7 @@ const routes: Routes = [
       },
       {
         path: 'stock-movements',
-        loadChildren: () =>
-          import('./modules/stock-movement-module/stock-movement.module').then(
-            m => m.StockMovementModule
-          ),
+        children: stockMovementRoutes,
         data: { animation: 'stock-movements' },
       },
       {
@@ -51,16 +49,12 @@ const routes: Routes = [
       },
       {
         path: 'invoices',
-        loadChildren: () =>
-          import('./modules/invoice-module/invoice.module').then(
-            m => m.InvoiceModule
-          ),
+        children: invoiceRoutes,
       },
 
       {
         path: 'users',
-        loadChildren: () =>
-          import('./modules/user-module/user.module').then(m => m.UserModule),
+        children: userRoutes,
       },
       {
         path: 'config',
@@ -71,18 +65,12 @@ const routes: Routes = [
       },
       {
         path: 'accounts-payable',
-        loadChildren: () =>
-          import(
-            './modules/accounts-payable-module/accounts-payable.module'
-          ).then(m => m.AccountsPayableModule),
+        children: accountsPayableRoutes,
         data: { animation: 'accounts-payable' },
       },
       {
         path: 'accounts-receivable',
-        loadChildren: () =>
-          import(
-            './modules/accounts-receivable-module/accounts-receivable.module'
-          ).then(m => m.AccountsReceivableModule),
+        children: accountsReceivableRoutes,
         data: { animation: 'accounts-receivable' },
       },
       {
