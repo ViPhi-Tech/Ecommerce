@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { Observable, Subject } from 'rxjs';
 import { environments } from 'src/environments/environments';
-import { Category } from './category.state';
+import { Category } from './category.interface';
 
 @Injectable({
   providedIn: 'root',

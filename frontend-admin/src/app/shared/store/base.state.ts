@@ -14,23 +14,29 @@ export abstract class BaseState<T extends BaseModuleState> {
   error = computed(() => this.state().error);
 
   /**
+   * Atualiza o estado de um campo específico
+   * @param key Chave do campo a ser atualizado
+   * @param value Novo valor para o campo
+   */
+  protected updateState<K extends keyof T>(key: K, value: T[K]): void {
+    this.state.update(state => ({
+      ...state,
+      [key]: value,
+    }));
+  }
+
+  /**
    * Define o estado de loading
    */
   protected setLoading(loading: boolean): void {
-    this.state.update(state => ({
-      ...state,
-      loading,
-    }));
+    this.updateState('loading', loading);
   }
 
   /**
    * Define uma mensagem de erro
    */
   protected setError(error: string | null): void {
-    this.state.update(state => ({
-      ...state,
-      error,
-    }));
+    this.updateState('error', error);
   }
 
   /**
@@ -51,13 +57,5 @@ export abstract class BaseState<T extends BaseModuleState> {
     console.error('Erro capturado:', error);
     this.setError(errorMessage);
     return of(null);
-  }
-
-  // Método que altera o estado de uma propriedade específica
-  protected updateState<K extends keyof T>(key: K, value: T[K]): void {
-    this.state.update(state => ({
-      ...state,
-      [key]: value,
-    }));
   }
 }

@@ -5,17 +5,12 @@ import {
 } from 'app/shared/interfaces/product-module.interface';
 import { BaseState } from 'app/shared/store/base.state';
 import { catchError, finalize, lastValueFrom, tap } from 'rxjs';
-import { environments } from 'src/environments/environments';
-import { HttpClient } from '@angular/common/http';
 import { ProductService } from './product.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductState extends BaseState<ProductModuleState> {
-  private http = inject(HttpClient);
-  private apiUrl = environments.apiUrl;
-
   private productService = inject(ProductService);
 
   protected state = signal<ProductModuleState>({
