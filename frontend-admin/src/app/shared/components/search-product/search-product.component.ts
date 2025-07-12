@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ProductState } from 'app/dashboard/modules/product-module/product.state';
-import { FormModule } from "../form/form.module";
+import { FormModule } from '../form/form.module';
 import { FormControl } from '@angular/forms';
 import { Product } from 'app/shared/interfaces/product-module.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -24,16 +24,15 @@ export class SearchProductComponent implements OnInit {
   ngOnInit() {
     this.productState.getProductList();
 
-    this.searchControl
-      .valueChanges
+    this.searchControl.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((products) => {
+      .subscribe(products => {
         console.log('Search value changed:', products);
         if (!this.searchControl.value) {
           this.products.set([]); // Clear the product list if search value is empty
           return;
         }
-        this.products.set(this.productState.productList())
+        this.products.set(this.productState.productList());
       });
   }
 

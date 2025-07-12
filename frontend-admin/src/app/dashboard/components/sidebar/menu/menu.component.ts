@@ -90,7 +90,7 @@ export class MenuComponent implements OnInit {
           icon: 'lucideTag',
           route: '/dashboard/categories/list',
           visible: true,
-        }
+        },
       ],
     },
   ];

@@ -1,4 +1,12 @@
-import { Component, EventEmitter, input, InputSignal, OnInit, Output, signal } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  input,
+  InputSignal,
+  OnInit,
+  Output,
+  signal,
+} from '@angular/core';
 import { randomId } from '../../../utils/utils';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -9,6 +17,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { SkeletonModule } from 'primeng/skeleton';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { NgClass } from '@angular/common';
+import { InputMaskModule } from 'primeng/inputmask';
+import { NgxMaskDirective } from 'ngx-mask';
 
 @Component({
   selector: 'fuse-input',
@@ -24,6 +34,8 @@ import { NgClass } from '@angular/common';
     InputNumberModule,
     RadioButtonModule,
     SkeletonModule,
+    InputMaskModule,
+    NgxMaskDirective,
   ],
 })
 export class InputComponent implements OnInit {
@@ -46,20 +58,33 @@ export class InputComponent implements OnInit {
 
   min = input<number>(0);
   max = input<number>(Number.MAX_SAFE_INTEGER);
+  mask = input<string>('');
 
   isRequired = signal(false);
   isLoading = input<boolean>(false);
   feedback = input<boolean>(false);
   errorMessage = input<string>('');
 
-  @Output() blurInput = new EventEmitter<any>();
+  @Output() blurChange = new EventEmitter<any>();
+  @Output() inputChange = new EventEmitter<any>();
+  @Output() keydownChange = new EventEmitter<any>();
+
   constructor() {}
 
   ngOnInit() {
     this.isRequired.set(!!this.control()?.validator);
+    console.log(this.isRequired());
   }
 
-  blurInputComponent(value: any) {
-    this.blurInput.emit(value);
+  blurChangeComponent(value: any) {
+    this.blurChange.emit(value);
+  }
+
+  inputChangeComponent(value: any) {
+    this.inputChange.emit(value);
+  }
+
+  keydownChangeComponent(value: any) {
+    this.keydownChange.emit(value);
   }
 }

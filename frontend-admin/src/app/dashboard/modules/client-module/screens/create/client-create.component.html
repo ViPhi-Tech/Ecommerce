@@ -5,7 +5,7 @@
   [modal]="true"
   [closeOnEscape]="true"
   [draggable]="false"
-  styleClass="max-w-[800px] w-full"
+  styleClass="max-ww-full"
 >
   <ng-template #header>
     <div class="flex flex-col space-y-1.5 text-center sm:text-left">
@@ -33,78 +33,31 @@
           <fuse-input
             label="Email"
             [control]="clientForm.get('email')"
-            type="email"
+            type="text"
             placeholder="Ex: joao@email.com"
           />
         </div>
 
         <div class="col-12 md:col-6 mb-4">
-          <label for="phone" class="block text-sm font-medium mb-2">Telefone</label>
-          <p-inputMask
-            id="phone"
-            mask="(99) 99999-9999"
+          <fuse-input
+            type="text"
+            [label]="documentLabel()"
+            [control]="clientForm.get('document')"
+            [placeholder]="documentPlaceholder()"
+            (inputChange)="handleDocumentInput($event)"
+            (blurChange)="handleDocumentBlur($event)"
+            mask="CPF_CNPJ"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            type="text"
+            label="Telefone"
+            [control]="clientForm.get('phone')"
             placeholder="(00) 00000-0000"
-            formControlName="phone"
-            styleClass="w-full"
-          ></p-inputMask>
-        </div>
-
-        <div class="col-12 md:col-6 mb-4">
-          <label for="document" class="block text-sm font-medium mb-2">CPF/CNPJ</label>
-          <p-inputMask
-            id="document"
-            mask="999.999.999-99"
-            placeholder="000.000.000-00"
-            formControlName="document"
-            styleClass="w-full"
-          ></p-inputMask>
-        </div>
-
-        <div class="col-12 md:col-8 mb-4">
-          <fuse-input
-            label="Endereço"
-            [control]="clientForm.get('address')"
-            placeholder="Ex: Rua das Flores, 123"
+            mask="(99) 99999-9999"
           />
-        </div>
-
-        <div class="col-12 md:col-4 mb-4">
-          <label for="zipCode" class="block text-sm font-medium mb-2">CEP</label>
-          <p-inputMask
-            id="zipCode"
-            mask="99999-999"
-            placeholder="00000-000"
-            formControlName="zipCode"
-            styleClass="w-full"
-          ></p-inputMask>
-        </div>
-
-        <div class="col-12 md:col-6 mb-4">
-          <fuse-input
-            label="Cidade"
-            [control]="clientForm.get('city')"
-            placeholder="Ex: São Paulo"
-          />
-        </div>
-
-        <div class="col-12 md:col-6 mb-4">
-          <fuse-input
-            label="Estado"
-            [control]="clientForm.get('state')"
-            placeholder="Ex: SP"
-          />
-        </div>
-
-        <div class="col-12 mb-4">
-          <label for="notes" class="block text-sm font-medium mb-2">Observações</label>
-          <textarea
-            id="notes"
-            pInputTextarea
-            formControlName="notes"
-            placeholder="Observações sobre o cliente..."
-            class="w-full"
-            rows="3"
-          ></textarea>
         </div>
       </form>
     </div>

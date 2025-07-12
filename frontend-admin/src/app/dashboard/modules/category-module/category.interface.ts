@@ -1,6 +1,6 @@
-import { BaseModuleState } from "app/shared/store/base.state";
+import { BaseModuleState } from 'app/shared/store/base.state';
 
-export interface CategoryModuleState extends BaseModuleState  {
+export interface CategoryModuleState extends BaseModuleState {
   categoryList: Category[];
 }
 

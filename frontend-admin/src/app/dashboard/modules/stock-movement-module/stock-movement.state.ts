@@ -41,7 +41,7 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
       )
-    )
+    );
   }
 
   async getStockMovementsByProduct(productId: string): Promise<void> {
@@ -49,12 +49,11 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
     this.clearError();
 
     await lastValueFrom(
-      this.stockMovementService.getStockMovementsByProduct(productId)
-        .pipe(
-          tap(data => this.setStockMovementDetails(data?.dados || null)),
-          catchError(error => this.handleError(error)),
-          finalize(() => this.setLoading(false))
-        )
+      this.stockMovementService.getStockMovementsByProduct(productId).pipe(
+        tap(data => this.setStockMovementDetails(data?.dados || null)),
+        catchError(error => this.handleError(error)),
+        finalize(() => this.setLoading(false))
+      )
     );
   }
 
@@ -65,5 +64,4 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
   setStockMovementDetails(stockMovement: StockMovement | null) {
     this.updateState('stockMovementDetails', stockMovement);
   }
-
 }

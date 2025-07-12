@@ -37,7 +37,7 @@ const routes: Routes = [
       },
       {
         path: 'products',
-        children: productRoutes
+        children: productRoutes,
       },
       {
         path: 'stock-movements',
@@ -46,7 +46,7 @@ const routes: Routes = [
       },
       {
         path: 'categories',
-        children: categoryRoutes
+        children: categoryRoutes,
       },
       {
         path: 'clients',
