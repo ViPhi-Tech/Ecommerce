@@ -20,10 +20,10 @@ export class UpdateStockUseCase {
         const movementType = input.quantity > 0 ? 'IN' : 'OUT';
 
         await this.productRepository.upsertStockMovement({
-            sotckId: updatedStock?.id ?? 0,
+            stockId: updatedStock?.id ?? 0,
             quantity: Math.abs(input.quantity),
             type: movementType,
-            user: input.user
+            userId: input.user
         });
 
         return updatedStock;

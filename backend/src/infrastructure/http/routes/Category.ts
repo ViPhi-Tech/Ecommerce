@@ -8,7 +8,6 @@ export default async function categoryRoutes(
     fastify: FastifyInstance,
     options: FastifyPluginOptions
 ) {
-
     fastify.post('/create', {
         schema: {
             tags: ['category'],

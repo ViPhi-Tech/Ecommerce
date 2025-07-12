@@ -20,4 +20,25 @@ model User {
   login   Login?   @relation(fields: [loginId], references: [id])
 
   address Address?
+
+  stockMovements StockMovement[]
+}
+
+model Address {
+  id         Int      @id @default(autoincrement())
+  street     String
+  number     String
+  city       String
+  state      String
+  zipCode    String
+  complement String?
+  partner    Partner? @relation(fields: [partnerId], references: [id])
+  partnerId  Int?     @unique
+
+  client   Client? @relation(fields: [clientId], references: [id])
+  clientId Int?    @unique
+
+  user   User? @relation(fields: [userId], references: [id])
+  userId Int?  @unique
+  
 }

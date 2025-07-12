@@ -53,24 +53,6 @@ enum PartnerType {
   OTHER
 }
 
-model Address {
-  id         Int      @id @default(autoincrement())
-  street     String
-  number     String
-  city       String
-  state      String
-  zipCode    String
-  complement String?
-  partner    Partner? @relation(fields: [partnerId], references: [id])
-  partnerId  Int?     @unique
-
-  client   Client? @relation(fields: [clientId], references: [id])
-  clientId Int?    @unique
-
-  user   User? @relation(fields: [userId], references: [id])
-  userId Int?  @unique
-}
-
 model Stock {
   id        Int      @id @default(autoincrement())
   productId Int      @unique // Chave única para cada produto (garante relação 1:1)
@@ -87,9 +69,11 @@ model StockMovement {
   stockId   Int // Chave estrangeira para o estoque
   type      MovementType // Tipo de movimentação (entrada ou saída)
   quantity  Int // Quantidade movimentada
+  userId    Int? // Chave estrangeira para o usuário que realizou a movimentação
   createdAt DateTime     @default(now()) // Data da movimentação
   updatedAt DateTime     @updatedAt // Data da última atualização da movimentação
 
+  user   User? @relation(fields: [userId], references: [id])
   stock Stock @relation(fields: [stockId], references: [id]) // Relaciona com o modelo Stock
 }
 

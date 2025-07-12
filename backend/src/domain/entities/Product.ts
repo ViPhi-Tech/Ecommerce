@@ -25,8 +25,8 @@ export interface Stock {
 
 
 export interface stockMovement {
-    user?: number | null;
-    sotckId: number;
+    userId?: number | null;
+    stockId: number;
     type: string;
     quantity: number
 }

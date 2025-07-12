@@ -3,7 +3,7 @@ import { OAuth2Client } from 'google-auth-library';
 import { TokenPayload } from '../../domain/entities/Auth';
 import { IAuthService } from '../../domain/services/IAuthService';
 
-export class JwtGoogleAuthService implements IAuthService {
+export class JwtAuthService implements IAuthService {
   private jwtSecret: string;
   private googleClientId: string;
   private googleClientSecret: string;
@@ -11,17 +11,19 @@ export class JwtGoogleAuthService implements IAuthService {
   private googleClient: OAuth2Client;
   
   constructor(
-    jwtSecret: string,
-    googleClientId: string,
-    googleClientSecret: string,
-    googleRedirectUri: string
-  ) {
-    this.jwtSecret = jwtSecret;
-    this.googleClientId = googleClientId;
-    this.googleClientSecret = googleClientSecret;
-    this.googleRedirectUri = googleRedirectUri;
-    this.googleClient = new OAuth2Client(googleClientId, googleClientSecret, googleRedirectUri);
-  }
+  jwtSecret: string,
+  googleClientId?: string,
+  googleClientSecret?: string,
+  googleRedirectUri?: string
+) {
+  this.jwtSecret = jwtSecret;
+  this.googleClientId = googleClientId ?? '';
+  this.googleClientSecret = googleClientSecret ?? '';
+  this.googleRedirectUri = googleRedirectUri ?? '';
+
+  this.googleClient = new OAuth2Client(googleClientId, googleClientSecret, googleRedirectUri);
+
+}
 
   // Método para gerar token JWT
   generateToken(payload: TokenPayload): string {
@@ -39,6 +41,33 @@ export class JwtGoogleAuthService implements IAuthService {
       prompt: 'consent'
     });
   }
+
+  verifyToken(token: string): TokenPayload | null {
+  try {
+    const decoded = jwt.verify(token, this.jwtSecret) as unknown;
+
+    if (
+      typeof decoded === 'object' &&
+      decoded !== null &&
+      'sub' in decoded && typeof (decoded as any).sub === 'number' &&
+      'email' in decoded && typeof (decoded as any).email === 'string' &&
+      'name' in decoded && typeof (decoded as any).name === 'string'
+    ) {
+      return {
+        sub: parseInt((decoded as any).sub, 10),
+        email: (decoded as any).email,
+        name: (decoded as any).name,
+        iat: (decoded as any).iat,
+        exp: (decoded as any).exp,
+      };
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Token inválido:', error);
+    return null;
+  }
+}
 
   // Trocar código de autorização por tokens
   async exchangeCodeForTokens(code: string) {

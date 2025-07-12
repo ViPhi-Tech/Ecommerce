@@ -1,11 +1,11 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 import { Product, Stock, stockMovement } from '../../../domain/entities/Product';
 import { IProductRepository } from "../../../domain/repositories/IProductRepository";
 import {ProductCreateDTO, ProductUpdateDTO} from "../../http/dto/Product.dto";
 
 export class ProductRepository implements IProductRepository {
-    constructor(private prisma: PrismaClient) {
-    }
+  constructor(private prisma: PrismaClient | Prisma.TransactionClient) {}
+
 
     async create(data: ProductCreateDTO): Promise<Product> {
         const created = await this.prisma.product.create({
@@ -28,6 +28,17 @@ export class ProductRepository implements IProductRepository {
         }
       });
     }
+
+
+    async findByProductId(productIds: number[]): Promise<Stock[]> {
+      return this.prisma.stock.findMany({
+        where: {
+          productId: {
+            in: productIds,
+          },
+        },
+      });
+    };
 
     async findById(id: number): Promise<Product | null> {
         return this.prisma.product.findUnique({
@@ -67,7 +78,7 @@ export class ProductRepository implements IProductRepository {
     };
 
 
-    async updateMultipleStocks(items: { sku: number; quantity: number }[]): Promise<Stock[]> {
+    async decrementMultipleStocks(items: { sku: number; quantity: number }[]): Promise<Stock[]> {
       const operations = items.map(({ sku, quantity }) => 
         this.prisma.stock.upsert({
           where: { productId: sku },
@@ -76,18 +87,44 @@ export class ProductRepository implements IProductRepository {
         })
       );
       
-      return await this.prisma.$transaction(operations);
+    return await Promise.all(operations);
+    };
+
+    async incrementMultipleStocks(items: { sku: number; quantity: number }[]): Promise<Stock[]> {
+      const operations = items.map(({ sku, quantity }) => 
+        this.prisma.stock.upsert({
+          where: { productId: sku },
+          update: { quantity: { decrement: quantity } },
+          create: { productId: sku, quantity: -quantity }
+        })
+      );
+      
+    return await Promise.all(operations);
     };
 
 
     async upsertStockMovement(data: stockMovement): Promise<void> {
         await this.prisma.stockMovement.create({
           data: {
-            stockId: data.sotckId,
+            stockId: data.stockId,
             quantity: data.quantity,
             type: data.type as 'IN' | 'OUT'
           }
         })
-    }
+    };
     
+  async updateManyStockMovements(data: stockMovement[]): Promise<void> {
+    await this.prisma.stockMovement.createMany({
+    data: data.map((item) => ({
+      stockId: item.stockId, // corrigido 'sotckId' para 'stockId'
+      quantity: item.quantity,
+      type: item.type as 'IN' | 'OUT',
+      userId: item.userId ?? null
+    })),
+    skipDuplicates: false, // ou true se quiser ignorar duplicatas
+  });
+};
+
+
+  
 }

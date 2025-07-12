@@ -1,3 +1,3 @@
 export interface ITransactionRunner {
-  run<T>(callback: () => Promise<T>): Promise<T>;
+  run<T>(callback: (tx: any) => Promise<T>): Promise<T>;
 }

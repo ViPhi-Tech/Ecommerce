@@ -19,19 +19,25 @@ export class OrderController {
         private updateOrderUseCase: UpdateOrderUseCase
     ) {}
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
-        try{
+    try {
+        const authHeader = request.headers.authorization ?? '';
+        const token = authHeader.startsWith('Bearer ')
+        ? authHeader.slice(7).trim()
+        : authHeader;
 
-            return reply.status(HTTP_STATUS.API_STATUS_CREATED).send({
-                status: HTTP_MESSAGES.API_STATUS_SUCCESS,
-                data: await this.createOrderUseCase.execute(request.body as OrderCreateDTO),
-            });
-        } catch (error) {
-            return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
-                status: HTTP_MESSAGES.API_STATUS_BAD_REQUEST,
-                description: error instanceof Error ? error.message : 'An unknown error occurred',
-            });
-        }
-
+        return reply.status(HTTP_STATUS.API_STATUS_CREATED).send({
+        status: HTTP_MESSAGES.API_STATUS_SUCCESS,
+        data: await this.createOrderUseCase.execute(
+            request.body as OrderCreateDTO,
+            token
+        ),
+        });
+    } catch (error) {
+        return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
+        status: HTTP_MESSAGES.API_STATUS_BAD_REQUEST,
+        description: error instanceof Error ? error.message : 'An unknown error occurred',
+        });
+    }
     };
 
 

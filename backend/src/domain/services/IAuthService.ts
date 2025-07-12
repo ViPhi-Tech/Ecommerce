@@ -5,4 +5,5 @@ export interface IAuthService {
   getGoogleAuthUrl(): string;
   exchangeCodeForTokens(code: string): Promise<any>;
   verifyGoogleIdToken(idToken: string): Promise<any>;
+  verifyToken(token: string): TokenPayload | null;
 }

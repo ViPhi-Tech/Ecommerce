@@ -28,8 +28,6 @@ export class UpdateOrderUseCase {
         sku: item.productId,
         quantity: item.quantity,
       }));
-
-      await this.productRepository.updateMultipleStocks(formattedItems);
     }
 
     if (input.payments.length >0){
