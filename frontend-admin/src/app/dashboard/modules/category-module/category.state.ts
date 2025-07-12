@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { catchError, finalize,  tap } from 'rxjs';
+import { catchError, finalize, tap } from 'rxjs';
 import { lastValueFrom } from 'rxjs';
 import { CategoryService } from 'app/dashboard/modules/category-module/category.service';
 import { BaseState } from 'app/shared/store/base.state';
@@ -48,5 +48,4 @@ export class CategoryState extends BaseState<CategoryModuleState> {
   setCategoryList(categoryList: any) {
     this.updateState('categoryList', categoryList);
   }
-
 }

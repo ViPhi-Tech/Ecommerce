@@ -74,7 +74,7 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
       icon: 'lucideUserPlus',
       click: () => {
         this.toggleQuickAccess();
-        this.router.navigate([{ outlets: { drawer: ['customers', 'new'] } }]);
+        this.router.navigate([{ outlets: { drawer: ['clients', 'new'] } }]);
       },
     },
     {

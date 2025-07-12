@@ -25,7 +25,7 @@ import { SkeletonModule } from 'primeng/skeleton';
     NgIcon,
     ButtonModule,
     SkeletonModule,
-    RouterModule
+    RouterModule,
   ],
 })
 export class SelectComponent implements OnInit {

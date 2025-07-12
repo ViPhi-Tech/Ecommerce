@@ -27,7 +27,7 @@ import {
   TableConfig,
 } from 'app/shared/interfaces/table.interfaces';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SearchProductComponent } from "app/shared/components/search-product/search-product.component";
+import { SearchProductComponent } from 'app/shared/components/search-product/search-product.component';
 
 @Component({
   selector: 'fuse-inbound',

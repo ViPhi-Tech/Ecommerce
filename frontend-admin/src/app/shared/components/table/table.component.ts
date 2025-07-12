@@ -10,7 +10,6 @@ import { RouterModule } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
 import {
   CurrencyPipe,
-  DatePipe,
   NgClass,
   NgStyle,
   NgTemplateOutlet,
@@ -18,6 +17,9 @@ import {
 import { TableActionsComponent } from './components/table-actions/table-actions.component';
 import { TooltipModule } from 'primeng/tooltip';
 import { NgIcon } from '@ng-icons/core';
+import { DocumentPipe } from 'app/shared/pipes/document.pipe';
+import { DateCustomPipe } from 'app/shared/pipes/date.pipe';
+import { PhonePipe } from 'app/shared/pipes/phone.pipe';
 
 @Component({
   selector: 'fuse-table',
@@ -35,10 +37,12 @@ import { NgIcon } from '@ng-icons/core';
     NgStyle,
     NgTemplateOutlet,
     TooltipModule,
-    DatePipe,
     CurrencyPipe,
     NgIcon,
     NgClass,
+    DocumentPipe,
+    PhonePipe,
+    DateCustomPipe
   ],
 })
 export class TableComponent implements OnInit {

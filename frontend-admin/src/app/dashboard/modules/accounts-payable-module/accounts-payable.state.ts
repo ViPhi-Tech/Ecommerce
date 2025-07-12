@@ -34,7 +34,7 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
         ),
         finalize(() => this.setLoading(false))
       )
-    )
+    );
   }
 
   setAccountsPayableList(list: any[]) {

@@ -21,7 +21,7 @@ export default async function clientRoutes(
     handler: clientController.findAll.bind(clientController),
   });
 
-  fastify.get('findById/:id', {
+  fastify.get('/findById/:id', {
     schema: {
       tags: ['client'],
       params: clientIdJsonSchema,

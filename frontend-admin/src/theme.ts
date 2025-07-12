@@ -21,6 +21,7 @@ import { routes } from './app/app.routes';
 import { CoreInterceptor } from './app/shared/interceptors/core.interceptor';
 import { Preset } from './prime.theme';
 import { MessageService } from 'primeng/api';
+import { provideEnvironmentNgxMask } from 'ngx-mask';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -30,6 +31,14 @@ export const THEME: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([CoreInterceptor])),
+    importProvidersFrom(NgIconsModule.withIcons(lucideIcons)),
+    provideEnvironmentNgxMask(),
+    provideIcons({
+      matArrowDropDownOutline,
+      matKeyboardArrowDownOutline,
+      heroPencilSquare,
+    }),
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
     providePrimeNG({
       theme: {
         preset: Preset,
@@ -161,12 +170,5 @@ export const THEME: ApplicationConfig = {
         },
       },
     }),
-    importProvidersFrom(NgIconsModule.withIcons(lucideIcons)),
-    provideIcons({
-      matArrowDropDownOutline,
-      matKeyboardArrowDownOutline,
-      heroPencilSquare,
-    }),
-    { provide: LOCALE_ID, useValue: 'pt-BR' },
   ],
 };

@@ -19,6 +19,13 @@ import { MessageService } from 'primeng/api';
 import { ClientService } from '../../client.service';
 import { ClientState } from '../../client.state';
 import { InputMaskModule } from 'primeng/inputmask';
+import { emailAsyncValidator } from 'app/shared/validators/validators';
+import {
+  formatDocument,
+  formatPhone,
+  isCnpjValid,
+  isCpfValid,
+} from 'app/shared/utils/utils';
 
 @Component({
   selector: 'fuse-client-create',
@@ -48,21 +55,26 @@ export class ClientCreateComponent implements OnInit {
   clientForm = this.formBuilder.group({
     id: [''],
     fullName: ['', [Validators.required]],
+    document: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
-    phone: [''],
-    document: [''],
-    address: [''],
-    city: [''],
-    state: [''],
-    zipCode: [''],
-    notes: [''],
+    phone: ['', [Validators.required]],
   });
 
   // signals
-  visible = signal(true);
+  visible = signal(false);
   title = signal('Cadastrar Cliente');
 
-  constructor() {}
+  // Controle interno do tipo de documento
+  private currentDocumentType: 'cpf' | 'cnpj' = 'cpf';
+
+  // signals para máscaras e placeholders
+  documentMask = signal('999.999.999-99');
+  documentPlaceholder = signal('000.000.000-00');
+  documentLabel = signal('CPF');
+
+  constructor() {
+    this.clientForm.get('email')?.addAsyncValidators(emailAsyncValidator);
+  }
 
   ngOnInit() {
     this.activatedRoute.params
@@ -82,8 +94,17 @@ export class ClientCreateComponent implements OnInit {
       .getClientById(id)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
-        next: (response: ApiResponse) => {
-          this.clientForm.patchValue(response.dados);
+        next: ({ data }: ApiResponse) => {
+          this.clientForm.patchValue({
+            id: data?.id,
+            fullName: data?.fullName,
+            document: formatDocument(data?.document),
+            email: data?.email,
+            phone: formatPhone(data?.phone),
+          });
+
+          this.handleDocumentInput(this.clientForm.get('document')?.value);
+
           this.visible.set(true);
         },
         error: () => {
@@ -108,7 +129,13 @@ export class ClientCreateComponent implements OnInit {
       return;
     }
 
-    this.clientService.upsertClient(this.clientForm.value).subscribe({
+    // Preparar dados incluindo o tipo de documento detectado automaticamente
+    const formData = {
+      ...this.clientForm.value,
+      documentType: this.currentDocumentType,
+    };
+
+    this.clientService.upsertClient(formData).subscribe({
       next: () => {
         this.toast.add({
           severity: 'success',
@@ -117,8 +144,7 @@ export class ClientCreateComponent implements OnInit {
             ? 'Cliente atualizado com sucesso!'
             : 'Cliente criado com sucesso!',
         });
-
-        this.state.getClientList();
+        this.clientService.createClientRefresh();
         this.closeDialog();
       },
       error: () => {
@@ -142,5 +168,60 @@ export class ClientCreateComponent implements OnInit {
         relativeTo: this.activatedRoute.root,
       });
     }, 300);
+  }
+
+  private updateDocumentLabel(): void {
+    if (this.currentDocumentType === 'cpf') {
+      this.documentLabel.set('CPF');
+    } else if (this.currentDocumentType === 'cnpj') {
+      this.documentLabel.set('CNPJ');
+    }
+  }
+
+  handleDocumentInput(value: any): void {
+    value = value?.target?.value || value;
+
+    if (!value) return;
+
+    const numbersOnly = value.replace(/\D/g, '');
+    if (this.currentDocumentType === 'cpf' && numbersOnly.length > 11) {
+      this.currentDocumentType = 'cnpj';
+      this.updateDocumentLabel();
+    }
+    if (
+      this.currentDocumentType === 'cnpj' &&
+      numbersOnly.length <= 11 &&
+      numbersOnly.length >= 1
+    ) {
+      this.currentDocumentType = 'cpf';
+      this.updateDocumentLabel();
+    }
+  }
+
+  handleDocumentBlur(value: any): void {
+    if (!value?.target?.value) return;
+    const numbersOnly = value.target.value.replace(/\D/g, '');
+
+    console.log('value', numbersOnly);
+    console.log('currentDocumentType', this.currentDocumentType);
+
+    if (this.currentDocumentType === 'cpf' && !isCpfValid(numbersOnly)) {
+      this.toast.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'CPF inválido',
+      });
+      this.clientForm.get('document')?.setErrors({ invalid: true });
+    } else if (
+      this.currentDocumentType === 'cnpj' &&
+      !isCnpjValid(numbersOnly)
+    ) {
+      this.toast.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'CNPJ inválido',
+      });
+      this.clientForm.get('document')?.setErrors({ invalid: true });
+    }
   }
 }

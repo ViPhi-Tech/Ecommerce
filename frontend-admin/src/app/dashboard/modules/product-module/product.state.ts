@@ -59,26 +59,26 @@ export class ProductState extends BaseState<ProductModuleState> {
   });
 
   async getProductList(skipLoader = true): Promise<void> {
-  this.setLoading(true);
-  this.clearError();
-  this.setProductList([]);
+    this.setLoading(true);
+    this.clearError();
+    this.setProductList([]);
 
-  await lastValueFrom(
-    this.productService.getAll(skipLoader).pipe(
-      tap((response: any) => {
-        const products = Array.isArray(response) ? response : response.dados;
-        if (products && products.length > 0) {
-          this.setProductList(products);
-        } else {
-          this.setProductList([]);
-          this.setError('Nenhum produto encontrado.');
-        }
-      }),
-      catchError(error => this.handleError(error)),
-      finalize(() => this.setLoading(false))
-    )
-  );
-}
+    await lastValueFrom(
+      this.productService.getAll(skipLoader).pipe(
+        tap((response: any) => {
+          const products = Array.isArray(response) ? response : response.dados;
+          if (products && products.length > 0) {
+            this.setProductList(products);
+          } else {
+            this.setProductList([]);
+            this.setError('Nenhum produto encontrado.');
+          }
+        }),
+        catchError(error => this.handleError(error)),
+        finalize(() => this.setLoading(false))
+      )
+    );
+  }
 
   setProductList(productList: Product[]) {
     this.updateState('productList', productList);

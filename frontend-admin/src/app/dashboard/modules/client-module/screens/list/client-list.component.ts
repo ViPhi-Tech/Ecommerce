@@ -46,18 +46,21 @@ export class ClientListComponent implements OnInit {
         tooltip: 'Adicionar Cliente',
         action: () => {
           // Exemplo de navegação para o outlet auxiliar "drawer"
-          this.router.navigate([
-            { outlets: { drawer: ['clients', 'new'] } },
-          ]);
+          this.router.navigate([{ outlets: { drawer: ['clients', 'new'] } }]);
         },
       },
     ],
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
-      { field: 'fullName', caption: 'Nome Completo', sortable: true, filter: true },
-      { field: 'email', caption: 'Email', sortable: true, filter: true },
-      { field: 'phone', caption: 'Telefone', sortable: true, filter: true },
-      { field: 'document', caption: 'CPF/CNPJ', sortable: true, filter: true },
+      {
+        field: 'fullName',
+        caption: 'Nome Completo',
+        sortable: true,
+        filter: true,
+      },
+      { field: 'email', caption: 'Email' },
+      { field: 'phone', type: 'phone', caption: 'Telefone' },
+      { field: 'document', type: 'document', caption: 'CPF/CNPJ', sortable: true, filter: true },
       {
         field: 'actions',
         caption: 'Ações',
@@ -70,7 +73,6 @@ export class ClientListComponent implements OnInit {
             variant: 'text',
             action: (rowData: any) => {
               // Exemplo de navegação para o outlet auxiliar "drawer"
-              console.log(rowData);
               this.router.navigate([
                 { outlets: { drawer: ['clients', rowData?.id] } },
               ]);
@@ -96,10 +98,7 @@ export class ClientListComponent implements OnInit {
 
   ngOnInit() {
     this.state.getClientList();
-    this.coreService.setPageTitle(
-      'Clientes',
-      'Lista de clientes cadastrados'
-    );
+    this.coreService.setPageTitle('Clientes', 'Lista de clientes cadastrados');
   }
 
   deleteClient(id: string) {
