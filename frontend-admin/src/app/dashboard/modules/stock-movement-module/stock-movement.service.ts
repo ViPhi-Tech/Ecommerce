@@ -33,8 +33,8 @@ export class StockMovementService {
 
   getStockMovementsByProduct(
     productId: string
-  ): Observable<ApiResponse<StockMovement[]>> {
-    return this.http.get<ApiResponse<StockMovement[]>>(
+  ): Observable<ApiResponse<StockMovement>> {
+    return this.http.get<ApiResponse<StockMovement>>(
       `${this.apiUrl}/product/${productId}`
     );
   }

@@ -54,7 +54,7 @@ export abstract class BaseState<T extends BaseModuleState> {
     defaultMessage = 'Erro ao carregar dados'
   ): Observable<any> {
     const errorMessage = typeof error === 'string' ? error : defaultMessage;
-    console.error('Erro capturado:', error);
+    console.error('Erro capturado:', error?.error);
     this.setError(errorMessage);
     return of(null);
   }

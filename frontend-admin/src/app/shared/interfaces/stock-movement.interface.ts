@@ -2,7 +2,7 @@ import { BaseModuleState } from 'app/shared/store/base.state';
 
 export interface StockMovementModuleState extends BaseModuleState {
   stockMovementList: StockMovement[];
-  view: 'table' | 'list'; // Tipo de visualização atual (tabela ou lista)
+  stockMovementDetails: StockMovement | null; // Detalhes de um movimento específico
 }
 
 export interface StockMovement {

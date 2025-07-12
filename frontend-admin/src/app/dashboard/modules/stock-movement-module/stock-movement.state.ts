@@ -1,11 +1,10 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import {
   StockMovement,
   StockMovementModuleState,
 } from 'app/shared/interfaces/stock-movement.interface';
 import { BaseState } from 'app/shared/store/base.state';
-import { catchError, finalize, lastValueFrom } from 'rxjs';
+import { catchError, finalize, lastValueFrom, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
 import { StockMovementService } from './stock-movement.service';
 import { HttpClient } from '@angular/common/http';
@@ -20,16 +19,16 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
 
   protected state = signal<StockMovementModuleState>({
     stockMovementList: [],
-    view:
-      (localStorage.getItem(
-        'stockMovementView'
-      ) as StockMovementModuleState['view']) || 'table',
+    stockMovementDetails: null,
     loading: false,
     error: null,
   });
 
   stockMovementList = computed(() => this.state().stockMovementList);
-  currentView = computed(() => this.state().view);
+
+  constructor() {
+    super();
+  }
 
   async getStockMovementList(filter: any): Promise<void> {
     this.setLoading(true);
@@ -38,25 +37,11 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
 
     await lastValueFrom(
       this.stockMovementService.getAll(filter, true).pipe(
+        tap(data => this.setStockMovementList(data?.dados || [])),
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
       )
     )
-      .then((response: any) => {
-        const stockMovements = Array.isArray(response)
-          ? response
-          : response.dados;
-        if (stockMovements && stockMovements.length > 0) {
-          this.setStockMovementList(stockMovements);
-        } else {
-          this.setStockMovementList([]);
-          this.setError('Nenhum movimento de estoque encontrado.');
-        }
-      })
-      .catch(error => {
-        this.setError('Erro ao carregar a lista de movimentos de estoque');
-        console.error('Erro ao buscar movimentos de estoque:', error);
-      });
   }
 
   async getStockMovementsByProduct(productId: string): Promise<void> {
@@ -64,56 +49,21 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
     this.clearError();
 
     await lastValueFrom(
-      this.http
-        .get<ApiResponse<StockMovement[]>>(
-          `${this.apiUrl}stock-movement/product/${productId}`,
-          {
-            headers: { 'Skip-Loader': 'true' },
-          }
-        )
+      this.stockMovementService.getStockMovementsByProduct(productId)
         .pipe(
+          tap(data => this.setStockMovementDetails(data?.dados || null)),
           catchError(error => this.handleError(error)),
           finalize(() => this.setLoading(false))
         )
-    )
-      .then((response: any) => {
-        const stockMovements = Array.isArray(response)
-          ? response
-          : response.dados;
-        if (stockMovements && stockMovements.length > 0) {
-          this.setStockMovementList(stockMovements);
-        } else {
-          this.setStockMovementList([]);
-          this.setError(
-            'Nenhum movimento de estoque encontrado para este produto.'
-          );
-        }
-      })
-      .catch(error => {
-        this.setError('Erro ao carregar movimentos de estoque do produto');
-        console.error(
-          'Erro ao buscar movimentos de estoque do produto:',
-          error
-        );
-      });
+    );
   }
 
   setStockMovementList(stockMovementList: StockMovement[]) {
-    this.state.update(state => ({
-      ...state,
-      stockMovementList,
-    }));
+    this.updateState('stockMovementList', stockMovementList);
   }
 
-  setView(view: StockMovementModuleState['view']) {
-    this.state.update(state => ({
-      ...state,
-      view,
-    }));
-    localStorage.setItem('stockMovementView', view);
+  setStockMovementDetails(stockMovement: StockMovement | null) {
+    this.updateState('stockMovementDetails', stockMovement);
   }
 
-  constructor() {
-    super();
-  }
 }
