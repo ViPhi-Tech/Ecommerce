@@ -125,12 +125,21 @@
           } @else {
             @if (column?.type === 'date') {
               {{
-                rowData?.[column?.field || ''] | date: 'dd/MM/yyyy' : 'pt-BR'
+                rowData?.[column?.field || ''] | dateCustom: 'short'
               }}
             } @else if (column?.type === 'datetime') {
               {{
                 rowData?.[column?.field || '']
-                  | date: 'dd/MM/yyyy HH:mm' : 'UTC'
+                  | dateCustom: 'medium'
+              }}
+            } @else if (column?.type === 'phone') {
+              {{
+                rowData?.[column?.field || '']
+                  | phone
+              }}
+            } @else if (column?.type === 'document') {
+              {{
+                rowData?.[column?.field || ''] | document
               }}
             } @else if (column?.type === 'currency') {
               {{

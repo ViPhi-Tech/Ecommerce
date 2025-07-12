@@ -58,9 +58,9 @@ export class ClientListComponent implements OnInit {
         sortable: true,
         filter: true,
       },
-      { field: 'email', caption: 'Email', sortable: true, filter: true },
-      { field: 'phone', caption: 'Telefone', sortable: true, filter: true },
-      { field: 'document', caption: 'CPF/CNPJ', sortable: true, filter: true },
+      { field: 'email', caption: 'Email' },
+      { field: 'phone', type: 'phone', caption: 'Telefone' },
+      { field: 'document', type: 'document', caption: 'CPF/CNPJ', sortable: true, filter: true },
       {
         field: 'actions',
         caption: 'Ações',
