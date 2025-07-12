@@ -1,22 +1,50 @@
-import { inject, Injectable } from '@angular/core';
-import { environments } from 'src/environments/environments';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
+import { Observable, Subject } from 'rxjs';
+import { environments } from 'src/environments/environments';
+import { Client } from './client.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ClientService {
-  private apiUrl = environments.apiUrl;
   private http = inject(HttpClient);
+  private apiUrl = environments.apiUrl + 'client';
+
+  private refreshSubj = new Subject<any>();
+  refresh$ = this.refreshSubj.asObservable();
 
   constructor() {}
 
-  getAll(options: { skipLoader?: boolean }): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}client/getAll`, {
-      headers: {
-        'Skip-Loader': options.skipLoader ? 'true' : 'false',
-      },
+  getClients(skipLoader = true): Observable<ApiResponse> {
+    const headers = skipLoader ? { 'Skip-Loader': 'true' } : undefined;
+    return this.http.get<ApiResponse<Client[]>>(`${this.apiUrl}/getAll`, {
+      headers,
     });
+  }
+
+  getClientById(clientId: string): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/${clientId}`, {
+      params: { id: clientId },
+    });
+  }
+
+  // Define methods for client operations here
+  upsertClient(clientData: any): Observable<ApiResponse> {
+    if (clientData.id) {
+      // Update existing client
+      return this.http.put<ApiResponse>(`${this.apiUrl}/update`, clientData);
+    }
+    // Create new client
+    return this.http.post<ApiResponse>(`${this.apiUrl}/create`, clientData);
+  }
+
+  deleteClient(clientId: string): Observable<ApiResponse> {
+    return this.http.delete<ApiResponse>(`${this.apiUrl}/${clientId}`);
+  }
+
+  refreshClientList() {
+    this.refreshSubj.next(true);
   }
 }

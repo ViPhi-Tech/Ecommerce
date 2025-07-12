@@ -1,0 +1,140 @@
+<p-dialog
+  #dialogRef
+  [(visible)]="visible"
+  (onHide)="onCloseDialog()"
+  [modal]="true"
+  [closeOnEscape]="true"
+  [draggable]="false"
+  styleClass="max-w-[800px] w-full"
+>
+  <ng-template #header>
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 class="text-2xl font-semibold leading-none tracking-tight">
+        {{ title() }}
+      </h2>
+      <p class="text-sm text-muted-foreground">
+        Preencha os dados do cliente abaixo
+      </p>
+    </div>
+  </ng-template>
+
+  <div class="flex flex-col gap-4">
+    <div>
+      <form [formGroup]="clientForm" class="row">
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="Nome Completo"
+            [control]="clientForm.get('fullName')"
+            placeholder="Ex: João Silva"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="Email"
+            [control]="clientForm.get('email')"
+            type="email"
+            placeholder="Ex: joao@email.com"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <label for="phone" class="block text-sm font-medium mb-2">Telefone</label>
+          <p-inputMask
+            id="phone"
+            mask="(99) 99999-9999"
+            placeholder="(00) 00000-0000"
+            formControlName="phone"
+            styleClass="w-full"
+          ></p-inputMask>
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <label for="document" class="block text-sm font-medium mb-2">CPF/CNPJ</label>
+          <p-inputMask
+            id="document"
+            mask="999.999.999-99"
+            placeholder="000.000.000-00"
+            formControlName="document"
+            styleClass="w-full"
+          ></p-inputMask>
+        </div>
+
+        <div class="col-12 md:col-8 mb-4">
+          <fuse-input
+            label="Endereço"
+            [control]="clientForm.get('address')"
+            placeholder="Ex: Rua das Flores, 123"
+          />
+        </div>
+
+        <div class="col-12 md:col-4 mb-4">
+          <label for="zipCode" class="block text-sm font-medium mb-2">CEP</label>
+          <p-inputMask
+            id="zipCode"
+            mask="99999-999"
+            placeholder="00000-000"
+            formControlName="zipCode"
+            styleClass="w-full"
+          ></p-inputMask>
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="Cidade"
+            [control]="clientForm.get('city')"
+            placeholder="Ex: São Paulo"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="Estado"
+            [control]="clientForm.get('state')"
+            placeholder="Ex: SP"
+          />
+        </div>
+
+        <div class="col-12 mb-4">
+          <label for="notes" class="block text-sm font-medium mb-2">Observações</label>
+          <textarea
+            id="notes"
+            pInputTextarea
+            formControlName="notes"
+            placeholder="Observações sobre o cliente..."
+            class="w-full"
+            rows="3"
+          ></textarea>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <div class="w-full justify-end flex items-center gap-4">
+      <div class="flex gap-2">
+        <button
+          pButton
+          type="submit"
+          label="Salvar"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+          (click)="onSubmit()"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          icon="pi pi-times"
+          (click)="closeDialog($event)"
+          severity="secondary"
+          [outlined]="true"
+          class="w-[200px]"
+          size="small"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
