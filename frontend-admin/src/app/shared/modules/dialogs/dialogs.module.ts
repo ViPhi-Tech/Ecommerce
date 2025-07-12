@@ -5,6 +5,20 @@ import { InboundComponent } from 'app/dashboard/modules/stock-movement-module/sc
 import { OutboundComponent } from 'app/dashboard/modules/stock-movement-module/screens/outbound/outbound.component';
 
 const routes: Routes = [
+  // category routes
+  {
+    path: 'category',
+    children: [
+      {
+        path: 'new',
+        component: InboundComponent,
+      },
+      {
+        path: ':id',
+        component: InboundComponent,
+      },
+    ],
+  },
   {
     path: 'inbound',
     children: [

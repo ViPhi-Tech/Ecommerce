@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
-import { ProductCreateComponent } from './screens/product-create/product-create.component';
+import { ProductCreateComponent } from './screens/create/product-create.component';
 
 const routes: Routes = [
   {

@@ -4,7 +4,7 @@ import {
   ProductModuleState,
 } from 'app/shared/interfaces/product-module.interface';
 import { BaseState } from 'app/shared/store/base.state';
-import { catchError, finalize, lastValueFrom } from 'rxjs';
+import { catchError, finalize, lastValueFrom, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
 import { HttpClient } from '@angular/common/http';
 import { ProductService } from './product.service';
@@ -64,17 +64,13 @@ export class ProductState extends BaseState<ProductModuleState> {
   });
 
   async getProductList(skipLoader = true): Promise<void> {
-    this.setLoading(true);
-    this.clearError();
-    this.setProductList([]);
+  this.setLoading(true);
+  this.clearError();
+  this.setProductList([]);
 
-    await lastValueFrom(
-      this.productService.getAll(skipLoader).pipe(
-        catchError(error => this.handleError(error)),
-        finalize(() => this.setLoading(false))
-      )
-    )
-      .then((response: any) => {
+  await lastValueFrom(
+    this.productService.getAll(skipLoader).pipe(
+      tap((response: any) => {
         const products = Array.isArray(response) ? response : response.dados;
         if (products && products.length > 0) {
           this.setProductList(products);
@@ -82,12 +78,12 @@ export class ProductState extends BaseState<ProductModuleState> {
           this.setProductList([]);
           this.setError('Nenhum produto encontrado.');
         }
-      })
-      .catch(error => {
-        this.setError('Erro ao carregar a lista de produtos');
-        console.error('Erro ao buscar produtos:', error);
-      });
-  }
+      }),
+      catchError(error => this.handleError(error)),
+      finalize(() => this.setLoading(false))
+    )
+  );
+}
 
   setProductList(productList: Product[]) {
     this.updateState('productList', productList);

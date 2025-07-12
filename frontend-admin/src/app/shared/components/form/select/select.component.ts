@@ -9,7 +9,7 @@ import {
   signal,
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
@@ -25,6 +25,7 @@ import { SkeletonModule } from 'primeng/skeleton';
     NgIcon,
     ButtonModule,
     SkeletonModule,
+    RouterModule
   ],
 })
 export class SelectComponent implements OnInit {

@@ -1,9 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { computed, inject, Injectable, signal } from '@angular/core';
-import {
-  Category,
-  CategoryModuleState,
-} from 'app/shared/interfaces/category-module.interface';
 import { catchError, finalize, Observable, of, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
 import { lastValueFrom } from 'rxjs';
@@ -82,4 +78,21 @@ export class CategoryState {
   }
 
   constructor() {}
+}
+export interface CategoryModuleState {
+  categoryList: Category[];
+  loading: boolean;
+  error: string | null;
+  view: 'table' | 'list'; // Tipo de visualização atual (tabela ou lista)
+}
+
+export interface Category {
+  id: string; // Identificador único da categoria
+  name: string; // Nome da categoria
+  description?: string; // Descrição opcional da categoria
+  parentCategoryId?: string; // ID da categoria pai (para categorias hierárquicas)
+  createdAt: Date; // Data de criação
+  updatedAt: Date; // Data da última atualização
+  isActive: boolean; // Indica se a categoria está ativa
+  imageUrl?: string; // URL de uma imagem representativa da categoria
 }

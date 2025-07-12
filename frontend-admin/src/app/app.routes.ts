@@ -49,15 +49,6 @@ export const routes: Routes = [
   },
 
   {
-    path: 'categories',
-    loadChildren: () =>
-      import(
-        'app/dashboard/modules/category-module/category-drawer.module'
-      ).then(m => m.CategoryDrawerModule),
-    outlet: 'drawer',
-    data: { animation: 'categories' },
-  },
-  {
     path: 'invoices',
     loadChildren: () =>
       import('app/dashboard/modules/invoice-module/invoice-drawer.module').then(
@@ -66,15 +57,7 @@ export const routes: Routes = [
     outlet: 'drawer',
     data: { animation: 'invoices' },
   },
-  {
-    path: 'users',
-    loadChildren: () =>
-      import('app/dashboard/modules/user-module/user-drawer.module').then(
-        m => m.UserDrawerModule
-      ),
-    outlet: 'drawer',
-    data: { animation: 'users' },
-  },
+
   {
     path: 'accounts-payable',
     loadChildren: () =>

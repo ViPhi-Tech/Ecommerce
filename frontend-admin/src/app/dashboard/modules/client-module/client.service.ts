@@ -12,7 +12,7 @@ export class ClientService {
 
   constructor() {}
 
-  getClients(options: { skipLoader?: boolean }): Observable<any> {
+  getAll(options: { skipLoader?: boolean }): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}client/getAll`, {
       headers: {
         'Skip-Loader': options.skipLoader ? 'true' : 'false',

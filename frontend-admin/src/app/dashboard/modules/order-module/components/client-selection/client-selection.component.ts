@@ -12,9 +12,9 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { CartState } from '../order-cart/order-cart.state';
 import { ClientState } from '../../../client-module/client.state';
-import { Client } from 'app/shared/interfaces/client-module.interface';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
+import { Client } from '../../interfaces/order.interface';
 
 @Component({
   selector: 'fuse-client-selection',
