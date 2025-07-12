@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { InboundComponent } from 'app/dashboard/modules/stock-movement-module/screens/inbound/inbound.component';
 import { OutboundComponent } from 'app/dashboard/modules/stock-movement-module/screens/outbound/outbound.component';
+import { CategoryCreateComponent } from 'app/dashboard/modules/category-module/screens/create/category-create.component';
 
 const routes: Routes = [
   // category routes
@@ -11,11 +12,11 @@ const routes: Routes = [
     children: [
       {
         path: 'new',
-        component: InboundComponent,
+        component: CategoryCreateComponent,
       },
       {
         path: ':id',
-        component: InboundComponent,
+        component: CategoryCreateComponent,
       },
     ],
   },

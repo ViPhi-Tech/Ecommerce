@@ -86,9 +86,8 @@ export class CategoryCreateComponent implements OnInit {
       });
   }
 
-  onSubmit(event: Event): void {
-    event.preventDefault();
-    event.stopPropagation();
+  onSubmit(): void {
+    this.categoryForm.markAllAsTouched();
 
     if (this.categoryForm.invalid) {
       this.toast.add({

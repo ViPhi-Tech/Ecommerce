@@ -42,7 +42,7 @@
           icon="pi pi-check"
           class="w-[200px]"
           size="small"
-          (click)="onSubmit($event)"
+          (click)="onSubmit()"
         ></button>
 
         <button
@@ -52,6 +52,7 @@
           icon="pi pi-times"
           (click)="closeDialog($event)"
           severity="secondary"
+          [outlined]="true"
           class="w-[200px]"
           size="small"
         ></button>
