@@ -7,7 +7,7 @@ import { OutboundComponent } from 'app/dashboard/modules/stock-movement-module/s
 const routes: Routes = [
   // category routes
   {
-    path: 'category',
+    path: 'categories',
     children: [
       {
         path: 'new',

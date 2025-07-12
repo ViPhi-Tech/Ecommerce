@@ -54,6 +54,30 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
       },
     },
     {
+      label: 'Cadastro de Categorias',
+      icon: 'lucideTag',
+      click: () => {
+        this.toggleQuickAccess();
+        this.router.navigate([{ outlets: { drawer: ['categories', 'new'] } }]);
+      },
+    },
+    {
+      label: 'Cadastro de Marcas',
+      icon: 'lucideBookA',
+      click: () => {
+        this.toggleQuickAccess();
+        this.router.navigate([{ outlets: { drawer: ['brands', 'new'] } }]);
+      },
+    },
+    {
+      label: 'Cadastro de Clientes',
+      icon: 'lucideUserPlus',
+      click: () => {
+        this.toggleQuickAccess();
+        this.router.navigate([{ outlets: { drawer: ['customers', 'new'] } }]);
+      },
+    },
+    {
       label: 'Importação de Nota Fiscal',
       icon: 'lucideFileText',
       click: () => {

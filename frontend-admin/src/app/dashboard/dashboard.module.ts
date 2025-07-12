@@ -6,6 +6,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { HeaderComponent } from './components/header/header.component';
 import { LogoComponent } from './components/logo/logo.component';
 import { isAuthGuard } from 'app/shared/guards/is-auth.guard';
+import { categoryRoutes } from './modules/category-module/category.routing';
+import { productRoutes } from './modules/product-module/product.routing';
 
 const routes: Routes = [
   {
@@ -33,11 +35,7 @@ const routes: Routes = [
       },
       {
         path: 'products',
-        loadChildren: () =>
-          import('./modules/product-module/product.module').then(
-            m => m.ProductModule
-          ),
-        data: { animation: 'products' },
+        children: productRoutes
       },
       {
         path: 'stock-movements',
@@ -49,11 +47,7 @@ const routes: Routes = [
       },
       {
         path: 'categories',
-        loadChildren: () =>
-          import('./modules/category-module/category.module').then(
-            m => m.CategoryModule
-          ),
-        data: { animation: 'categories' },
+        children: categoryRoutes
       },
       {
         path: 'invoices',
