@@ -58,3 +58,25 @@ export const isCnpjValid = (cnpj: string): boolean => {
 
   return remainder === parseInt(cnpj.charAt(13));
 };
+
+export const formatDocument = (document: string): string => {
+  const type = document.length > 11 ? 'cnpj' : 'cpf';
+  if (type === 'cpf') {
+    return formatCpf(document);
+  } else if (type === 'cnpj') {
+    return formatCnpj(document);
+  }
+  return document;
+};
+
+export const formatCpf = (cpf: string): string => {
+  return cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+};
+
+export const formatCnpj = (cnpj: string): string => {
+  return cnpj.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+};
+
+export const formatPhone = (phone: string): string => {
+  return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+};

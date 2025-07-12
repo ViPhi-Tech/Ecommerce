@@ -20,7 +20,12 @@ import { ClientService } from '../../client.service';
 import { ClientState } from '../../client.state';
 import { InputMaskModule } from 'primeng/inputmask';
 import { emailAsyncValidator } from 'app/shared/validators/validators';
-import { isCnpjValid, isCpfValid } from 'app/shared/utils/utils';
+import {
+  formatDocument,
+  formatPhone,
+  isCnpjValid,
+  isCpfValid,
+} from 'app/shared/utils/utils';
 
 @Component({
   selector: 'fuse-client-create',
@@ -56,7 +61,7 @@ export class ClientCreateComponent implements OnInit {
   });
 
   // signals
-  visible = signal(true);
+  visible = signal(false);
   title = signal('Cadastrar Cliente');
 
   // Controle interno do tipo de documento
@@ -89,16 +94,16 @@ export class ClientCreateComponent implements OnInit {
       .getClientById(id)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
-        next: (response: ApiResponse) => {
-          this.clientForm.patchValue(response.dados);
+        next: ({ data }: ApiResponse) => {
+          this.clientForm.patchValue({
+            id: data?.id,
+            fullName: data?.fullName,
+            document: formatDocument(data?.document),
+            email: data?.email,
+            phone: formatPhone(data?.phone),
+          });
 
-          // Detectar o tipo de documento baseado no valor carregado
-          const document = response.dados.document;
-          if (document) {
-            const numbersOnly = document.replace(/\D/g, '');
-            this.currentDocumentType = numbersOnly.length > 11 ? 'cnpj' : 'cpf';
-            this.updateDocumentLabel();
-          }
+          this.handleDocumentInput(this.clientForm.get('document')?.value);
 
           this.visible.set(true);
         },
@@ -139,8 +144,7 @@ export class ClientCreateComponent implements OnInit {
             ? 'Cliente atualizado com sucesso!'
             : 'Cliente criado com sucesso!',
         });
-
-        this.state.getClientList();
+        this.clientService.createClientRefresh();
         this.closeDialog();
       },
       error: () => {
@@ -175,8 +179,11 @@ export class ClientCreateComponent implements OnInit {
   }
 
   handleDocumentInput(value: any): void {
-    if (!value?.target?.value) return;
-    const numbersOnly = value.target.value.replace(/\D/g, '');
+    value = value?.target?.value || value;
+
+    if (!value) return;
+
+    const numbersOnly = value.replace(/\D/g, '');
     if (this.currentDocumentType === 'cpf' && numbersOnly.length > 11) {
       this.currentDocumentType = 'cnpj';
       this.updateDocumentLabel();

@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   EventEmitter,
   inject,
   model,
@@ -15,6 +16,9 @@ import { ClientState } from '../../../client-module/client.state';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
 import { Client } from '../../interfaces/order.interface';
+import { Router } from '@angular/router';
+import { ClientService } from 'app/dashboard/modules/client-module/client.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'fuse-client-selection',
@@ -23,8 +27,11 @@ import { Client } from '../../interfaces/order.interface';
   imports: [NgIcon, DialogModule, ButtonModule, InputTextModule, CommonModule],
 })
 export class ClientSelectionComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
+  private router = inject(Router);
   public cartState = inject(CartState);
   public clientState = inject(ClientState);
+  public clientService = inject(ClientService);
 
   show = model(false);
 
@@ -35,7 +42,16 @@ export class ClientSelectionComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.clientService.onClientCreate$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.show.set(true);
+        this.clientState.getClientList();
+        this.searchTerm.set('');
+      });
+    this.clientState.getClientList();
+  }
 
   onClientChange(client: Client) {
     this.cartState.setClient(client);
@@ -47,7 +63,6 @@ export class ClientSelectionComponent implements OnInit {
     const target = event.target as HTMLInputElement;
     this.searchTerm.set(target.value);
     this.clientState.setSearchTerm(target.value);
-    this.clientSelected.emit(target.value);
   }
 
   // Getter para filtrar clientes com base no termo de busca
@@ -66,6 +81,10 @@ export class ClientSelectionComponent implements OnInit {
         client.document?.toLowerCase().includes(search) ||
         client.phone?.toLowerCase().includes(search)
     );
+  }
+
+  createClient() {
+    this.router.navigate([{ outlets: { drawer: ['clients', 'new'] } }]);
   }
 
   close() {
