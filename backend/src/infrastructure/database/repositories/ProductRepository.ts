@@ -144,5 +144,17 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
       }
     });
   }
+
+  async findByName(param: string): Promise<Product[]> {
+    return this.prisma.product.findMany({
+      where: {
+        name: {
+          contains: param,
+          mode: 'insensitive'
+        },
+        isActive: true
+      }
+    })
+  };
   
 }

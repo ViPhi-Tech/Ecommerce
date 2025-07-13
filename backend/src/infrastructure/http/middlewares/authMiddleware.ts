@@ -2,7 +2,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'seu_jwt_secret_aqui';
+const JWT_SECRET = process.env.SECRET_KEY || 'seu_jwt_secret_aqui';
 
 // Middleware de autenticação
 export async function authenticate(request: FastifyRequest, reply: FastifyReply) {
