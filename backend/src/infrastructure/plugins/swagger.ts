@@ -13,7 +13,7 @@ export default fp(async (fastify: FastifyInstance) => {
             },
             // Define o host para o Swagger UI usar ao fazer requisições.
             // 'localhost' é o que o navegador verá via Nginx na porta 80.
-            host: 'localhost:8000', 
+            host: 'https://ecom-back-pk5h.onrender.com', 
             schemes: ['http', 'https'], // Suporta HTTP e HTTPS
             consumes: ['application/json'],
             produces: ['application/json'],
