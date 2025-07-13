@@ -4,7 +4,7 @@ import { paymentTypeJsonSchema } from '../dto/Payment.dto';
 
 
 
-export default async function partnerRoutes(
+export default async function paymentRoutes(
   fastify: FastifyInstance,
   options: FastifyPluginOptions
 ) {
