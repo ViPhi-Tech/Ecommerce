@@ -9,6 +9,8 @@ import { FindAllProductUseCase } from "../../../application/use-cases/product/Fi
 import {ProductController} from "../../http/controllers/ProductController";
 import { GetMovimentByProductUseCase } from "../../../application/use-cases/product/GetMovimentByProductUseCase";
 import { FindByNameProductUseCase } from "../../../application/use-cases/product/FindProductsByNameUseCase";
+import { FindByParamProductUseCase } from "../../../application/use-cases/product/FindByParamUseCase";
+
 export const productRepository = new ProductRepository(prisma);
 
 const findByIdProductUseCase = new FindByIdProductUseCase(productRepository);
@@ -19,6 +21,9 @@ const findAllProductUseCase = new FindAllProductUseCase(productRepository);
 const createProductUseCase = new CreateProductUseCase(productRepository, updateStockUseCase);
 const getMovimentByProductUseCase = new GetMovimentByProductUseCase(productRepository);
 const findProductByNameUseCase = new FindByNameProductUseCase(productRepository);
+const findProductByParam = new FindByParamProductUseCase(productRepository)
+
+
 export const productController = new ProductController(
     createProductUseCase,
     findByIdProductUseCase,
@@ -27,5 +32,6 @@ export const productController = new ProductController(
     deleteProductUseCase,
     findAllProductUseCase,
     getMovimentByProductUseCase,
-    findProductByNameUseCase
+    findProductByNameUseCase,
+    findProductByParam
 );

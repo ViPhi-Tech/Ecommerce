@@ -95,5 +95,22 @@ export default async function productRoutes(
         },
         preValidation: [authenticate],
         handler: productController.findProductByName.bind(productController)
-    })
+    });
+
+
+
+    fastify.get('/search/:param', {
+        schema: {
+            tags: ['product'],
+            params: {
+                type: 'object',
+                properties: {
+                    param: { type: 'string' }
+                },
+                required: ['param']
+            }
+        },
+        preValidation: [authenticate],
+        handler: productController.findByParam.bind(productController)
+    });
 }

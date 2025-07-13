@@ -146,15 +146,44 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
   }
 
   async findByName(param: string): Promise<Product[]> {
-    return this.prisma.product.findMany({
-      where: {
-        name: {
-          contains: param,
-          mode: 'insensitive'
-        },
-        isActive: true
-      }
-    })
+    return this.prisma.$queryRawUnsafe<Product[]>(`
+      SELECT *
+      FROM "Product"
+      WHERE "name" % $1 AND "isActive" = true
+      ORDER BY similarity("name", $1) DESC
+      LIMIT 20
+    `, param);
   };
-  
+
+
+    async findByAnyParam(param: string): Promise<Product[]> {
+      const searchTerm = `%${param}%`;
+
+      const resp = await this.prisma.$queryRaw<Product[]>(Prisma.sql`
+        SELECT *
+        FROM "Product"
+        WHERE
+          "isActive" = true AND (
+            CAST("ean" AS TEXT) ILIKE ${searchTerm} OR
+            CAST("sku" AS TEXT) ILIKE ${searchTerm} OR
+            CAST("id" AS TEXT) ILIKE ${searchTerm} OR  -- Adicionado: Busca por ID
+            "name" % ${param}
+          )
+        ORDER BY
+          CASE
+            WHEN CAST("id" AS TEXT) ILIKE ${searchTerm} THEN -1 -- Prioriza ID (-1 é o valor mais baixo, logo o primeiro)
+            WHEN CAST("ean" AS TEXT) ILIKE ${searchTerm} THEN 0
+            WHEN CAST("sku" AS TEXT) ILIKE ${searchTerm} THEN 1
+            ELSE 2
+          END,
+          similarity("name", ${param}) DESC
+        LIMIT 20;
+      `);
+
+  console.log(resp)
+  return resp
+};
+
+
+
 }

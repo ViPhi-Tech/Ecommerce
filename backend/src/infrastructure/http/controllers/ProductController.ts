@@ -11,7 +11,7 @@ import {ProductCreateDTO, ProductID, ProductUpdateStock, ProductIdMoviment} from
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 import { FindByNameProductUseCase } from '../../../application/use-cases/product/FindProductsByNameUseCase';
-
+import { FindByParamProductUseCase } from '../../../application/use-cases/product/FindByParamUseCase';
 
 export class ProductController {
     constructor(
@@ -22,7 +22,8 @@ export class ProductController {
         private deleteProductUseCase: DeleteProductUseCase,
         private findAllProductUseCase: FindAllProductUseCase,
         private getMovimentByProductUseCase: GetMovimentByProductUseCase,
-        private findProductByNameUseCase: FindByNameProductUseCase
+        private findProductByNameUseCase: FindByNameProductUseCase,
+        private findProductByParam: FindByParamProductUseCase
     ) {}
 
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
@@ -116,6 +117,17 @@ export class ProductController {
         try {
             const { param } = request.params as { param: string };
             const data_product = await this.findProductByNameUseCase.execute(param);
+            return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product });
+        } catch (error) {
+            return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
+        }
+    };
+
+
+    async findByParam(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try {
+            const { param } = request.params as { param: string };
+            const data_product = await this.findProductByParam.execute(param);
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product });
         } catch (error) {
             return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
