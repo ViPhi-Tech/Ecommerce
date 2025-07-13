@@ -34,8 +34,10 @@
             "scripts": [],
             "allowedCommonJsDependencies": ["xml2js",
                          "dayjs/plugin/timezone",
-                          "dayjs/plugin/utc",
-                          "dayjs/plugin/relativeTime"
+                        "dayjs/plugin/utc",
+                        "dayjs/plugin/relativeTime",
+                        "dayjs/plugin/duration",
+                        "dayjs/plugin/advancedFormat"
                         ]
           },
           "configurations": {
