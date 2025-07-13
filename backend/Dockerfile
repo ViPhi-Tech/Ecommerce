@@ -2,13 +2,13 @@
 FROM node:22-alpine AS build
 WORKDIR /usr/src/app
 
-# Copia package.json e package-lock.json
+# Copia package.json e package-lock.json (se existir)
 COPY package.json package-lock.json* ./
 
-# Instala dependências
+# Instala dependências (usa npm install para não dar erro)
 RUN npm install --silent
 
-# Copia o restante do código-fonte e arquivos do prisma
+# Copia o resto do código e prisma
 COPY . .
 
 # Exporta variável DATABASE_URL para prisma generate
@@ -18,17 +18,17 @@ ENV DATABASE_URL=$DATABASE_URL
 # Gera cliente Prisma
 RUN npx prisma generate
 
-# Executa build do projeto (transpilar TypeScript)
+# Builda o projeto
 RUN npm run build
 
-# Etapa 2: imagem final para execução
+# Etapa 2: imagem final
 FROM node:22-alpine
 WORKDIR /usr/src/app
 
-# Cria usuário não-root para segurança
+# Cria usuário para rodar sem root
 RUN addgroup -g 1001 -S nodejs && adduser -S appuser -u 1001
 
-# Copia package.json e package-lock.json para instalar dependências de produção
+# Copia package.json e package-lock.json (se existir)
 COPY package.json package-lock.json* ./
 
 # Instala só dependências de produção
@@ -38,17 +38,17 @@ RUN npm install --production --silent
 COPY --from=build /usr/src/app/dist ./dist
 COPY --from=build /usr/src/app/prisma ./prisma
 
-# Exporta variável DATABASE_URL para runtime
+# Exporta DATABASE_URL para rodar em runtime
 ENV DATABASE_URL=$DATABASE_URL
 
-# Gera cliente Prisma para produção (garantia)
+# Gera prisma novamente para garantir
 RUN npx prisma generate
 
-# Define para rodar com usuário não-root
+# Usa usuário não-root
 USER appuser
 
-# Expõe porta da aplicação
+# Expõe porta da app
 EXPOSE 8000
 
-# Comando para iniciar o servidor Node.js
+# Comando para rodar app
 CMD ["node", "dist/server.js"]
