@@ -2,6 +2,8 @@
 FROM node:22-alpine AS build
 WORKDIR /usr/src/app
 
+RUN npm run build
+
 # Copia package.json e package-lock.json (se existir)
 COPY package.json package-lock.json* ./
 
