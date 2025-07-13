@@ -75,7 +75,7 @@ export class CreateOrderUseCase {
     await productRepository!.decrementMultipleStocks(formattedItems)
 
     const productIds = items.map((item) => item.productId)
-    const stocks = await productRepository!.findByProductId(productIds)
+    const stocks = await productRepository!.findStockByProductId(productIds)
 
     const stockMap = new Map<number, number>()
     stocks.forEach((stock) => {

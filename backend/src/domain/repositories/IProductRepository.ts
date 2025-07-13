@@ -11,6 +11,6 @@ export interface IProductRepository {
     incrementMultipleStocks(item: {sku: number; quantity: number}[]): Promise<Stock[]>;
     upsertStockMovement(data: stockMovement): Promise<void>;
     updateManyStockMovements(data: stockMovement[]): Promise<void>;
-    findByProductId(productsId: number[]): Promise<Stock[]>
-    //findMovimentByProductId(productId: string): Promise<stockMovement[]>
+    findStockByProductId(productsId: number[]): Promise<Stock[]>
+    findMovimentByProductId(stockId: number[]): Promise<stockMovement[]>
 }

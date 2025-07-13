@@ -125,6 +125,24 @@ export class ProductRepository implements IProductRepository {
   });
 };
 
+async findStockByProductId(productId: number[]): Promise<Stock[]> {
+  return this.prisma.stock.findMany({
+    where: {
+      productId: {
+        in: productId
+      }
+    }
+  });
+}
 
+  async findMovimentByProductId(stockId: number[]): Promise<stockMovement[]> {
+    return this.prisma.stockMovement.findMany({
+      where: {
+        stockId: {
+          in: stockId
+        }
+      }
+    });
+  }
   
 }

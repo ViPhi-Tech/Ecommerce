@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { productController } from "../../config/dependencies/productDependencies";
 import { authenticate } from "../middlewares/authMiddleware";
-import {productCreateJsonSchema, productUpdateStockJsonSchema, productUpdateJsonSchema} from "../dto/Product.dto";
+import {productCreateJsonSchema, productUpdateStockJsonSchema, productUpdateJsonSchema, productIdMovimentJsonSchema} from "../dto/Product.dto";
 import { productIdJsonSchema } from "../dto/Product.dto";
 
 export default async function productRoutes(
@@ -62,5 +62,21 @@ export default async function productRoutes(
             preValidation: [authenticate],
             handler: productController.delete.bind(productController)
         }
-    )
+    );
+
+
+    fastify.get('/getMovimentByProduct/:productIds', {
+    schema: {
+        tags: ['product'],
+        params: {
+            type: 'object',
+            properties: {
+                productIds: { type: 'string' } // recebe "1,2,3,4"
+            },
+            required: ['productIds']
+        },
+    },
+    preValidation: [authenticate],
+    handler: productController.getMovimentByProduct.bind(productController)
+    })
 }

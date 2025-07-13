@@ -7,6 +7,7 @@ import { ProductRepository } from "../../database/repositories/ProductRepository
 import { UpdateProductUseCase } from "../../../application/use-cases/product/UpdateProductUseCase";
 import { FindAllProductUseCase } from "../../../application/use-cases/product/FindAllProductUseCase";
 import {ProductController} from "../../http/controllers/ProductController";
+import { GetMovimentByProductUseCase } from "../../../application/use-cases/product/GetMovimentByProductUseCase";
 
 export const productRepository = new ProductRepository(prisma);
 
@@ -16,6 +17,7 @@ const updateProductUseCase = new UpdateProductUseCase(productRepository);
 const deleteProductUseCase = new DeleteProductUseCase(productRepository);
 const findAllProductUseCase = new FindAllProductUseCase(productRepository);
 const createProductUseCase = new CreateProductUseCase(productRepository, updateStockUseCase);
+const getMovimentByProductUseCase = new GetMovimentByProductUseCase(productRepository);
 
 export const productController = new ProductController(
     createProductUseCase,
@@ -23,5 +25,6 @@ export const productController = new ProductController(
     updateStockUseCase,
     updateProductUseCase,
     deleteProductUseCase,
-    findAllProductUseCase
+    findAllProductUseCase,
+    getMovimentByProductUseCase
 );

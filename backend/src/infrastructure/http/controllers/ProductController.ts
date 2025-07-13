@@ -5,8 +5,9 @@ import { UpdateProductUseCase } from '../../../application/use-cases/product/Upd
 import { DeleteProductUseCase } from "../../../application/use-cases/product/DeleteProductUseCase"
 import { FindByIdProductUseCase } from "../../../application/use-cases/product/FindByIdProductUseCase";
 import { FindAllProductUseCase } from '../../../application/use-cases/product/FindAllProductUseCase';
+import { GetMovimentByProductUseCase } from '../../../application/use-cases/product/GetMovimentByProductUseCase';
 import {ApiResponse} from "../../../shared/types/apiResponse";
-import {ProductCreateDTO, ProductID, ProductUpdateStock} from "../dto/Product.dto";
+import {ProductCreateDTO, ProductID, ProductUpdateStock, ProductIdMoviment} from "../dto/Product.dto";
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 
@@ -18,7 +19,8 @@ export class ProductController {
         private updateStockUseCase: UpdateStockUseCase,
         private updateProductUseCase: UpdateProductUseCase,
         private deleteProductUseCase: DeleteProductUseCase,
-        private findAllProductUseCase: FindAllProductUseCase
+        private findAllProductUseCase: FindAllProductUseCase,
+        private getMovimentByProductUseCase: GetMovimentByProductUseCase
     ) {}
 
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
@@ -88,5 +90,22 @@ export class ProductController {
             console.log(error)
             return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false,  descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR});
         }
-    }
+    };
+
+    async getMovimentByProduct(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try{
+            const productIds = (request.params as ProductIdMoviment).productIds
+            .split(',')
+            .map(id => Number(id.trim()));
+
+            if (productIds.some(isNaN)) {
+                return reply.status(400).send({ error: 'Invalid productIds format' });
+            }
+            const data_product = await this.getMovimentByProductUseCase.execute(productIds)
+            return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product})
+        } catch (error) {
+            console.log(error)
+            return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false,  descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR});
+        }
+    };
 }
