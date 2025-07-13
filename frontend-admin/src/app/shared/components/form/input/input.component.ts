@@ -73,7 +73,6 @@ export class InputComponent implements OnInit {
 
   ngOnInit() {
     this.isRequired.set(!!this.control()?.validator);
-    console.log(this.isRequired());
   }
 
   blurChangeComponent(value: any) {

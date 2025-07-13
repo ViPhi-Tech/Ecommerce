@@ -85,3 +85,107 @@
 </p-dialog>
 
 <fuse-import-invoice />
+
+<p-dialog
+  #dialogRef
+  [(visible)]="showSelectProductDialog"
+  [modal]="true"
+  [closeOnEscape]="true"
+  [draggable]="false"
+  styleClass="max-w-[600px] w-full"
+>
+  <ng-template #header>
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 class="text-2xl font-semibold leading-none tracking-tight">
+        Selecione um Produto
+      </h2>
+      <p class="text-sm text-muted-foreground">
+        Selecione um produto e uma quantidade para dar entrada ao estoque
+      </p>
+    </div>
+  </ng-template>
+  <div class="animate-fade-in">
+    <form [formGroup]="formAddProduct">
+      <div class="space-y-4">
+        <div class="flex flex-col gap-1">
+          <label [for]="'productId'" class="label"> Produto </label>
+          <p-autocomplete
+            formControlName="productId"
+            [suggestions]="filteredProducts()"
+            (completeMethod)="filterProduct($event)"
+            fluid
+            optionLabel="name"
+          >
+            <ng-template let-product #item>
+              <div class="w-full">
+                <div class="flex justify-between w-full">
+                  <div>
+                    <span class="font-medium"
+                      >{{ product?.sku }} - {{ product?.name }}</span
+                    >
+                  </div>
+                  <span class="text-sm text-muted-foreground">{{
+                    product?.finalPrice
+                      | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+                  }}</span>
+                </div>
+                <div>
+                  <span class="text-sm text-muted-foreground"
+                    >Estoque atual:
+                    <strong>{{ product?.stock?.quantity }}</strong></span
+                  >
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #header>
+              <div class="font-medium px-3 py-2">Produtos Disponíveis</div>
+            </ng-template>
+            <ng-template #empty>
+              <div class="px-3 py-2 text-sm text-muted-foreground">
+                Nenhum produto encontrado
+              </div>
+            </ng-template>
+          </p-autocomplete>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <fuse-input
+            label="Quantidade"
+            [control]="formAddProduct.get('quantity')"
+            type="number"
+            placeholder="Quantidade"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <ng-template #footer>
+    <div class="w-full justify-end flex items-center gap-4">
+      <div class="flex gap-2">
+        <button
+          pButton
+          type="submit"
+          label="Adicionar"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+          (click)="addProduct()"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          icon="pi pi-times"
+          (click)="showSelectProductDialog.set(false)"
+          [outlined]="true"
+          severity="secondary"
+          class="w-[200px]"
+          size="small"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+  
+</p-dialog>
