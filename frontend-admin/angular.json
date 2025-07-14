@@ -32,13 +32,7 @@
             ],
             "styles": ["src/styles.scss"],
             "scripts": [],
-            "allowedCommonJsDependencies": ["xml2js",
-                         "dayjs/plugin/timezone",
-                        "dayjs/plugin/utc",
-                        "dayjs/plugin/relativeTime",
-                        "dayjs/plugin/duration",
-                        "dayjs/plugin/advancedFormat"
-                        ]
+            "allowedCommonJsDependencies": ["xml2js"]
           },
           "configurations": {
             "production": {
