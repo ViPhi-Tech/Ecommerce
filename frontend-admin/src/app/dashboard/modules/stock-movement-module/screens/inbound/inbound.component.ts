@@ -19,6 +19,7 @@ import {
 } from '@angular/forms';
 import { ImportInvoiceComponent } from 'app/shared/components/import-invoice/import-invoice.component';
 import { ImportInvoiceService } from 'app/shared/components/import-invoice/import-invoice.service';
+import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TableComponent } from 'app/shared/components/table/table.component';
@@ -28,6 +29,8 @@ import {
 } from 'app/shared/interfaces/table.interfaces';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SearchProductComponent } from 'app/shared/components/search-product/search-product.component';
+import { CurrencyPipe } from '@angular/common';
+import { ProductService } from 'app/dashboard/modules/product-module/product.service';
 
 @Component({
   selector: 'fuse-inbound',
@@ -42,6 +45,9 @@ import { SearchProductComponent } from 'app/shared/components/search-product/sea
     DialogModule,
     TableComponent,
     SearchProductComponent,
+    DialogModule,
+    AutoCompleteModule,
+    CurrencyPipe
   ],
 })
 export class InboundComponent implements OnInit {
@@ -50,6 +56,7 @@ export class InboundComponent implements OnInit {
   private fb = inject(FormBuilder);
   private destroyRef = inject(DestroyRef);
   private coreService = inject(CoreService);
+  private productService = inject(ProductService);
 
   @ViewChild('dialogRef') dialogRef!: Dialog;
 
@@ -67,8 +74,15 @@ export class InboundComponent implements OnInit {
   visible = signal(true);
   title = signal('Entrada de Produtos');
   subtitle = signal('Cadastro de nova entrada de produtos');
+  showSelectProductDialog = signal(false);
+  filteredProducts = signal<any[]>([]);
 
   tableConfig = signal<TableConfig>(DEFAULT_TABLE_CONFIG);
+
+  formAddProduct = this.fb.group({
+    productId: [null, [Validators.required]],
+    quantity: [1, [Validators.required, Validators.min(1)]]
+  });
 
   constructor() {
     this.initForm();
@@ -100,7 +114,17 @@ export class InboundComponent implements OnInit {
       ...DEFAULT_TABLE_CONFIG,
       emptyMessage: 'Nenhum produto selecionado',
       textWrap: false,
-      showHeader: false,
+      headerButtons: [
+        {
+          icon: 'pi pi-plus',
+          label: 'Adicionar',
+          tooltip: 'Adicionar produto',
+          action: () => {
+            this.formAddProduct.reset();
+            this.showSelectProductDialog.set(true);
+          },
+        },
+      ],
       columns: [
         { field: 'description', caption: 'Nome' },
         { field: 'sku', caption: 'SKU' },
@@ -131,6 +155,38 @@ export class InboundComponent implements OnInit {
           });
         }
       });
+  }
+
+  filterProduct(event: AutoCompleteCompleteEvent) {
+    const query = event?.query;
+    if (query) {
+      // Simula uma chamada de API para filtrar produtos
+      this.productService
+        .filterProducts(query)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(response => {
+          this.filteredProducts.set(response.data || []);
+        });
+    } else {
+      this.filteredProducts.set([]);
+    }
+  }
+
+  addProduct() {
+    if (this.formAddProduct.valid) {
+      const productData = this.formAddProduct.value;
+      const products = this.inboundData.get('products')?.value || [];
+      const existingProductIndex = products.findIndex(
+        (p: any) => p.productId === productData.productId
+      );
+      if (existingProductIndex > -1) {
+        // Atualiza a quantidade se o produto já existir
+        products[existingProductIndex].quantity += productData.quantity;
+      } else {
+        products.push(productData);
+      }
+    }
+    this.formAddProduct.reset();
   }
 
   closeDialog(e = new Event('close')): void {

@@ -40,6 +40,12 @@ export class ProductService {
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${productId}`);
   }
 
+  filterProducts(query: string): Observable<ApiResponse<Product[]>> {
+    return this.http.get<ApiResponse<Product[]>>(`${this.apiUrl}/search/${query}`, {
+      headers: { 'Skip-Loader': 'false' },
+    });
+  }
+
   refreshProductList() {
     this.refreshProductList$.set(Math.random());
   }
