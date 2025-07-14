@@ -157,34 +157,61 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
 
 
   async findByAnyParam(param: string): Promise<Product[]> {
+  try {
     const searchTerm = `%${param}%`;
 
     const resp = await this.prisma.$queryRaw<Product[]>(Prisma.sql`
-      SELECT *,
-        similarity("name", ${param}) AS name_similarity
-      FROM "Product"
+      SELECT 
+        p.id,
+        p.name,
+        p.description,
+        p."shortDescription",
+        p."initialPrice",
+        p."finalPrice",
+        p."brandId",
+        b."name" as brandName,
+        p."image",
+        p."sku",
+        p."ean",
+        p."companyId",
+        p."categoryId",
+        json_build_object(
+          'id', s.id,
+          'productId', s."productId",
+          'quantity', s.quantity,
+          'createdAt', s."createdAt",
+          'updatedAt', s."updatedAt"
+        ) AS stock
+      FROM "Product" p
+      LEFT JOIN "Stock" s ON s."productId" = p.id
+      LEFT JOIN "Brand" b ON p."brandId" = b.id
       WHERE
-        "isActive" = true AND (
-          CAST("ean" AS TEXT) ILIKE ${searchTerm} OR
-          CAST("sku" AS TEXT) ILIKE ${searchTerm} OR
-          CAST("id" AS TEXT) ILIKE ${searchTerm} OR
-          "name" ILIKE ${searchTerm} OR
-          similarity("name", ${param}) > 0.1
+        p."isActive" = true AND (
+          CAST(p."ean" AS TEXT) ILIKE ${searchTerm} OR
+          CAST(p."sku" AS TEXT) ILIKE ${searchTerm} OR
+          CAST(p."id" AS TEXT) ILIKE ${searchTerm} OR
+          p."name" ILIKE ${searchTerm} OR
+          similarity(p."name", ${param}) > 0.1
         )
       ORDER BY
         CASE
-          WHEN CAST("id" AS TEXT) ILIKE ${searchTerm} THEN -1
-          WHEN CAST("ean" AS TEXT) ILIKE ${searchTerm} THEN 0
-          WHEN CAST("sku" AS TEXT) ILIKE ${searchTerm} THEN 1
-          WHEN "name" ILIKE ${searchTerm} THEN 2
+          WHEN CAST(p."id" AS TEXT) ILIKE ${searchTerm} THEN -1
+          WHEN CAST(p."ean" AS TEXT) ILIKE ${searchTerm} THEN 0
+          WHEN CAST(p."sku" AS TEXT) ILIKE ${searchTerm} THEN 1
+          WHEN p."name" ILIKE ${searchTerm} THEN 2
           ELSE 3
         END,
-        similarity("name", ${param}) DESC
+        similarity(p."name", ${param}) DESC
       LIMIT 20;
     `);
 
     return resp;
+  } catch (err) {
+    console.error('Erro ao buscar produtos:', err);
+    return [];
   }
+}
+    
 
 
 
