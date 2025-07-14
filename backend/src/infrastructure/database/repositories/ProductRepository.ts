@@ -1,7 +1,7 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-import { Product, Stock, stockMovement } from '../../../domain/entities/Product';
+import { Product, Stock, stockMovement, Metric } from '../../../domain/entities/Product';
 import { IProductRepository } from "../../../domain/repositories/IProductRepository";
-import {ProductCreateDTO, ProductUpdateDTO} from "../../http/dto/Product.dto";
+import {ProductCreateDTO, ProductUpdateDTO, metricDTO} from "../../http/dto/Product.dto";
 
 export class ProductRepository implements IProductRepository {
   constructor(private prisma: PrismaClient | Prisma.TransactionClient) {}
@@ -210,6 +210,25 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
     console.error('Erro ao buscar produtos:', err);
     return [];
   }
+};
+
+
+async getMetrics(data: Metric): Promise<{ total: number }> {
+  
+  const result = await this.prisma.stockMovement.aggregate({
+    _sum: {
+      quantity: true,
+    },
+    where: {
+      type: data.type,
+      createdAt: {
+        gte: data.date,
+        lt: new Date(data.date.getTime() + 24 * 60 * 60 * 1000),
+      },
+    },
+  });
+
+  return { total: result._sum.quantity ?? 0 };
 }
     
 
