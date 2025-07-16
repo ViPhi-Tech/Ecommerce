@@ -113,7 +113,7 @@ export default async function productRoutes(
     });
 
 
-    fastify.get('moviment/metrics',{
+    fastify.get('/moviment/metrics',{
         schema: {
             tags: ['product'],
             querystring: metricJsonSchema,

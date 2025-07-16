@@ -27,7 +27,7 @@ export class ProductRepository implements IProductRepository {
           stock: true
         }
       });
-    }
+    };
 
 
     async findByProductId(productIds: number[]): Promise<Stock[]> {
@@ -44,14 +44,14 @@ export class ProductRepository implements IProductRepository {
         return this.prisma.product.findUnique({
             where: {id, isActive: true}
         });
-    }
+    };
 
     async update(id: number, data: ProductUpdateDTO): Promise<Product> {
         return this.prisma.product.update({
             where: {id},
             data
         });
-    }
+    };
 
     async delete(id: number): Promise<void> {
       await this.prisma.product.update({
@@ -133,7 +133,7 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
       }
     }
   });
-}
+};
 
   async findMovimentByProductId(stockId: number[]): Promise<stockMovement[]> {
     return this.prisma.stockMovement.findMany({
@@ -143,7 +143,7 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
         }
       }
     });
-  }
+  };
 
   async findByName(param: string): Promise<Product[]> {
     return this.prisma.$queryRawUnsafe<Product[]>(`
