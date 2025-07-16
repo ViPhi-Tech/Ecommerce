@@ -2,7 +2,8 @@ import { BaseModuleState } from 'app/shared/store/base.state';
 
 export interface StockMovementModuleState extends BaseModuleState {
   stockMovementList: StockMovement[];
-  stockMovementDetails: StockMovement | null; // Detalhes de um movimento específico
+  cardsData: any; // Dados para exibição em cartões, se necessário
+  loadingCards: boolean; // Indica se os dados dos cartões estão sendo carregados
 }
 
 export interface StockMovement {

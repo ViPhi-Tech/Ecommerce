@@ -19,6 +19,7 @@ import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/sim
 import { MovementItemComponent } from '../../components/movement-item/movement-item.component';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'fuse-stock-movement-list',
@@ -164,6 +165,7 @@ export class StockMovementListComponent implements OnInit {
     this.productId = this.route.snapshot.paramMap.get('productId');
 
     this.loadStockMovements();
+    this.state.getStockMetrics();
 
     if (this.productId) {
       this.coreService.setPageTitle(
@@ -176,6 +178,12 @@ export class StockMovementListComponent implements OnInit {
         'Lista de movimentos de estoque'
       );
     }
+
+    this.formFilter.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe(() => {
+        this.onFilterChange();
+      });
   }
 
   onFilterChange() {
@@ -183,7 +191,9 @@ export class StockMovementListComponent implements OnInit {
   }
 
   private loadStockMovements() {
-    this.state.getStockMovementList(this.formFilter.getRawValue());
+    const filter: any = this.formFilter.getRawValue();
+    filter.date = dayjs(filter.date).format('YYYY-MM-DD');
+    this.state.getStockMovementList(filter);
   }
 
   deleteStockMovement(stockMovementId: string) {

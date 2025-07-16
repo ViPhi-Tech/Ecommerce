@@ -21,6 +21,25 @@ Um componente reutilizável para exibir indicadores simples com título, valor e
 | `variant`       | `'success' \| 'warning' \| 'error' \| 'info'` | `'info'`    | Variante de cor do indicador      |
 | `icon`          | `string`                                      | `undefined` | Nome do ícone (não implementado)  |
 | `customIconSvg` | `string`                                      | `undefined` | HTML/SVG customizado para o ícone |
+| `loading`       | `boolean`                                     | `false`     | Exibe skeleton durante carregamento |
+
+## Estado de Loading
+
+O componente suporta um estado de loading que exibe skeletons no lugar do conteúdo:
+
+```html
+<fuse-simple-indicator
+  title="Vendas Hoje"
+  value="1.250"
+  variant="success"
+  [loading]="isLoading"
+></fuse-simple-indicator>
+```
+
+Durante o loading, será exibido:
+- Skeleton para o título (60% da largura)
+- Skeleton para o valor (40% da largura) 
+- Skeleton circular para o ícone
 
 ## Variantes
 

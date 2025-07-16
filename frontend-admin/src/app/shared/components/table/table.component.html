@@ -101,6 +101,8 @@
     >
       @for (column of config().columns; track $index) {
         <td
+          class="overflow-auto text-ellipsis whitespace-nowrap"
+          [ngStyle]="{ 'max-width': column?.maxWidth || 'none' }"
           [ngClass]="{
             'text-nowrap': !config().textWrap,
             'text-left': column?.align === 'left',

@@ -14,6 +14,7 @@ export interface Product {
   brand: string;
   initialPrice: number;
   finalPrice: number;
+  quantity: number; // Quantidade em estoque
   stock: Stock;
   shortDescription: string;
   description: string;

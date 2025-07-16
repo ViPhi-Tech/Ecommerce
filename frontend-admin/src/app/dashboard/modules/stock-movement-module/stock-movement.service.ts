@@ -14,6 +14,7 @@ import {
 export class StockMovementService {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl + 'stock-movement';
+  private productsApiUrl = environments.apiUrl + 'products';
 
   constructor() {}
 
@@ -21,22 +22,14 @@ export class StockMovementService {
     filter: { date: string; type: string },
     skipLoader: boolean
   ): Observable<ApiResponse<StockMovement[]>> {
-    return this.http.get<ApiResponse<StockMovement[]>>(`${this.apiUrl}/all`, {
+    return this.http.get<ApiResponse<StockMovement[]>>(`${this.productsApiUrl}/all`, {
       params: filter,
       headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
     });
   }
 
-  getStockMovementById(stockMovementId: string): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(`${this.apiUrl}/${stockMovementId}`);
-  }
-
-  getStockMovementsByProduct(
-    productId: string
-  ): Observable<ApiResponse<StockMovement>> {
-    return this.http.get<ApiResponse<StockMovement>>(
-      `${this.apiUrl}/product/${productId}`
-    );
+  getStockMetrics(): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${this.productsApiUrl}/metrics`);
   }
 
   // Define methods for stock movement operations here

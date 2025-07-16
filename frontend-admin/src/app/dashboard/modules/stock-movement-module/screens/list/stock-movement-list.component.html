@@ -1,22 +1,25 @@
 <div class="p-8 animate-fade-in space-y-4">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 animate-left">
     <fuse-simple-indicator
+      [loading]="state.loadingCards()"
       title="Saldo Total"
-      value="38"
+      [value]="state.cardsData()?.totalStock || 0"
       variant="info"
       icon="lucidePackage"
     ></fuse-simple-indicator>
 
     <fuse-simple-indicator
+      [loading]="state.loadingCards()"
       title="Entradas no Mês"
-      value="127"
+      [value]="state.cardsData()?.monthIn || 0"
       variant="success"
       icon="lucideArrowUp"
     ></fuse-simple-indicator>
 
     <fuse-simple-indicator
+      [loading]="state.loadingCards()"
       title="Saídas no Mês"
-      value="89"
+      [value]="state.cardsData()?.monthOut || 0"
       variant="error"
       icon="lucideArrowDown"
     ></fuse-simple-indicator>

@@ -2,23 +2,37 @@
   class="rounded-lg border bg-card text-card-foreground shadow-2xs dark:bg-dark dark:border-dark"
 >
   <div class="p-6">
-    <div class="flex items-center justify-between">
-      <div>
-        <p
-          class="text-sm font-medium text-muted-foreground dark:text-muted mb-1"
+    @if (loading()) {
+      <div class="flex items-center justify-between">
+        <div class="flex flex-col justify-between w-full">
+          <p-skeleton width="60%" height="1rem" class="mb-2"></p-skeleton>
+          <p-skeleton width="40%" height="1rem" class="mt-2"></p-skeleton>
+        </div>
+        <div class="ml-4">
+          <p-skeleton shape="circle" size="3rem"></p-skeleton>
+        </div>
+      </div>
+    }
+    
+    @if (!loading()) {
+      <div class="flex items-center justify-between">
+        <div>
+          <p
+            class="text-sm font-medium text-muted-foreground dark:text-muted mb-1"
+          >
+            {{ title() }}
+          </p>
+          <p class="text-2xl font-bold" [ngClass]="variantClasses.textColor">
+            {{ value() }}
+          </p>
+        </div>
+        <div
+          class="h-12 w-12 rounded-lg flex items-center justify-center"
+          [ngClass]="variantClasses.bgColor"
         >
-          {{ title }}
-        </p>
-        <p class="text-2xl font-bold" [ngClass]="variantClasses.textColor">
-          {{ value }}
-        </p>
+          <ng-icon [name]="icon()" size="20" [class]="variantClasses.iconColor" />
+        </div>
       </div>
-      <div
-        class="h-12 w-12 rounded-lg flex items-center justify-center"
-        [ngClass]="variantClasses.bgColor"
-      >
-        <ng-icon [name]="icon" size="20" [class]="variantClasses.iconColor" />
-      </div>
-    </div>
+    }
   </div>
 </div>

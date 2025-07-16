@@ -19,7 +19,7 @@
   </ng-template>
 
   <div class="animate-fade-in">
-    <form [formGroup]="inboundData">
+    <!-- <form [formGroup]="inboundData">
       <div class="space-y-4">
         <div class="flex flex-col gap-1">
           <label [for]="'xmlFileInput'" class="label"> Arquivo XML </label>
@@ -40,13 +40,10 @@
           />
         </div>
       </div>
-    </form>
+    </form> -->
     <div class="flex flex-col py-4 gap-4">
       <div class="flex items-center justify-between">
         <h3 class="text-lg font-semibold">Lista de produtos</h3>
-      </div>
-      <div>
-        <fuse-search-product />
       </div>
       <fuse-table
         [data]="inboundData.get('products')?.value"
@@ -113,16 +110,20 @@
             formControlName="productId"
             [suggestions]="filteredProducts()"
             (completeMethod)="filterProduct($event)"
-            fluid
+            placeholder="Pesquisar produto por SKU ou nome"
+            appendTo="body"
             optionLabel="name"
+            dataKey="sku"
+            fluid
           >
             <ng-template let-product #item>
               <div class="w-full">
                 <div class="flex justify-between w-full">
                   <div>
-                    <span class="font-medium"
-                      >{{ product?.sku }} - {{ product?.name }}</span
-                    >
+                    <span class="font-medium max-w-[400px] truncate inline-block align-bottom" 
+                      title="{{ product?.sku }} - {{ product?.name }}">
+                      {{ product?.sku }} - {{ product?.name }}
+                    </span>
                   </div>
                   <span class="text-sm text-muted-foreground">{{
                     product?.finalPrice
@@ -132,7 +133,7 @@
                 <div>
                   <span class="text-sm text-muted-foreground"
                     >Estoque atual:
-                    <strong>{{ product?.stock?.quantity }}</strong></span
+                    <strong>{{ product?.quantity }}</strong></span
                   >
                 </div>
               </div>

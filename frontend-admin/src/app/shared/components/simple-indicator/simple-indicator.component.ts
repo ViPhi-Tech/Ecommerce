@@ -1,19 +1,21 @@
-import { Component, Input } from '@angular/core';
-import { NgClass } from '@angular/common';
+import { Component, input } from '@angular/core';
+import { NgClass, CommonModule } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @Component({
   selector: 'fuse-simple-indicator',
-  imports: [NgClass, NgIcon],
+  imports: [NgClass, NgIcon, SkeletonModule, CommonModule],
   templateUrl: './simple-indicator.component.html',
   styleUrls: ['./simple-indicator.component.scss'],
 })
 export default class SimpleIndicatorComponent {
-  @Input() title = '';
-  @Input() value: string | number = '';
-  @Input() variant: 'success' | 'warning' | 'error' | 'info' = 'info';
-  @Input() icon?: string;
-  @Input() customIconSvg?: string;
+  title = input<string>();
+  value = input<string | number>();
+  variant = input<'success' | 'warning' | 'error' | 'info'>('info');
+  icon = input<string | undefined>();
+  customIconSvg = input<string | undefined>();
+  loading = input<boolean>(false);
 
   get variantClasses() {
     const variants = {
@@ -38,6 +40,6 @@ export default class SimpleIndicatorComponent {
         iconColor: 'text-blue-600',
       },
     };
-    return variants[this.variant];
+    return variants[this.variant()];
   }
 }

@@ -1,3 +1,4 @@
+import { CurrencyPipe } from '@angular/common';
 import {
   Component,
   DestroyRef,
@@ -6,31 +7,31 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import { CoreService } from 'app/shared/services/core.service';
-import { TabsModule } from 'primeng/tabs';
-import { ButtonModule } from 'primeng/button';
-import { FieldsetModule } from 'primeng/fieldset';
-import { FormModule } from 'app/shared/components/form/form.module';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ProductService } from 'app/dashboard/modules/product-module/product.service';
+import { FormModule } from 'app/shared/components/form/form.module';
 import { ImportInvoiceComponent } from 'app/shared/components/import-invoice/import-invoice.component';
 import { ImportInvoiceService } from 'app/shared/components/import-invoice/import-invoice.service';
-import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
-import { Dialog, DialogModule } from 'primeng/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
+import { SearchProductComponent } from 'app/shared/components/search-product/search-product.component';
 import { TableComponent } from 'app/shared/components/table/table.component';
+import { Product } from 'app/shared/interfaces/product-module.interface';
 import {
   DEFAULT_TABLE_CONFIG,
   TableConfig,
 } from 'app/shared/interfaces/table.interfaces';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { SearchProductComponent } from 'app/shared/components/search-product/search-product.component';
-import { CurrencyPipe } from '@angular/common';
-import { ProductService } from 'app/dashboard/modules/product-module/product.service';
+import { CoreService } from 'app/shared/services/core.service';
+import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
+import { ButtonModule } from 'primeng/button';
+import { Dialog, DialogModule } from 'primeng/dialog';
+import { FieldsetModule } from 'primeng/fieldset';
+import { TabsModule } from 'primeng/tabs';
 
 @Component({
   selector: 'fuse-inbound',
@@ -97,6 +98,8 @@ export class InboundComponent implements OnInit {
     );
   }
 
+  // ========== INICIALIZAÇÃO ==========
+
   initForm() {
     this.inboundData = this.fb.group({
       nfModel: [this.nfModel()[0].value, [Validators.required]],
@@ -126,20 +129,40 @@ export class InboundComponent implements OnInit {
         },
       ],
       columns: [
-        { field: 'description', caption: 'Nome' },
-        { field: 'sku', caption: 'SKU' },
-        { field: 'ean', caption: 'EAN' },
-        { field: 'ncm', caption: 'NCM' },
-        { field: 'quantity', caption: 'Quantidade', sortable: true },
-        { field: 'unitValue', caption: 'Valor Unitário', sortable: true },
-        { field: 'totalValue', caption: 'Valor Total', sortable: true },
+        { field: 'name', caption: 'Nome', maxWidth: '300px' },
+        { field: 'sku', caption: 'SKU', maxWidth: '200px' },
+        { field: 'ean', caption: 'EAN', maxWidth: '200px' },
+        { field: 'quantity', caption: 'Quantidade', sortable: true, maxWidth: '150px' },
+        { field: 'stock', caption: 'Estoque atual', sortable: true, maxWidth: '150px' },
+        {
+        field: 'actions',
+        caption: 'Ações',
+        actionButtonsType: 'buttons',
+        actionButtons: [
+          {
+            icon: 'lucideTrash2',
+            label: 'Remover',
+            variant: 'text',
+            colorText: '#EF4444',
+            colorIcon: '#EF4444',
+            tooltip: 'Remover Produto',
+            action: (rowData: any) => {
+              this.removeProduct(rowData?.id);
+            },
+          },
+        ],
+      },
       ],
     });
   }
 
+  // ========== SUBMISSÃO DE FORMULÁRIO ==========
+
   onSubmit() {
     console.log('Form submitted:', this.inboundData.value);
   }
+
+  // ========== IMPORTAÇÃO DE XML/NFE ==========
 
   importXml() {
     this.importInvoiceService.openDialog(this.inboundData.getRawValue());
@@ -150,12 +173,19 @@ export class InboundComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(data => {
         if (data) {
+          // const products = data.products.map((product: any) => ({
+          //   ...product,
+          // }));
+
           this.inboundData.patchValue({
             ...data,
+            name: data.identification?.name || '',
           });
         }
       });
   }
+
+  // ========== GERENCIAMENTO DE PRODUTOS ==========
 
   filterProduct(event: AutoCompleteCompleteEvent) {
     const query = event?.query;
@@ -165,7 +195,7 @@ export class InboundComponent implements OnInit {
         .filterProducts(query)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe(response => {
-          this.filteredProducts.set(response.data || []);
+          this.filteredProducts.set(response.dados || []);
         });
     } else {
       this.filteredProducts.set([]);
@@ -174,20 +204,38 @@ export class InboundComponent implements OnInit {
 
   addProduct() {
     if (this.formAddProduct.valid) {
-      const productData = this.formAddProduct.value;
+      const formData = this.formAddProduct.value;
+      const selectedProduct = formData.productId as unknown as Product; // Este agora será o objeto produto completo
+      const quantity = formData.quantity as number;
+      
+      if (!selectedProduct || !quantity) {
+        return;
+      }
+      
       const products = this.inboundData.get('products')?.value || [];
       const existingProductIndex = products.findIndex(
-        (p: any) => p.productId === productData.productId
+        (p: any) => p.sku === selectedProduct.sku
       );
+      
       if (existingProductIndex > -1) {
-        // Atualiza a quantidade se o produto já existir
-        products[existingProductIndex].quantity += productData.quantity;
+        products[existingProductIndex].quantity += quantity;
       } else {
-        products.push(productData);
+        products.push({...selectedProduct, quantity, stock: selectedProduct?.quantity});
       }
+      
+      this.inboundData.patchValue({ products });
+      this.showSelectProductDialog.set(false);
+      this.formAddProduct.reset();
     }
-    this.formAddProduct.reset();
   }
+
+  removeProduct(productId: string) {
+    const products = this.inboundData.get('products')?.value || [];
+    const updatedProducts = products.filter((p: any) => p.id !== productId);
+    this.inboundData.patchValue({ products: updatedProducts });
+  }
+
+  // ========== GERENCIAMENTO DE DIALOGS ==========
 
   closeDialog(e = new Event('close')): void {
     this.dialogRef.close(e);

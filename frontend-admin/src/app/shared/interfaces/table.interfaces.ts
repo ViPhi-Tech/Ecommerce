@@ -22,6 +22,7 @@ export interface TableColumn {
   sortable?: boolean;
   filter?: boolean;
   customClass?: string;
+  maxWidth?: string; // Maximum width of the column
   actionButtonsType?: 'buttons' | 'dropdown'; // Type of action buttons, can be 'buttons' or 'dropdown'
   actionButtons?: ActionButtons[];
   template?: TemplateRef<any | null>;
