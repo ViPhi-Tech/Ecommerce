@@ -43,10 +43,7 @@ export class ProductListComponent implements OnInit {
 
   constructor() {}
 
-  async ngOnInit() {
-    await this.productState.getProductList();
-    console.log(this.productState.productList());
-  }
+  async ngOnInit() {}
 
   async addProductToCart(product: any) {
     product.loading = true;

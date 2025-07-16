@@ -6,6 +6,7 @@
       pSize="small"
       type="text"
       class="w-full"
+      [formControl]="searchControl"
       (input)="onSearchChange($event)"
       placeholder="Buscar produto por nome, categoria ou código..."
     />

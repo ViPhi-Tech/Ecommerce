@@ -54,7 +54,6 @@ export class OrderCartComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.clientState.getClientList();
   }
 
   getCartData() {}
