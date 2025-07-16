@@ -25,6 +25,7 @@ export class PaymentController {
         .send({
           status: false,
           descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR,
+          dados: null
         });
     }
   }
