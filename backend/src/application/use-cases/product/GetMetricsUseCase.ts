@@ -14,7 +14,7 @@ export class GetMetricsUseCase {
 
     const metricInput = {
       date: parsedDate,
-      type: data.type,
+      type: data.type ?? null,
     };
 
     const total = await this.productRepository.getMetrics(metricInput);

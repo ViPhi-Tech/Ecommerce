@@ -81,7 +81,7 @@ export const metricSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
     message: "A data deve estar no formato YYYY-MM-DD",
   }),
-  type: z.enum(["IN", "OUT"]),
+  type: z.enum(["IN", "OUT"]).optional().nullable(),
 });
 
 export const metricJsonSchema = zodToJsonSchema(metricSchema)

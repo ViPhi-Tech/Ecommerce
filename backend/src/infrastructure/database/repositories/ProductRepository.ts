@@ -220,17 +220,20 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
 
 async getMetrics(data: Metric): Promise<{ total: number }> {
   
+  const whereCondition: any = {
+    createdAt: {
+      gte: data.date,
+      lt: new Date(data.date.getTime() + 24 * 60 * 60 * 1000),
+    },
+  };
+  if (data.type === 'IN' || data.type === 'OUT') {
+    whereCondition.type = data.type;
+  }
   const result = await this.prisma.stockMovement.aggregate({
     _sum: {
       quantity: true,
     },
-    where: {
-      type: data.type,
-      createdAt: {
-        gte: data.date,
-        lt: new Date(data.date.getTime() + 24 * 60 * 60 * 1000),
-      },
-    },
+    where: whereCondition,
   });
 
   return { total: result._sum.quantity ?? 0 };
