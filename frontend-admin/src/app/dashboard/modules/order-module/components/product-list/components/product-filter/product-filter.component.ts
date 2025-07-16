@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { SelectChangeEvent, SelectModule } from 'primeng/select';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -7,6 +7,9 @@ import { InputIconModule } from 'primeng/inputicon';
 import { SelectComponent } from 'app/shared/components/form/select/select.component';
 import { InputTextModule } from 'primeng/inputtext';
 import { ProductState } from 'app/dashboard/modules/product-module/product.state';
+import { ProductService } from 'app/dashboard/modules/product-module/product.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'fuse-product-filter',
@@ -22,13 +25,16 @@ import { ProductState } from 'app/dashboard/modules/product-module/product.state
   ],
 })
 export class ProductFilterComponent implements OnInit {
+  private destroyRef = inject(DestroyRef);
   productState = inject(ProductState);
+  private productService = inject(ProductService);
 
   products: any[] | undefined;
 
   selectedProduct = new FormControl();
   searchTerm = signal('');
 
+  searchControl = new FormControl('');
   filterSelected = new FormControl('');
 
   filters = signal([
@@ -40,7 +46,27 @@ export class ProductFilterComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.searchControl.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(debounceTime(500))
+      .subscribe((value) => {
+        this.filterProduct(value || '');
+      });
+  }
+
+  filterProduct(query: string) {
+    if (query) {
+      this.productService
+        .filterProducts(query)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe(response => {
+          this.productState.setFilteredProducts(response?.dados);
+        });
+    } else {
+      this.productState.setFilteredProducts([]);
+    }
+  }
 
   onSearchChange(event: Event) {
     const target = event.target as HTMLInputElement;

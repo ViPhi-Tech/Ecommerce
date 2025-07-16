@@ -19,7 +19,6 @@ import { ProductService } from 'app/dashboard/modules/product-module/product.ser
 import { FormModule } from 'app/shared/components/form/form.module';
 import { ImportInvoiceComponent } from 'app/shared/components/import-invoice/import-invoice.component';
 import { ImportInvoiceService } from 'app/shared/components/import-invoice/import-invoice.service';
-import { SearchProductComponent } from 'app/shared/components/search-product/search-product.component';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { Product } from 'app/shared/interfaces/product-module.interface';
 import {
@@ -45,7 +44,6 @@ import { TabsModule } from 'primeng/tabs';
     ImportInvoiceComponent,
     DialogModule,
     TableComponent,
-    SearchProductComponent,
     DialogModule,
     AutoCompleteModule,
     CurrencyPipe
@@ -117,6 +115,8 @@ export class InboundComponent implements OnInit {
       ...DEFAULT_TABLE_CONFIG,
       emptyMessage: 'Nenhum produto selecionado',
       textWrap: false,
+      showClearFilters: false,
+      showExport: false,
       headerButtons: [
         {
           icon: 'pi pi-plus',
@@ -207,22 +207,22 @@ export class InboundComponent implements OnInit {
       const formData = this.formAddProduct.value;
       const selectedProduct = formData.productId as unknown as Product; // Este agora será o objeto produto completo
       const quantity = formData.quantity as number;
-      
+
       if (!selectedProduct || !quantity) {
         return;
       }
-      
+
       const products = this.inboundData.get('products')?.value || [];
       const existingProductIndex = products.findIndex(
         (p: any) => p.sku === selectedProduct.sku
       );
-      
+
       if (existingProductIndex > -1) {
         products[existingProductIndex].quantity += quantity;
       } else {
         products.push({...selectedProduct, quantity, stock: selectedProduct?.quantity});
       }
-      
+
       this.inboundData.patchValue({ products });
       this.showSelectProductDialog.set(false);
       this.formAddProduct.reset();

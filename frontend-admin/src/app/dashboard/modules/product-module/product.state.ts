@@ -22,6 +22,7 @@ export class ProductState extends BaseState<ProductModuleState> {
     error: null,
     orderFilter: '',
     searchTerm: '',
+    filteredProducts: [],
   });
 
   productList = computed(() => this.state().productList);
@@ -29,13 +30,11 @@ export class ProductState extends BaseState<ProductModuleState> {
   currentOrderFilter = computed(() => this.state().orderFilter);
   currentSearchTerm = computed(() => this.state().searchTerm);
 
-  orderProductList = computed(() => {
+  filteredProducts = computed(() => {
     const state = this.state();
     const filter = state.orderFilter;
     const searchTerm = state.searchTerm;
-    const productList = state.productList;
-
-    let filteredProducts = [...productList];
+    let filteredProducts = [...state.filteredProducts];
 
     filteredProducts.sort((a, b) => {
       if (filter === 'low-price') {
@@ -55,6 +54,9 @@ export class ProductState extends BaseState<ProductModuleState> {
         product.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
+
+    console.log('Filtered Products:', filteredProducts);
+
     return filteredProducts;
   });
 
@@ -84,6 +86,10 @@ export class ProductState extends BaseState<ProductModuleState> {
     this.updateState('productList', productList);
   }
 
+  setFilteredProducts(filteredProducts: Product[]) {
+    this.updateState('filteredProducts', filteredProducts);
+  }
+
   setView(view: ProductModuleState['view']) {
     this.updateState('view', view);
     localStorage.setItem('productView', view);
@@ -95,6 +101,18 @@ export class ProductState extends BaseState<ProductModuleState> {
 
   setSearchTerm(searchTerm: string) {
     this.updateState('searchTerm', searchTerm);
+  }
+
+  clearState() {
+    this.state.set({
+      productList: [],
+      view: 'table',
+      loading: false,
+      error: null,
+      orderFilter: '',
+      searchTerm: '',
+      filteredProducts: [],
+    });
   }
 
   constructor() {

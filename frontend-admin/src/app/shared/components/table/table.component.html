@@ -54,21 +54,25 @@
                 placeholder="Pesquisar"
               />
             </p-iconfield>
-            <p-button
-              size="small"
-              pTooltip="Limpar filtros"
-              (click)="clearFilters(dt2)"
-            >
-              <ng-icon name="lucideFilter"></ng-icon>
-            </p-button>
-            <!-- // export -->
-            <p-button
-              size="small"
-              pTooltip="Exportar tabela"
-              (click)="exportTable(dt2)"
-            >
-              <ng-icon name="lucideFileChartColumn"></ng-icon>
-            </p-button>
+            @if (config().showClearFilters) {
+              <p-button
+                size="small"
+                pTooltip="Limpar filtros"
+                (click)="clearFilters(dt2)"
+              >
+                <ng-icon name="lucideFilter"></ng-icon>
+              </p-button>
+            }
+
+            @if (config().showExport) {
+              <p-button
+                size="small"
+                pTooltip="Exportar tabela"
+                (click)="exportTable(dt2)"
+              >
+                <ng-icon name="lucideFileChartColumn"></ng-icon>
+              </p-button>
+            }
           </div>
         </div>
       </div>

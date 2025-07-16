@@ -1,4 +1,4 @@
-<div>
+<div class="h-full">
   <h2 class="text-xl font-semibold mb-4">Todos os produtos</h2>
   <fuse-product-filter />
   <div class="mt-4">
@@ -6,7 +6,7 @@
       <div class="flex items-center gap-2">
         <ng-icon name="lucideFilter" />
         <span class="text-sm text-muted-foreground"
-          >{{ productState.orderProductList().length }} produtos
+          >{{ productState.filteredProducts().length }} produtos
           encontrados</span
         >
       </div>
@@ -27,16 +27,21 @@
   <div
     [ngClass]="{
       'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4':
-        productView() === 'grid',
-      'flex flex-col gap-4': productView() === 'list',
+        productView() === 'grid' && productState.filteredProducts().length > 0,
+      'flex flex-col gap-4': productView() === 'list' || productState.filteredProducts().length === 0,
     }"
   >
-    @for (product of productState.orderProductList(); track $index) {
+    @for (product of productState.filteredProducts(); track $index) {
       <ng-container
         [ngTemplateOutlet]="productView() === 'grid' ? gridView : listView"
         [ngTemplateOutletContext]="{ $implicit: product }"
       >
       </ng-container>
+    }@empty {
+      <div class="w-full flex flex-col justify-center items-center p-4 text-center text-muted-foreground">
+        <ng-icon name="lucideSearchX" size="40" />
+        <span class="text-xl">Nenhum produto encontrado.</span>
+      </div>
     }
   </div>
 </div>
@@ -50,16 +55,23 @@
         <div>
           <h3 class="font-semibold">{{ product?.name }}</h3>
           <div class="flex items-center gap-2 text-sm text-muted-foreground">
-            <span>União</span><span>•</span><span>789100005550</span>
+            @if (product?.sku) {
+              <span>{{product?.sku}}</span><span>•</span>
+            }
+            @if (product?.ean) {
+              <span>{{product?.ean}}</span>
+            }
           </div>
         </div>
       </div>
       <div class="flex items-center gap-4">
-        <div
-          class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
-        >
-          Mercearia
-        </div>
+        @if (product?.category?.name) {
+          <div
+            class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
+          >
+            {{ product?.category?.name }}
+          </div>
+        }
         <span class="font-bold text-lg">{{
           product?.finalPrice | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
         }}</span>
@@ -79,12 +91,24 @@
   <div
     class="animate-right rounded-lg border border-gray-200 dark:border-dark bg-card text-card-foreground shadow-sm overflow-hidden"
   >
-    <div class="aspect-video relative"></div>
     <div class="p-4">
       <h3 class="font-semibold line-clamp-2 min-h-[48px]">
         {{ product?.name }}
       </h3>
-      <p class="text-muted-foreground text-sm">{{ product?.category }}</p>
+      <div class="flex items-center gap-2 text-muted-foreground text-sm mb-1">
+        @if (product?.sku) {
+          <span>SKU: {{ product?.sku }}</span>
+          <span>•</span>
+        }
+        @if (product?.ean) {
+          <span>EAN: {{ product?.ean }}</span>
+        }
+      </div>
+      @if (product?.category?.name) {
+        <div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors text-foreground mb-1">
+          {{ product?.category?.name }}
+        </div>
+      }
     </div>
     <div class="p-4 pt-0 flex flex-col justify-between items-center">
       <div class="mb-2">

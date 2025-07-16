@@ -18,6 +18,7 @@ import { OrderCartComponent } from '../../components/order-cart/order-cart.compo
 import { ProductListComponent } from '../../components/product-list/product-list.component';
 import { CoreService } from 'app/shared/services/core.service';
 import { CartState } from '../../components/order-cart/order-cart.state';
+import { ProductState } from 'app/dashboard/modules/product-module/product.state';
 
 @Component({
   selector: 'fuse-order-create',
@@ -32,11 +33,13 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
 
   private coreService = inject(CoreService);
   private orderState = inject(OrderState);
+  private productState = inject(ProductState);
   private cartState = inject(CartState);
 
   constructor() {}
 
   ngOnInit() {
+    this.productState.clearState();
     this.loadOrderData();
     this.detectChildRouteChanges();
   }
@@ -46,7 +49,7 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
   private async loadOrderData() {
     const orderId = this.activatedRoute.snapshot.paramMap.get('id');
     if (orderId && orderId !== 'new') {
-      await this.orderState.getOrderById(orderId);
+      // await this.orderState.getOrderById(orderId);
     } else {
       this.coreService.setPageTitle('Nova Venda', 'Criar uma nova venda');
       this.orderState.resetOrder();

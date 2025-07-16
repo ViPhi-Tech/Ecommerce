@@ -7,6 +7,8 @@ export interface TableConfig {
   paginator?: boolean;
   pageLinkSize: number;
   showHeader?: boolean;
+  showClearFilters?: boolean;
+  showExport?: boolean;
   showCurrentPageReport?: boolean;
   emptyMessage?: string;
   textWrap?: boolean;
