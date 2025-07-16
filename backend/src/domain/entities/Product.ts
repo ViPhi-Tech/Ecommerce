@@ -12,6 +12,10 @@ export interface Product {
     ean: string;
     companyId?: number | null;
     categoryId?: number | null;
+    category?: {
+        id: number;
+        name: string;
+    } | null;
     stock?: Stock | null;
 }
 

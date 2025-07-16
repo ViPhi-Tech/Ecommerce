@@ -176,6 +176,10 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
         p."companyId",
         p."categoryId",
         json_build_object(
+          'id', c.id,
+          'name', c.name
+        ) AS category,
+        json_build_object(
           'id', s.id,
           'productId', s."productId",
           'quantity', s.quantity,
@@ -185,6 +189,7 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
       FROM "Product" p
       LEFT JOIN "Stock" s ON s."productId" = p.id
       LEFT JOIN "Brand" b ON p."brandId" = b.id
+      LEFT JOIN "Category" c ON p."categoryId" = c.id
       WHERE
         p."isActive" = true AND (
           CAST(p."ean" AS TEXT) ILIKE ${searchTerm} OR

@@ -8,6 +8,11 @@ export interface ProductResponse {
   description?: string | null;
   shortDescription?: string | null;
   sku: string;
+  categoryId?: number | null;
+  category?: {
+      id: number | null;
+      name: string;
+  } | null;
   companyId?: number | null;
   stock?: {
       quantity: number;

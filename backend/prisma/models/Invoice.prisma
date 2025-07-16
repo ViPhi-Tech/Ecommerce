@@ -14,4 +14,17 @@ model Invoice {
   updatedAt   DateTime @updatedAt
   orderId     Int
   order       Order?    @relation(fields: [orderId], references: [id])
+
+  items       InoviceItems[]
+}
+
+model InoviceItems {
+  id          Int      @id @default(autoincrement())
+  invoiceId   Int      
+  invoice     Invoice? @relation(fields: [invoiceId], references: [id])
+  productId   Int      
+  product     Product? @relation(fields: [productId], references: [id])
+  quantity    Int
+  price       Float
+  totalAmount Float
 }

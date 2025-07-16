@@ -28,6 +28,8 @@ model Product {
 
   brandId Int?
   brand   Brand? @relation(fields: [brandId], references: [id])
+
+  invoices InoviceItems[]
 }
 
 model Partner {
