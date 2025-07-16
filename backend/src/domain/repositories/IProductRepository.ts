@@ -1,4 +1,4 @@
-import { Product, Stock, stockMovement } from "../entities/Product";
+import { Product, Stock, stockMovement, Metric } from "../entities/Product";
 
 export interface IProductRepository {
     create(data: Product): Promise<Product>;
@@ -15,4 +15,5 @@ export interface IProductRepository {
     findStockByProductId(productsId: number[]): Promise<Stock[]>;
     findMovimentByProductId(stockId: number[]): Promise<stockMovement[]>;
     findByAnyParam(param: string): Promise<Product[]>;
+    getMetrics(data: Metric): Promise<{total: number}>;
 }

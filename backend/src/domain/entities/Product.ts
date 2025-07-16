@@ -30,3 +30,9 @@ export interface stockMovement {
     type: string;
     quantity: number
 }
+
+
+export interface Metric {
+    date: Date;
+    type: "IN" | "OUT";
+}

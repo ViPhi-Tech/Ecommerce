@@ -7,12 +7,12 @@ import { FindByIdProductUseCase } from "../../../application/use-cases/product/F
 import { FindAllProductUseCase } from '../../../application/use-cases/product/FindAllProductUseCase';
 import { GetMovimentByProductUseCase } from '../../../application/use-cases/product/GetMovimentByProductUseCase';
 import {ApiResponse} from "../../../shared/types/apiResponse";
-import {ProductCreateDTO, ProductID, ProductUpdateStock, ProductIdMoviment} from "../dto/Product.dto";
+import {ProductCreateDTO, ProductID, ProductUpdateStock, ProductIdMoviment, metricDTO} from "../dto/Product.dto";
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 import { FindByNameProductUseCase } from '../../../application/use-cases/product/FindProductsByNameUseCase';
 import { FindByParamProductUseCase } from '../../../application/use-cases/product/FindByParamUseCase';
-
+import { GetMetricsUseCase } from '../../../application/use-cases/product/GetMetricsUseCase';
 export class ProductController {
     constructor(
         private createProductUseCase: CreateProductUseCase,
@@ -23,7 +23,8 @@ export class ProductController {
         private findAllProductUseCase: FindAllProductUseCase,
         private getMovimentByProductUseCase: GetMovimentByProductUseCase,
         private findProductByNameUseCase: FindByNameProductUseCase,
-        private findProductByParam: FindByParamProductUseCase
+        private findProductByParam: FindByParamProductUseCase,
+        private getMetricsUseCase: GetMetricsUseCase,
     ) {}
 
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
@@ -128,6 +129,16 @@ export class ProductController {
         try {
             const { param } = request.params as { param: string };
             const data_product = await this.findProductByParam.execute(param);
+            return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product });
+        } catch (error) {
+            return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
+        }
+    };
+
+    async getMetrics(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try {
+            const params = request.query as metricDTO;
+            const data_product = await this.getMetricsUseCase.execute(params);
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product });
         } catch (error) {
             return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
