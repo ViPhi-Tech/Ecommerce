@@ -39,7 +39,7 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
   constructor() {}
 
   ngOnInit() {
-    this.productState.clearState(); // Limpar o estado dos produtos ao iniciar a criação de um pedido
+    this.productState.clearState();
     this.loadOrderData();
     this.detectChildRouteChanges();
   }
