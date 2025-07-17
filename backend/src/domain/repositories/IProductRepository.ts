@@ -15,6 +15,7 @@ export interface IProductRepository {
     findStockByProductId(productsId: number[]): Promise<Stock[]>;
     findMovimentByProductId(stockId: number[]): Promise<stockMovement[]>;
     findByAnyParam(param: string): Promise<Product[]>;
-    getMetrics(data: findMoviment): Promise<{total: number}>;
     findMovimentByDate(data: findMoviment): Promise<stockMovement[]>;
+    countStock(startDate: Date, endDate: Date): Promise<number>;
+    countMoviment(startDate: Date, endDate: Date, type: 'IN' | 'OUT'): Promise<number>;
 }

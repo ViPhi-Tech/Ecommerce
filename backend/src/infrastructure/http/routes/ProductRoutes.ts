@@ -115,12 +115,10 @@ export default async function productRoutes(
 
     fastify.get('/moviment/metrics',{
         schema: {
-            tags: ['product'],
-            querystring: '',
-                required: ['date', 'type']
+            tags: ['product']
             },
         preValidation: [authenticate],
-        handler: productController.findAll.bind(productController)
+        handler: productController.getMetrics.bind(productController)
     }
     );
 

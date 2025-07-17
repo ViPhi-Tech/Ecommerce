@@ -146,5 +146,15 @@ export class ProductController {
         } catch (error) {
             return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
         }
+    };
+
+
+    async getMetrics(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try {
+            const data_product = await this.getMetricsUseCase.execute();
+            return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product }); 
+        } catch (error) {
+            return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
+        }
     }
 }

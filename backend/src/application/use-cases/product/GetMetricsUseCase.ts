@@ -1,23 +1,24 @@
 import { IProductRepository } from "../../../domain/repositories/IProductRepository";
-import { MetricDTO, MetricResponse } from "../../dto/product/MetricDTO";
-import { parseISO, isValid } from "date-fns";
+import { MetricResponse } from "../../dto/product/MetricDTO";
 
 export class GetMetricsUseCase {
   constructor(private productRepository: IProductRepository) {}
 
-  async execute(data: MetricDTO): Promise<MetricResponse> {
-    const parsedDate = parseISO(data.date);
+  async execute(): Promise<MetricResponse> {
 
-    if (!isValid(parsedDate)) {
-      throw new Error("Data inválida. Use o formato YYYY-MM-DD.");
-    }
+    const now = new Date();
 
-    const metricInput = {
-      date: parsedDate,
-      type: data.type ?? null,
+    const startDate = new Date(now.getFullYear(), now.getMonth(), 1, 0, 0, 0, 0);
+    const endDate = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+
+    const stockTotal = await this.productRepository.countStock(startDate, endDate);
+    const movimentIn = await this.productRepository.countMoviment(startDate, endDate, 'IN');
+    const movimentOut = await this.productRepository.countMoviment(startDate,  endDate, 'OUT');
+    return {
+      stockTotal,
+      movimentIn,
+      movimentOut
     };
-
-    const total = await this.productRepository.getMetrics(metricInput);
-    return total;
   }
 }

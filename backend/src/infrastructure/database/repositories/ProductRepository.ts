@@ -218,27 +218,6 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
 };
 
 
-async getMetrics(data: findMoviment): Promise<{ total: number }> {
-  
-  const whereCondition: any = {
-    createdAt: {
-      gte: data.date,
-      lt: new Date(data.date.getTime() + 24 * 60 * 60 * 1000),
-    },
-  };
-  if (data.type === 'IN' || data.type === 'OUT') {
-    whereCondition.type = data.type;
-  }
-  const result = await this.prisma.stockMovement.aggregate({
-    _sum: {
-      quantity: true,
-    },
-    where: whereCondition,
-  });
-
-  return { total: result._sum.quantity ?? 0 };
-};
-
 
 async findMovimentByDate(data: findMoviment): Promise<stockMovement[]> {
 
@@ -272,5 +251,38 @@ return this.prisma.stockMovement.findMany({
       }
     }
   })
+};
+
+
+async countStock(startDate: Date, endDate: Date): Promise<number> {
+  const result = await this.prisma.stock.aggregate({
+    _sum: {
+      quantity: true
+    },
+    where: {
+      createdAt: {
+        gte: startDate,
+        lt: endDate
+      }
+    }
+  })
+  return result._sum.quantity ?? 0;
+};
+
+async countMoviment(startDate: Date, endDate: Date, type: 'IN' | 'OUT'): Promise<number> {
+  const result = await this.prisma.stockMovement.aggregate({
+    _sum: {
+      quantity: true
+    },
+    where: {
+      createdAt: {
+        gte: startDate,
+        lt: endDate
+      },
+      type: type
+    }
+  })
+  return result._sum.quantity ?? 0
 }
+
 }

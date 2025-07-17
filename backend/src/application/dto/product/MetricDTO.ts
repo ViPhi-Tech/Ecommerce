@@ -5,5 +5,7 @@ export interface MetricDTO {
 }
 
 export interface MetricResponse {
-    total: number
+    stockTotal: number;
+    movimentIn: number;
+    movimentOut: number;
 }
