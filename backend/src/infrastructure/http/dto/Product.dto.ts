@@ -77,14 +77,14 @@ export const movimentStockSchema = z.object({
 });
 
 
-export const metricSchema = z.object({
+export const findMovimentSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
     message: "A data deve estar no formato YYYY-MM-DD",
   }),
   type: z.enum(["IN", "OUT"]).optional().nullable(),
 });
 
-export const metricJsonSchema = zodToJsonSchema(metricSchema)
+export const findMovimentJsonSchema = zodToJsonSchema(findMovimentSchema)
 export const productUpdateStockJsonSchema = zodToJsonSchema(productUpdateStockSchema);
 export const productIdJsonSchema= zodToJsonSchema(productIDSchema);
 export const productIdMovimentJsonSchema = zodToJsonSchema(productIdMovimentSchema);
@@ -92,7 +92,7 @@ export const productJsonSchema = zodToJsonSchema(productSchemaDTO);
 export const productCreateJsonSchema = zodToJsonSchema(productCreateSchema);
 export const productUpdateJsonSchema = zodToJsonSchema(productUpdateSchema);
 
-export type metricDTO = z.infer<typeof metricSchema>
+export type findMovimentDTO = z.infer<typeof findMovimentSchema>
 export type ProductCreateDTO = z.infer<typeof productCreateSchema>;
 export type ProductDTO = z.infer<typeof productSchemaDTO>;
 export type ProductID = z.infer<typeof productIDSchema>;

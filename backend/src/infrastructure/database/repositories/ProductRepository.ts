@@ -1,7 +1,7 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-import { Product, Stock, stockMovement, Metric } from '../../../domain/entities/Product';
+import { Product, Stock, stockMovement, findMoviment } from '../../../domain/entities/Product';
 import { IProductRepository } from "../../../domain/repositories/IProductRepository";
-import {ProductCreateDTO, ProductUpdateDTO, metricDTO} from "../../http/dto/Product.dto";
+import {ProductCreateDTO, ProductUpdateDTO, findMovimentDTO} from "../../http/dto/Product.dto";
 
 export class ProductRepository implements IProductRepository {
   constructor(private prisma: PrismaClient | Prisma.TransactionClient) {}
@@ -218,7 +218,7 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
 };
 
 
-async getMetrics(data: Metric): Promise<{ total: number }> {
+async getMetrics(data: findMoviment): Promise<{ total: number }> {
   
   const whereCondition: any = {
     createdAt: {
@@ -237,9 +237,40 @@ async getMetrics(data: Metric): Promise<{ total: number }> {
   });
 
   return { total: result._sum.quantity ?? 0 };
+};
+
+
+async findMovimentByDate(data: findMoviment): Promise<stockMovement[]> {
+
+    const whereCondition: any = {
+    createdAt: {
+      gte: data.date,
+      lt: new Date(data.date.getTime() + 24 * 60 * 60 * 1000),
+    },
+  };
+  if (data.type === 'IN' || data.type === 'OUT') {
+    whereCondition.type = data.type;
+  }
+
+return this.prisma.stockMovement.findMany({
+  where: whereCondition,
+  include: {
+    stock: {
+      select: {
+        product: {
+          select: {
+            name: true,
+            sku: true
+          }
+        }
+      }
+    },
+    user: {
+      select: {
+        fullName: true 
+        }
+      }
+    }
+  })
 }
-    
-
-
-
 }

@@ -36,7 +36,7 @@ export interface stockMovement {
 }
 
 
-export interface Metric {
+export interface findMoviment {
     date: Date;
     type: "IN" | "OUT" | undefined | null;
 }
