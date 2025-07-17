@@ -32,10 +32,7 @@
             ],
             "styles": ["src/styles.scss"],
             "scripts": [],
-            "allowedCommonJsDependencies": ["xml2js"],
-            "customWebpackConfig": {
-              "path": "./webpack.config.js"
-            }
+            "allowedCommonJsDependencies": ["xml2js"]
           },
           "configurations": {
             "production": {

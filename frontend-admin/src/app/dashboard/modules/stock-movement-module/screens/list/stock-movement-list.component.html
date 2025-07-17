@@ -3,7 +3,7 @@
     <fuse-simple-indicator
       [loading]="state.loadingCards()"
       title="Saldo Total"
-      [value]="state.cardsData()?.totalStock || 0"
+      [value]="state.cardsData()?.stockTotal || 0"
       variant="info"
       icon="lucidePackage"
     ></fuse-simple-indicator>
@@ -11,7 +11,7 @@
     <fuse-simple-indicator
       [loading]="state.loadingCards()"
       title="Entradas no Mês"
-      [value]="state.cardsData()?.monthIn || 0"
+      [value]="state.cardsData()?.movimentIn || 0"
       variant="success"
       icon="lucideArrowUp"
     ></fuse-simple-indicator>
@@ -19,7 +19,7 @@
     <fuse-simple-indicator
       [loading]="state.loadingCards()"
       title="Saídas no Mês"
-      [value]="state.cardsData()?.monthOut || 0"
+      [value]="state.cardsData()?.movimentOut || 0"
       variant="error"
       icon="lucideArrowDown"
     ></fuse-simple-indicator>
@@ -58,9 +58,17 @@
     </div>
 
     <div class="space-y-4">
+      @if (state.loading()) {
+        <div class="flex flex-col gap-4">
+          <fuse-movement-item [loading]="true" />
+          <fuse-movement-item [loading]="true" />
+          <fuse-movement-item [loading]="true" />
+        </div>
+      }
+
       @for (item of state.stockMovementList(); track $index) {
         <div>
-          <fuse-movement-item [item]="item" />
+          <fuse-movement-item  [item]="item" />
         </div>
       }@empty {
         <div>

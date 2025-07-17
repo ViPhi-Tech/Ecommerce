@@ -10,6 +10,7 @@ import { IMovimentItem } from 'app/shared/interfaces/stock-movement.interface';
 })
 export class MovementItemComponent implements OnInit {
   item = input<IMovimentItem>();
+  loading = input<boolean>();
 
   constructor() {}
 
