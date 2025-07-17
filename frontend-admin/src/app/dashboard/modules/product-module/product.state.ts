@@ -82,6 +82,25 @@ export class ProductState extends BaseState<ProductModuleState> {
     );
   }
 
+  searchProducts(query: string): void {
+    this.setLoading(true);
+    this.clearError();
+
+    this.productService.filterProducts(query).pipe(
+      tap((response: any) => {
+        const products = Array.isArray(response) ? response : response.dados;
+        if (products && products.length > 0) {
+          this.setFilteredProducts(products);
+        } else {
+          this.setFilteredProducts([]);
+          this.setError('Nenhum produto encontrado.');
+        }
+      }),
+      catchError(error => this.handleError(error)),
+      finalize(() => this.setLoading(false))
+    ).subscribe();
+  }
+
   setProductList(productList: Product[]) {
     this.updateState('productList', productList);
   }
