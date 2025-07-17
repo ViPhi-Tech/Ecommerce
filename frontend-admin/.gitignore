@@ -40,3 +40,15 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# TypeScript build info
+.tsbuildinfo
+
+# Memory optimization
+*.log
+*.tmp
+.cache/
+
+# VS Code
+.vscode/settings.json
+.vscode/launch.json

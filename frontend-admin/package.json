@@ -4,18 +4,22 @@
   "main": "main.js",
   "scripts": {
     "ng": "ng",
-    "dev": "ng serve",
-    "build": "ng build --configuration production",
-    "watch": "ng build --watch --configuration development",
+    "dev": "node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng serve --configuration development",
+    "build": "node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --configuration production",
+    "build:dev": "node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --configuration development",
+    "watch": "node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
     "formatar": "prettier --write src",
     "electron": "ng build --base-href ./ && electron .",
-    "dist": "ng build --base-href ./ && electron-builder"
+    "dist": "ng build --base-href ./ && electron-builder",
+    "clean": "rimraf dist .angular node_modules/.cache .tsbuildinfo",
+    "clean:install": "npm run clean && npm install",
+    "serve:optimized": "npm run clean && npm run dev"
   },
   "private": true,
   "browser": {
-  "timers": false
+    "timers": false
   },
   "dependencies": {
     "@angular/common": "^19.2.0",
@@ -60,6 +64,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "prettier": "3.5.3",
+    "rimraf": "^6.0.1",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.7.2",
     "typescript-eslint": "8.27.0"

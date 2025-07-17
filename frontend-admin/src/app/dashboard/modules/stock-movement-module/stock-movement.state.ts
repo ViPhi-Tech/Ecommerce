@@ -9,6 +9,7 @@ import { environments } from 'src/environments/environments';
 import { StockMovementService } from './stock-movement.service';
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
+import { MetricDTO } from './dtos/MetricDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,7 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
     super();
   }
 
-  async getStockMovementList(filter: any): Promise<void> {
+  async getStockMovementList(filter: MetricDTO): Promise<void> {
     this.setLoading(true);
     this.clearError();
     this.setStockMovementList([]);

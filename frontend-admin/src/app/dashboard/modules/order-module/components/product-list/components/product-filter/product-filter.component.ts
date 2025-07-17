@@ -57,14 +57,7 @@ export class ProductFilterComponent implements OnInit {
 
   filterProduct(query: string) {
     if (query) {
-      this.productService
-        .filterProducts(query)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(response => {
-          this.productState.setFilteredProducts(response?.dados);
-        });
-    } else {
-      this.productState.setFilteredProducts([]);
+      this.productState.searchProducts(query);
     }
   }
 
