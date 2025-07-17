@@ -1,12 +1,7 @@
 import { Component, input, OnInit } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
+import { IMovimentItem } from 'app/shared/interfaces/stock-movement.interface';
 
-interface IMovementItem {
-  type: 'in' | 'out';
-  productName: string;
-  productSku: string;
-  quantity: number;
-}
 
 @Component({
   selector: 'fuse-movement-item',
@@ -14,7 +9,7 @@ interface IMovementItem {
   imports: [NgIcon],
 })
 export class MovementItemComponent implements OnInit {
-  data = input<IMovementItem>();
+  item = input<IMovimentItem>();
 
   constructor() {}
 

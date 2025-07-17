@@ -4,7 +4,7 @@ import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
 import {
-  StockMovement,
+  IMovimentItem,
   StockMovementCreate,
 } from 'app/shared/interfaces/stock-movement.interface';
 
@@ -21,8 +21,8 @@ export class StockMovementService {
   getAll(
     filter: { date: string; type: string },
     skipLoader: boolean
-  ): Observable<ApiResponse<StockMovement[]>> {
-    return this.http.get<ApiResponse<StockMovement[]>>(`${this.productsApiUrl}/moviment/metrics`, {
+  ): Observable<ApiResponse<IMovimentItem[]>> {
+    return this.http.get<ApiResponse<IMovimentItem[]>>(`${this.productsApiUrl}/getMovimentByDate`, {
       params: filter,
       headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
     });
@@ -43,7 +43,7 @@ export class StockMovementService {
   }
 
   updateStockMovement(
-    stockMovementData: StockMovement
+    stockMovementData: IMovimentItem
   ): Observable<ApiResponse> {
     return this.http.put<ApiResponse>(
       `${this.apiUrl}/update`,

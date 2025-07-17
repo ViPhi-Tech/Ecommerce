@@ -58,15 +58,15 @@
     </div>
 
     <div class="space-y-4">
-      <div>
-        <fuse-movement-item />
-      </div>
-      <div>
-        <fuse-movement-item />
-      </div>
-      <div>
-        <fuse-movement-item />
-      </div>
+      @for (item of state.stockMovementList(); track $index) {
+        <div>
+          <fuse-movement-item [item]="item" />
+        </div>
+      }@empty {
+        <div>
+          <p>Nenhum movimento de estoque encontrado para esta data.</p>
+        </div>
+      }
     </div>
   </div>
 </div>

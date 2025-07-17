@@ -149,12 +149,13 @@ export class StockMovementListComponent implements OnInit {
 
   maxDate = signal(new Date());
   movementTypes = signal([
+    { label: 'Todos', value: '' },
     { label: 'Entrada', value: 'IN' },
     { label: 'Saída', value: 'OUT' },
   ]);
 
   formFilter = this.formBuilder.group({
-    type: [null],
+    type: [''],
     date: [new Date()],
   });
 

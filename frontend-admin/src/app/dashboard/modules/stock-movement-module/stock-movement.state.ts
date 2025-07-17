@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import {
-  StockMovement,
+  IMovimentItem,
   StockMovementModuleState,
 } from 'app/shared/interfaces/stock-movement.interface';
 import { BaseState } from 'app/shared/store/base.state';
@@ -10,6 +10,7 @@ import { StockMovementService } from './stock-movement.service';
 import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { MetricDTO } from './dtos/MetricDTO';
+import dayjs from 'dayjs';
 
 @Injectable({
   providedIn: 'root',
@@ -32,7 +33,17 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
     error: null,
   });
 
-  stockMovementList = computed(() => this.state().stockMovementList);
+  stockMovementList = computed(() => {
+    let list = this.state().stockMovementList;
+    list = list.map(item => {
+      item.date = dayjs(item.createdAt).format('DD/MM/YYYY');
+      item.hour = dayjs(item.createdAt).format('HH:mm');
+
+      return item as IMovimentItem;
+    })
+
+    return list
+  });
   cardsData = computed(() => this.state().cardsData);
   loadingCards = computed(() => this.state().loadingCards);
 
@@ -78,7 +89,7 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
     this.updateState('loadingCards', loading);
   }
 
-  setStockMovementList(stockMovementList: StockMovement[]) {
+  setStockMovementList(stockMovementList: IMovimentItem[]) {
     this.updateState('stockMovementList', stockMovementList);
   }
 

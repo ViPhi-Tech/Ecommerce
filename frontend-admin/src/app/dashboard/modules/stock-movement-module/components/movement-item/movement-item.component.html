@@ -8,36 +8,44 @@
     >
       <div class="flex items-start gap-4">
         <div class="flex flex-col items-center gap-1">
-          <div
-            class="rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/80 bg-green-100 text-green-800 border-green-200 flex items-center gap-1"
-          >
-            <ng-icon name="lucideArrowUp" class="h-4 w-4"></ng-icon>
-            Entrada
-          </div>
-          <span class="text-xs text-gray-500">14:30</span>
+          @if (item()?.type === 'IN') {
+            <div
+              class="rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/80 bg-green-100 text-green-800 border-green-200 flex items-center gap-1"
+            >
+              <ng-icon name="lucideArrowUp" class="h-4 w-4"></ng-icon>
+              Entrada
+            </div>
+          }@else {
+            <div
+              class="rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-red/80 bg-red-100 text-red-800 border-red-200 flex items-center gap-1"
+            >
+              <ng-icon name="lucideArrowDown" class="h-4 w-4"></ng-icon>
+              Saída
+            </div>
+          }
+          <span class="text-xs text-gray-500">{{ item()?.hour }}</span>
         </div>
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-2 mb-1">
             <h3 class="font-semibold text-gray-900 dark:text-white truncate">
-              Notebook Dell Inspiron 15
+              {{ item()?.stock?.product?.name }}
             </h3>
             <div
               class="inline-flex items-center rounded-full border px-2.5 py-0.5 font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground text-xs"
-              data-v0-t="badge"
             >
-              NB001
+              {{ item()?.stock?.product?.sku }}
             </div>
           </div>
           <div
-            class="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600"
+            class="flex gap-2 text-sm text-gray-600"
           >
             <div class="flex items-center gap-1">
               <ng-icon name="lucideCalendar" class="h-3 w-3"></ng-icon>
-              2024-01-15
+              {{ item()?.date }}
             </div>
             <div class="flex items-center gap-1">
               <ng-icon name="lucidePackage" class="h-3 w-3"></ng-icon>
-              Qtd: 5
+              Qtd: {{ item()?.quantity }}
             </div>
           </div>
         </div>
