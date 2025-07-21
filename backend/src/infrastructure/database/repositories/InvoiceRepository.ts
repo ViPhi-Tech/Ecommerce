@@ -9,10 +9,12 @@ export class InvoiceRepository implements IInvoiceRepository {
 
   async create(data: Invoice): Promise<Invoice> {
     const { clientId, orderId, ...restOfData } = data;
+    const { items, ...restWithoutItems } = restOfData; 
+    
+    const dataForPrisma: Prisma.InvoiceUpdateInput = {
+    ...restWithoutItems                                  // Prepara o restante dos campos
+  };
 
-    const dataForPrisma: Prisma.InvoiceCreateInput = {
-      ...restOfData,
-    };
     if (clientId) {
       dataForPrisma.client = {
         connect: {
@@ -31,7 +33,9 @@ export class InvoiceRepository implements IInvoiceRepository {
     }
 
     const invoice = await this.prisma.invoice.create({
-      data: dataForPrisma,
+      data: {
+        ...restWithoutItems
+      }
     });
 
     return invoice as Invoice;
@@ -57,10 +61,11 @@ export class InvoiceRepository implements IInvoiceRepository {
   async update(id: number, data: Partial<Invoice>): Promise<Invoice> {
     // 1. Separa os IDs de relação do resto dos dados a serem atualizados.
     const { clientId, orderId, ...restOfData } = data;
-    
+    const { items, ...restWithoutItems } = restOfData;
     // 2. Prepara o objeto de dados para o Prisma.
+    // Agora: restWithoutItems não tem mais 'items'
     const dataForPrisma: Prisma.InvoiceUpdateInput = {
-      ...restOfData, // Adiciona os campos simples (status, totalAmount, etc.)
+      ...restWithoutItems
     };
     
     // 3. Se um novo clientId for fornecido, usa 'connect' para atualizar a relação.

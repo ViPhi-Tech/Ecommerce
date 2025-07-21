@@ -1,3 +1,5 @@
+import { InvoiceItem } from "./InvoiceItem";
+
 export interface Invoice {
   id?: number;                 // opcional, gerado pelo banco
   number?: string | null;              // obrigatório
@@ -9,4 +11,5 @@ export interface Invoice {
   taxAmount?: number | null;   // opcional, pode ser null
   clientId?: number | null;    // opcional, pode ser null
   orderId?: number | null;             // obrigatório (Int no Prisma)
+  items?: InvoiceItem[]
 }

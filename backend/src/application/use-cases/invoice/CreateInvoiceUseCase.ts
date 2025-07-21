@@ -37,6 +37,8 @@ export class CreateInvoiceUseCase {
           invoiceId: currentInvoiceId
         }));
         await invoiceRepository.createItems(invoice.id, itemsToCreate);
+        const itemsInvoice = await invoiceRepository.findItemsByInvoiceID(currentInvoiceId)
+        invoice.items = itemsInvoice
       }
       return invoice;
     });
