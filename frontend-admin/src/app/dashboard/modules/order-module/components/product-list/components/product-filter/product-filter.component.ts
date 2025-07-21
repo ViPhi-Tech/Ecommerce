@@ -50,7 +50,7 @@ export class ProductFilterComponent implements OnInit {
     this.searchControl.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
       .pipe(debounceTime(500))
-      .subscribe((value) => {
+      .subscribe(value => {
         this.filterProduct(value || '');
       });
   }

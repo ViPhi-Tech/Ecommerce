@@ -7,6 +7,7 @@ import {
   IMovimentItem,
   StockMovementCreate,
 } from 'app/shared/interfaces/stock-movement.interface';
+import { Product } from 'app/shared/interfaces/product-module.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -22,14 +23,19 @@ export class StockMovementService {
     filter: { date: string; type: string },
     skipLoader: boolean
   ): Observable<ApiResponse<IMovimentItem[]>> {
-    return this.http.get<ApiResponse<IMovimentItem[]>>(`${this.productsApiUrl}/getMovimentByDate`, {
-      params: filter,
-      headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
-    });
+    return this.http.get<ApiResponse<IMovimentItem[]>>(
+      `${this.productsApiUrl}/getMovimentByDate`,
+      {
+        params: filter,
+        headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
+      }
+    );
   }
 
   getStockMetrics(): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(`${this.productsApiUrl}/moviment/metrics`);
+    return this.http.get<ApiResponse<any>>(
+      `${this.productsApiUrl}/moviment/metrics`
+    );
   }
 
   // Define methods for stock movement operations here
@@ -42,13 +48,24 @@ export class StockMovementService {
     );
   }
 
-  updateStockMovement(
-    stockMovementData: IMovimentItem
-  ): Observable<ApiResponse> {
-    return this.http.put<ApiResponse>(
-      `${this.apiUrl}/update`,
-      stockMovementData
-    );
+  inboundProductsToStock(products: Product[]): Observable<ApiResponse> {
+    const updatedProducts = products.map(({ id, quantity }) => ({
+      id,
+      quantity,
+    }));
+    return this.http.put<ApiResponse>(`${this.apiUrl}/inbound`, {
+      products: updatedProducts,
+    });
+  }
+
+  outboundProductsToStock(products: Product[]): Observable<ApiResponse> {
+    const updatedProducts = products.map(({ id, quantity }) => ({
+      id,
+      quantity,
+    }));
+    return this.http.put<ApiResponse>(`${this.apiUrl}/outbound`, {
+      products: updatedProducts,
+    });
   }
 
   deleteStockMovement(stockMovementId: string): Observable<ApiResponse> {

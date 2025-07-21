@@ -42,7 +42,7 @@ import { PhonePipe } from 'app/shared/pipes/phone.pipe';
     NgClass,
     DocumentPipe,
     PhonePipe,
-    DateCustomPipe
+    DateCustomPipe,
   ],
 })
 export class TableComponent implements OnInit {

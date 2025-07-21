@@ -15,12 +15,11 @@ dayjs.locale('pt-br');
 
 @Pipe({
   name: 'dateCustom',
-  standalone: true
+  standalone: true,
 })
 export class DateCustomPipe implements PipeTransform {
-
   transform(
-    value: string | number | Date | dayjs.Dayjs, 
+    value: string | number | Date | dayjs.Dayjs,
     format?: string,
     relative?: boolean
   ): string {
@@ -44,28 +43,28 @@ export class DateCustomPipe implements PipeTransform {
     switch (format) {
       case 'short':
         return date.format('DD/MM/YYYY');
-      
+
       case 'medium':
         return date.format('DD/MM/YYYY HH:mm');
-      
+
       case 'long':
         return date.format('DD [de] MMMM [de] YYYY');
-      
+
       case 'full':
         return date.format('dddd, DD [de] MMMM [de] YYYY [às] HH:mm');
-      
+
       case 'time':
         return date.format('HH:mm');
-      
+
       case 'datetime':
         return date.format('DD/MM/YYYY [às] HH:mm');
-      
+
       case 'iso':
         return date.toISOString();
-      
+
       case 'timestamp':
         return date.unix().toString();
-      
+
       default:
         // Se um formato personalizado for fornecido, usa ele
         // Senão, usa o formato padrão brasileiro

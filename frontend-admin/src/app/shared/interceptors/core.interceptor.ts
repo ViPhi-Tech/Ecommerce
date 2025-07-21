@@ -51,7 +51,7 @@ export function CoreInterceptor(
 
     if (hasNullParams) {
       cleanedRequest = req.clone({
-        params: cleanedParams
+        params: cleanedParams,
       });
     }
   }

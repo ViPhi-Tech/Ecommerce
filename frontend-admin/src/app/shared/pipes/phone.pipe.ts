@@ -2,10 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'phone',
-  standalone: true
+  standalone: true,
 })
 export class PhonePipe implements PipeTransform {
-  
   transform(value: string | number): string {
     if (!value) {
       return '';
@@ -19,23 +18,23 @@ export class PhonePipe implements PipeTransform {
       case 8:
         // Telefone fixo sem DDD: 0000-0000
         return this.formatFixedPhone(cleanValue);
-      
+
       case 9:
         // Celular sem DDD: 90000-0000
         return this.formatMobilePhone(cleanValue);
-      
+
       case 10:
         // Telefone fixo com DDD: (00) 0000-0000
         return this.formatFixedPhoneWithDDD(cleanValue);
-      
+
       case 11:
         // Celular com DDD: (00) 90000-0000
         return this.formatMobilePhoneWithDDD(cleanValue);
-      
+
       case 13:
         // Telefone com código do país: +55 (00) 90000-0000
         return this.formatInternationalPhone(cleanValue);
-      
+
       default:
         // Se não for um formato reconhecido, retorna o valor original
         return value.toString();
@@ -68,7 +67,7 @@ export class PhonePipe implements PipeTransform {
       const phoneWithoutCountryCode = phone.substring(2);
       return `+55 ${this.formatMobilePhoneWithDDD(phoneWithoutCountryCode)}`;
     }
-    
+
     // Se não começar com 55, formata como número genérico
     return phone.replace(/(\d{2})(\d{2})(\d{5})(\d{4})/, '+$1 ($2) $3-$4');
   }

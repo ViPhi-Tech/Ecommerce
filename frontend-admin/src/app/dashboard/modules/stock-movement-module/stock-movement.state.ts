@@ -40,9 +40,9 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
       item.hour = dayjs(item.createdAt).format('HH:mm');
 
       return item as IMovimentItem;
-    })
+    });
 
-    return list
+    return list;
   });
   cardsData = computed(() => this.state().cardsData);
   loadingCards = computed(() => this.state().loadingCards);
@@ -71,7 +71,7 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
     await lastValueFrom(
       this.stockMovementService.getStockMetrics().pipe(
         tap(data => this.updateState('cardsData', data?.dados || null)),
-        catchError((error) => {
+        catchError(error => {
           this.handleError(error, 'Erro ao carregar métricas de estoque');
           this.toast.add({
             severity: 'error',
@@ -92,5 +92,4 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
   setStockMovementList(stockMovementList: IMovimentItem[]) {
     this.updateState('stockMovementList', stockMovementList);
   }
-
 }

@@ -53,8 +53,7 @@ export class OrderCartComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   getCartData() {}
 

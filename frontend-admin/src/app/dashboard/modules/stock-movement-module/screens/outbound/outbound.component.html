@@ -5,10 +5,10 @@
   [modal]="true"
   [closeOnEscape]="true"
   [draggable]="false"
-  styleClass="w-full md:w-[900px]"
+  styleClass="w-full md:max-w-[1200px]"
 >
   <ng-template #header>
-    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+    <div class="mw flex flex-col space-y-1.5 text-center sm:text-left">
       <h2 class="text-2xl font-semibold leading-none tracking-tight">
         {{ title() }}
       </h2>
@@ -19,34 +19,37 @@
   </ng-template>
 
   <div class="animate-fade-in">
-    <p-tabs value="0">
-      <form [formGroup]="outboundData">
-        <div class="space-y-4">
-          <div class="flex flex-col gap-1">
-            <label [for]="'xmlFileInput'" class="label"> Arquivo XML </label>
-            <p-button
-              (onClick)="importXml()"
-              [disabled]="!outboundData.get('nfModel')?.valid"
-              label="Importar dados de arquivo XML"
-              icon="pi pi-upload"
-            />
-          </div>
-
-          <div>
-            <fuse-input
-              [control]="outboundData.get('nfModel')"
-              type="radio"
-              label="Modelo"
-              [items]="nfModel()"
-            />
-          </div>
+    <!-- <form [formGroup]="outboundData">
+      <div class="space-y-4">
+        <div class="flex flex-col gap-1">
+          <label [for]="'xmlFileInput'" class="label"> Arquivo XML </label>
+          <p-button
+            (onClick)="importXml()"
+            [disabled]="!outboundData.get('nfModel')?.valid"
+            label="Importar dados de arquivo XML"
+            icon="pi pi-upload"
+          />
         </div>
-      </form>
+
+        <div>
+          <fuse-input
+            [control]="outboundData.get('nfModel')"
+            type="radio"
+            label="Modelo"
+            [items]="nfModel()"
+          />
+        </div>
+      </div>
+    </form> -->
+    <div class="flex flex-col py-4 gap-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Lista de produtos</h3>
+      </div>
       <fuse-table
         [data]="outboundData.get('products')?.value"
         [config]="tableConfig()"
       ></fuse-table>
-    </p-tabs>
+    </div>
   </div>
 
   <ng-template #footer>
@@ -79,3 +82,112 @@
 </p-dialog>
 
 <fuse-import-invoice />
+
+<p-dialog
+  #dialogRef
+  [(visible)]="showSelectProductDialog"
+  [modal]="true"
+  [closeOnEscape]="true"
+  [draggable]="false"
+  styleClass="max-w-[600px] w-full"
+>
+  <ng-template #header>
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 class="text-2xl font-semibold leading-none tracking-tight">
+        Selecione um Produto
+      </h2>
+      <p class="text-sm text-muted-foreground">
+        Selecione um produto e uma quantidade para dar entrada ao estoque
+      </p>
+    </div>
+  </ng-template>
+  <div class="animate-fade-in">
+    <form [formGroup]="formAddProduct">
+      <div class="space-y-4">
+        <div class="flex flex-col gap-1">
+          <label [for]="'productId'" class="label"> Produto </label>
+          <p-autocomplete
+            formControlName="productId"
+            [suggestions]="filteredProducts()"
+            (completeMethod)="filterProduct($event)"
+            placeholder="Pesquisar produto por SKU ou nome"
+            appendTo="body"
+            optionLabel="name"
+            dataKey="sku"
+            fluid
+          >
+            <ng-template let-product #item>
+              <div class="w-full">
+                <div class="flex justify-between w-full">
+                  <div>
+                    <span
+                      class="font-medium max-w-[400px] truncate inline-block align-bottom"
+                      title="{{ product?.sku }} - {{ product?.name }}"
+                    >
+                      {{ product?.sku }} - {{ product?.name }}
+                    </span>
+                  </div>
+                  <span class="text-sm text-muted-foreground">{{
+                    product?.finalPrice
+                      | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+                  }}</span>
+                </div>
+                <div>
+                  <span class="text-sm text-muted-foreground"
+                    >Estoque atual:
+                    <strong>{{ product?.stock?.quantity }}</strong></span
+                  >
+                </div>
+              </div>
+            </ng-template>
+            <ng-template #header>
+              <div class="font-medium px-3 py-2">Produtos Disponíveis</div>
+            </ng-template>
+            <ng-template #empty>
+              <div class="px-3 py-2 text-sm text-muted-foreground">
+                Nenhum produto encontrado
+              </div>
+            </ng-template>
+          </p-autocomplete>
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <fuse-input
+            label="Quantidade"
+            [control]="formAddProduct.get('quantity')"
+            type="number"
+            placeholder="Quantidade"
+          />
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <ng-template #footer>
+    <div class="w-full justify-end flex items-center gap-4">
+      <div class="flex gap-2">
+        <button
+          pButton
+          type="submit"
+          label="Adicionar"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+          (click)="addProductToList()"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          icon="pi pi-times"
+          (click)="showSelectProductDialog.set(false)"
+          [outlined]="true"
+          severity="secondary"
+          class="w-[200px]"
+          size="small"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

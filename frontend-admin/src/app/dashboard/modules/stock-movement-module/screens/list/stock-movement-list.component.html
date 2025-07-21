@@ -68,9 +68,9 @@
 
       @for (item of state.stockMovementList(); track $index) {
         <div>
-          <fuse-movement-item  [item]="item" />
+          <fuse-movement-item [item]="item" />
         </div>
-      }@empty {
+      } @empty {
         @if (!state.loading()) {
           <div>
             <p>Nenhum movimento de estoque encontrado para esta data.</p>

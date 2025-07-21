@@ -9,6 +9,7 @@ export interface ProductModuleState extends BaseModuleState {
 }
 
 export interface Product {
+  id: string | number; // Identificador único do produto
   name: string;
   sku: string;
   category: string;

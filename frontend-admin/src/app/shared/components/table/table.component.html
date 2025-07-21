@@ -130,23 +130,13 @@
             </ng-container>
           } @else {
             @if (column?.type === 'date') {
-              {{
-                rowData?.[column?.field || ''] | dateCustom: 'short'
-              }}
+              {{ rowData?.[column?.field || ''] | dateCustom: 'short' }}
             } @else if (column?.type === 'datetime') {
-              {{
-                rowData?.[column?.field || '']
-                  | dateCustom: 'medium'
-              }}
+              {{ rowData?.[column?.field || ''] | dateCustom: 'medium' }}
             } @else if (column?.type === 'phone') {
-              {{
-                rowData?.[column?.field || '']
-                  | phone
-              }}
+              {{ rowData?.[column?.field || ''] | phone }}
             } @else if (column?.type === 'document') {
-              {{
-                rowData?.[column?.field || ''] | document
-              }}
+              {{ rowData?.[column?.field || ''] | document }}
             } @else if (column?.type === 'currency') {
               {{
                 rowData?.[column?.field || '']

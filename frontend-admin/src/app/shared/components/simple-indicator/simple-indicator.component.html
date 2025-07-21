@@ -13,7 +13,7 @@
         </div>
       </div>
     }
-    
+
     @if (!loading()) {
       <div class="flex items-center justify-between">
         <div>
@@ -30,7 +30,11 @@
           class="h-12 w-12 rounded-lg flex items-center justify-center"
           [ngClass]="variantClasses.bgColor"
         >
-          <ng-icon [name]="icon()" size="20" [class]="variantClasses.iconColor" />
+          <ng-icon
+            [name]="icon()"
+            size="20"
+            [class]="variantClasses.iconColor"
+          />
         </div>
       </div>
     }

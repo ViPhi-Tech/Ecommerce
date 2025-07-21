@@ -60,7 +60,13 @@ export class ClientListComponent implements OnInit {
       },
       { field: 'email', caption: 'Email' },
       { field: 'phone', type: 'phone', caption: 'Telefone' },
-      { field: 'document', type: 'document', caption: 'CPF/CNPJ', sortable: true, filter: true },
+      {
+        field: 'document',
+        type: 'document',
+        caption: 'CPF/CNPJ',
+        sortable: true,
+        filter: true,
+      },
       {
         field: 'actions',
         caption: 'Ações',

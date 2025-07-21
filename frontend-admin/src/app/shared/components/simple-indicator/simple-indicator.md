@@ -14,13 +14,13 @@ Um componente reutilizável para exibir indicadores simples com título, valor e
 
 ## Propriedades
 
-| Propriedade     | Tipo                                          | Padrão      | Descrição                         |
-| --------------- | --------------------------------------------- | ----------- | --------------------------------- |
-| `title`         | `string`                                      | `''`        | Título do indicador               |
-| `value`         | `string \| number`                            | `''`        | Valor principal a ser exibido     |
-| `variant`       | `'success' \| 'warning' \| 'error' \| 'info'` | `'info'`    | Variante de cor do indicador      |
-| `icon`          | `string`                                      | `undefined` | Nome do ícone (não implementado)  |
-| `customIconSvg` | `string`                                      | `undefined` | HTML/SVG customizado para o ícone |
+| Propriedade     | Tipo                                          | Padrão      | Descrição                           |
+| --------------- | --------------------------------------------- | ----------- | ----------------------------------- |
+| `title`         | `string`                                      | `''`        | Título do indicador                 |
+| `value`         | `string \| number`                            | `''`        | Valor principal a ser exibido       |
+| `variant`       | `'success' \| 'warning' \| 'error' \| 'info'` | `'info'`    | Variante de cor do indicador        |
+| `icon`          | `string`                                      | `undefined` | Nome do ícone (não implementado)    |
+| `customIconSvg` | `string`                                      | `undefined` | HTML/SVG customizado para o ícone   |
 | `loading`       | `boolean`                                     | `false`     | Exibe skeleton durante carregamento |
 
 ## Estado de Loading
@@ -37,8 +37,9 @@ O componente suporta um estado de loading que exibe skeletons no lugar do conte�
 ```
 
 Durante o loading, será exibido:
+
 - Skeleton para o título (60% da largura)
-- Skeleton para o valor (40% da largura) 
+- Skeleton para o valor (40% da largura)
 - Skeleton circular para o ícone
 
 ## Variantes

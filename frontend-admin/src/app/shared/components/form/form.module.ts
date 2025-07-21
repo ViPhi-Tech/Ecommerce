@@ -5,7 +5,12 @@ import { InputComponent } from './input/input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  imports: [SelectComponent, DatePickerComponent, InputComponent, ReactiveFormsModule],
+  imports: [
+    SelectComponent,
+    DatePickerComponent,
+    InputComponent,
+    ReactiveFormsModule,
+  ],
   exports: [SelectComponent, DatePickerComponent, InputComponent],
 })
 export class FormModule {}

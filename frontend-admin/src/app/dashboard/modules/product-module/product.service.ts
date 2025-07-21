@@ -41,9 +41,12 @@ export class ProductService {
   }
 
   filterProducts(query: string): Observable<ApiResponse<Product[]>> {
-    return this.http.get<ApiResponse<Product[]>>(`${this.apiUrl}/search/${query}`, {
-      headers: { 'Skip-Loader': 'false' },
-    });
+    return this.http.get<ApiResponse<Product[]>>(
+      `${this.apiUrl}/search/${query}`,
+      {
+        headers: { 'Skip-Loader': 'false' },
+      }
+    );
   }
 
   refreshProductList() {

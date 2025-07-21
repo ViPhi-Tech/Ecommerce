@@ -17,15 +17,15 @@ export interface StockMovementCreate {
 }
 
 export interface IMovimentItem {
-  id:        number;
-  stockId:   number;
-  type:      string;
-  quantity:  number;
-  userId:    number;
+  id: number;
+  stockId: number;
+  type: string;
+  quantity: number;
+  userId: number;
   createdAt: Date;
   updatedAt: Date;
-  stock:     Stock;
-  user:      User;
+  stock: Stock;
+  user: User;
 
   hour?: string; // Hora do movimento, opcional
   date?: string; // Data do movimento, opcional
@@ -37,7 +37,7 @@ export interface Stock {
 
 export interface Product {
   name: string;
-  sku:  string;
+  sku: string;
 }
 
 export interface User {

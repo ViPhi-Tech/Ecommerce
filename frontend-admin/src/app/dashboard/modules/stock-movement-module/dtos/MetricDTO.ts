@@ -1,6 +1,6 @@
 export interface MetricDTO {
   date: string;
-  type: "IN" | "OUT";
+  type: 'IN' | 'OUT';
 }
 
 export interface MetricResponse {
