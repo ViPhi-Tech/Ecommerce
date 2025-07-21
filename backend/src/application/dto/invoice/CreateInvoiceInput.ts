@@ -8,5 +8,11 @@ export interface CreateInvoiceInput {
   totalAmount: number;           // obrigatório
   taxAmount?: number | null;     // opcional, aceita null
   clientId?: number | null;      // opcional, aceita null
-  orderId: number;               // obrigatório (Int no Prisma)
+  orderId?: number | null;               // obrigatório (Int no Prisma)
+  items?: {
+    productId: number;
+    quantity: number;
+    price: number;
+    totalAmount: number;
+  }[]
 }

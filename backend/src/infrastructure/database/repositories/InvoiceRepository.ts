@@ -1,6 +1,8 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { Invoice } from '../../../domain/entities/Invoice';
 import { IInvoiceRepository } from '../../../domain/repositories/IInvoiceRepository';
+import { InvoiceItem } from '../../../domain/entities/InvoiceItem';
+import { InvoiceID } from '../../http/dto/Invoice.dto';
 
 export class InvoiceRepository implements IInvoiceRepository {
   constructor(private prisma: PrismaClient | Prisma.TransactionClient) {}
@@ -9,7 +11,7 @@ export class InvoiceRepository implements IInvoiceRepository {
     const { clientId, orderId, ...restOfData } = data;
 
     const dataForPrisma: Prisma.InvoiceCreateInput = {
-      ...restOfData, // Adiciona os campos simples (number, totalAmount, etc.)
+      ...restOfData,
     };
     if (clientId) {
       dataForPrisma.client = {
@@ -19,11 +21,13 @@ export class InvoiceRepository implements IInvoiceRepository {
       };
     }
     if (orderId) {
-      dataForPrisma.order = {
+      if (typeof orderId === 'number' && orderId > 0) {
+              dataForPrisma.order = {
         connect: {
           id: orderId,
         },
       };
+      }
     }
 
     const invoice = await this.prisma.invoice.create({
@@ -31,8 +35,7 @@ export class InvoiceRepository implements IInvoiceRepository {
     });
 
     return invoice as Invoice;
-  }
-
+  };
 
   async findById(id: number): Promise<Invoice | null> {
     const invoice = await this.prisma.invoice.findUnique({
@@ -41,7 +44,7 @@ export class InvoiceRepository implements IInvoiceRepository {
     });
 
     return invoice as Invoice
-  }
+  };
 
   async findAll(): Promise<Invoice[]> {
     const invoices = await this.prisma.invoice.findMany({
@@ -49,7 +52,7 @@ export class InvoiceRepository implements IInvoiceRepository {
     });
 
     return invoices as Invoice[]
-  }
+  };
 
   async update(id: number, data: Partial<Invoice>): Promise<Invoice> {
     // 1. Separa os IDs de relação do resto dos dados a serem atualizados.
@@ -77,8 +80,29 @@ export class InvoiceRepository implements IInvoiceRepository {
     });
   };
 
-
   async delete(id: number): Promise<void> {
     await this.prisma.invoice.delete({ where: { id } });
+  };
+
+  async createItems(invoiceId: number, data: InvoiceItem[]): Promise<InvoiceItem[]> {
+    const newData = data.map(item =>({
+      ...item,
+      invoiceId
+    }))
+    await this.prisma.invoiceItem.createMany({
+      data: newData
+    })
+    return this.findItemsByInvoiceID(invoiceId)
+  };
+
+  async findItemsByInvoiceID(invoiceId: number): Promise<InvoiceItem[]> {
+    return await this.prisma.invoiceItem.findMany({
+      where: {
+        invoiceId
+      }
+    })
   }
+
+
+
 }

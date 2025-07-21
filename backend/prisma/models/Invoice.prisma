@@ -1,7 +1,7 @@
 model Invoice {
   id          Int      @id @default(autoincrement())
   external_id String   @unique    @default(uuid())
-  number      String   @unique                        // Número da nota
+  number      String?                                // Número da nota
   series      String?                                // Série da nota (opcional)
   status      String                                 // Ex: 'issued', 'canceled', 'pending'
   issueDate   DateTime                               // Data de emissão
@@ -12,13 +12,13 @@ model Invoice {
   client      Client?   @relation(fields: [clientId], references: [id])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  orderId     Int
+  orderId     Int?
   order       Order?    @relation(fields: [orderId], references: [id])
 
-  items       InoviceItems[]
+  items       InvoiceItem[]
 }
 
-model InoviceItems {
+model InvoiceItem {
   id          Int      @id @default(autoincrement())
   invoiceId   Int      
   invoice     Invoice? @relation(fields: [invoiceId], references: [id])

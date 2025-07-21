@@ -1,6 +1,6 @@
 export interface Invoice {
   id?: number;                 // opcional, gerado pelo banco
-  number: string;              // obrigatório
+  number?: string | null;              // obrigatório
   series?: string | null;      // opcional, pode ser null
   status: string;              // obrigatório
   issueDate: Date;             // obrigatório

@@ -33,7 +33,7 @@ export default async function invoiceRoutes(
       tags: ['invoice']
     },
     preValidation: [authenticate],
-    handler: invoiceController.findAll.bind(invoiceController) // ✅
+    handler: invoiceController.findAll.bind(invoiceController) 
   });
 
   fastify.put('/:id', {
@@ -42,7 +42,7 @@ export default async function invoiceRoutes(
       body: invoiceJsonSchema
     },
     preValidation: [authenticate],
-    handler: invoiceController.update.bind(invoiceController) // ✅
+    handler: invoiceController.update.bind(invoiceController) 
   });
 
   fastify.delete('/:id', {
@@ -51,6 +51,8 @@ export default async function invoiceRoutes(
       params: {}
     },
     preValidation: [authenticate],
-    handler: invoiceController.delete.bind(invoiceController) // ✅
+    handler: invoiceController.delete.bind(invoiceController)
   });
+
+
 }
