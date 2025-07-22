@@ -50,7 +50,7 @@ export class StockMovementService {
 
   inboundProductsToStock(products: Product[]): Observable<ApiResponse> {
     const updatedProducts = products.map(({ id, quantity }) => ({
-      id,
+      productId: id,
       quantity,
     }));
     return this.http.put<ApiResponse>(`${this.apiUrl}/inbound`, {
@@ -60,7 +60,7 @@ export class StockMovementService {
 
   outboundProductsToStock(products: Product[]): Observable<ApiResponse> {
     const updatedProducts = products.map(({ id, quantity }) => ({
-      id,
+      productId: id,
       quantity,
     }));
     return this.http.put<ApiResponse>(`${this.apiUrl}/outbound`, {
