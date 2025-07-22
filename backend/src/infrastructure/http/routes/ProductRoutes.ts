@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { productController } from "../../config/dependencies/productDependencies";
 import { authenticate } from "../middlewares/authMiddleware";
-import {productCreateJsonSchema, productUpdateStockJsonSchema, productUpdateJsonSchema, findMovimentJsonSchema} from "../dto/Product.dto";
+import {productCreateJsonSchema, productUpdateStockJsonSchema, productUpdateJsonSchema, findMovimentJsonSchema, updateManyStocksJsonSchema} from "../dto/Product.dto";
 import { productIdJsonSchema } from "../dto/Product.dto";
 
 export default async function productRoutes(
@@ -121,8 +121,6 @@ export default async function productRoutes(
         handler: productController.getMetrics.bind(productController)
     }
     );
-
-
         fastify.get('/getMovimentByDate',{
         schema: {
             tags: ['product'],
@@ -132,5 +130,15 @@ export default async function productRoutes(
         preValidation: [authenticate],
         handler: productController.findMovimentByDate.bind(productController)
     }
-    )
+    );
+
+
+    fastify.post('/movimentManyStocks', {
+        schema: {
+            tags: ['product'],
+            body: updateManyStocksJsonSchema
+        },
+        preValidation: [authenticate],
+        handler: productController.updateManyStocks.bind(productController)
+    })
 }

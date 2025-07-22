@@ -57,6 +57,11 @@ export const productUpdateStockSchema = z.object({
     quantity: z.number().min(1, { message: "Quantidade atualizada do produto" })
 });
 
+export const productUpdateManyStockSchema = z.object({
+    type: z.enum(["IN", "OUT"]),
+    stocks: z.array(productUpdateStockSchema)
+}
+);
 
 export const productCategorySchema = z.object({
     name: z.string().min(1, {message: "Nome da categoria"}),
@@ -86,6 +91,7 @@ export const findMovimentSchema = z.object({
 
 export const findMovimentJsonSchema = zodToJsonSchema(findMovimentSchema)
 export const productUpdateStockJsonSchema = zodToJsonSchema(productUpdateStockSchema);
+export const updateManyStocksJsonSchema = zodToJsonSchema(productUpdateManyStockSchema)
 export const productIdJsonSchema= zodToJsonSchema(productIDSchema);
 export const productIdMovimentJsonSchema = zodToJsonSchema(productIdMovimentSchema);
 export const productJsonSchema = zodToJsonSchema(productSchemaDTO);
@@ -99,3 +105,4 @@ export type ProductID = z.infer<typeof productIDSchema>;
 export type ProductUpdateStock = z.infer<typeof productUpdateStockSchema>;
 export type ProductIdMoviment = z.infer<typeof productIdMovimentSchema>;
 export type ProductUpdateDTO = z.infer<typeof productCreateSchema>;
+export type UpdateManyDTO = z.infer<typeof productUpdateManyStockSchema>

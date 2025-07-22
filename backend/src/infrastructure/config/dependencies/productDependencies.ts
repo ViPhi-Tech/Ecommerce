@@ -12,6 +12,12 @@ import { FindByNameProductUseCase } from "../../../application/use-cases/product
 import { FindByParamProductUseCase } from "../../../application/use-cases/product/FindByParamUseCase";
 import { GetMetricsUseCase } from "../../../application/use-cases/product/GetMetricsUseCase";
 import { FindMovimentByDateUseCase } from "../../../application/use-cases/product/FindMovimentByDate";
+import { UpdateManyStocksUseCase } from "../../../application/use-cases/product/UpdateManyStocksUseCase";
+import { JwtAuthService } from "../../services/AuthService";
+
+const JWT_SECRET = process.env.SECRET_KEY || '';
+
+const jwtService = new JwtAuthService(JWT_SECRET);
 
 export const productRepository = new ProductRepository(prisma);
 
@@ -27,6 +33,8 @@ const findProductByParam = new FindByParamProductUseCase(productRepository)
 const getMetricsUseCase = new GetMetricsUseCase(productRepository);
 const findMovimentByDateUseCase = new FindMovimentByDateUseCase(productRepository);
 
+const movimentManyUseCase = new UpdateManyStocksUseCase(productRepository, jwtService);
+
 export const productController = new ProductController(
     createProductUseCase,
     findByIdProductUseCase,
@@ -38,5 +46,6 @@ export const productController = new ProductController(
     findProductByNameUseCase,
     findProductByParam,
     getMetricsUseCase,
-    findMovimentByDateUseCase
+    findMovimentByDateUseCase,
+    movimentManyUseCase
 );

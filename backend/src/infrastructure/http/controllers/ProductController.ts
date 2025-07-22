@@ -7,13 +7,15 @@ import { FindByIdProductUseCase } from "../../../application/use-cases/product/F
 import { FindAllProductUseCase } from '../../../application/use-cases/product/FindAllProductUseCase';
 import { GetMovimentByProductUseCase } from '../../../application/use-cases/product/GetMovimentByProductUseCase';
 import {ApiResponse} from "../../../shared/types/apiResponse";
-import {ProductCreateDTO, ProductID, ProductUpdateStock, ProductIdMoviment, findMovimentDTO} from "../dto/Product.dto";
+import {ProductCreateDTO, ProductID, ProductUpdateStock, ProductIdMoviment, findMovimentDTO, UpdateManyDTO} from "../dto/Product.dto";
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 import { FindByNameProductUseCase } from '../../../application/use-cases/product/FindProductsByNameUseCase';
 import { FindByParamProductUseCase } from '../../../application/use-cases/product/FindByParamUseCase';
 import { GetMetricsUseCase } from '../../../application/use-cases/product/GetMetricsUseCase';
 import { FindMovimentByDateUseCase } from '../../../application/use-cases/product/FindMovimentByDate';
+import { UpdateManyStocksUseCase } from '../../../application/use-cases/product/UpdateManyStocksUseCase';
+
 
 export class ProductController {
     constructor(
@@ -27,7 +29,8 @@ export class ProductController {
         private findProductByNameUseCase: FindByNameProductUseCase,
         private findProductByParam: FindByParamProductUseCase,
         private getMetricsUseCase: GetMetricsUseCase,
-        private findMovimentByDateUseCase: FindMovimentByDateUseCase
+        private findMovimentByDateUseCase: FindMovimentByDateUseCase,
+        private movimentManyUseCase: UpdateManyStocksUseCase
     ) {}
 
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
@@ -152,6 +155,26 @@ export class ProductController {
     async getMetrics(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try {
             const data_product = await this.getMetricsUseCase.execute();
+            return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product }); 
+        } catch (error) {
+            return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
+        }
+    };
+
+    async updateManyStocks(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try {
+            
+            let token: string | undefined = '';
+            const authHeader = request.headers.authorization;
+            if (authHeader) {
+                token = authHeader.startsWith('Bearer ') ? authHeader.slice(7).trim() : authHeader.trim();
+            }
+
+            if (!token && request.cookies && request.cookies.access_token) {
+                token = request.cookies.access_token;
+            }
+            const {stocks, type} = request.body as UpdateManyDTO;
+            const data_product = await this.movimentManyUseCase.execute(stocks, type, token);
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product }); 
         } catch (error) {
             return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });

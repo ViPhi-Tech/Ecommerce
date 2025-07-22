@@ -69,13 +69,20 @@ export class JwtAuthService implements IAuthService {
   }
 }
 
-  // Trocar código de autorização por tokens
+getLoggedInUserId(token: string): number | null {
+  const decodedToken = this.verifyToken(token); 
+
+  if (decodedToken && decodedToken.sub) {
+    return decodedToken.sub;
+  }
+
+  return null;
+}
   async exchangeCodeForTokens(code: string) {
     const { tokens } = await this.googleClient.getToken(code);
     return tokens;
   }
 
-  // Verificar ID token do Google
   async verifyGoogleIdToken(idToken: string) {
     try {
       const ticket = await this.googleClient.verifyIdToken({

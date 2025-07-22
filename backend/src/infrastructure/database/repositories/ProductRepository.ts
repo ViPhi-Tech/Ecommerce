@@ -94,7 +94,7 @@ export class ProductRepository implements IProductRepository {
       const operations = items.map(({ sku, quantity }) => 
         this.prisma.stock.upsert({
           where: { productId: sku },
-          update: { quantity: { decrement: quantity } },
+          update: { quantity: { increment: quantity } },
           create: { productId: sku, quantity: -quantity }
         })
       );
@@ -116,12 +116,12 @@ export class ProductRepository implements IProductRepository {
   async updateManyStockMovements(data: stockMovement[]): Promise<void> {
     await this.prisma.stockMovement.createMany({
     data: data.map((item) => ({
-      stockId: item.stockId, // corrigido 'sotckId' para 'stockId'
+      stockId: item.stockId, 
       quantity: item.quantity,
       type: item.type as 'IN' | 'OUT',
       userId: item.userId ?? null
     })),
-    skipDuplicates: false, // ou true se quiser ignorar duplicatas
+    skipDuplicates: false, 
   });
 };
 

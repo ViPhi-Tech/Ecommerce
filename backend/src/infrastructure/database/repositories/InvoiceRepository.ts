@@ -2,7 +2,6 @@ import { Prisma, PrismaClient } from '@prisma/client';
 import { Invoice } from '../../../domain/entities/Invoice';
 import { IInvoiceRepository } from '../../../domain/repositories/IInvoiceRepository';
 import { InvoiceItem } from '../../../domain/entities/InvoiceItem';
-import { InvoiceID } from '../../http/dto/Invoice.dto';
 
 export class InvoiceRepository implements IInvoiceRepository {
   constructor(private prisma: PrismaClient | Prisma.TransactionClient) {}
@@ -12,7 +11,7 @@ export class InvoiceRepository implements IInvoiceRepository {
     const { items, ...restWithoutItems } = restOfData; 
     
     const dataForPrisma: Prisma.InvoiceUpdateInput = {
-    ...restWithoutItems                                  // Prepara o restante dos campos
+    ...restWithoutItems                               
   };
 
     if (clientId) {

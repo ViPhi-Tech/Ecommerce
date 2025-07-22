@@ -22,7 +22,6 @@ export class CreateOrderUseCase {
     const tokenDecoded = this.jwtService.verifyToken(authToken)
 
     return this.transactionRunner.run<OrderResponse>(async (tx) => {
-      // Cria novas instâncias dos repositórios usando a transação
       const txOrderRepository = new OrderRepository(tx)
       const txProductRepository = new ProductRepository(tx)
       const txPaymentRepository = new PaymentRepository(tx)
