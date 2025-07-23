@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
-import { Product } from 'app/shared/interfaces/product-module.interface';
+import { Product } from 'app/shared/interfaces/product/Product';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
 

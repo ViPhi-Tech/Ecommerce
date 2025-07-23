@@ -20,7 +20,6 @@ import { FormModule } from 'app/shared/components/form/form.module';
 import { ImportInvoiceComponent } from 'app/shared/components/import-invoice/import-invoice.component';
 import { ImportInvoiceService } from 'app/shared/components/import-invoice/import-invoice.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
-import { Product } from 'app/shared/interfaces/product-module.interface';
 import {
   DEFAULT_TABLE_CONFIG,
   TableConfig,
@@ -36,6 +35,8 @@ import { Dialog, DialogModule } from 'primeng/dialog';
 import { FieldsetModule } from 'primeng/fieldset';
 import { TabsModule } from 'primeng/tabs';
 import { StockMovementService } from '../../stock-movement.service';
+import { StockMovementState } from '../../stock-movement.state';
+import { Product } from 'app/shared/interfaces/product/Product';
 
 @Component({
   selector: 'fuse-inbound',
@@ -62,6 +63,7 @@ export class InboundComponent implements OnInit {
   private coreService = inject(CoreService);
   private toast = inject(MessageService);
   // Services
+  private stockMovementState = inject(StockMovementState);
   private stockMovementService = inject(StockMovementService);
   private productService = inject(ProductService);
 
@@ -188,10 +190,11 @@ export class InboundComponent implements OnInit {
 
     if (this.inboundData.valid) {
       this.stockMovementService
-        .inboundProductsToStock(formData.products)
+        .updateProductStock(formData.products, 'IN')
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
+            this.stockMovementService.refreshStockData()
             this.toast.add({
               severity: 'success',
               summary: 'Sucesso',

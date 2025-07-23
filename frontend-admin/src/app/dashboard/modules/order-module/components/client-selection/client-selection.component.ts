@@ -15,10 +15,10 @@ import { CartState } from '../order-cart/order-cart.state';
 import { ClientState } from '../../../client-module/client.state';
 import { InputTextModule } from 'primeng/inputtext';
 import { CommonModule } from '@angular/common';
-import { Client } from '../../interfaces/order.interface';
 import { Router } from '@angular/router';
 import { ClientService } from 'app/dashboard/modules/client-module/client.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Client } from 'app/shared/interfaces/client/Client';
 
 @Component({
   selector: 'fuse-client-selection',
@@ -75,7 +75,7 @@ export class ClientSelectionComponent implements OnInit {
     }
 
     return clients.filter(
-      client =>
+      (client: Client) =>
         client.fullName.toLowerCase().includes(search) ||
         client.email.toLowerCase().includes(search) ||
         client.document?.toLowerCase().includes(search) ||

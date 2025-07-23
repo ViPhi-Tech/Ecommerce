@@ -1,8 +1,4 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import {
-  IMovimentItem,
-  StockMovementModuleState,
-} from 'app/shared/interfaces/stock-movement.interface';
 import { BaseState } from 'app/shared/store/base.state';
 import { catchError, finalize, lastValueFrom, of, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
@@ -11,6 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { MessageService } from 'primeng/api';
 import { MetricDTO } from './dtos/MetricDTO';
 import dayjs from 'dayjs';
+import { StockMovementModuleState } from 'app/shared/interfaces/stock/StockMovementModuleState';
+import { IMovimentItem } from 'app/shared/interfaces/stock/IMovimentItem';
 
 @Injectable({
   providedIn: 'root',

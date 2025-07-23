@@ -1,6 +1,6 @@
 import { Component, input, OnInit } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
-import { IMovimentItem } from 'app/shared/interfaces/stock-movement.interface';
+import { IMovimentItem } from 'app/shared/interfaces/stock/IMovimentItem';
 
 @Component({
   selector: 'fuse-movement-item',

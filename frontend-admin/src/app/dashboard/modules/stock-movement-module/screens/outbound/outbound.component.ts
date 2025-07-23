@@ -20,7 +20,6 @@ import { FormModule } from 'app/shared/components/form/form.module';
 import { ImportInvoiceComponent } from 'app/shared/components/import-invoice/import-invoice.component';
 import { ImportInvoiceService } from 'app/shared/components/import-invoice/import-invoice.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
-import { Product } from 'app/shared/interfaces/product-module.interface';
 import {
   DEFAULT_TABLE_CONFIG,
   TableConfig,
@@ -36,6 +35,7 @@ import { Dialog, DialogModule } from 'primeng/dialog';
 import { FieldsetModule } from 'primeng/fieldset';
 import { TabsModule } from 'primeng/tabs';
 import { StockMovementService } from '../../stock-movement.service';
+import { Product } from 'app/shared/interfaces/product/Product';
 
 @Component({
   selector: 'fuse-outbound',
@@ -188,10 +188,11 @@ export class OutboundComponent implements OnInit {
 
     if (this.outboundData.valid) {
       this.stockMovementService
-        .outboundProductsToStock(formData.products)
+        .updateProductStock(formData.products, 'OUT')
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
+            this.stockMovementService.refreshStockData()
             this.toast.add({
               severity: 'success',
               summary: 'Sucesso',

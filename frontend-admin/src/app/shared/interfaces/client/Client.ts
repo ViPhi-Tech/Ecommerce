@@ -1,10 +1,3 @@
-import { BaseModuleState } from 'app/shared/store/base.state';
-
-export interface ClientModuleState extends BaseModuleState {
-  clientList: Client[];
-  searchTerm: string; // Campo para armazenar o termo de busca
-}
-
 export interface Client {
   id: string; // Identificador único do cliente
   fullName: string; // Nome completo do cliente

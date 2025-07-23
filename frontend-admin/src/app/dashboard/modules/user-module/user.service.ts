@@ -1,13 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
+import { User } from 'app/shared/interfaces/user/User';
+import { UserCreate } from 'app/shared/interfaces/user/UserCreate';
+import { UserUpdate } from 'app/shared/interfaces/user/UserUpdate';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
-import {
-  User,
-  UserCreate,
-  UserUpdate,
-} from 'app/shared/interfaces/user-module.interface';
 
 @Injectable({
   providedIn: 'root',

@@ -1,11 +1,9 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import {
-  Product,
-  ProductModuleState,
-} from 'app/shared/interfaces/product-module.interface';
 import { BaseState } from 'app/shared/store/base.state';
 import { catchError, finalize, lastValueFrom, tap } from 'rxjs';
 import { ProductService } from './product.service';
+import { ProductModuleState } from 'app/shared/interfaces/product/ProductModuleState';
+import { Product } from 'app/shared/interfaces/product/Product';
 
 @Injectable({
   providedIn: 'root',

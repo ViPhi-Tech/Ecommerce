@@ -1,11 +1,8 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { catchError, finalize, lastValueFrom } from 'rxjs';
 import { AccountsReceivableService } from './accounts-receivable.service';
-import { BaseModuleState, BaseState } from 'app/shared/store/base.state';
-
-export interface AccountsReceivableModuleState extends BaseModuleState {
-  accountsReceivableList: any[];
-}
+import { BaseState } from 'app/shared/store/base.state';
+import { AccountsReceivableModuleState } from 'app/shared/interfaces/accounts-receivable/AccountsReceivableModuleState';
 
 @Injectable({
   providedIn: 'root',
