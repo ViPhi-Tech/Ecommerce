@@ -45,5 +45,6 @@ export class ClientRepository implements IClientRepository {
         }
       }
     )
-  }
+  };
+
 } 

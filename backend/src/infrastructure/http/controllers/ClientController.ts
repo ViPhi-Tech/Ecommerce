@@ -20,7 +20,7 @@ export class ClientController {
     private updateClientUseCase: UpdateClientUseCase,
     private deleteClientUseCase: DeleteClientUseCase,
     private findClientByDocument: FindClientByDocument
-  ) {}
+    ) {}
 
   async create(request: FastifyRequest<{ Body: ClientCreateDTO }>, reply: FastifyReply): Promise<ApiResponse> {
     try {
@@ -91,5 +91,8 @@ export class ClientController {
     } catch (error: any) {
       return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({status: false, descricao: error.message || HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR})
     }
-  }
+  };
+
+
+
 } 

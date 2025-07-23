@@ -132,7 +132,6 @@ export default async function productRoutes(
     }
     );
 
-
     fastify.post('/movimentManyStocks', {
         schema: {
             tags: ['product'],

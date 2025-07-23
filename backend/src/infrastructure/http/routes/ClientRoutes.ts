@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { clientController } from '../../config/dependencies/clientDependencies';
 import { clientCreateJsonSchema, clientIdJsonSchema, clientUpdateJsonSchema, clientDocumentJsonSchema } from '../dto/Client.dto';
+import { authenticate } from "../middlewares/authMiddleware";
 
 export default async function clientRoutes(
   fastify: FastifyInstance,
@@ -55,7 +56,6 @@ export default async function clientRoutes(
 
     handler: clientController.findyByDocument.bind(clientController)
   });
-
 
 
 }

@@ -3,6 +3,7 @@ import { CreateInvoiceInput } from "../../dto/invoice/CreateInvoiceInput";
 import { ITransactionRunner } from "../../../domain/repositories/ITransactionRunner";
 import { ITransactionClient } from "../../../domain/repositories/ITransactionClient";
 import { Invoice } from "../../../domain/entities/Invoice";
+
 type InvoiceRepositoryFactory = (tx: ITransactionClient) => IInvoiceRepository;
 
 export class CreateInvoiceUseCase {
@@ -12,15 +13,11 @@ export class CreateInvoiceUseCase {
   ) {}
 
   async execute(data: CreateInvoiceInput): Promise<Invoice> {
-    // Envolve toda a lógica de negócio no runner da transação
     return this.transactionRunner.run(async (tx) => {
-      // Usa a fábrica para obter uma instância do repositório que opera DENTRO desta transação
       const invoiceRepository = this.invoiceRepositoryFactory(tx);
 
-      // Separa os dados da fatura principal dos dados dos itens
       const { items, ...invoiceData } = data;
 
-      // Cria a fatura principal
       const invoice = await invoiceRepository.create({
         ...invoiceData,
         dueDate: invoiceData.dueDate ? new Date(invoiceData.dueDate) : undefined,
