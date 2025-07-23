@@ -1,9 +1,3 @@
-import { BaseModuleState } from 'app/shared/store/base.state';
-
-export interface CategoryModuleState extends BaseModuleState {
-  categoryList: Category[];
-}
-
 export interface Category {
   id: string; // Identificador único da categoria
   name: string; // Nome da categoria

@@ -3,7 +3,7 @@ import { catchError, finalize, tap } from 'rxjs';
 import { lastValueFrom } from 'rxjs';
 import { CategoryService } from 'app/dashboard/modules/category-module/category.service';
 import { BaseState } from 'app/shared/store/base.state';
-import { CategoryModuleState } from './category.interface';
+import { CategoryModuleState } from 'app/shared/interfaces/category/CategoryModuleState';
 
 @Injectable({
   providedIn: 'root',
