@@ -1,13 +1,11 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
-import {
-  User,
-  UserModuleState,
-} from 'app/shared/interfaces/user-module.interface';
 import { BaseState } from 'app/shared/store/base.state';
 import { catchError, finalize, lastValueFrom } from 'rxjs';
 import { environments } from 'src/environments/environments';
 import { HttpClient } from '@angular/common/http';
+import { UserModuleState } from 'app/shared/interfaces/user/UserModuleState';
+import { User } from 'app/shared/interfaces/user/User';
 
 @Injectable({
   providedIn: 'root',

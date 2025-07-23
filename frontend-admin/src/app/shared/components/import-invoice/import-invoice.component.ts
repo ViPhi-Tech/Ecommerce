@@ -15,9 +15,9 @@ import { XmlUtils } from 'app/shared/utils/xml.utils';
 import { InvoiceDetailsComponent } from 'app/shared/components/invoice-details/invoice-details.component';
 import { FileUploadComponent } from 'app/shared/components/file-upload/file-upload.component';
 import { Subscription } from 'rxjs';
-import { InvoiceDetails } from 'app/shared/interfaces/invoice.interface';
 import { ImportInvoiceService } from './import-invoice.service';
 import { ProductState } from 'app/dashboard/modules/product-module/product.state';
+import { InvoiceDetails } from 'app/shared/interfaces/invoice/InvoiceDetails';
 
 @Component({
   selector: 'fuse-import-invoice',

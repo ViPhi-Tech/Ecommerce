@@ -3,12 +3,10 @@ import { inject, Injectable } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { Observable, Subject } from 'rxjs';
 import { environments } from 'src/environments/environments';
-import {
-  IMovimentItem,
-  StockMovementCreate,
-} from 'app/shared/interfaces/stock-movement.interface';
-import { Product } from 'app/shared/interfaces/product-module.interface';
 import { MovimentManyStocks } from './interfaces/stock-moviment.interface';
+import { IMovimentItem } from 'app/shared/interfaces/stock/IMovimentItem';
+import { StockMovementCreate } from 'app/shared/interfaces/stock/StockMovementCreate';
+import { Product } from 'app/shared/interfaces/product/Product';
 
 @Injectable({
   providedIn: 'root',

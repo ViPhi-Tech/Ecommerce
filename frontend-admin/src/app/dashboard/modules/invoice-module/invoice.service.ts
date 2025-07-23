@@ -1,5 +1,5 @@
 import { Injectable, signal, WritableSignal } from '@angular/core';
-import { InvoiceDetails } from 'app/shared/interfaces/invoice.interface';
+import { InvoiceDetails } from 'app/shared/interfaces/invoice/InvoiceDetails';
 import { Observable, of } from 'rxjs';
 
 interface InvoiceModuleState {

@@ -6,7 +6,6 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { InvoiceDetails } from '../../interfaces/invoice.interface';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { PanelModule } from 'primeng/panel';
 import {
@@ -16,6 +15,7 @@ import {
 import { TableComponent } from '../table/table.component';
 import { NgIcon } from '@ng-icons/core';
 import { TooltipModule } from 'primeng/tooltip';
+import { InvoiceDetails } from 'app/shared/interfaces/invoice/InvoiceDetails';
 @Component({
   selector: 'fuse-invoice-details',
   templateUrl: './invoice-details.component.html',

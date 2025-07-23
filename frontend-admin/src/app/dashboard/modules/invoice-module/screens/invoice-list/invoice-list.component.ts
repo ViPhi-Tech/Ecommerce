@@ -12,7 +12,7 @@ import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 import { InvoiceService } from '../../invoice.service';
-import { InvoiceDetails } from 'app/shared/interfaces/invoice.interface';
+import { InvoiceDetails } from 'app/shared/interfaces/invoice/InvoiceDetails';
 
 @Component({
   selector: 'fuse-invoice-list',
