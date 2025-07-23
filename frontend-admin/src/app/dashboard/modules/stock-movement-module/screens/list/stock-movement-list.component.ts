@@ -165,6 +165,13 @@ export class StockMovementListComponent implements OnInit {
     // Verifica se está visualizando movimentos de um produto específico
     this.productId = this.route.snapshot.paramMap.get('productId');
 
+    this.stockMovementService.refreshStock$
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe(() => {
+        this.loadStockMovements();
+        this.state.getStockMetrics();
+      });
+
     this.loadStockMovements();
     this.state.getStockMetrics();
 

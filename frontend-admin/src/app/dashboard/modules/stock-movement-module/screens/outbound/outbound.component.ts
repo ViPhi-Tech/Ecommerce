@@ -188,10 +188,11 @@ export class OutboundComponent implements OnInit {
 
     if (this.outboundData.valid) {
       this.stockMovementService
-        .outboundProductsToStock(formData.products)
+        .updateProductStock(formData.products, 'OUT')
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
+            this.stockMovementService.refreshStockData()
             this.toast.add({
               severity: 'success',
               summary: 'Sucesso',

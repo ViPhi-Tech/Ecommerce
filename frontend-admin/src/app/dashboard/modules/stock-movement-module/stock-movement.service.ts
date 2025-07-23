@@ -1,13 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environments } from 'src/environments/environments';
 import {
   IMovimentItem,
   StockMovementCreate,
 } from 'app/shared/interfaces/stock-movement.interface';
 import { Product } from 'app/shared/interfaces/product-module.interface';
+import { MovimentManyStocks } from './interfaces/stock-moviment.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -16,6 +17,9 @@ export class StockMovementService {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl + 'stock-movement';
   private productsApiUrl = environments.apiUrl + 'product';
+
+  private refreshStock = new Subject<void>();
+  refreshStock$ = this.refreshStock.asObservable();
 
   constructor() {}
 
@@ -48,27 +52,37 @@ export class StockMovementService {
     );
   }
 
-  inboundProductsToStock(products: Product[]): Observable<ApiResponse> {
-    const updatedProducts = products.map(({ id, quantity }) => ({
-      productId: id,
-      quantity,
-    }));
-    return this.http.put<ApiResponse>(`${this.apiUrl}/inbound`, {
-      products: updatedProducts,
-    });
+  updateProductStock(products: Product[], type: 'IN' | 'OUT'): Observable<ApiResponse> {
+    const outboundData: MovimentManyStocks = this.formatStockMovementData(
+      products,
+      type
+    );
+
+    return this.http.post<ApiResponse>(`${this.productsApiUrl}/movimentManyStocks`, outboundData);
   }
 
-  outboundProductsToStock(products: Product[]): Observable<ApiResponse> {
+  formatStockMovementData(
+    products: Product[],
+    type: 'IN' | 'OUT',
+  ): MovimentManyStocks {
     const updatedProducts = products.map(({ id, quantity }) => ({
       productId: id,
       quantity,
     }));
-    return this.http.put<ApiResponse>(`${this.apiUrl}/outbound`, {
-      products: updatedProducts,
-    });
+
+    return {
+      type,
+      stocks: updatedProducts,
+    };
+  }
+
+  refreshStockData() {
+    this.refreshStock.next();
   }
 
   deleteStockMovement(stockMovementId: string): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(`${this.apiUrl}/${stockMovementId}`);
+    return this.http.delete<ApiResponse>(
+      `${this.apiUrl}/delete/${stockMovementId}`
+    );
   }
 }

@@ -36,6 +36,7 @@ import { Dialog, DialogModule } from 'primeng/dialog';
 import { FieldsetModule } from 'primeng/fieldset';
 import { TabsModule } from 'primeng/tabs';
 import { StockMovementService } from '../../stock-movement.service';
+import { StockMovementState } from '../../stock-movement.state';
 
 @Component({
   selector: 'fuse-inbound',
@@ -62,6 +63,7 @@ export class InboundComponent implements OnInit {
   private coreService = inject(CoreService);
   private toast = inject(MessageService);
   // Services
+  private stockMovementState = inject(StockMovementState);
   private stockMovementService = inject(StockMovementService);
   private productService = inject(ProductService);
 
@@ -188,10 +190,11 @@ export class InboundComponent implements OnInit {
 
     if (this.inboundData.valid) {
       this.stockMovementService
-        .inboundProductsToStock(formData.products)
+        .updateProductStock(formData.products, 'IN')
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
+            this.stockMovementService.refreshStockData()
             this.toast.add({
               severity: 'success',
               summary: 'Sucesso',
