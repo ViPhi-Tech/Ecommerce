@@ -16,19 +16,18 @@ export class UpdateManyStocksUseCase {
             sku: item.productId,
             quantity: item.quantity
         }));
-        const movementType = type ? 'IN' : 'OUT';
 
         let updatedStock: Stock[] = [];
-        if (movementType === 'IN'){
+        if (type === 'IN'){
             updatedStock = await this.productRepository.incrementMultipleStocks(newItems);
-        } else if (movementType === 'OUT') {
+        } else if (type === 'OUT') {
             updatedStock = await this.productRepository.decrementMultipleStocks(newItems);
         }
         const itemsUpdated = updatedStock.map((item) => ({
             stockId: item.id as number,
             userId,
             quantity: item.quantity,
-            type: movementType
+            type: type
         }))
         const moviment = await this.productRepository.updateManyStockMovements(itemsUpdated)
 
