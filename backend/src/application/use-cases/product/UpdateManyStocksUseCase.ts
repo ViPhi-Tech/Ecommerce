@@ -23,12 +23,16 @@ export class UpdateManyStocksUseCase {
         } else if (type === 'OUT') {
             updatedStock = await this.productRepository.decrementMultipleStocks(newItems);
         }
-        const itemsUpdated = updatedStock.map((item) => ({
+        
+        const itemsUpdated = updatedStock.map((item) => {
+        const inputItem = newItems.find((input) => input.sku === item.productId);
+        return {
             stockId: item.id as number,
             userId,
-            quantity: item.quantity,
+            quantity: inputItem?.quantity ?? 0,
             type: type
-        }))
+        };
+        });
         const moviment = await this.productRepository.updateManyStockMovements(itemsUpdated)
 
         return updatedStock;

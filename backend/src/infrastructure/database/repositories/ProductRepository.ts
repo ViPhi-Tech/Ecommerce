@@ -236,6 +236,7 @@ return this.prisma.stockMovement.findMany({
   include: {
     stock: {
       select: {
+        quantity: true,
         product: {
           select: {
             name: true,
@@ -249,6 +250,9 @@ return this.prisma.stockMovement.findMany({
         fullName: true 
         }
       }
+    },
+    orderBy: {
+      id: 'desc'
     }
   })
 };
