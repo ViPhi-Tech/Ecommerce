@@ -5,6 +5,7 @@ import { InboundComponent } from 'app/dashboard/modules/stock-movement-module/sc
 import { OutboundComponent } from 'app/dashboard/modules/stock-movement-module/screens/outbound/outbound.component';
 import { CategoryCreateComponent } from 'app/dashboard/modules/category-module/screens/create/category-create.component';
 import { ClientCreateComponent } from 'app/dashboard/modules/client-module/screens/create/client-create.component';
+import { AccountsPayableCreateComponent } from 'app/dashboard/modules/accounts-payable-module/screens/create/accounts-payable-create.component';
 
 const routes: Routes = [
   // category routes
@@ -61,6 +62,19 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: 'accounts-payable',
+    children: [
+      {
+        path: 'new',
+        component: AccountsPayableCreateComponent,
+      },
+      {
+        path: ':id',
+        component: AccountsPayableCreateComponent,
+      },
+    ],
+  }
 ];
 
 @NgModule({

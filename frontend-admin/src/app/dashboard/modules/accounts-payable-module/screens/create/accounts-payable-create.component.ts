@@ -6,30 +6,26 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import {
-  FormBuilder,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { CoreService } from 'app/shared/services/core.service';
 import { MessageService } from 'primeng/api';
-import { Drawer } from 'primeng/drawer';
+import { ButtonModule } from 'primeng/button';
+import { Dialog, DialogModule } from 'primeng/dialog';
 import { AccountsPayableService } from '../../accounts-payable.service';
+import { Drawer } from 'primeng/drawer';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import dayjs from 'dayjs';
+import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { CheckboxModule } from 'primeng/checkbox';
-import dayjs from 'dayjs';
 
 @Component({
-  selector: 'fuse-accounts-payable-form',
-  templateUrl: './accounts-payable-form.component.html',
-  imports: [ReactiveFormsModule, FormModule, CheckboxModule],
+  selector: 'fuse-accounts-payable-create-drawer',
+  templateUrl: './accounts-payable-create.component.html',
+  imports: [DialogModule, ButtonModule, ReactiveFormsModule, FormModule, CheckboxModule],
 })
-export class AccountsPayableFormComponent implements OnInit {
-  destroyedRef = inject(DestroyRef);
+export class AccountsPayableCreateComponent implements OnInit {
   private router = inject(Router);
   private coreService = inject(CoreService);
   private activatedRoute = inject(ActivatedRoute);
@@ -39,20 +35,25 @@ export class AccountsPayableFormComponent implements OnInit {
 
   @ViewChild('drawerRef') drawerRef!: Drawer;
 
-  formGroup = this.formBuilder.group({});
-
-  title = signal('Adicionar Conta a Pagar');
+  title = signal('Cadastrar conta a pagar');
   subtitle = signal('Preencha os dados da nova conta a pagar abaixo');
   submitButtonLabel = signal('Salvar');
   isLoading = signal(true);
 
   accountsPayableForm!: FormGroup;
 
+  destroyedRef = inject(DestroyRef);
+
+  @ViewChild('dialogRef') dialogRef!: Dialog;
+
+  // signals
+  visible = signal(true);
+
   constructor() {
     this.initForm();
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
     this.coreService.setPageTitle('', '');
     this.activatedRoute.params
       .pipe(takeUntilDestroyed(this.destroyedRef))
@@ -156,5 +157,23 @@ export class AccountsPayableFormComponent implements OnInit {
 
   back() {
     this.router.navigate(['dashboard/accounts-payable/list']);
+  }
+
+  closeDialog(e = new Event('close')): void {
+    this.dialogRef.close(e);
+  }
+
+  onSave() {
+    console.log('Save action triggered');
+    this.onCloseDialog();
+  }
+
+  onCloseDialog() {
+    this.visible.set(false);
+    setTimeout(() => {
+      this.router.navigate([{ outlets: { drawer: null } }], {
+        relativeTo: this.activatedRoute.root,
+      });
+    }, 300);
   }
 }
