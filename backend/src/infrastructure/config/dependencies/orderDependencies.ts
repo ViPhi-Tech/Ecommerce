@@ -22,7 +22,6 @@ const jwtService = new JwtAuthService(JWT_SECRET);
 
 const createOrderUseCase = new CreateOrderUseCase(transactionRunner, orderRepositoryFactory, productRepositoryFactory, paymentRepositoryFactory, jwtService);
 
-
 export const orderRepository = new OrderRepository(prisma);
 
 
