@@ -6,6 +6,7 @@ import { OutboundComponent } from 'app/dashboard/modules/stock-movement-module/s
 import { CategoryCreateComponent } from 'app/dashboard/modules/category-module/screens/create/category-create.component';
 import { ClientCreateComponent } from 'app/dashboard/modules/client-module/screens/create/client-create.component';
 import { AccountsPayableCreateComponent } from 'app/dashboard/modules/accounts-payable-module/screens/create/accounts-payable-create.component';
+import { AccountsReceivableCreateComponent } from 'app/dashboard/modules/accounts-receivable-module/screens/create/accounts-receivable-create.component';
 
 const routes: Routes = [
   // category routes
@@ -74,7 +75,20 @@ const routes: Routes = [
         component: AccountsPayableCreateComponent,
       },
     ],
-  }
+  },
+  {
+    path: 'accounts-receivable',
+    children: [
+      {
+        path: 'new',
+        component: AccountsReceivableCreateComponent,
+      },
+      {
+        path: ':id',
+        component: AccountsReceivableCreateComponent,
+      },
+    ],
+  },
 ];
 
 @NgModule({

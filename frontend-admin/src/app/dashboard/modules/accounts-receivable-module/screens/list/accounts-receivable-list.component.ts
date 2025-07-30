@@ -1,7 +1,6 @@
 import {
   Component,
   DestroyRef,
-  effect,
   inject,
   OnInit,
   signal,
@@ -20,7 +19,6 @@ import { TableComponent } from 'app/shared/components/table/table.component';
 @Component({
   selector: 'fuse-accounts-receivable-list',
   templateUrl: './accounts-receivable-list.component.html',
-  styleUrls: ['./accounts-receivable-list.component.scss'],
   animations: [heightAnimation],
   imports: [TableComponent],
 })
@@ -45,12 +43,13 @@ export class AccountsReceivableListComponent implements OnInit {
         label: 'Adicionar',
         tooltip: 'Adicionar Conta a Receber',
         action: () => {
-          this.router.navigate(['dashboard/accounts-receivable/new']);
+          this.router.navigate([
+            { outlets: { drawer: ['accounts-receivable', 'new'] } },
+          ]);
         },
       },
     ],
     columns: [
-      { field: 'id', caption: 'ID', sortable: true, filter: true },
       {
         field: 'description',
         caption: 'Descrição',
@@ -62,7 +61,6 @@ export class AccountsReceivableListComponent implements OnInit {
         caption: 'Data de Vencimento',
         type: 'date',
         sortable: true,
-        filter: true,
       },
       {
         field: 'amount',
@@ -101,19 +99,15 @@ export class AccountsReceivableListComponent implements OnInit {
     ],
   });
 
-  constructor() {
-    effect(() => {
-      if (this.accountsReceivableService.refreshAccountsReceivableList$()) {
-        this.state.getAccountsReceivableList();
-      }
-    });
-  }
+  constructor() {}
 
-  ngOnInit() {
-    this.state.getAccountsReceivableList();
+  async ngOnInit() {
+    await this.state.getAccountsReceivableList();
+    console.log('Accounts Receivable List:', this.state.accountsReceivableList());
+
     this.coreService.setPageTitle(
       'Contas a Receber',
-      'Lista de contas a pagar'
+      'Lista de contas a receber'
     );
   }
 
@@ -123,7 +117,7 @@ export class AccountsReceivableListComponent implements OnInit {
 
   delete(id: string) {
     this.confirmationService.confirm({
-      message: 'Você tem certeza que deseja excluir esta conta a pagar?',
+      message: 'Você tem certeza que deseja excluir esta conta a receber?',
       header: 'Confirmação de Exclusão',
       icon: 'pi pi-exclamation-triangle text-red-500',
       acceptLabel: 'Sim',
@@ -139,7 +133,7 @@ export class AccountsReceivableListComponent implements OnInit {
               this.toast.add({
                 severity: 'success',
                 summary: 'Sucesso',
-                detail: 'Conta a pagar excluída com sucesso',
+                detail: 'Conta a receber excluída com sucesso',
               });
               this.accountsReceivableService.refreshList();
             },
@@ -147,7 +141,7 @@ export class AccountsReceivableListComponent implements OnInit {
               this.toast.add({
                 severity: 'error',
                 summary: 'Erro',
-                detail: 'Erro ao excluir conta a pagar',
+                detail: 'Erro ao excluir conta a receber',
               });
             },
           });

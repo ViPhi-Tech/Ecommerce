@@ -156,7 +156,9 @@ export class AccountsPayableCreateComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['dashboard/accounts-payable/list']);
+    this.router.navigate([{ outlets: { drawer: null } }], {
+      relativeTo: this.activatedRoute.root,
+    });
   }
 
   closeDialog(e = new Event('close')): void {
