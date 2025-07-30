@@ -194,7 +194,7 @@ export class InboundComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            this.stockMovementService.refreshStockData()
+            this.stockMovementService.refreshStockData();
             this.toast.add({
               severity: 'success',
               summary: 'Sucesso',

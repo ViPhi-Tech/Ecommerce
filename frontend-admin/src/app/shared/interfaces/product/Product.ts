@@ -1,4 +1,4 @@
-import { Stock } from "./Stock";
+import { Stock } from './Stock';
 
 export interface Product {
   id: string | number; // Identificador único do produto

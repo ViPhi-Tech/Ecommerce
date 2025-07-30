@@ -50,18 +50,24 @@ export class StockMovementService {
     );
   }
 
-  updateProductStock(products: Product[], type: 'IN' | 'OUT'): Observable<ApiResponse> {
+  updateProductStock(
+    products: Product[],
+    type: 'IN' | 'OUT'
+  ): Observable<ApiResponse> {
     const outboundData: MovimentManyStocks = this.formatStockMovementData(
       products,
       type
     );
 
-    return this.http.post<ApiResponse>(`${this.productsApiUrl}/movimentManyStocks`, outboundData);
+    return this.http.post<ApiResponse>(
+      `${this.productsApiUrl}/movimentManyStocks`,
+      outboundData
+    );
   }
 
   formatStockMovementData(
     products: Product[],
-    type: 'IN' | 'OUT',
+    type: 'IN' | 'OUT'
   ): MovimentManyStocks {
     const updatedProducts = products.map(({ id, quantity }) => ({
       productId: id,
