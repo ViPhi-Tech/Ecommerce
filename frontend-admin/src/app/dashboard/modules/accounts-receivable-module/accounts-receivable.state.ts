@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { catchError, finalize, lastValueFrom } from 'rxjs';
+import { catchError, finalize, lastValueFrom, tap } from 'rxjs';
 import { AccountsReceivableService } from './accounts-receivable.service';
 import { BaseState } from 'app/shared/store/base.state';
 import { AccountsReceivableModuleState } from 'app/shared/interfaces/accounts-receivable/AccountsReceivableModuleState';
@@ -25,25 +25,13 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
 
     await lastValueFrom(
       this.service.getAll().pipe(
+        tap(data => this.setAccountsReceivableList(data.dados)),
         catchError(() =>
-          this.handleError('Erro ao carregar a lista de contas a pagar')
+          this.handleError('Erro ao carregar a lista de contas a receber')
         ),
         finalize(() => this.setLoading(false))
       )
-    )
-      .then((response: any) => {
-        const items = Array.isArray(response) ? response : response.dados;
-        if (items && items.length > 0) {
-          this.setAccountsReceivableList(items);
-        } else {
-          this.setAccountsReceivableList([]);
-          this.setError('Nenhuma conta a pagar encontrada.');
-        }
-      })
-      .catch(error => {
-        this.setError('Erro ao carregar a lista de contas a pagar');
-        console.error('Erro ao buscar contas a pagar:', error);
-      });
+    );
   }
 
   setAccountsReceivableList(list: any[]) {

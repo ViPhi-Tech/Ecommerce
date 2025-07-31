@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
-import { Category } from 'app/shared/interfaces/category/Category';
+import { ICategory } from 'app/shared/interfaces/category/Category';
 import { Observable, Subject } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
@@ -19,7 +19,7 @@ export class CategoryService {
 
   getCategories(skipLoader = true): Observable<ApiResponse> {
     const headers = skipLoader ? { 'Skip-Loader': 'true' } : undefined;
-    return this.http.get<ApiResponse<Category[]>>(`${this.apiUrl}/all`, {
+    return this.http.get<ApiResponse<ICategory[]>>(`${this.apiUrl}/all`, {
       headers,
     });
   }

@@ -3,7 +3,7 @@ import { BaseState } from 'app/shared/store/base.state';
 import { catchError, finalize, lastValueFrom, tap } from 'rxjs';
 import { ProductService } from './product.service';
 import { ProductModuleState } from 'app/shared/interfaces/product/ProductModuleState';
-import { Product } from 'app/shared/interfaces/product/Product';
+import { IProduct } from 'app/shared/interfaces/product/Product';
 
 @Injectable({
   providedIn: 'root',
@@ -102,11 +102,11 @@ export class ProductState extends BaseState<ProductModuleState> {
       .subscribe();
   }
 
-  setProductList(productList: Product[]) {
+  setProductList(productList: IProduct[]) {
     this.updateState('productList', productList);
   }
 
-  setFilteredProducts(filteredProducts: Product[]) {
+  setFilteredProducts(filteredProducts: IProduct[]) {
     this.updateState('filteredProducts', filteredProducts);
   }
 

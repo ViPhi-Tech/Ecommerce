@@ -53,17 +53,23 @@
     />
   }
 
-  @if (type() === 'price' && !isLoading()) {
-    <p-inputnumber
+  @if (['price', 'money'].includes(type()) && !isLoading()) {
+    <input
+      pInputText
       [formControl]="control()"
-      inputId="{{ idRef() }}"
-      mode="currency"
-      currency="BRL"
-      [min]="min()"
-      [max]="max()"
-      [size]="size()"
-      locale="pt-BR"
-      (onBlur)="blurChangeComponent($event)"
+      class="{{ addictionalClass() }}"
+      [pSize]="size()"
+      [placeholder]="placeholder()"
+      [id]="idRef()"
+      [name]="idRef()"
+      (blur)="blurChangeComponent($event)"
+      (input)="inputChangeComponent($event)"
+      (keydown)="keydownChangeComponent($event)"
+      prefix="R$ "
+      mask="separator.2"
+      [thousandSeparator]="'.'"
+      [decimalMarker]="','"
+      [dropSpecialCharacters]="true"
     />
   }
 

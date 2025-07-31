@@ -6,7 +6,12 @@ import {
   signal,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { MessageService } from 'primeng/api';
@@ -23,7 +28,13 @@ import { CheckboxModule } from 'primeng/checkbox';
 @Component({
   selector: 'fuse-accounts-payable-create-drawer',
   templateUrl: './accounts-payable-create.component.html',
-  imports: [DialogModule, ButtonModule, ReactiveFormsModule, FormModule, CheckboxModule],
+  imports: [
+    DialogModule,
+    ButtonModule,
+    ReactiveFormsModule,
+    FormModule,
+    CheckboxModule,
+  ],
 })
 export class AccountsPayableCreateComponent implements OnInit {
   private router = inject(Router);
@@ -156,7 +167,9 @@ export class AccountsPayableCreateComponent implements OnInit {
   }
 
   back() {
-    this.router.navigate(['dashboard/accounts-payable/list']);
+    this.router.navigate([{ outlets: { drawer: null } }], {
+      relativeTo: this.activatedRoute.root,
+    });
   }
 
   closeDialog(e = new Event('close')): void {

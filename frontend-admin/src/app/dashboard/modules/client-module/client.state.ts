@@ -4,7 +4,7 @@ import { lastValueFrom } from 'rxjs';
 import { ClientService } from 'app/dashboard/modules/client-module/client.service';
 import { BaseState } from 'app/shared/store/base.state';
 import { ClientModuleState } from 'app/shared/interfaces/client/ClientModuleState';
-import { Client } from 'app/shared/interfaces/client/Client';
+import { IClient } from 'app/shared/interfaces/client/Client';
 
 @Injectable({
   providedIn: 'root',
@@ -61,7 +61,7 @@ export class ClientState extends BaseState<ClientModuleState> {
     }
 
     return clients.filter(
-      (client: Client) =>
+      (client: IClient) =>
         client.fullName?.toLowerCase().includes(search) ||
         client.document?.toLowerCase().includes(search) ||
         client.phone?.toLowerCase().includes(search) ||

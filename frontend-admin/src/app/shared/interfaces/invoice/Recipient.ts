@@ -1,7 +1,7 @@
-import { Address } from './Address';
+import { IAddress } from './Address';
 
 export interface Recipient {
   name: string;
   cnpj: string;
-  address: Address;
+  address: IAddress;
 }

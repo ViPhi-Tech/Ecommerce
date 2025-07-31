@@ -1,5 +1,5 @@
-import { Stock } from './Stock';
-import { User } from './User';
+import { IStock } from './Stock';
+import { IUser } from './User';
 
 export interface IMovimentItem {
   id: number;
@@ -9,8 +9,8 @@ export interface IMovimentItem {
   userId: number;
   createdAt: Date;
   updatedAt: Date;
-  stock: Stock;
-  user: User;
+  stock: IStock;
+  user: IUser;
 
   hour?: string; // Hora do movimento, opcional
   date?: string; // Data do movimento, opcional
