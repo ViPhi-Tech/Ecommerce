@@ -23,9 +23,9 @@ export class SupplierRepository implements ISupplierRepository {
       return this.prisma.supplier.findMany();
     }
 
-    async findById(id: string): Promise<Supplier | null> {
+    async findById(uuid: string): Promise<Supplier | null> {
         return this.prisma.supplier.findUnique({
-            where: {id}
+            where: {uuid: uuid}
         });
     }
 
@@ -35,16 +35,16 @@ export class SupplierRepository implements ISupplierRepository {
         });
     }
 
-    async update(id: string, data: Partial<Supplier>): Promise<Supplier> {
+    async update(uuid: string, data: Partial<Supplier>): Promise<Supplier> {
         return this.prisma.supplier.update({
-            where: {id},
+            where: {uuid: uuid},
             data
         });
     }
 
-    async delete(id: string): Promise<void> {
+    async delete(uuid: string): Promise<void> {
         await this.prisma.supplier.delete({
-            where: {id}
+            where: {uuid:uuid}
         });
     };
 }

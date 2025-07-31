@@ -1,5 +1,6 @@
 export interface SupplierCreateDTO {
-    id?: string;
+    id?: number;
+    uuid?: string,
     tradeName: string;
     legalName: string;
     cnpj: string;

@@ -1,0 +1,23 @@
+model AccountsPayable {
+  id               Int       @id @default(autoincrement())
+  uuid             String    @unique @default(uuid())
+
+  supplierId       Int
+  supplier         Supplier  @relation("SupplierToPayables", fields: [supplierId], references: [id])
+
+  originalDueDate  DateTime  // Data de vencimento original
+  issueDate        DateTime  // Data de emissão
+  dueDate          DateTime  // Data de vencimento atual (pode ser diferente da original)
+  competenceDate   DateTime  // Data de competência
+
+  amount           Float   // Valor
+
+  recurringPurchase Boolean   @default(false)  // Compra recorrente (mensalmente no dia do vencimento)
+
+  description      String    // Descrição da conta a pagar
+
+  status           String    // ex: 'pending', 'paid', 'overdue'
+
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
