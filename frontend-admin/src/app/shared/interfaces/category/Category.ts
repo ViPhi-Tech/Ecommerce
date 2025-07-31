@@ -1,4 +1,4 @@
-export interface Category {
+export interface ICategory {
   id: string; // Identificador único da categoria
   name: string; // Nome da categoria
   description?: string; // Descrição opcional da categoria

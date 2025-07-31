@@ -1,7 +1,7 @@
-import { Address } from './Address';
+import { IAddress } from './Address';
 
 export interface Issuer {
   name: string;
   cnpj: string;
-  address: Address;
+  address: IAddress;
 }

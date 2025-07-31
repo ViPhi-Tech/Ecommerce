@@ -35,7 +35,7 @@ import { Dialog, DialogModule } from 'primeng/dialog';
 import { FieldsetModule } from 'primeng/fieldset';
 import { TabsModule } from 'primeng/tabs';
 import { StockMovementService } from '../../stock-movement.service';
-import { Product } from 'app/shared/interfaces/product/Product';
+import { IProduct } from 'app/shared/interfaces/product/Product';
 
 @Component({
   selector: 'fuse-outbound',
@@ -257,7 +257,7 @@ export class OutboundComponent implements OnInit {
   addProductToList() {
     if (this.formAddProduct.valid) {
       const formData = this.formAddProduct.value;
-      const selectedProduct = formData.productId as unknown as Product; // Este agora será o objeto produto completo
+      const selectedProduct = formData.productId as unknown as IProduct; // Este agora será o objeto produto completo
       const quantity = formData.quantity as number;
 
       if (!selectedProduct || !quantity) {

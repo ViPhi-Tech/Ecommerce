@@ -31,7 +31,7 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
         ),
         finalize(() => this.setLoading(false))
       )
-    )
+    );
   }
 
   setAccountsReceivableList(list: any[]) {

@@ -53,8 +53,8 @@
     />
   }
 
-  @if ((['price', 'money'].includes(type())) && !isLoading()) {
-   <input
+  @if (['price', 'money'].includes(type()) && !isLoading()) {
+    <input
       pInputText
       [formControl]="control()"
       class="{{ addictionalClass() }}"
@@ -70,7 +70,6 @@
       [thousandSeparator]="'.'"
       [decimalMarker]="','"
       [dropSpecialCharacters]="true"
-
     />
   }
 

@@ -18,7 +18,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ClientService } from 'app/dashboard/modules/client-module/client.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Client } from 'app/shared/interfaces/client/Client';
+import { IClient } from 'app/shared/interfaces/client/Client';
 
 @Component({
   selector: 'fuse-client-selection',
@@ -53,7 +53,7 @@ export class ClientSelectionComponent implements OnInit {
     this.clientState.getClientList();
   }
 
-  onClientChange(client: Client) {
+  onClientChange(client: IClient) {
     this.cartState.setClient(client);
     this.clientSelected.emit(client);
     this.close();
@@ -75,7 +75,7 @@ export class ClientSelectionComponent implements OnInit {
     }
 
     return clients.filter(
-      (client: Client) =>
+      (client: IClient) =>
         client.fullName.toLowerCase().includes(search) ||
         client.email.toLowerCase().includes(search) ||
         client.document?.toLowerCase().includes(search) ||

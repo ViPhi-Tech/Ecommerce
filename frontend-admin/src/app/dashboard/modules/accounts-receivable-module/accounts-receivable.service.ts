@@ -16,7 +16,7 @@ export class AccountsReceivableService {
   constructor() {}
 
   getAll() {
-     return of({
+    return of({
       status: 'success',
       message: 'Lista de contas a pagar carregada com sucesso.',
       dados: [
