@@ -1,0 +1,184 @@
+<p-dialog
+  #dialogRef
+  [(visible)]="visible"
+  (onHide)="onCloseDialog()"
+  [modal]="true"
+  [closeOnEscape]="true"
+  [draggable]="false"
+  styleClass="max-w-[800px] w-full"
+>
+  <ng-template #header>
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 class="text-2xl font-semibold leading-none tracking-tight">
+        {{ title() }}
+      </h2>
+      <p class="text-sm text-muted-foreground">
+        Preencha os dados do fornecedor abaixo
+      </p>
+    </div>
+  </ng-template>
+
+  <div class="flex flex-col gap-4">
+    <div>
+      <form [formGroup]="supplierForm" class="row">
+        <!-- Dados básicos -->
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="Nome da Empresa"
+            [control]="supplierForm.get('name')"
+            placeholder="Ex: Fornecedora ABC Ltda"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="Nome Fantasia"
+            [control]="supplierForm.get('tradeName')"
+            placeholder="Ex: ABC Distribuidora"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="CNPJ"
+            [control]="supplierForm.get('cnpj')"
+            placeholder="00.000.000/0000-00"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="CPF"
+            [control]="supplierForm.get('cpf')"
+            placeholder="000.000.000-00"
+          />
+        </div>
+
+        <!-- Contato -->
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="Email"
+            [control]="supplierForm.get('email')"
+            placeholder="contato@fornecedor.com.br"
+            type="email"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="Telefone"
+            [control]="supplierForm.get('phone')"
+            placeholder="(11) 99999-9999"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="Pessoa de Contato"
+            [control]="supplierForm.get('contactPerson')"
+            placeholder="Ex: João Silva"
+          />
+        </div>
+
+        <!-- Endereço -->
+        <div class="col-12 mb-4">
+          <h3 class="text-lg font-semibold mb-3">Endereço</h3>
+        </div>
+
+        <div class="col-12 md:col-8 mb-4" formGroupName="address">
+          <fuse-input
+            label="Rua"
+            [control]="supplierForm.get('address.street')"
+            placeholder="Nome da rua"
+          />
+        </div>
+
+        <div class="col-12 md:col-4 mb-4" formGroupName="address">
+          <fuse-input
+            label="Número"
+            [control]="supplierForm.get('address.number')"
+            placeholder="123"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4" formGroupName="address">
+          <fuse-input
+            label="Complemento"
+            [control]="supplierForm.get('address.complement')"
+            placeholder="Apto 101, Bloco A"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4" formGroupName="address">
+          <fuse-input
+            label="Bairro"
+            [control]="supplierForm.get('address.neighborhood')"
+            placeholder="Centro"
+          />
+        </div>
+
+        <div class="col-12 md:col-4 mb-4" formGroupName="address">
+          <fuse-input
+            label="Cidade"
+            [control]="supplierForm.get('address.city')"
+            placeholder="São Paulo"
+          />
+        </div>
+
+        <div class="col-12 md:col-4 mb-4" formGroupName="address">
+          <fuse-input
+            label="Estado"
+            [control]="supplierForm.get('address.state')"
+            placeholder="SP"
+          />
+        </div>
+
+        <div class="col-12 md:col-4 mb-4" formGroupName="address">
+          <fuse-input
+            label="CEP"
+            [control]="supplierForm.get('address.zipCode')"
+            placeholder="00000-000"
+          />
+        </div>
+
+        <!-- Descrição -->
+        <div class="col-12 mb-4">
+          <fuse-input
+            label="Descrição/Observações"
+            [control]="supplierForm.get('description')"
+            placeholder="Informações adicionais sobre o fornecedor"
+            type="textarea"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <div class="w-full justify-end flex items-center gap-4">
+      <div class="flex gap-2">
+        <button
+          pButton
+          type="submit"
+          label="Salvar"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+          (click)="onSubmit()"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          icon="pi pi-times"
+          (click)="closeDialog($event)"
+          severity="secondary"
+          [outlined]="true"
+          class="w-[200px]"
+          size="small"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

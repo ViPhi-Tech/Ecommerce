@@ -1,4 +1,4 @@
-export interface Client {
+export interface IClient {
   id: string; // Identificador único do cliente
   fullName: string; // Nome completo do cliente
   email: string; // Email do cliente

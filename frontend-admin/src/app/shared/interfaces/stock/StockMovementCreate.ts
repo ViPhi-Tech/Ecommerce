@@ -1,4 +1,4 @@
-export interface StockMovementCreate {
+export interface IStockMovementCreate {
   productId: string;
   type: 'IN' | 'OUT' | 'ADJUSTMENT';
   quantity: number;

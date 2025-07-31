@@ -36,7 +36,7 @@ import { FieldsetModule } from 'primeng/fieldset';
 import { TabsModule } from 'primeng/tabs';
 import { StockMovementService } from '../../stock-movement.service';
 import { StockMovementState } from '../../stock-movement.state';
-import { Product } from 'app/shared/interfaces/product/Product';
+import { IProduct } from 'app/shared/interfaces/product/Product';
 
 @Component({
   selector: 'fuse-inbound',
@@ -194,7 +194,7 @@ export class InboundComponent implements OnInit {
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
-            this.stockMovementService.refreshStockData()
+            this.stockMovementService.refreshStockData();
             this.toast.add({
               severity: 'success',
               summary: 'Sucesso',
@@ -255,7 +255,7 @@ export class InboundComponent implements OnInit {
   addProductToList() {
     if (this.formAddProduct.valid) {
       const formData = this.formAddProduct.value;
-      const selectedProduct = formData.productId as unknown as Product; // Este agora será o objeto produto completo
+      const selectedProduct = formData.productId as unknown as IProduct; // Este agora será o objeto produto completo
       const quantity = formData.quantity as number;
 
       if (!selectedProduct || !quantity) {

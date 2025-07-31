@@ -16,6 +16,7 @@ import { accountsReceivableRoutes } from './modules/accounts-receivable-module/a
 import { stockMovementRoutes } from './modules/stock-movement-module/stock-movement.routing';
 import { customizationRoutes } from './modules/customization/customization.routing';
 import { clientRoutes } from './modules/client-module/client.routing';
+import { supplierRoutes } from './modules/supplier-module/supplier.routing';
 
 const routes: Routes = [
   {
@@ -52,6 +53,11 @@ const routes: Routes = [
         path: 'clients',
         children: clientRoutes,
         data: { animation: 'clients' },
+      },
+      {
+        path: 'suppliers',
+        children: supplierRoutes,
+        data: { animation: 'suppliers' },
       },
       {
         path: 'invoices',

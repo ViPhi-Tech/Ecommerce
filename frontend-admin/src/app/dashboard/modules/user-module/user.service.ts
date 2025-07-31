@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
-import { User } from 'app/shared/interfaces/user/User';
-import { UserCreate } from 'app/shared/interfaces/user/UserCreate';
-import { UserUpdate } from 'app/shared/interfaces/user/UserUpdate';
+import { IUser } from 'app/shared/interfaces/user/User';
+import { IUserCreate } from 'app/shared/interfaces/user/UserCreate';
+import { IUserUpdate } from 'app/shared/interfaces/user/UserUpdate';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
@@ -22,13 +22,13 @@ export class UserService {
     return this.http.get<ApiResponse>(`${this.apiUrl}/${userId}`);
   }
 
-  getUsersList(): Observable<ApiResponse<User[]>> {
-    return this.http.get<ApiResponse<User[]>>(`${this.apiUrl}/all`);
+  getUsersList(): Observable<ApiResponse<IUser[]>> {
+    return this.http.get<ApiResponse<IUser[]>>(`${this.apiUrl}/all`);
   }
 
   // Define methods for user operations here
   upsertUser(
-    userData: UserCreate | (UserUpdate & { id?: string })
+    userData: IUserCreate | (IUserUpdate & { id?: string })
   ): Observable<ApiResponse> {
     if (userData?.id) {
       // Update existing user

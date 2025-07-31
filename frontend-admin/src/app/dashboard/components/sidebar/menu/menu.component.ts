@@ -86,6 +86,12 @@ export class MenuComponent implements OnInit {
           visible: true,
         },
         {
+          label: 'Fornecedores',
+          icon: 'lucideTruck',
+          route: '/dashboard/suppliers/list',
+          visible: true,
+        },
+        {
           label: 'Categorias',
           icon: 'lucideTag',
           route: '/dashboard/categories/list',

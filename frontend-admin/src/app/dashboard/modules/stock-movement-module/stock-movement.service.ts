@@ -5,8 +5,8 @@ import { Observable, Subject } from 'rxjs';
 import { environments } from 'src/environments/environments';
 import { MovimentManyStocks } from './interfaces/stock-moviment.interface';
 import { IMovimentItem } from 'app/shared/interfaces/stock/IMovimentItem';
-import { StockMovementCreate } from 'app/shared/interfaces/stock/StockMovementCreate';
-import { Product } from 'app/shared/interfaces/product/Product';
+import { IStockMovementCreate } from 'app/shared/interfaces/stock/StockMovementCreate';
+import { IProduct } from 'app/shared/interfaces/product/Product';
 
 @Injectable({
   providedIn: 'root',
@@ -42,7 +42,7 @@ export class StockMovementService {
 
   // Define methods for stock movement operations here
   createStockMovement(
-    stockMovementData: StockMovementCreate
+    stockMovementData: IStockMovementCreate
   ): Observable<ApiResponse> {
     return this.http.post<ApiResponse>(
       `${this.apiUrl}/create`,
@@ -50,18 +50,24 @@ export class StockMovementService {
     );
   }
 
-  updateProductStock(products: Product[], type: 'IN' | 'OUT'): Observable<ApiResponse> {
+  updateProductStock(
+    products: IProduct[],
+    type: 'IN' | 'OUT'
+  ): Observable<ApiResponse> {
     const outboundData: MovimentManyStocks = this.formatStockMovementData(
       products,
       type
     );
 
-    return this.http.post<ApiResponse>(`${this.productsApiUrl}/movimentManyStocks`, outboundData);
+    return this.http.post<ApiResponse>(
+      `${this.productsApiUrl}/movimentManyStocks`,
+      outboundData
+    );
   }
 
   formatStockMovementData(
-    products: Product[],
-    type: 'IN' | 'OUT',
+    products: IProduct[],
+    type: 'IN' | 'OUT'
   ): MovimentManyStocks {
     const updatedProducts = products.map(({ id, quantity }) => ({
       productId: id,

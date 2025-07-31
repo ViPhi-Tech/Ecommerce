@@ -1,0 +1,84 @@
+<p-dialog
+  #dialogRef
+  [(visible)]="visible"
+  (onHide)="onCloseDialog()"
+  [modal]="true"
+  [closeOnEscape]="true"
+  [draggable]="false"
+  styleClass="max-w-[600px] w-full"
+>
+  <ng-template #header>
+    <div class="flex flex-col">
+      <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+        <h2 class="text-2xl font-semibold leading-none tracking-tight">
+          {{ title() }}
+        </h2>
+        <p class="text-sm text-muted-foreground">
+          {{ subtitle() }}
+        </p>
+      </div>
+    </div>
+  </ng-template>
+
+  <div class="flex flex-col gap-4 scroll-form">
+    <div>
+      <form [formGroup]="accountsReceivableForm" class="row">
+        <div class="col-12 md:col-12">
+          <fuse-input
+            [isLoading]="isLoading()"
+            type="textarea"
+            label="Descrição"
+            [control]="accountsReceivableForm.get('description')"
+            placeholder="Ex: Venda de produto X"
+          />
+        </div>
+        <div class="col-12 md:col-6 mt-4">
+          <fuse-datepicker
+            label="Data de Vencimento"
+            [isLoading]="isLoading()"
+            placeholder="00/00/0000"
+            [control]="accountsReceivableForm.get('dueDate')"
+            type="date"
+          />
+        </div>
+        <div class="col-12 md:col-6 mt-4">
+          <fuse-input
+            [isLoading]="isLoading()"
+            label="Valor"
+            [control]="accountsReceivableForm.get('amount')"
+            type="money"
+            placeholder="Ex: 100,00"
+          />
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <div class="flex gap-2">
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        (click)="closeDialog()"
+        outlined="true"
+        severity="secondary"
+        class="w-[200px]"
+        size="small"
+      ></button>
+
+      <button
+        pButton
+        type="submit"
+        [label]="submitButtonLabel()"
+        icon="pi pi-check"
+        class="w-[200px]"
+        size="small"
+        (click)="onSubmit($event)"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-toast baseZIndex="9000" />

@@ -1,6 +1,6 @@
-import { Stock } from "./Stock";
+import { IStock } from '../stock/Stock';
 
-export interface Product {
+export interface IProduct {
   id: string | number; // Identificador único do produto
   name: string;
   sku: string;
@@ -9,7 +9,7 @@ export interface Product {
   initialPrice: number;
   finalPrice: number;
   quantity: number; // Quantidade em estoque
-  stock: Stock;
+  stock: IStock;
   shortDescription: string;
   description: string;
   imageUrl: string;

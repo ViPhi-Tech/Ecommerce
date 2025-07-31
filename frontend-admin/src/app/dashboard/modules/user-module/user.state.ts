@@ -5,7 +5,7 @@ import { catchError, finalize, lastValueFrom } from 'rxjs';
 import { environments } from 'src/environments/environments';
 import { HttpClient } from '@angular/common/http';
 import { UserModuleState } from 'app/shared/interfaces/user/UserModuleState';
-import { User } from 'app/shared/interfaces/user/User';
+import { IUser } from 'app/shared/interfaces/user/User';
 
 @Injectable({
   providedIn: 'root',
@@ -52,7 +52,7 @@ export class UserState extends BaseState<UserModuleState> {
 
     await lastValueFrom(
       this.http
-        .get<ApiResponse<User[]>>(`${this.apiUrl}user/all`, {
+        .get<ApiResponse<IUser[]>>(`${this.apiUrl}user/all`, {
           headers: { 'Skip-Loader': 'true' },
         })
         .pipe(
@@ -77,7 +77,7 @@ export class UserState extends BaseState<UserModuleState> {
       });
   }
 
-  setUserList(userList: User[]) {
+  setUserList(userList: IUser[]) {
     this.updateState('userList', userList);
   }
 

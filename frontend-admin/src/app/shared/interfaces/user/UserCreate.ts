@@ -1,4 +1,4 @@
-export interface UserCreate {
+export interface IUserCreate {
   id?: string | number; // ID opcional para criação (geralmente não é necessário)
   fullName: string;
   email: string;

@@ -120,7 +120,10 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
     {
       label: 'Cadastro de Fornecedores',
       icon: 'lucideUsers',
-      click: () => {},
+      click: () => {
+        this.toggleQuickAccess();
+        this.router.navigate([{ outlets: { drawer: ['suppliers', 'new'] } }]);
+      },
     },
     {
       label: 'Relatórios',

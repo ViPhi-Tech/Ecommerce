@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
-import { Product } from 'app/shared/interfaces/product/Product';
+import { IProduct } from 'app/shared/interfaces/product/Product';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
@@ -16,8 +16,8 @@ export class ProductService {
 
   constructor() {}
 
-  getAll(skipLoader: boolean): Observable<ApiResponse<Product[]>> {
-    return this.http.get<ApiResponse<Product[]>>(`${this.apiUrl}/all`, {
+  getAll(skipLoader: boolean): Observable<ApiResponse<IProduct[]>> {
+    return this.http.get<ApiResponse<IProduct[]>>(`${this.apiUrl}/all`, {
       headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
     });
   }
@@ -40,8 +40,8 @@ export class ProductService {
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${productId}`);
   }
 
-  filterProducts(query: string): Observable<ApiResponse<Product[]>> {
-    return this.http.get<ApiResponse<Product[]>>(
+  filterProducts(query: string): Observable<ApiResponse<IProduct[]>> {
+    return this.http.get<ApiResponse<IProduct[]>>(
       `${this.apiUrl}/search/${query}`,
       {
         headers: { 'Skip-Loader': 'false' },

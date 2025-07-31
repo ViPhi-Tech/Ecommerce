@@ -1,4 +1,4 @@
-export interface User {
+export interface IUser {
   id: string | number; // Identificador único do usuário
   fullName: string; // Nome completo do usuário
   email: string; // Email do usuário

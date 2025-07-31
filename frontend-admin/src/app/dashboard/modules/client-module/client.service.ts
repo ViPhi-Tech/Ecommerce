@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
-import { Client } from 'app/shared/interfaces/client/Client';
+import { IClient } from 'app/shared/interfaces/client/Client';
 import { Observable, Subject } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
@@ -22,7 +22,7 @@ export class ClientService {
 
   getClients(skipLoader = true): Observable<ApiResponse> {
     const headers = skipLoader ? { 'Skip-Loader': 'true' } : undefined;
-    return this.http.get<ApiResponse<Client[]>>(`${this.apiUrl}/getAll`, {
+    return this.http.get<ApiResponse<IClient[]>>(`${this.apiUrl}/getAll`, {
       headers,
     });
   }

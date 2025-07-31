@@ -14,7 +14,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { Drawer, DrawerModule } from 'primeng/drawer';
+import { Dialog, DialogModule } from 'primeng/dialog';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { AccountsReceivableService } from '../../accounts-receivable.service';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
@@ -26,9 +26,8 @@ import { CoreService } from 'app/shared/services/core.service';
 @Component({
   selector: 'fuse-accounts-receivable-create',
   templateUrl: './accounts-receivable-create.component.html',
-  styleUrls: ['./accounts-receivable-create.component.scss'],
   imports: [
-    DrawerModule,
+    DialogModule,
     ButtonModule,
     ReactiveFormsModule,
     FormModule,
@@ -44,18 +43,21 @@ export class AccountsReceivableCreateComponent implements OnInit {
   private toast = inject(MessageService);
   private accountsReceivableService = inject(AccountsReceivableService);
 
-  @ViewChild('drawerRef') drawerRef!: Drawer;
+  @ViewChild('dialogRef') dialogRef!: Dialog;
 
   formGroup = this.formBuilder.group({});
 
   title = signal('Adicionar Conta a Receber');
-  subtitle = signal('Preencha os dados da nova conta a pagar abaixo');
+  subtitle = signal('Preencha os dados da nova conta a receber abaixo');
   submitButtonLabel = signal('Salvar');
   isLoading = signal(true);
+  visible = signal(true);
 
   accountsReceivableForm!: FormGroup;
 
-  constructor() {}
+  constructor() {
+    this.initForm();
+  }
 
   ngOnInit(): void {
     this.coreService.setPageTitle('', '');
@@ -66,15 +68,16 @@ export class AccountsReceivableCreateComponent implements OnInit {
         const id = params['id'];
         if (id) {
           this.title.set('Editar Conta a Receber');
+          this.subtitle.set('Preencha os dados da conta a receber abaixo');
           this.loadInfos(id);
           this.coreService.setPageTitle(
             'Editar Conta a Receber',
-            'Preencha os dados da conta a pagar abaixo'
+            'Preencha os dados da conta a receber abaixo'
           );
         } else {
           this.coreService.setPageTitle(
             'Adicionar Conta a Receber',
-            'Preencha os dados da nova conta a pagar abaixo'
+            'Preencha os dados da nova conta a receber abaixo'
           );
           this.loadInfos();
         }
@@ -99,9 +102,9 @@ export class AccountsReceivableCreateComponent implements OnInit {
           this.toast.add({
             severity: 'error',
             summary: 'Erro',
-            detail: 'Erro ao carregar conta a pagar',
+            detail: 'Erro ao carregar conta a receber',
           });
-          console.error('Erro ao carregar conta a pagar:', error);
+          console.error('Erro ao carregar conta a receber:', error);
         },
       });
   }
@@ -119,6 +122,10 @@ export class AccountsReceivableCreateComponent implements OnInit {
     e.preventDefault();
     e.stopPropagation();
     this.accountsReceivableForm.markAllAsTouched();
+
+    const formValue = this.accountsReceivableForm.getRawValue();
+    console.log('Form Value:', formValue);
+
     if (!this.accountsReceivableForm.valid) {
       this.toast.add({
         severity: 'error',
@@ -127,8 +134,9 @@ export class AccountsReceivableCreateComponent implements OnInit {
       });
       return;
     }
+
     this.accountsReceivableService
-      .upsert(this.accountsReceivableForm.getRawValue())
+      .upsert(formValue)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: () => {
@@ -136,8 +144,8 @@ export class AccountsReceivableCreateComponent implements OnInit {
             severity: 'success',
             summary: 'Sucesso',
             detail: this.accountsReceivableForm.value.id
-              ? 'Conta a pagar atualizada com sucesso!'
-              : 'Conta a pagar criada com sucesso!',
+              ? 'Conta a receber atualizada com sucesso!'
+              : 'Conta a receber criada com sucesso!',
           });
           this.back();
         },
@@ -145,13 +153,29 @@ export class AccountsReceivableCreateComponent implements OnInit {
           this.toast.add({
             severity: 'error',
             summary: 'Erro',
-            detail: 'Erro ao criar conta a pagar',
+            detail: 'Erro ao salvar conta a receber',
           });
         },
       });
   }
 
   back() {
-    this.router.navigate(['dashboard/accounts-receivable/list']);
+    // remover outlet da url
+    this.router.navigate([{ outlets: { drawer: null } }], {
+      relativeTo: this.activatedRoute.root,
+    });
+  }
+
+  closeDialog(e = new Event('close')): void {
+    this.dialogRef.close(e);
+  }
+
+  onCloseDialog() {
+    this.visible.set(false);
+    setTimeout(() => {
+      this.router.navigate([{ outlets: { drawer: null } }], {
+        relativeTo: this.activatedRoute.root,
+      });
+    }, 300);
   }
 }

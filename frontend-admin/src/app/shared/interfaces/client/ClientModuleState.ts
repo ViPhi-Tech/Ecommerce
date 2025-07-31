@@ -1,7 +1,7 @@
 import { BaseModuleState } from 'app/shared/store/base.state';
-import { Client } from './Client';
+import { IClient } from './Client';
 
 export interface ClientModuleState extends BaseModuleState {
-  clientList: Client[];
+  clientList: IClient[];
   searchTerm: string; // Campo para armazenar o termo de busca
 }
