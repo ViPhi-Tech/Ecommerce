@@ -5,6 +5,7 @@ import { InboundComponent } from 'app/dashboard/modules/stock-movement-module/sc
 import { OutboundComponent } from 'app/dashboard/modules/stock-movement-module/screens/outbound/outbound.component';
 import { CategoryCreateComponent } from 'app/dashboard/modules/category-module/screens/create/category-create.component';
 import { ClientCreateComponent } from 'app/dashboard/modules/client-module/screens/create/client-create.component';
+import { SupplierCreateComponent } from 'app/dashboard/modules/supplier-module/screens/create/supplier-create.component';
 import { AccountsPayableCreateComponent } from 'app/dashboard/modules/accounts-payable-module/screens/create/accounts-payable-create.component';
 import { AccountsReceivableCreateComponent } from 'app/dashboard/modules/accounts-receivable-module/screens/create/accounts-receivable-create.component';
 
@@ -34,6 +35,20 @@ const routes: Routes = [
       {
         path: ':id',
         component: ClientCreateComponent,
+      },
+    ],
+  },
+  // supplier routes
+  {
+    path: 'suppliers',
+    children: [
+      {
+        path: 'new',
+        component: SupplierCreateComponent,
+      },
+      {
+        path: ':id',
+        component: SupplierCreateComponent,
       },
     ],
   },
