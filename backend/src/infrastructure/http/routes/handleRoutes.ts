@@ -9,6 +9,7 @@ import fileRoutes from './File';
 import clientRoutes from './ClientRoutes';
 import invoiceRoutes from './InvoiceRoutes';
 import brandRoutes from './Brand';
+import supplierRoutes from './Supplier';
 import paymentRoutes from './paymentRoutes';
 
 export default async function handleRoutes(fastify: FastifyInstance) {
@@ -35,6 +36,7 @@ export default async function handleRoutes(fastify: FastifyInstance) {
       fastify.register(clientRoutes, {prefix: '/client'})
       fastify.register(invoiceRoutes, { prefix: '/invoices' })
       fastify.register(brandRoutes, { prefix: '/brand' })
+      fastify.register(supplierRoutes, { prefix: '/supplier' })
       fastify.register(paymentRoutes, { prefix: '/payment' })
       fastify.get(
         '/',
