@@ -8,7 +8,6 @@ export const accountsPayableIdSchema = z.object({
 
 // Schema para criação
 export const accountsPayableCreateSchema = z.object({
-  supplierId: z.number().int().positive(),
   originalDueDate: z.string().datetime(),
   issueDate: z.string().datetime(),
   dueDate: z.string().datetime(),
