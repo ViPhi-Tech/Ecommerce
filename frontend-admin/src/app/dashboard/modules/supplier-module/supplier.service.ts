@@ -31,10 +31,13 @@ export class SupplierService {
   }
 
   // Define methods for supplier operations here
-  upsertSupplier(supplierData: any): Observable<ApiResponse> {
+  upsertSupplier(supplierData: ISupplier): Observable<ApiResponse> {
     if (supplierData.id) {
       // Update existing supplier
-      return this.http.put<ApiResponse>(`${this.apiUrl}/update`, supplierData);
+      return this.http.put<ApiResponse>(
+        `${this.apiUrl}/update/${supplierData.uuid}`,
+        supplierData
+      );
     }
     // Create new supplier
     return this.http.post<ApiResponse>(`${this.apiUrl}/create`, supplierData);

@@ -18,6 +18,11 @@ import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { MessageService } from 'primeng/api';
 import { SupplierService } from '../../supplier.service';
 import { SupplierState } from '../../supplier.state';
+import {
+  cnpjValidator,
+  emailAsyncValidator,
+} from 'app/shared/validators/validators';
+import { ISupplier } from 'app/shared/interfaces/supplier/Supplier';
 
 @Component({
   selector: 'fuse-supplier-create',
@@ -44,33 +49,27 @@ export class SupplierCreateComponent implements OnInit {
   @ViewChild('dialogRef') dialogRef!: Dialog;
 
   supplierForm = this.formBuilder.group({
-    id: [''],
-    name: ['', [Validators.required]],
-    tradeName: [''],
-    cnpj: [''],
-    cpf: [''],
-    email: ['', [Validators.required, Validators.email]],
-    phone: [''],
-    contactPerson: [''],
-    description: [''],
-    address: this.formBuilder.group({
-      street: [''],
-      number: [''],
-      complement: [''],
-      neighborhood: [''],
-      city: [''],
-      state: [''],
-      zipCode: [''],
-    }),
+    id: [0], // Será gerado automaticamente pelo backend
+    uuid: [''], // Será gerado automaticamente pelo backend
+    tradeName: ['', [Validators.required]], // Nome fantasia (obrigatório)
+    legalName: ['', [Validators.required]], // Razão social (obrigatório)
+    cnpj: ['', [Validators.required]], // CNPJ (obrigatório e único)
+    address: ['', [Validators.required]], // Endereço completo (obrigatório)
+    email: ['', [Validators.email]], // Email (opcional, mas deve ser válido se preenchido)
+    phone: [''], // Telefone (opcional)
   });
 
   // signals
-  visible = signal(true);
+  visible = signal(false);
   title = signal('Cadastrar Fornecedor');
+  isLoading = signal(false);
 
   constructor() {}
 
   ngOnInit() {
+    this.supplierForm.get('email')?.addAsyncValidators(emailAsyncValidator);
+    this.supplierForm.get('cnpj')?.addAsyncValidators(cnpjValidator);
+
     this.activatedRoute.params
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe(params => {
@@ -90,6 +89,7 @@ export class SupplierCreateComponent implements OnInit {
       .subscribe({
         next: (response: ApiResponse) => {
           this.supplierForm.patchValue(response.dados);
+          this.supplierForm.get('email')?.disable();
           this.visible.set(true);
         },
         error: () => {
@@ -104,6 +104,7 @@ export class SupplierCreateComponent implements OnInit {
 
   onSubmit(): void {
     this.supplierForm.markAllAsTouched();
+    this.isLoading.set(true);
 
     if (this.supplierForm.invalid) {
       this.toast.add({
@@ -114,27 +115,31 @@ export class SupplierCreateComponent implements OnInit {
       return;
     }
 
-    this.supplierService.upsertSupplier(this.supplierForm.value).subscribe({
-      next: () => {
-        this.toast.add({
-          severity: 'success',
-          summary: 'Sucesso',
-          detail: this.supplierForm.value.id
-            ? 'Fornecedor atualizado com sucesso!'
-            : 'Fornecedor criado com sucesso!',
-        });
+    this.supplierService
+      .upsertSupplier(this.supplierForm.value as ISupplier)
+      .subscribe({
+        next: () => {
+          this.isLoading.set(false);
+          this.toast.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: this.supplierForm.value.id
+              ? 'Fornecedor atualizado com sucesso!'
+              : 'Fornecedor criado com sucesso!',
+          });
 
-        this.state.getSupplierList();
-        this.closeDialog();
-      },
-      error: () => {
-        this.toast.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Erro ao salvar fornecedor',
-        });
-      },
-    });
+          this.state.getSupplierList();
+          this.closeDialog();
+        },
+        error: () => {
+          this.isLoading.set(false);
+          this.toast.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao salvar fornecedor',
+          });
+        },
+      });
   }
 
   closeDialog(e = new Event('close')): void {

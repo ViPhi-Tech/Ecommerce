@@ -1,11 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
@@ -16,6 +9,7 @@ import { SupplierService } from '../../supplier.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SupplierState } from '../../supplier.state';
+import { ISupplier } from 'app/shared/interfaces/supplier/Supplier';
 
 @Component({
   selector: 'fuse-supplier-list',
@@ -34,7 +28,7 @@ export class SupplierListComponent implements OnInit {
 
   visible = false;
 
-  tableConfig: WritableSignal<TableConfig> = signal({
+  tableConfig = signal<TableConfig>({
     rowsPerPageOptions: [5, 10, 20],
     rowsPerPage: 10,
     paginator: true,
@@ -51,11 +45,11 @@ export class SupplierListComponent implements OnInit {
       },
     ],
     columns: [
-      { field: 'id', caption: 'ID', sortable: true, filter: true },
-      { field: 'name', caption: 'Nome', sortable: true, filter: true },
-      { field: 'email', caption: 'Email', sortable: true, filter: true },
-      { field: 'phone', caption: 'Telefone', sortable: true, filter: true },
-      { field: 'cnpj', caption: 'CNPJ', sortable: true, filter: true },
+      { field: 'id', caption: 'ID', sortable: true },
+      { field: 'legalName', caption: 'Razão Social', sortable: true },
+      { field: 'email', caption: 'Email', sortable: true },
+      { field: 'phone', caption: 'Telefone', sortable: true, type: 'phone' },
+      { field: 'cnpj', caption: 'CNPJ', sortable: true, type: 'document' },
       {
         field: 'actions',
         caption: 'Ações',
@@ -66,11 +60,11 @@ export class SupplierListComponent implements OnInit {
             label: 'Editar',
             tooltip: 'Editar Fornecedor',
             variant: 'text',
-            action: (rowData: any) => {
+            action: (rowData: ISupplier) => {
               // Exemplo de navegação para o outlet auxiliar "drawer"
               console.log(rowData);
               this.router.navigate([
-                { outlets: { drawer: ['suppliers', rowData?.id] } },
+                { outlets: { drawer: ['suppliers', rowData?.uuid] } },
               ]);
             },
           },
@@ -81,8 +75,8 @@ export class SupplierListComponent implements OnInit {
             colorText: '#EF4444',
             colorIcon: '#EF4444',
             tooltip: 'Excluir Fornecedor',
-            action: (rowData: any) => {
-              this.deleteSupplier(rowData?.id);
+            action: (rowData: ISupplier) => {
+              this.deleteSupplier(rowData?.uuid);
             },
           },
         ],

@@ -24,8 +24,8 @@
         <!-- Dados básicos -->
         <div class="col-12 md:col-6 mb-4">
           <fuse-input
-            label="Nome da Empresa"
-            [control]="supplierForm.get('name')"
+            label="Razão Social"
+            [control]="supplierForm.get('legalName')"
             placeholder="Ex: Fornecedora ABC Ltda"
           />
         </div>
@@ -43,14 +43,15 @@
             label="CNPJ"
             [control]="supplierForm.get('cnpj')"
             placeholder="00.000.000/0000-00"
+            mask="00.000.000/0000-00"
           />
         </div>
 
         <div class="col-12 md:col-6 mb-4">
           <fuse-input
-            label="CPF"
-            [control]="supplierForm.get('cpf')"
-            placeholder="000.000.000-00"
+            label="Endereço"
+            [control]="supplierForm.get('address')"
+            placeholder="Rua, número, bairro, cidade - Estado, CEP"
           />
         </div>
 
@@ -60,7 +61,6 @@
             label="Email"
             [control]="supplierForm.get('email')"
             placeholder="contato@fornecedor.com.br"
-            type="email"
           />
         </div>
 
@@ -69,85 +69,7 @@
             label="Telefone"
             [control]="supplierForm.get('phone')"
             placeholder="(11) 99999-9999"
-          />
-        </div>
-
-        <div class="col-12 md:col-6 mb-4">
-          <fuse-input
-            label="Pessoa de Contato"
-            [control]="supplierForm.get('contactPerson')"
-            placeholder="Ex: João Silva"
-          />
-        </div>
-
-        <!-- Endereço -->
-        <div class="col-12 mb-4">
-          <h3 class="text-lg font-semibold mb-3">Endereço</h3>
-        </div>
-
-        <div class="col-12 md:col-8 mb-4" formGroupName="address">
-          <fuse-input
-            label="Rua"
-            [control]="supplierForm.get('address.street')"
-            placeholder="Nome da rua"
-          />
-        </div>
-
-        <div class="col-12 md:col-4 mb-4" formGroupName="address">
-          <fuse-input
-            label="Número"
-            [control]="supplierForm.get('address.number')"
-            placeholder="123"
-          />
-        </div>
-
-        <div class="col-12 md:col-6 mb-4" formGroupName="address">
-          <fuse-input
-            label="Complemento"
-            [control]="supplierForm.get('address.complement')"
-            placeholder="Apto 101, Bloco A"
-          />
-        </div>
-
-        <div class="col-12 md:col-6 mb-4" formGroupName="address">
-          <fuse-input
-            label="Bairro"
-            [control]="supplierForm.get('address.neighborhood')"
-            placeholder="Centro"
-          />
-        </div>
-
-        <div class="col-12 md:col-4 mb-4" formGroupName="address">
-          <fuse-input
-            label="Cidade"
-            [control]="supplierForm.get('address.city')"
-            placeholder="São Paulo"
-          />
-        </div>
-
-        <div class="col-12 md:col-4 mb-4" formGroupName="address">
-          <fuse-input
-            label="Estado"
-            [control]="supplierForm.get('address.state')"
-            placeholder="SP"
-          />
-        </div>
-
-        <div class="col-12 md:col-4 mb-4" formGroupName="address">
-          <fuse-input
-            label="CEP"
-            [control]="supplierForm.get('address.zipCode')"
-            placeholder="00000-000"
-          />
-        </div>
-
-        <!-- Descrição -->
-        <div class="col-12 mb-4">
-          <fuse-input
-            label="Descrição/Observações"
-            [control]="supplierForm.get('description')"
-            placeholder="Informações adicionais sobre o fornecedor"
-            type="textarea"
+            mask="(99) 99999-9999"
           />
         </div>
       </form>
@@ -164,6 +86,7 @@
           icon="pi pi-check"
           class="w-[200px]"
           size="small"
+          [loading]="isLoading()"
           (click)="onSubmit()"
         ></button>
 
@@ -171,6 +94,7 @@
           pButton
           type="button"
           label="Cancelar"
+          [disabled]="isLoading()"
           icon="pi pi-times"
           (click)="closeDialog($event)"
           severity="secondary"
