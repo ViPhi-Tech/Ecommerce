@@ -1,11 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
@@ -15,6 +8,7 @@ import { heightAnimation } from 'app/shared/utils/animations';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { AccountsPayableService } from '../../accounts-payable.service';
 import { AccountsPayableState } from '../../accounts-payable.state';
+import { IAccountsPayable } from 'app/shared/interfaces/accounts-payable/AccountsPayable';
 
 @Component({
   selector: 'fuse-accounts-payable-list',
@@ -32,7 +26,7 @@ export class AccountsPayableListComponent implements OnInit {
 
   state = inject(AccountsPayableState);
 
-  tableConfig: WritableSignal<TableConfig> = signal({
+  tableConfig = signal<TableConfig>({
     rowsPerPageOptions: [5, 10, 20],
     rowsPerPage: 10,
     paginator: true,
@@ -52,7 +46,7 @@ export class AccountsPayableListComponent implements OnInit {
     columns: [
       // { field: 'id', caption: 'ID', sortable: true, filter: true },
       {
-        field: 'provider',
+        field: 'supplierName',
         caption: 'Fornecedor',
         sortable: true,
         filter: true,
@@ -65,6 +59,7 @@ export class AccountsPayableListComponent implements OnInit {
         field: 'dueDate',
         caption: 'Data de Vencimento',
         sortable: true,
+        type: 'date',
       },
       {
         field: 'amount',
@@ -82,7 +77,7 @@ export class AccountsPayableListComponent implements OnInit {
             label: 'Editar',
             tooltip: 'Editar Conta a Pagar',
             variant: 'text',
-            action: (rowData: any) => {
+            action: (rowData: IAccountsPayable) => {
               this.edit(rowData?.id);
             },
           },
@@ -93,7 +88,7 @@ export class AccountsPayableListComponent implements OnInit {
             colorText: '#EF4444',
             colorIcon: '#EF4444',
             tooltip: 'Excluir Conta a Pagar',
-            action: (rowData: any) => {
+            action: (rowData: IAccountsPayable) => {
               this.delete(rowData?.id);
             },
           },
@@ -102,20 +97,19 @@ export class AccountsPayableListComponent implements OnInit {
     ],
   });
 
-  constructor() {}
-
-  async ngOnInit() {
-    await this.state.getAccountsPayableList();
-    console.log('Accounts Payable List:', this.state.accountsPayableList());
-
+  constructor() {
     this.coreService.setPageTitle('Contas a Pagar', 'Lista de contas a pagar');
   }
 
-  edit(id: string) {
+  async ngOnInit() {
+    await this.state.getAccountsPayableList();
+  }
+
+  edit(id: number) {
     this.router.navigate(['dashboard/accounts-payable/edit/', id]);
   }
 
-  delete(id: string) {
+  delete(id: number) {
     this.confirmationService.confirm({
       message: 'Você tem certeza que deseja excluir esta conta a pagar?',
       header: 'Confirmação de Exclusão',
@@ -135,7 +129,7 @@ export class AccountsPayableListComponent implements OnInit {
                 summary: 'Sucesso',
                 detail: 'Conta a pagar excluída com sucesso',
               });
-              this.accountsPayableService.refreshList();
+              this.state.getAccountsPayableList();
             },
             error: () => {
               this.toast.add({

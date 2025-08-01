@@ -42,7 +42,7 @@ export class OrderListComponent implements OnInit {
 
   @ViewChild('name', { static: true }) name!: TemplateRef<any>;
 
-  tableConfig: WritableSignal<TableConfig> = signal(DEFAULT_TABLE_CONFIG);
+  tableConfig = signal<TableConfig>(DEFAULT_TABLE_CONFIG);
 
   title = '';
 

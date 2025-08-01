@@ -34,7 +34,7 @@ export class ClientListComponent implements OnInit {
 
   visible = false;
 
-  tableConfig: WritableSignal<TableConfig> = signal({
+  tableConfig = signal<TableConfig>({
     rowsPerPageOptions: [5, 10, 20],
     rowsPerPage: 10,
     paginator: true,

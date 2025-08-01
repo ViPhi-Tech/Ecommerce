@@ -87,7 +87,7 @@ export class AccountsPayableCreateComponent implements OnInit {
       });
   }
 
-  async loadInfos(id?: string): Promise<void> {
+  async loadInfos(id?: number): Promise<void> {
     if (!id) {
       this.isLoading.set(false);
       return;
@@ -115,14 +115,15 @@ export class AccountsPayableCreateComponent implements OnInit {
   initForm(): void {
     this.accountsPayableForm = this.formBuilder.group({
       id: [''],
+      uuid: [''],
       provider: ['', [Validators.required]],
-      description: ['', [Validators.required, Validators.maxLength(255)]],
-      dueDateOriginal: [{ value: '', disabled: true }],
+      originalDueDate: [{ value: '', disabled: true }],
       issueDate: [dayjs().format('DD/MM/YYYY'), Validators.required],
       dueDate: ['', Validators.required],
       competenceDate: ['', Validators.required],
       recurringPurchase: [false],
       amount: ['', Validators.required],
+      description: ['', [Validators.required, Validators.maxLength(255)]],
     });
   }
 
@@ -132,7 +133,6 @@ export class AccountsPayableCreateComponent implements OnInit {
     this.accountsPayableForm.markAllAsTouched();
 
     const formValue = this.accountsPayableForm.getRawValue();
-    console.log('Form Value:', formValue);
     if (!this.accountsPayableForm.valid) {
       this.toast.add({
         severity: 'error',
@@ -174,11 +174,6 @@ export class AccountsPayableCreateComponent implements OnInit {
 
   closeDialog(e = new Event('close')): void {
     this.dialogRef.close(e);
-  }
-
-  onSave() {
-    console.log('Save action triggered');
-    this.onCloseDialog();
   }
 
   onCloseDialog() {

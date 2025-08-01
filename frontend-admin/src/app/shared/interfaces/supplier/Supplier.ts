@@ -1,23 +1,13 @@
 export interface ISupplier {
-  id: string; // Identificador único do fornecedor
-  name: string; // Nome da empresa fornecedora
-  tradeName?: string; // Nome fantasia da empresa
-  cnpj?: string; // CNPJ da empresa
-  cpf?: string; // CPF (para fornecedores pessoa física)
-  email: string; // Email de contato
-  phone?: string; // Telefone de contato
-  address?: {
-    street: string;
-    number: string;
-    complement?: string;
-    neighborhood: string;
-    city: string;
-    state: string;
-    zipCode: string;
-  }; // Endereço completo
-  contactPerson?: string; // Pessoa de contato
-  description?: string; // Descrição ou observações sobre o fornecedor
-  isActive: boolean; // Indica se o fornecedor está ativo
+  id: number; // Identificador único autoincremental
+  uuid: string; // UUID único
+  tradeName: string; // Nome fantasia
+  legalName: string; // Razão social
+  cnpj: string; // CNPJ da empresa (obrigatório e único)
+  address: string; // Endereço completo
+  email?: string; // Email de contato (opcional)
+  phone?: string; // Telefone de contato (opcional)
   createdAt: Date; // Data de criação
   updatedAt: Date; // Data da última atualização
+  accountsPayable?: any[]; // Relacionamento com contas a pagar
 }

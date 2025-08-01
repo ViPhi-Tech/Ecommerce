@@ -42,7 +42,7 @@ export class UserListComponent implements OnInit {
     this.state.getUserList();
   });
 
-  tableConfig: WritableSignal<TableConfig> = signal({
+  tableConfig = signal<TableConfig>({
     rowsPerPageOptions: [5, 10, 20],
     rowsPerPage: 10,
     paginator: true,

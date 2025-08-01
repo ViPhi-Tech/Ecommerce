@@ -59,6 +59,17 @@ export interface ActionButtons {
   action: (rowData: any, rowIndex?: number | string) => void;
 }
 
+export type columnType =
+  | 'text'
+  | 'number'
+  | 'date'
+  | 'boolean'
+  | 'phone'
+  | 'cnpj'
+  | 'cpf'
+  | 'email'
+  | 'actions';
+
 export const DEFAULT_TABLE_CONFIG: TableConfig = {
   rowsPerPageOptions: [10, 20, 50],
   rowsPerPage: 10,

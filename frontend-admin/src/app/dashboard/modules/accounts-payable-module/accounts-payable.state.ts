@@ -3,6 +3,7 @@ import { catchError, finalize, lastValueFrom, tap } from 'rxjs';
 import { AccountsPayableService } from './accounts-payable.service';
 import { BaseState } from 'app/shared/store/base.state';
 import { AccountsPayableModuleState } from 'app/shared/interfaces/accounts-payable/AccountsPayableModuleState';
+import { IAccountsPayable } from 'app/shared/interfaces/accounts-payable/AccountsPayable';
 
 @Injectable({
   providedIn: 'root',
@@ -25,7 +26,7 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
 
     await lastValueFrom(
       this.service.getAll().pipe(
-        tap(data => this.setAccountsPayableList(data.dados)),
+        tap(data => this.setAccountsPayableList(data.data)),
         catchError(() =>
           this.handleError('Erro ao carregar a lista de contas a pagar')
         ),
@@ -34,7 +35,12 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
     );
   }
 
-  setAccountsPayableList(list: any[]) {
+  setAccountsPayableList(list: IAccountsPayable[]) {
+    list = list.map(item => ({
+      ...item,
+      supplierName: item.supplier?.tradeName || 'Fornecedor Desconhecido',
+    }));
+
     this.updateState('accountsPayableList', list);
   }
 }
