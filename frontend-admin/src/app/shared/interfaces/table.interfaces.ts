@@ -18,7 +18,7 @@ export interface TableConfig {
 }
 
 export interface TableColumn {
-  field: string | number;
+  field: string;
   type?: string;
   caption: string;
   sortable?: boolean;

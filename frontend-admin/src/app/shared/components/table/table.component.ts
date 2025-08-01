@@ -20,6 +20,8 @@ import { NgIcon } from '@ng-icons/core';
 import { DocumentPipe } from 'app/shared/pipes/document.pipe';
 import { DateCustomPipe } from 'app/shared/pipes/date.pipe';
 import { PhonePipe } from 'app/shared/pipes/phone.pipe';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'fuse-table',
@@ -43,6 +45,8 @@ import { PhonePipe } from 'app/shared/pipes/phone.pipe';
     DocumentPipe,
     PhonePipe,
     DateCustomPipe,
+    MultiSelectModule,
+    FormsModule,
   ],
 })
 export class TableComponent implements OnInit {
@@ -68,6 +72,24 @@ export class TableComponent implements OnInit {
     }
     return fields;
   });
+
+  columnData() {
+    const data: any = {};
+    this.config().columns.map(col => {
+      if (col.filter) {
+        const uniqueValues = Array.from(
+          new Set(this.data()?.map((item: any) => item[col.field]))
+        );
+        data[col.field] = uniqueValues.map(value => {
+          return {
+            label: value,
+            value: value,
+          };
+        });
+      }
+    });
+    return data;
+  }
 
   exportColumns = computed(() => {
     return this.config().columns.map(col => {
