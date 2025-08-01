@@ -24,11 +24,15 @@
     <div>
       <form [formGroup]="accountsPayableForm" class="row">
         <div class="col-12">
-          <fuse-input
+          <fuse-select
             label="Fornecedor"
+            [items]="supplierState.supplierList()"
+            valueRef="id"
+            labelRef="legalName"
             [isLoading]="isLoading()"
-            [control]="accountsPayableForm.get('provider')"
-            placeholder="Ex: Fornecedor X"
+            [drawerAux]="['suppliers', 'new']"
+            [control]="accountsPayableForm.get('supplierId')"
+            placeholder="Adicione um fornecedor"
           />
         </div>
         <div class="col-12 md:col-6 mt-4">

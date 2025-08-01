@@ -27,7 +27,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     redirectTo: 'dashboard',
   },
-  // dialogs
+  // dialogs - drawer principal
   {
     path: '',
     loadChildren: () =>
@@ -35,5 +35,14 @@ export const routes: Routes = [
         m => m.DialogsModule
       ),
     outlet: 'drawer',
+  },
+  // dialogs - drawer auxiliar (overlay sobre o drawer principal)
+  {
+    path: '',
+    loadChildren: () =>
+      import('app/shared/modules/dialogs/dialogs.module').then(
+        m => m.DialogsModule
+      ),
+    outlet: 'drawerAux',
   },
 ];

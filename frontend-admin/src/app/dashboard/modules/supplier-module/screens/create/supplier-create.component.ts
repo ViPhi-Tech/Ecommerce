@@ -149,9 +149,16 @@ export class SupplierCreateComponent implements OnInit {
   onCloseDialog() {
     this.visible.set(false);
     setTimeout(() => {
-      this.router.navigate([{ outlets: { drawer: null } }], {
-        relativeTo: this.activatedRoute.root,
-      });
+      // se tiver drawerAux na url, remove o outlet
+      if (this.router.url.includes('drawerAux')) {
+        this.router.navigate([{ outlets: { drawerAux: null } }], {
+          relativeTo: this.activatedRoute.root,
+        });
+      } else {
+        this.router.navigate([{ outlets: { drawer: null } }], {
+          relativeTo: this.activatedRoute.root,
+        });
+      }
     }, 300);
   }
 }

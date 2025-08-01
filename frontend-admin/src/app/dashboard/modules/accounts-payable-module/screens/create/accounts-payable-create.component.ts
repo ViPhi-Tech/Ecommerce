@@ -24,6 +24,7 @@ import dayjs from 'dayjs';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { CheckboxModule } from 'primeng/checkbox';
+import { SupplierState } from 'app/dashboard/modules/supplier-module/supplier.state';
 
 @Component({
   selector: 'fuse-accounts-payable-create-drawer',
@@ -42,6 +43,7 @@ export class AccountsPayableCreateComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
   private toast = inject(MessageService);
+  public supplierState = inject(SupplierState);
   private accountsPayableService = inject(AccountsPayableService);
 
   @ViewChild('drawerRef') drawerRef!: Drawer;
@@ -66,6 +68,7 @@ export class AccountsPayableCreateComponent implements OnInit {
 
   ngOnInit() {
     this.coreService.setPageTitle('', '');
+    this.supplierState.getSupplierList();
     this.activatedRoute.params
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe(params => {
@@ -97,7 +100,27 @@ export class AccountsPayableCreateComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: (response: ApiResponse) => {
-          this.accountsPayableForm.patchValue(response.dados);
+          const data = response.dados;
+
+          // Converter as datas do formato ISO para o formato DD/MM/YYYY para exibição
+          if (data.originalDueDate) {
+            data.originalDueDate = dayjs(data.originalDueDate).format(
+              'DD/MM/YYYY'
+            );
+          }
+          if (data.issueDate) {
+            data.issueDate = dayjs(data.issueDate).format('DD/MM/YYYY');
+          }
+          if (data.dueDate) {
+            data.dueDate = dayjs(data.dueDate).format('DD/MM/YYYY');
+          }
+          if (data.competenceDate) {
+            data.competenceDate = dayjs(data.competenceDate).format(
+              'DD/MM/YYYY'
+            );
+          }
+
+          this.accountsPayableForm.patchValue(data);
           this.isLoading.set(false);
         },
         error: (error: any) => {
@@ -116,13 +139,14 @@ export class AccountsPayableCreateComponent implements OnInit {
     this.accountsPayableForm = this.formBuilder.group({
       id: [''],
       uuid: [''],
-      provider: ['', [Validators.required]],
+      supplierId: ['', [Validators.required]],
       originalDueDate: [{ value: '', disabled: true }],
       issueDate: [dayjs().format('DD/MM/YYYY'), Validators.required],
       dueDate: ['', Validators.required],
       competenceDate: ['', Validators.required],
       recurringPurchase: [false],
       amount: ['', Validators.required],
+      status: ['pending'],
       description: ['', [Validators.required, Validators.maxLength(255)]],
     });
   }
@@ -142,8 +166,26 @@ export class AccountsPayableCreateComponent implements OnInit {
       return;
     }
 
+    // Formatar as datas para o formato ISO antes de enviar
+    const payload = { ...formValue };
+
+    // Se originalDueDate estiver vazio, definir como null ao invés de string vazia
+    if (!payload.originalDueDate || payload.originalDueDate === '') {
+      payload.originalDueDate = null;
+    } else {
+      // Converter para formato ISO date-time se tiver valor
+      payload.originalDueDate = this.convertToISODateTime(
+        payload.originalDueDate
+      );
+    }
+
+    // Converter outras datas para formato ISO
+    payload.issueDate = this.convertToISODateTime(payload.issueDate);
+    payload.dueDate = this.convertToISODateTime(payload.dueDate);
+    payload.competenceDate = this.convertToISODateTime(payload.competenceDate);
+
     this.accountsPayableService
-      .upsert(formValue)
+      .upsert(payload)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: () => {
@@ -164,6 +206,42 @@ export class AccountsPayableCreateComponent implements OnInit {
           });
         },
       });
+  }
+
+  private convertToISODateTime(dateString: string): string | null {
+    if (!dateString || dateString.trim() === '') {
+      return null;
+    }
+
+    try {
+      // Se já estiver no formato ISO, retornar como está
+      if (dateString.includes('T') && dateString.includes('Z')) {
+        return dateString;
+      }
+
+      // Converter do formato DD/MM/YYYY para ISO
+      const dateParts = dateString.split('/');
+      if (dateParts.length === 3) {
+        const day = dateParts[0].padStart(2, '0');
+        const month = dateParts[1].padStart(2, '0');
+        const year = dateParts[2];
+
+        // Criar data no formato ISO com horário padrão (00:00:00)
+        const isoDate = dayjs(`${year}-${month}-${day}`).toISOString();
+        return isoDate;
+      }
+
+      // Tentar parsear com dayjs se não estiver no formato esperado
+      const parsedDate = dayjs(dateString);
+      if (parsedDate.isValid()) {
+        return parsedDate.toISOString();
+      }
+
+      return null;
+    } catch (error) {
+      console.error('Erro ao converter data:', error);
+      return null;
+    }
   }
 
   back() {

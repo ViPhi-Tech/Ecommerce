@@ -48,7 +48,8 @@ export class SelectComponent implements OnInit {
   canSearch = input<boolean>(true);
   isRequired = signal(false);
   isLoading = input<boolean>(false);
-  quickAdd = input<any[]>([]);
+  drawer = input<any[]>([]);
+  drawerAux = input<any[]>([]);
 
   @Output() changeValue = new EventEmitter<any>();
 
@@ -62,7 +63,16 @@ export class SelectComponent implements OnInit {
     this.changeValue.emit(value);
   };
 
-  redirectToQuickAdd() {
-    this.router.navigate([{ outlets: { drawer: this.quickAdd() } }]);
+  redirectToDrawer() {
+    if (this.drawerAux().length > 0) {
+      // Extract the current drawer outlet from the router URL
+      const match = this.router.url.match(/drawer:([^)]*)/);
+      const drawer = match && match[1] ? match[1].split('/') : [];
+      this.router.navigate([
+        { outlets: { drawer: drawer, drawerAux: this.drawerAux() } },
+      ]);
+      return;
+    }
+    this.router.navigate([{ outlets: { drawer: this.drawer() } }]);
   }
 }
