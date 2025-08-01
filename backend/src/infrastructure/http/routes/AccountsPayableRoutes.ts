@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { accountsPayableController } from '../../config/dependencies/accountsPayableDependencies';
-import { authMiddleware } from '../middlewares/authMiddleware';
+import { authenticate } from "../middlewares/authMiddleware";
 import {
   accountsPayableIdJsonSchema,
   accountsPayableCreateJsonSchema,
@@ -10,8 +10,9 @@ import {
 } from '../dto/AccountsPayable.dto';
 
 export async function accountsPayableRoutes(fastify: FastifyInstance) {
+  // Criar conta a pagar
   fastify.post('/create', {
-    preHandler: [authMiddleware],
+    preHandler: [authenticate],
     schema: {
       tags: ['Accounts Payable'],
       summary: 'Criar nova conta a pagar',
@@ -32,7 +33,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
 
   // Buscar conta a pagar por ID
   fastify.get('/:id', {
-    preHandler: [authMiddleware],
+    preHandler: [authenticate],
     schema: {
       tags: ['Accounts Payable'],
       summary: 'Buscar conta a pagar por ID',
@@ -52,7 +53,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
 
   // Listar todas as contas a pagar
   fastify.get('/all', {
-    preHandler: [authMiddleware],
+    preHandler: [authenticate],
     schema: {
       tags: ['Accounts Payable'],
       summary: 'Listar todas as contas a pagar',
@@ -71,7 +72,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
 
   // Buscar contas a pagar por fornecedor
   fastify.get('/supplier/:supplierId', {
-    preHandler: [authMiddleware],
+    preHandler: [authenticate],
     schema: {
       tags: ['Accounts Payable'],
       summary: 'Buscar contas a pagar por fornecedor',
@@ -91,7 +92,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
 
   // Buscar contas a pagar por status
   fastify.get('/status/:status', {
-    preHandler: [authMiddleware],
+    preHandler: [authenticate],
     schema: {
       tags: ['Accounts Payable'],
       summary: 'Buscar contas a pagar por status',
@@ -111,7 +112,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
 
   // Buscar contas a pagar em atraso
   fastify.get('/overdue', {
-    preHandler: [authMiddleware],
+    preHandler: [authenticate],
     schema: {
       tags: ['Accounts Payable'],
       summary: 'Buscar contas a pagar em atraso',
@@ -130,7 +131,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
 
   // Atualizar conta a pagar
   fastify.put('/update/:id', {
-    preHandler: [authMiddleware],
+    preHandler: [authenticate],
     schema: {
       tags: ['Accounts Payable'],
       summary: 'Atualizar conta a pagar',
@@ -152,7 +153,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
 
   // Deletar conta a pagar
   fastify.delete('/:id', {
-    preHandler: [authMiddleware],
+    preHandler: [authenticate],
     schema: {
       tags: ['Accounts Payable'],
       summary: 'Deletar conta a pagar',
