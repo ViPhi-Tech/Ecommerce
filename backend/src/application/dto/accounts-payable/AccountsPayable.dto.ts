@@ -7,7 +7,7 @@ export interface AccountsPayableCreateDTO {
   amount: number;
   recurringPurchase?: boolean;
   description: string;
-  status: string;
+  status: 'PENDING' | 'PAID' | 'CANCELLED';
 }
 
 export interface AccountsPayableUpdateDTO {

@@ -17,7 +17,7 @@ export class AccountsPayableRepository implements IAccountsPayableRepository {
         amount: data.amount,
         recurringPurchase: data.recurringPurchase ?? false,
         description: data.description,
-        status: data.status,
+        status: data.status ?? 'PENDING',
       },
     });
   }

@@ -15,7 +15,6 @@ export const accountsPayableCreateSchema = z.object({
   amount: z.number().positive(),
   recurringPurchase: z.boolean().optional().default(false),
   description: z.string().min(1, 'Descrição é obrigatória'),
-  status: z.enum(['pending', 'paid', 'overdue', 'cancelled']),
 });
 
 // Schema para atualização
