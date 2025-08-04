@@ -25,6 +25,7 @@ import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SupplierState } from 'app/dashboard/modules/supplier-module/supplier.state';
+import { formatDate } from 'app/shared/utils/utils';
 
 @Component({
   selector: 'fuse-accounts-payable-create-drawer',
@@ -166,23 +167,17 @@ export class AccountsPayableCreateComponent implements OnInit {
       return;
     }
 
-    // Formatar as datas para o formato ISO antes de enviar
     const payload = { ...formValue };
 
-    // Se originalDueDate estiver vazio, definir como null ao invés de string vazia
-    if (!payload.originalDueDate || payload.originalDueDate === '') {
-      payload.originalDueDate = null;
-    } else {
-      // Converter para formato ISO date-time se tiver valor
-      payload.originalDueDate = this.convertToISODateTime(
-        payload.originalDueDate
-      );
-    }
+    console.debug('Payload before formatting:', payload);
 
-    // Converter outras datas para formato ISO
-    payload.issueDate = this.convertToISODateTime(payload.issueDate);
-    payload.dueDate = this.convertToISODateTime(payload.dueDate);
-    payload.competenceDate = this.convertToISODateTime(payload.competenceDate);
+    payload.issueDate = formatDate(payload.issueDate);
+    payload.dueDate = formatDate(payload.dueDate);
+    payload.competenceDate = formatDate(payload.competenceDate);
+
+    if (!payload.originalDueDate || payload.originalDueDate === '') {
+      payload.originalDueDate = payload.dueDate;
+    }
 
     this.accountsPayableService
       .upsert(payload)
@@ -206,42 +201,6 @@ export class AccountsPayableCreateComponent implements OnInit {
           });
         },
       });
-  }
-
-  private convertToISODateTime(dateString: string): string | null {
-    if (!dateString || dateString.trim() === '') {
-      return null;
-    }
-
-    try {
-      // Se já estiver no formato ISO, retornar como está
-      if (dateString.includes('T') && dateString.includes('Z')) {
-        return dateString;
-      }
-
-      // Converter do formato DD/MM/YYYY para ISO
-      const dateParts = dateString.split('/');
-      if (dateParts.length === 3) {
-        const day = dateParts[0].padStart(2, '0');
-        const month = dateParts[1].padStart(2, '0');
-        const year = dateParts[2];
-
-        // Criar data no formato ISO com horário padrão (00:00:00)
-        const isoDate = dayjs(`${year}-${month}-${day}`).toISOString();
-        return isoDate;
-      }
-
-      // Tentar parsear com dayjs se não estiver no formato esperado
-      const parsedDate = dayjs(dateString);
-      if (parsedDate.isValid()) {
-        return parsedDate.toISOString();
-      }
-
-      return null;
-    } catch (error) {
-      console.error('Erro ao converter data:', error);
-      return null;
-    }
   }
 
   back() {

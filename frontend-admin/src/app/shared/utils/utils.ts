@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export const randomId = () => {
   return Math.random().toString(36).substring(2, 15);
 };
@@ -79,4 +81,11 @@ export const formatCnpj = (cnpj: string): string => {
 
 export const formatPhone = (phone: string): string => {
   return phone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+};
+
+export const formatDate = (date: string): string => {
+  if (date) {
+    return dayjs(date).format('YYYY-MM-DD');
+  }
+  return '';
 };
