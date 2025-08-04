@@ -1,5 +1,5 @@
 import { User } from '../../../domain/entities/User';
-import { LoginDTO, GoogleLoginDTO, AuthResponse } from '../../../infrastructure/http/dto/Auth.dto';
+import { LoginDTO, GoogleLoginDTO, AuthResponse } from '../../dto/auth/AuthDTOs';
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 import { ILoginRepository } from '../../../domain/repositories/ILoginRepository';
 import { IPasswordService } from '../../../domain/services/IPasswordService';

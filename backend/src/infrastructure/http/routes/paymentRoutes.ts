@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { paymentController } from '../../config/dependencies/paymentDependencies';
-import { paymentTypeJsonSchema } from '../dto/Payment.dto';
+import { paymentTypeJsonSchema } from '../../../application/dto/payment/PaymentDTOs';
 
 export default async function paymentRoutes(
   fastify: FastifyInstance,

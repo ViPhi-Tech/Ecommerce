@@ -4,7 +4,7 @@ import { authenticate } from '../middlewares/authMiddleware';
 import {
   uploadFileJsonSchema,
   destroyFileJsonSchema
-} from '../../http/dto/File.dto'
+} from '../../../application/dto/file/FileDTOs'
 
 export default async function fileRoutes(
   fastify: FastifyInstance,

@@ -3,8 +3,14 @@ import { CreateUserUseCase } from '../../../application/use-cases/user/CreateUse
 import { GetUserUseCase } from '../../../application/use-cases/user/GetUserUseCase';
 import { UpdateUserUseCase } from '../../../application/use-cases/user/UpdateUserUseCase';
 import { DeleteUserUseCase } from '../../../application/use-cases/user/DeleteUserUseCase';
-import { CreateUserDTO, UpdateUserDTO } from '../dto/User.dto';
-import { UpdateLoginDTO } from '../dto/Login.dto';
+import { 
+  CreateUserDTO, 
+  UpdateUserDTO, 
+  createUserSchema, 
+  updateUserSchema,
+  UserResponse 
+} from '../../../application/dto/user/UserDTOs';
+import { UpdateLoginDTO, updateLoginSchema } from '../../../application/dto/login/LoginDTOs';
 import { EmailAlreadyExistsError, UserNotFoundError } from '../../../shared/errors/UserErrors';
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 import { HTTP_STATUS} from "../../../shared/types/httpStatus";
@@ -19,7 +25,17 @@ export class UserController {
 
   async create(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const userData = request.body as CreateUserDTO;
+      // Validação usando o schema do application
+      const validationResult = createUserSchema.safeParse(request.body);
+      
+      if (!validationResult.success) {
+        return reply.code(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
+          message: 'Dados inválidos',
+          errors: validationResult.error.errors
+        });
+      }
+      
+      const userData = validationResult.data;
       
       const user = await this.createUserUseCase.execute(userData);
 

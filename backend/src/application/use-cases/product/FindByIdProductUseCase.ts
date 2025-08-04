@@ -1,4 +1,4 @@
-import { ProductID } from "../../../infrastructure/http/dto/Product.dto";
+import { ProductIdDTO } from "../../dto/product/ProductDTOs";
 import { ProductResponse } from "../../dto/product/ProductResponse";
 import { IProductRepository} from "../../../domain/repositories/IProductRepository";
 
@@ -7,7 +7,7 @@ export class FindByIdProductUseCase {
         private productRepository: IProductRepository
     ) {}
 
-    async execute(data: ProductID): Promise<ProductResponse | null> {
+    async execute(data: ProductIdDTO): Promise<ProductResponse | null> {
         return await this.productRepository.findById(data.id);
     }
 }

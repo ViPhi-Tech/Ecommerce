@@ -5,7 +5,7 @@ import { DeleteCategoryUseCase } from '../../../application/use-cases/category/D
 import { FindByIdCategoryUseCase } from "../../../application/use-cases/category/FindByIdCategoryUseCase";
 import { FindAllCategoryUseCase } from '../../../application/use-cases/category/FindAllCategoryUseCase';
 import { ApiResponse } from "../../../shared/types/apiResponse";
-import { CategoryCreateDTO, CategoryID } from "../dto/Category.dto";
+import { CreateCategoryDTO, CategoryIdDTO, createCategorySchema, categoryIdSchema } from "../../../application/dto/category/CategoryDTOs";
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 
@@ -20,8 +20,8 @@ export class CategoryController {
     
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try {
-            const categoryData = request.body as CategoryCreateDTO;
-            const category = await this.createCategoryUseCase.execute(categoryData)
+            const validatedData = createCategorySchema.parse(request.body);
+            const category = await this.createCategoryUseCase.execute(validatedData)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: category})
         } catch (error) {
             console.log(error)
@@ -41,8 +41,8 @@ export class CategoryController {
 
     async findById(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const categoryID = request.params as CategoryID
-            const category = await this.findCategoryByIdUseCase.execute(categoryID.id)
+            const validatedParams = categoryIdSchema.parse(request.params);
+            const category = await this.findCategoryByIdUseCase.execute(validatedParams.id)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: category})
         } catch (error) {
             console.log(error)
@@ -52,8 +52,8 @@ export class CategoryController {
 
     async update(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const category = request.body as CategoryCreateDTO
-            const data_category = await this.updateCategoryUseCase.execute(category)
+            const validatedData = createCategorySchema.parse(request.body);
+            const data_category = await this.updateCategoryUseCase.execute(validatedData)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_category})
         } catch (error) {
             console.log(error)
@@ -63,8 +63,8 @@ export class CategoryController {
 
     async delete(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const category = request.params as CategoryID
-            const data_category = await this.deleteCategoryUseCase.execute(category.id)
+            const validatedParams = categoryIdSchema.parse(request.params);
+            const data_category = await this.deleteCategoryUseCase.execute(validatedParams.id)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_category})
         } catch (error) {
             console.log(error)

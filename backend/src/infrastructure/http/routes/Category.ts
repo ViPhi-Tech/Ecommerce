@@ -1,8 +1,9 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-import { categoryController } from "../../config/dependencies/categoryDependencies"
+import { categoryController } from '../../config/dependencies/categoryDependencies';
+import { CategoryController } from '../controllers/CategoryController';
 import { authenticate } from "../middlewares/authMiddleware";
-import { categoryCreateJsonSchema, categoryUpdateJsonSchema } from "../dto/Category.dto";
-import { categoryIdJsonSchema } from "../dto/Category.dto";
+import { createCategoryJsonSchema, updateCategoryJsonSchema } from "../../../application/dto/category/CategoryDTOs";
+import { categoryIdJsonSchema } from "../../../application/dto/category/CategoryDTOs";
 
 export default async function categoryRoutes(
     fastify: FastifyInstance,
@@ -11,7 +12,7 @@ export default async function categoryRoutes(
     fastify.post('/create', {
         schema: {
             tags: ['category'],
-            body: categoryCreateJsonSchema
+            body: createCategoryJsonSchema
         },
         preValidation: [authenticate],
         handler: categoryController.create.bind(categoryController)
@@ -37,7 +38,7 @@ export default async function categoryRoutes(
     fastify.put('/update', {
         schema: {
             tags: ['category'],
-            body: categoryUpdateJsonSchema
+            body: updateCategoryJsonSchema
         },
         preValidation: [authenticate],
         handler: categoryController.update.bind(categoryController)

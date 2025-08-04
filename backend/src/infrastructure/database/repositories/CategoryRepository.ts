@@ -1,13 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 import { Category } from '../../../domain/entities/Category';
 import { ICategoryRepository } from "../../../domain/repositories/ICategoryRepository";
-import { CategoryCreateDTO, CategoryDTO } from "../../http/dto/Category.dto";
+import { CreateCategoryDTO, UpdateCategoryDTO } from "../../../application/dto/category/CategoryDTOs";
 
 export class CategoryRepository implements ICategoryRepository {
     constructor(private prisma: PrismaClient) {
     }
 
-    async create(data: CategoryCreateDTO): Promise<Category> {
+    async create(data: CreateCategoryDTO): Promise<Category> {
         return await this.prisma.category.create({
             data: {
                 name: data.name,
@@ -26,7 +26,7 @@ export class CategoryRepository implements ICategoryRepository {
         });
     }
 
-    async update(id: number, data: Partial<CategoryDTO>): Promise<Category> {
+    async update(id: number, data: Partial<UpdateCategoryDTO>): Promise<Category> {
         return this.prisma.category.update({
             where: {id},
             data

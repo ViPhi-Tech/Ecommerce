@@ -7,7 +7,7 @@ import { FindByStatusAccountsPayableUseCase } from '../../../application/use-cas
 import { FindOverdueAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/FindOverdueAccountsPayableUseCase';
 import { UpdateAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/UpdateAccountsPayableUseCase';
 import { DeleteAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/DeleteAccountsPayableUseCase';
-import { AccountsPayableCreateDTO, AccountsPayableUpdateDTO } from '../../../application/dto/accounts-payable/AccountsPayable.dto';
+import { CreateAccountsPayableInput, UpdateAccountsPayableInput } from '../../../application/dto/accountsPayable/AccountsPayableDTOs';
 
 export class AccountsPayableController {
   constructor(
@@ -23,18 +23,9 @@ export class AccountsPayableController {
 
   async create(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const data = request.body as AccountsPayableCreateDTO;
+      const data = request.body as CreateAccountsPayableInput;
       
-      // Converter strings de data para Date objects
-      const accountsPayableData = {
-        ...data,
-        originalDueDate: new Date(data.originalDueDate),
-        issueDate: new Date(data.issueDate),
-        dueDate: new Date(data.dueDate),
-        competenceDate: new Date(data.competenceDate),
-      };
-
-      const accountsPayable = await this.createAccountsPayableUseCase.execute(accountsPayableData);
+      const accountsPayable = await this.createAccountsPayableUseCase.execute(data);
       
       return reply.status(201).send({
         success: true,
@@ -142,16 +133,9 @@ export class AccountsPayableController {
   async update(request: FastifyRequest, reply: FastifyReply) {
     try {
       const { id } = request.params as { id: string };
-      const data = request.body as AccountsPayableUpdateDTO;
+      const data = request.body as UpdateAccountsPayableInput;
       
-      // Converter strings de data para Date objects se fornecidas
-      const updateData = { ...data };
-      if (data.originalDueDate) updateData.originalDueDate = new Date(data.originalDueDate);
-      if (data.issueDate) updateData.issueDate = new Date(data.issueDate);
-      if (data.dueDate) updateData.dueDate = new Date(data.dueDate);
-      if (data.competenceDate) updateData.competenceDate = new Date(data.competenceDate);
-
-      const accountsPayable = await this.updateAccountsPayableUseCase.execute(parseInt(id), updateData);
+      const accountsPayable = await this.updateAccountsPayableUseCase.execute(parseInt(id), data);
       
       return reply.status(200).send({
         success: true,

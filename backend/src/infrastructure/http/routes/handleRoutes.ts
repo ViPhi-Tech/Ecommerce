@@ -11,7 +11,7 @@ import invoiceRoutes from './InvoiceRoutes';
 import brandRoutes from './Brand';
 import supplierRoutes from './Supplier';
 import accountsPayableRoutes from './AccountsPayable';
-import paymentRoutes from './paymentRoutes';
+import paymentRoutes from './PaymentRoutes';
 
 export default async function handleRoutes(fastify: FastifyInstance) {
   fastify.get(

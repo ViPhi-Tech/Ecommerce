@@ -1,13 +1,13 @@
 import { AccountsPayable } from '../entities/AccountsPayable';
-import { AccountsPayableCreateDTO, AccountsPayableUpdateDTO } from '../../application/dto/accounts-payable/AccountsPayable.dto';
+import { CreateAccountsPayableInput, UpdateAccountsPayableInput } from '../../application/dto/accountsPayable/AccountsPayableDTOs';
 
 export interface IAccountsPayableRepository {
-  create(data: AccountsPayableCreateDTO): Promise<AccountsPayable>;
+  create(data: CreateAccountsPayableInput): Promise<AccountsPayable>;
   findById(id: number): Promise<AccountsPayable | null>;
   findAll(): Promise<AccountsPayable[]>;
   findBySupplierId(supplierId: number): Promise<AccountsPayable[]>;
   findByStatus(status: string): Promise<AccountsPayable[]>;
   findOverdue(): Promise<AccountsPayable[]>;
-  update(id: number, data: AccountsPayableUpdateDTO): Promise<AccountsPayable>;
+  update(id: number, data: UpdateAccountsPayableInput): Promise<AccountsPayable>;
   delete(id: number): Promise<void>;
 }

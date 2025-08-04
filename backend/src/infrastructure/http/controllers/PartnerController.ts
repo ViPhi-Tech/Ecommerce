@@ -4,7 +4,7 @@ import { FindAllPartnerUseCase } from '../../../application/use-cases/partner/Fi
 import { FindByIdPartnerUseCase } from '../../../application/use-cases/partner/FindByIdPartnerUseCase';
 import { UpdatePartnerUseCase } from '../../../application/use-cases/partner/UpdatePartnerUseCase';
 import { DeletePartnerUseCase } from '../../../application/use-cases/partner/DeletePartnerUseCase';
-import { PartnerCreateDTO, PartnerUpdateDTO, PartnerIdDTO } from '../dto/Partner.dto';
+import { CreatePartnerDTO, UpdatePartnerDTO, PartnerIdDTO, createPartnerSchema, updatePartnerSchema, partnerIdSchema } from '../../../application/dto/partner/PartnerDTOs';
 
 import {ApiResponse} from "../../../shared/types/apiResponse";
 
@@ -20,16 +20,10 @@ export class PartnerController {
     private readonly deletePartnerUseCase: DeletePartnerUseCase,
   ) {}
 
-  async create(request: FastifyRequest<{ Body: PartnerCreateDTO }>, reply: FastifyReply): Promise<void> {
-    const partnerData = request.body as PartnerCreateDTO;
-    const partner = await this.createPartnerUseCase.execute(partnerData)
-    partner.name = partnerData.name;
-    partner.email = partnerData.email;
-    partner.document = partnerData.document;
-    partner.phone = partnerData.phone;
-
-    const newPartner = await this.createPartnerUseCase.execute(partner);
-    reply.code(201).send(newPartner);
+  async create(request: FastifyRequest<{ Body: CreatePartnerDTO }>, reply: FastifyReply): Promise<void> {
+    const validatedData = createPartnerSchema.parse(request.body);
+    const partner = await this.createPartnerUseCase.execute(validatedData);
+    reply.code(201).send(partner);
   }
 
   async findAll(request: FastifyRequest, reply: FastifyReply): Promise<void> {
@@ -38,8 +32,8 @@ export class PartnerController {
   }
 
   async findById(request: FastifyRequest<{ Params: PartnerIdDTO }>, reply: FastifyReply): Promise<void> {
-    const { id } = request.params;
-    const partner = await this.findByIdPartnerUseCase.execute(id);
+    const validatedParams = partnerIdSchema.parse(request.params);
+    const partner = await this.findByIdPartnerUseCase.execute(validatedParams.id);
     if (!partner) {
       reply.code(404).send({ message: 'Partner not found' });
       return;
@@ -47,21 +41,20 @@ export class PartnerController {
     reply.send(partner);
   }
 
-  async update(request: FastifyRequest<{ Params: PartnerIdDTO; Body: PartnerUpdateDTO }>, reply: FastifyReply): Promise<ApiResponse> {
-    const { id } = request.params;
-    const partnerData = request.body;
+  async update(request: FastifyRequest<{ Params: PartnerIdDTO; Body: UpdatePartnerDTO }>, reply: FastifyReply): Promise<ApiResponse> {
+    const validatedParams = partnerIdSchema.parse(request.params);
+    const validatedData = updatePartnerSchema.parse(request.body);
 
-    const updatedPartner = await this.updatePartnerUseCase.execute(id, partnerData);
+    const updatedPartner = await this.updatePartnerUseCase.execute(validatedParams.id, validatedData);
     if (!updatedPartner) {
       return reply.code(HTTP_STATUS.API_STATUS_NOT_FOUND).send({status: false, descricao: HTTP_MESSAGES.API_STATUS_NOT_FOUND, data: {}})
     }
-    return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false,  descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR});
+    return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true,  descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: updatedPartner});
   }
 
   async delete(request: FastifyRequest<{ Params: PartnerIdDTO }>, reply: FastifyReply): Promise<void> {
-    const { id } = request.params;
-    await this.deletePartnerUseCase.execute(id);
-    return reply.code(HTTP_STATUS.API_STATUS_NOT_FOUND).send({status: false, descricao: HTTP_MESSAGES.API_STATUS_NOT_FOUND, data: {}})
-
+    const validatedParams = partnerIdSchema.parse(request.params);
+    await this.deletePartnerUseCase.execute(validatedParams.id);
+    reply.code(HTTP_STATUS.API_STATUS_NO_CONTENT).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, data: {}});
   }
 }

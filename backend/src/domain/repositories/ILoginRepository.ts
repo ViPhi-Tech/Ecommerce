@@ -1,5 +1,5 @@
 import { Login } from '../entities/Login';
-import { CreateLoginDTO, UpdateLoginDTO } from '../../infrastructure/http/dto/Login.dto';
+import { CreateLoginDTO, UpdateLoginDTO } from '../../application/dto/login/LoginDTOs';
 
 export interface ILoginRepository {
   create(data: Omit<CreateLoginDTO, 'password'> & { hashedPpassword?: string }): Promise<Login>;

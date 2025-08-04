@@ -2,12 +2,17 @@ import { FastifyInstance } from 'fastify';
 import { accountsPayableController } from '../../config/dependencies/accountsPayableDependencies';
 import { authenticate } from "../middlewares/authMiddleware";
 import {
+  createAccountsPayableJsonSchema,
+  updateAccountsPayableJsonSchema,
   accountsPayableIdJsonSchema,
-  accountsPayableCreateJsonSchema,
-  accountsPayableUpdateJsonSchema,
   accountsPayableSupplierJsonSchema,
   accountsPayableStatusJsonSchema,
-} from '../dto/AccountsPayable.dto';
+  createAccountsPayableSchema,
+  updateAccountsPayableSchema,
+  accountsPayableIdSchema,
+  accountsPayableSupplierSchema,
+  accountsPayableStatusSchema
+} from '../../../application/dto/accountsPayable/AccountsPayableDTOs';
 
 export async function accountsPayableRoutes(fastify: FastifyInstance) {
   // Criar conta a pagar
@@ -16,7 +21,22 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
     schema: {
       tags: ['Accounts Payable'],
       summary: 'Criar nova conta a pagar',
-      body: accountsPayableCreateJsonSchema,
+      description: 'Cria uma nova conta a pagar. Todas as datas devem ser enviadas no formato YYYY-MM-DD (ex: 2023-12-31)',
+      body: {
+        type: 'object',
+        properties: {
+          originalDueDate: { type: 'string', description: 'Data de vencimento original no formato YYYY-MM-DD', example: '2023-12-31' },
+          issueDate: { type: 'string', description: 'Data de emissão no formato YYYY-MM-DD', example: '2023-12-01' },
+          dueDate: { type: 'string', description: 'Data de vencimento no formato YYYY-MM-DD', example: '2023-12-31' },
+          competenceDate: { type: 'string', description: 'Data de competência no formato YYYY-MM-DD', example: '2023-12-01' },
+          amount: { type: 'number', description: 'Valor da conta', example: 1500.50 },
+          recurringPurchase: { type: 'boolean', description: 'Se é uma compra recorrente', example: false },
+          description: { type: 'string', description: 'Descrição da conta', example: 'Pagamento de fornecedor' },
+          supplierId: { type: 'integer', description: 'ID do fornecedor', example: 1 },
+          status: { type: 'string', enum: ['pending', 'paid', 'overdue', 'cancelled'], description: 'Status da conta', example: 'pending' }
+        },
+        required: ['originalDueDate', 'issueDate', 'dueDate', 'competenceDate', 'amount', 'description', 'supplierId']
+      },
       response: {
         201: {
           type: 'object',
@@ -26,7 +46,25 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
             data: { type: 'object' },
           },
         },
+        400: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            message: { type: 'string' },
+          },
+        },
       },
+    },
+    preValidation: async (request, reply) => {
+      try {
+        createAccountsPayableSchema.parse(request.body);
+      } catch (error: any) {
+        reply.status(400).send({
+          success: false,
+          message: 'Dados inválidos',
+          errors: error.errors || error.message,
+        });
+      }
     },
     handler: accountsPayableController.create.bind(accountsPayableController),
   });
@@ -46,7 +84,27 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
             data: { type: 'object' },
           },
         },
+        404: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            message: { type: 'string' },
+          },
+        },
       },
+    },
+    preValidation: async (request, reply) => {
+      try {
+        const params = request.params as { id: string };
+        const parsedParams = { id: Number(params.id) };
+        accountsPayableIdSchema.parse(parsedParams);
+      } catch (error: any) {
+        reply.status(400).send({
+          success: false,
+          message: 'ID inválido',
+          errors: error.errors || error.message,
+        });
+      }
     },
     handler: accountsPayableController.findById.bind(accountsPayableController),
   });
@@ -87,6 +145,19 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
         },
       },
     },
+    preValidation: async (request, reply) => {
+      try {
+        const params = request.params as { supplierId: string };
+        const parsedParams = { supplierId: Number(params.supplierId) };
+        accountsPayableSupplierSchema.parse(parsedParams);
+      } catch (error: any) {
+        reply.status(400).send({
+          success: false,
+          message: 'ID do fornecedor inválido',
+          errors: error.errors || error.message,
+        });
+      }
+    },
     handler: accountsPayableController.findBySupplier.bind(accountsPayableController),
   });
 
@@ -106,6 +177,17 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
           },
         },
       },
+    },
+    preValidation: async (request, reply) => {
+      try {
+        accountsPayableStatusSchema.parse(request.params);
+      } catch (error: any) {
+        reply.status(400).send({
+          success: false,
+          message: 'Status inválido',
+          errors: error.errors || error.message,
+        });
+      }
     },
     handler: accountsPayableController.findByStatus.bind(accountsPayableController),
   });
@@ -135,8 +217,22 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
     schema: {
       tags: ['Accounts Payable'],
       summary: 'Atualizar conta a pagar',
+      description: 'Atualiza uma conta a pagar existente. Todas as datas devem ser enviadas no formato YYYY-MM-DD (ex: 2023-12-31)',
       params: accountsPayableIdJsonSchema,
-      body: accountsPayableUpdateJsonSchema,
+      body: {
+        type: 'object',
+        properties: {
+          originalDueDate: { type: 'string', description: 'Data de vencimento original no formato YYYY-MM-DD', example: '2023-12-31' },
+          issueDate: { type: 'string', description: 'Data de emissão no formato YYYY-MM-DD', example: '2023-12-01' },
+          dueDate: { type: 'string', description: 'Data de vencimento no formato YYYY-MM-DD', example: '2023-12-31' },
+          competenceDate: { type: 'string', description: 'Data de competência no formato YYYY-MM-DD', example: '2023-12-01' },
+          amount: { type: 'number', description: 'Valor da conta', example: 1500.50 },
+          recurringPurchase: { type: 'boolean', description: 'Se é uma compra recorrente', example: false },
+          description: { type: 'string', description: 'Descrição da conta', example: 'Pagamento de fornecedor atualizado' },
+          supplierId: { type: 'integer', description: 'ID do fornecedor', example: 1 },
+          status: { type: 'string', enum: ['pending', 'paid', 'overdue', 'cancelled'], description: 'Status da conta', example: 'paid' }
+        }
+      },
       response: {
         200: {
           type: 'object',
@@ -146,7 +242,35 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
             data: { type: 'object' },
           },
         },
+        400: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            message: { type: 'string' },
+          },
+        },
+        404: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            message: { type: 'string' },
+          },
+        },
       },
+    },
+    preValidation: async (request, reply) => {
+      try {
+        const params = request.params as { id: string };
+        const parsedParams = { id: Number(params.id) };
+        accountsPayableIdSchema.parse(parsedParams);
+        updateAccountsPayableSchema.parse(request.body);
+      } catch (error: any) {
+        reply.status(400).send({
+          success: false,
+          message: 'Dados inválidos',
+          errors: error.errors || error.message,
+        });
+      }
     },
     handler: accountsPayableController.update.bind(accountsPayableController),
   });
@@ -166,7 +290,34 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
             message: { type: 'string' },
           },
         },
+        400: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            message: { type: 'string' },
+          },
+        },
+        404: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            message: { type: 'string' },
+          },
+        },
       },
+    },
+    preValidation: async (request, reply) => {
+      try {
+        const params = request.params as { id: string };
+        const parsedParams = { id: Number(params.id) };
+        accountsPayableIdSchema.parse(parsedParams);
+      } catch (error: any) {
+        reply.status(400).send({
+          success: false,
+          message: 'ID inválido',
+          errors: error.errors || error.message,
+        });
+      }
     },
     handler: accountsPayableController.delete.bind(accountsPayableController),
   });

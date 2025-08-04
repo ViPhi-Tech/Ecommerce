@@ -3,11 +3,11 @@ import { accountsPayableController } from '../../config/dependencies/accountsPay
 import { authenticate } from '../middlewares/authMiddleware';
 import {
   accountsPayableIdJsonSchema,
-  accountsPayableCreateJsonSchema,
-  accountsPayableUpdateJsonSchema,
+  createAccountsPayableJsonSchema,
+  updateAccountsPayableJsonSchema,
   accountsPayableSupplierJsonSchema,
   accountsPayableStatusJsonSchema,
-} from '../dto/AccountsPayable.dto';
+} from '../../../application/dto/accountsPayable/AccountsPayableDTOs';
 
 export default async function accountsPayableRoutes(
   fastify: FastifyInstance,
@@ -19,7 +19,7 @@ export default async function accountsPayableRoutes(
     schema: {
       tags: ['accounts-payable'],
       summary: 'Criar nova conta a pagar',
-      body: accountsPayableCreateJsonSchema,
+      body: createAccountsPayableJsonSchema,
     },
     handler: accountsPayableController.create.bind(accountsPayableController),
   });
@@ -84,7 +84,7 @@ export default async function accountsPayableRoutes(
       tags: ['accounts-payable'],
       summary: 'Atualizar conta a pagar',
       params: accountsPayableIdJsonSchema,
-      body: accountsPayableUpdateJsonSchema,
+      body: updateAccountsPayableJsonSchema,
     },
     handler: accountsPayableController.update.bind(accountsPayableController),
   });

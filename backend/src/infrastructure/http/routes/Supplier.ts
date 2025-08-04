@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { supplierController } from "../../config/dependencies/supplierDependencies"
 import { authenticate } from "../middlewares/authMiddleware";
-import { supplierCreateToSchema, supplierUpdateToSchema, supplierIdToSchema } from "../dto/Supplier.dto";
+import { createSupplierJsonSchema, updateSupplierJsonSchema, supplierIdJsonSchema } from "../../../application/dto/supplier/SupplierDTOs";
 
 export default async function supplierRoutes(
     fastify: FastifyInstance,
@@ -11,7 +11,7 @@ export default async function supplierRoutes(
     fastify.post('/create', {
         schema: {
             tags: ['supplier'],
-            body: supplierCreateToSchema
+            body: createSupplierJsonSchema
         },
         preValidation: [authenticate],
         handler: supplierController.create.bind(supplierController)
@@ -20,7 +20,7 @@ export default async function supplierRoutes(
     fastify.get('/:id', {
         schema: {
             tags: ['supplier'],
-            params: supplierIdToSchema  
+            params: supplierIdJsonSchema  
         },
         preValidation: [authenticate],
         handler: supplierController.findById.bind(supplierController)
@@ -37,8 +37,8 @@ export default async function supplierRoutes(
     fastify.put('/update/:id', {
         schema: {
             tags: ['supplier'],
-            body: supplierUpdateToSchema,
-            params: supplierIdToSchema
+            body: updateSupplierJsonSchema,
+            params: supplierIdJsonSchema
         },
         preValidation: [authenticate],
         handler: supplierController.update.bind(supplierController)
@@ -48,7 +48,7 @@ export default async function supplierRoutes(
         {
             schema: {
                 tags: ['supplier'],
-                params: supplierIdToSchema
+                params: supplierIdJsonSchema
             },
             preValidation: [authenticate],
             handler: supplierController.delete.bind(supplierController)

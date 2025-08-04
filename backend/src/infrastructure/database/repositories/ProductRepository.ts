@@ -1,13 +1,13 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import { Product, Stock, stockMovement, findMoviment } from '../../../domain/entities/Product';
 import { IProductRepository } from "../../../domain/repositories/IProductRepository";
-import {ProductCreateDTO, ProductUpdateDTO, findMovimentDTO} from "../../http/dto/Product.dto";
+import {CreateProductDTO, UpdateProductDTO, FindMovementDTO} from "../../../application/dto/product/ProductDTOs";
 
 export class ProductRepository implements IProductRepository {
   constructor(private prisma: PrismaClient | Prisma.TransactionClient) {}
 
 
-    async create(data: ProductCreateDTO): Promise<Product> {
+    async create(data: CreateProductDTO): Promise<Product> {
         const created = await this.prisma.product.create({
             data,
             include :{
@@ -46,7 +46,7 @@ export class ProductRepository implements IProductRepository {
         });
     };
 
-    async update(id: number, data: ProductUpdateDTO): Promise<Product> {
+    async update(id: number, data: UpdateProductDTO): Promise<Product> {
         return this.prisma.product.update({
             where: {id},
             data

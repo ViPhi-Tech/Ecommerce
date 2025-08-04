@@ -1,7 +1,7 @@
-import { IPaymentRepository } from "../../../domain/repositories/IPaymentRepository";
-import { PrismaClient, Prisma } from "@prisma/client";
-import { Payment, PaymentType } from "../../../domain/entities/Payment";
-import { PaymentCreateDTO, PaymentUpdateDTO } from "../../http/dto/Payment.dto";
+import { PrismaClient, Prisma } from '@prisma/client';
+import { IPaymentRepository } from '../../../domain/repositories/IPaymentRepository';
+import { Payment, PaymentType } from '../../../domain/entities/Payment';
+import { CreatePaymentDTO, UpdatePaymentDTO } from '../../../application/dto/payment/PaymentDTOs';
 export class PaymentRepository implements IPaymentRepository {
   constructor(private prisma: PrismaClient | Prisma.TransactionClient) {}
 
@@ -20,7 +20,7 @@ export class PaymentRepository implements IPaymentRepository {
     });
     }
 
-    async create(data: PaymentCreateDTO): Promise<Payment> {
+    async create(data: CreatePaymentDTO): Promise<Payment> {
         return await this.prisma.payment.create({
             data
         })

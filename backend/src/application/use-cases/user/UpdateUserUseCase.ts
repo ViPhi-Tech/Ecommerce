@@ -1,6 +1,6 @@
 import { User } from '../../../domain/entities/User';
-import { UpdateUserDTO } from '../../../infrastructure/http/dto/User.dto';
-import { UpdateLoginDTO } from '../../../infrastructure/http/dto/Login.dto';
+import { UpdateUserDTO } from '../../dto/user/UserDTOs';
+import { UpdateLoginDTO } from '../../dto/login/LoginDTOs';
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 import { ILoginRepository } from '../../../domain/repositories/ILoginRepository';
 import { IPasswordService } from '../../../domain/services/IPasswordService';

@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { clientController } from '../../config/dependencies/clientDependencies';
-import { clientCreateJsonSchema, clientIdJsonSchema, clientUpdateJsonSchema, clientDocumentJsonSchema } from '../dto/Client.dto';
+import { createClientJsonSchema, clientIdJsonSchema, updateClientJsonSchema, clientDocumentJsonSchema } from '../../../application/dto/client/ClientDTOs';
 import { authenticate } from "../middlewares/authMiddleware";
 
 export default async function clientRoutes(
@@ -10,7 +10,7 @@ export default async function clientRoutes(
   fastify.post('/create', {
     schema: {
       tags: ['client'],
-      body: clientCreateJsonSchema,
+      body: createClientJsonSchema,
     },
     handler: clientController.create.bind(clientController),
   });
@@ -34,7 +34,7 @@ export default async function clientRoutes(
     schema: {
       tags: ['client'],
       params: clientIdJsonSchema,
-      body: clientUpdateJsonSchema,
+      body: updateClientJsonSchema,
     },
     handler: clientController.update.bind(clientController),
   });

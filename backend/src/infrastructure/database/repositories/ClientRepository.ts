@@ -1,12 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 import { IClientRepository } from '../../../domain/repositories/IClientRepository';
 import { Client } from '../../../domain/entities/Client';
-import { ClientCreateDTO, ClientUpdateDTO } from '../../http/dto/Client.dto';
+import { CreateClientDTO, UpdateClientDTO } from '../../../application/dto/client/ClientDTOs';
 
 export class ClientRepository implements IClientRepository {
   constructor(private prisma: PrismaClient) {}
 
-  async create(data: ClientCreateDTO): Promise<Client> {
+  async create(data: CreateClientDTO): Promise<Client> {
     return this.prisma.client.create({ data });
   }
 
@@ -22,7 +22,7 @@ export class ClientRepository implements IClientRepository {
     return this.prisma.client.findUnique({ where: { id, isActive: true } }) as any;
   }
 
-  async update(id: number, data: ClientUpdateDTO): Promise<Client> {
+  async update(id: number, data: UpdateClientDTO): Promise<Client> {
     return this.prisma.client.update({ where: { id }, data }) as any;
   }
 
@@ -47,4 +47,4 @@ export class ClientRepository implements IClientRepository {
     )
   };
 
-} 
+}

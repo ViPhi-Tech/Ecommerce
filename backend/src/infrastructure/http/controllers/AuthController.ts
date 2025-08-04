@@ -1,6 +1,6 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { AuthUseCase } from '../../../application/use-cases/auth/AuthUseCase';
-import { LoginDTO } from '../dto/Auth.dto';
+import { LoginDTO, GoogleLoginDTO, loginSchema, googleLoginSchema } from '../../../application/dto/auth/AuthDTOs';
 import { InvalidCredentialsError } from '../../../shared/errors/UserErrors';
 
 export class AuthController {

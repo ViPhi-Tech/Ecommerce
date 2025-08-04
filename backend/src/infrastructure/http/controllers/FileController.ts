@@ -4,7 +4,7 @@ import { DestroyFileUseCase } from '../../../application/use-cases/file/DestroyF
 import { HTTP_STATUS } from '../../../shared/types/httpStatus';
 import { HTTP_MESSAGES } from '../../../shared/types/httpMessages';
 import { ApiResponse } from '../../../shared/types/apiResponse';
-import { UploadFileDTO, DestroyFileDTO } from '../dto/File.dto';
+import { UploadFileDTO, DestroyFileDTO, uploadFileSchema, destroyFileSchema } from '../../../application/dto/file/FileDTOs';
 
 export class FileController {
   constructor(

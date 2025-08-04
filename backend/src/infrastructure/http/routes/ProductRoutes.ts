@@ -1,8 +1,8 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { productController } from "../../config/dependencies/productDependencies";
 import { authenticate } from "../middlewares/authMiddleware";
-import {productCreateJsonSchema, productUpdateStockJsonSchema, productUpdateJsonSchema, findMovimentJsonSchema, updateManyStocksJsonSchema} from "../dto/Product.dto";
-import { productIdJsonSchema } from "../dto/Product.dto";
+import { createProductJsonSchema, updateProductJsonSchema, productIdJsonSchema } from "../../../application/dto/product/ProductDTOs";
+import { updateStockJsonSchema, findMovementJsonSchema, updateManyStockJsonSchema } from "../../../application/dto/product/ProductDTOs";
 
 export default async function productRoutes(
     fastify: FastifyInstance,
@@ -12,7 +12,7 @@ export default async function productRoutes(
     fastify.post('/create', {
         schema: {
             tags: ['product'],
-            body: productCreateJsonSchema
+            body: createProductJsonSchema
         },
         preValidation: [authenticate],
         handler: productController.create.bind(productController)
@@ -38,7 +38,7 @@ export default async function productRoutes(
     fastify.post('/update/stock', {
         schema: {
             tags: ['product'],
-            body: productUpdateStockJsonSchema
+            body: updateStockJsonSchema
         },
         preValidation: [authenticate],
         handler: productController.updateStock.bind(productController)
@@ -47,7 +47,7 @@ export default async function productRoutes(
     fastify.put('/update', {
         schema: {
             tags: ['product'],
-            body: productUpdateJsonSchema
+            body: updateProductJsonSchema
         },
         preValidation: [authenticate],
         handler: productController.update.bind(productController)
@@ -124,7 +124,7 @@ export default async function productRoutes(
         fastify.get('/getMovimentByDate',{
         schema: {
             tags: ['product'],
-            querystring: findMovimentJsonSchema,
+            querystring: findMovementJsonSchema,
                 required: ['date', 'type']
             },
         preValidation: [authenticate],
@@ -135,7 +135,7 @@ export default async function productRoutes(
     fastify.post('/movimentManyStocks', {
         schema: {
             tags: ['product'],
-            body: updateManyStocksJsonSchema
+            body: updateManyStockJsonSchema
         },
         preValidation: [authenticate],
         handler: productController.updateManyStocks.bind(productController)

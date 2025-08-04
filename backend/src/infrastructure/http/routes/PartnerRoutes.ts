@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { partnerController } from '../../config/dependencies/partnerDependencies';
-import { partnerCreateJsonSchema, partnerIdJsonSchema, partnerUpdateJsonSchema } from '../dto/Partner.dto';
+import { createPartnerJsonSchema, partnerIdJsonSchema, updatePartnerJsonSchema } from '../../../application/dto/partner/PartnerDTOs';
 
 export default async function partnerRoutes(
   fastify: FastifyInstance,
@@ -9,7 +9,7 @@ export default async function partnerRoutes(
   fastify.post('/create', {
     schema: {
       tags: ['partner'],
-      body: partnerCreateJsonSchema,
+      body: createPartnerJsonSchema,
     },
     handler: partnerController.create.bind(partnerController),
   });
@@ -33,7 +33,7 @@ export default async function partnerRoutes(
     schema: {
       tags: ['partner'],
       params: partnerIdJsonSchema,
-      body: partnerUpdateJsonSchema,
+      body: updatePartnerJsonSchema,
     },
     handler: partnerController.update.bind(partnerController),
   });

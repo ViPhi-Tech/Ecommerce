@@ -1,4 +1,4 @@
-import { ProductID } from "../../../infrastructure/http/dto/Product.dto";
+import { ProductIdDTO } from "../../dto/product/ProductDTOs";
 import { IProductRepository} from "../../../domain/repositories/IProductRepository";
 import { stockMovement } from "../../dto/product/StockMovimentResponse";
 export class GetMovimentByProductUseCase {

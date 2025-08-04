@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { ClientCreateDTO, ClientUpdateDTO, ClientID, ClientDocument } from '../dto/Client.dto';
+import { CreateClientDTO, UpdateClientDTO, ClientIdDTO, createClientSchema, updateClientSchema, clientIdSchema } from '../../../application/dto/client/ClientDTOs';
 import { CreateClientUseCase } from '../../../application/use-cases/client/CreateClientUseCase';
 import { FindAllClientUseCase } from '../../../application/use-cases/client/FindAllClientUseCase';
 import { FindByIdClientUseCase } from '../../../application/use-cases/client/FindByIdClientUseCase';
@@ -22,9 +22,10 @@ export class ClientController {
     private findClientByDocument: FindClientByDocument
     ) {}
 
-  async create(request: FastifyRequest<{ Body: ClientCreateDTO }>, reply: FastifyReply): Promise<ApiResponse> {
+  async create(request: FastifyRequest<{ Body: CreateClientDTO }>, reply: FastifyReply): Promise<ApiResponse> {
     try {
-      const client = await this.createClientUseCase.execute(request.body);
+      const validatedData = createClientSchema.parse(request.body);
+      const client = await this.createClientUseCase.execute(validatedData);
       return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: client})
 
     } catch (error: any) {
@@ -51,9 +52,10 @@ export class ClientController {
     }
   };
 
-  async findById(request: FastifyRequest<{ Params: ClientID }>, reply: FastifyReply):Promise<ApiResponse> {
+  async findById(request: FastifyRequest<{ Params: ClientIdDTO }>, reply: FastifyReply):Promise<ApiResponse> {
     try {
-      const client = await this.findByIdClientUseCase.execute(request.params.id);
+      const validatedParams = clientIdSchema.parse(request.params);
+      const client = await this.findByIdClientUseCase.execute(validatedParams.id);
       if (!client) return reply.code(HTTP_STATUS.API_STATUS_NOT_FOUND).send({ status: false, descricao: 'Cliente não encontrado' });
       return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, data: client});
     } catch (error: any) {
@@ -62,9 +64,11 @@ export class ClientController {
 
   };
 
-  async update(request: FastifyRequest<{ Params: ClientID; Body: ClientUpdateDTO }>, reply: FastifyReply): Promise<ApiResponse> {
+  async update(request: FastifyRequest<{ Params: ClientIdDTO; Body: UpdateClientDTO }>, reply: FastifyReply): Promise<ApiResponse> {
     try {
-      const client = await this.updateClientUseCase.execute(request.params.id, request.body);
+      const validatedParams = clientIdSchema.parse(request.params);
+      const validatedData = updateClientSchema.parse(request.body);
+      const client = await this.updateClientUseCase.execute(validatedParams.id, validatedData);
       return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: client});
     } catch (error: any) {
       return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({status:false, descricao: error.message || HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR })
@@ -73,9 +77,10 @@ export class ClientController {
 
   };
 
-  async delete(request: FastifyRequest<{ Params: ClientID }>, reply: FastifyReply): Promise<ApiResponse> {
+  async delete(request: FastifyRequest<{ Params: ClientIdDTO }>, reply: FastifyReply): Promise<ApiResponse> {
     try {
-      await this.deleteClientUseCase.execute(request.params.id);
+      const validatedParams = clientIdSchema.parse(request.params);
+      await this.deleteClientUseCase.execute(validatedParams.id);
       return reply.code(HTTP_STATUS.API_STATUS_NO_CONTENT).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: {}});
     } catch (error: any) {
       return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({status:false, descricao: error.message || HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR })
@@ -85,7 +90,7 @@ export class ClientController {
 
   async findyByDocument(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse>{
     try {
-      const body = request.params as ClientDocument
+      const body = request.params as { document: string };
       const client = await this.findClientByDocument.execute(body.document)
       return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: client});
     } catch (error: any) {
@@ -95,4 +100,4 @@ export class ClientController {
 
 
 
-} 
+}

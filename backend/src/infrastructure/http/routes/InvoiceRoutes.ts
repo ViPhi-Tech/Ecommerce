@@ -2,9 +2,10 @@ import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { invoiceController } from '../../config/dependencies/invoiceDependencies';
 import { authenticate } from '../middlewares/authMiddleware';
 import {
+  createInvoiceJsonSchema,
   invoiceIdJsonSchema,
-  invoiceJsonSchema
-} from '../dto/Invoice.dto';
+  updateInvoiceJsonSchema,
+} from '../../../application/dto/invoice/InvoiceDTOs';
 
 export default async function invoiceRoutes(
   fastify: FastifyInstance,
@@ -13,7 +14,7 @@ export default async function invoiceRoutes(
   fastify.post('/create', {
     schema: {
       tags: ['invoice'],
-      body: invoiceJsonSchema
+      body: createInvoiceJsonSchema
     },
     preValidation: [authenticate],
     handler: invoiceController.create.bind(invoiceController) 
@@ -39,7 +40,7 @@ export default async function invoiceRoutes(
   fastify.put('/:id', {
     schema: {
       tags: ['invoice'],
-      body: invoiceJsonSchema
+      body: updateInvoiceJsonSchema
     },
     preValidation: [authenticate],
     handler: invoiceController.update.bind(invoiceController) 
@@ -48,7 +49,7 @@ export default async function invoiceRoutes(
   fastify.delete('/:id', {
     schema: {
       tags: ['invoice'],
-      params: {}
+      params: invoiceIdJsonSchema
     },
     preValidation: [authenticate],
     handler: invoiceController.delete.bind(invoiceController)

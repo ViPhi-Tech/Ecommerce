@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { orderController } from "../../config/dependencies/orderDependencies";
 import { authenticate } from "../middlewares/authMiddleware";
-import { orderIdJsonSchema, orderCreateJsonSchema, orderUpdateJsonSchema, createPreOrderJsonSchema } from '../dto/Order.dto';
+import { orderIdJsonSchema, createOrderJsonSchema, updateOrderJsonSchema, createPreOrderJsonSchema } from '../../../application/dto/order/OrderDTOs';
 
 export default async function saleRoutes(
     fastify: FastifyInstance,
@@ -11,7 +11,7 @@ export default async function saleRoutes(
     fastify.post('/create', {
         schema: {
             tags: ['order'],
-            body: orderCreateJsonSchema
+            body: createOrderJsonSchema
         },
         preValidation: [authenticate],
         handler: orderController.create.bind(orderController)
@@ -46,7 +46,7 @@ export default async function saleRoutes(
      fastify.patch('/update', {
          schema: {
             tags: ['order'],
-            body: orderCreateJsonSchema
+            body: updateOrderJsonSchema
          },
          preValidation: [authenticate],
          handler: orderController.updateOrder.bind(orderController)

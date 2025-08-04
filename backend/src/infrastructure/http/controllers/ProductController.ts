@@ -1,20 +1,20 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { CreateProductUseCase } from "../../../application/use-cases/product/CreateProductUseCase";
-import { UpdateStockUseCase } from "../../../application/use-cases/product/UpdateStockUseCase";
-import { UpdateProductUseCase } from '../../../application/use-cases/product/UpdateProductUseCase';
-import { DeleteProductUseCase } from "../../../application/use-cases/product/DeleteProductUseCase"
-import { FindByIdProductUseCase } from "../../../application/use-cases/product/FindByIdProductUseCase";
+import { CreateProductUseCase } from '../../../application/use-cases/product/CreateProductUseCase';
+import { FindByIdProductUseCase } from '../../../application/use-cases/product/FindByIdProductUseCase';
 import { FindAllProductUseCase } from '../../../application/use-cases/product/FindAllProductUseCase';
+import { UpdateProductUseCase } from '../../../application/use-cases/product/UpdateProductUseCase';
+import { DeleteProductUseCase } from '../../../application/use-cases/product/DeleteProductUseCase';
+import { UpdateStockUseCase } from "../../../application/use-cases/product/UpdateStockUseCase";
 import { GetMovimentByProductUseCase } from '../../../application/use-cases/product/GetMovimentByProductUseCase';
-import {ApiResponse} from "../../../shared/types/apiResponse";
-import {ProductCreateDTO, ProductID, ProductUpdateStock, ProductIdMoviment, findMovimentDTO, UpdateManyDTO} from "../dto/Product.dto";
-import { HTTP_STATUS } from "../../../shared/types/httpStatus";
-import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 import { FindByNameProductUseCase } from '../../../application/use-cases/product/FindProductsByNameUseCase';
 import { FindByParamProductUseCase } from '../../../application/use-cases/product/FindByParamUseCase';
 import { GetMetricsUseCase } from '../../../application/use-cases/product/GetMetricsUseCase';
 import { FindMovimentByDateUseCase } from '../../../application/use-cases/product/FindMovimentByDate';
 import { UpdateManyStocksUseCase } from '../../../application/use-cases/product/UpdateManyStocksUseCase';
+import { ApiResponse } from "../../../shared/types/apiResponse";
+import { HTTP_STATUS } from "../../../shared/types/httpStatus";
+import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
+import { CreateProductDTO, UpdateProductDTO, ProductIdDTO, createProductSchema, updateProductSchema, productIdSchema, UpdateStockDTO, ProductIdsMovementDTO, FindMovementDTO, UpdateManyStockDTO } from "../../../application/dto/product/ProductDTOs";
 
 
 export class ProductController {
@@ -35,7 +35,7 @@ export class ProductController {
 
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try {
-            const productData = request.body as ProductCreateDTO;
+            const productData = createProductSchema.parse(request.body);
             const product = await this.createProductUseCase.execute(productData)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: product})
         } catch (error: any) {
@@ -59,8 +59,8 @@ export class ProductController {
 
     async findById(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const ProductID = request.params as ProductID
-            const product = await this.findProductByIdUseCase.execute(ProductID)
+            const productParams = productIdSchema.parse(request.params);
+            const product = await this.findProductByIdUseCase.execute(productParams)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: product})
         } catch (error) {
             console.log(error)
@@ -71,7 +71,7 @@ export class ProductController {
 
     async updateStock(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const stock = request.body as ProductUpdateStock
+            const stock = request.body as UpdateStockDTO
             const data_stock = await this.updateStockUseCase.execute(stock)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_stock})
         } catch (error) {
@@ -82,7 +82,7 @@ export class ProductController {
 
     async update(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const product = request.body as ProductCreateDTO
+            const product = request.body as CreateProductDTO
             const data_product = await this.updateProductUseCase.execute(product)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product})
         } catch (error) {
@@ -93,7 +93,7 @@ export class ProductController {
 
     async delete (request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const product = request.params as ProductID
+            const product = request.params as ProductIdDTO
             const data_product = await this.deleteProductUseCase.execute(product.id)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product})
         } catch (error) {
@@ -104,9 +104,9 @@ export class ProductController {
 
     async getMovimentByProduct(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const productIds = (request.params as ProductIdMoviment).productIds
+            const productIds = (request.params as ProductIdsMovementDTO).productIds
             .split(',')
-            .map(id => Number(id.trim()));
+            .map((id: string) => Number(id.trim()));
 
             if (productIds.some(isNaN)) {
                 return reply.status(400).send({ error: 'Invalid productIds format' });
@@ -143,7 +143,7 @@ export class ProductController {
 
     async findMovimentByDate(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try {
-            const params = request.query as findMovimentDTO;
+            const params = request.query as FindMovementDTO;
             const data_product = await this.findMovimentByDateUseCase.execute(params);
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product });
         } catch (error) {
@@ -173,7 +173,7 @@ export class ProductController {
             if (!token && request.cookies && request.cookies.access_token) {
                 token = request.cookies.access_token;
             }
-            const {stocks, type} = request.body as UpdateManyDTO;
+            const {stocks, type} = request.body as UpdateManyStockDTO;
             const data_product = await this.movimentManyUseCase.execute(stocks, type, token);
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product }); 
         } catch (error) {

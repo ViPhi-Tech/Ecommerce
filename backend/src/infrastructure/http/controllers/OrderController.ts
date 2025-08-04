@@ -7,8 +7,8 @@ import { ApiResponse } from "../../../shared/types/apiResponse";
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 
-import { OrderCreateDTO, OrderID, CreatePreOrderDTO } from "../dto/Order.dto";
 import { UpdateOrderUseCase } from '../../../application/use-cases/order/UpdateOrderUseCase';
+import { CreateOrderDTO, OrderIdDTO, CreatePreOrderDTO, createOrderSchema, orderIdSchema, createPreOrderSchema } from "../../../application/dto/order/OrderDTOs";
 
 export class OrderController {
     constructor(
@@ -25,10 +25,12 @@ export class OrderController {
         ? authHeader.slice(7).trim()
         : authHeader;
 
+        const orderData = createOrderSchema.parse(request.body);
+
         return reply.status(HTTP_STATUS.API_STATUS_CREATED).send({
         status: HTTP_MESSAGES.API_STATUS_SUCCESS,
         data: await this.createOrderUseCase.execute(
-            request.body as OrderCreateDTO,
+            orderData,
             token
         ),
         });
@@ -42,11 +44,11 @@ export class OrderController {
 
 
     async findById(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
-        const order = request.params as OrderID;
+        const orderParams = orderIdSchema.parse(request.params);
         try {
             return reply.status(HTTP_STATUS.API_STATUS_SUCCESS).send({
                 status: HTTP_MESSAGES.API_STATUS_SUCCESS,
-                data: await this.findByIdOrderUseCase.execute(order.id),
+                data: await this.findByIdOrderUseCase.execute(orderParams.id),
             }); 
         } catch (error) {
             return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
@@ -80,11 +82,11 @@ export class OrderController {
 
     async updateOrder(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try {
-            const order = request.body as OrderCreateDTO
+            const orderData = createOrderSchema.parse(request.body);
             return reply.status(HTTP_STATUS.API_STATUS_SUCCESS).send({
                 status: true,
                 descricao: HTTP_MESSAGES.API_STATUS_SUCCESS,
-                data: await this.updateOrderUseCase.execute(order.clientId, order)
+                data: await this.updateOrderUseCase.execute(orderData.clientId, orderData)
             });
         } catch (error) {
             return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({

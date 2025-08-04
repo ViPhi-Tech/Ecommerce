@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
-import { brandController } from "../../config/dependencies/brandDependencies"
+import { brandController } from '../../config/dependencies/brandDependencies';
 import { authenticate } from "../middlewares/authMiddleware";
-import { brandCreateToSchema, brandUpdateToSchema, brandIdToSchema } from "../dto/Brand.dto";
+import { createBrandJsonSchema, updateBrandJsonSchema, brandIdJsonSchema } from "../../../application/dto/brand/BrandDTOs";
 import { number } from 'zod';
 
 export default async function brandRoutes(
@@ -12,7 +12,7 @@ export default async function brandRoutes(
     fastify.post('/create', {
         schema: {
             tags: ['brand'],
-            body: brandCreateToSchema
+            body: createBrandJsonSchema
         },
         preValidation: [authenticate],
         handler: brandController.create.bind(brandController)
@@ -21,7 +21,7 @@ export default async function brandRoutes(
     fastify.get('/:id', {
         schema: {
             tags: ['brand'],
-            params: brandUpdateToSchema  
+            params: brandIdJsonSchema  
         },
         preValidation: [authenticate],
         handler: brandController.findById.bind(brandController)
@@ -38,8 +38,8 @@ export default async function brandRoutes(
     fastify.put('/update/:id', {
         schema: {
             tags: ['brand'],
-            body: brandUpdateToSchema,
-            params: brandIdToSchema
+            body: updateBrandJsonSchema,
+            params: brandIdJsonSchema
         },
         preValidation: [authenticate],
         handler: brandController.update.bind(brandController)
@@ -49,7 +49,7 @@ export default async function brandRoutes(
         {
             schema: {
                 tags: ['brand'],
-                params: brandIdToSchema
+                params: brandIdJsonSchema
             },
             preValidation: [authenticate],
             handler: brandController.delete.bind(brandController)
