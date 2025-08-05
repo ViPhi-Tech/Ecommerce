@@ -125,13 +125,13 @@ export class AccountsPayableCreateComponent implements OnInit {
       uuid: [''],
       supplierId: ['', [Validators.required]],
       originalDueDate: [{ value: '', disabled: true }],
-      issueDate: [dayjs().format('DD/MM/YYYY'), Validators.required],
+      issueDate: [dayjs().format('DD/MM/YYYY')],
       dueDate: ['', Validators.required],
-      competenceDate: ['', Validators.required],
+      competenceDate: [''],
       recurringPurchase: [false],
       amount: ['', Validators.required],
       status: ['pending'],
-      description: ['', [Validators.required, Validators.maxLength(255)]],
+      description: [''],
     });
   }
 

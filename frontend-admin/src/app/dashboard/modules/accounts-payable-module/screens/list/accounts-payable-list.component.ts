@@ -130,7 +130,7 @@ export class AccountsPayableListComponent implements OnInit {
                 summary: 'Sucesso',
                 detail: 'Conta a pagar excluída com sucesso',
               });
-              this.state.getAccountsPayableList();
+              this.state.removeAccountPayable(id);
             },
             error: () => {
               this.toast.add({

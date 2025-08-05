@@ -43,4 +43,8 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
 
     this.updateState('accountsPayableList', list);
   }
+
+  removeAccountPayable(id: number) {
+    this.updateState('accountsPayableList', this.accountsPayableList().filter(item => item.id !== id));
+  }
 }

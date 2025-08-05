@@ -4,7 +4,6 @@ import {
   inject,
   OnInit,
   signal,
-  WritableSignal,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
@@ -99,7 +98,7 @@ export class AccountsReceivableListComponent implements OnInit {
     ],
   });
 
-  constructor() {}
+  constructor() { }
 
   async ngOnInit() {
     await this.state.getAccountsReceivableList();
@@ -138,7 +137,7 @@ export class AccountsReceivableListComponent implements OnInit {
                 summary: 'Sucesso',
                 detail: 'Conta a receber excluída com sucesso',
               });
-              this.accountsReceivableService.refreshList();
+              this.state.removeAccountReceivable(Number(id));
             },
             error: () => {
               this.toast.add({
