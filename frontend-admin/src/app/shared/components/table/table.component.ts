@@ -73,7 +73,7 @@ export class TableComponent implements OnInit {
     return fields;
   });
 
-  columnData() {
+  columnData = computed(() => {
     const data: any = {};
     this.config().columns.map(col => {
       if (col.filter) {
@@ -89,7 +89,7 @@ export class TableComponent implements OnInit {
       }
     });
     return data;
-  }
+  })
 
   exportColumns = computed(() => {
     return this.config().columns.map(col => {
