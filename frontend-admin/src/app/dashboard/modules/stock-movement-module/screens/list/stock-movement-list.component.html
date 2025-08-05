@@ -1,4 +1,4 @@
-<div class="p-8 animate-fade-in space-y-4">
+<div class="p-8 animate-fade-in flex flex-col space-y-4 min-h-page">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 animate-left">
     <fuse-simple-indicator
       [loading]="state.loadingCards()"
@@ -25,7 +25,7 @@
     ></fuse-simple-indicator>
   </div>
 
-  <div class="animate-left">
+  <div class="animate-left flex flex-col flex-1">
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-xl font-bold">Listagem de Movimentações</h1>
       <div>
@@ -57,7 +57,7 @@
       </div>
     </div>
 
-    <div class="space-y-4">
+    <div class="flex-1 flex flex-col space-y-4">
       @if (state.loading()) {
         <div class="flex flex-col gap-4">
           <fuse-movement-item [loading]="true" />
@@ -72,8 +72,15 @@
         </div>
       } @empty {
         @if (!state.loading()) {
-          <div>
-            <p>Nenhum movimento de estoque encontrado para esta data.</p>
+          <div class="flex-1 flex items-center justify-center flex-col">
+            <ng-icon
+              name="lucidePackage"
+              class="text-gray-400 mb-4"
+              size="60"
+            ></ng-icon>
+            <p class="text-gray-500 text-lg">
+              Nenhum movimento de estoque encontrado para esta data.
+            </p>
           </div>
         }
       }

@@ -14,20 +14,25 @@
   input-background: #18181b;
 }
 
-:root[class='dark'] {
-}
+:root[class='dark'] {}
 
 .card {
   @apply bg-white rounded-lg shadow-md p-4 dark:text-white dark:bg-card-background;
 }
 
+.min-h-page {
+  min-height: calc(100vh - 57px);
+}
+
 .animate-fade-in {
   animation: fadeIn 0.3s ease-in-out;
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -36,11 +41,13 @@
 .animate-left {
   animation: slideLeftToRightFadeIn 0.3s ease-in-out;
 }
+
 @keyframes slideLeftToRightFadeIn {
   from {
     transform: translateX(-30px);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
@@ -50,11 +57,13 @@
 .animate-right {
   animation: slideRightToLeftFadeOut 0.2s ease-in-out forwards;
 }
+
 @keyframes slideRightToLeftFadeOut {
   from {
     transform: translateX(30px);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;

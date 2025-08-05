@@ -58,6 +58,7 @@ export class AccountsPayableListComponent implements OnInit {
       {
         field: 'dueDate',
         caption: 'Data de Vencimento',
+        filter: true,
         sortable: true,
         type: 'date',
       },

@@ -25,7 +25,7 @@ import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SupplierState } from 'app/dashboard/modules/supplier-module/supplier.state';
-import { formatDate } from 'app/shared/utils/utils';
+import { AccountsPayableState } from '../../accounts-payable.state';
 
 @Component({
   selector: 'fuse-accounts-payable-create-drawer',
@@ -45,6 +45,7 @@ export class AccountsPayableCreateComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private toast = inject(MessageService);
   public supplierState = inject(SupplierState);
+  public accountsPayableState = inject(AccountsPayableState);
   private accountsPayableService = inject(AccountsPayableService);
 
   @ViewChild('drawerRef') drawerRef!: Drawer;
@@ -103,24 +104,6 @@ export class AccountsPayableCreateComponent implements OnInit {
         next: (response: ApiResponse) => {
           const data = response.dados;
 
-          // Converter as datas do formato ISO para o formato DD/MM/YYYY para exibição
-          if (data.originalDueDate) {
-            data.originalDueDate = dayjs(data.originalDueDate).format(
-              'DD/MM/YYYY'
-            );
-          }
-          if (data.issueDate) {
-            data.issueDate = dayjs(data.issueDate).format('DD/MM/YYYY');
-          }
-          if (data.dueDate) {
-            data.dueDate = dayjs(data.dueDate).format('DD/MM/YYYY');
-          }
-          if (data.competenceDate) {
-            data.competenceDate = dayjs(data.competenceDate).format(
-              'DD/MM/YYYY'
-            );
-          }
-
           this.accountsPayableForm.patchValue(data);
           this.isLoading.set(false);
         },
@@ -169,12 +152,6 @@ export class AccountsPayableCreateComponent implements OnInit {
 
     const payload = { ...formValue };
 
-    console.debug('Payload before formatting:', payload);
-
-    payload.issueDate = formatDate(payload.issueDate);
-    payload.dueDate = formatDate(payload.dueDate);
-    payload.competenceDate = formatDate(payload.competenceDate);
-
     if (!payload.originalDueDate || payload.originalDueDate === '') {
       payload.originalDueDate = payload.dueDate;
     }
@@ -191,6 +168,7 @@ export class AccountsPayableCreateComponent implements OnInit {
               ? 'Conta a pagar atualizada com sucesso!'
               : 'Conta a pagar criada com sucesso!',
           });
+          this.accountsPayableState.getAccountsPayableList();
           this.back();
         },
         error: () => {
