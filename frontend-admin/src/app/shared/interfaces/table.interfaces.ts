@@ -23,6 +23,7 @@ export interface TableColumn {
   caption: string;
   sortable?: boolean;
   filter?: boolean;
+  multiFilter?: boolean; // Indicates if the column supports multiple filters
   customClass?: string;
   maxWidth?: string; // Maximum width of the column
   actionButtonsType?: 'buttons' | 'dropdown'; // Type of action buttons, can be 'buttons' or 'dropdown'
