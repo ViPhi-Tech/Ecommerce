@@ -31,7 +31,8 @@ export interface TableColumn {
   template?: TemplateRef<any | null>;
   headerAlign?: 'left' | 'center' | 'right'; // Alignment of the header
   align?: 'left' | 'center' | 'right'; // Alignment of the column
-  style?: string; // Custom CSS styles for the column
+  style?: string;
+  badgeSeverityKey?: string; // Key for badge severity, used for status badges
 }
 
 export interface HeaderButton {

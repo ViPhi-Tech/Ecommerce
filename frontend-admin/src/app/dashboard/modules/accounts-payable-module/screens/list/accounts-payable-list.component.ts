@@ -69,6 +69,14 @@ export class AccountsPayableListComponent implements OnInit {
         sortable: true,
       },
       {
+        field: 'status',
+        caption: 'Situação',
+        type: 'badge',
+        sortable: true,
+        badgeSeverityKey: 'statusBadgeColor',
+        align: 'center',
+      },
+      {
         field: 'actions',
         caption: 'Ações',
         actionButtonsType: 'buttons',

@@ -188,6 +188,15 @@
                   name="lucideCircleSlash2"
                 ></ng-icon>
               }
+            } @else if (
+              column?.type === 'badge' &&
+              column?.badgeSeverityKey &&
+              rowData?.[column?.field || '']
+            ) {
+              <p-badge
+                [value]="rowData?.[column?.field || '']"
+                [severity]="rowData?.[column?.badgeSeverityKey || '']"
+              ></p-badge>
             } @else {
               {{ rowData?.[column?.field || ''] }}
             }
