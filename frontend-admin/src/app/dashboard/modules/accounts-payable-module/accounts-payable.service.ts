@@ -35,4 +35,8 @@ export class AccountsPayableService {
   delete(id: number): Observable<ApiResponse> {
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${id}`);
   }
+
+  markAsPaid(id: number): Observable<ApiResponse> {
+    return this.http.patch<ApiResponse>(`${this.apiUrl}/mark-as-paid/${id}`, {});
+  }
 }

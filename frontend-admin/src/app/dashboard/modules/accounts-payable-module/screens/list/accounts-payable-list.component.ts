@@ -74,9 +74,19 @@ export class AccountsPayableListComponent implements OnInit {
         actionButtonsType: 'buttons',
         actionButtons: [
           {
+            icon: 'lucideCircleCheckBig',
+            label: 'Dar Baixa',
+            tooltip: 'Dar Baixa na Conta a Pagar',
+            variant: 'text',
+            action: (rowData: IAccountsPayable) => {
+              this.markAsPaid(rowData?.id);
+            }
+          },
+          {
             icon: 'lucideSquarePen',
             label: 'Editar',
             tooltip: 'Editar Conta a Pagar',
+            colorIcon: '#3B82F6',
             variant: 'text',
             action: (rowData: IAccountsPayable) => {
               this.edit(rowData?.id);
@@ -104,6 +114,41 @@ export class AccountsPayableListComponent implements OnInit {
 
   async ngOnInit() {
     await this.state.getAccountsPayableList();
+  }
+
+  // Método para dar baixa na conta a pagar
+  async markAsPaid(id: number) {
+    this.confirmationService.confirm({
+      message: 'Você tem certeza que deseja dar baixa nesta conta a pagar?',
+      header: 'Confirmação de Baixa',
+      icon: 'pi pi-exclamation-triangle text-yellow-500',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-secondary',
+      accept: () => {
+        this.accountsPayableService
+          .markAsPaid(id)
+          .pipe(takeUntilDestroyed(this.destroyedRef))
+          .subscribe({
+            next: () => {
+              this.toast.add({
+                severity: 'success',
+                summary: 'Sucesso',
+                detail: 'Conta a pagar marcada como paga com sucesso',
+              });
+              this.state.updateAccountPayableStatus(id, 'paid');
+            },
+            error: () => {
+              this.toast.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: 'Erro ao dar baixa na conta a pagar',
+              });
+            },
+          });
+      },
+    });
   }
 
   edit(id: number) {
