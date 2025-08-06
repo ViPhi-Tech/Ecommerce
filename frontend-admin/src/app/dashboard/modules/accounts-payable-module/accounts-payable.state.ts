@@ -39,6 +39,7 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
     list = list.map(item => ({
       ...item,
       supplierName: item.supplier?.tradeName || 'Fornecedor Desconhecido',
+      ...this.convertStatus(item),
     }));
 
     this.updateState('accountsPayableList', list);
@@ -56,5 +57,28 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
       return item;
     });
     this.updateState('accountsPayableList', updatedList);
+  }
+
+  convertStatus(item: IAccountsPayable) {
+    const statusMap: Record<string, { status: string; statusBadgeColor: string }> = {
+      'pending': {
+        status: 'Pendente',
+        statusBadgeColor: 'info',
+      },
+      'paid': {
+        status: 'Pago',
+        statusBadgeColor: 'success',
+      },
+      'overdue': {
+        status: 'Vencido',
+        statusBadgeColor: 'danger',
+      },
+      'cancelled': {
+        status: 'Cancelado',
+        statusBadgeColor: 'secondary',
+      },
+    };
+
+    return statusMap[item.status] || { status: 'Desconhecido', statusBadgeColor: 'secondary' };
   }
 }

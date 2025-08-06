@@ -24,6 +24,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import dayjs from 'dayjs';
+import { BadgeModule } from 'primeng/badge';
 
 @Component({
   selector: 'fuse-table',
@@ -50,7 +51,7 @@ import dayjs from 'dayjs';
     MultiSelectModule,
     SelectModule,
     FormsModule,
-
+    BadgeModule,
   ],
 })
 export class TableComponent implements OnInit {
