@@ -1,18 +1,14 @@
 model Order {
-  id        Int      @id @default(autoincrement())
+  id        Int         @id @default(autoincrement())
   total     Float
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  status    String?  @default("PENDING")
-
-  clientId Int?
-  client   Client? @relation(fields: [clientId], references: [id])
-
-  items OrderItem[] // Relação 1:N com os itens do pedido
-
-  payments Payment[]
-
-  invoice Invoice[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  status    String?     @default("PENDING")
+  clientId  Int?
+  invoice   Invoice[]
+  client    Client?     @relation(fields: [clientId], references: [id])
+  items     OrderItem[]
+  payments  Payment[]
 }
 
 model OrderItem {
@@ -23,7 +19,6 @@ model OrderItem {
   price     Float
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  order   Order   @relation(fields: [orderId], references: [id])
-  product Product @relation(fields: [productId], references: [id])
+  order     Order    @relation(fields: [orderId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id])
 }

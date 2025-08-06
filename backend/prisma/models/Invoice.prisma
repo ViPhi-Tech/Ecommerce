@@ -1,30 +1,29 @@
 model Invoice {
-  id          Int      @id @default(autoincrement())
-  external_id String   @unique    @default(uuid())
-  number      String?                                // Número da nota
-  series      String?                                // Série da nota (opcional)
-  status      String                                 // Ex: 'issued', 'canceled', 'pending'
-  issueDate   DateTime                               // Data de emissão
-  dueDate     DateTime?                              // Data de vencimento (se aplicável)
-  totalAmount Float                                 // Valor total da nota
-  taxAmount   Float?                                // Total de impostos (opcional)
-  clientId    Int?                                  // FK para cliente
-  client      Client?   @relation(fields: [clientId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  number      String?
+  series      String?
+  status      String
+  issueDate   DateTime
+  dueDate     DateTime?
+  totalAmount Float
+  taxAmount   Float?
+  clientId    Int?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  id          Int           @id @default(autoincrement())
+  external_id String        @unique @default(uuid())
   orderId     Int?
-  order       Order?    @relation(fields: [orderId], references: [id])
-
+  client      Client?       @relation(fields: [clientId], references: [id])
+  order       Order?        @relation(fields: [orderId], references: [id])
   items       InvoiceItem[]
 }
 
 model InvoiceItem {
-  id          Int      @id @default(autoincrement())
-  invoiceId   Int      
-  invoice     Invoice? @relation(fields: [invoiceId], references: [id])
-  productId   Int      
-  product     Product? @relation(fields: [productId], references: [id])
+  id          Int     @id @default(autoincrement())
+  invoiceId   Int
+  productId   Int
   quantity    Int
   price       Float
   totalAmount Float
+  invoice     Invoice @relation(fields: [invoiceId], references: [id])
+  product     Product @relation(fields: [productId], references: [id])
 }

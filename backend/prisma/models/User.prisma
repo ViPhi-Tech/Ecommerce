@@ -3,25 +3,20 @@ model Login {
   email          String  @unique
   googleId       String? @unique
   hashedPassword String?
-
-  user   User?
-  client Client?
+  client         Client?
+  user           User?
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  fullName String?
-  isActive Boolean @default(true)
-
-  loginId   Int? @unique
-  companyId Int?
-
-  company Company? @relation(fields: [companyId], references: [id])
-  login   Login?   @relation(fields: [loginId], references: [id])
-
-  address Address?
-
+  id             Int             @id @default(autoincrement())
+  fullName       String?
+  isActive       Boolean         @default(true)
+  loginId        Int?            @unique
+  companyId      Int?
+  address        Address?
   stockMovements StockMovement[]
+  company        Company?        @relation(fields: [companyId], references: [id])
+  login          Login?          @relation(fields: [loginId], references: [id])
 }
 
 model Address {
@@ -32,13 +27,10 @@ model Address {
   state      String
   zipCode    String
   complement String?
-  partner    Partner? @relation(fields: [partnerId], references: [id])
   partnerId  Int?     @unique
-
-  client   Client? @relation(fields: [clientId], references: [id])
-  clientId Int?    @unique
-
-  user   User? @relation(fields: [userId], references: [id])
-  userId Int?  @unique
-  
+  clientId   Int?     @unique
+  userId     Int?     @unique
+  client     Client?  @relation(fields: [clientId], references: [id])
+  partner    Partner? @relation(fields: [partnerId], references: [id])
+  user       User?    @relation(fields: [userId], references: [id])
 }
