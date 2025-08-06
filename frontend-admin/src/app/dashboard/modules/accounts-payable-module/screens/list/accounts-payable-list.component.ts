@@ -107,7 +107,9 @@ export class AccountsPayableListComponent implements OnInit {
   }
 
   edit(id: number) {
-    this.router.navigate(['dashboard/accounts-payable/edit/', id]);
+    this.router.navigate([
+      { outlets: { drawer: ['accounts-payable', id] } },
+    ]);
   }
 
   delete(id: number) {

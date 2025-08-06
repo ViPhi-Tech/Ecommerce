@@ -12,7 +12,7 @@ export class AccountsPayableService {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl + 'accounts-payable';
 
-  constructor() {}
+  constructor() { }
 
   getAll() {
     return this.http.get<ApiResponse<IAccountsPayable[]>>(`${this.apiUrl}/all`);
@@ -25,7 +25,7 @@ export class AccountsPayableService {
   upsert(data: IAccountsPayable): Observable<ApiResponse> {
     if (data.id) {
       return this.http.put<ApiResponse>(
-        `${this.apiUrl}/update/${data.uuid}`,
+        `${this.apiUrl}/update/${data.id}`,
         data
       );
     }

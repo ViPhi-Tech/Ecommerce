@@ -26,6 +26,7 @@ import { FormModule } from 'app/shared/components/form/form.module';
 import { CheckboxModule } from 'primeng/checkbox';
 import { SupplierState } from 'app/dashboard/modules/supplier-module/supplier.state';
 import { AccountsPayableState } from '../../accounts-payable.state';
+import { IAccountsPayable } from 'app/shared/interfaces/accounts-payable/AccountsPayable';
 
 @Component({
   selector: 'fuse-accounts-payable-create-drawer',
@@ -62,7 +63,7 @@ export class AccountsPayableCreateComponent implements OnInit {
   @ViewChild('dialogRef') dialogRef!: Dialog;
 
   // signals
-  visible = signal(true);
+  visible = signal(false);
 
   constructor() {
     this.initForm();
@@ -95,6 +96,7 @@ export class AccountsPayableCreateComponent implements OnInit {
   async loadInfos(id?: number): Promise<void> {
     if (!id) {
       this.isLoading.set(false);
+      this.visible.set(true);
       return;
     }
     this.accountsPayableService
@@ -102,10 +104,17 @@ export class AccountsPayableCreateComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: (response: ApiResponse) => {
-          const data = response.dados;
+          const data = response.data as IAccountsPayable;
 
-          this.accountsPayableForm.patchValue(data);
+          this.accountsPayableForm.patchValue({
+            ...data,
+            originalDueDate: dayjs(data.originalDueDate).format('DD/MM/YYYY'),
+            issueDate: dayjs(data.issueDate).format('DD/MM/YYYY'),
+            dueDate: dayjs(data.dueDate).format('DD/MM/YYYY'),
+            competenceDate: data.competenceDate ? dayjs(data.competenceDate).format('DD/MM/YYYY') : '',
+          });
           this.isLoading.set(false);
+          this.visible.set(true);
         },
         error: (error: any) => {
           this.isLoading.set(false);
