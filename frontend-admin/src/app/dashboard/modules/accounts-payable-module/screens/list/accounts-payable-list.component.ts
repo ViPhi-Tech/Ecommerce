@@ -6,6 +6,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { heightAnimation } from 'app/shared/utils/animations';
 import { TableComponent } from 'app/shared/components/table/table.component';
+import { ButtonModule } from 'primeng/button';
 import { AccountsPayableService } from '../../accounts-payable.service';
 import { AccountsPayableState } from '../../accounts-payable.state';
 import { IAccountsPayable } from 'app/shared/interfaces/accounts-payable/AccountsPayable';
@@ -14,7 +15,7 @@ import { IAccountsPayable } from 'app/shared/interfaces/accounts-payable/Account
   selector: 'fuse-accounts-payable-list',
   templateUrl: './accounts-payable-list.component.html',
   animations: [heightAnimation],
-  imports: [TableComponent],
+  imports: [TableComponent, ButtonModule],
 })
 export class AccountsPayableListComponent implements OnInit {
   private router = inject(Router);
@@ -198,5 +199,9 @@ export class AccountsPayableListComponent implements OnInit {
           });
       },
     });
+  }
+
+  navigateToKanban() {
+    this.router.navigate(['/dashboard/accounts-payable/kanban']);
   }
 }

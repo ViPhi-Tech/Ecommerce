@@ -1,0 +1,71 @@
+<div
+  class="kanban-card"
+  [ngStyle]="cardStyle()"
+  [ngClass]="{ 'cursor-grab': allowDrag(), 'cursor-pointer': !allowDrag() }"
+  (click)="onClick()"
+  (keyup.enter)="onClick()"
+  (keyup.space)="onClick()"
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="'Card: ' + card().title"
+>
+  <!-- Header do Card -->
+  <div class="card-header">
+    <div class="flex items-start justify-between">
+      <h4 class="card-title">
+        {{ card().title }}
+      </h4>
+
+      @if (card().priority) {
+        <span class="priority-badge" [ngClass]="priorityColor()">
+          <ng-icon [name]="priorityIcon()" class="w-3 h-3"></ng-icon>
+        </span>
+      }
+    </div>
+  </div>
+
+  <!-- Descrição -->
+  @if (card().description) {
+    <div class="card-description">
+      <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+        {{ card().description }}
+      </p>
+    </div>
+  }
+
+  <!-- Tags -->
+  <div class="card-tags">
+    @for (tag of card().tags; track tag) {
+      <span class="tag">
+        {{ tag }}
+      </span>
+    }
+  </div>
+
+  <!-- Footer do Card -->
+  <div class="card-footer">
+    <div class="flex items-center justify-between">
+      <!-- Responsável -->
+      @if (card().assignee) {
+        <div class="assignee">
+          <div class="assignee-avatar">
+            {{ card().assignee?.charAt(0)?.toUpperCase() }}
+          </div>
+          <span class="assignee-name">
+            {{ card().assignee }}
+          </span>
+        </div>
+      }
+
+      <!-- Data de Vencimento -->
+      @if (card().dueDate) {
+        <div class="due-date" [ngClass]="{ overdue: isOverdue() }">
+          <ng-icon name="lucideCalendar" class="w-3 h-3"></ng-icon>
+          <span class="text-xs">
+            {{ formatDate(card().dueDate) }}
+          </span>
+        </div>
+      }
+    </div>
+  </div>
+</div>

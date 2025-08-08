@@ -1,0 +1,131 @@
+.kanban-pipe {
+  min-width: 18rem;
+  max-width: 20rem;
+  background-color: white;
+  border-radius: 0.5rem;
+  border: 2px solid;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+:host-context(.dark) .kanban-pipe {
+  background-color: rgb(17 24 39);
+}
+
+.kanban-pipe:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.pipe-header {
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom: 1px solid rgb(229 231 235);
+}
+
+:host-context(.dark) .pipe-header {
+  border-bottom-color: rgb(55 65 81);
+}
+
+.pipe-content {
+  padding: 0.75rem;
+  min-height: 8rem;
+  max-height: 24rem;
+  overflow-y: auto;
+  transition: max-height 0.3s ease;
+}
+
+.pipe-content>*+* {
+  margin-top: 0.75rem;
+}
+
+.empty-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-item {
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.card-item:hover {
+  transform: scale(1.05);
+}
+
+/* Drag and Drop Styles */
+.cdk-drag-preview {
+  transform: rotate(2deg);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 2px solid rgb(147 197 253);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0.4;
+  border: 2px dashed rgb(209 213 219);
+  background-color: rgb(249 250 251);
+}
+
+:host-context(.dark) .cdk-drag-placeholder {
+  background-color: rgb(31 41 55);
+}
+
+.cdk-drop-list-dragging .cdk-drag {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.cdk-drop-list-receiving {
+  background-color: rgb(239 246 255);
+}
+
+:host-context(.dark) .cdk-drop-list-receiving {
+  background-color: rgba(30, 58, 138, 0.2);
+}
+
+/* Scroll personalizado */
+.pipe-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pipe-content::-webkit-scrollbar-track {
+  background-color: rgb(243 244 246);
+  border-radius: 0.25rem;
+}
+
+:host-context(.dark) .pipe-content::-webkit-scrollbar-track {
+  background-color: rgb(31 41 55);
+}
+
+.pipe-content::-webkit-scrollbar-thumb {
+  background-color: rgb(209 213 219);
+  border-radius: 0.25rem;
+}
+
+:host-context(.dark) .pipe-content::-webkit-scrollbar-thumb {
+  background-color: rgb(75 85 99);
+}
+
+.pipe-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(156 163 175);
+}
+
+:host-context(.dark) .pipe-content::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(107 114 128);
+}
+
+/* Animações */
+@keyframes slide-in {
+  from {
+    transform: translateX(-10px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.kanban-pipe {
+  animation: slide-in 0.3s ease-out;
+}
