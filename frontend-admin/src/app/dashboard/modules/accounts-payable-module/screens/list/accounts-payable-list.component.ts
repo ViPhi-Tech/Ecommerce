@@ -90,7 +90,7 @@ export class AccountsPayableListComponent implements OnInit {
             variant: 'text',
             action: (rowData: IAccountsPayable) => {
               this.markAsPaid(rowData?.id);
-            }
+            },
           },
           {
             icon: 'lucideSquarePen',
@@ -162,9 +162,7 @@ export class AccountsPayableListComponent implements OnInit {
   }
 
   edit(id: number) {
-    this.router.navigate([
-      { outlets: { drawer: ['accounts-payable', id] } },
-    ]);
+    this.router.navigate([{ outlets: { drawer: ['accounts-payable', id] } }]);
   }
 
   delete(id: number) {

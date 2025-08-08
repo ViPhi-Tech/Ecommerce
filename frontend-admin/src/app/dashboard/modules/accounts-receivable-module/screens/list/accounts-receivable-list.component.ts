@@ -1,10 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
@@ -98,7 +92,7 @@ export class AccountsReceivableListComponent implements OnInit {
     ],
   });
 
-  constructor() { }
+  constructor() {}
 
   async ngOnInit() {
     await this.state.getAccountsReceivableList();

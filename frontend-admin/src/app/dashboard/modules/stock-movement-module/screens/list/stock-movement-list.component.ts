@@ -1,10 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
@@ -18,7 +12,7 @@ import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/sim
 import { MovementItemComponent } from '../../components/movement-item/movement-item.component';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { NgIcon } from "@ng-icons/core";
+import { NgIcon } from '@ng-icons/core';
 import dayjs from 'dayjs';
 
 @Component({
@@ -32,8 +26,8 @@ import dayjs from 'dayjs';
     MovementItemComponent,
     FormModule,
     ReactiveFormsModule,
-    NgIcon
-],
+    NgIcon,
+  ],
 })
 export class StockMovementListComponent implements OnInit {
   private router = inject(Router);

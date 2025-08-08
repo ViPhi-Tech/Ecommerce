@@ -39,6 +39,9 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
   }
 
   removeAccountReceivable(id: number) {
-    this.updateState('accountsReceivableList', this.accountsReceivableList().filter(item => item.id !== id));
+    this.updateState(
+      'accountsReceivableList',
+      this.accountsReceivableList().filter(item => item.id !== id)
+    );
   }
 }

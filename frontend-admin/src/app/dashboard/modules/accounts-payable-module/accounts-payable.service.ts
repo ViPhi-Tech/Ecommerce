@@ -12,7 +12,7 @@ export class AccountsPayableService {
   private http = inject(HttpClient);
   private apiUrl = environments.apiUrl + 'accounts-payable';
 
-  constructor() { }
+  constructor() {}
 
   getAll() {
     return this.http.get<ApiResponse<IAccountsPayable[]>>(`${this.apiUrl}/all`);
@@ -37,6 +37,9 @@ export class AccountsPayableService {
   }
 
   markAsPaid(id: number): Observable<ApiResponse> {
-    return this.http.patch<ApiResponse>(`${this.apiUrl}/mark-as-paid/${id}`, {});
+    return this.http.patch<ApiResponse>(
+      `${this.apiUrl}/mark-as-paid/${id}`,
+      {}
+    );
   }
 }

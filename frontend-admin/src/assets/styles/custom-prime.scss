@@ -10,15 +10,14 @@
     border-top: 0;
   }
 
-  .p-datatable-tbody>tr,
-  .p-datatable-tbody>tr>td,
+  .p-datatable-tbody > tr,
+  .p-datatable-tbody > tr > td,
   .p-paginator.p-component {
     background-color: transparent;
   }
 }
 
 .dark {
-
   textarea,
   input,
   p-select {
@@ -86,11 +85,11 @@
   }
 }
 
-.p-datatable-thead>tr>th {
+.p-datatable-thead > tr > th {
   @apply px-4 py-3 text-left text-sm font-semibold text-muted-foreground;
 }
 
-.p-datatable-thead>tr>th,
+.p-datatable-thead > tr > th,
 .p-datatable-sort-icon,
 .p-datatable-sort-badge {
   text-wrap-mode: nowrap;
@@ -101,9 +100,8 @@
 }
 
 .ng-invalid.ng-touched {
-
-  &>.p-password,
-  &>.p-datepicker {
+  & > .p-password,
+  & > .p-datepicker {
     input {
       border-color: var(--p-inputtext-invalid-border-color);
       color: var(--p-inputtext-invalid-border-color);
@@ -167,7 +165,6 @@ input {
 .p-datepicker-panel {
   min-width: max-content !important;
 }
-
 
 .p-datatable-filter .p-button {
   height: 25px !important;

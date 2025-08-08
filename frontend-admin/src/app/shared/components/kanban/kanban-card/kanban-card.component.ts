@@ -1,5 +1,5 @@
 import { Component, input, output, computed } from '@angular/core';
-import { NgFor, NgIf, NgClass, NgStyle } from '@angular/common';
+import { NgClass, NgStyle } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 import { KanbanCard } from '../kanban.component';
 
@@ -7,7 +7,7 @@ import { KanbanCard } from '../kanban.component';
   selector: 'fuse-kanban-card',
   templateUrl: './kanban-card.component.html',
   styleUrls: ['./kanban-card.component.scss'],
-  imports: [NgFor, NgIf, NgClass, NgIcon, NgStyle],
+  imports: [NgClass, NgIcon, NgStyle],
 })
 export class KanbanCardComponent {
   // Inputs
@@ -20,7 +20,7 @@ export class KanbanCardComponent {
 
   // Computed
   cardStyle = computed(() => ({
-    'min-height': `${this.height()}px`
+    'min-height': `${this.height()}px`,
   }));
 
   priorityColor = computed(() => {
@@ -57,7 +57,7 @@ export class KanbanCardComponent {
 
   formatDate(date: Date | string | undefined): string {
     if (!date) return '';
-    
+
     const dateObj = date instanceof Date ? date : new Date(date);
     const now = new Date();
     const diffTime = dateObj.getTime() - now.getTime();
@@ -73,11 +73,10 @@ export class KanbanCardComponent {
   isOverdue(): boolean {
     const cardDueDate = this.card().dueDate;
     if (!cardDueDate) return false;
-    
-    const dueDate = cardDueDate instanceof Date 
-      ? cardDueDate 
-      : new Date(cardDueDate);
-    
+
+    const dueDate =
+      cardDueDate instanceof Date ? cardDueDate : new Date(cardDueDate);
+
     return dueDate < new Date();
   }
 }

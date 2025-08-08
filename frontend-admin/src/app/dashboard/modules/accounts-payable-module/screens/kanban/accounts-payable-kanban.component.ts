@@ -5,7 +5,11 @@ import { NgIcon } from '@ng-icons/core';
 import { Router } from '@angular/router';
 import { AccountsPayableState } from '../../accounts-payable.state';
 import { IAccountsPayable } from 'app/shared/interfaces/accounts-payable/AccountsPayable';
-import { KanbanComponent, KanbanColumn, KanbanCard } from 'app/shared/components/kanban/kanban.component';
+import {
+  KanbanComponent,
+  KanbanColumn,
+  KanbanCard,
+} from 'app/shared/components/kanban/kanban.component';
 
 @Component({
   selector: 'fuse-accounts-payable-kanban',
@@ -36,7 +40,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
 
   private setupKanbanColumns() {
     const accounts = this.accountsPayableList();
-    
+
     // Definir as colunas do Kanban
     const columns: KanbanColumn[] = [
       {
@@ -44,35 +48,35 @@ export class AccountsPayableKanbanComponent implements OnInit {
         title: 'Pendente',
         color: 'yellow',
         cards: [],
-        maxCards: 50
+        maxCards: 50,
       },
       {
         id: 'due_soon',
         title: 'Vence em Breve',
         color: 'blue',
         cards: [],
-        maxCards: 30
+        maxCards: 30,
       },
       {
         id: 'overdue',
         title: 'Vencidas',
         color: 'red',
         cards: [],
-        maxCards: 20
+        maxCards: 20,
       },
       {
         id: 'paid',
         title: 'Pagas',
         color: 'green',
-        cards: []
-      }
+        cards: [],
+      },
     ];
 
     // Mapear contas para cards e distribuir nas colunas
     accounts.forEach(account => {
       const card = this.mapAccountToCard(account);
       const status = this.determineAccountStatus(account);
-      
+
       const column = columns.find(col => col.id === status);
       if (column) {
         column.cards.push(card);
@@ -93,17 +97,19 @@ export class AccountsPayableKanbanComponent implements OnInit {
       dueDate: account.dueDate,
       tags: [
         account.recurringPurchase ? 'Recorrente' : 'Única',
-        `R$ ${account.amount.toFixed(2)}`
+        `R$ ${account.amount.toFixed(2)}`,
       ],
       // Dados adicionais para uso posterior
-      accountData: account
+      accountData: account,
     };
   }
 
   private determineAccountStatus(account: IAccountsPayable): string {
     const now = new Date();
     const dueDate = new Date(account.dueDate);
-    const daysDifference = Math.ceil((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    const daysDifference = Math.ceil(
+      (dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    );
 
     if (account.status === 'paid') {
       return 'paid';
@@ -120,10 +126,14 @@ export class AccountsPayableKanbanComponent implements OnInit {
     return 'pending';
   }
 
-  private determinePriority(account: IAccountsPayable): 'low' | 'medium' | 'high' {
+  private determinePriority(
+    account: IAccountsPayable
+  ): 'low' | 'medium' | 'high' {
     const now = new Date();
     const dueDate = new Date(account.dueDate);
-    const daysDifference = Math.ceil((dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24));
+    const daysDifference = Math.ceil(
+      (dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    );
 
     if (daysDifference < 0) {
       return 'high'; // Vencida

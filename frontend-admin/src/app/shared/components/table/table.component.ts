@@ -55,7 +55,7 @@ import { BadgeModule } from 'primeng/badge';
   ],
 })
 export class TableComponent implements OnInit {
-  constructor() { }
+  constructor() {}
 
   title: InputSignal<string> = input('');
   data: InputSignal<any> = input([]);
@@ -96,7 +96,7 @@ export class TableComponent implements OnInit {
       }
     });
     return data;
-  })
+  });
 
   exportColumns = computed(() => {
     return this.config().columns.map(col => {
@@ -108,7 +108,7 @@ export class TableComponent implements OnInit {
       };
     });
   });
-  ngOnInit() { }
+  ngOnInit() {}
 
   search($event: any, dt2: any) {
     dt2.filterGlobal($event?.target?.value, 'contains');

@@ -14,14 +14,16 @@
   input-background: #18181b;
 }
 
-:root[class='dark'] {}
+:root[class='dark'] {
+}
 
 .card {
   @apply bg-white rounded-lg shadow-md p-4 dark:text-white dark:bg-card-background;
 }
 
-.min-h-page {
-  min-height: calc(100vh - 57px);
+.max-h-page {
+  max-height: calc(100vh - 57px);
+  overflow-y: auto;
 }
 
 .animate-fade-in {

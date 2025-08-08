@@ -111,7 +111,9 @@ export class AccountsPayableCreateComponent implements OnInit {
             originalDueDate: dayjs(data.originalDueDate).format('DD/MM/YYYY'),
             issueDate: dayjs(data.issueDate).format('DD/MM/YYYY'),
             dueDate: dayjs(data.dueDate).format('DD/MM/YYYY'),
-            competenceDate: data.competenceDate ? dayjs(data.competenceDate).format('DD/MM/YYYY') : '',
+            competenceDate: data.competenceDate
+              ? dayjs(data.competenceDate).format('DD/MM/YYYY')
+              : '',
           });
           this.isLoading.set(false);
           this.visible.set(true);

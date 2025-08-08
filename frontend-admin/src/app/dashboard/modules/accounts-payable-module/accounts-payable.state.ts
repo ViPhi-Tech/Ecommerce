@@ -46,7 +46,10 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
   }
 
   removeAccountPayable(id: number) {
-    this.updateState('accountsPayableList', this.accountsPayableList().filter(item => item.id !== id));
+    this.updateState(
+      'accountsPayableList',
+      this.accountsPayableList().filter(item => item.id !== id)
+    );
   }
 
   updateAccountPayableStatus(id: number, status: string) {
@@ -60,25 +63,33 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
   }
 
   convertStatus(item: IAccountsPayable) {
-    const statusMap: Record<string, { status: string; statusBadgeColor: string }> = {
-      'pending': {
+    const statusMap: Record<
+      string,
+      { status: string; statusBadgeColor: string }
+    > = {
+      pending: {
         status: 'Pendente',
         statusBadgeColor: 'info',
       },
-      'paid': {
+      paid: {
         status: 'Pago',
         statusBadgeColor: 'success',
       },
-      'overdue': {
+      overdue: {
         status: 'Vencido',
         statusBadgeColor: 'danger',
       },
-      'cancelled': {
+      cancelled: {
         status: 'Cancelado',
         statusBadgeColor: 'secondary',
       },
     };
 
-    return statusMap[item.status] || { status: 'Desconhecido', statusBadgeColor: 'secondary' };
+    return (
+      statusMap[item.status] || {
+        status: 'Desconhecido',
+        statusBadgeColor: 'secondary',
+      }
+    );
   }
 }

@@ -1,5 +1,5 @@
 import { Component, input, output, computed, signal } from '@angular/core';
-import { NgFor, NgIf, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 import { KanbanCard, KanbanColumn } from '../kanban.component';
 import { KanbanCardComponent } from '../kanban-card/kanban-card.component';
@@ -8,7 +8,7 @@ import { KanbanCardComponent } from '../kanban-card/kanban-card.component';
   selector: 'fuse-kanban-pipe',
   templateUrl: './kanban-pipe.component.html',
   styleUrls: ['./kanban-pipe.component.scss'],
-  imports: [NgFor, NgIf, NgClass, NgIcon, KanbanCardComponent],
+  imports: [NgClass, NgIcon, KanbanCardComponent],
 })
 export class KanbanPipeComponent {
   // Inputs
@@ -40,16 +40,16 @@ export class KanbanPipeComponent {
   getColumnColorClass() {
     const color = this.column().color;
     if (!color) return 'border-gray-300 dark:border-gray-600';
-    
+
     // Mapear cores para classes CSS
     const colorMap: Record<string, string> = {
-      'blue': 'border-blue-300 dark:border-blue-600',
-      'green': 'border-green-300 dark:border-green-600',
-      'yellow': 'border-yellow-300 dark:border-yellow-600',
-      'red': 'border-red-300 dark:border-red-600',
-      'purple': 'border-purple-300 dark:border-purple-600',
-      'pink': 'border-pink-300 dark:border-pink-600',
-      'indigo': 'border-indigo-300 dark:border-indigo-600',
+      blue: 'border-blue-300 dark:border-blue-600',
+      green: 'border-green-300 dark:border-green-600',
+      yellow: 'border-yellow-300 dark:border-yellow-600',
+      red: 'border-red-300 dark:border-red-600',
+      purple: 'border-purple-300 dark:border-purple-600',
+      pink: 'border-pink-300 dark:border-pink-600',
+      indigo: 'border-indigo-300 dark:border-indigo-600',
     };
 
     return colorMap[color] || 'border-gray-300 dark:border-gray-600';
@@ -58,15 +58,15 @@ export class KanbanPipeComponent {
   getHeaderColorClass() {
     const color = this.column().color;
     if (!color) return 'bg-gray-50 dark:bg-gray-800';
-    
+
     const colorMap: Record<string, string> = {
-      'blue': 'bg-blue-50 dark:bg-blue-900/20',
-      'green': 'bg-green-50 dark:bg-green-900/20',
-      'yellow': 'bg-yellow-50 dark:bg-yellow-900/20',
-      'red': 'bg-red-50 dark:bg-red-900/20',
-      'purple': 'bg-purple-50 dark:bg-purple-900/20',
-      'pink': 'bg-pink-50 dark:bg-pink-900/20',
-      'indigo': 'bg-indigo-50 dark:bg-indigo-900/20',
+      blue: 'bg-blue-50 dark:bg-blue-900/20',
+      green: 'bg-green-50 dark:bg-green-900/20',
+      yellow: 'bg-yellow-50 dark:bg-yellow-900/20',
+      red: 'bg-red-50 dark:bg-red-900/20',
+      purple: 'bg-purple-50 dark:bg-purple-900/20',
+      pink: 'bg-pink-50 dark:bg-pink-900/20',
+      indigo: 'bg-indigo-50 dark:bg-indigo-900/20',
     };
 
     return colorMap[color] || 'bg-gray-50 dark:bg-gray-800';
