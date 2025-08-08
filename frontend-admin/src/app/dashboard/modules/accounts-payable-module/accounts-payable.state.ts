@@ -60,6 +60,8 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
       }
       return item;
     });
+    console.log('Updated Accounts Payable List:', updatedList);
+    
     this.updateState('accountsPayableList', updatedList);
   }
 

@@ -14,13 +14,17 @@
       ></div>
     </div>
   } @else {
-    <div class="kanban-columns flex gap-4 overflow-x-auto pb-4">
+    <div
+      class="kanban-columns flex gap-4 overflow-x-auto pb-4"
+      cdkDropListGroup
+    >
       @for (column of columns(); track column.id) {
         <fuse-kanban-pipe
           [column]="column"
           [cardHeight]="cardHeight()"
           [allowDragDrop]="allowDragDrop()"
           (cardClick)="onCardClick($event)"
+          (cardDrop)="onCardDrop($event)"
           class="kanban-column flex-shrink-0"
         ></fuse-kanban-pipe>
       }

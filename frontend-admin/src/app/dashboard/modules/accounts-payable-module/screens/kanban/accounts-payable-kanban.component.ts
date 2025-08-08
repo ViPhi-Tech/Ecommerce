@@ -10,6 +10,7 @@ import {
   KanbanColumn,
   KanbanCard,
 } from 'app/shared/components/kanban/kanban.component';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'fuse-accounts-payable-kanban',
@@ -164,6 +165,52 @@ export class AccountsPayableKanbanComponent implements OnInit {
     this.router.navigate([
       { outlets: { drawer: ['accounts-payable', account.uuid] } },
     ]);
+  }
+
+  onCardDrop(dropEvent: { event: CdkDragDrop<KanbanCard[]>, sourceColumn: string, targetColumn: string }) {
+    const { event, sourceColumn, targetColumn } = dropEvent;
+    if (sourceColumn === targetColumn) {
+      // Reordenar dentro da mesma coluna
+      const updatedColumns = this.kanbanColumns().map(column => {
+        if (column.id === sourceColumn) {
+          const updatedCards = [...column.cards];
+          moveItemInArray(updatedCards, event.previousIndex, event.currentIndex);
+          return { ...column, cards: updatedCards };
+        }
+        return column;
+      });
+      this.kanbanColumns.set(updatedColumns);
+    } else {
+      // Mover entre colunas diferentes
+      const updatedColumns = this.kanbanColumns().map(column => {
+        if (column.id === sourceColumn) {
+          const updatedCards = [...column.cards];
+          updatedCards.splice(event.previousIndex, 1);
+          return { ...column, cards: updatedCards };
+        } else if (column.id === targetColumn) {
+          const updatedCards = [...column.cards];
+          const movedCard = event.item.data as KanbanCard;
+          updatedCards.splice(event.currentIndex, 0, movedCard);
+          return { ...column, cards: updatedCards };
+        }
+        return column;
+      });
+      this.kanbanColumns.set(updatedColumns);
+
+      // Atualizar o status da conta a pagar no backend
+      const movedCard = event.item.data as KanbanCard;
+      const account = movedCard['accountData'] as IAccountsPayable;
+      const newStatus = targetColumn;
+
+      if (account && newStatus) {
+        this.updateAccountStatus(account.id, newStatus);
+      }
+    }
+  }
+
+  private updateAccountStatus(accountId: number, newStatus: any) {
+    // Atualizar o status no state
+    this.state.updateAccountPayableStatus(accountId, newStatus);
   }
 
   navigateToList() {

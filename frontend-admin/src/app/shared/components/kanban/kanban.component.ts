@@ -1,5 +1,6 @@
-import { Component, input, OnInit } from '@angular/core';
+import { Component, input, OnInit, output } from '@angular/core';
 import { KanbanPipeComponent } from './kanban-pipe/kanban-pipe.component';
+import { CdkDropListGroup, CdkDragDrop } from '@angular/cdk/drag-drop';
 
 export interface KanbanCard {
   id: string | number;
@@ -25,7 +26,7 @@ export interface KanbanColumn {
   selector: 'fuse-kanban',
   templateUrl: './kanban.component.html',
   styleUrls: ['./kanban.component.scss'],
-  imports: [KanbanPipeComponent],
+  imports: [KanbanPipeComponent, CdkDropListGroup],
 })
 export class KanbanComponent implements OnInit {
   // Inputs
@@ -35,11 +36,25 @@ export class KanbanComponent implements OnInit {
   cardHeight = input<number>(120);
   allowDragDrop = input<boolean>(false);
 
+  // Outputs
+  cardClick = output<KanbanCard>();
+  cardDrop = output<{ event: CdkDragDrop<KanbanCard[]>, sourceColumn: string, targetColumn: string }>();
+
   ngOnInit() {}
 
   onCardClick(card: KanbanCard) {
-    // Emitir evento de clique no card (pode ser implementado posteriormente)
-    console.log('Card clicked:', card);
+    this.cardClick.emit(card);
+  }
+
+  onCardDrop(event: CdkDragDrop<KanbanCard[]>) {
+    const sourceColumnId = event.previousContainer.id;
+    const targetColumnId = event.container.id;
+    
+    this.cardDrop.emit({
+      event,
+      sourceColumn: sourceColumnId,
+      targetColumn: targetColumnId
+    });
   }
 
   getColumnCards(columnId: string): KanbanCard[] {

@@ -3,12 +3,13 @@ import { NgClass } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 import { KanbanCard, KanbanColumn } from '../kanban.component';
 import { KanbanCardComponent } from '../kanban-card/kanban-card.component';
+import { CdkDropList, CdkDrag, CdkDragDrop } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'fuse-kanban-pipe',
   templateUrl: './kanban-pipe.component.html',
   styleUrls: ['./kanban-pipe.component.scss'],
-  imports: [NgClass, NgIcon, KanbanCardComponent],
+  imports: [NgClass, NgIcon, KanbanCardComponent, CdkDropList, CdkDrag],
 })
 export class KanbanPipeComponent {
   // Inputs
@@ -18,6 +19,7 @@ export class KanbanPipeComponent {
 
   // Outputs
   cardClick = output<KanbanCard>();
+  cardDrop = output<CdkDragDrop<KanbanCard[]>>();
 
   // Signals
   isCollapsed = signal<boolean>(false);
@@ -31,6 +33,10 @@ export class KanbanPipeComponent {
 
   onCardClick(card: KanbanCard) {
     this.cardClick.emit(card);
+  }
+
+  onCardDrop(event: CdkDragDrop<KanbanCard[]>) {
+    this.cardDrop.emit(event);
   }
 
   toggleCollapse() {

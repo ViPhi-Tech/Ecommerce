@@ -35,7 +35,14 @@
 
   <!-- Área de Drop dos Cards -->
   @if (!isCollapsed()) {
-    <div class="pipe-content">
+    <div
+      class="pipe-content"
+      cdkDropList
+      [id]="column().id"
+      [cdkDropListData]="column().cards"
+      (cdkDropListDropped)="onCardDrop($event)"
+      [cdkDropListDisabled]="!allowDragDrop()"
+    >
       @if (column().cards.length === 0) {
         <div class="empty-state">
           <div
@@ -47,13 +54,19 @@
         </div>
       } @else {
         @for (card of column().cards; track card.id) {
-          <fuse-kanban-card
-            [card]="card"
-            [height]="cardHeight()"
-            [allowDrag]="allowDragDrop()"
-            (cardClick)="onCardClick(card)"
+          <div
+            cdkDrag
+            [cdkDragData]="card"
+            [cdkDragDisabled]="!allowDragDrop()"
             class="card-item"
-          ></fuse-kanban-card>
+          >
+            <fuse-kanban-card
+              [card]="card"
+              [height]="cardHeight()"
+              [allowDrag]="allowDragDrop()"
+              (cardClick)="onCardClick(card)"
+            ></fuse-kanban-card>
+          </div>
         }
       }
     </div>
