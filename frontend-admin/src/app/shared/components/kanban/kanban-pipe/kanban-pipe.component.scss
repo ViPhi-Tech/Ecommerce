@@ -3,7 +3,7 @@
   max-width: 20rem;
   background-color: white;
   border-radius: 0.5rem;
-  border: 2px solid;
+  border: 1px solid;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
 }
@@ -29,12 +29,16 @@
 .pipe-content {
   padding: 0.75rem;
   min-height: 8rem;
-  max-height: 24rem;
   overflow-y: auto;
   transition: max-height 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+  flex-shrink: 0;
 }
 
-.pipe-content > * + * {
+.pipe-content>*+* {
   margin-top: 0.75rem;
 }
 

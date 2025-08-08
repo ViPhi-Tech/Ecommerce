@@ -1,4 +1,4 @@
-import { Component, input, signal, OnInit } from '@angular/core';
+import { Component, input, OnInit } from '@angular/core';
 import { KanbanPipeComponent } from './kanban-pipe/kanban-pipe.component';
 
 export interface KanbanCard {
@@ -35,12 +35,7 @@ export class KanbanComponent implements OnInit {
   cardHeight = input<number>(120);
   allowDragDrop = input<boolean>(false);
 
-  // Signals
-  internalColumns = signal<KanbanColumn[]>([]);
-
-  ngOnInit() {
-    this.internalColumns.set([...this.columns()]);
-  }
+  ngOnInit() {}
 
   onCardClick(card: KanbanCard) {
     // Emitir evento de clique no card (pode ser implementado posteriormente)
@@ -48,6 +43,6 @@ export class KanbanComponent implements OnInit {
   }
 
   getColumnCards(columnId: string): KanbanCard[] {
-    return this.internalColumns().find(col => col.id === columnId)?.cards || [];
+    return this.columns().find(col => col.id === columnId)?.cards || [];
   }
 }

@@ -4,6 +4,7 @@ import { AccountsPayableService } from './accounts-payable.service';
 import { BaseState } from 'app/shared/store/base.state';
 import { AccountsPayableModuleState } from 'app/shared/interfaces/accounts-payable/AccountsPayableModuleState';
 import { IAccountsPayable } from 'app/shared/interfaces/accounts-payable/AccountsPayable';
+import { AccountsPayableStatus } from 'app/shared/interfaces/accounts-payable/AccountsPayableStatus';
 
 @Injectable({
   providedIn: 'root',
@@ -52,7 +53,7 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
     );
   }
 
-  updateAccountPayableStatus(id: number, status: string) {
+  updateAccountPayableStatus(id: number, status: AccountsPayableStatus) {
     const updatedList = this.accountsPayableList().map(item => {
       if (item.id === id) {
         return { ...item, status };
@@ -65,31 +66,32 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
   convertStatus(item: IAccountsPayable) {
     const statusMap: Record<
       string,
-      { status: string; statusBadgeColor: string }
+      { statusLabel: string; statusBadgeColor: string }
     > = {
       pending: {
-        status: 'Pendente',
+        statusLabel: 'Pendente',
         statusBadgeColor: 'info',
       },
       paid: {
-        status: 'Pago',
+        statusLabel: 'Pago',
         statusBadgeColor: 'success',
       },
       overdue: {
-        status: 'Vencido',
+        statusLabel: 'Vencido',
         statusBadgeColor: 'danger',
       },
       cancelled: {
-        status: 'Cancelado',
+        statusLabel: 'Cancelado',
+        statusBadgeColor: 'secondary',
+      },
+      unknown: {
+        statusLabel: 'Desconhecido',
         statusBadgeColor: 'secondary',
       },
     };
 
     return (
-      statusMap[item.status] || {
-        status: 'Desconhecido',
-        statusBadgeColor: 'secondary',
-      }
+      statusMap[item?.status || 'unknown']
     );
   }
 }

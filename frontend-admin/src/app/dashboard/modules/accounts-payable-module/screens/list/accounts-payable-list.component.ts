@@ -70,7 +70,7 @@ export class AccountsPayableListComponent implements OnInit {
         sortable: true,
       },
       {
-        field: 'status',
+        field: 'statusLabel',
         caption: 'Situação',
         type: 'badge',
         filter: true,

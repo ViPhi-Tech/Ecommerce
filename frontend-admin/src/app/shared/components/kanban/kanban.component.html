@@ -15,7 +15,7 @@
     </div>
   } @else {
     <div class="kanban-columns flex gap-4 overflow-x-auto pb-4">
-      @for (column of internalColumns(); track column.id) {
+      @for (column of columns(); track column.id) {
         <fuse-kanban-pipe
           [column]="column"
           [cardHeight]="cardHeight()"

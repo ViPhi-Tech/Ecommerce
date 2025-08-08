@@ -1,5 +1,4 @@
 .accounts-payable-kanban {
-  min-height: calc(100vh - 2rem);
   background: transparent;
 }
 
@@ -8,6 +7,9 @@
   border-radius: 0.75rem;
   padding: 1.5rem;
   border: 1px solid rgb(229 231 235);
+  // faca q oculpe o resto da tela sem exceder o tamanho da tela
+  max-height: calc(100vh - 13rem);
+  overflow-y: auto;
 }
 
 :host-context(.dark) .kanban-container {
@@ -72,7 +74,7 @@
     width: 100%;
   }
 
-  .flex.gap-3 > * {
+  .flex.gap-3>* {
     width: 100%;
   }
 }

@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { NgIcon } from '@ng-icons/core';
@@ -28,19 +28,28 @@ export class AccountsPayableKanbanComponent implements OnInit {
   loading = computed(() => this.state.loading());
   accountsPayableList = computed(() => this.state.accountsPayableList());
 
+  constructor() {
+    // Effect que executa automaticamente quando accountsPayableList mudar
+    effect(() => {
+      const accounts = this.accountsPayableList();
+      if (accounts.length > 0) {
+        this.setupKanbanColumns();
+      }
+    });
+  }
+
   ngOnInit() {
     this.loadAccountsPayable();
-    this.setupKanbanColumns();
   }
 
   async loadAccountsPayable() {
     await this.state.getAccountsPayableList();
-    this.setupKanbanColumns();
   }
 
   private setupKanbanColumns() {
     const accounts = this.accountsPayableList();
-
+    console.log('Accounts Payable List:', accounts);
+    
     // Definir as colunas do Kanban
     const columns: KanbanColumn[] = [
       {
@@ -73,10 +82,9 @@ export class AccountsPayableKanbanComponent implements OnInit {
     ];
 
     // Mapear contas para cards e distribuir nas colunas
-    accounts.forEach(account => {
+    accounts.forEach((account: IAccountsPayable) => {
       const card = this.mapAccountToCard(account);
-      const status = this.determineAccountStatus(account);
-
+      const status = account.status; // Usar o status diretamente do objeto account
       const column = columns.find(col => col.id === status);
       if (column) {
         column.cards.push(card);
