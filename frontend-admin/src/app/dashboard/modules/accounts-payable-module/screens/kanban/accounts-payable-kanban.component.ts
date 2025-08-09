@@ -70,24 +70,24 @@ export class AccountsPayableKanbanComponent implements OnInit {
           {
             label: 'Editar',
             icon: 'lucideEdit',
-            action: (card) => {
+            action: card => {
               this.editAccount(card);
             },
           },
           {
             label: 'Visualizar',
             icon: 'lucideEye',
-            action: (card) => {
+            action: card => {
               this.viewAccount(card);
             },
           },
           {
             label: 'Excluir',
             icon: 'lucideTrash2',
-            action: (card) => {
+            action: card => {
               this.deleteAccount(card);
             },
-          }
+          },
         ],
         maxCards: 50,
       },
@@ -100,24 +100,24 @@ export class AccountsPayableKanbanComponent implements OnInit {
           {
             label: 'Editar',
             icon: 'lucideEdit',
-            action: (card) => {
+            action: card => {
               this.editAccount(card);
             },
           },
           {
             label: 'Marcar como Pago',
             icon: 'lucideCheck',
-            action: (card) => {
+            action: card => {
               this.markAsPaid(card);
             },
           },
           {
             label: 'Visualizar',
             icon: 'lucideEye',
-            action: (card) => {
+            action: card => {
               this.viewAccount(card);
             },
-          }
+          },
         ],
         maxCards: 30,
       },
@@ -130,24 +130,24 @@ export class AccountsPayableKanbanComponent implements OnInit {
           {
             label: 'Pagar Urgente',
             icon: 'lucideAlertTriangle',
-            action: (card) => {
+            action: card => {
               this.markAsPaid(card);
             },
           },
           {
             label: 'Editar',
             icon: 'lucideEdit',
-            action: (card) => {
+            action: card => {
               this.editAccount(card);
             },
           },
           {
             label: 'Visualizar',
             icon: 'lucideEye',
-            action: (card) => {
+            action: card => {
               this.viewAccount(card);
             },
-          }
+          },
         ],
         maxCards: 20,
       },
@@ -160,17 +160,17 @@ export class AccountsPayableKanbanComponent implements OnInit {
           {
             label: 'Visualizar',
             icon: 'lucideEye',
-            action: (card) => {
+            action: card => {
               this.viewAccount(card);
             },
           },
           {
             label: 'Gerar Comprovante',
             icon: 'lucideDownload',
-            action: (card) => {
+            action: card => {
               this.generateReceipt(card);
             },
-          }
+          },
         ],
       },
     ];
@@ -328,7 +328,11 @@ export class AccountsPayableKanbanComponent implements OnInit {
   deleteAccount(card: KanbanCard) {
     const account = card['accountData'] as IAccountsPayable;
     if (account) {
-      if (confirm(`Tem certeza que deseja excluir a conta "${account.description}"?`)) {
+      if (
+        confirm(
+          `Tem certeza que deseja excluir a conta "${account.description}"?`
+        )
+      ) {
         // Implementar lógica de exclusão
         this.state.removeAccountPayable(account.id);
       }

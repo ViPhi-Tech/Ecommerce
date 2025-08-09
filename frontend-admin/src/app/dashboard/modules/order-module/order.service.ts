@@ -18,7 +18,7 @@ export class OrderService {
     if (skipLoader) {
       headers['Skip-Loader'] = 'true';
     }
-    
+
     return this.http.get<Order[] | { data: Order[] }>(
       `${this.apiUrl}order/all`,
       { headers }

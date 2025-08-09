@@ -20,10 +20,13 @@ export class AccountsPayableService {
     if (skipLoader) {
       headers['Skip-Loader'] = 'true';
     }
-    
-    return this.http.get<ApiResponse<IAccountsPayable[]>>(`${this.apiUrl}/all`, {
-      headers
-    });
+
+    return this.http.get<ApiResponse<IAccountsPayable[]>>(
+      `${this.apiUrl}/all`,
+      {
+        headers,
+      }
+    );
   }
 
   getById(id: number): Observable<ApiResponse<IAccountsPayable>> {
@@ -51,11 +54,12 @@ export class AccountsPayableService {
     );
   }
 
-  updateAccountPayableStatus(id: number, status: AccountsPayableStatus): Observable<ApiResponse> {
-    return this.http.patch<ApiResponse>(
-      `${this.apiUrl}/update-status/${id}`,
-      { status }
-    );
+  updateAccountPayableStatus(
+    id: number,
+    status: AccountsPayableStatus
+  ): Observable<ApiResponse> {
+    return this.http.patch<ApiResponse>(`${this.apiUrl}/update-status/${id}`, {
+      status,
+    });
   }
-
 }

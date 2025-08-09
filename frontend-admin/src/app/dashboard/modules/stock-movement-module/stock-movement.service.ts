@@ -39,7 +39,7 @@ export class StockMovementService {
     if (skipLoader) {
       headers['Skip-Loader'] = 'true';
     }
-    
+
     return this.http.get<ApiResponse<any>>(
       `${this.productsApiUrl}/moviment/metrics`,
       { headers }

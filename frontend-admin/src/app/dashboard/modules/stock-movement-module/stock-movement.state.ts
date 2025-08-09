@@ -49,7 +49,10 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
     super();
   }
 
-  async getStockMovementList(filter: MetricDTO, skipLoader = true): Promise<void> {
+  async getStockMovementList(
+    filter: MetricDTO,
+    skipLoader = true
+  ): Promise<void> {
     this.setLoading(true);
     this.clearError();
     this.setStockMovementList([]);
