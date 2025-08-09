@@ -5,7 +5,7 @@ import { environments } from 'src/environments/environments';
 import {
   Reseller,
   ResellerModuleState,
-} from '../interfaces/reseller-module.interface';
+} from 'app/shared/interfaces/reseller-module.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -24,13 +24,18 @@ export class ResellerState {
   loading = computed(() => this.state().loading);
   error = computed(() => this.state().error);
 
-  getResellerList(): void {
+  getResellerList(skipLoader = true): void {
     this.setLoading(true);
     this.setError(null);
     this.setResellerList([]);
 
+    const headers: any = {};
+    if (skipLoader) {
+      headers['Skip-Loader'] = 'true';
+    }
+
     this.http
-      .get<Reseller[]>(`${this.apiUrl}resellers`)
+      .get<Reseller[]>(`${this.apiUrl}resellers`, { headers })
       .pipe(
         tap(resellers => this.setResellerList(resellers)),
         catchError(error => this.handleError(error)),

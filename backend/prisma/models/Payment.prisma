@@ -1,31 +1,28 @@
 model Payment {
-  id        Int      @id @default(autoincrement())
+  id        Int           @id @default(autoincrement())
   value     Float
-  typeId    String      
-  statusId  String      
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  order   Order         @relation(fields: [orderId], references: [id])
-  orderId Int
-  type    PaymentType  @relation(fields: [typeId], references: [name])
-  status  PaymentStatus @relation(fields: [statusId], references: [name])
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  orderId   Int
+  statusId  String
+  typeId    String
+  order     Order         @relation(fields: [orderId], references: [id])
+  status    PaymentStatus @relation(fields: [statusId], references: [name])
+  type      PaymentType   @relation(fields: [typeId], references: [name])
 }
 
 model PaymentType {
   name      String    @id
-  label     String
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-
-  payments Payment[]
+  label     String
+  payments  Payment[]
 }
 
 model PaymentStatus {
-  name      String   @id
+  name      String    @id
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   label     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  payments Payment[]
+  payments  Payment[]
 }

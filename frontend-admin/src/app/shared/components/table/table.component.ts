@@ -22,6 +22,9 @@ import { DateCustomPipe } from 'app/shared/pipes/date.pipe';
 import { PhonePipe } from 'app/shared/pipes/phone.pipe';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { FormsModule } from '@angular/forms';
+import { SelectModule } from 'primeng/select';
+import dayjs from 'dayjs';
+import { BadgeModule } from 'primeng/badge';
 
 @Component({
   selector: 'fuse-table',
@@ -46,7 +49,9 @@ import { FormsModule } from '@angular/forms';
     PhonePipe,
     DateCustomPipe,
     MultiSelectModule,
+    SelectModule,
     FormsModule,
+    BadgeModule,
   ],
 })
 export class TableComponent implements OnInit {
@@ -73,23 +78,25 @@ export class TableComponent implements OnInit {
     return fields;
   });
 
-  columnData() {
+  columnData = computed(() => {
     const data: any = {};
     this.config().columns.map(col => {
       if (col.filter) {
         const uniqueValues = Array.from(
           new Set(this.data()?.map((item: any) => item[col.field]))
         );
-        data[col.field] = uniqueValues.map(value => {
+        data[col.field] = uniqueValues.map((value: any) => {
+          let label = value;
+          label = this.formatLabelFilter(value, col?.type || 'text');
           return {
-            label: value,
+            label: label,
             value: value,
           };
         });
       }
     });
     return data;
-  }
+  });
 
   exportColumns = computed(() => {
     return this.config().columns.map(col => {
@@ -120,5 +127,22 @@ export class TableComponent implements OnInit {
     if (config && typeof config.rowClick === 'function') {
       config.rowClick(rowData, rowIndex);
     }
+  }
+
+  formatLabelFilter(value: any, type: string): string {
+    let label = value;
+    if (type === 'date') {
+      label = dayjs(value).format('DD/MM/YYYY');
+    }
+    if (type === 'datetime') {
+      label = dayjs(value).format('DD/MM/YYYY HH:mm');
+    }
+    if (type === 'currency') {
+      label = new Intl.NumberFormat('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+      }).format(value);
+    }
+    return label;
   }
 }

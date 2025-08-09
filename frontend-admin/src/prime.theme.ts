@@ -2128,7 +2128,7 @@ export const Preset = definePreset(Lara, {
       },
       bodyCell: {
         borderColor: '{datatable.border.color}',
-        padding: '0.75rem 1rem',
+        padding: '0.25rem 1rem',
       },
       footerCell: {
         borderColor: '{datatable.border.color}',

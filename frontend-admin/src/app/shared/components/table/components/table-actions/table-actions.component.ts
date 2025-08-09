@@ -1,6 +1,5 @@
 import { Component, input, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { TooltipModule } from 'primeng/tooltip';
 import { CommonModule } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
@@ -17,7 +16,6 @@ import { PopoverModule } from 'primeng/popover';
     CommonModule,
     ButtonModule,
     TooltipModule,
-    OverlayPanelModule,
     PopoverModule,
     SplitButtonModule,
     NgIcon,

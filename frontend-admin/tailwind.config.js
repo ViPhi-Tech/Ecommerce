@@ -4,7 +4,7 @@ import PrimeUI from 'tailwindcss-primeui';
 module.exports = {
   important: true,
   darkMode: ['selector', '[class~="dark"]'],
-  content: ['./src/**/*.{html,js}'],
+  content: ['./src/**/*.{html,js,ts,scss}'],
   theme: {
     extend: {
       backgroundColor: {

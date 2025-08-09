@@ -1,35 +1,27 @@
 model Product {
-  id          Int     @id @default(autoincrement())
-  name        String
-  description String?
-  sku         String  @unique
-  cost        Float?
-  quantity    Int     @default(0)
-  ean         String  @default("0")
-  isActive    Boolean @default(true)
-
+  id               Int           @id @default(autoincrement())
+  name             String
+  description      String?
+  sku              String        @unique
+  cost             Float?
+  quantity         Int           @default(0)
+  ean              String        @default("0")
+  isActive         Boolean       @default(true)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  companyId        Int?
+  categoryId       Int?
+  finalPrice       Float         @default(0)
+  image            String?
+  initialPrice     Float         @default(0)
   shortDescription String?
-  initialPrice Float @default(0)
-  finalPrice   Float @default(0)
-
-  image String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  companyId Int?
-  company   Company? @relation(fields: [companyId], references: [id])
-
-  stock      Stock?      @relation("ProductStock")
-  orderItems OrderItem[]
-
-  categoryId Int?
-  category   Category? @relation(fields: [categoryId], references: [id])
-
-  brandId Int?
-  brand   Brand? @relation(fields: [brandId], references: [id])
-
-  invoices InvoiceItem[]
+  brandId          Int?
+  invoices         InvoiceItem[]
+  orderItems       OrderItem[]
+  brand            Brand?        @relation(fields: [brandId], references: [id])
+  category         Category?     @relation(fields: [categoryId], references: [id])
+  company          Company?      @relation(fields: [companyId], references: [id])
+  stock            Stock?        @relation("ProductStock")
 }
 
 model Partner {
@@ -43,8 +35,38 @@ model Partner {
   active      Boolean     @default(true)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
+  address     Address?
+}
 
-  address Address?
+model Stock {
+  id        Int             @id @default(autoincrement())
+  productId Int             @unique
+  quantity  Int             @default(0)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  product   Product         @relation("ProductStock", fields: [productId], references: [id])
+  movements StockMovement[]
+}
+
+model StockMovement {
+  id        Int          @id @default(autoincrement())
+  stockId   Int
+  type      MovementType
+  quantity  Int
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  userId    Int?
+  stock     Stock        @relation(fields: [stockId], references: [id])
+  user      User?        @relation(fields: [userId], references: [id])
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  isActive  Boolean?  @default(true)
+  products  Product[]
 }
 
 enum PartnerType {
@@ -55,41 +77,7 @@ enum PartnerType {
   OTHER
 }
 
-model Stock {
-  id        Int      @id @default(autoincrement())
-  productId Int      @unique // Chave única para cada produto (garante relação 1:1)
-  quantity  Int      @default(0)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  product   Product         @relation("ProductStock", fields: [productId], references: [id]) // Relacionando com o Product
-  movements StockMovement[] // Relacionamento 1:N com StockMovement
-}
-
-model StockMovement {
-  id        Int          @id @default(autoincrement()) // Identificador único da movimentação
-  stockId   Int // Chave estrangeira para o estoque
-  type      MovementType // Tipo de movimentação (entrada ou saída)
-  quantity  Int // Quantidade movimentada
-  userId    Int? // Chave estrangeira para o usuário que realizou a movimentação
-  createdAt DateTime     @default(now()) // Data da movimentação
-  updatedAt DateTime     @updatedAt // Data da última atualização da movimentação
-
-  user   User? @relation(fields: [userId], references: [id])
-  stock Stock @relation(fields: [stockId], references: [id]) // Relaciona com o modelo Stock
-}
-
 enum MovementType {
   IN
   OUT
-}
-
-model Category {
-  id        Int      @id @default(autoincrement())
-  name      String
-  isActive  Boolean? @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  products Product[]
 }

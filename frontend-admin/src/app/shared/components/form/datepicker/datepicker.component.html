@@ -16,11 +16,11 @@
       [iconDisplay]="'input'"
       [showIcon]="true"
       appendTo="body"
+      dataType="string"
       [inputId]="idRef()"
       [size]="size()"
       [maxDate]="maxDate()"
       dateFormat="dd/mm/yy"
-      (onSelect)="onDateSelect($event)"
     />
   }
   @if (type() === 'time' && !isLoading()) {
@@ -34,6 +34,7 @@
       [timeOnly]="true"
       appendTo="body"
       [inputId]="idRef()"
+      dataType="string"
       [size]="size()"
       dateFormat="dd/mm/yy"
       (onSelect)="onTimeSelect($event)"

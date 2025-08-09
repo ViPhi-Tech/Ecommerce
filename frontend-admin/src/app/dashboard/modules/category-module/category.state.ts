@@ -23,14 +23,14 @@ export class CategoryState extends BaseState<CategoryModuleState> {
     super();
   }
 
-  async getCategoryList(): Promise<void> {
+  async getCategoryList(skipLoader = true): Promise<void> {
     this.setLoading(true);
     this.setError(null);
     this.setCategoryList([]);
 
     try {
       await lastValueFrom(
-        this.categoryService.getCategories().pipe(
+        this.categoryService.getCategories(skipLoader).pipe(
           tap(data => this.setCategoryList(data.dados)),
           catchError(error => {
             this.handleError(error, 'Erro ao carregar categorias');

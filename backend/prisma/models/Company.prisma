@@ -1,9 +1,8 @@
 model Company {
-  id       Int     @id @default(autoincrement())
+  id       Int       @id @default(autoincrement())
   fullName String
   document String
-  isActive Boolean @default(true)
-
-  users    User[]
+  isActive Boolean   @default(true)
   products Product[]
+  users    User[]
 }

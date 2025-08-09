@@ -1,6 +1,16 @@
 <div class="p-8 animate-fade-in">
   <div class="flex justify-between items-center mb-4">
     <h1 class="text-xl font-bold">Contas a Pagar</h1>
+    <div class="flex gap-2">
+      <p-button
+        icon="pi pi-table"
+        label="Kanban"
+        [text]="true"
+        (onClick)="navigateToKanban()"
+        pTooltip="Visualizar em Kanban"
+        tooltipPosition="bottom"
+      />
+    </div>
   </div>
   <div class="animate-left">
     <fuse-table

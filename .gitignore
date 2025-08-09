@@ -105,14 +105,6 @@ desktop.ini
 .Trashes
 
 # ========================
-# === Package Manager ===
-# ========================
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
-**/.pnp.*
-
-# ========================
 # === Next.js Specific ===
 # ========================
 .next/

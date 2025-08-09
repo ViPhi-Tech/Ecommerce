@@ -1,14 +1,15 @@
 import { IAccountsPayableRepository } from '../../../domain/repositories/IAccountsPayableRepository';
 import { AccountsPayable } from '../../../domain/entities/AccountsPayable';
 import { CreateAccountsPayableInput } from '../../dto/accountsPayable/AccountsPayableDTOs';
+import { parseDate } from '../../../shared/utils/dateUtils';
 
 export class CreateAccountsPayableUseCase {
-  constructor(private accountsPayableRepository: IAccountsPayableRepository) {}
+  constructor(private accountsPayableRepository: IAccountsPayableRepository) { }
 
   async execute(data: CreateAccountsPayableInput): Promise<AccountsPayable> {
     // Validar se as datas são válidas
     this.validateDates(data);
-    
+
     return await this.accountsPayableRepository.create(data);
   }
 
@@ -21,7 +22,7 @@ export class CreateAccountsPayableUseCase {
     ];
 
     for (const dateField of dates) {
-      const date = new Date(dateField.value);
+      const date = parseDate(dateField.value);
       if (isNaN(date.getTime())) {
         throw new Error(`Data inválida para o campo ${dateField.field}: ${dateField.value}`);
       }

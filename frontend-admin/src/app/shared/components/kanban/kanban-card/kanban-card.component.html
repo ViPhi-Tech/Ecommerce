@@ -1,0 +1,105 @@
+<div
+  class="kanban-card"
+  [ngStyle]="cardStyle()"
+  [ngClass]="{ 'cursor-grab': allowDrag(), 'cursor-pointer': !allowDrag() }"
+  (click)="onClick()"
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()"
+  (keyup.enter)="onClick()"
+  (keyup.space)="onClick()"
+  tabindex="0"
+  role="button"
+  [attr.aria-label]="'Card: ' + card().title"
+>
+  <!-- Header do Card -->
+  <div class="card-header">
+    <div class="flex items-start justify-between">
+      <h4 class="card-title">
+        {{ card().title }}
+      </h4>
+
+      <div class="flex items-center gap-2">
+        @if (card().priority) {
+          <span class="priority-badge" [ngClass]="priorityColor()">
+            <ng-icon [name]="priorityIcon()" class="w-3 h-3"></ng-icon>
+          </span>
+        }
+
+        <!-- Botão de Ações - aparece apenas no hover e se houver ações -->
+        @if (actions().length > 0 && isHovered()) {
+          <p-button
+            icon="pi pi-ellipsis-v"
+            class="actions-button"
+            severity="secondary"
+            size="small"
+            text
+            [rounded]="true"
+            (click)="actionPopover.toggle($event); $event.stopPropagation()"
+          />
+
+          <p-popover #actionPopover>
+            <div class="actions-menu">
+              @for (action of actions(); track action.label) {
+                <button
+                  type="button"
+                  class="action-item"
+                  (click)="onActionClick(action, $event); actionPopover.hide()"
+                >
+                  @if (action.icon) {
+                    <ng-icon [name]="action.icon" class="w-4 h-4"></ng-icon>
+                  }
+                  <span>{{ action.label }}</span>
+                </button>
+              }
+            </div>
+          </p-popover>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- Descrição -->
+  @if (card().description) {
+    <div class="card-description">
+      <p class="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
+        {{ card().description }}
+      </p>
+    </div>
+  }
+
+  <!-- Tags -->
+  <div class="card-tags">
+    @for (tag of card().tags; track tag) {
+      <span class="tag">
+        {{ tag }}
+      </span>
+    }
+  </div>
+
+  <!-- Footer do Card -->
+  <div class="card-footer">
+    <div class="flex items-center justify-between">
+      <!-- Responsável -->
+      @if (card().assignee) {
+        <div class="assignee">
+          <div class="assignee-avatar">
+            {{ card().assignee?.charAt(0)?.toUpperCase() }}
+          </div>
+          <span class="assignee-name">
+            {{ card().assignee }}
+          </span>
+        </div>
+      }
+
+      <!-- Data de Vencimento -->
+      @if (card().dueDate) {
+        <div class="due-date" [ngClass]="{ overdue: isOverdue() }">
+          <ng-icon name="lucideCalendar" class="w-3 h-3"></ng-icon>
+          <span class="text-xs">
+            {{ formatDate(card().dueDate) }}
+          </span>
+        </div>
+      }
+    </div>
+  </div>
+</div>

@@ -23,6 +23,7 @@ export interface TableColumn {
   caption: string;
   sortable?: boolean;
   filter?: boolean;
+  multiFilter?: boolean; // Indicates if the column supports multiple filters
   customClass?: string;
   maxWidth?: string; // Maximum width of the column
   actionButtonsType?: 'buttons' | 'dropdown'; // Type of action buttons, can be 'buttons' or 'dropdown'
@@ -30,7 +31,8 @@ export interface TableColumn {
   template?: TemplateRef<any | null>;
   headerAlign?: 'left' | 'center' | 'right'; // Alignment of the header
   align?: 'left' | 'center' | 'right'; // Alignment of the column
-  style?: string; // Custom CSS styles for the column
+  style?: string;
+  badgeSeverityKey?: string; // Key for badge severity, used for status badges
 }
 
 export interface HeaderButton {

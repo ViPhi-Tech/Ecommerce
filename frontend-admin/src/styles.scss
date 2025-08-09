@@ -1,5 +1,5 @@
 @use 'src/assets/styles/custom-prime.scss';
-@import 'primeicons/primeicons.css';
+@use 'primeicons/primeicons.css';
 
 @tailwind base;
 @tailwind components;
@@ -21,13 +21,20 @@
   @apply bg-white rounded-lg shadow-md p-4 dark:text-white dark:bg-card-background;
 }
 
+.max-h-page {
+  max-height: calc(100vh - 57px);
+  overflow-y: auto;
+}
+
 .animate-fade-in {
   animation: fadeIn 0.3s ease-in-out;
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -36,11 +43,13 @@
 .animate-left {
   animation: slideLeftToRightFadeIn 0.3s ease-in-out;
 }
+
 @keyframes slideLeftToRightFadeIn {
   from {
     transform: translateX(-30px);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;
@@ -50,11 +59,13 @@
 .animate-right {
   animation: slideRightToLeftFadeOut 0.2s ease-in-out forwards;
 }
+
 @keyframes slideRightToLeftFadeOut {
   from {
     transform: translateX(30px);
     opacity: 0;
   }
+
   to {
     transform: translateX(0);
     opacity: 1;

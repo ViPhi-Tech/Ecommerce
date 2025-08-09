@@ -5,6 +5,7 @@
   [rows]="10"
   [rowsPerPageOptions]="[10, 25, 50]"
   [loading]="loading()"
+  [showGridlines]="true"
   [showLoader]="false"
   [paginator]="true"
   [globalFilterFields]="globalFilterFields()"
@@ -81,41 +82,50 @@
   <ng-template #header>
     <tr>
       @for (column of config().columns; track $index) {
-        <th
-          pSortableColumn="{{ column?.sortable ? column?.field : '' }}"
-          [ngClass]="{
-            'text-left': column?.headerAlign === 'left',
-            'text-right': column?.headerAlign === 'right',
-            'text-center':
-              column?.headerAlign === 'center' || column.caption === 'Ações',
-          }"
-        >
-          {{ column?.caption }}
-          @if (column?.sortable) {
-            <p-sortIcon class="ml-2" field="{{ column?.field }}" />
-          }
-          @if (column?.filter) {
-            <p-columnFilter
-              [field]="column.field"
-              matchMode="in"
-              display="menu"
-              [showMatchModes]="false"
-              [showOperator]="false"
-              [showAddButton]="false"
-            >
-              <ng-template #filter let-value let-filter="filterCallback">
-                <p-multiselect
-                  [ngModel]="value"
-                  (ngModelChange)="filter($event)"
-                  [options]="columnData()[column.field]"
-                  placeholder="Selecione"
-                  optionLabel="name"
-                  [panelStyle]="{ minWidth: '16rem' }"
+        <th pSortableColumn="{{ column?.sortable ? column?.field : '' }}">
+          <div
+            class="flex items-center"
+            [ngClass]="{
+              'justify-start': column?.headerAlign === 'left',
+              'justify-end': column?.headerAlign === 'right',
+              'justify-center':
+                column?.headerAlign === 'center' || column.caption === 'Ações',
+              'justify-between': column?.filter || column?.sortable,
+            }"
+          >
+            <div>
+              {{ column?.caption }}
+            </div>
+            <div>
+              @if (column?.sortable) {
+                <p-sortIcon class="ml-2" field="{{ column?.field }}" />
+              }
+              @if (column?.filter) {
+                <p-columnFilter
+                  [field]="column.field"
+                  matchMode="in"
+                  display="menu"
+                  [showMatchModes]="false"
+                  [showOperator]="false"
+                  [showAddButton]="false"
                 >
-                </p-multiselect>
-              </ng-template>
-            </p-columnFilter>
-          }
+                  <ng-template #filter let-value let-filter="filterCallback">
+                    <p-multiselect
+                      [ngModel]="value"
+                      (onChange)="filter($event.value)"
+                      [options]="columnData()[column.field]"
+                      placeholder="Selecione"
+                      optionLabel="label"
+                      optionValue="value"
+                      styleClass="w-[20rem]"
+                      [panelStyle]="{ minWidth: '20rem' }"
+                    >
+                    </p-multiselect>
+                  </ng-template>
+                </p-columnFilter>
+              }
+            </div>
+          </div>
         </th>
       }
     </tr>
@@ -178,6 +188,15 @@
                   name="lucideCircleSlash2"
                 ></ng-icon>
               }
+            } @else if (
+              column?.type === 'badge' &&
+              column?.badgeSeverityKey &&
+              rowData?.[column?.field || '']
+            ) {
+              <p-badge
+                [value]="rowData?.[column?.field || '']"
+                [severity]="rowData?.[column?.badgeSeverityKey || '']"
+              ></p-badge>
             } @else {
               {{ rowData?.[column?.field || ''] }}
             }

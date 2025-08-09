@@ -7,7 +7,7 @@ import { FindByStatusAccountsPayableUseCase } from '../../../application/use-cas
 import { FindOverdueAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/FindOverdueAccountsPayableUseCase';
 import { UpdateAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/UpdateAccountsPayableUseCase';
 import { DeleteAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/DeleteAccountsPayableUseCase';
-import { CreateAccountsPayableInput, UpdateAccountsPayableInput } from '../../../application/dto/accountsPayable/AccountsPayableDTOs';
+import { CreateAccountsPayableInput, UpdateAccountsPayableInput, UpdateAccountsPayableStatusInput } from '../../../application/dto/accountsPayable/AccountsPayableDTOs';
 
 export class AccountsPayableController {
   constructor(
@@ -146,6 +146,26 @@ export class AccountsPayableController {
       return reply.status(400).send({
         success: false,
         message: error instanceof Error ? error.message : 'Erro ao atualizar conta a pagar',
+      });
+    }
+  }
+
+  async updateStatus(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const { id } = request.params as { id: string };
+      const { status } = request.body as UpdateAccountsPayableStatusInput;
+      
+      const accountsPayable = await this.updateAccountsPayableUseCase.execute(parseInt(id), { status });
+      
+      return reply.status(200).send({
+        success: true,
+        message: 'Status da conta a pagar atualizado com sucesso',
+        data: accountsPayable,
+      });
+    } catch (error) {
+      return reply.status(400).send({
+        success: false,
+        message: error instanceof Error ? error.message : 'Erro ao atualizar status da conta a pagar',
       });
     }
   }

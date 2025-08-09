@@ -23,14 +23,14 @@ export class SupplierState extends BaseState<SupplierModuleState> {
     super();
   }
 
-  async getSupplierList(): Promise<void> {
+  async getSupplierList(skipLoader = true): Promise<void> {
     this.setLoading(true);
     this.setError(null);
     this.setSupplierList([]);
 
     try {
       await lastValueFrom(
-        this.supplierService.getSuppliers().pipe(
+        this.supplierService.getSuppliers(skipLoader).pipe(
           tap(data => this.setSupplierList(data.dados)),
           catchError(error => {
             this.handleError(error, 'Erro ao carregar fornecedores');

@@ -1,11 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  signal,
-  WritableSignal,
-} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
@@ -19,6 +12,7 @@ import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/sim
 import { MovementItemComponent } from '../../components/movement-item/movement-item.component';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { NgIcon } from '@ng-icons/core';
 import dayjs from 'dayjs';
 
 @Component({
@@ -32,6 +26,7 @@ import dayjs from 'dayjs';
     MovementItemComponent,
     FormModule,
     ReactiveFormsModule,
+    NgIcon,
   ],
 })
 export class StockMovementListComponent implements OnInit {
@@ -156,7 +151,7 @@ export class StockMovementListComponent implements OnInit {
 
   formFilter = this.formBuilder.group({
     type: [''],
-    date: [new Date()],
+    date: [dayjs().format('DD/MM/YYYY')],
   });
 
   constructor() {}
@@ -200,7 +195,6 @@ export class StockMovementListComponent implements OnInit {
 
   private loadStockMovements() {
     const filter: any = this.formFilter.getRawValue();
-    filter.date = dayjs(filter.date).format('YYYY-MM-DD');
     this.state.getStockMovementList(filter);
   }
 

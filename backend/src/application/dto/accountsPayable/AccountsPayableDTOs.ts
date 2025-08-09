@@ -34,6 +34,10 @@ export interface FindAccountsPayableByStatusInput {
   status: 'pending' | 'paid' | 'overdue' | 'cancelled';
 }
 
+export interface UpdateAccountsPayableStatusInput {
+  status: 'pending' | 'paid' | 'overdue' | 'cancelled';
+}
+
 // ===== VALIDATION SCHEMAS (Para HTTP) =====
 // Todas as datas devem ser enviadas no formato 'YYYY-MM-DD' (ex: 2023-12-31)
 export const createAccountsPayableSchema = z.object({
@@ -78,12 +82,19 @@ export const accountsPayableStatusSchema = z.object({
   }),
 });
 
+export const updateAccountsPayableStatusSchema = z.object({
+  status: z.enum(['pending', 'paid', 'overdue', 'cancelled'], { 
+    message: 'Status deve ser: pending, paid, overdue ou cancelled' 
+  }),
+});
+
 // ===== JSON SCHEMAS (Para Swagger) =====
 export const createAccountsPayableJsonSchema = zodToJsonSchema(createAccountsPayableSchema);
 export const updateAccountsPayableJsonSchema = zodToJsonSchema(updateAccountsPayableSchema);
 export const accountsPayableIdJsonSchema = zodToJsonSchema(accountsPayableIdSchema);
 export const accountsPayableSupplierJsonSchema = zodToJsonSchema(accountsPayableSupplierSchema);
 export const accountsPayableStatusJsonSchema = zodToJsonSchema(accountsPayableStatusSchema);
+export const updateAccountsPayableStatusJsonSchema = zodToJsonSchema(updateAccountsPayableStatusSchema);
 
 // ===== TYPES (Para TypeScript) =====
 export type CreateAccountsPayableDTO = z.infer<typeof createAccountsPayableSchema>;
@@ -91,6 +102,7 @@ export type UpdateAccountsPayableDTO = z.infer<typeof updateAccountsPayableSchem
 export type AccountsPayableIdDTO = z.infer<typeof accountsPayableIdSchema>;
 export type AccountsPayableSupplierDTO = z.infer<typeof accountsPayableSupplierSchema>;
 export type AccountsPayableStatusDTO = z.infer<typeof accountsPayableStatusSchema>;
+export type UpdateAccountsPayableStatusDTO = z.infer<typeof updateAccountsPayableStatusSchema>;
 
 // ===== RESPONSE DTOs =====
 export interface AccountsPayableResponse {

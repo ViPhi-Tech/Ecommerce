@@ -1,12 +1,32 @@
-import { parseString } from 'xml2js';
+import { XMLParser } from 'fast-xml-parser';
 
 export class XmlUtils {
   static xmlToJson(xml: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      parseString(xml, { explicitArray: false }, (err, result) => {
-        if (err) reject(err);
-        else resolve(result);
-      });
+      try {
+        const parser = new XMLParser({
+          ignoreAttributes: false,
+          attributeNamePrefix: '$',
+          textNodeName: '#text',
+          parseAttributeValue: true,
+          parseTagValue: true,
+          trimValues: true,
+          processEntities: true,
+          isArray: (name, jpath) => {
+            // Mantém arrays para elementos que podem ter múltiplas ocorrências
+            if (
+              jpath === 'nfeProc.NFe.infNFe.det' ||
+              jpath === 'NFe.infNFe.det'
+            )
+              return true;
+            return false;
+          },
+        });
+        const result = parser.parse(xml);
+        resolve(result);
+      } catch (error) {
+        reject(error);
+      }
     });
   }
 

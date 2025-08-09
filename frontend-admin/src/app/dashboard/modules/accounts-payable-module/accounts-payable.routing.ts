@@ -12,6 +12,16 @@ export const accountsPayableRoutes: Routes = [
     },
   },
   {
+    path: 'kanban',
+    loadComponent: () =>
+      import('./screens/kanban/accounts-payable-kanban.component').then(
+        m => m.AccountsPayableKanbanComponent
+      ),
+    data: {
+      title: ['Dashboard', 'Contas a Pagar', 'Kanban'],
+    },
+  },
+  {
     path: '',
     redirectTo: 'list',
     pathMatch: 'full',

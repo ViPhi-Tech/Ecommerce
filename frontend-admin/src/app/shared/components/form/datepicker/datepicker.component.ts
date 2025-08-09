@@ -32,14 +32,6 @@ export class DatePickerComponent implements OnInit {
     this.isRequired.set(!!this.control()?.validator);
   }
 
-  onDateSelect(date: Date) {
-    if (date) {
-      // Converte a data para o formato DD/MM/YYYY
-      const formattedDate = dayjs(date).format('DD/MM/YYYY');
-      this.control().setValue(formattedDate);
-    }
-  }
-
   onTimeSelect(time: Date) {
     if (time) {
       // Converte o horário para o formato HH:mm
