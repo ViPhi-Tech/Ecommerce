@@ -26,14 +26,14 @@ export class ClientState extends BaseState<ClientModuleState> {
     super();
   }
 
-  async getClientList(): Promise<void> {
+  async getClientList(skipLoader = true): Promise<void> {
     this.setLoading(true);
     this.setError(null);
     this.setClientList([]);
 
     try {
       await lastValueFrom(
-        this.clientService.getClients().pipe(
+        this.clientService.getClients(skipLoader).pipe(
           tap(data => this.setClientList(data.dados)),
           catchError(error => {
             this.handleError(error, 'Erro ao carregar clientes');

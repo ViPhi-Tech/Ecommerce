@@ -15,7 +15,7 @@ export class AccountsReceivableService {
 
   constructor() {}
 
-  getAll() {
+  getAll(skipLoader = true) {
     return of({
       status: 'success',
       message: 'Lista de contas a pagar carregada com sucesso.',
@@ -44,7 +44,11 @@ export class AccountsReceivableService {
         },
       ],
     });
-    // return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/all`);
+    // const headers: any = {};
+    // if (skipLoader) {
+    //   headers['Skip-Loader'] = 'true';
+    // }
+    // return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/all`, { headers });
   }
 
   getById(id: string): Observable<ApiResponse> {

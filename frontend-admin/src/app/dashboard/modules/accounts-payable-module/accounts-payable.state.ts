@@ -20,13 +20,13 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
 
   accountsPayableList = computed(() => this.state().accountsPayableList);
 
-  async getAccountsPayableList(): Promise<void> {
+  async getAccountsPayableList(skipLoader = true): Promise<void> {
     this.setLoading(true);
     this.clearError();
     this.setAccountsPayableList([]);
 
     await lastValueFrom(
-      this.service.getAll().pipe(
+      this.service.getAll(skipLoader).pipe(
         tap(data => this.setAccountsPayableList(data.data)),
         catchError(() =>
           this.handleError('Erro ao carregar a lista de contas a pagar')

@@ -34,9 +34,15 @@ export class StockMovementService {
     );
   }
 
-  getStockMetrics(): Observable<ApiResponse<any>> {
+  getStockMetrics(skipLoader = true): Observable<ApiResponse<any>> {
+    const headers: any = {};
+    if (skipLoader) {
+      headers['Skip-Loader'] = 'true';
+    }
+    
     return this.http.get<ApiResponse<any>>(
-      `${this.productsApiUrl}/moviment/metrics`
+      `${this.productsApiUrl}/moviment/metrics`,
+      { headers }
     );
   }
 

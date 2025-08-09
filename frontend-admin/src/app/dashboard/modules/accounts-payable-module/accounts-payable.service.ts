@@ -14,8 +14,15 @@ export class AccountsPayableService {
 
   constructor() {}
 
-  getAll() {
-    return this.http.get<ApiResponse<IAccountsPayable[]>>(`${this.apiUrl}/all`);
+  getAll(skipLoader = true) {
+    const headers: any = {};
+    if (skipLoader) {
+      headers['Skip-Loader'] = 'true';
+    }
+    
+    return this.http.get<ApiResponse<IAccountsPayable[]>>(`${this.apiUrl}/all`, {
+      headers
+    });
   }
 
   getById(id: number): Observable<ApiResponse<IAccountsPayable>> {

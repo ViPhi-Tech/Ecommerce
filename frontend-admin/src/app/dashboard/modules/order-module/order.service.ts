@@ -13,9 +13,15 @@ export class OrderService {
 
   constructor() {}
 
-  getOrders(): Observable<Order[] | { data: Order[] }> {
+  getOrders(skipLoader = true): Observable<Order[] | { data: Order[] }> {
+    const headers: any = {};
+    if (skipLoader) {
+      headers['Skip-Loader'] = 'true';
+    }
+    
     return this.http.get<Order[] | { data: Order[] }>(
-      `${this.apiUrl}order/all`
+      `${this.apiUrl}order/all`,
+      { headers }
     );
   }
 

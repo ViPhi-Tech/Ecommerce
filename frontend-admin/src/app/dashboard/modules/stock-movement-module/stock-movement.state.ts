@@ -49,13 +49,13 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
     super();
   }
 
-  async getStockMovementList(filter: MetricDTO): Promise<void> {
+  async getStockMovementList(filter: MetricDTO, skipLoader = true): Promise<void> {
     this.setLoading(true);
     this.clearError();
     this.setStockMovementList([]);
 
     await lastValueFrom(
-      this.stockMovementService.getAll(filter, true).pipe(
+      this.stockMovementService.getAll(filter, skipLoader).pipe(
         tap(data => this.setStockMovementList(data?.dados || [])),
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
@@ -63,11 +63,11 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
     );
   }
 
-  async getStockMetrics(): Promise<void> {
+  async getStockMetrics(skipLoader = true): Promise<void> {
     this.setLoadingCards(true);
     this.clearError();
     await lastValueFrom(
-      this.stockMovementService.getStockMetrics().pipe(
+      this.stockMovementService.getStockMetrics(skipLoader).pipe(
         tap(data => this.updateState('cardsData', data?.dados || null)),
         catchError(error => {
           this.handleError(error, 'Erro ao carregar métricas de estoque');

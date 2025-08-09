@@ -18,13 +18,13 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
 
   accountsReceivableList = computed(() => this.state().accountsReceivableList);
 
-  async getAccountsReceivableList(): Promise<void> {
+  async getAccountsReceivableList(skipLoader = true): Promise<void> {
     this.setLoading(true);
     this.clearError();
     this.setAccountsReceivableList([]);
 
     await lastValueFrom(
-      this.service.getAll().pipe(
+      this.service.getAll(skipLoader).pipe(
         tap(data => this.setAccountsReceivableList(data.dados)),
         catchError(() =>
           this.handleError('Erro ao carregar a lista de contas a receber')

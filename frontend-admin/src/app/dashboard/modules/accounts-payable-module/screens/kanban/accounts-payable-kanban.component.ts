@@ -53,7 +53,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
   }
 
   async loadAccountsPayable() {
-    await this.state.getAccountsPayableList();
+    await this.state.getAccountsPayableList(true);
   }
 
   private setupKanbanColumns() {
