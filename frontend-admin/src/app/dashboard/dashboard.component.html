@@ -3,10 +3,10 @@
   <div class="min-h-screen w-full flex">
     <fuse-sidebar />
     <div
-      class="flex-1 bg-white dark:bg-container-background relative w-[100vw] lg:max-w-[calc(100vw-250px)] ml-0 lg:ml-[250px] overflow-hidden"
+      class="flex flex-col flex-grow bg-white dark:bg-container-background relative h-screen w-[100vw] lg:max-w-[calc(100vw-250px)] ml-0 lg:ml-[250px] overflow-hidden"
     >
       <fuse-header />
-      <div class="space-y-4 max-h-page overflow-y-auto">
+      <div class="flex-grow overflow-hidden flex flex-nowrap flex-col">
         <router-outlet #outlet="outlet"></router-outlet>
       </div>
     </div>

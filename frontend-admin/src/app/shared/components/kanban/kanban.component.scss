@@ -1,22 +1,29 @@
 :host {
-  // quero que o componente nao estoure a altura do pai
-  display: block;
+  // quero que o componente tenha a mesma altura do pai
   height: 100%;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
 }
 
 .kanban-board {
+  display: flex;
+  flex-direction: column;
   min-height: 400px;
   background: transparent;
+  flex-grow: 1;
 }
 
 .kanban-columns {
-  min-height: 500px;
+  flex-grow: 1;
+  overflow: hidden;
 }
 
 .kanban-column {
   min-width: 300px;
   max-width: 350px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Animações */
