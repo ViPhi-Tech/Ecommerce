@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { IAccountsPayable } from 'app/shared/interfaces/accounts-payable/AccountsPayable';
+import { AccountsPayableStatus } from 'app/shared/interfaces/accounts-payable/AccountsPayableStatus';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
@@ -49,4 +50,12 @@ export class AccountsPayableService {
       {}
     );
   }
+
+  updateAccountPayableStatus(id: number, status: AccountsPayableStatus): Observable<ApiResponse> {
+    return this.http.patch<ApiResponse>(
+      `${this.apiUrl}/update-status/${id}`,
+      { status }
+    );
+  }
+
 }

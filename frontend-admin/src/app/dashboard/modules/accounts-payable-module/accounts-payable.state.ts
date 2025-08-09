@@ -63,9 +63,14 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
       }
       return item;
     });
-    console.log('Updated Accounts Payable List:', updatedList);
-
     this.updateState('accountsPayableList', updatedList);
+
+    lastValueFrom(this.service.updateAccountPayableStatus(id, status).pipe(
+      catchError(() => {
+        this.handleError('Erro ao atualizar status da conta a pagar');
+        return [];
+      })
+    ))
   }
 
   private determineAccountStatus(

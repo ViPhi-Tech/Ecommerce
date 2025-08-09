@@ -7,18 +7,14 @@ import {
   accountsPayableIdJsonSchema,
   accountsPayableSupplierJsonSchema,
   accountsPayableStatusJsonSchema,
-  createAccountsPayableSchema,
-  updateAccountsPayableSchema,
-  accountsPayableIdSchema,
-  accountsPayableSupplierSchema,
-  accountsPayableStatusSchema
+  updateAccountsPayableStatusJsonSchema,
 } from '../../../application/dto/accountsPayable/AccountsPayableDTOs';
 
 export async function accountsPayableRoutes(fastify: FastifyInstance) {
   // Criar conta a pagar
   fastify.post('/create', {
     schema: {
-      tags: ['Accounts Payable'],
+      tags: ['accounts-payable'],
       summary: 'Criar nova conta a pagar',
       description: 'Cria uma nova conta a pagar. Todas as datas devem ser enviadas no formato YYYY-MM-DD (ex: 2023-12-31)',
       body: createAccountsPayableJsonSchema,
@@ -47,7 +43,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
   // Buscar conta a pagar por ID
   fastify.get('/:id', {
     schema: {
-      tags: ['Accounts Payable'],
+      tags: ['accounts-payable'],
       summary: 'Buscar conta a pagar por ID',
       params: accountsPayableIdJsonSchema,
       response: {
@@ -74,7 +70,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
   // Listar todas as contas a pagar
   fastify.get('/all', {
     schema: {
-      tags: ['Accounts Payable'],
+      tags: ['accounts-payable'],
       summary: 'Listar todas as contas a pagar',
       response: {
         200: {
@@ -93,7 +89,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
   // Buscar contas a pagar por fornecedor
   fastify.get('/supplier/:supplierId', {
     schema: {
-      tags: ['Accounts Payable'],
+      tags: ['accounts-payable'],
       summary: 'Buscar contas a pagar por fornecedor',
       params: accountsPayableSupplierJsonSchema,
       response: {
@@ -113,7 +109,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
   // Buscar contas a pagar por status
   fastify.get('/status/:status', {
     schema: {
-      tags: ['Accounts Payable'],
+      tags: ['accounts-payable'],
       summary: 'Buscar contas a pagar por status',
       params: accountsPayableStatusJsonSchema,
       response: {
@@ -133,7 +129,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
   // Buscar contas a pagar em atraso
   fastify.get('/overdue', {
     schema: {
-      tags: ['Accounts Payable'],
+      tags: ['accounts-payable'],
       summary: 'Buscar contas a pagar em atraso',
       response: {
         200: {
@@ -152,7 +148,7 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
   // Atualizar conta a pagar
   fastify.put('/update/:id', {
     schema: {
-      tags: ['Accounts Payable'],
+      tags: ['accounts-payable'],
       summary: 'Atualizar conta a pagar',
       description: 'Atualiza uma conta a pagar existente. Todas as datas devem ser enviadas no formato YYYY-MM-DD (ex: 2023-12-31)',
       params: accountsPayableIdJsonSchema,
@@ -186,10 +182,47 @@ export async function accountsPayableRoutes(fastify: FastifyInstance) {
     handler: accountsPayableController.update.bind(accountsPayableController),
   });
 
+   // Atualizar apenas o status da conta a pagar
+  fastify.patch('/update-status/:id', {
+    schema: {
+      tags: ['accounts-payable'],
+      summary: 'Atualizar status da conta a pagar',
+      description: 'Atualiza apenas o status de uma conta a pagar existente',
+      params: accountsPayableIdJsonSchema,
+      body: updateAccountsPayableStatusJsonSchema,
+      response: {
+        200: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            message: { type: 'string' },
+            data: { type: 'object' },
+          },
+        },
+        400: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            message: { type: 'string' },
+          },
+        },
+        404: {
+          type: 'object',
+          properties: {
+            success: { type: 'boolean' },
+            message: { type: 'string' },
+          },
+        },
+      },
+    },
+    preValidation: [authenticate],
+    handler: accountsPayableController.updateStatus.bind(accountsPayableController),
+  });
+
   // Deletar conta a pagar
   fastify.delete('/:id', {
     schema: {
-      tags: ['Accounts Payable'],
+      tags: ['accounts-payable'],
       summary: 'Deletar conta a pagar',
       params: accountsPayableIdJsonSchema,
       response: {
