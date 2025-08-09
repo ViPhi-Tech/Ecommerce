@@ -1,5 +1,12 @@
-import { Component, computed, inject, OnInit, signal, effect } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  computed,
+  inject,
+  OnInit,
+  signal,
+  effect,
+} from '@angular/core';
+import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { NgIcon } from '@ng-icons/core';
 import { Router } from '@angular/router';
@@ -17,10 +24,12 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
   templateUrl: './accounts-payable-kanban.component.html',
   styleUrls: ['./accounts-payable-kanban.component.scss'],
   imports: [CommonModule, ButtonModule, NgIcon, KanbanComponent],
+  providers: [CurrencyPipe],
 })
 export class AccountsPayableKanbanComponent implements OnInit {
   private router = inject(Router);
   private state = inject(AccountsPayableState);
+  private currencyPipe = inject(CurrencyPipe);
 
   // Signals
   kanbanColumns = signal<KanbanColumn[]>([]);
@@ -50,7 +59,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
   private setupKanbanColumns() {
     const accounts = this.accountsPayableList();
     console.log('Accounts Payable List:', accounts);
-    
+
     // Definir as colunas do Kanban
     const columns: KanbanColumn[] = [
       {
@@ -100,39 +109,17 @@ export class AccountsPayableKanbanComponent implements OnInit {
       id: account.uuid,
       title: `${account.supplier?.tradeName || 'Fornecedor'} - ${account.description}`,
       description: `Valor: R$ ${account.amount.toFixed(2)}`,
-      status: this.determineAccountStatus(account),
+      status: account?.status || 'pending',
       priority: this.determinePriority(account),
       assignee: 'Sistema',
       dueDate: account.dueDate,
       tags: [
         account.recurringPurchase ? 'Recorrente' : 'Única',
-        `R$ ${account.amount.toFixed(2)}`,
+        `${this.currencyPipe.transform(account.amount, 'BRL')}`,
       ],
       // Dados adicionais para uso posterior
       accountData: account,
     };
-  }
-
-  private determineAccountStatus(account: IAccountsPayable): string {
-    const now = new Date();
-    const dueDate = new Date(account.dueDate);
-    const daysDifference = Math.ceil(
-      (dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
-    );
-
-    if (account.status === 'paid') {
-      return 'paid';
-    }
-
-    if (daysDifference < 0) {
-      return 'overdue';
-    }
-
-    if (daysDifference <= 7) {
-      return 'due_soon';
-    }
-
-    return 'pending';
   }
 
   private determinePriority(
@@ -160,21 +147,30 @@ export class AccountsPayableKanbanComponent implements OnInit {
   }
 
   onCardClick(card: any) {
+    console.log('Card clicked:', card);
     // Navegar para detalhes ou edição da conta
-    const account = card['accountData'] as IAccountsPayable;
-    this.router.navigate([
-      { outlets: { drawer: ['accounts-payable', account.uuid] } },
-    ]);
+    // const account = card['accountData'] as IAccountsPayable;
+    // this.router.navigate([
+    //   { outlets: { drawer: ['accounts-payable', account.uuid] } },
+    // ]);
   }
 
-  onCardDrop(dropEvent: { event: CdkDragDrop<KanbanCard[]>, sourceColumn: string, targetColumn: string }) {
+  onCardDrop(dropEvent: {
+    event: CdkDragDrop<KanbanCard[]>;
+    sourceColumn: string;
+    targetColumn: string;
+  }) {
     const { event, sourceColumn, targetColumn } = dropEvent;
     if (sourceColumn === targetColumn) {
       // Reordenar dentro da mesma coluna
       const updatedColumns = this.kanbanColumns().map(column => {
         if (column.id === sourceColumn) {
           const updatedCards = [...column.cards];
-          moveItemInArray(updatedCards, event.previousIndex, event.currentIndex);
+          moveItemInArray(
+            updatedCards,
+            event.previousIndex,
+            event.currentIndex
+          );
           return { ...column, cards: updatedCards };
         }
         return column;

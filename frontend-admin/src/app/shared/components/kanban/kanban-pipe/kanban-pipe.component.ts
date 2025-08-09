@@ -31,19 +31,7 @@ export class KanbanPipeComponent {
     return col.maxCards ? col.cards.length >= col.maxCards : false;
   });
 
-  onCardClick(card: KanbanCard) {
-    this.cardClick.emit(card);
-  }
-
-  onCardDrop(event: CdkDragDrop<KanbanCard[]>) {
-    this.cardDrop.emit(event);
-  }
-
-  toggleCollapse() {
-    this.isCollapsed.update(collapsed => !collapsed);
-  }
-
-  getColumnColorClass() {
+  columnColorClass = computed(() => {
     const color = this.column().color;
     if (!color) return 'border-gray-300 dark:border-gray-600';
 
@@ -59,22 +47,34 @@ export class KanbanPipeComponent {
     };
 
     return colorMap[color] || 'border-gray-300 dark:border-gray-600';
-  }
+  });
 
-  getHeaderColorClass() {
+  headerColorClass = computed(() => {
     const color = this.column().color;
-    if (!color) return 'bg-gray-50 dark:bg-gray-800';
+    if (!color) return 'bg-gray-100 dark:bg-gray-800';
 
     const colorMap: Record<string, string> = {
-      blue: 'bg-blue-50 dark:bg-blue-900/20',
-      green: 'bg-green-50 dark:bg-green-900/20',
-      yellow: 'bg-yellow-50 dark:bg-yellow-900/20',
-      red: 'bg-red-50 dark:bg-red-900/20',
-      purple: 'bg-purple-50 dark:bg-purple-900/20',
-      pink: 'bg-pink-50 dark:bg-pink-900/20',
-      indigo: 'bg-indigo-50 dark:bg-indigo-900/20',
+      blue: 'bg-blue-100 dark:bg-blue-900/20',
+      green: 'bg-green-100 dark:bg-green-900/20',
+      yellow: 'bg-yellow-100 dark:bg-yellow-900/20',
+      red: 'bg-red-100 dark:bg-red-900/20',
+      purple: 'bg-purple-100 dark:bg-purple-900/20',
+      pink: 'bg-pink-100 dark:bg-pink-900/20',
+      indigo: 'bg-indigo-100 dark:bg-indigo-900/20',
     };
 
     return colorMap[color] || 'bg-gray-50 dark:bg-gray-800';
+  });
+
+  onCardClick(card: KanbanCard) {
+    this.cardClick.emit(card);
+  }
+
+  onCardDrop(event: CdkDragDrop<KanbanCard[]>) {
+    this.cardDrop.emit(event);
+  }
+
+  toggleCollapse() {
+    this.isCollapsed.update(collapsed => !collapsed);
   }
 }

@@ -38,7 +38,11 @@ export class KanbanComponent implements OnInit {
 
   // Outputs
   cardClick = output<KanbanCard>();
-  cardDrop = output<{ event: CdkDragDrop<KanbanCard[]>, sourceColumn: string, targetColumn: string }>();
+  cardDrop = output<{
+    event: CdkDragDrop<KanbanCard[]>;
+    sourceColumn: string;
+    targetColumn: string;
+  }>();
 
   ngOnInit() {}
 
@@ -49,11 +53,11 @@ export class KanbanComponent implements OnInit {
   onCardDrop(event: CdkDragDrop<KanbanCard[]>) {
     const sourceColumnId = event.previousContainer.id;
     const targetColumnId = event.container.id;
-    
+
     this.cardDrop.emit({
       event,
       sourceColumn: sourceColumnId,
-      targetColumn: targetColumnId
+      targetColumn: targetColumnId,
     });
   }
 

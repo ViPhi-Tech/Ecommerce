@@ -14,9 +14,13 @@ export class XmlUtils {
           processEntities: true,
           isArray: (name, jpath) => {
             // Mantém arrays para elementos que podem ter múltiplas ocorrências
-            if (jpath === 'nfeProc.NFe.infNFe.det' || jpath === 'NFe.infNFe.det') return true;
+            if (
+              jpath === 'nfeProc.NFe.infNFe.det' ||
+              jpath === 'NFe.infNFe.det'
+            )
+              return true;
             return false;
-          }
+          },
         });
         const result = parser.parse(xml);
         resolve(result);

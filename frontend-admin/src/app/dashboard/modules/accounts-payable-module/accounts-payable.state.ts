@@ -37,11 +37,13 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
   }
 
   setAccountsPayableList(list: IAccountsPayable[]) {
-    list = list.map(item => ({
-      ...item,
-      supplierName: item.supplier?.tradeName || 'Fornecedor Desconhecido',
-      ...this.convertStatus(item),
-    }));
+    list = list.map(item => {
+      item.status = this.determineAccountStatus(item);
+      return {
+        ...item,
+        ...this.convertStatus(item),
+      };
+    });
 
     this.updateState('accountsPayableList', list);
   }
@@ -61,8 +63,32 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
       return item;
     });
     console.log('Updated Accounts Payable List:', updatedList);
-    
+
     this.updateState('accountsPayableList', updatedList);
+  }
+
+  private determineAccountStatus(
+    account: IAccountsPayable
+  ): AccountsPayableStatus {
+    const now = new Date();
+    const dueDate = new Date(account.dueDate);
+    const daysDifference = Math.ceil(
+      (dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    if (account.status === 'paid') {
+      return 'paid';
+    }
+
+    if (daysDifference < 0) {
+      return 'overdue';
+    }
+
+    if (daysDifference <= 7) {
+      return 'due_soon';
+    }
+
+    return 'pending';
   }
 
   convertStatus(item: IAccountsPayable) {
@@ -78,13 +104,13 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
         statusLabel: 'Pago',
         statusBadgeColor: 'success',
       },
+      due_soon: {
+        statusLabel: 'Vence em Breve',
+        statusBadgeColor: 'warn',
+      },
       overdue: {
         statusLabel: 'Vencido',
         statusBadgeColor: 'danger',
-      },
-      cancelled: {
-        statusLabel: 'Cancelado',
-        statusBadgeColor: 'secondary',
       },
       unknown: {
         statusLabel: 'Desconhecido',
@@ -92,8 +118,6 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
       },
     };
 
-    return (
-      statusMap[item?.status || 'unknown']
-    );
+    return statusMap[item?.status || 'unknown'];
   }
 }
