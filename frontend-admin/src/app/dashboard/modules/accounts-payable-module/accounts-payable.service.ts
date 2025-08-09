@@ -56,10 +56,18 @@ export class AccountsPayableService {
 
   updateAccountPayableStatus(
     id: number,
-    status: AccountsPayableStatus
+    status: AccountsPayableStatus,
+    skipLoader = true
   ): Observable<ApiResponse> {
-    return this.http.patch<ApiResponse>(`${this.apiUrl}/update-status/${id}`, {
-      status,
-    });
+    const headers: any = {};
+    if (skipLoader) {
+      headers['Skip-Loader'] = 'true';
+    }
+
+    return this.http.patch<ApiResponse>(
+      `${this.apiUrl}/update-status/${id}`,
+      { status },
+      { headers }
+    );
   }
 }

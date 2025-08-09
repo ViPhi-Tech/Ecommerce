@@ -23,7 +23,7 @@ export class KanbanCardComponent {
   cardClick = output<KanbanCard>();
 
   // Signals
-  isHovered = signal(false);
+  isHovered = signal(true);
 
   // Computed
   cardStyle = computed(() => ({

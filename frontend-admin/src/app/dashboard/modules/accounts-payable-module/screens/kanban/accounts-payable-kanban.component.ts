@@ -69,7 +69,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
         cardsActions: [
           {
             label: 'Editar',
-            icon: 'lucideEdit',
+            icon: 'lucideSquarePen',
             action: card => {
               this.editAccount(card);
             },
@@ -99,7 +99,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
         cardsActions: [
           {
             label: 'Editar',
-            icon: 'lucideEdit',
+            icon: 'lucideSquarePen',
             action: card => {
               this.editAccount(card);
             },
@@ -136,7 +136,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
           },
           {
             label: 'Editar',
-            icon: 'lucideEdit',
+            icon: 'lucideSquarePen',
             action: card => {
               this.editAccount(card);
             },

@@ -63,7 +63,7 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
       }
       return item;
     });
-    this.updateState('accountsPayableList', updatedList);
+    this.setAccountsPayableList(updatedList);
 
     lastValueFrom(
       this.service.updateAccountPayableStatus(id, status).pipe(
