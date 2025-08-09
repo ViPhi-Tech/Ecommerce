@@ -32,18 +32,6 @@ export class AccountsPayableListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
-    headerButtons: [
-      {
-        icon: 'pi pi-plus',
-        label: 'Adicionar',
-        tooltip: 'Adicionar Conta a Pagar',
-        action: () => {
-          this.router.navigate([
-            { outlets: { drawer: ['accounts-payable', 'new'] } },
-          ]);
-        },
-      },
-    ],
     columns: [
       // { field: 'id', caption: 'ID', sortable: true, filter: true },
       {
@@ -119,11 +107,15 @@ export class AccountsPayableListComponent implements OnInit {
   });
 
   constructor() {
-    this.coreService.setPageTitle('Contas a Pagar', 'Lista de contas a pagar');
+    this.coreService.setPageTitle('Financeiro', '');
   }
 
   async ngOnInit() {
-    await this.state.getAccountsPayableList();
+    this.loadAccountsPayable();
+  }
+
+  loadAccountsPayable() {
+    this.state.getAccountsPayableList();
   }
 
   // Método para dar baixa na conta a pagar
@@ -159,6 +151,10 @@ export class AccountsPayableListComponent implements OnInit {
           });
       },
     });
+  }
+
+  addNewAccount() {
+    this.router.navigate([{ outlets: { drawer: ['accounts-payable', 'new'] } }]);
   }
 
   edit(id: number) {

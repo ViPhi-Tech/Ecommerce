@@ -36,24 +36,27 @@
             [rounded]="true"
             (click)="actionPopover.toggle($event); $event.stopPropagation()"
           />
-
-          <p-popover #actionPopover>
-            <div class="actions-menu">
-              @for (action of actions(); track action.label) {
-                <button
-                  type="button"
-                  class="action-item"
-                  (click)="onActionClick(action, $event); actionPopover.hide()"
-                >
-                  @if (action.icon) {
-                    <ng-icon [name]="action.icon" class="w-4 h-4"></ng-icon>
-                  }
-                  <span>{{ action.label }}</span>
-                </button>
-              }
-            </div>
-          </p-popover>
         }
+        <p-popover
+          #actionPopover
+          styleClass="popover-actions"
+          [dismissable]="true"
+        >
+          <div>
+            @for (action of actions(); track action.label) {
+              <button
+                type="button"
+                class="action-item"
+                (click)="onActionClick(action, $event); actionPopover.hide()"
+              >
+                @if (action.icon) {
+                  <ng-icon [name]="action.icon" class="w-4 h-4"></ng-icon>
+                }
+                <span>{{ action.label }}</span>
+              </button>
+            }
+          </div>
+        </p-popover>
       </div>
     </div>
   </div>

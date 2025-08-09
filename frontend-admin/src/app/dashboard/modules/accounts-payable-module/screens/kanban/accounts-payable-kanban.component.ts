@@ -18,6 +18,7 @@ import {
   KanbanCard,
 } from 'app/shared/components/kanban/kanban.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CoreService } from 'app/shared/services/core.service';
 
 @Component({
   selector: 'fuse-accounts-payable-kanban',
@@ -28,6 +29,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 })
 export class AccountsPayableKanbanComponent implements OnInit {
   private router = inject(Router);
+  private coreService = inject(CoreService);
   private state = inject(AccountsPayableState);
   private currencyPipe = inject(CurrencyPipe);
 
@@ -39,6 +41,8 @@ export class AccountsPayableKanbanComponent implements OnInit {
   accountsPayableList = computed(() => this.state.accountsPayableList());
 
   constructor() {
+    this.coreService.setPageTitle('Financeiro', '');
+    
     // Effect que executa automaticamente quando accountsPayableList mudar
     effect(() => {
       const accounts = this.accountsPayableList();
