@@ -41,6 +41,7 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
       item.status = this.determineAccountStatus(item);
       return {
         ...item,
+        supplierName: item.supplier?.legalName || 'Fornecedor Desconhecido',
         ...this.convertStatus(item),
       };
     });

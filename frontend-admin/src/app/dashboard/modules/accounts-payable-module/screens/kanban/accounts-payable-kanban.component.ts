@@ -58,7 +58,6 @@ export class AccountsPayableKanbanComponent implements OnInit {
 
   private setupKanbanColumns() {
     const accounts = this.accountsPayableList();
-    console.log('Accounts Payable List:', accounts);
 
     // Definir as colunas do Kanban
     const columns: KanbanColumn[] = [
@@ -67,6 +66,29 @@ export class AccountsPayableKanbanComponent implements OnInit {
         title: 'Pendente',
         color: 'yellow',
         cards: [],
+        cardsActions: [
+          {
+            label: 'Editar',
+            icon: 'lucideEdit',
+            action: (card) => {
+              this.editAccount(card);
+            },
+          },
+          {
+            label: 'Visualizar',
+            icon: 'lucideEye',
+            action: (card) => {
+              this.viewAccount(card);
+            },
+          },
+          {
+            label: 'Excluir',
+            icon: 'lucideTrash2',
+            action: (card) => {
+              this.deleteAccount(card);
+            },
+          }
+        ],
         maxCards: 50,
       },
       {
@@ -74,6 +96,29 @@ export class AccountsPayableKanbanComponent implements OnInit {
         title: 'Vence em Breve',
         color: 'blue',
         cards: [],
+        cardsActions: [
+          {
+            label: 'Editar',
+            icon: 'lucideEdit',
+            action: (card) => {
+              this.editAccount(card);
+            },
+          },
+          {
+            label: 'Marcar como Pago',
+            icon: 'lucideCheck',
+            action: (card) => {
+              this.markAsPaid(card);
+            },
+          },
+          {
+            label: 'Visualizar',
+            icon: 'lucideEye',
+            action: (card) => {
+              this.viewAccount(card);
+            },
+          }
+        ],
         maxCards: 30,
       },
       {
@@ -81,6 +126,29 @@ export class AccountsPayableKanbanComponent implements OnInit {
         title: 'Vencidas',
         color: 'red',
         cards: [],
+        cardsActions: [
+          {
+            label: 'Pagar Urgente',
+            icon: 'lucideAlertTriangle',
+            action: (card) => {
+              this.markAsPaid(card);
+            },
+          },
+          {
+            label: 'Editar',
+            icon: 'lucideEdit',
+            action: (card) => {
+              this.editAccount(card);
+            },
+          },
+          {
+            label: 'Visualizar',
+            icon: 'lucideEye',
+            action: (card) => {
+              this.viewAccount(card);
+            },
+          }
+        ],
         maxCards: 20,
       },
       {
@@ -88,6 +156,22 @@ export class AccountsPayableKanbanComponent implements OnInit {
         title: 'Pagas',
         color: 'green',
         cards: [],
+        cardsActions: [
+          {
+            label: 'Visualizar',
+            icon: 'lucideEye',
+            action: (card) => {
+              this.viewAccount(card);
+            },
+          },
+          {
+            label: 'Gerar Comprovante',
+            icon: 'lucideDownload',
+            action: (card) => {
+              this.generateReceipt(card);
+            },
+          }
+        ],
       },
     ];
 
@@ -221,5 +305,51 @@ export class AccountsPayableKanbanComponent implements OnInit {
 
   refreshData() {
     this.loadAccountsPayable();
+  }
+
+  editAccount(card: KanbanCard) {
+    const account = card['accountData'] as IAccountsPayable;
+    if (account) {
+      this.router.navigate([
+        { outlets: { drawer: ['accounts-payable', account.uuid] } },
+      ]);
+    }
+  }
+
+  viewAccount(card: KanbanCard) {
+    const account = card['accountData'] as IAccountsPayable;
+    if (account) {
+      this.router.navigate([
+        { outlets: { drawer: ['accounts-payable', account.uuid, 'view'] } },
+      ]);
+    }
+  }
+
+  deleteAccount(card: KanbanCard) {
+    const account = card['accountData'] as IAccountsPayable;
+    if (account) {
+      if (confirm(`Tem certeza que deseja excluir a conta "${account.description}"?`)) {
+        // Implementar lógica de exclusão
+        this.state.removeAccountPayable(account.id);
+      }
+    }
+  }
+
+  markAsPaid(card: KanbanCard) {
+    const account = card['accountData'] as IAccountsPayable;
+    if (account) {
+      if (confirm(`Marcar a conta "${account.description}" como paga?`)) {
+        this.updateAccountStatus(account.id, 'paid');
+      }
+    }
+  }
+
+  generateReceipt(card: KanbanCard) {
+    const account = card['accountData'] as IAccountsPayable;
+    if (account) {
+      console.log('Gerando comprovante para:', account.description);
+      // Implementar lógica de geração de comprovante
+      alert('Funcionalidade de gerar comprovante será implementada em breve.');
+    }
   }
 }

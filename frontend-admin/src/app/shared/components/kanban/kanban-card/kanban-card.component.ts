@@ -1,22 +1,29 @@
-import { Component, input, output, computed } from '@angular/core';
+import { Component, input, output, computed, signal } from '@angular/core';
 import { NgClass, NgStyle } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
-import { KanbanCard } from '../kanban.component';
+import { ButtonModule } from 'primeng/button';
+import { PopoverModule } from 'primeng/popover';
+import { MenuModule } from 'primeng/menu';
+import { KanbanCard, CardAction } from '../kanban.component';
 
 @Component({
   selector: 'fuse-kanban-card',
   templateUrl: './kanban-card.component.html',
   styleUrls: ['./kanban-card.component.scss'],
-  imports: [NgClass, NgIcon, NgStyle],
+  imports: [NgClass, NgIcon, NgStyle, ButtonModule, PopoverModule, MenuModule],
 })
 export class KanbanCardComponent {
   // Inputs
   card = input.required<KanbanCard>();
   height = input<number>(120);
   allowDrag = input<boolean>(true);
+  actions = input<CardAction[]>([]);
 
   // Outputs
   cardClick = output<KanbanCard>();
+
+  // Signals
+  isHovered = signal(false);
 
   // Computed
   cardStyle = computed(() => ({
@@ -53,6 +60,19 @@ export class KanbanCardComponent {
 
   onClick() {
     this.cardClick.emit(this.card());
+  }
+
+  onMouseEnter() {
+    this.isHovered.set(true);
+  }
+
+  onMouseLeave() {
+    this.isHovered.set(false);
+  }
+
+  onActionClick(action: CardAction, event: Event) {
+    event.stopPropagation(); // Evita que o clique no botão dispare o click do card
+    action.action(this.card());
   }
 
   formatDate(date: Date | string | undefined): string {

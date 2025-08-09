@@ -20,6 +20,7 @@
 .kanban-card:hover {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   border-color: rgb(147 197 253);
+  transform: translateY(-1px);
 }
 
 .kanban-card:focus {
@@ -32,6 +33,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  position: relative;
 }
 
 .card-title {
@@ -41,6 +43,7 @@
   color: rgb(17 24 39);
   margin: 0;
   flex: 1;
+  margin-right: 0.5rem;
 }
 
 :host-context(.dark) .card-title {
@@ -54,8 +57,79 @@
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 500;
-  margin-left: 0.5rem;
   flex-shrink: 0;
+}
+
+/* Botão de Ações */
+.actions-button {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  flex-shrink: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.9);
+  transition: all 0.2s ease;
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.kanban-card:hover .actions-button {
+  opacity: 1;
+  visibility: visible;
+  transform: scale(1);
+}
+
+.actions-button:hover {
+  background-color: rgba(59, 130, 246, 0.1) !important;
+  border-color: rgba(59, 130, 246, 0.3) !important;
+  transform: scale(1.05);
+}
+
+:host-context(.dark) .actions-button {
+  background-color: rgba(31, 41, 55, 0.9) !important;
+  border-color: rgba(75, 85, 99, 0.5) !important;
+  color: rgb(209, 213, 219) !important;
+}
+
+:host-context(.dark) .actions-button:hover {
+  background-color: rgba(55, 65, 81, 0.9) !important;
+  border-color: rgba(147, 197, 253, 0.3) !important;
+}
+
+/* Menu de Ações */
+.actions-menu {
+  padding: 0.5rem 0;
+  min-width: 150px;
+}
+
+.action-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: rgb(55 65 81);
+  transition: all 0.2s ease;
+}
+
+.action-item:hover {
+  background-color: rgb(243 244 246);
+  color: rgb(17 24 39);
+}
+
+:host-context(.dark) .action-item {
+  color: rgb(209 213 219);
+}
+
+:host-context(.dark) .action-item:hover {
+  background-color: rgb(55 65 81);
+  color: rgb(243 244 246);
 }
 
 /* Descrição */

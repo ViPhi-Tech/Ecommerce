@@ -14,12 +14,19 @@ export interface KanbanCard {
   [key: string]: any;
 }
 
+export interface CardAction {
+  label: string;
+  icon?: string;
+  action: (card: KanbanCard) => void;
+}
+
 export interface KanbanColumn {
   id: string;
   title: string;
   color?: string;
   cards: KanbanCard[];
   maxCards?: number;
+  cardsActions?: CardAction[];
 }
 
 @Component({

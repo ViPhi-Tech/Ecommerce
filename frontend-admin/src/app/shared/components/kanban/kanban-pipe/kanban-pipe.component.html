@@ -64,6 +64,7 @@
               [card]="card"
               [height]="cardHeight()"
               [allowDrag]="allowDragDrop()"
+              [actions]="column().cardsActions || []"
               (cardClick)="onCardClick(card)"
             ></fuse-kanban-card>
           </div>
