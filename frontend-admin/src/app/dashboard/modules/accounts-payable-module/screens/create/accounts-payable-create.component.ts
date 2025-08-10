@@ -70,7 +70,6 @@ export class AccountsPayableCreateComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.coreService.setPageTitle('', '');
     this.supplierState.getSupplierList();
     this.activatedRoute.params
       .pipe(takeUntilDestroyed(this.destroyedRef))
@@ -79,15 +78,7 @@ export class AccountsPayableCreateComponent implements OnInit {
         if (id) {
           this.title.set('Editar Conta a Pagar');
           this.loadInfos(id);
-          this.coreService.setPageTitle(
-            'Editar Conta a Pagar',
-            'Preencha os dados da conta a pagar abaixo'
-          );
         } else {
-          this.coreService.setPageTitle(
-            'Adicionar Conta a Pagar',
-            'Preencha os dados da nova conta a pagar abaixo'
-          );
           this.loadInfos();
         }
       });
@@ -125,6 +116,7 @@ export class AccountsPayableCreateComponent implements OnInit {
             summary: 'Erro',
             detail: 'Erro ao carregar conta a pagar',
           });
+          this.onCloseDialog();
           console.error('Erro ao carregar conta a pagar:', error);
         },
       });

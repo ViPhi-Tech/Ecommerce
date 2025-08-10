@@ -169,3 +169,11 @@ input {
 .p-datatable-filter .p-button {
   height: 25px !important;
 }
+
+.p-popover:before {
+  margin-left: -5px !important;
+}
+
+.p-popover:after {
+  margin-left: -3px !important;
+}

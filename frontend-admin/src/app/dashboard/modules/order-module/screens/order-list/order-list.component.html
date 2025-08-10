@@ -10,22 +10,22 @@
     </div>
 
     <div class="flex gap-3 ml-auto">
-      @if (state.currentView() === 'list') {
+      @if (state.currentView() === 'grid') {
         <p-button
           [text]="true"
-          [variant]="state.currentView() === 'list' ? undefined : 'outlined'"
-          (onClick)="state.setView('table')"
+          [variant]="state.currentView() === 'grid' ? undefined : 'outlined'"
+          (onClick)="state.setView('list')"
           pTooltip="Visualizar em tabela"
           tooltipPosition="bottom"
           label="Listagem"
         >
         </p-button>
       }
-      @if (state.currentView() === 'table') {
+      @if (state.currentView() === 'list') {
         <p-button
           [text]="true"
-          [variant]="state.currentView() === 'table' ? undefined : 'outlined'"
-          (onClick)="state.setView('list')"
+          [variant]="state.currentView() === 'list' ? undefined : 'outlined'"
+          (onClick)="state.setView('grid')"
           pTooltip="Visualizar em cards"
           tooltipPosition="bottom"
           label="Grid"
@@ -34,6 +34,7 @@
       }
       <p-button
         [text]="true"
+        styleClass="h-full"
         (onClick)="refreshOrders()"
         pTooltip="Atualizar dados"
         tooltipPosition="bottom"
@@ -51,7 +52,7 @@
     </div>
   </div>
 
-  @if (state.currentView() === 'table') {
+  @if (state.currentView() === 'list') {
     <div class="animate-left">
       <fuse-table
         [data]="state.orderList()"
@@ -66,7 +67,7 @@
       </fuse-table>
     </div>
   }
-  @if (state.currentView() === 'list') {
+  @if (state.currentView() === 'grid') {
     <div class="animate-right space-y-4">
       <div class="ounded-lg border bg-card text-card-foreground shadow-sm">
         <div class="p-6 pt-6">

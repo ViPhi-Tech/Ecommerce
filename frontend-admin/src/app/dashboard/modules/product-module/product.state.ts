@@ -15,7 +15,7 @@ export class ProductState extends BaseState<ProductModuleState> {
     productList: [],
     view:
       (localStorage.getItem('productView') as ProductModuleState['view']) ||
-      'table',
+      'list',
     loading: false,
     error: null,
     orderFilter: '',
@@ -126,7 +126,7 @@ export class ProductState extends BaseState<ProductModuleState> {
   clearState() {
     this.state.set({
       productList: [],
-      view: 'table',
+      view: 'list',
       loading: false,
       error: null,
       orderFilter: '',

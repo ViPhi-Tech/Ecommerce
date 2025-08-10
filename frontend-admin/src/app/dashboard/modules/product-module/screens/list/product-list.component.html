@@ -10,27 +10,29 @@
     </div>
 
     <div class="flex gap-3 ml-auto">
-      <!-- <p-button
-        [variant]="state.currentView() === 'table' ? undefined : 'outlined'"
-        [text]="true"
-        (onClick)="state.setView('table')"
-        pTooltip="Visualizar em tabela"
-        tooltipPosition="bottom"
-      >
-        <ng-icon name="lucideList" />
-      </p-button>
-      <p-button
-        [variant]="state.currentView() === 'list' ? undefined : 'outlined'"
-        [text]="true"
-        (onClick)="state.setView('list')"
-        pTooltip="Visualizar em cards"
-        tooltipPosition="bottom"
-      >
-        <ng-icon name="lucideTable" />
-      </p-button> -->
+      @if (state.currentView() === 'grid') {
+        <p-button
+          label="Listagem"
+          [variant]="state.currentView() === 'list' ? undefined : 'outlined'"
+          [text]="true"
+          (onClick)="state.setView('list')"
+          pTooltip="Visualizar em tabela"
+          tooltipPosition="bottom"
+        />
+      } @else {
+        <p-button
+          [variant]="state.currentView() === 'grid' ? undefined : 'outlined'"
+          [text]="true"
+          (onClick)="state.setView('grid')"
+          label="Grid"
+          pTooltip="Visualizar em cards"
+          tooltipPosition="bottom"
+        />
+      }
 
       <p-button
         [text]="true"
+        styleClass="h-full"
         (onClick)="refreshProducts()"
         pTooltip="Atualizar dados"
         tooltipPosition="bottom"
@@ -48,7 +50,7 @@
     </div>
   </div>
 
-  @if (state.currentView() === 'table') {
+  @if (state.currentView() === 'list') {
     <div class="animate-left">
       <fuse-table
         [data]="state.productList()"
@@ -63,7 +65,7 @@
       </fuse-table>
     </div>
   }
-  @if (state.currentView() === 'list') {
+  @if (state.currentView() === 'grid') {
     <div class="animate-right space-y-4">
       <div class="ounded-lg border bg-card text-card-foreground shadow-sm">
         <div class="p-6 pt-6">

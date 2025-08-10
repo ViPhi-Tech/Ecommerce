@@ -19,8 +19,7 @@ export class OrderState extends BaseState<OrderModuleState> {
     orderList: [],
     orderDetails: {} as Order, // Inicializa com um objeto vazio ou pode ser null se não houver detalhes carregados
     view:
-      (localStorage.getItem('orderView') as OrderModuleState['view']) ||
-      'table',
+      (localStorage.getItem('orderView') as OrderModuleState['view']) || 'list',
     loading: false,
     error: null,
   });
@@ -100,7 +99,7 @@ export class OrderState extends BaseState<OrderModuleState> {
     this.updateState('orderDetails', {} as Order);
   }
 
-  setView(view: 'table' | 'list') {
+  setView(view: 'list' | 'grid') {
     this.updateState('view', view);
     localStorage.setItem('orderView', view);
   }
