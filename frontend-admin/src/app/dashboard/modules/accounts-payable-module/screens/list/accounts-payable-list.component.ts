@@ -154,7 +154,9 @@ export class AccountsPayableListComponent implements OnInit {
   }
 
   addNewAccount() {
-    this.router.navigate([{ outlets: { drawer: ['accounts-payable', 'new'] } }]);
+    this.router.navigate([
+      { outlets: { drawer: ['accounts-payable', 'new'] } },
+    ]);
   }
 
   edit(id: number) {

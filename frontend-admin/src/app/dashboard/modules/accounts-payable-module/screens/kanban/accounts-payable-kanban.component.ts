@@ -42,7 +42,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
 
   constructor() {
     this.coreService.setPageTitle('Financeiro', '');
-    
+
     // Effect que executa automaticamente quando accountsPayableList mudar
     effect(() => {
       const accounts = this.accountsPayableList();

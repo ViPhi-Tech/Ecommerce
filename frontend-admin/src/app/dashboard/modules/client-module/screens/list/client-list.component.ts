@@ -1,10 +1,4 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
