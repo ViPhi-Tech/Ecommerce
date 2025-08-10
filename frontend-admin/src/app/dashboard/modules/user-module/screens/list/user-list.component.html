@@ -1,6 +1,34 @@
-<div class="p-8 animate-fade-in">
-  <div class="mb-4">
-    <h1 class="text-xl font-bold">Lista de Usuários</h1>
+<div class="p-6 animate-fade-in">
+  <div class="flex items-center">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+        Usuários - Listagem
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-1">
+        Gerencie seus usuários de forma organizada
+      </p>
+    </div>
+
+    <div class="flex gap-3 ml-auto">
+      <p-button
+        icon="pi pi-refresh"
+        [text]="true"
+        (onClick)="refreshUsers()"
+        pTooltip="Atualizar dados"
+        tooltipPosition="bottom"
+      />
+
+      <p-button
+        icon="pi pi-plus"
+        label="Novo Usuário"
+        (onClick)="addNewUser()"
+        pTooltip="Adicionar novo usuário"
+        tooltipPosition="bottom"
+      />
+    </div>
+  </div>
+
+  <div class="animate-left">
     <fuse-table
       [data]="state.userList()"
       [loading]="state.loading()"

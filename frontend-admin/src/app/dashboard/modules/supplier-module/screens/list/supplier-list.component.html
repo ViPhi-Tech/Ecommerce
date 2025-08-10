@@ -1,6 +1,31 @@
-<div class="p-8 animate-fade-in">
-  <div class="flex justify-between items-center mb-4">
-    <h1 class="text-xl font-bold">Lista de Fornecedores</h1>
+<div class="p-6 animate-fade-in">
+  <div class="flex items-center">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+        Fornecedores - Listagem
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-1">
+        Gerencie seus fornecedores de forma organizada
+      </p>
+    </div>
+
+    <div class="flex gap-3 ml-auto">
+      <p-button
+        icon="pi pi-refresh"
+        [text]="true"
+        (onClick)="refreshSuppliers()"
+        pTooltip="Atualizar dados"
+        tooltipPosition="bottom"
+      />
+
+      <p-button
+        icon="pi pi-plus"
+        label="Novo Fornecedor"
+        (onClick)="addNewSupplier()"
+        pTooltip="Adicionar novo fornecedor"
+        tooltipPosition="bottom"
+      />
+    </div>
   </div>
 
   <div class="animate-left">

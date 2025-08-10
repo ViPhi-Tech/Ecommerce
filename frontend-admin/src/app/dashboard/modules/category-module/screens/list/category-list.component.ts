@@ -4,7 +4,6 @@ import {
   inject,
   OnInit,
   signal,
-  WritableSignal,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
@@ -39,19 +38,6 @@ export class CategoryListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
-    headerButtons: [
-      {
-        icon: 'pi pi-plus',
-        label: 'Adicionar',
-        tooltip: 'Adicionar Categoria',
-        action: () => {
-          // Exemplo de navegação para o outlet auxiliar "drawer"
-          this.router.navigate([
-            { outlets: { drawer: ['categories', 'new'] } },
-          ]);
-        },
-      },
-    ],
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'name', caption: 'Nome', sortable: true, filter: true },
@@ -97,6 +83,14 @@ export class CategoryListComponent implements OnInit {
       'Categorias',
       'Lista de categorias disponíveis'
     );
+  }
+
+  addNewCategory() {
+    this.router.navigate([{ outlets: { drawer: ['categories', 'new'] } }]);
+  }
+
+  refreshCategories() {
+    this.state.getCategoryList();
   }
 
   deleteCategory(id: string) {

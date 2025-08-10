@@ -5,7 +5,6 @@ import {
   inject,
   OnInit,
   signal,
-  WritableSignal,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
@@ -50,17 +49,6 @@ export class ProductListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
-    headerButtons: [
-      {
-        icon: 'pi pi-plus',
-        label: 'Adicionar',
-        tooltip: 'Adicionar Produto',
-        action: () => {
-          // Exemplo de navegação para o outlet auxiliar "drawer"
-          this.router.navigate(['dashboard/products/new']);
-        },
-      },
-    ],
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'name', caption: 'Nome', sortable: true, filter: true },
@@ -131,6 +119,14 @@ export class ProductListComponent implements OnInit {
   ngOnInit() {
     this.state.getProductList();
     this.coreService.setPageTitle('Produtos', 'Lista de produtos disponíveis');
+  }
+
+  addNewProduct() {
+    this.router.navigate(['dashboard/products/new']);
+  }
+
+  refreshProducts() {
+    this.state.getProductList();
   }
 
   editProduct(productId: string) {

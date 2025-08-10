@@ -5,7 +5,6 @@ import {
   signal,
   TemplateRef,
   ViewChild,
-  WritableSignal,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
@@ -57,22 +56,20 @@ export class OrderListComponent implements OnInit {
     this.state.getOrderList();
   }
 
+  addNewOrder() {
+    this.router.navigate(['dashboard', 'orders', 'new']);
+  }
+
+  refreshOrders() {
+    this.state.getOrderList();
+  }
+
   setTableConfig() {
     this.tableConfig.set({
       rowsPerPageOptions: [5, 10, 20],
       rowsPerPage: 10,
       paginator: true,
       pageLinkSize: 5,
-      headerButtons: [
-        {
-          icon: 'pi pi-plus',
-          label: 'Criar Pedido',
-          tooltip: 'Criar Pedido',
-          action: () => {
-            this.router.navigate(['dashboard', 'orders', 'new']);
-          },
-        },
-      ],
       columns: [
         { field: 'id', caption: 'Cód. Pedido', sortable: true, filter: true },
         {

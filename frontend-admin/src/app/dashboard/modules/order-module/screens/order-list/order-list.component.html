@@ -1,19 +1,53 @@
-<div class="p-8 animate-fade-in">
-  <div class="flex justify-between items-center mb-4">
-    <h1 class="text-xl font-bold">Lista de Pedidos</h1>
-    <div class="flex gap-1">
+<div class="p-6 animate-fade-in">
+  <div class="flex items-center">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+        Pedidos - Listagem
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-1">
+        Gerencie seus pedidos de forma visual e organizada
+      </p>
+    </div>
+
+    <div class="flex gap-3 ml-auto">
+      @if (state.currentView() === 'list') {
+        <p-button
+          [text]="true"
+          [variant]="state.currentView() === 'list' ? undefined : 'outlined'"
+          (onClick)="state.setView('table')"
+          pTooltip="Visualizar em tabela"
+          tooltipPosition="bottom"
+          label="Listagem"
+        >
+        </p-button>
+      }
+      @if (state.currentView() === 'table') {
+        <p-button
+          [text]="true"
+          [variant]="state.currentView() === 'table' ? undefined : 'outlined'"
+          (onClick)="state.setView('list')"
+          pTooltip="Visualizar em cards"
+          tooltipPosition="bottom"
+          label="Grid"
+        >
+        </p-button>
+      }
       <p-button
-        [variant]="state.currentView() === 'table' ? undefined : 'outlined'"
-        (onClick)="state.setView('table')"
+        [text]="true"
+        (onClick)="refreshOrders()"
+        pTooltip="Atualizar dados"
+        tooltipPosition="bottom"
       >
-        <ng-icon name="lucideList" />
+        <ng-icon name="lucideRefreshCw" />
       </p-button>
+
       <p-button
-        [variant]="state.currentView() === 'list' ? undefined : 'outlined'"
-        (onClick)="state.setView('list')"
-      >
-        <ng-icon name="lucideTable" />
-      </p-button>
+        icon="pi pi-plus"
+        label="Novo Pedido"
+        (onClick)="addNewOrder()"
+        pTooltip="Criar novo pedido"
+        tooltipPosition="bottom"
+      />
     </div>
   </div>
 

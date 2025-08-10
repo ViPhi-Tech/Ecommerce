@@ -33,17 +33,6 @@ export class SupplierListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
-    headerButtons: [
-      {
-        icon: 'pi pi-plus',
-        label: 'Adicionar',
-        tooltip: 'Adicionar Fornecedor',
-        action: () => {
-          // Exemplo de navegação para o outlet auxiliar "drawer"
-          this.router.navigate([{ outlets: { drawer: ['suppliers', 'new'] } }]);
-        },
-      },
-    ],
     columns: [
       { field: 'id', caption: 'ID', sortable: true },
       { field: 'legalName', caption: 'Razão Social', sortable: true },
@@ -92,6 +81,14 @@ export class SupplierListComponent implements OnInit {
       'Fornecedores',
       'Lista de fornecedores disponíveis'
     );
+  }
+
+  addNewSupplier() {
+    this.router.navigate([{ outlets: { drawer: ['suppliers', 'new'] } }]);
+  }
+
+  refreshSuppliers() {
+    this.state.getSupplierList();
   }
 
   deleteSupplier(id: string) {

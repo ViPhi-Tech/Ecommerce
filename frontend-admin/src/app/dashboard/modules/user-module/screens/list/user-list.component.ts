@@ -5,7 +5,6 @@ import {
   inject,
   OnInit,
   signal,
-  WritableSignal,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
@@ -16,10 +15,8 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { UserService } from '../../user.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { heightAnimation } from 'app/shared/utils/animations';
-import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { UserState } from '../../user.state';
-import { NgTemplateOutlet } from '@angular/common';
 
 @Component({
   selector: 'fuse-user-list',
@@ -78,16 +75,7 @@ export class UserListComponent implements OnInit {
         ],
       },
     ],
-    headerButtons: [
-      {
-        icon: 'pi pi-plus',
-        label: 'Adicionar Usuário',
-        tooltip: 'Adicionar Usuário',
-        action: () => {
-          this.router.navigate([{ outlets: { drawer: ['users', 'new'] } }]);
-        },
-      },
-    ],
+    headerButtons: [],
   });
 
   title = 'Lista de Usuários';
@@ -97,6 +85,14 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.state.getUserList();
+  }
+
+  addNewUser() {
+    this.router.navigate([{ outlets: { drawer: ['users', 'new'] } }]);
+  }
+
+  refreshUsers() {
     this.state.getUserList();
   }
 
