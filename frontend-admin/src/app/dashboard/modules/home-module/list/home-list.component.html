@@ -1,0 +1,152 @@
+<div class="p-6 space-y-6">
+  <!-- Header -->
+  <div class="mb-6">
+    <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
+    <p class="text-gray-600 dark:text-gray-400">Visão geral do seu negócio</p>
+  </div>
+
+  <!-- Indicadores Principais -->
+  <div
+    class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-8"
+  >
+    <div
+      *ngFor="let indicator of indicators"
+      class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
+    >
+      <div class="flex items-center justify-between">
+        <div>
+          <p class="text-sm font-medium text-gray-600 dark:text-gray-400">
+            {{ indicator.title }}
+          </p>
+          <p class="text-2xl font-bold text-gray-900 dark:text-white">
+            {{ indicator.value }}
+          </p>
+          <div class="flex items-center mt-2">
+            <span
+              [class]="
+                indicator.trend === 'up' ? 'text-green-600' : 'text-red-600'
+              "
+              class="text-sm font-medium"
+            >
+              {{ indicator.percentage }}
+            </span>
+            <span class="text-xs text-gray-500 dark:text-gray-400 ml-2"
+              >vs. mês anterior</span
+            >
+          </div>
+        </div>
+        <div
+          [class]="
+            indicator.trend === 'up'
+              ? 'bg-green-100 text-green-600'
+              : 'bg-red-100 text-red-600'
+          "
+          class="p-3 rounded-full"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              *ngIf="indicator.trend === 'up'"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+            />
+            <path
+              *ngIf="indicator.trend === 'down'"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"
+            />
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Gráficos Principais -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Gráfico de Vendas -->
+    <div
+      class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
+    >
+      <div echarts [options]="salesChartOption" class="h-80"></div>
+    </div>
+
+    <!-- Gráfico de Produtos Mais Vendidos -->
+    <div
+      class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
+    >
+      <div echarts [options]="topProductsChartOption" class="h-80"></div>
+    </div>
+  </div>
+
+  <!-- Gráficos Secundários -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <!-- Gráfico de Categorias -->
+    <div
+      class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
+    >
+      <div echarts [options]="categoriesChartOption" class="h-80"></div>
+    </div>
+
+    <!-- Gráfico de Status de Pedidos -->
+    <div
+      class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
+    >
+      <div echarts [options]="orderStatusChartOption" class="h-80"></div>
+    </div>
+  </div>
+
+  <!-- Resumo de Atividades Recentes -->
+  <div
+    class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
+  >
+    <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4">
+      Atividades Recentes
+    </h2>
+    <div class="space-y-4">
+      <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+        <div class="flex-1">
+          <p class="text-sm font-medium text-gray-900 dark:text-white">
+            Novo pedido #1234 foi processado
+          </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Há 5 minutos</p>
+        </div>
+      </div>
+      <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+        <div class="flex-1">
+          <p class="text-sm font-medium text-gray-900 dark:text-white">
+            Cliente João Silva se cadastrou
+          </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Há 12 minutos</p>
+        </div>
+      </div>
+      <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <div class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
+        <div class="flex-1">
+          <p class="text-sm font-medium text-gray-900 dark:text-white">
+            Estoque baixo: Smartphone Galaxy
+          </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Há 25 minutos</p>
+        </div>
+      </div>
+      <div class="flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg">
+        <div class="w-2 h-2 bg-purple-500 rounded-full mr-3"></div>
+        <div class="flex-1">
+          <p class="text-sm font-medium text-gray-900 dark:text-white">
+            Relatório mensal foi gerado
+          </p>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Há 1 hora</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
