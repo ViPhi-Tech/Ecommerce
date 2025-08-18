@@ -44,4 +44,13 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
       this.accountsReceivableList().filter(item => item.id !== id)
     );
   }
+
+  updateAccountReceivableStatus(id: number, status: string) {
+    this.updateState(
+      'accountsReceivableList',
+      this.accountsReceivableList().map(item =>
+        item.id === id ? { ...item, status } : item
+      )
+    );
+  }
 }

@@ -1,0 +1,77 @@
+<div class="animate-fade-in flex flex-col h-full">
+  <!-- Header -->
+  <div class="flex justify-between items-center p-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+        Contas a Receber - Kanban
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-1">
+        Gerencie suas contas a receber de forma visual e organizada
+      </p>
+    </div>
+
+    <div class="flex gap-3">
+      <p-button
+        icon="pi pi-list"
+        label="Lista"
+        [text]="true"
+        (onClick)="navigateToList()"
+        pTooltip="Visualizar em lista"
+        tooltipPosition="bottom"
+      />
+
+      <p-button
+        icon="pi pi-refresh"
+        [text]="true"
+        (onClick)="refreshData()"
+        pTooltip="Atualizar dados"
+        tooltipPosition="bottom"
+      />
+
+      <p-button
+        icon="pi pi-plus"
+        label="Nova Conta"
+        (onClick)="addNewAccount()"
+        pTooltip="Adicionar nova conta a receber"
+        tooltipPosition="bottom"
+      />
+    </div>
+  </div>
+
+  <!-- Kanban Board -->
+  <div class="kanban-container">
+    <fuse-kanban
+      title=""
+      [columns]="kanbanColumns()"
+      [loading]="loading()"
+      [cardHeight]="140"
+      [allowDragDrop]="true"
+      (cardClick)="onCardClick($event)"
+      (cardDrop)="onCardDrop($event)"
+    ></fuse-kanban>
+  </div>
+
+  <!-- Empty State -->
+  @if (!loading() && kanbanColumns().length === 0) {
+    <div class="empty-state-container">
+      <div class="text-center py-12">
+        <ng-icon
+          name="lucideCreditCard"
+          class="w-16 h-16 mx-auto text-gray-400 mb-4"
+        ></ng-icon>
+        <h3 class="text-lg font-medium text-gray-900 dark:text-gray-100 mb-2">
+          Nenhuma conta a receber encontrada
+        </h3>
+        <p class="text-gray-500 dark:text-gray-400 mb-6">
+          Comece adicionando uma nova conta a receber para gerenciar seus
+          recebimentos.
+        </p>
+        <p-button
+          icon="pi pi-plus"
+          label="Adicionar Primeira Conta"
+          (onClick)="addNewAccount()"
+        />
+      </div>
+    </div>
+  }
+</div>
