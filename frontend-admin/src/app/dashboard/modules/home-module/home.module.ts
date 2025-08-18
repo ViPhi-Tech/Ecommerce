@@ -8,7 +8,7 @@ import { homeRoutes } from './home.routing';
   imports: [
     CommonModule,
     RouterModule.forChild(homeRoutes),
-    NgxEchartsModule.forChild()
-  ]
+    NgxEchartsModule.forChild(),
+  ],
 })
-export class HomeModule { }
+export class HomeModule {}

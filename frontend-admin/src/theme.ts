@@ -35,7 +35,7 @@ export const THEME: ApplicationConfig = {
     importProvidersFrom(
       NgIconsModule.withIcons(lucideIcons),
       NgxEchartsModule.forRoot({
-        echarts: () => import('echarts')
+        echarts: () => import('echarts'),
       })
     ),
     provideEnvironmentNgxMask(),
