@@ -5,6 +5,7 @@ import {
   OnInit,
   signal,
   effect,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -19,6 +20,9 @@ import {
 } from 'app/shared/components/kanban/kanban.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CoreService } from 'app/shared/services/core.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { AccountsReceivableService } from '../../accounts-receivable.service';
 
 @Component({
   selector: 'fuse-accounts-receivable-kanban',
@@ -31,7 +35,11 @@ export class AccountsReceivableKanbanComponent implements OnInit {
   private router = inject(Router);
   private coreService = inject(CoreService);
   private state = inject(AccountsReceivableState);
+  private confirmationService = inject(ConfirmationService);
+  private accountsReceivableService = inject(AccountsReceivableService);
   private currencyPipe = inject(CurrencyPipe);
+  private destroyedRef = inject(DestroyRef);
+  private toast = inject(MessageService);
 
   // Signals
   kanbanColumns = signal<KanbanColumn[]>([]);
@@ -63,6 +71,30 @@ export class AccountsReceivableKanbanComponent implements OnInit {
   private setupKanbanColumns() {
     const accounts = this.accountsReceivableList();
 
+    const actions = [
+          {
+            label: 'Editar',
+            icon: 'lucideSquarePen',
+            action: (card: KanbanCard) => {
+              this.editAccount(card);
+            },
+          },
+          {
+            label: 'Visualizar',
+            icon: 'lucideEye',
+            action: (card: KanbanCard) => {
+              this.viewAccount(card);
+            },
+          },
+          {
+            label: 'Excluir',
+            icon: 'lucideTrash2',
+            action: (card: KanbanCard) => {
+              this.deleteAccount(card);
+            },
+          },
+        ]
+
     // Definir as colunas do Kanban
     const columns: KanbanColumn[] = [
       {
@@ -70,29 +102,7 @@ export class AccountsReceivableKanbanComponent implements OnInit {
         title: 'Pendente',
         color: 'yellow',
         cards: [],
-        cardsActions: [
-          {
-            label: 'Editar',
-            icon: 'lucideSquarePen',
-            action: card => {
-              this.editAccount(card);
-            },
-          },
-          {
-            label: 'Visualizar',
-            icon: 'lucideEye',
-            action: card => {
-              this.viewAccount(card);
-            },
-          },
-          {
-            label: 'Excluir',
-            icon: 'lucideTrash2',
-            action: card => {
-              this.deleteAccount(card);
-            },
-          },
-        ],
+        cardsActions: actions,
         maxCards: 50,
       },
       {
@@ -100,29 +110,7 @@ export class AccountsReceivableKanbanComponent implements OnInit {
         title: 'Vence em Breve',
         color: 'blue',
         cards: [],
-        cardsActions: [
-          {
-            label: 'Editar',
-            icon: 'lucideSquarePen',
-            action: card => {
-              this.editAccount(card);
-            },
-          },
-          {
-            label: 'Marcar como Recebido',
-            icon: 'lucideCheck',
-            action: card => {
-              this.markAsReceived(card);
-            },
-          },
-          {
-            label: 'Visualizar',
-            icon: 'lucideEye',
-            action: card => {
-              this.viewAccount(card);
-            },
-          },
-        ],
+        cardsActions: actions,
         maxCards: 30,
       },
       {
@@ -130,29 +118,7 @@ export class AccountsReceivableKanbanComponent implements OnInit {
         title: 'Vencidas',
         color: 'red',
         cards: [],
-        cardsActions: [
-          {
-            label: 'Receber Urgente',
-            icon: 'lucideAlertTriangle',
-            action: card => {
-              this.markAsReceived(card);
-            },
-          },
-          {
-            label: 'Editar',
-            icon: 'lucideSquarePen',
-            action: card => {
-              this.editAccount(card);
-            },
-          },
-          {
-            label: 'Visualizar',
-            icon: 'lucideEye',
-            action: card => {
-              this.viewAccount(card);
-            },
-          },
-        ],
+        cardsActions: actions,
         maxCards: 20,
       },
       {
@@ -160,22 +126,7 @@ export class AccountsReceivableKanbanComponent implements OnInit {
         title: 'Recebidas',
         color: 'green',
         cards: [],
-        cardsActions: [
-          {
-            label: 'Visualizar',
-            icon: 'lucideEye',
-            action: card => {
-              this.viewAccount(card);
-            },
-          },
-          {
-            label: 'Gerar Comprovante',
-            icon: 'lucideDownload',
-            action: card => {
-              this.generateReceipt(card);
-            },
-          },
-        ],
+        cardsActions: actions,
       },
     ];
 
@@ -194,7 +145,7 @@ export class AccountsReceivableKanbanComponent implements OnInit {
 
   private mapAccountToCard(account: IAccountsReceivable): KanbanCard {
     return {
-      id: account.uuid,
+      id: account.id,
       title: `${account.client?.fullName || 'Cliente'} - ${account.description}`,
       description: `Valor: R$ ${account.amount.toFixed(2)}`,
       status: account?.status || 'pending',
@@ -315,7 +266,7 @@ export class AccountsReceivableKanbanComponent implements OnInit {
     const account = card['accountData'] as IAccountsReceivable;
     if (account) {
       this.router.navigate([
-        { outlets: { drawer: ['accounts-receivable', account.uuid] } },
+        { outlets: { drawer: ['accounts-receivable', account.id] } },
       ]);
     }
   }
@@ -324,7 +275,7 @@ export class AccountsReceivableKanbanComponent implements OnInit {
     const account = card['accountData'] as IAccountsReceivable;
     if (account) {
       this.router.navigate([
-        { outlets: { drawer: ['accounts-receivable', account.uuid, 'view'] } },
+        { outlets: { drawer: ['accounts-receivable', account.id, 'view'] } },
       ]);
     }
   }
@@ -332,14 +283,37 @@ export class AccountsReceivableKanbanComponent implements OnInit {
   deleteAccount(card: KanbanCard) {
     const account = card['accountData'] as IAccountsReceivable;
     if (account) {
-      if (
-        confirm(
-          `Tem certeza que deseja excluir a conta "${account.description}"?`
-        )
-      ) {
-        // Implementar lógica de exclusão
-        this.state.removeAccountReceivable(account.id);
-      }
+      this.confirmationService.confirm({
+        message: 'Você tem certeza que deseja excluir esta conta a receber?',
+        header: 'Confirmação de Exclusão',
+        icon: 'pi pi-exclamation-triangle text-red-500',
+        acceptLabel: 'Sim',
+        rejectLabel: 'Não',
+        acceptButtonStyleClass: 'p-button-danger',
+        rejectButtonStyleClass: 'p-button-secondary',
+        accept: () => {
+          this.accountsReceivableService
+            .delete(account.id.toString())
+            .pipe(takeUntilDestroyed(this.destroyedRef))
+            .subscribe({
+              next: () => {
+                this.toast.add({
+                  severity: 'success',
+                  summary: 'Sucesso',
+                  detail: 'Conta a receber excluída com sucesso',
+                });
+                this.state.removeAccountReceivable(account.id);
+              },
+              error: () => {
+                this.toast.add({
+                  severity: 'error',
+                  summary: 'Erro',
+                  detail: 'Erro ao excluir conta a receber',
+                });
+              },
+            });
+        },
+      });
     }
   }
 

@@ -3,6 +3,7 @@ import { inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { Observable, of } from 'rxjs';
 import { environments } from 'src/environments/environments';
+import { AccountsReceivableStatus } from 'app/shared/interfaces/accounts-receivable/AccountsReceivableStatus';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,7 @@ export class AccountsReceivableService {
           competenceDate: new Date('2024-11-01'),
           recurringIncome: false,
           amount: 1500.0,
-          status: 'pending',
+          status: 'pending' as AccountsReceivableStatus,
           statusLabel: 'Pendente',
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -63,7 +64,7 @@ export class AccountsReceivableService {
           competenceDate: new Date('2024-11-01'),
           recurringIncome: true,
           amount: 2000.0,
-          status: 'due_soon',
+          status: 'due_soon' as AccountsReceivableStatus,
           statusLabel: 'Vence em Breve',
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -87,7 +88,7 @@ export class AccountsReceivableService {
           competenceDate: new Date('2024-10-01'),
           recurringIncome: false,
           amount: 5000.0,
-          status: 'overdue',
+          status: 'overdue' as AccountsReceivableStatus,
           statusLabel: 'Vencido',
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -111,7 +112,7 @@ export class AccountsReceivableService {
           competenceDate: new Date('2024-10-01'),
           recurringIncome: true,
           amount: 800.0,
-          status: 'received',
+          status: 'received' as AccountsReceivableStatus,
           statusLabel: 'Recebido',
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -138,6 +139,10 @@ export class AccountsReceivableService {
 
   delete(id: string): Observable<ApiResponse> {
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${id}`);
+  }
+
+  updateAccountReceivableStatus(id: number, status: AccountsReceivableStatus): Observable<ApiResponse> {
+    return this.http.patch<ApiResponse>(`${this.apiUrl}/${id}/status`, { status });
   }
 
   refreshList() {

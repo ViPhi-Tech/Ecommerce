@@ -21,7 +21,9 @@ import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { CoreService } from 'app/shared/services/core.service';
+import { AccountsReceivableState } from '../../accounts-receivable.state';
+import { IAccountsReceivable } from 'app/shared/interfaces/accounts-receivable/AccountsReceivable';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'fuse-accounts-receivable-create',
@@ -37,11 +39,11 @@ import { CoreService } from 'app/shared/services/core.service';
 export class AccountsReceivableCreateComponent implements OnInit {
   destroyedRef = inject(DestroyRef);
   private router = inject(Router);
-  private coreService = inject(CoreService);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
   private toast = inject(MessageService);
   private accountsReceivableService = inject(AccountsReceivableService);
+  public accountsReceivableState = inject(AccountsReceivableState);
 
   @ViewChild('dialogRef') dialogRef!: Dialog;
 
@@ -51,6 +53,7 @@ export class AccountsReceivableCreateComponent implements OnInit {
   subtitle = signal('Preencha os dados da nova conta a receber abaixo');
   submitButtonLabel = signal('Salvar');
   isLoading = signal(true);
+  isView = signal(false);
   visible = signal(true);
 
   accountsReceivableForm!: FormGroup;
@@ -60,7 +63,6 @@ export class AccountsReceivableCreateComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.coreService.setPageTitle('', '');
     this.initForm();
     this.activatedRoute.params
       .pipe(takeUntilDestroyed(this.destroyedRef))
@@ -70,16 +72,14 @@ export class AccountsReceivableCreateComponent implements OnInit {
           this.title.set('Editar Conta a Receber');
           this.subtitle.set('Preencha os dados da conta a receber abaixo');
           this.loadInfos(id);
-          this.coreService.setPageTitle(
-            'Editar Conta a Receber',
-            'Preencha os dados da conta a receber abaixo'
-          );
         } else {
-          this.coreService.setPageTitle(
-            'Adicionar Conta a Receber',
-            'Preencha os dados da nova conta a receber abaixo'
-          );
           this.loadInfos();
+        }
+        const url = this.router.url;
+        this.isView.set(url.includes('/view'));
+        if (this.isView()) {
+          this.accountsReceivableForm.disable();
+          this.title.set('Visualizar Conta a Receber');
         }
       });
   }
@@ -87,6 +87,7 @@ export class AccountsReceivableCreateComponent implements OnInit {
   async loadInfos(id?: string): Promise<void> {
     if (!id) {
       this.isLoading.set(false);
+      this.visible.set(true);
       return;
     }
     this.accountsReceivableService
@@ -94,8 +95,14 @@ export class AccountsReceivableCreateComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: (response: ApiResponse) => {
-          this.accountsReceivableForm.patchValue(response.dados);
+          const data = response.data as IAccountsReceivable;
+
+          this.accountsReceivableForm.patchValue({
+            ...data,
+            dueDate: data.dueDate ? dayjs(data.dueDate).format('DD/MM/YYYY') : '',
+          });
           this.isLoading.set(false);
+          this.visible.set(true);
         },
         error: (error: any) => {
           this.isLoading.set(false);
@@ -104,6 +111,7 @@ export class AccountsReceivableCreateComponent implements OnInit {
             summary: 'Erro',
             detail: 'Erro ao carregar conta a receber',
           });
+          this.onCloseDialog();
           console.error('Erro ao carregar conta a receber:', error);
         },
       });
@@ -147,6 +155,7 @@ export class AccountsReceivableCreateComponent implements OnInit {
               ? 'Conta a receber atualizada com sucesso!'
               : 'Conta a receber criada com sucesso!',
           });
+          this.accountsReceivableState.getAccountsReceivableList();
           this.back();
         },
         error: () => {

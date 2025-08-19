@@ -86,6 +86,10 @@ const routes: Routes = [
         component: AccountsPayableCreateComponent,
       },
       {
+        path: ':id/view',
+        component: AccountsPayableCreateComponent,
+      },
+      {
         path: ':id',
         component: AccountsPayableCreateComponent,
       },
@@ -96,6 +100,10 @@ const routes: Routes = [
     children: [
       {
         path: 'new',
+        component: AccountsReceivableCreateComponent,
+      },
+      {
+        path: ':id/view',
         component: AccountsReceivableCreateComponent,
       },
       {

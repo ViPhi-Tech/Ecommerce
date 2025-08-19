@@ -13,7 +13,6 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CoreService } from 'app/shared/services/core.service';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Dialog, DialogModule } from 'primeng/dialog';
@@ -41,7 +40,6 @@ import { IAccountsPayable } from 'app/shared/interfaces/accounts-payable/Account
 })
 export class AccountsPayableCreateComponent implements OnInit {
   private router = inject(Router);
-  private coreService = inject(CoreService);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
   private toast = inject(MessageService);
@@ -55,6 +53,7 @@ export class AccountsPayableCreateComponent implements OnInit {
   subtitle = signal('Preencha os dados da nova conta a pagar abaixo');
   submitButtonLabel = signal('Salvar');
   isLoading = signal(true);
+  isView = signal(false);
 
   accountsPayableForm!: FormGroup;
 
@@ -80,6 +79,12 @@ export class AccountsPayableCreateComponent implements OnInit {
           this.loadInfos(id);
         } else {
           this.loadInfos();
+        }
+        const url = this.router.url
+        this.isView.set(url.includes('/view'));
+        if (this.isView()) {
+          this.accountsPayableForm.disable();
+          this.title.set('Visualizar Conta a Pagar');
         }
       });
   }
