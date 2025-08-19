@@ -7,4 +7,5 @@ export interface IClientRepository {
   update(id: number, data: Partial<Client>): Promise<Client>;
   findByDocument(document: string): Promise<Client | null>;
   delete(id: number): Promise<void>;
+  countByMonth(initialMonth: number, finalMonth: number): Promise<number>;
 } 

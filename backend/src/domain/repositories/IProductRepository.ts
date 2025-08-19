@@ -18,4 +18,5 @@ export interface IProductRepository {
     findMovimentByDate(data: findMoviment): Promise<stockMovement[]>;
     countStock(startDate: Date, endDate: Date): Promise<number>;
     countMoviment(startDate: Date, endDate: Date, type: 'IN' | 'OUT'): Promise<number>;
+    countByMonth(initialMonth: number, finalMonth: number): Promise<number>;
 }
