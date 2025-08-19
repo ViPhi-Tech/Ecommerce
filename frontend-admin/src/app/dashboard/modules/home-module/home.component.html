@@ -10,7 +10,7 @@
     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-8"
   >
     <div
-      *ngFor="let indicator of indicators"
+      *ngFor="let indicator of indicators()"
       class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
     >
       <div class="flex items-center justify-between">
@@ -75,14 +75,14 @@
     <div
       class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
     >
-      <div echarts [options]="salesChartOption" class="h-80"></div>
+      <div echarts [options]="salesChartOption()" class="h-80"></div>
     </div>
 
     <!-- Gráfico de Produtos Mais Vendidos -->
     <div
       class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
     >
-      <div echarts [options]="topProductsChartOption" class="h-80"></div>
+      <div echarts [options]="topProductsChartOption()" class="h-80"></div>
     </div>
   </div>
 
@@ -92,14 +92,14 @@
     <div
       class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
     >
-      <div echarts [options]="categoriesChartOption" class="h-80"></div>
+      <div echarts [options]="categoriesChartOption()" class="h-80"></div>
     </div>
 
     <!-- Gráfico de Status de Pedidos -->
     <div
       class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
     >
-      <div echarts [options]="orderStatusChartOption" class="h-80"></div>
+      <div echarts [options]="orderStatusChartOption()" class="h-80"></div>
     </div>
   </div>
 

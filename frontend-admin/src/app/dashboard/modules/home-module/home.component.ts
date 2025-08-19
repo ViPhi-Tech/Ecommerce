@@ -1,8 +1,17 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { CoreService } from 'app/shared/services/core.service';
+
+// Interfaces para tipagem
+interface Indicator {
+  title: string;
+  value: string;
+  percentage: string;
+  trend: 'up' | 'down';
+  icon: string;
+}
 
 @Component({
   selector: 'fuse-home',
@@ -14,8 +23,8 @@ import { CoreService } from 'app/shared/services/core.service';
 export class HomeComponent implements OnInit {
   private coreService = inject(CoreService);
 
-  // Dados dos indicadores
-  indicators = [
+  // Dados dos indicadores usando signal
+  indicators = signal<Indicator[]>([
     {
       title: 'Vendas Totais',
       value: 'R$ 124.590,00',
@@ -44,13 +53,14 @@ export class HomeComponent implements OnInit {
       trend: 'down' as const,
       icon: 'lucidePackage',
     },
-  ];
+  ]);
 
-  // Configuração do gráfico de vendas
-  salesChartOption: EChartsOption = {
+  // Configuração do gráfico de vendas usando signal
+  salesChartOption = signal<EChartsOption>({
     title: {
       text: 'Vendas por Mês',
       left: 'center',
+      top: '0px',
       textStyle: {
         fontSize: 16,
         fontWeight: 'bold',
@@ -115,13 +125,14 @@ export class HomeComponent implements OnInit {
         },
       },
     ],
-  };
+  });
 
-  // Configuração do gráfico de produtos mais vendidos
-  topProductsChartOption: EChartsOption = {
+  // Configuração do gráfico de produtos mais vendidos usando signal
+  topProductsChartOption = signal<EChartsOption>({
     title: {
       text: 'Produtos Mais Vendidos',
       left: 'center',
+      top: '0px',
       textStyle: {
         fontSize: 16,
         fontWeight: 'bold',
@@ -132,16 +143,15 @@ export class HomeComponent implements OnInit {
       formatter: '{a} <br/>{b}: {c} ({d}%)',
     },
     legend: {
-      orient: 'vertical',
-      left: 'left',
-      top: 'middle',
+      bottom: '0px',
+      left: 'center',
     },
     series: [
       {
         name: 'Produtos',
         type: 'pie',
-        radius: ['40%', '70%'],
-        center: ['60%', '50%'],
+        radius: ['20%', '45%'],
+        center: ['50%', '45%'],
         data: [
           { value: 335, name: 'Smartphone Galaxy' },
           { value: 310, name: 'Notebook Dell' },
@@ -163,13 +173,14 @@ export class HomeComponent implements OnInit {
         },
       },
     ],
-  };
+  });
 
-  // Configuração do gráfico de categorias
-  categoriesChartOption: EChartsOption = {
+  // Configuração do gráfico de categorias usando signal
+  categoriesChartOption = signal<EChartsOption>({
     title: {
       text: 'Vendas por Categoria',
       left: 'center',
+      top: '0px',
       textStyle: {
         fontSize: 16,
         fontWeight: 'bold',
@@ -228,13 +239,14 @@ export class HomeComponent implements OnInit {
         },
       },
     ],
-  };
+  });
 
-  // Configuração do gráfico de status de pedidos
-  orderStatusChartOption: EChartsOption = {
+  // Configuração do gráfico de status de pedidos usando signal
+  orderStatusChartOption = signal<EChartsOption>({
     title: {
       text: 'Status dos Pedidos',
       left: 'center',
+      top: '0px',
       textStyle: {
         fontSize: 16,
         fontWeight: 'bold',
@@ -244,14 +256,15 @@ export class HomeComponent implements OnInit {
       trigger: 'item',
     },
     legend: {
-      top: '5%',
+      bottom: '10px',
       left: 'center',
     },
     series: [
       {
         name: 'Status',
         type: 'pie',
-        radius: ['40%', '70%'],
+        radius: ['30%', '50%'],
+        center: ['50%', '40%'],
         avoidLabelOverlap: false,
         itemStyle: {
           borderRadius: 10,
@@ -281,7 +294,7 @@ export class HomeComponent implements OnInit {
         ],
       },
     ],
-  };
+  });
 
   constructor() {}
 

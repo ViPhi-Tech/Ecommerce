@@ -20,11 +20,6 @@
   overflow: auto;
 }
 
-:host-context(.dark) .kanban-container {
-  background-color: rgb(17 24 39);
-  border-color: rgb(55 65 81);
-}
-
 .empty-state-container {
   background-color: white;
   border-radius: 0.75rem;
@@ -33,7 +28,6 @@
 }
 
 :host-context(.dark) .empty-state-container {
-  background-color: rgb(31 41 55);
   border-color: rgb(55 65 81);
 }
 
