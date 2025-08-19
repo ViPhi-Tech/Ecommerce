@@ -89,3 +89,12 @@ export const formatDate = (date: string): string => {
   }
   return '';
 };
+
+
+export const formatCurrency = (value: number): string => {
+    if (!value && value !== 0) return 'R$ 0,00';
+    return new Intl.NumberFormat('pt-BR', {
+      style: 'currency',
+      currency: 'BRL',
+    }).format(value);
+  }

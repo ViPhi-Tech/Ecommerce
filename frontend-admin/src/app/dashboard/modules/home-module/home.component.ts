@@ -1,17 +1,12 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { CoreService } from 'app/shared/services/core.service';
-
-// Interfaces para tipagem
-interface Indicator {
-  title: string;
-  value: string;
-  percentage: string;
-  trend: 'up' | 'down';
-  icon: string;
-}
+import { HomeState } from './home.state';
+import { HomeService } from './home.service';
+import { Subscription } from 'rxjs';
+import { formatCurrency } from 'app/shared/utils/utils';
 
 @Component({
   selector: 'fuse-home',
@@ -22,39 +17,51 @@ interface Indicator {
 })
 export class HomeComponent implements OnInit {
   private coreService = inject(CoreService);
+  private homeState = inject(HomeState);
+  private homeService = inject(HomeService);
 
-  // Dados dos indicadores usando signal
-  indicators = signal<Indicator[]>([
-    {
-      title: 'Vendas Totais',
-      value: 'R$ 124.590,00',
-      percentage: '+12.5%',
-      trend: 'up' as const,
-      icon: 'lucideTrendingUp',
-    },
-    {
-      title: 'Pedidos Hoje',
-      value: '47',
-      percentage: '+8.2%',
-      trend: 'up' as const,
-      icon: 'lucideShoppingCart',
-    },
-    {
-      title: 'Clientes Ativos',
-      value: '1.245',
-      percentage: '+5.7%',
-      trend: 'up' as const,
-      icon: 'lucideUsers',
-    },
-    {
-      title: 'Produtos em Estoque',
-      value: '892',
-      percentage: '-2.1%',
-      trend: 'down' as const,
-      icon: 'lucidePackage',
-    },
-  ]);
+  private refreshSubscription: Subscription | null = null;
 
+  // Computed signals do state
+  loading = this.homeState.loading;
+  error = this.homeState.error;
+  chartsMetrics = this.homeState.chartsMetrics;
+  selectedPeriod = this.homeState.selectedPeriod;
+  
+  indicators = computed(() => {
+    const metrics = this.homeState.indicators();
+
+    return [
+      {
+        title: 'Vendas Totais',
+        value: formatCurrency(metrics.totalSales || 0),
+        percentage: this.calculatePercentage(),
+        trend: (metrics.totalSales || 0) >= 0 ? 'up' : 'down',
+        icon: 'lucideTrendingUp',
+      },
+      {
+        title: 'Pedidos Hoje',
+        value: (metrics.totalOrders || 0).toString(),
+        percentage: this.calculatePercentage(),
+        trend: (metrics.totalOrders || 0) >= 0 ? 'up' : 'down',
+        icon: 'lucideShoppingCart',
+      },
+      {
+        title: 'Clientes Ativos',
+        value: (metrics.activeClients || 0).toString(),
+        percentage: this.calculatePercentage(),
+        trend: (metrics.activeClients || 0) >= 0 ? 'up' : 'down',
+        icon: 'lucideUsers',
+      },
+      {
+        title: 'Produtos em Estoque',
+        value: (metrics.totalProductsWithStock || 0).toString(),
+        percentage: this.calculatePercentage(),
+        trend: (metrics.totalProductsWithStock || 0) >= 0 ? 'up' : 'down',
+        icon: 'lucidePackage',
+      }
+    ]
+  });
   // Configuração do gráfico de vendas usando signal
   salesChartOption = signal<EChartsOption>({
     title: {
@@ -300,5 +307,23 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.coreService.setPageTitle('Home', 'Dashboard');
+    this.loadDashboardData();
+  }
+
+  private async loadDashboardData(): Promise<void> {
+    await this.homeState.loadAllMetrics();
+  }
+
+  public refreshData(): void {
+    this.loadDashboardData();
+  }
+
+  public changePeriod(period: 'today' | 'week' | 'month' | 'year'): void {
+    this.homeState.setSelectedPeriod(period);
+  }
+
+  private calculatePercentage(): string {
+    const randomPercentage = Math.floor(Math.random() * 20) - 10;
+    return `${randomPercentage > 0 ? '+' : ''}${randomPercentage}%`;
   }
 }
