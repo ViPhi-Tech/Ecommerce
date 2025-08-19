@@ -5,6 +5,7 @@ import {
   OnInit,
   signal,
   effect,
+  DestroyRef,
 } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
@@ -19,6 +20,9 @@ import {
 } from 'app/shared/components/kanban/kanban.component';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { CoreService } from 'app/shared/services/core.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { AccountsPayableService } from '../../accounts-payable.service';
 
 @Component({
   selector: 'fuse-accounts-payable-kanban',
@@ -31,7 +35,12 @@ export class AccountsPayableKanbanComponent implements OnInit {
   private router = inject(Router);
   private coreService = inject(CoreService);
   private state = inject(AccountsPayableState);
+  private confirmationService = inject(ConfirmationService);
+  private accountsPayableService = inject(AccountsPayableService);
   private currencyPipe = inject(CurrencyPipe);
+  private destroyedRef = inject(DestroyRef);
+  private toast = inject(MessageService);
+
 
   // Signals
   kanbanColumns = signal<KanbanColumn[]>([]);
@@ -63,6 +72,30 @@ export class AccountsPayableKanbanComponent implements OnInit {
   private setupKanbanColumns() {
     const accounts = this.accountsPayableList();
 
+    const actions = [
+          {
+            label: 'Editar',
+            icon: 'lucideSquarePen',
+            action: (card: KanbanCard) => {
+              this.editAccount(card);
+            },
+          },
+          {
+            label: 'Visualizar',
+            icon: 'lucideEye',
+            action: (card: KanbanCard) => {
+              this.viewAccount(card);
+            },
+          },
+          {
+            label: 'Excluir',
+            icon: 'lucideTrash2',
+            action: (card: KanbanCard) => {
+              this.deleteAccount(card);
+            },
+          },
+        ]
+
     // Definir as colunas do Kanban
     const columns: KanbanColumn[] = [
       {
@@ -70,29 +103,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
         title: 'Pendente',
         color: 'yellow',
         cards: [],
-        cardsActions: [
-          {
-            label: 'Editar',
-            icon: 'lucideSquarePen',
-            action: card => {
-              this.editAccount(card);
-            },
-          },
-          {
-            label: 'Visualizar',
-            icon: 'lucideEye',
-            action: card => {
-              this.viewAccount(card);
-            },
-          },
-          {
-            label: 'Excluir',
-            icon: 'lucideTrash2',
-            action: card => {
-              this.deleteAccount(card);
-            },
-          },
-        ],
+        cardsActions: actions,
         maxCards: 50,
       },
       {
@@ -100,29 +111,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
         title: 'Vence em Breve',
         color: 'blue',
         cards: [],
-        cardsActions: [
-          {
-            label: 'Editar',
-            icon: 'lucideSquarePen',
-            action: card => {
-              this.editAccount(card);
-            },
-          },
-          {
-            label: 'Marcar como Pago',
-            icon: 'lucideCheck',
-            action: card => {
-              this.markAsPaid(card);
-            },
-          },
-          {
-            label: 'Visualizar',
-            icon: 'lucideEye',
-            action: card => {
-              this.viewAccount(card);
-            },
-          },
-        ],
+        cardsActions: actions,
         maxCards: 30,
       },
       {
@@ -130,29 +119,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
         title: 'Vencidas',
         color: 'red',
         cards: [],
-        cardsActions: [
-          {
-            label: 'Pagar Urgente',
-            icon: 'lucideAlertTriangle',
-            action: card => {
-              this.markAsPaid(card);
-            },
-          },
-          {
-            label: 'Editar',
-            icon: 'lucideSquarePen',
-            action: card => {
-              this.editAccount(card);
-            },
-          },
-          {
-            label: 'Visualizar',
-            icon: 'lucideEye',
-            action: card => {
-              this.viewAccount(card);
-            },
-          },
-        ],
+        cardsActions: actions,
         maxCards: 20,
       },
       {
@@ -160,22 +127,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
         title: 'Pagas',
         color: 'green',
         cards: [],
-        cardsActions: [
-          {
-            label: 'Visualizar',
-            icon: 'lucideEye',
-            action: card => {
-              this.viewAccount(card);
-            },
-          },
-          {
-            label: 'Gerar Comprovante',
-            icon: 'lucideDownload',
-            action: card => {
-              this.generateReceipt(card);
-            },
-          },
-        ],
+        cardsActions: actions,
       },
     ];
 
@@ -194,7 +146,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
 
   private mapAccountToCard(account: IAccountsPayable): KanbanCard {
     return {
-      id: account.uuid,
+      id: account.id,
       title: `${account.supplier?.tradeName || 'Fornecedor'} - ${account.description}`,
       description: `Valor: R$ ${account.amount.toFixed(2)}`,
       status: account?.status || 'pending',
@@ -239,7 +191,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
     // Navegar para detalhes ou edição da conta
     // const account = card['accountData'] as IAccountsPayable;
     // this.router.navigate([
-    //   { outlets: { drawer: ['accounts-payable', account.uuid] } },
+    //   { outlets: { drawer: ['accounts-payable', account.id] } },
     // ]);
   }
 
@@ -315,7 +267,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
     const account = card['accountData'] as IAccountsPayable;
     if (account) {
       this.router.navigate([
-        { outlets: { drawer: ['accounts-payable', account.uuid] } },
+        { outlets: { drawer: ['accounts-payable', account.id] } },
       ]);
     }
   }
@@ -324,7 +276,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
     const account = card['accountData'] as IAccountsPayable;
     if (account) {
       this.router.navigate([
-        { outlets: { drawer: ['accounts-payable', account.uuid, 'view'] } },
+        { outlets: { drawer: ['accounts-payable', account.id, 'view'] } },
       ]);
     }
   }
@@ -332,14 +284,37 @@ export class AccountsPayableKanbanComponent implements OnInit {
   deleteAccount(card: KanbanCard) {
     const account = card['accountData'] as IAccountsPayable;
     if (account) {
-      if (
-        confirm(
-          `Tem certeza que deseja excluir a conta "${account.description}"?`
-        )
-      ) {
-        // Implementar lógica de exclusão
-        this.state.removeAccountPayable(account.id);
-      }
+      this.confirmationService.confirm({
+        message: 'Você tem certeza que deseja excluir esta conta a pagar?',
+        header: 'Confirmação de Exclusão',
+        icon: 'pi pi-exclamation-triangle text-red-500',
+        acceptLabel: 'Sim',
+        rejectLabel: 'Não',
+        acceptButtonStyleClass: 'p-button-danger',
+        rejectButtonStyleClass: 'p-button-secondary',
+        accept: () => {
+          this.accountsPayableService
+            .delete(account.id)
+            .pipe(takeUntilDestroyed(this.destroyedRef))
+            .subscribe({
+              next: () => {
+                this.toast.add({
+                  severity: 'success',
+                  summary: 'Sucesso',
+                  detail: 'Conta a pagar excluída com sucesso',
+                });
+                this.state.removeAccountPayable(account.id);
+              },
+              error: () => {
+                this.toast.add({
+                  severity: 'error',
+                  summary: 'Erro',
+                  detail: 'Erro ao excluir conta a pagar',
+                });
+              },
+            });
+        },
+      });
     }
   }
 

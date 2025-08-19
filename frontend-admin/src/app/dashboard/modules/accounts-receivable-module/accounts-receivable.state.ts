@@ -3,6 +3,8 @@ import { catchError, finalize, lastValueFrom, tap } from 'rxjs';
 import { AccountsReceivableService } from './accounts-receivable.service';
 import { BaseState } from 'app/shared/store/base.state';
 import { AccountsReceivableModuleState } from 'app/shared/interfaces/accounts-receivable/AccountsReceivableModuleState';
+import { IAccountsReceivable } from 'app/shared/interfaces/accounts-receivable/AccountsReceivable';
+import { AccountsReceivableStatus } from 'app/shared/interfaces/accounts-receivable/AccountsReceivableStatus';
 
 @Injectable({
   providedIn: 'root',
@@ -34,7 +36,16 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
     );
   }
 
-  setAccountsReceivableList(list: any[]) {
+  setAccountsReceivableList(list: IAccountsReceivable[]) {
+    list = list.map(item => {
+      item.status = this.determineAccountStatus(item);
+      return {
+        ...item,
+        clientName: item.client?.fullName || 'Cliente Desconhecido',
+        ...this.convertStatus(item),
+      };
+    });
+
     this.updateState('accountsReceivableList', list);
   }
 
@@ -43,5 +54,63 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
       'accountsReceivableList',
       this.accountsReceivableList().filter(item => item.id !== id)
     );
+  }
+
+  updateAccountReceivableStatus(id: number, status: AccountsReceivableStatus) {
+    const updatedList = this.accountsReceivableList().map(item => {
+      if (item.id === id) {
+        return { ...item, status };
+      }
+      return item;
+    });
+    this.setAccountsReceivableList(updatedList);
+
+    lastValueFrom(
+      this.service.updateAccountReceivableStatus(id, status).pipe(
+        catchError(() => {
+          this.handleError('Erro ao atualizar status da conta a receber');
+          return [];
+        })
+      )
+    );
+  }
+
+  private determineAccountStatus(
+    account: IAccountsReceivable
+  ): AccountsReceivableStatus {
+    const now = new Date();
+    const dueDate = new Date(account.dueDate);
+    const daysDifference = Math.ceil(
+      (dueDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    if (account.status === 'received') {
+      return 'received';
+    }
+
+    if (daysDifference < 0) {
+      return 'overdue';
+    }
+
+    if (daysDifference <= 7) {
+      return 'due_soon';
+    }
+
+    return 'pending';
+  }
+
+  convertStatus(item: IAccountsReceivable) {
+    switch (item.status) {
+      case 'pending':
+        return { statusLabel: 'Pendente' };
+      case 'received':
+        return { statusLabel: 'Recebido' };
+      case 'overdue':
+        return { statusLabel: 'Vencido' };
+      case 'due_soon':
+        return { statusLabel: 'Vence em Breve' };
+      default:
+        return { statusLabel: 'Desconhecido' };
+    }
   }
 }

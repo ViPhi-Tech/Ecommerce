@@ -8,12 +8,13 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { heightAnimation } from 'app/shared/utils/animations';
 import { AccountsReceivableState } from '../../accounts-receivable.state';
 import { TableComponent } from 'app/shared/components/table/table.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'fuse-accounts-receivable-list',
   templateUrl: './accounts-receivable-list.component.html',
   animations: [heightAnimation],
-  imports: [TableComponent],
+  imports: [TableComponent, ButtonModule],
 })
 export class AccountsReceivableListComponent implements OnInit {
   private router = inject(Router);
@@ -30,18 +31,6 @@ export class AccountsReceivableListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
-    headerButtons: [
-      {
-        icon: 'pi pi-plus',
-        label: 'Adicionar',
-        tooltip: 'Adicionar Conta a Receber',
-        action: () => {
-          this.router.navigate([
-            { outlets: { drawer: ['accounts-receivable', 'new'] } },
-          ]);
-        },
-      },
-    ],
     columns: [
       {
         field: 'description',
@@ -95,7 +84,7 @@ export class AccountsReceivableListComponent implements OnInit {
   constructor() {}
 
   async ngOnInit() {
-    await this.state.getAccountsReceivableList();
+    await this.loadAccountsReceivable();
     console.log(
       'Accounts Receivable List:',
       this.state.accountsReceivableList()
@@ -105,6 +94,20 @@ export class AccountsReceivableListComponent implements OnInit {
       'Contas a Receber',
       'Lista de contas a receber'
     );
+  }
+
+  async loadAccountsReceivable() {
+    await this.state.getAccountsReceivableList();
+  }
+
+  navigateToKanban() {
+    this.router.navigate(['/dashboard/accounts-receivable/kanban']);
+  }
+
+  addNewAccount() {
+    this.router.navigate([
+      { outlets: { drawer: ['accounts-receivable', 'new'] } },
+    ]);
   }
 
   edit(id: string) {

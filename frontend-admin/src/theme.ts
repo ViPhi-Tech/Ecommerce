@@ -15,6 +15,7 @@ import {
   matKeyboardArrowDownOutline,
 } from '@ng-icons/material-icons/outline';
 import { heroPencilSquare } from '@ng-icons/heroicons/outline';
+import { NgxEchartsModule } from 'ngx-echarts';
 
 import { providePrimeNG } from 'primeng/config';
 import { routes } from './app/app.routes';
@@ -31,7 +32,12 @@ export const THEME: ApplicationConfig = {
     provideRouter(routes),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([CoreInterceptor])),
-    importProvidersFrom(NgIconsModule.withIcons(lucideIcons)),
+    importProvidersFrom(
+      NgIconsModule.withIcons(lucideIcons),
+      NgxEchartsModule.forRoot({
+        echarts: () => import('echarts'),
+      })
+    ),
     provideEnvironmentNgxMask(),
     provideIcons({
       matArrowDropDownOutline,

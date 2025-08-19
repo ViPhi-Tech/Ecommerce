@@ -68,15 +68,17 @@
         size="small"
       ></button>
 
-      <button
-        pButton
-        type="submit"
-        [label]="submitButtonLabel()"
-        icon="pi pi-check"
-        class="w-[200px]"
-        size="small"
-        (click)="onSubmit($event)"
-      ></button>
+      @if (!isView()) {
+        <button
+          pButton
+          type="submit"
+          [label]="submitButtonLabel()"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+          (click)="onSubmit($event)"
+        ></button>
+      }
     </div>
   </ng-template>
 </p-dialog>

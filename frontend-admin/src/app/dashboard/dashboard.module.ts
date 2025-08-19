@@ -17,6 +17,7 @@ import { stockMovementRoutes } from './modules/stock-movement-module/stock-movem
 import { customizationRoutes } from './modules/customization/customization.routing';
 import { clientRoutes } from './modules/client-module/client.routing';
 import { supplierRoutes } from './modules/supplier-module/supplier.routing';
+import { homeRoutes } from './modules/home-module/home.routing';
 
 const routes: Routes = [
   {
@@ -27,6 +28,11 @@ const routes: Routes = [
       breadcrumb: 'Dashboard',
     },
     children: [
+      {
+        path: '',
+        children: homeRoutes,
+        data: { animation: 'home' },
+      },
       {
         path: 'customization',
         children: customizationRoutes,
@@ -87,7 +93,7 @@ const routes: Routes = [
       },
       {
         path: '**',
-        redirectTo: 'orders',
+        redirectTo: '',
         pathMatch: 'full',
       },
     ],
