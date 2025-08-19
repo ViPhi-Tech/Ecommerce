@@ -151,8 +151,7 @@ export class OrderViewComponent implements OnInit {
         return 'Cartão de Débito';
       case 'boleto':
         return 'Boleto';
-      case 'cash':
-      case 'dinheiro':
+      case 'money':
         return 'Dinheiro';
       default:
         return typeId || 'N/A';
