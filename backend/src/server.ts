@@ -10,7 +10,7 @@ import cloudinary from "./infrastructure/plugins/cloudinary";
 
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
-const server = fastify();
+const server = fastify({logger: true});
 
 server.register(cors, {
 	origin: [
