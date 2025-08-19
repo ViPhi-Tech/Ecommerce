@@ -64,6 +64,7 @@ export const createInvoiceSchema = z.object({
 });
 
 export const updateInvoiceSchema = z.object({
+  id: z.number().int({ message: 'ID da fatura deve ser um número inteiro' }),
   number: z.string().min(1, { message: 'Número da fatura é obrigatório' }),
   series: z.string().min(1, { message: 'Série é obrigatória' }),
   status: z.string().min(1, { message: 'Status é obrigatório' }),

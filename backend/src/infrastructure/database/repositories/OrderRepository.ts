@@ -96,7 +96,33 @@ export class OrderRepository implements IOrderRepository {
         total: 0,
       },
     });
-  }
+  };
+
+  async countByMonth(initialMonth: number, finalMonth: number): Promise<number> {
+    return await this.prisma.order.count({
+      where: {
+        createdAt: {
+          gte: new Date(new Date().getFullYear(), initialMonth - 1, 1),
+          lt: new Date(new Date().getFullYear(), finalMonth, 1),
+        }
+      }
+    })
+  };
   
+
+  async countSalesByMonth(initialMonth: number, finalMonth: number): Promise<number> {
+  const result = await this.prisma.order.aggregate({
+    _sum: {
+      total: true
+    },
+    where: {
+      createdAt: {
+        gte: new Date(new Date().getFullYear(), initialMonth - 1, 1),
+        lt: new Date(new Date().getFullYear(), finalMonth, 1),
+      }
+    }
+  })
+  return result._sum.total ?? 0
+}
  
 }

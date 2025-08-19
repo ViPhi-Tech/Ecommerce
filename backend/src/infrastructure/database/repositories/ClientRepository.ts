@@ -47,4 +47,18 @@ export class ClientRepository implements IClientRepository {
     )
   };
 
+  async countByMonth(initialMonth: number, finalMonth: number): Promise<number> {
+    return await this.prisma.client.count(
+      {
+        where: {
+          createdAt: {
+            gte: new Date(new Date().getFullYear(), initialMonth - 1, 1),
+            lt: new Date(new Date().getFullYear(), finalMonth, 1),
+          },
+          isActive: true
+        }
+      }
+    )
+  }
+
 }

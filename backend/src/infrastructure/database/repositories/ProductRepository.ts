@@ -287,6 +287,21 @@ async countMoviment(startDate: Date, endDate: Date, type: 'IN' | 'OUT'): Promise
     }
   })
   return result._sum.quantity ?? 0
-}
+};
+
+async countByMonth(initialMonth: number, finalMonth: number): Promise<number> {
+  const result = await this.prisma.stock.aggregate({
+    _sum: {
+      quantity: true
+    },
+    where: {
+      createdAt: {
+        gte: new Date(new Date().getFullYear(), initialMonth - 1, 1),
+        lt: new Date(new Date().getFullYear(), finalMonth, 1),
+      }
+    }
+  })
+  return result._sum.quantity ?? 0
+};
 
 }

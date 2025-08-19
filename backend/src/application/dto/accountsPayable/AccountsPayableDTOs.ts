@@ -63,7 +63,7 @@ export const updateAccountsPayableSchema = z.object({
   amount: z.number().positive({ message: 'Valor deve ser positivo' }).optional(),
   recurringPurchase: z.boolean().optional(),
   description: z.string().min(1, { message: 'Descrição é obrigatória' }).optional(),
-  status: z.enum(['pending', 'paid', 'overdue', 'cancelled'], { 
+  status: z.enum(['pending', 'paid', 'overdue', 'cancelled', 'due_soon'], { 
     message: 'Status deve ser: pending, paid, overdue ou cancelled' 
   }).optional(),
 });
@@ -83,7 +83,7 @@ export const accountsPayableStatusSchema = z.object({
 });
 
 export const updateAccountsPayableStatusSchema = z.object({
-  status: z.enum(['pending', 'paid', 'overdue', 'cancelled'], { 
+  status: z.enum(['pending', 'paid', 'overdue', 'cancelled', 'due_soon'], { 
     message: 'Status deve ser: pending, paid, overdue ou cancelled' 
   }),
 });
