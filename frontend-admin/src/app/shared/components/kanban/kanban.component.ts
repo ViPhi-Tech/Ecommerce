@@ -1,5 +1,6 @@
 import { Component, input, OnInit, output } from '@angular/core';
 import { KanbanPipeComponent } from './kanban-pipe/kanban-pipe.component';
+import { KanbanSkeletonComponent } from './kanban-skeleton/kanban-skeleton.component';
 import { CdkDropListGroup, CdkDragDrop } from '@angular/cdk/drag-drop';
 
 export interface KanbanCard {
@@ -33,7 +34,7 @@ export interface KanbanColumn {
   selector: 'fuse-kanban',
   templateUrl: './kanban.component.html',
   styleUrls: ['./kanban.component.scss'],
-  imports: [KanbanPipeComponent, CdkDropListGroup],
+  imports: [KanbanPipeComponent, KanbanSkeletonComponent, CdkDropListGroup],
 })
 export class KanbanComponent implements OnInit {
   // Inputs

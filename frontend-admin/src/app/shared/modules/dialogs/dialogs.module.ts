@@ -8,6 +8,7 @@ import { ClientCreateComponent } from 'app/dashboard/modules/client-module/scree
 import { SupplierCreateComponent } from 'app/dashboard/modules/supplier-module/screens/create/supplier-create.component';
 import { AccountsPayableCreateComponent } from 'app/dashboard/modules/accounts-payable-module/screens/create/accounts-payable-create.component';
 import { AccountsReceivableCreateComponent } from 'app/dashboard/modules/accounts-receivable-module/screens/create/accounts-receivable-create.component';
+import { OrderViewComponent } from 'app/dashboard/modules/order-module/screens/order-view/order-view.component';
 
 const routes: Routes = [
   // category routes
@@ -109,6 +110,15 @@ const routes: Routes = [
       {
         path: ':id',
         component: AccountsReceivableCreateComponent,
+      },
+    ],
+  },
+  {
+    path: 'orders',
+    children: [
+      {
+        path: ':id/view',
+        component: OrderViewComponent,
       },
     ],
   },

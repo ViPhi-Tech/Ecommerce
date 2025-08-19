@@ -1,0 +1,72 @@
+<div class="kanban-skeleton">
+  <div class="kanban-columns flex gap-4 overflow-x-auto pb-4">
+    @for (skeleton of skeletonColumns; track skeleton.id) {
+      <div class="kanban-column flex-shrink-0 min-w-[300px] max-w-[350px]">
+        <!-- Header Skeleton -->
+        <div
+          class="skeleton-header bg-gray-100 dark:bg-gray-800 rounded-t-lg p-3 border-b border-gray-200 dark:border-gray-700"
+        >
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div
+                class="skeleton-title bg-gray-300 dark:bg-gray-600 h-5 w-24 rounded animate-pulse"
+              ></div>
+              <div
+                class="skeleton-count bg-gray-300 dark:bg-gray-600 h-5 w-8 rounded-full animate-pulse"
+              ></div>
+            </div>
+            <div
+              class="skeleton-icon bg-gray-300 dark:bg-gray-600 h-4 w-4 rounded animate-pulse"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Cards Skeleton -->
+        <div
+          class="skeleton-content bg-white dark:bg-gray-900 rounded-b-lg p-3 min-h-[400px] space-y-3"
+        >
+          @for (cardSkeleton of skeleton.cards; track cardSkeleton.id) {
+            <div
+              class="skeleton-card bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3 animate-pulse"
+            >
+              <!-- Card Title -->
+              <div
+                class="skeleton-card-title bg-gray-300 dark:bg-gray-600 h-4 w-3/4 rounded mb-2 animate-pulse"
+              ></div>
+
+              <!-- Card Description -->
+              <div class="skeleton-card-description space-y-1 mb-3">
+                <div
+                  class="bg-gray-200 dark:bg-gray-700 h-3 w-full rounded animate-pulse"
+                ></div>
+                <div
+                  class="bg-gray-200 dark:bg-gray-700 h-3 w-5/6 rounded animate-pulse"
+                ></div>
+              </div>
+
+              <!-- Card Tags -->
+              <div class="flex gap-1 mb-2">
+                <div
+                  class="bg-gray-200 dark:bg-gray-700 h-5 w-12 rounded-full animate-pulse"
+                ></div>
+                <div
+                  class="bg-gray-200 dark:bg-gray-700 h-5 w-16 rounded-full animate-pulse"
+                ></div>
+              </div>
+
+              <!-- Card Footer -->
+              <div class="flex items-center justify-between">
+                <div
+                  class="skeleton-assignee bg-gray-300 dark:bg-gray-600 h-6 w-6 rounded-full animate-pulse"
+                ></div>
+                <div
+                  class="skeleton-date bg-gray-200 dark:bg-gray-700 h-3 w-16 rounded animate-pulse"
+                ></div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

@@ -1,7 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { MenuComponent } from './menu/menu.component';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { NgClass } from '@angular/common';
 
 @Component({
@@ -11,5 +11,10 @@ import { NgClass } from '@angular/common';
   imports: [NgIcon, MenuComponent, RouterModule, NgClass],
 })
 export class SidebarComponent {
+  private router = inject(Router);
   compactMode = signal(false);
+
+  onLogoClick() {
+    this.router.navigate(['/dashboard']);
+  }
 }

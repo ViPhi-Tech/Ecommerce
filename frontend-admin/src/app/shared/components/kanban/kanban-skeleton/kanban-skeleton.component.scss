@@ -1,0 +1,87 @@
+:host {
+  display: block;
+  flex-grow: 1;
+}
+
+/* Skeleton Styles */
+.kanban-skeleton {
+  flex-grow: 1;
+}
+
+.kanban-columns {
+  flex-grow: 1;
+  overflow: hidden;
+}
+
+.kanban-column {
+  min-width: 300px;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+}
+
+.skeleton-header {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.skeleton-content {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.skeleton-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+}
+
+/* Animações */
+@keyframes skeleton-pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: skeleton-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .kanban-columns {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .kanban-column {
+    min-width: 100%;
+    max-width: 100%;
+  }
+}
+
+/* Scrollbar personalizada */
+.kanban-columns::-webkit-scrollbar {
+  height: 8px;
+}
+
+.kanban-columns::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+.kanban-columns::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+}
+
+.kanban-columns::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}

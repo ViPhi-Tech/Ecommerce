@@ -1,16 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
+import { CoreService } from 'app/shared/services/core.service';
 
 @Component({
-  selector: 'fuse-home-list',
+  selector: 'fuse-home',
   standalone: true,
   imports: [CommonModule, NgxEchartsModule],
-  templateUrl: './home-list.component.html',
-  styleUrls: ['./home-list.component.scss'],
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
-export class HomeListComponent implements OnInit {
+export class HomeComponent implements OnInit {
+  private coreService = inject(CoreService);
+
   // Dados dos indicadores
   indicators = [
     {
@@ -283,6 +286,6 @@ export class HomeListComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    // Aqui você pode carregar dados reais da API
+    this.coreService.setPageTitle('Home', 'Dashboard');
   }
 }

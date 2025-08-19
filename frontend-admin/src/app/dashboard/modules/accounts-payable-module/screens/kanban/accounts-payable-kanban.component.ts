@@ -246,6 +246,9 @@ export class AccountsPayableKanbanComponent implements OnInit {
 
   private updateAccountStatus(accountId: number, newStatus: any) {
     // Atualizar o status no state
+    if (newStatus !== 'paid') {
+      newStatus = 'pending';
+    }
     this.state.updateAccountPayableStatus(accountId, newStatus);
   }
 
