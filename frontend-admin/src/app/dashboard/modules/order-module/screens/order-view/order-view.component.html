@@ -1,0 +1,285 @@
+<p-dialog
+  #dialogRef
+  [(visible)]="visible"
+  (onHide)="onCloseDialog()"
+  [modal]="true"
+  [closeOnEscape]="true"
+  [draggable]="false"
+  styleClass="max-w-[800px] w-full"
+>
+  <ng-template #header>
+    <div class="flex flex-col">
+      <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+        <h2 class="text-2xl font-semibold leading-none tracking-tight">
+          {{ title() }}
+        </h2>
+        <p class="text-sm text-muted-foreground">
+          Detalhes completos do pedido
+        </p>
+      </div>
+    </div>
+  </ng-template>
+
+  @if (isLoading()) {
+    <div class="flex justify-center items-center p-8">
+      <i class="pi pi-spinner pi-spin text-2xl"></i>
+      <span class="ml-2">Carregando dados do pedido...</span>
+    </div>
+  } @else if (orderData()) {
+    <div class="flex flex-col gap-2 scroll-form">
+      <!-- Informações Básicas -->
+      <ng-template #header>
+        <div class="flex justify-between items-center p-4 border-b">
+          <h3 class="text-lg font-semibold">Informações Básicas</h3>
+          <p-tag
+            [value]="getStatusLabel(orderData()!.status)"
+            [severity]="getStatusSeverity(orderData()!.status)"
+          ></p-tag>
+        </div>
+      </ng-template>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 p-4">
+        <div>
+          <span class="block text-sm font-medium text-gray-700 mb-1">
+            ID do Pedido
+          </span>
+          <p class="text-sm text-gray-900 font-semibold">
+            #{{ orderData()!.id }}
+          </p>
+        </div>
+
+        <div>
+          <span class="block text-sm font-medium text-gray-700 mb-1">
+            ID do Cliente
+          </span>
+          <p class="text-sm text-gray-900">
+            {{ orderData()!.clientId || 'N/A' }}
+          </p>
+        </div>
+
+        <div>
+          <span class="block text-sm font-medium text-gray-700 mb-1">
+            Valor Total
+          </span>
+          <p class="text-lg font-bold text-green-600">
+            {{ formatCurrency(orderData()!.total) }}
+          </p>
+        </div>
+
+        <div>
+          <span class="block text-sm font-medium text-gray-700 mb-1">
+            Data de Criação
+          </span>
+          <p class="text-sm text-gray-900">
+            {{ formatDate(orderData()!.createdAt) }}
+          </p>
+        </div>
+
+        <div>
+          <span class="block text-sm font-medium text-gray-700 mb-1">
+            Última Atualização
+          </span>
+          <p class="text-sm text-gray-900">
+            {{ formatDate(orderData()!.updatedAt) }}
+          </p>
+        </div>
+
+        <div>
+          <span class="block text-sm font-medium text-gray-700 mb-1">
+            Status
+          </span>
+          <p-tag
+            [value]="getStatusLabel(orderData()!.status)"
+            [severity]="getStatusSeverity(orderData()!.status)"
+          ></p-tag>
+        </div>
+      </div>
+
+      <p-divider></p-divider>
+
+      <!-- Itens do Pedido -->
+      @if (orderData()!.items?.length) {
+        <ng-template #header>
+          <div class="p-4 border-b">
+            <h3 class="text-lg font-semibold">Itens do Pedido</h3>
+            <p class="text-sm text-gray-600">
+              {{ orderData()!.items?.length || 0 }}
+              {{ (orderData()!.items?.length || 0) === 1 ? 'item' : 'itens' }}
+            </p>
+          </div>
+        </ng-template>
+
+        <div>
+          @for (item of orderData()!.items; track item.id) {
+            <div class="border rounded-lg p-4 mb-4 last:mb-0 bg-gray-50">
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="lg:col-span-2">
+                  <span class="block text-sm font-medium text-gray-700 mb-1">
+                    Produto
+                  </span>
+                  <p class="text-sm text-gray-900 font-semibold">
+                    {{ item.product?.name || 'N/A' }}
+                  </p>
+                  @if (item.product?.sku) {
+                    <p class="text-xs text-gray-500 mt-1">
+                      SKU: {{ item.product?.sku }}
+                    </p>
+                  }
+                  @if (item.product?.ean) {
+                    <p class="text-xs text-gray-500">
+                      EAN: {{ item.product?.ean }}
+                    </p>
+                  }
+                </div>
+
+                <div>
+                  <span class="block text-sm font-medium text-gray-700 mb-1">
+                    Quantidade
+                  </span>
+                  <p class="text-sm text-gray-900 font-semibold">
+                    {{ item.quantity }}
+                  </p>
+                </div>
+
+                <div>
+                  <span class="block text-sm font-medium text-gray-700 mb-1">
+                    Preço Unitário
+                  </span>
+                  <p class="text-sm text-gray-900 font-semibold">
+                    {{ formatCurrency(item.price) }}
+                  </p>
+                </div>
+
+                <div class="lg:col-span-4 border-t pt-2 mt-2">
+                  <div class="flex justify-between items-center">
+                    <span class="text-sm font-medium text-gray-700">
+                      Subtotal
+                    </span>
+                    <span class="text-sm font-bold text-green-600">
+                      {{ formatCurrency(item.price * item.quantity) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <p-divider></p-divider>
+      }
+
+      <!-- Pagamentos -->
+      @if (orderData()!.payments?.length) {
+        <ng-template #header>
+          <div class="p-4 border-b">
+            <h3 class="text-lg font-semibold">Pagamentos</h3>
+            <p class="text-sm text-gray-600">
+              {{ orderData()!.payments?.length || 0 }}
+              {{
+                (orderData()!.payments?.length || 0) === 1
+                  ? 'pagamento'
+                  : 'pagamentos'
+              }}
+            </p>
+          </div>
+        </ng-template>
+
+        <div>
+          @for (payment of orderData()!.payments; track payment.id) {
+            <div class="border rounded-lg p-4 mb-4 last:mb-0 bg-gray-50">
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <div>
+                  <span class="block text-sm font-medium text-gray-700 mb-1">
+                    ID do Pagamento
+                  </span>
+                  <p class="text-sm text-gray-900 font-semibold">
+                    #{{ payment.id }}
+                  </p>
+                </div>
+
+                <div>
+                  <span class="block text-sm font-medium text-gray-700 mb-1">
+                    Valor
+                  </span>
+                  <p class="text-sm font-bold text-green-600">
+                    {{ formatCurrency(payment.value) }}
+                  </p>
+                </div>
+
+                <div>
+                  <span class="block text-sm font-medium text-gray-700 mb-1">
+                    Tipo
+                  </span>
+                  <p-tag
+                    [value]="getPaymentTypeLabel(payment.typeId)"
+                    severity="info"
+                  ></p-tag>
+                </div>
+
+                <div>
+                  <span class="block text-sm font-medium text-gray-700 mb-1">
+                    Status
+                  </span>
+                  <p-tag
+                    [value]="getPaymentStatusLabel(payment.statusId)"
+                    [severity]="getPaymentStatusSeverity(payment.statusId)"
+                  ></p-tag>
+                </div>
+
+                <div>
+                  <span class="block text-sm font-medium text-gray-700 mb-1">
+                    Data de Criação
+                  </span>
+                  <p class="text-sm text-gray-900">
+                    {{ formatDate(payment.createdAt) }}
+                  </p>
+                </div>
+
+                <div>
+                  <span class="block text-sm font-medium text-gray-700 mb-1">
+                    Última Atualização
+                  </span>
+                  <p class="text-sm text-gray-900">
+                    {{ formatDate(payment.updatedAt) }}
+                  </p>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="flex justify-center items-center p-8">
+      <p class="text-gray-500">Nenhum dado encontrado para este pedido.</p>
+    </div>
+  }
+
+  <ng-template #footer>
+    <div class="flex gap-2 justify-end">
+      <button
+        pButton
+        type="button"
+        label="Fechar"
+        icon="pi pi-times"
+        (click)="closeDialog()"
+        outlined="true"
+        severity="secondary"
+        class="w-[150px]"
+        size="small"
+      ></button>
+
+      <!-- @if (orderData() && !isLoading()) {
+        <button
+          pButton
+          type="button"
+          label="Editar"
+          icon="pi pi-pencil"
+          (click)="onEditOrder()"
+          class="w-[150px]"
+          size="small"
+        ></button>
+      } -->
+    </div>
+  </ng-template>
+</p-dialog>

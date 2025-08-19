@@ -64,6 +64,16 @@ export class OrderListComponent implements OnInit {
     this.state.getOrderList();
   }
 
+  viewOrder(orderData: any) {
+    this.router.navigate([
+      { outlets: { drawer: ['orders', orderData.id, 'view'] } }
+    ]);
+  }
+
+  editOrder(orderData: any) {
+    this.router.navigate(['dashboard', 'orders', orderData.id]);
+  }
+
   setTableConfig() {
     this.tableConfig.set({
       rowsPerPageOptions: [5, 10, 20],
@@ -102,8 +112,8 @@ export class OrderListComponent implements OnInit {
               color: 'info',
               variant: 'text',
               tooltip: 'Visualizar Pedido',
-              action: (data, index) => {
-                console.log('Visualizar Pedido', data, index);
+              action: (data) => {
+                this.viewOrder(data);
               },
             },
             {
@@ -111,8 +121,8 @@ export class OrderListComponent implements OnInit {
               color: 'primary',
               variant: 'text',
               tooltip: 'Editar Pedido',
-              action: (data, index) => {
-                console.log('Editar Pedido', data, index);
+              action: (data) => {
+                this.editOrder(data);
               },
             },
             {

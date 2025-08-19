@@ -12,6 +12,16 @@ export const orderRoutes: Routes = [
     },
   },
   {
+    path: ':id/view',
+    loadComponent: () =>
+      import('./screens/order-view/order-view.component').then(
+        m => m.OrderViewComponent
+      ),
+    data: {
+      title: ['Dashboard', 'Visualizar Pedido'],
+    },
+  },
+  {
     path: ':id',
     loadComponent: () =>
       import('./screens/order-create/order-create.component').then(

@@ -3,6 +3,7 @@ import { Order } from './interfaces/order.interface';
 import { environments } from 'src/environments/environments';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -35,7 +36,7 @@ export class OrderService {
     });
   }
 
-  getOrderById(orderId: string | number): Observable<Order> {
-    return this.http.get<Order>(`${this.apiUrl}order/${orderId}`);
+  getOrderById(orderId: string | number): Observable<ApiResponse<Order>> {
+    return this.http.get<ApiResponse<Order>>(`${this.apiUrl}order/${orderId}`);
   }
 }
