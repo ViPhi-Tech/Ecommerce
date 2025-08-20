@@ -1,0 +1,167 @@
+<div class="p-6 animate-fade-in">
+  <!-- Header -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+        Relatórios
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-1">
+        Consulte e analise os dados do sistema
+      </p>
+    </div>
+
+    <div class="flex gap-3">
+      <p-button
+        type="button"
+        (onClick)="refreshReport()"
+        severity="secondary"
+        size="small"
+        [outlined]="true"
+        [loading]="state.loading()"
+        [disabled]="state.loading()"
+        pTooltip="Atualizar dados"
+      >
+        <ng-template #content>
+          <ng-icon name="lucideRefreshCw" class="h-4 w-4 mr-2"></ng-icon>
+          Atualizar
+        </ng-template>
+      </p-button>
+
+      <p-button
+        type="button"
+        (onClick)="exportToPDF()"
+        severity="secondary"
+        size="small"
+        [outlined]="true"
+        [loading]="exportingPDF()"
+        [disabled]="state.loading() || exportingPDF() || !state.reportData() || state.reportData().length === 0"
+        pTooltip="Exportar para PDF"
+      >
+        <ng-template #content>
+          <ng-icon name="lucideFileDown" class="h-4 w-4 mr-2"></ng-icon>
+          PDF
+        </ng-template>
+      </p-button>
+
+      <p-button
+        type="button"
+        (onClick)="exportToExcel()"
+        severity="primary"
+        size="small"
+        [loading]="exportingExcel()"
+        [disabled]="state.loading() || exportingExcel() || !state.reportData() || state.reportData().length === 0"
+        pTooltip="Exportar para Excel"
+      >
+        <ng-template #content>
+          <ng-icon name="lucideDownload" class="h-4 w-4 mr-2"></ng-icon>
+          Excel
+        </ng-template>
+      </p-button>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <div
+    class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm p-6 mb-6"
+  >
+    <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
+      Filtros do Relatório
+    </h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Tipo de Relatório -->
+      <fuse-select
+        [label]="'Tipo de Relatório'"
+        [items]="state.reportTypes()"
+        [control]="selectedReportTypeControl"
+        [valueRef]="'id'"
+        [labelRef]="'label'"
+        [placeholder]="'Selecione o tipo de relatório'"
+        (changeValue)="onReportTypeChange()"
+      />
+
+      <!-- Período -->
+      <fuse-select
+        [label]="'Período'"
+        [items]="state.periodOptions()"
+        [control]="selectedPeriodTypeControl"
+        [valueRef]="'value'"
+        [labelRef]="'label'"
+        [placeholder]="'Selecione o período'"
+        (changeValue)="onPeriodTypeChange()"
+      />
+
+      <!-- Data Inicial (apenas para período personalizado) -->
+      @if (selectedPeriodType() === 'custom') {
+        <fuse-datepicker
+          [label]="'Data Inicial'"
+          [control]="customStartDateControl"
+          [type]="'date'"
+          [placeholder]="'Selecione a data inicial'"
+          (changeValue)="onCustomDateChange()"
+        />
+
+        <!-- Data Final (apenas para período personalizado) -->
+        <fuse-datepicker
+          [label]="'Data Final'"
+          [control]="customEndDateControl"
+          [type]="'date'"
+          [placeholder]="'Selecione a data final'"
+          (changeValue)="onCustomDateChange()"
+        />
+      }
+    </div>
+
+    <!-- Descrição do relatório atual -->
+    @if (state.currentReportType(); as currentType) {
+      <div
+        class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md"
+      >
+        <p class="text-sm text-blue-800 dark:text-blue-200">
+          <strong>{{ currentType.label }}:</strong>
+          {{ currentType.description }}
+        </p>
+      </div>
+    }
+  </div>
+
+  <!-- Tabela de Dados -->
+  <div
+    class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm"
+  >
+    <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+      <div class="flex items-center justify-between">
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+          Dados do Relatório
+        </h2>
+        @if (state.reportData() && state.reportData().length > 0) {
+          <span class="text-sm text-gray-600 dark:text-gray-400">
+            {{ state.reportData().length }} registro(s) encontrado(s)
+          </span>
+        }
+      </div>
+    </div>
+
+    <div class="p-6">
+      @if (state.loading()) {
+        <div class="flex items-center justify-center py-12">
+          <div class="flex items-center gap-3">
+            <div
+              class="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"
+            ></div>
+            <span class="text-gray-600 dark:text-gray-400"
+              >Carregando dados...</span
+            >
+          </div>
+        </div>
+      } @else {
+        <fuse-table
+          [data]="state.reportData()"
+          [loading]="state.loading()"
+          [config]="tableConfig()"
+        >
+        </fuse-table>
+      }
+    </div>
+  </div>
+</div>

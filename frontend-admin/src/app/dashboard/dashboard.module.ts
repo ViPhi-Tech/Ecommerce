@@ -18,6 +18,7 @@ import { customizationRoutes } from './modules/customization/customization.routi
 import { clientRoutes } from './modules/client-module/client.routing';
 import { supplierRoutes } from './modules/supplier-module/supplier.routing';
 import { homeRoutes } from './modules/home-module/home.routing';
+import { reportRoutes } from './modules/report-module/report.routing';
 
 const routes: Routes = [
   {
@@ -90,6 +91,11 @@ const routes: Routes = [
         path: 'accounts-receivable',
         children: accountsReceivableRoutes,
         data: { animation: 'accounts-receivable' },
+      },
+      {
+        path: 'reports',
+        children: reportRoutes,
+        data: { animation: 'reports' },
       },
       {
         path: '**',

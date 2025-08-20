@@ -63,6 +63,12 @@ export class MenuComponent implements OnInit {
           route: '/dashboard/accounts-receivable/kanban',
           visible: true,
         },
+        {
+          label: 'Relatórios',
+          icon: 'lucideChartPie',
+          route: '/dashboard/reports/list',
+          visible: true,
+        },
       ],
     },
     {
