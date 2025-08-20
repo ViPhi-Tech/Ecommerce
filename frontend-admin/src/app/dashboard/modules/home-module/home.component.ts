@@ -1,5 +1,8 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { NgIcon } from '@ng-icons/core';
 import { CoreService } from 'app/shared/services/core.service';
 import { HomeState } from './home.state';
 import { formatCurrency } from 'app/shared/utils/utils';
@@ -8,12 +11,19 @@ import { SalesChartComponent } from './componentes/sales-chart/sales-chart.compo
 import { TopProductsChartComponent } from './componentes/top-products-chart/top-products-chart.component';
 import { CategoriesChartComponent } from './componentes/categories-chart/categories-chart.component';
 import { OrderStatusChartComponent } from './componentes/order-status-chart/order-status-chart.component';
+import { SelectComponent } from 'app/shared/components/form/select/select.component';
+import { DatePickerComponent } from 'app/shared/components/form/datepicker/datepicker.component';
 
 @Component({
   selector: 'fuse-home',
   standalone: true,
   imports: [
     CommonModule,
+    ReactiveFormsModule,
+    ButtonModule,
+    NgIcon,
+    SelectComponent,
+    DatePickerComponent,
     IndicatorsComponent,
     SalesChartComponent,
     TopProductsChartComponent,
@@ -26,6 +36,19 @@ import { OrderStatusChartComponent } from './componentes/order-status-chart/orde
 export class HomeComponent implements OnInit {
   private coreService = inject(CoreService);
   private homeState = inject(HomeState);
+
+  // Form controls para filtros
+  dateRangeControl = new FormControl();
+  periodControl = new FormControl('today');
+
+  // Opções para o select de período
+  periodOptions = [
+    { label: 'Hoje', value: 'today' },
+    { label: 'Esta Semana', value: 'week' },
+    { label: 'Este Mês', value: 'month' },
+    { label: 'Este Ano', value: 'year' },
+    { label: 'Período Personalizado', value: 'custom' }
+  ];
 
   // Computed signals do state
   loading = this.homeState.loading;
@@ -81,13 +104,39 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.coreService.setPageTitle('Home', 'Dashboard');
     this.loadDashboardData();
+    
+    // Configurar valor inicial do controle de período
+    this.periodControl.setValue('today');
+    
+    // Escutar mudanças no dateRangeControl
+    this.dateRangeControl.valueChanges.subscribe(value => {
+      if (value) {
+        this.onDateRangeChange(value);
+      }
+    });
   }
 
   private async loadDashboardData(): Promise<void> {
     await this.homeState.loadAllMetrics();
   }
 
-  public refreshData(): void {
+  public async refreshData(): Promise<void> {
+    await this.loadDashboardData();
+  }
+
+  public onPeriodChange(period: string): void {
+    console.log('Período selecionado:', period);
+    this.homeState.setSelectedPeriod(period as 'today' | 'week' | 'month' | 'year');
+    
+    // Se for período personalizado, mostrar o datepicker
+    if (period !== 'custom') {
+      this.loadDashboardData();
+    }
+  }
+
+  public onDateRangeChange(dateRange: Date): void {
+    console.log('Data selecionada:', dateRange);
+    // Aqui você pode implementar a lógica para filtrar por data personalizada
     this.loadDashboardData();
   }
 
