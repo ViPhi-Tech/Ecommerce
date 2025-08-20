@@ -1,5 +1,76 @@
 <div
   class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
 >
-  <div echarts [options]="chartOption()" class="h-80"></div>
+  @if (loading) {
+    <!-- Top Products Chart Skeleton -->
+    <div class="top-products-skeleton">
+      <!-- Header Skeleton -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 h-6 w-40 rounded animate-pulse mb-2"
+          ></div>
+          <div
+            class="bg-gray-200 dark:bg-gray-700 h-4 w-56 rounded animate-pulse"
+          ></div>
+        </div>
+        <div
+          class="bg-gray-300 dark:bg-gray-600 h-8 w-8 rounded animate-pulse"
+        ></div>
+      </div>
+
+      <!-- Chart Area Skeleton - Donut Style -->
+      <div class="h-80 flex items-center justify-center">
+        <div class="relative skeleton-donut">
+          <!-- Outer Circle -->
+          <div
+            class="w-48 h-48 rounded-full border-8 border-gray-200 dark:border-gray-700 animate-pulse-smooth"
+          ></div>
+          <!-- Inner Circle -->
+          <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 rounded-full bg-gray-100 dark:bg-gray-700 animate-pulse-smooth"
+          ></div>
+
+          <!-- Animated Segments -->
+          <div class="absolute inset-0 rounded-full overflow-hidden">
+            <div
+              class="w-full h-full rounded-full bg-gradient-to-r from-blue-300 to-transparent dark:from-blue-600 opacity-30 skeleton-pie-segment"
+              style="clip-path: polygon(50% 50%, 50% 0%, 75% 0%, 75% 50%)"
+            ></div>
+            <div
+              class="w-full h-full rounded-full bg-gradient-to-r from-green-300 to-transparent dark:from-green-600 opacity-30 skeleton-pie-segment"
+              style="clip-path: polygon(50% 50%, 75% 50%, 100% 75%, 50% 50%)"
+            ></div>
+            <div
+              class="w-full h-full rounded-full bg-gradient-to-r from-yellow-300 to-transparent dark:from-yellow-600 opacity-30 skeleton-pie-segment"
+              style="clip-path: polygon(50% 50%, 50% 100%, 25% 100%, 50% 50%)"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Legend List Skeleton -->
+      <div class="space-y-3 mt-4">
+        @for (item of [1, 2, 3, 4]; track item) {
+          <div
+            class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg animate-pulse"
+          >
+            <div class="flex items-center space-x-3">
+              <div
+                class="w-4 h-4 rounded-full bg-gray-300 dark:bg-gray-600 animate-pulse"
+              ></div>
+              <div
+                class="bg-gray-300 dark:bg-gray-600 h-4 w-24 rounded animate-pulse"
+              ></div>
+            </div>
+            <div
+              class="bg-gray-300 dark:bg-gray-600 h-4 w-16 rounded animate-pulse"
+            ></div>
+          </div>
+        }
+      </div>
+    </div>
+  } @else {
+    <div echarts [options]="chartOption()" class="h-80"></div>
+  }
 </div>

@@ -14,6 +14,7 @@ export class CategoriesChartComponent {
   @Input() data: number[] = [];
   @Input() categories: string[] = [];
   @Input() title = 'Vendas por Categoria';
+  @Input() loading = false;
 
   chartOption = computed<EChartsOption>(() => ({
     title: {

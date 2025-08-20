@@ -1,2 +1,61 @@
 // Estilos específicos para o gráfico de status de pedidos
 // Caso precise de customizações específicas, adicione aqui
+
+// Skeleton Styles for Order Status Chart
+.order-status-skeleton {
+  .skeleton-pie-segment {
+    animation: skeleton-rotate 4s linear infinite;
+    transform-origin: center;
+
+    &:nth-child(1) {
+      animation-delay: 0s;
+    }
+
+    &:nth-child(2) {
+      animation-delay: 0.5s;
+    }
+
+    &:nth-child(3) {
+      animation-delay: 1s;
+    }
+
+    &:nth-child(4) {
+      animation-delay: 1.5s;
+    }
+  }
+}
+
+// Animações específicas para skeletons
+@keyframes skeleton-rotate {
+  0% {
+    transform: rotate(0deg);
+    opacity: 0.5;
+  }
+
+  50% {
+    opacity: 0.8;
+  }
+
+  100% {
+    transform: rotate(5deg);
+    opacity: 0.5;
+  }
+}
+
+// Pulsação suave para elementos de skeleton
+@keyframes skeleton-pulse-smooth {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+.animate-pulse-smooth {
+  animation: skeleton-pulse-smooth 2.5s ease-in-out infinite;
+}

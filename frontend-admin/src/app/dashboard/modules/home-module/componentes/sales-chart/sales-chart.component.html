@@ -1,5 +1,87 @@
 <div
   class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
 >
-  <div echarts [options]="chartOption()" class="h-80"></div>
+  @if (loading) {
+    <!-- Sales Chart Skeleton -->
+    <div class="sales-chart-skeleton">
+      <!-- Header Skeleton -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 h-6 w-32 rounded animate-pulse mb-2"
+          ></div>
+          <div
+            class="bg-gray-200 dark:bg-gray-700 h-4 w-48 rounded animate-pulse"
+          ></div>
+        </div>
+        <div
+          class="bg-gray-300 dark:bg-gray-600 h-8 w-8 rounded animate-pulse"
+        ></div>
+      </div>
+
+      <!-- Chart Area Skeleton -->
+      <div
+        class="h-80 bg-gray-100 dark:bg-gray-700 rounded-lg animate-pulse relative overflow-hidden"
+      >
+        <!-- Chart Lines Effect -->
+        <div class="absolute inset-0 flex items-end justify-around p-4">
+          <div
+            class="bg-gray-300 dark:bg-gray-600 rounded-t skeleton-bar"
+            style="width: 12%; height: 60%"
+          ></div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 rounded-t skeleton-bar"
+            style="width: 12%; height: 80%"
+          ></div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 rounded-t skeleton-bar"
+            style="width: 12%; height: 45%"
+          ></div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 rounded-t skeleton-bar"
+            style="width: 12%; height: 70%"
+          ></div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 rounded-t skeleton-bar"
+            style="width: 12%; height: 55%"
+          ></div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 rounded-t skeleton-bar"
+            style="width: 12%; height: 65%"
+          ></div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 rounded-t skeleton-bar"
+            style="width: 12%; height: 40%"
+          ></div>
+        </div>
+
+        <!-- Gradient Overlay for depth -->
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-gray-200 dark:from-gray-800 to-transparent opacity-30"
+        ></div>
+      </div>
+
+      <!-- Legend Skeleton -->
+      <div class="flex items-center justify-center mt-4 space-x-4">
+        <div class="flex items-center space-x-2">
+          <div
+            class="w-3 h-3 bg-blue-300 dark:bg-blue-600 rounded animate-pulse"
+          ></div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 h-4 w-16 rounded animate-pulse"
+          ></div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <div
+            class="w-3 h-3 bg-green-300 dark:bg-green-600 rounded animate-pulse"
+          ></div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 h-4 w-20 rounded animate-pulse"
+          ></div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div echarts [options]="chartOption()" class="h-80"></div>
+  }
 </div>

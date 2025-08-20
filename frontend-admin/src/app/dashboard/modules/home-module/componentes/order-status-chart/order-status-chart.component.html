@@ -1,5 +1,128 @@
 <div
   class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
 >
-  <div echarts [options]="chartOption()" class="h-80"></div>
+  @if (loading) {
+    <!-- Order Status Chart Skeleton -->
+    <div class="order-status-skeleton">
+      <!-- Header Skeleton -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 h-6 w-44 rounded animate-pulse mb-2"
+          ></div>
+          <div
+            class="bg-gray-200 dark:bg-gray-700 h-4 w-56 rounded animate-pulse"
+          ></div>
+        </div>
+        <div
+          class="bg-gray-300 dark:bg-gray-600 h-8 w-8 rounded animate-pulse"
+        ></div>
+      </div>
+
+      <!-- Chart Area Skeleton - Pie Chart -->
+      <div class="h-64 flex items-center justify-center relative">
+        <div class="relative">
+          <!-- Main Circle -->
+          <div
+            class="w-40 h-40 rounded-full border-8 border-gray-200 dark:border-gray-700 animate-pulse-smooth relative overflow-hidden"
+          >
+            <!-- Animated Pie Segments -->
+            <div class="absolute inset-0 rounded-full">
+              <!-- Segment 1 -->
+              <div
+                class="absolute inset-0 rounded-full bg-blue-300 dark:bg-blue-600 opacity-40 skeleton-pie-segment"
+                style="clip-path: polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%)"
+              ></div>
+              <!-- Segment 2 -->
+              <div
+                class="absolute inset-0 rounded-full bg-green-300 dark:bg-green-600 opacity-40 skeleton-pie-segment"
+                style="
+                  clip-path: polygon(50% 50%, 100% 50%, 100% 100%, 50% 100%);
+                "
+              ></div>
+              <!-- Segment 3 -->
+              <div
+                class="absolute inset-0 rounded-full bg-yellow-300 dark:bg-yellow-600 opacity-40 skeleton-pie-segment"
+                style="clip-path: polygon(50% 50%, 50% 100%, 0% 100%, 0% 75%)"
+              ></div>
+              <!-- Segment 4 -->
+              <div
+                class="absolute inset-0 rounded-full bg-red-300 dark:bg-red-600 opacity-40 skeleton-pie-segment"
+                style="clip-path: polygon(50% 50%, 0% 75%, 0% 0%, 50% 0%)"
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status List Skeleton -->
+      <div class="grid grid-cols-2 gap-4 mt-6">
+        <div
+          class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg animate-pulse"
+        >
+          <div
+            class="w-4 h-4 rounded-full bg-blue-300 dark:bg-blue-600 animate-pulse"
+          ></div>
+          <div>
+            <div
+              class="bg-gray-300 dark:bg-gray-600 h-4 w-20 rounded animate-pulse mb-1"
+            ></div>
+            <div
+              class="bg-gray-200 dark:bg-gray-700 h-3 w-12 rounded animate-pulse"
+            ></div>
+          </div>
+        </div>
+
+        <div
+          class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg animate-pulse"
+        >
+          <div
+            class="w-4 h-4 rounded-full bg-green-300 dark:bg-green-600 animate-pulse"
+          ></div>
+          <div>
+            <div
+              class="bg-gray-300 dark:bg-gray-600 h-4 w-24 rounded animate-pulse mb-1"
+            ></div>
+            <div
+              class="bg-gray-200 dark:bg-gray-700 h-3 w-12 rounded animate-pulse"
+            ></div>
+          </div>
+        </div>
+
+        <div
+          class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg animate-pulse"
+        >
+          <div
+            class="w-4 h-4 rounded-full bg-yellow-300 dark:bg-yellow-600 animate-pulse"
+          ></div>
+          <div>
+            <div
+              class="bg-gray-300 dark:bg-gray-600 h-4 w-20 rounded animate-pulse mb-1"
+            ></div>
+            <div
+              class="bg-gray-200 dark:bg-gray-700 h-3 w-12 rounded animate-pulse"
+            ></div>
+          </div>
+        </div>
+
+        <div
+          class="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg animate-pulse"
+        >
+          <div
+            class="w-4 h-4 rounded-full bg-red-300 dark:bg-red-600 animate-pulse"
+          ></div>
+          <div>
+            <div
+              class="bg-gray-300 dark:bg-gray-600 h-4 w-18 rounded animate-pulse mb-1"
+            ></div>
+            <div
+              class="bg-gray-200 dark:bg-gray-700 h-3 w-12 rounded animate-pulse"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div echarts [options]="chartOption()" class="h-80"></div>
+  }
 </div>

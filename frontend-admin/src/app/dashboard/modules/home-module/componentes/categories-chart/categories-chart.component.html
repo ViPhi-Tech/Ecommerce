@@ -1,5 +1,143 @@
 <div
   class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
 >
-  <div echarts [options]="chartOption()" class="h-80"></div>
+  @if (loading) {
+    <!-- Categories Chart Skeleton -->
+    <div class="categories-skeleton">
+      <!-- Header Skeleton -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 h-6 w-36 rounded animate-pulse mb-2"
+          ></div>
+          <div
+            class="bg-gray-200 dark:bg-gray-700 h-4 w-52 rounded animate-pulse"
+          ></div>
+        </div>
+        <div
+          class="bg-gray-300 dark:bg-gray-600 h-8 w-8 rounded animate-pulse"
+        ></div>
+      </div>
+
+      <!-- Chart Area Skeleton - Horizontal Bars -->
+      <div class="space-y-4">
+        <div class="flex items-center space-x-4">
+          <div
+            class="bg-gray-200 dark:bg-gray-700 h-4 w-20 rounded animate-pulse-smooth"
+          ></div>
+          <div
+            class="flex-1 bg-gray-100 dark:bg-gray-700 h-6 rounded-full relative overflow-hidden"
+          >
+            <div
+              class="absolute left-0 top-0 h-full bg-blue-300 dark:bg-blue-600 rounded-full skeleton-progress-bar"
+              style="width: 75%"
+            ></div>
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 h-4 w-12 rounded animate-pulse-smooth"
+          ></div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <div
+            class="bg-gray-200 dark:bg-gray-700 h-4 w-24 rounded animate-pulse-smooth"
+          ></div>
+          <div
+            class="flex-1 bg-gray-100 dark:bg-gray-700 h-6 rounded-full relative overflow-hidden"
+          >
+            <div
+              class="absolute left-0 top-0 h-full bg-green-300 dark:bg-green-600 rounded-full skeleton-progress-bar"
+              style="width: 60%"
+            ></div>
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 h-4 w-12 rounded animate-pulse-smooth"
+          ></div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <div
+            class="bg-gray-200 dark:bg-gray-700 h-4 w-28 rounded animate-pulse-smooth"
+          ></div>
+          <div
+            class="flex-1 bg-gray-100 dark:bg-gray-700 h-6 rounded-full relative overflow-hidden"
+          >
+            <div
+              class="absolute left-0 top-0 h-full bg-yellow-300 dark:bg-yellow-600 rounded-full skeleton-progress-bar"
+              style="width: 45%"
+            ></div>
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 h-4 w-12 rounded animate-pulse-smooth"
+          ></div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <div
+            class="bg-gray-200 dark:bg-gray-700 h-4 w-16 rounded animate-pulse-smooth"
+          ></div>
+          <div
+            class="flex-1 bg-gray-100 dark:bg-gray-700 h-6 rounded-full relative overflow-hidden"
+          >
+            <div
+              class="absolute left-0 top-0 h-full bg-purple-300 dark:bg-purple-600 rounded-full skeleton-progress-bar"
+              style="width: 30%"
+            ></div>
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 h-4 w-12 rounded animate-pulse-smooth"
+          ></div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+          <div
+            class="bg-gray-200 dark:bg-gray-700 h-4 w-22 rounded animate-pulse-smooth"
+          ></div>
+          <div
+            class="flex-1 bg-gray-100 dark:bg-gray-700 h-6 rounded-full relative overflow-hidden"
+          >
+            <div
+              class="absolute left-0 top-0 h-full bg-red-300 dark:bg-red-600 rounded-full skeleton-progress-bar"
+              style="width: 20%"
+            ></div>
+          </div>
+          <div
+            class="bg-gray-300 dark:bg-gray-600 h-4 w-12 rounded animate-pulse-smooth"
+          ></div>
+        </div>
+      </div>
+
+      <!-- Summary Stats Skeleton -->
+      <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+        <div class="grid grid-cols-3 gap-4">
+          <div class="text-center">
+            <div
+              class="bg-gray-300 dark:bg-gray-600 h-8 w-12 rounded animate-pulse mx-auto mb-2"
+            ></div>
+            <div
+              class="bg-gray-200 dark:bg-gray-700 h-3 w-16 rounded animate-pulse mx-auto"
+            ></div>
+          </div>
+          <div class="text-center">
+            <div
+              class="bg-gray-300 dark:bg-gray-600 h-8 w-12 rounded animate-pulse mx-auto mb-2"
+            ></div>
+            <div
+              class="bg-gray-200 dark:bg-gray-700 h-3 w-20 rounded animate-pulse mx-auto"
+            ></div>
+          </div>
+          <div class="text-center">
+            <div
+              class="bg-gray-300 dark:bg-gray-600 h-8 w-12 rounded animate-pulse mx-auto mb-2"
+            ></div>
+            <div
+              class="bg-gray-200 dark:bg-gray-700 h-3 w-14 rounded animate-pulse mx-auto"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div echarts [options]="chartOption()" class="h-80"></div>
+  }
 </div>

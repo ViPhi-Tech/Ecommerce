@@ -18,6 +18,7 @@ export interface ProductData {
 export class TopProductsChartComponent {
   @Input() data: ProductData[] = [];
   @Input() title = 'Produtos Mais Vendidos';
+  @Input() loading = false;
 
   chartOption = computed<EChartsOption>(() => ({
     title: {

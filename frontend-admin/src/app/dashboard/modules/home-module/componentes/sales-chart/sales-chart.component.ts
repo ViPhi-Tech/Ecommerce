@@ -14,6 +14,7 @@ export class SalesChartComponent {
   @Input() data: number[] = [];
   @Input() labels: string[] = [];
   @Input() title = 'Vendas por Mês';
+  @Input() loading = false;
 
   chartOption = computed<EChartsOption>(() => ({
     title: {

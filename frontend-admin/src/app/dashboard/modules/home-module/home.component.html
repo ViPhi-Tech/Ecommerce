@@ -11,22 +11,20 @@
     [loading]="loading()"
   ></fuse-indicators>
 
-  <!-- Gráficos Principais -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
     <!-- Gráfico de Vendas -->
-    <fuse-sales-chart></fuse-sales-chart>
+    <fuse-sales-chart [loading]="loading()"></fuse-sales-chart>
 
     <!-- Gráfico de Produtos Mais Vendidos -->
-    <fuse-top-products-chart></fuse-top-products-chart>
+    <fuse-top-products-chart [loading]="loading()"></fuse-top-products-chart>
   </div>
 
-  <!-- Gráficos Secundários -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
     <!-- Gráfico de Categorias -->
-    <fuse-categories-chart></fuse-categories-chart>
+    <fuse-categories-chart [loading]="loading()"></fuse-categories-chart>
 
     <!-- Gráfico de Status de Pedidos -->
-    <fuse-order-status-chart></fuse-order-status-chart>
+    <fuse-order-status-chart [loading]="loading()"></fuse-order-status-chart>
   </div>
 
   <!-- Resumo de Atividades Recentes -->

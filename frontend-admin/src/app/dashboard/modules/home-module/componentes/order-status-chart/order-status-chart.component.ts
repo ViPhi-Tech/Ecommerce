@@ -19,6 +19,7 @@ export interface OrderStatusData {
 export class OrderStatusChartComponent {
   @Input() data: OrderStatusData[] = [];
   @Input() title = 'Status dos Pedidos';
+  @Input() loading = false;
 
   chartOption = computed<EChartsOption>(() => ({
     title: {
