@@ -72,28 +72,28 @@ export class AccountsReceivableKanbanComponent implements OnInit {
     const accounts = this.accountsReceivableList();
 
     const actions = [
-          {
-            label: 'Editar',
-            icon: 'lucideSquarePen',
-            action: (card: KanbanCard) => {
-              this.editAccount(card);
-            },
-          },
-          {
-            label: 'Visualizar',
-            icon: 'lucideEye',
-            action: (card: KanbanCard) => {
-              this.viewAccount(card);
-            },
-          },
-          {
-            label: 'Excluir',
-            icon: 'lucideTrash2',
-            action: (card: KanbanCard) => {
-              this.deleteAccount(card);
-            },
-          },
-        ]
+      {
+        label: 'Editar',
+        icon: 'lucideSquarePen',
+        action: (card: KanbanCard) => {
+          this.editAccount(card);
+        },
+      },
+      {
+        label: 'Visualizar',
+        icon: 'lucideEye',
+        action: (card: KanbanCard) => {
+          this.viewAccount(card);
+        },
+      },
+      {
+        label: 'Excluir',
+        icon: 'lucideTrash2',
+        action: (card: KanbanCard) => {
+          this.deleteAccount(card);
+        },
+      },
+    ];
 
     // Definir as colunas do Kanban
     const columns: KanbanColumn[] = [

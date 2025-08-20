@@ -9,10 +9,10 @@ export interface Indicator {
 }
 
 export interface DashboardMetrics {
-  totalOrders: number,
-  totalProductsWithStock: number,
-  totalSales: number,
-  activeClients: number
+  totalOrders: number;
+  totalProductsWithStock: number;
+  totalSales: number;
+  activeClients: number;
 }
 
 export interface ChartsMetrics {

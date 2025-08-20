@@ -66,7 +66,7 @@ export class OrderViewComponent implements OnInit {
 
   async loadOrderData(id: number | string): Promise<void> {
     this.isLoading.set(true);
-    
+
     this.orderService
       .getOrderById(id)
       .pipe(takeUntilDestroyed(this.destroyedRef))
@@ -180,7 +180,9 @@ export class OrderViewComponent implements OnInit {
     }
   }
 
-  getPaymentStatusSeverity(statusId: string): 'success' | 'info' | 'warn' | 'danger' {
+  getPaymentStatusSeverity(
+    statusId: string
+  ): 'success' | 'info' | 'warn' | 'danger' {
     switch (statusId?.toLowerCase()) {
       case 'approved':
       case 'aprovado':

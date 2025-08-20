@@ -80,7 +80,7 @@ export class AccountsPayableCreateComponent implements OnInit {
         } else {
           this.loadInfos();
         }
-        const url = this.router.url
+        const url = this.router.url;
         this.isView.set(url.includes('/view'));
         if (this.isView()) {
           this.accountsPayableForm.disable();

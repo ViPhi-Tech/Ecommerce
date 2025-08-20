@@ -19,7 +19,7 @@ export class HomeState extends BaseState<HomeModuleState> {
       totalOrders: 0,
       totalProductsWithStock: 0,
       totalSales: 0,
-      activeClients: 0
+      activeClients: 0,
     },
     chartsMetrics: {
       salesByMonth: null,
@@ -29,7 +29,7 @@ export class HomeState extends BaseState<HomeModuleState> {
     },
     selectedPeriod: 'month',
     loading: false,
-    error: null
+    error: null,
   });
 
   indicators = computed(() => this.state().indicators);
@@ -70,9 +70,7 @@ export class HomeState extends BaseState<HomeModuleState> {
     this.clearError();
 
     try {
-      await Promise.all([
-        this.getDashboardMetrics(skipLoader),
-      ]);
+      await Promise.all([this.getDashboardMetrics(skipLoader)]);
     } catch {
       this.setError('Erro ao carregar dados do dashboard.');
     } finally {

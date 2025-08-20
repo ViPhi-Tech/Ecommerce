@@ -141,8 +141,13 @@ export class AccountsReceivableService {
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${id}`);
   }
 
-  updateAccountReceivableStatus(id: number, status: AccountsReceivableStatus): Observable<ApiResponse> {
-    return this.http.patch<ApiResponse>(`${this.apiUrl}/${id}/status`, { status });
+  updateAccountReceivableStatus(
+    id: number,
+    status: AccountsReceivableStatus
+  ): Observable<ApiResponse> {
+    return this.http.patch<ApiResponse>(`${this.apiUrl}/${id}/status`, {
+      status,
+    });
   }
 
   refreshList() {

@@ -66,7 +66,7 @@ export class OrderListComponent implements OnInit {
 
   viewOrder(orderData: any) {
     this.router.navigate([
-      { outlets: { drawer: ['orders', orderData.id, 'view'] } }
+      { outlets: { drawer: ['orders', orderData.id, 'view'] } },
     ]);
   }
 
@@ -112,7 +112,7 @@ export class OrderListComponent implements OnInit {
               color: 'info',
               variant: 'text',
               tooltip: 'Visualizar Pedido',
-              action: (data) => {
+              action: data => {
                 this.viewOrder(data);
               },
             },
@@ -121,7 +121,7 @@ export class OrderListComponent implements OnInit {
               color: 'primary',
               variant: 'text',
               tooltip: 'Editar Pedido',
-              action: (data) => {
+              action: data => {
                 this.editOrder(data);
               },
             },

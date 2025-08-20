@@ -20,17 +20,13 @@ export class HomeService {
     period: 'today' | 'week' | 'month' | 'year' = 'month',
     skipLoader = true
   ): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(
-      `${this.apiUrl}/metrics`,
-      {
-        params: { period },
-        headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
-      }
-    );
+    return this.http.get<ApiResponse<any>>(`${this.apiUrl}/metrics`, {
+      params: { period },
+      headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
+    });
   }
 
   getDashboardCharts(): Observable<ApiResponse<ChartsMetrics>> {
     return this.http.get<ApiResponse<ChartsMetrics>>(`${this.apiUrl}/charts`);
   }
-
 }

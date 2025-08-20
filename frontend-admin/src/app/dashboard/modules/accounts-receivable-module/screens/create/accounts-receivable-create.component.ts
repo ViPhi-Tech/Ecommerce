@@ -99,7 +99,9 @@ export class AccountsReceivableCreateComponent implements OnInit {
 
           this.accountsReceivableForm.patchValue({
             ...data,
-            dueDate: data.dueDate ? dayjs(data.dueDate).format('DD/MM/YYYY') : '',
+            dueDate: data.dueDate
+              ? dayjs(data.dueDate).format('DD/MM/YYYY')
+              : '',
           });
           this.isLoading.set(false);
           this.visible.set(true);
