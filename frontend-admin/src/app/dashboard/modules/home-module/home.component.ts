@@ -2,7 +2,6 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoreService } from 'app/shared/services/core.service';
 import { HomeState } from './home.state';
-import { HomeService } from './home.service';
 import { Subscription } from 'rxjs';
 import { formatCurrency } from 'app/shared/utils/utils';
 import { IndicatorsComponent } from './componentes/indicators/indicators.component';
@@ -28,7 +27,6 @@ import { OrderStatusChartComponent } from './componentes/order-status-chart/orde
 export class HomeComponent implements OnInit {
   private coreService = inject(CoreService);
   private homeState = inject(HomeState);
-  private homeService = inject(HomeService);
 
   private refreshSubscription: Subscription | null = null;
 

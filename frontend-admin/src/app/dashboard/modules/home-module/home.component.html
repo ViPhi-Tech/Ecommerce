@@ -6,7 +6,10 @@
   </div>
 
   <!-- Indicadores Principais -->
-  <fuse-indicators [indicators]="indicators()"></fuse-indicators>
+  <fuse-indicators
+    [indicators]="indicators()"
+    [loading]="loading()"
+  ></fuse-indicators>
 
   <!-- Gráficos Principais -->
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">

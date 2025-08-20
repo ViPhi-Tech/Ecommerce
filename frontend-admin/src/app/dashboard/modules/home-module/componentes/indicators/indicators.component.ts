@@ -18,4 +18,5 @@ export interface Indicator {
 })
 export class IndicatorsComponent {
   @Input() indicators: Indicator[] = [];
+  @Input() loading = false;
 }
