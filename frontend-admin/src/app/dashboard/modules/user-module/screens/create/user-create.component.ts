@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -39,6 +39,7 @@ export class UserCreateComponent implements OnInit {
   private userService = inject(UserService);
   private userState = inject(UserState);
   private toast = inject(MessageService);
+  private destroyRef = inject(DestroyRef);
 
   @ViewChild('dialogRef') dialogRef!: Dialog;
 
@@ -67,7 +68,6 @@ export class UserCreateComponent implements OnInit {
       fullName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      isActive: [true],
       modules: [[], [Validators.required]], // Array de módulos selecionados
     });
   }
@@ -89,14 +89,13 @@ export class UserCreateComponent implements OnInit {
     this.isLoading.set(true);
     this.userService
       .getUserById(id)
-      .pipe(takeUntilDestroyed())
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: response => {
           const user = response.data || response;
           this.userForm.patchValue({
             fullName: user.fullName,
             email: user.email,
-            isActive: user.isActive,
             modules: user.modules || [],
           });
           this.isLoading.set(false);
@@ -132,7 +131,7 @@ export class UserCreateComponent implements OnInit {
 
       this.userService
         .upsertUser(formData)
-        .pipe(takeUntilDestroyed())
+        .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe({
           next: () => {
             this.toast.add({

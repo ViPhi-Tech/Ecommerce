@@ -5,7 +5,7 @@
   [modal]="true"
   [closeOnEscape]="true"
   [draggable]="false"
-  styleClass="max-w-[600px] w-full"
+  styleClass="max-w-[800px] w-full"
 >
   <ng-template #header>
     <div class="flex flex-col space-y-1.5 text-center sm:text-left">
@@ -34,7 +34,6 @@
           <div class="col-12 mb-4">
             <fuse-input
               [isLoading]="isLoading()"
-              type="email"
               label="Email"
               [control]="userForm.get('email')"
               placeholder="Digite o email do usuário"
@@ -52,26 +51,8 @@
           </div>
 
           <div class="col-12 mb-4">
-            <fuse-radio
-              [isLoading]="isLoading()"
-              label="Status do Usuário"
-              [control]="userForm.get('isActive')"
-              [items]="[
-                { value: true, label: 'Ativo' },
-                { value: false, label: 'Inativo' },
-              ]"
-              valueRef="value"
-              labelRef="label"
-              direction="row"
-              groupName="userStatus"
-            />
-          </div>
-
-          <div class="col-12 mb-4">
             <div class="flex justify-between items-center mb-3">
-              <div class="block text-sm font-medium">
-                Módulos do Sistema *
-              </div>
+              <div class="block text-sm font-medium">Módulos do Sistema *</div>
               <div class="flex gap-2">
                 <button
                   type="button"
@@ -91,10 +72,22 @@
                 </button>
               </div>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 modules-grid">
+            <div
+              class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 modules-grid"
+            >
               @for (module of systemModules; track module.id) {
-                <div class="flex items-start space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors module-card"
-                     [class.selected]="isModuleSelected(module.id)">
+                <div
+                  class="flex items-start space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors module-card cursor-pointer"
+                  [class.selected]="isModuleSelected(module.id)"
+                  [class.disabled]="isLoading()"
+                  (click)="toggleModule(module.id)"
+                  (keyup.enter)="toggleModule(module.id)"
+                  (keyup.space)="toggleModule(module.id)"
+                  [attr.tabindex]="isLoading() ? -1 : 0"
+                  [attr.role]="'checkbox'"
+                  [attr.aria-checked]="isModuleSelected(module.id)"
+                  [attr.aria-label]="'Selecionar módulo ' + module.name"
+                >
                   <input
                     type="checkbox"
                     [id]="'module-' + module.id"
@@ -102,19 +95,26 @@
                     (change)="toggleModule(module.id)"
                     class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     [disabled]="isLoading()"
+                    tabindex="-1"
                   />
                   <div class="flex-1 min-w-0">
-                    <label [for]="'module-' + module.id" class="block text-sm cursor-pointer module-title">
+                    <label
+                      [for]="'module-' + module.id"
+                      class="block text-sm cursor-pointer module-title"
+                    >
                       {{ module.name }}
                     </label>
-                    <p class="mt-1 module-description">
+                    <!-- <p class="mt-1 module-description">
                       {{ module.description }}
-                    </p>
+                    </p> -->
                   </div>
                 </div>
               }
             </div>
-            @if (userForm.get('modules')?.invalid && userForm.get('modules')?.touched) {
+            @if (
+              userForm.get('modules')?.invalid &&
+              userForm.get('modules')?.touched
+            ) {
               <div class="validation-error">
                 Selecione pelo menos um módulo para o usuário
               </div>
