@@ -1,1 +1,46 @@
 // User Create Component Styles
+
+.modules-grid {
+  .module-card {
+    transition: all 0.2s ease-in-out;
+    
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    &.selected {
+      border-color: #3b82f6;
+      background-color: #eff6ff;
+    }
+    
+    input[type="checkbox"] {
+      &:checked {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+      }
+      
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        outline: none;
+      }
+    }
+    
+    .module-title {
+      font-weight: 500;
+      color: #111827;
+    }
+    
+    .module-description {
+      color: #6b7280;
+      font-size: 0.75rem;
+      line-height: 1rem;
+    }
+  }
+}
+
+.validation-error {
+  color: #ef4444;
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}

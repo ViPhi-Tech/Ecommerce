@@ -4,6 +4,7 @@ export interface IUser {
   email: string; // Email do usuário
   loginId?: number; // ID do login associado
   isActive: boolean; // Indica se o usuário está ativo
+  modules?: string[]; // Módulos permitidos para o usuário
   createdAt?: Date; // Data de criação
   updatedAt?: Date; // Data da última atualização
   companyId?: number; // ID da empresa associada

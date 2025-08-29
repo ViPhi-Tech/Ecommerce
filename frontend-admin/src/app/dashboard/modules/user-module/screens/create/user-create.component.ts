@@ -16,6 +16,7 @@ import { UserState } from '../../user.state';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { ToastModule } from 'primeng/toast';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { SYSTEM_MODULES } from 'app/shared/constants/system-modules.constants';
 
 @Component({
   selector: 'fuse-user-create',
@@ -44,6 +45,9 @@ export class UserCreateComponent implements OnInit {
   userForm!: FormGroup;
   userId = signal<string | null>(null);
   isLoading = signal(false);
+  
+  // Módulos do sistema
+  systemModules = SYSTEM_MODULES;
 
   // signals
   visible = signal(true);
@@ -64,6 +68,7 @@ export class UserCreateComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       isActive: [true],
+      modules: [[], [Validators.required]], // Array de módulos selecionados
     });
   }
 
@@ -92,6 +97,7 @@ export class UserCreateComponent implements OnInit {
             fullName: user.fullName,
             email: user.email,
             isActive: user.isActive,
+            modules: user.modules || [],
           });
           this.isLoading.set(false);
         },
@@ -157,6 +163,51 @@ export class UserCreateComponent implements OnInit {
       const control = this.userForm.get(key);
       control?.markAsTouched();
     });
+  }
+
+  // Método para verificar se um módulo está selecionado
+  isModuleSelected(moduleId: string): boolean {
+    const selectedModules = this.userForm.get('modules')?.value || [];
+    return selectedModules.includes(moduleId);
+  }
+
+  // Método para alternar a seleção de um módulo
+  toggleModule(moduleId: string): void {
+    const modulesControl = this.userForm.get('modules');
+    const currentModules = modulesControl?.value || [];
+    
+    if (currentModules.includes(moduleId)) {
+      // Remove o módulo se já estiver selecionado
+      const updatedModules = currentModules.filter((id: string) => id !== moduleId);
+      modulesControl?.setValue(updatedModules);
+    } else {
+      // Adiciona o módulo se não estiver selecionado
+      const updatedModules = [...currentModules, moduleId];
+      modulesControl?.setValue(updatedModules);
+    }
+  }
+
+  // Método para selecionar todos os módulos
+  selectAllModules(): void {
+    const allModuleIds = this.systemModules.map(module => module.id);
+    this.userForm.get('modules')?.setValue(allModuleIds);
+  }
+
+  // Método para limpar todas as seleções
+  clearAllModules(): void {
+    this.userForm.get('modules')?.setValue([]);
+  }
+
+  // Método para verificar se todos os módulos estão selecionados
+  areAllModulesSelected(): boolean {
+    const selectedModules = this.userForm.get('modules')?.value || [];
+    return selectedModules.length === this.systemModules.length;
+  }
+
+  // Método para verificar se nenhum módulo está selecionado
+  areNoModulesSelected(): boolean {
+    const selectedModules = this.userForm.get('modules')?.value || [];
+    return selectedModules.length === 0;
   }
 
   closeDrawer(e?: Event) {

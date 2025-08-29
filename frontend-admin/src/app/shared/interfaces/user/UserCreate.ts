@@ -4,4 +4,5 @@ export interface IUserCreate {
   email: string;
   password?: string;
   isActive?: boolean;
+  modules?: string[]; // Módulos permitidos para o usuário
 }

@@ -17,6 +17,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { heightAnimation } from 'app/shared/utils/animations';
 import { ButtonModule } from 'primeng/button';
 import { UserState } from '../../user.state';
+import { SYSTEM_MODULES } from 'app/shared/constants/system-modules.constants';
 
 @Component({
   selector: 'fuse-user-list',
@@ -66,6 +67,13 @@ export class UserListComponent implements OnInit {
             },
           },
           {
+            icon: 'pi pi-info-circle',
+            tooltip: 'Ver módulos do usuário',
+            action: (rowData: any) => {
+              this.showUserModules(rowData);
+            },
+          },
+          {
             icon: 'pi pi-trash',
             tooltip: 'Excluir usuário',
             action: (rowData: any) => {
@@ -94,6 +102,27 @@ export class UserListComponent implements OnInit {
 
   refreshUsers() {
     this.state.getUserList();
+  }
+
+  showUserModules(user: any) {
+    const userModules = user.modules || [];
+    const moduleNames = userModules.map((moduleId: string) => {
+      const module = SYSTEM_MODULES.find(m => m.id === moduleId);
+      return module ? module.name : moduleId;
+    });
+
+    const modulesText = moduleNames.length > 0 
+      ? moduleNames.join(', ') 
+      : 'Nenhum módulo atribuído';
+
+    this.confirmationService.confirm({
+      message: `<strong>Módulos do usuário ${user.fullName}:</strong><br><br>${modulesText}`,
+      header: 'Módulos Permitidos',
+      icon: 'pi pi-info-circle',
+      acceptLabel: 'Fechar',
+      rejectVisible: false,
+      accept: () => {},
+    });
   }
 
   confirmDelete(user: any) {
