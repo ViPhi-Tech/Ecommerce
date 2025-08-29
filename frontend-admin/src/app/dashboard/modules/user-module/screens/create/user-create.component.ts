@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { Drawer, DrawerModule } from 'primeng/drawer';
+import { Dialog, DialogModule } from 'primeng/dialog';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
 import { MessageService } from 'primeng/api';
@@ -22,7 +22,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   templateUrl: './user-create.component.html',
   styleUrls: ['./user-create.component.scss'],
   imports: [
-    DrawerModule,
+    DialogModule,
     ButtonModule,
     ReactiveFormsModule,
     InputTextModule,
@@ -39,7 +39,7 @@ export class UserCreateComponent implements OnInit {
   private userState = inject(UserState);
   private toast = inject(MessageService);
 
-  @ViewChild('drawerRef') drawerRef!: Drawer;
+  @ViewChild('dialogRef') dialogRef!: Dialog;
 
   userForm!: FormGroup;
   userId = signal<string | null>(null);
@@ -135,7 +135,7 @@ export class UserCreateComponent implements OnInit {
               detail: `Usuário ${this.userId() ? 'atualizado' : 'cadastrado'} com sucesso`,
             });
             this.userService.refreshUserList();
-            this.closeDrawer();
+            this.onCloseDialog();
           },
           error: error => {
             console.error('Error saving user:', error);
@@ -171,7 +171,16 @@ export class UserCreateComponent implements OnInit {
     }, 300);
   }
 
-  onCloseDrawer() {
-    this.closeDrawer();
+  closeDialog(e = new Event('close')): void {
+    this.dialogRef.close(e);
+  }
+
+  onCloseDialog() {
+    this.visible.set(false);
+    setTimeout(() => {
+      this.router.navigate([{ outlets: { drawer: null } }], {
+        relativeTo: this.activatedRoute.root,
+      });
+    }, 300);
   }
 }

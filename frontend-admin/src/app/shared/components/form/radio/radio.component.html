@@ -1,0 +1,48 @@
+<div class="w-full label-position {{ labelPosition() }}">
+  @if (!isLoading()) {
+    @if (label()) {
+      <div class="label">
+        {{ label() }}
+        @if (isRequired()) {
+          <span class="text-red-500">*</span>
+        }
+      </div>
+    }
+    <div
+      class="flex gap-4 {{ addictionalClass() }}"
+      [class.flex-col]="direction() === 'col'"
+      [class.flex-row]="direction() === 'row'"
+    >
+      @for (item of items(); track $index) {
+        <div class="field-radiobutton">
+          <p-radiobutton
+            [inputId]="groupName() + '_' + $index"
+            [name]="groupName()"
+            [value]="item[valueRef()]"
+            [formControl]="control()"
+            (onChange)="onChange($event)"
+          />
+          <label [for]="groupName() + '_' + $index" class="ml-2">
+            {{ item[labelRef()] }}
+          </label>
+        </div>
+      }
+    </div>
+  } @else {
+    <p-skeleton height="1rem" styleClass="mb-2" width="100px" />
+    <p-skeleton height="2rem" styleClass="mb-2" width="100%" />
+  }
+</div>
+
+@if (
+  errorMessage() && control().invalid && (control().dirty || control().touched)
+) {
+  <p-message
+    severity="error"
+    icon="pi pi-times-circle"
+    styleClass="mt-2"
+    size="small"
+  >
+    {{ errorMessage() }}
+  </p-message>
+}

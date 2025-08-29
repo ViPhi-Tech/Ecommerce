@@ -16,9 +16,8 @@
         (onClick)="refreshReport()"
         severity="secondary"
         size="small"
+        label="Atualizar"
         [outlined]="true"
-        [loading]="state.loading()"
-        [disabled]="state.loading()"
         pTooltip="Atualizar dados"
       >
         <ng-template #content>
@@ -32,9 +31,8 @@
         (onClick)="exportToPDF()"
         severity="secondary"
         size="small"
+        label="PDF"
         [outlined]="true"
-        [loading]="exportingPDF()"
-        [disabled]="state.loading() || exportingPDF() || !state.reportData() || state.reportData().length === 0"
         pTooltip="Exportar para PDF"
       >
         <ng-template #content>
@@ -48,8 +46,7 @@
         (onClick)="exportToExcel()"
         severity="primary"
         size="small"
-        [loading]="exportingExcel()"
-        [disabled]="state.loading() || exportingExcel() || !state.reportData() || state.reportData().length === 0"
+        label="Excel"
         pTooltip="Exportar para Excel"
       >
         <ng-template #content>
@@ -130,16 +127,9 @@
     class="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm"
   >
     <div class="p-6 border-b border-gray-200 dark:border-gray-700">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
-          Dados do Relatório
-        </h2>
-        @if (state.reportData() && state.reportData().length > 0) {
-          <span class="text-sm text-gray-600 dark:text-gray-400">
-            {{ state.reportData().length }} registro(s) encontrado(s)
-          </span>
-        }
-      </div>
+      <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+        Dados do Relatório
+      </h2>
     </div>
 
     <div class="p-6">

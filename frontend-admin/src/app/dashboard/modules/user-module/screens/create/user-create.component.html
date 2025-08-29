@@ -1,74 +1,102 @@
-@if (userForm) {
-  <form [formGroup]="userForm" class="flex flex-col gap-4">
-    <div class="grid grid-cols-12 gap-4">
-      <div class="col-12">
-        <fuse-input
-          [isLoading]="isLoading()"
-          label="Nome completo"
-          [control]="userForm.get('fullName')"
-          placeholder="Digite o nome completo do usuário"
-        />
-      </div>
-
-      <div class="col-12">
-        <fuse-input
-          [isLoading]="isLoading()"
-          type="email"
-          label="Email"
-          [control]="userForm.get('email')"
-          placeholder="Digite o email do usuário"
-        />
-      </div>
-
-      <div class="col-12">
-        <fuse-input
-          [isLoading]="isLoading()"
-          type="password"
-          label="Senha"
-          [control]="userForm.get('password')"
-          placeholder="Digite a senha do usuário"
-        />
-      </div>
-
-      <div class="col-12">
-        <fuse-input
-          [isLoading]="isLoading()"
-          type="radio"
-          label="Status"
-          [control]="userForm.get('isActive')"
-          [items]="[
-            { key: 'active', label: 'Ativo', value: true },
-            { key: 'inactive', label: 'Inativo', value: false },
-          ]"
-        />
-      </div>
+<p-dialog
+  #dialogRef
+  [(visible)]="visible"
+  (onHide)="onCloseDialog()"
+  [modal]="true"
+  [closeOnEscape]="true"
+  [draggable]="false"
+  styleClass="max-w-[600px] w-full"
+>
+  <ng-template #header>
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 class="text-2xl font-semibold leading-none tracking-tight">
+        {{ title() }}
+      </h2>
+      <p class="text-sm text-muted-foreground">
+        Preencha os dados do usuário abaixo
+      </p>
     </div>
-  </form>
+  </ng-template>
 
-  <div class="w-full justify-end flex items-center gap-4 mt-4">
-    <div class="flex gap-2">
-      <button
-        pButton
-        type="submit"
-        [label]="submitButtonLabel()"
-        icon="pi pi-check"
-        class="w-[200px]"
-        size="small"
-        [loading]="isLoading()"
-        (click)="onSubmit($event)"
-      ></button>
+  <div class="flex flex-col gap-4">
+    <div>
+      @if (userForm) {
+        <form [formGroup]="userForm" class="row">
+          <div class="col-12 mb-4">
+            <fuse-input
+              [isLoading]="isLoading()"
+              label="Nome completo"
+              [control]="userForm.get('fullName')"
+              placeholder="Digite o nome completo do usuário"
+            />
+          </div>
 
-      <button
-        pButton
-        type="button"
-        label="Cancelar"
-        icon="pi pi-times"
-        (click)="closeDrawer()"
-        [outlined]="true"
-        severity="secondary"
-        class="w-[200px]"
-        size="small"
-      ></button>
+          <div class="col-12 mb-4">
+            <fuse-input
+              [isLoading]="isLoading()"
+              type="email"
+              label="Email"
+              [control]="userForm.get('email')"
+              placeholder="Digite o email do usuário"
+            />
+          </div>
+
+          <div class="col-12 mb-4">
+            <fuse-input
+              [isLoading]="isLoading()"
+              type="password"
+              label="Senha"
+              [control]="userForm.get('password')"
+              placeholder="Digite a senha do usuário"
+            />
+          </div>
+
+          <div class="col-12 mb-4">
+            <fuse-radio
+              [isLoading]="isLoading()"
+              label="Status do Usuário"
+              [control]="userForm.get('isActive')"
+              [items]="[
+                { value: true, label: 'Ativo' },
+                { value: false, label: 'Inativo' },
+              ]"
+              valueRef="value"
+              labelRef="label"
+              direction="row"
+              groupName="userStatus"
+            />
+          </div>
+        </form>
+      }
     </div>
   </div>
-}
+
+  <ng-template #footer>
+    <div class="w-full justify-end flex items-center gap-4">
+      <div class="flex gap-2">
+        <button
+          pButton
+          type="submit"
+          [label]="submitButtonLabel()"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+          [loading]="isLoading()"
+          (click)="onSubmit($event)"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          icon="pi pi-times"
+          (click)="closeDialog($event)"
+          [outlined]="true"
+          severity="secondary"
+          class="w-[200px]"
+          size="small"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

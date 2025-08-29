@@ -9,6 +9,7 @@ import { SupplierCreateComponent } from 'app/dashboard/modules/supplier-module/s
 import { AccountsPayableCreateComponent } from 'app/dashboard/modules/accounts-payable-module/screens/create/accounts-payable-create.component';
 import { AccountsReceivableCreateComponent } from 'app/dashboard/modules/accounts-receivable-module/screens/create/accounts-receivable-create.component';
 import { OrderViewComponent } from 'app/dashboard/modules/order-module/screens/order-view/order-view.component';
+import { UserCreateComponent } from 'app/dashboard/modules/user-module/screens/create/user-create.component';
 
 const routes: Routes = [
   // category routes
@@ -119,6 +120,20 @@ const routes: Routes = [
       {
         path: ':id/view',
         component: OrderViewComponent,
+      },
+    ],
+  },
+  // user routes
+  {
+    path: 'users',
+    children: [
+      {
+        path: 'new',
+        component: UserCreateComponent,
+      },
+      {
+        path: 'edit/:id',
+        component: UserCreateComponent,
       },
     ],
   },

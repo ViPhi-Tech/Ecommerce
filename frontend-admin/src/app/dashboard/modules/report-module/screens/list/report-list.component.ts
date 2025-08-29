@@ -48,10 +48,6 @@ export class ReportListComponent implements OnInit {
   customStartDateControl = new FormControl('');
   customEndDateControl = new FormControl('');
 
-  // Loading states
-  exportingPDF = signal<boolean>(false);
-  exportingExcel = signal<boolean>(false);
-
   // Table configuration
   tableConfig = signal<TableConfig>({
     rowsPerPageOptions: [10, 20, 50],
@@ -148,16 +144,6 @@ export class ReportListComponent implements OnInit {
   }
 
   exportToPDF() {
-    if (!this.state.reportData() || this.state.reportData().length === 0) {
-      this.toast.add({
-        severity: 'warn',
-        summary: 'Atenção',
-        detail: 'Não há dados para exportar. Carregue os dados primeiro.'
-      });
-      return;
-    }
-
-    this.exportingPDF.set(true);
     this.state.exportReport('pdf')
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
@@ -175,24 +161,11 @@ export class ReportListComponent implements OnInit {
             summary: 'Erro',
             detail: 'Erro ao exportar relatório para PDF'
           });
-        },
-        complete: () => {
-          this.exportingPDF.set(false);
         }
       });
   }
 
   exportToExcel() {
-    if (!this.state.reportData() || this.state.reportData().length === 0) {
-      this.toast.add({
-        severity: 'warn',
-        summary: 'Atenção',
-        detail: 'Não há dados para exportar. Carregue os dados primeiro.'
-      });
-      return;
-    }
-
-    this.exportingExcel.set(true);
     this.state.exportReport('excel')
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
@@ -210,29 +183,12 @@ export class ReportListComponent implements OnInit {
             summary: 'Erro',
             detail: 'Erro ao exportar relatório para Excel'
           });
-        },
-        complete: () => {
-          this.exportingExcel.set(false);
         }
       });
   }
 
-  async refreshReport() {
-    this.toast.add({
-      severity: 'info',
-      summary: 'Atualizando',
-      detail: 'Carregando dados do relatório...'
-    });
-    
-    await this.state.loadReportData();
-    
-    if (!this.state.loading()) {
-      this.toast.add({
-        severity: 'success',
-        summary: 'Atualizado',
-        detail: 'Dados do relatório atualizados com sucesso'
-      });
-    }
+  refreshReport() {
+    this.state.loadReportData();
   }
 
   private downloadFile(blob: Blob, filename: string) {
