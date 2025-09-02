@@ -8,12 +8,7 @@ import { TableConfig } from '../../interfaces/table.interfaces';
 import { ButtonModule } from 'primeng/button';
 import { RouterModule } from '@angular/router';
 import { SkeletonModule } from 'primeng/skeleton';
-import {
-  CurrencyPipe,
-  NgClass,
-  NgStyle,
-  NgTemplateOutlet,
-} from '@angular/common';
+import { CurrencyPipe, NgStyle, NgTemplateOutlet } from '@angular/common';
 import { TableActionsComponent } from './components/table-actions/table-actions.component';
 import { TooltipModule } from 'primeng/tooltip';
 import { NgIcon } from '@ng-icons/core';
@@ -44,7 +39,6 @@ import { BadgeModule } from 'primeng/badge';
     TooltipModule,
     CurrencyPipe,
     NgIcon,
-    NgClass,
     DocumentPipe,
     PhonePipe,
     DateCustomPipe,

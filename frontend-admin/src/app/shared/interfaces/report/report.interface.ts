@@ -15,7 +15,12 @@ export interface IReportColumn {
 
 export interface IReportFilter {
   reportType: string;
-  periodType: 'current_month' | 'last_7_days' | 'last_15_days' | 'last_30_days' | 'custom';
+  periodType:
+    | 'current_month'
+    | 'last_7_days'
+    | 'last_15_days'
+    | 'last_30_days'
+    | 'custom';
   startDate?: string;
   endDate?: string;
 }
@@ -55,4 +60,8 @@ export interface IClientReport {
   status: 'ativo' | 'inativo';
 }
 
-export type ReportData = ISalesReport | IStockReport | IFinancialReport | IClientReport;
+export type ReportData =
+  | ISalesReport
+  | IStockReport
+  | IFinancialReport
+  | IClientReport;

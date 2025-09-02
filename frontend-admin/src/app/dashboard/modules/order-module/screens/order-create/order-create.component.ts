@@ -5,11 +5,7 @@ import {
   inject,
   DestroyRef,
 } from '@angular/core';
-import {
-  Router,
-  RouterModule,
-  ActivatedRoute,
-} from '@angular/router';
+import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { OrderState } from '../../order.state';
 import { OrderCartComponent } from '../../components/order-cart/order-cart.component';
 import { ProductListComponent } from '../../components/product-list/product-list.component';
@@ -52,5 +48,4 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
       this.cartState.resetCart();
     }
   }
-
 }

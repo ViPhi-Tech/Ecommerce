@@ -1,4 +1,11 @@
-import { Component, DestroyRef, effect, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  effect,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
@@ -26,7 +33,7 @@ import { TooltipModule } from 'primeng/tooltip';
     DatePickerComponent,
     ButtonModule,
     TooltipModule,
-    NgIcon
+    NgIcon,
   ],
 })
 export class ReportListComponent implements OnInit {
@@ -54,7 +61,7 @@ export class ReportListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
-    columns: []
+    columns: [],
   });
 
   constructor() {
@@ -68,10 +75,13 @@ export class ReportListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.coreService.setPageTitle('Relatórios', 'Consulte e analise os dados do sistema');
+    this.coreService.setPageTitle(
+      'Relatórios',
+      'Consulte e analise os dados do sistema'
+    );
     this.state.loadReportData();
     this.updateTableConfig();
-    
+
     // Sync form controls with signals
     this.selectedReportTypeControl.setValue(this.selectedReportType());
     this.selectedPeriodTypeControl.setValue(this.selectedPeriodType());
@@ -102,10 +112,10 @@ export class ReportListComponent implements OnInit {
   onCustomDateChange() {
     const startDate = this.customStartDateControl.value;
     const endDate = this.customEndDateControl.value;
-    
+
     if (startDate) this.customStartDate.set(startDate);
     if (endDate) this.customEndDate.set(endDate);
-    
+
     if (this.selectedPeriodType() === 'custom' && startDate && endDate) {
       this.updateFilter();
     }
@@ -114,7 +124,7 @@ export class ReportListComponent implements OnInit {
   private updateFilter() {
     const filter: Partial<IReportFilter> = {
       reportType: this.selectedReportType(),
-      periodType: this.selectedPeriodType() as any
+      periodType: this.selectedPeriodType() as any,
     };
 
     if (this.selectedPeriodType() === 'custom') {
@@ -137,53 +147,55 @@ export class ReportListComponent implements OnInit {
           caption: col.caption,
           type: col.type as any,
           sortable: col.sortable,
-          filter: col.filter
-        }))
+          filter: col.filter,
+        })),
       }));
     }
   }
 
   exportToPDF() {
-    this.state.exportReport('pdf')
+    this.state
+      .exportReport('pdf')
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
-        next: (blob) => {
+        next: blob => {
           this.downloadFile(blob, 'relatorio.pdf');
           this.toast.add({
             severity: 'success',
             summary: 'Sucesso',
-            detail: 'Relatório exportado para PDF com sucesso'
+            detail: 'Relatório exportado para PDF com sucesso',
           });
         },
         error: () => {
           this.toast.add({
             severity: 'error',
             summary: 'Erro',
-            detail: 'Erro ao exportar relatório para PDF'
+            detail: 'Erro ao exportar relatório para PDF',
           });
-        }
+        },
       });
   }
 
   exportToExcel() {
-    this.state.exportReport('excel')
+    this.state
+      .exportReport('excel')
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
-        next: (blob) => {
+        next: blob => {
           this.downloadFile(blob, 'relatorio.xlsx');
           this.toast.add({
             severity: 'success',
             summary: 'Sucesso',
-            detail: 'Relatório exportado para Excel com sucesso'
+            detail: 'Relatório exportado para Excel com sucesso',
           });
         },
         error: () => {
           this.toast.add({
             severity: 'error',
             summary: 'Erro',
-            detail: 'Erro ao exportar relatório para Excel'
+            detail: 'Erro ao exportar relatório para Excel',
           });
-        }
+        },
       });
   }
 

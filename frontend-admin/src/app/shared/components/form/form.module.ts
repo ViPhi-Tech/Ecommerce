@@ -13,6 +13,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     RadioComponent,
     ReactiveFormsModule,
   ],
-  exports: [SelectComponent, DatePickerComponent, InputComponent, RadioComponent],
+  exports: [
+    SelectComponent,
+    DatePickerComponent,
+    InputComponent,
+    RadioComponent,
+  ],
 })
 export class FormModule {}

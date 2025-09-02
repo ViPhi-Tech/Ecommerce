@@ -23,7 +23,15 @@ interface PaymentMethod {
 @Component({
   selector: 'fuse-payment-selection',
   templateUrl: './payment-selection.component.html',
-  imports: [NgIcon, ButtonModule, InputTextModule, FormsModule, CurrencyPipe, FormModule, NgxMaskDirective],
+  imports: [
+    NgIcon,
+    ButtonModule,
+    InputTextModule,
+    FormsModule,
+    CurrencyPipe,
+    FormModule,
+    NgxMaskDirective,
+  ],
 })
 export class PaymentSelectionComponent implements OnInit {
   public toast = inject(MessageService);

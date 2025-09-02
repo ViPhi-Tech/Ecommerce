@@ -7,7 +7,10 @@ import { Router } from '@angular/router';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { emailAsyncValidator } from 'app/shared/validators/validators';
 import { translate } from 'app/shared/constants/deParaTextos';
-import { AuthResponse, ChangePasswordRequest } from 'app/shared/interfaces/auth.interfaces';
+import {
+  AuthResponse,
+  ChangePasswordRequest,
+} from 'app/shared/interfaces/auth.interfaces';
 
 @Component({
   selector: 'fuse-login',
@@ -25,7 +28,7 @@ export class LoginComponent implements OnInit {
     email: ['', Validators.required],
     password: ['', Validators.required],
     novaSenha: [''],
-    confirmarSenha: ['']
+    confirmarSenha: [''],
   });
 
   loading = signal(false);
@@ -41,7 +44,7 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     this.form.markAllAsTouched();
-    
+
     if (this.primeiroLogin()) {
       // Lógica para mudança de senha no primeiro login
       this.changePassword();
@@ -79,9 +82,12 @@ export class LoginComponent implements OnInit {
   }
 
   private changePassword() {
-    if (this.form.get('novaSenha')?.valid && this.form.get('confirmarSenha')?.valid) {
+    if (
+      this.form.get('novaSenha')?.valid &&
+      this.form.get('confirmarSenha')?.valid
+    ) {
       const { novaSenha, confirmarSenha } = this.form.getRawValue();
-      
+
       if (novaSenha !== confirmarSenha) {
         this.errorMessage.set('As senhas não coincidem');
         return;
@@ -91,7 +97,7 @@ export class LoginComponent implements OnInit {
       const changePasswordData: ChangePasswordRequest = {
         email: this.userEmail(),
         novaSenha: novaSenha!,
-        confirmarSenha: confirmarSenha!
+        confirmarSenha: confirmarSenha!,
       };
 
       this.authService.changePassword(changePasswordData).subscribe({
@@ -110,7 +116,9 @@ export class LoginComponent implements OnInit {
   }
 
   private setupPasswordChangeValidators() {
-    this.form.get('novaSenha')?.setValidators([Validators.required, Validators.minLength(6)]);
+    this.form
+      .get('novaSenha')
+      ?.setValidators([Validators.required, Validators.minLength(6)]);
     this.form.get('confirmarSenha')?.setValidators([Validators.required]);
     this.form.get('novaSenha')?.updateValueAndValidity();
     this.form.get('confirmarSenha')?.updateValueAndValidity();
@@ -125,7 +133,7 @@ export class LoginComponent implements OnInit {
     this.form.get('confirmarSenha')?.updateValueAndValidity();
     this.form.patchValue({
       novaSenha: '',
-      confirmarSenha: ''
+      confirmarSenha: '',
     });
   }
 }

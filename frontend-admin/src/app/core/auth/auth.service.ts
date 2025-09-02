@@ -1,6 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { AuthResponse, ChangePasswordRequest } from 'app/shared/interfaces/auth.interfaces';
+import {
+  AuthResponse,
+  ChangePasswordRequest,
+} from 'app/shared/interfaces/auth.interfaces';
 import { jwtDecode } from 'jwt-decode';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
@@ -29,13 +32,9 @@ export class AuthService {
   }
 
   changePassword(data: ChangePasswordRequest): Observable<AuthResponse> {
-    return this.http.put(
-      `${this.apiUrl}auth/change-password`,
-      data,
-      {
-        headers: { 'Skip-Loader': 'true' },
-      }
-    ) as Observable<AuthResponse>;
+    return this.http.put(`${this.apiUrl}auth/change-password`, data, {
+      headers: { 'Skip-Loader': 'true' },
+    }) as Observable<AuthResponse>;
   }
 
   setToken(token: string, name = 'accessToken') {

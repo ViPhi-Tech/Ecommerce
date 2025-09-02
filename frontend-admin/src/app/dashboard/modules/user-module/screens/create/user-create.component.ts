@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, OnInit, signal, ViewChild } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   ReactiveFormsModule,
@@ -46,7 +53,7 @@ export class UserCreateComponent implements OnInit {
   userForm!: FormGroup;
   userId = signal<string | null>(null);
   isLoading = signal(false);
-  
+
   // Módulos do sistema
   systemModules = SYSTEM_MODULES;
 
@@ -174,10 +181,12 @@ export class UserCreateComponent implements OnInit {
   toggleModule(moduleId: string): void {
     const modulesControl = this.userForm.get('modules');
     const currentModules = modulesControl?.value || [];
-    
+
     if (currentModules.includes(moduleId)) {
       // Remove o módulo se já estiver selecionado
-      const updatedModules = currentModules.filter((id: string) => id !== moduleId);
+      const updatedModules = currentModules.filter(
+        (id: string) => id !== moduleId
+      );
       modulesControl?.setValue(updatedModules);
     } else {
       // Adiciona o módulo se não estiver selecionado

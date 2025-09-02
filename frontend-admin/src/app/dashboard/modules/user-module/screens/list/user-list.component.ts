@@ -111,9 +111,10 @@ export class UserListComponent implements OnInit {
       return module ? module.name : moduleId;
     });
 
-    const modulesText = moduleNames.length > 0 
-      ? moduleNames.join(', ') 
-      : 'Nenhum módulo atribuído';
+    const modulesText =
+      moduleNames.length > 0
+        ? moduleNames.join(', ')
+        : 'Nenhum módulo atribuído';
 
     this.confirmationService.confirm({
       message: `<strong>Módulos do usuário ${user.fullName}:</strong><br><br>${modulesText}`,

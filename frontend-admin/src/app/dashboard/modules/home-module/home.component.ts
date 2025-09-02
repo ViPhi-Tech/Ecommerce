@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
     { label: 'Esta Semana', value: 'week' },
     { label: 'Este Mês', value: 'month' },
     { label: 'Este Ano', value: 'year' },
-    { label: 'Período Personalizado', value: 'custom' }
+    { label: 'Período Personalizado', value: 'custom' },
   ];
 
   // Computed signals do state
@@ -104,10 +104,10 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.coreService.setPageTitle('Home', 'Dashboard');
     this.loadDashboardData();
-    
+
     // Configurar valor inicial do controle de período
     this.periodControl.setValue('today');
-    
+
     // Escutar mudanças no dateRangeControl
     this.dateRangeControl.valueChanges.subscribe(value => {
       if (value) {
@@ -126,8 +126,10 @@ export class HomeComponent implements OnInit {
 
   public onPeriodChange(period: string): void {
     console.log('Período selecionado:', period);
-    this.homeState.setSelectedPeriod(period as 'today' | 'week' | 'month' | 'year');
-    
+    this.homeState.setSelectedPeriod(
+      period as 'today' | 'week' | 'month' | 'year'
+    );
+
     // Se for período personalizado, mostrar o datepicker
     if (period !== 'custom') {
       this.loadDashboardData();
