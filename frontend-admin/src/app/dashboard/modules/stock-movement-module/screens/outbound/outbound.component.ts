@@ -138,19 +138,19 @@ export class OutboundComponent implements OnInit {
       ],
       columns: [
         { field: 'name', caption: 'Nome' },
-        { field: 'sku', caption: 'SKU', maxWidth: '200px' },
-        { field: 'ean', caption: 'EAN', maxWidth: '200px' },
+        { field: 'sku', caption: 'SKU', width: '200px' },
+        { field: 'ean', caption: 'EAN', width: '200px' },
         {
           field: 'quantity',
           caption: 'Quantidade',
           sortable: true,
-          maxWidth: '150px',
+          width: '150px',
         },
         {
           field: 'stock',
           caption: 'Estoque atual',
           sortable: true,
-          maxWidth: '150px',
+          width: '150px',
         },
         {
           field: 'actions',

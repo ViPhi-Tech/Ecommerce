@@ -25,7 +25,7 @@ export interface TableColumn {
   filter?: boolean;
   multiFilter?: boolean; // Indicates if the column supports multiple filters
   customClass?: string;
-  maxWidth?: string; // Maximum width of the column
+  width?: string; // Maximum width of the column
   actionButtonsType?: 'buttons' | 'dropdown'; // Type of action buttons, can be 'buttons' or 'dropdown'
   actionButtons?: ActionButtons[];
   template?: TemplateRef<any | null>;

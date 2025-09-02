@@ -82,7 +82,12 @@
   <ng-template #header>
     <tr>
       @for (column of config().columns; track $index) {
-        <th pSortableColumn="{{ column?.sortable ? column?.field : '' }}">
+        <th
+          pSortableColumn="{{ column?.sortable ? column?.field : '' }}"
+          [ngStyle]="{
+            width: column?.width,
+          }"
+        >
           <div
             class="flex items-center"
             [ngClass]="{
@@ -138,8 +143,9 @@
       @for (column of config().columns; track $index) {
         <td
           class="overflow-auto text-ellipsis whitespace-nowrap"
-          [ngStyle]="{ 'max-width': column?.maxWidth || 'none' }"
+          [ngStyle]="{ 'max-width': column?.width || 'none' }"
           [ngClass]="{
+            width: column?.width,
             'text-nowrap': !config().textWrap,
             'text-left': column?.align === 'left',
             'text-right': column?.align === 'right',

@@ -81,7 +81,7 @@ export class OrderListComponent implements OnInit {
       paginator: true,
       pageLinkSize: 5,
       columns: [
-        { field: 'id', caption: 'Cód. Pedido', sortable: true, filter: true },
+        { field: 'id', caption: 'Cód. Pedido', sortable: true, filter: true, width: '150px' },
         {
           field: 'customerName',
           caption: 'Cliente',
@@ -95,7 +95,6 @@ export class OrderListComponent implements OnInit {
           sortable: true,
           filter: true,
         },
-        { field: 'status', caption: 'Status', sortable: true, filter: true },
         {
           field: 'createdAt',
           caption: 'Data de Criação',
