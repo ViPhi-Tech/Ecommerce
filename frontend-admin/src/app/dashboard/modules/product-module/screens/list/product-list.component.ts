@@ -122,7 +122,7 @@ export class ProductListComponent implements OnInit {
   }
 
   addNewProduct() {
-    this.router.navigate(['dashboard/products/new']);
+    this.router.navigate([{ outlets: { drawer: ['products', 'new'] } }]);
   }
 
   refreshProducts() {
@@ -130,7 +130,7 @@ export class ProductListComponent implements OnInit {
   }
 
   editProduct(productId: string) {
-    this.router.navigate(['dashboard/products/edit/', productId]);
+    this.router.navigate([{ outlets: { drawer: ['products', productId] } }]);
   }
 
   deleteProduct(productId: string) {

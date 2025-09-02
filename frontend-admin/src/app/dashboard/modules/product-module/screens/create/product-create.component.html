@@ -1,5 +1,24 @@
-<div class="p-8 animate-fade-in">
-  <form class="flex flex-col gap-4 scroll-form">
+<p-dialog
+  #dialogRef
+  [(visible)]="visible"
+  (onHide)="onCloseDialog()"
+  [modal]="true"
+  [closeOnEscape]="true"
+  [draggable]="false"
+  styleClass="max-w-[800px] w-full"
+>
+  <ng-template #header>
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 class="text-2xl font-semibold leading-none tracking-tight">
+        {{ title() }}
+      </h2>
+      <p class="text-sm text-muted-foreground">
+        {{ subtitle() }}
+      </p>
+    </div>
+  </ng-template>
+
+  <div class="flex flex-col gap-4">
     <div>
       <form [formGroup]="productForm" class="row space-y-4">
         <div class="col-12 md:col-12">
@@ -39,7 +58,7 @@
             [isLoading]="isLoading()"
             [drawer]="['categories', 'new']"
             [control]="productForm.get('categoryId')"
-            placeholder="Adicione uma cetegoria"
+            placeholder="Adicione uma categoria"
           />
         </div>
 
@@ -104,36 +123,34 @@
           />
         </div>
       </form>
-      <!-- <fuse-section title="Informações Básicas do Produto">
-        </fuse-section> -->
-    </div>
-  </form>
-
-  <div class="w-full justify-end flex items-center gap-4 mt-4">
-    <div class="flex gap-2">
-      <button
-        pButton
-        type="submit"
-        [label]="submitButtonLabel()"
-        icon="pi pi-check"
-        class="w-[200px]"
-        size="small"
-        (click)="onSubmit($event)"
-      ></button>
-
-      <button
-        pButton
-        type="button"
-        label="Cancelar"
-        icon="pi pi-times"
-        (click)="back()"
-        outlined="true"
-        severity="secondary"
-        class="w-[200px]"
-        size="small"
-      ></button>
     </div>
   </div>
-</div>
 
-<p-toast baseZIndex="9000" />
+  <ng-template #footer>
+    <div class="w-full justify-end flex items-center gap-4">
+      <div class="flex gap-2">
+        <button
+          pButton
+          type="submit"
+          [label]="submitButtonLabel()"
+          icon="pi pi-check"
+          class="w-[200px]"
+          size="small"
+          (click)="onSubmit($event)"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          icon="pi pi-times"
+          (click)="closeDialog($event)"
+          severity="secondary"
+          [outlined]="true"
+          class="w-[200px]"
+          size="small"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>
