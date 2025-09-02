@@ -90,13 +90,12 @@
         >
           <div
             class="flex items-center"
-            [ngClass]="{
-              'justify-start': column?.headerAlign === 'left',
-              'justify-end': column?.headerAlign === 'right',
-              'justify-center':
-                column?.headerAlign === 'center' || column.caption === 'Ações',
-              'justify-between': column?.filter || column?.sortable,
-            }"
+            [class.justify-start]="column?.headerAlign === 'left'"
+            [class.justify-end]="column?.headerAlign === 'right'"
+            [class.justify-center]="
+              column?.headerAlign === 'center' || column.caption === 'Ações'
+            "
+            [class.justify-between]="column?.filter || column?.sortable"
           >
             <div>
               {{ column?.caption }}
@@ -143,15 +142,16 @@
       @for (column of config().columns; track $index) {
         <td
           class="overflow-auto text-ellipsis whitespace-nowrap"
-          [ngStyle]="{ 'max-width': column?.width || 'none' }"
-          [ngClass]="{
+          [ngStyle]="{
+            'max-width': column?.width || 'none',
             width: column?.width,
-            'text-nowrap': !config().textWrap,
-            'text-left': column?.align === 'left',
-            'text-right': column?.align === 'right',
-            'text-center':
-              column?.align === 'center' || column.caption === 'Ações',
           }"
+          [class.text-nowrap]="!config().textWrap"
+          [class.text-left]="column?.align === 'left'"
+          [class.text-right]="column?.align === 'right'"
+          [class.text-center]="
+            column?.align === 'center' || column.caption === 'Ações'
+          "
         >
           @if (column.field === 'actions' && column?.actionButtons?.length) {
             <fuse-table-actions
