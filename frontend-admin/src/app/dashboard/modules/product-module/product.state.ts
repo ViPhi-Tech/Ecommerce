@@ -53,8 +53,6 @@ export class ProductState extends BaseState<ProductModuleState> {
       );
     }
 
-    console.log('Filtered Products:', filteredProducts);
-
     return filteredProducts;
   });
 

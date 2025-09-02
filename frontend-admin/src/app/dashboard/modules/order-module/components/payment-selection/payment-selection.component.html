@@ -67,16 +67,18 @@
               (click)="$event.stopPropagation()"
             >
               <span class="text-sm font-medium">Valor a pagar:</span>
-              <p-inputNumber
+              <input
+                pInputText
                 [ngModel]="getPaymentMethodValue(paymentMethod.id)"
                 (ngModelChange)="onPaymentValueChange(paymentMethod.id, $event)"
                 (onBlur)="onPaymentValueBlur(paymentMethod.id)"
-                mode="currency"
-                currency="BRL"
-                locale="pt-BR"
                 [min]="0"
                 [max]="this.cartState.total()"
-                styleClass="w-32"
+                prefix="R$ "
+                mask="separator.2"
+                [thousandSeparator]="'.'"
+                [decimalMarker]="','"
+                [dropSpecialCharacters]="true"
                 (click)="$event.stopPropagation()"
                 (focus)="$event.stopPropagation()"
               />
@@ -103,6 +105,15 @@
               getTotalPaid() | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
             }}</span>
           </div>
+          @if (getTotalPaid() - cartState.total() > 0) {
+            <div class="flex justify-between text-sm">
+              <span>Troco:</span>
+              <span class="font-medium text-blue-600">{{
+                getTotalPaid() - cartState.total()
+                  | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+              }}</span>
+            </div>
+          }
           <div class="flex justify-between text-sm border-t pt-2">
             <span>Restante:</span>
             <span

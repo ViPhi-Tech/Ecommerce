@@ -1,11 +1,13 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
-import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
 import { CurrencyPipe } from '@angular/common';
 import { CartState } from '../order-cart/order-cart.state';
 import { MessageService } from 'primeng/api';
+import { FormModule } from 'app/shared/components/form/form.module';
+import { NgxMaskDirective } from 'ngx-mask';
+import { InputTextModule } from 'primeng/inputtext';
 
 interface PaymentMethod {
   id: string;
@@ -21,7 +23,7 @@ interface PaymentMethod {
 @Component({
   selector: 'fuse-payment-selection',
   templateUrl: './payment-selection.component.html',
-  imports: [NgIcon, ButtonModule, InputNumberModule, FormsModule, CurrencyPipe],
+  imports: [NgIcon, ButtonModule, InputTextModule, FormsModule, CurrencyPipe, FormModule, NgxMaskDirective],
 })
 export class PaymentSelectionComponent implements OnInit {
   public toast = inject(MessageService);

@@ -80,7 +80,8 @@ export class ClientCreateComponent implements OnInit {
     this.activatedRoute.params
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe(params => {
-        if (params['id']) {
+        debugger
+        if (params['id'] && params['id'] !== 'new') {
           this.loadClient(params['id']);
           this.title.set('Editar Cliente');
         } else {

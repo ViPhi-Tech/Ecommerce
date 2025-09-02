@@ -9,9 +9,12 @@ export class OrderRepository implements IOrderRepository {
   async findAll(): Promise<Order[]> {
     return this.prisma.order.findMany({
         include: {
-            items: true,
-            client: true
+          items: true,
+          client: true
         },
+        orderBy: {
+          createdAt: 'desc'
+        }
     });
   }
 
@@ -38,6 +41,7 @@ export class OrderRepository implements IOrderRepository {
       where: { id },
       include: {
         payments: true, // Include payment details in the order
+        client: true,
         items: {
           include: {
             product: true, // Include product details in the order items
