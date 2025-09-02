@@ -10,11 +10,9 @@ import { categoryRoutes } from './modules/category-module/category.routing';
 import { productRoutes } from './modules/product-module/product.routing';
 import { userRoutes } from './modules/user-module/user.routing';
 import { orderRoutes } from './modules/order-module/order.routing';
-import { invoiceRoutes } from './modules/invoice-module/invoice.routing';
 import { accountsPayableRoutes } from './modules/accounts-payable-module/accounts-payable.routing';
 import { accountsReceivableRoutes } from './modules/accounts-receivable-module/accounts-receivable.routing';
 import { stockMovementRoutes } from './modules/stock-movement-module/stock-movement.routing';
-import { customizationRoutes } from './modules/customization/customization.routing';
 import { clientRoutes } from './modules/client-module/client.routing';
 import { supplierRoutes } from './modules/supplier-module/supplier.routing';
 import { homeRoutes } from './modules/home-module/home.routing';
@@ -33,11 +31,6 @@ const routes: Routes = [
         path: '',
         children: homeRoutes,
         data: { animation: 'home' },
-      },
-      {
-        path: 'customization',
-        children: customizationRoutes,
-        data: { animation: 'customization' },
       },
       {
         path: 'orders',
@@ -66,11 +59,6 @@ const routes: Routes = [
         children: supplierRoutes,
         data: { animation: 'suppliers' },
       },
-      {
-        path: 'invoices',
-        children: invoiceRoutes,
-      },
-
       {
         path: 'users',
         children: userRoutes,

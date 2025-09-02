@@ -195,6 +195,7 @@ export class StockMovementListComponent implements OnInit {
 
   private loadStockMovements() {
     const filter: any = this.formFilter.getRawValue();
+    filter.date = dayjs(filter.date, 'DD/MM/YYYY').format('YYYY-MM-DD');
     this.state.getStockMovementList(filter);
   }
 

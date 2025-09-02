@@ -38,12 +38,6 @@ export const SYSTEM_MODULES: IUserModule[] = [
     route: '/dashboard/orders'
   },
   {
-    id: 'invoice-module',
-    name: 'Notas Fiscais',
-    description: 'Gerenciamento de notas fiscais',
-    route: '/dashboard/invoices'
-  },
-  {
     id: 'stock-movement-module',
     name: 'Movimentação de Estoque',
     description: 'Controle de entrada e saída de estoque',
@@ -73,10 +67,4 @@ export const SYSTEM_MODULES: IUserModule[] = [
     description: 'Gerenciamento de usuários do sistema',
     route: '/dashboard/users'
   },
-  {
-    id: 'customization',
-    name: 'Personalização',
-    description: 'Configurações e personalização do sistema',
-    route: '/dashboard/customization'
-  }
 ];
