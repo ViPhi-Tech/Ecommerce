@@ -14,45 +14,39 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { Drawer, DrawerModule } from 'primeng/drawer';
+import { Dialog, DialogModule } from 'primeng/dialog';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { ProductService } from '../../product.service';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { CoreService } from 'app/shared/services/core.service';
 import { CategoryState } from 'app/dashboard/modules/category-module/category.state';
+import { ProductState } from '../../product.state';
 
 @Component({
   selector: 'fuse-product-create',
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss'],
-  imports: [
-    DrawerModule,
-    ButtonModule,
-    ReactiveFormsModule,
-    FormModule,
-    ToastModule,
-  ],
+  imports: [DialogModule, ButtonModule, ReactiveFormsModule, FormModule],
 })
 export class ProductCreateComponent implements OnInit {
   destroyedRef = inject(DestroyRef);
   private router = inject(Router);
-  private coreService = inject(CoreService);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
   private toast = inject(MessageService);
 
   private productService = inject(ProductService);
+  private productState = inject(ProductState);
   categoryState = inject(CategoryState);
 
-  @ViewChild('drawerRef') drawerRef!: Drawer;
+  @ViewChild('dialogRef') dialogRef!: Dialog;
 
   formGroup = this.formBuilder.group({});
 
   // signals
-  title = signal('Adicionar Produto');
+  visible = signal(true);
+  title = signal('Cadastrar Produto');
   subtitle = signal('Preencha os dados do novo produto abaixo');
   submitButtonLabel = signal('Salvar');
   isLoading = signal(true);
@@ -62,8 +56,6 @@ export class ProductCreateComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.coreService.setPageTitle('', '');
-
     this.initForm();
 
     // pegar o id da rota, se existir
@@ -73,17 +65,10 @@ export class ProductCreateComponent implements OnInit {
         const id = params['id'];
         if (id) {
           this.title.set('Editar Produto');
+          this.subtitle.set('Preencha os dados do produto abaixo');
           this.loadInfos(id);
-          this.coreService.setPageTitle(
-            'Editar Produto',
-            'Preencha os dados do produto abaixo'
-          );
           this.blockFields();
         } else {
-          this.coreService.setPageTitle(
-            'Adicionar Produto',
-            'Preencha os dados do novo produto abaixo'
-          );
           this.loadInfos();
         }
       });
@@ -161,7 +146,8 @@ export class ProductCreateComponent implements OnInit {
               ? 'Produto atualizado com sucesso!'
               : 'Produto criado com sucesso!',
           });
-          this.back();
+          this.productState.getProductList();
+          this.closeDialog();
         },
         error: () => {
           this.toast.add({
@@ -179,7 +165,16 @@ export class ProductCreateComponent implements OnInit {
     this.productForm.get('quantity')?.disable();
   }
 
-  back() {
-    this.router.navigate(['dashboard/products/list']);
+  closeDialog(e = new Event('close')): void {
+    this.dialogRef.close(e);
+  }
+
+  onCloseDialog() {
+    this.visible.set(false);
+    setTimeout(() => {
+      this.router.navigate([{ outlets: { drawer: null } }], {
+        relativeTo: this.activatedRoute.root,
+      });
+    }, 300);
   }
 }

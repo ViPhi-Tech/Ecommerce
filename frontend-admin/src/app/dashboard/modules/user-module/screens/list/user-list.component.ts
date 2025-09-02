@@ -86,10 +86,10 @@ export class UserListComponent implements OnInit {
     headerButtons: [],
   });
 
-  title = 'Lista de Usuários';
+  title = 'Usuários';
 
   constructor() {
-    // this.coreService.setPageTitle(this.title);
+    this.coreService.setPageTitle(this.title, 'Listagem com os usuários');
   }
 
   ngOnInit() {

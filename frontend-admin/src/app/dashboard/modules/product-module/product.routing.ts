@@ -9,20 +9,6 @@ export const productRoutes: Routes = [
       ),
   },
   {
-    path: 'new',
-    loadComponent: () =>
-      import('./screens/create/product-create.component').then(
-        m => m.ProductCreateComponent
-      ),
-  },
-  {
-    path: 'edit/:id',
-    loadComponent: () =>
-      import('./screens/create/product-create.component').then(
-        m => m.ProductCreateComponent
-      ),
-  },
-  {
     path: '',
     redirectTo: 'list',
     pathMatch: 'full',

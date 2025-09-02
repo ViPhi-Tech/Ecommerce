@@ -16,6 +16,17 @@ interface MenuGroup {
 export class MenuComponent implements OnInit {
   menu: MenuGroup[] = [
     {
+      groupTitle: 'Dashboard',
+      items: [
+        {
+          label: 'Visão Geral',
+          icon: 'lucideLayoutDashboard',
+          route: '/dashboard',
+          visible: true,
+        },
+      ],
+    },
+    {
       groupTitle: 'Comercial',
       items: [
         {
