@@ -1,9 +1,12 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { GetDashboardMetricsDTO } from "../../../application/dto/dashboard/DashboardDTOs";
 import { GetDashboardMetricUseCase } from "../../../application/use-cases/dashboard/GetDashboardMetricUseCase";
+import { GetDashboardChartsUseCase } from "../../../application/use-cases/dashboard/GetDashboardChartsUseCase";
+
 export class DashboardController {
   constructor(
-    private getDashboardMetricUseCase: GetDashboardMetricUseCase
+    private getDashboardMetricUseCase: GetDashboardMetricUseCase,
+    private getDashboardChartsUseCase: GetDashboardChartsUseCase
   ) {}
 
   async getDashboardMetrics(request: FastifyRequest, reply: FastifyReply): Promise<Response> {
@@ -12,6 +15,16 @@ export class DashboardController {
         return reply.status(200).send(dashboardMetrics)
     } catch (error) {
         return reply.status(500).send({message: 'Internal server error'})
+    }
+  };
+
+
+  async getDashboardCharts(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const dashboardCharts = await this.getDashboardChartsUseCase.execute()
+      return reply.status(200).send(dashboardCharts)
+    } catch (error) {
+      return reply.status(500).send({message: 'Internal server error'})
     }
   }
 }

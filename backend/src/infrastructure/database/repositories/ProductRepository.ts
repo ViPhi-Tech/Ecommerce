@@ -1,5 +1,5 @@
 import { PrismaClient, Prisma } from '@prisma/client';
-import { Product, Stock, stockMovement, findMoviment } from '../../../domain/entities/Product';
+import { Product, Stock, stockMovement, findMoviment, TopProducts } from '../../../domain/entities/Product';
 import { IProductRepository } from "../../../domain/repositories/IProductRepository";
 import {CreateProductDTO, UpdateProductDTO, FindMovementDTO} from "../../../application/dto/product/ProductDTOs";
 
@@ -303,5 +303,42 @@ async countByMonth(initialMonth: number, finalMonth: number): Promise<number> {
   })
   return result._sum.quantity ?? 0
 };
+
+
+async getTopProductsByMonth(initialMonth: number, finalMonth: number): Promise<TopProducts[]> {
+  const result = await this.prisma.orderItem.groupBy({
+    by: ['productId'], 
+    _sum: {
+      quantity: true,
+    },
+    where: {
+      order: { 
+        createdAt: {
+          gte: new Date(new Date().getFullYear(), initialMonth - 1, 1),
+          lt: new Date(new Date().getFullYear(), finalMonth, 1),
+        },
+      },
+    },
+    orderBy: {
+      _sum: {
+        quantity: 'desc',
+      },
+    },
+    take: 10, 
+  })
+
+  const products = await this.prisma.product.findMany({
+    where: {
+      id: { in: result.map(r => r.productId) },
+    },
+    select: { id: true, name: true },
+  })
+
+  // Montar a lista final sem duplicações
+  return result.map(r => ({
+    name: products.find(p => p.id === r.productId)?.name ?? 'Produto desconhecido',
+    total: r._sum.quantity ?? 0,
+  }))
+}
 
 }

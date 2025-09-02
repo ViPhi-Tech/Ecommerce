@@ -1,4 +1,4 @@
-import { Product, Stock, stockMovement, findMoviment } from "../entities/Product";
+import { Product, Stock, stockMovement, findMoviment, TopProducts } from "../entities/Product";
 
 export interface IProductRepository {
     create(data: Product): Promise<Product>;
@@ -19,4 +19,6 @@ export interface IProductRepository {
     countStock(startDate: Date, endDate: Date): Promise<number>;
     countMoviment(startDate: Date, endDate: Date, type: 'IN' | 'OUT'): Promise<number>;
     countByMonth(initialMonth: number, finalMonth: number): Promise<number>;
+    getTopProductsByMonth(initialMonth: number, finalMonth: number): Promise<TopProducts[]>;
+    
 }

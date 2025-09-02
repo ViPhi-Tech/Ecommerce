@@ -12,3 +12,19 @@ export interface OrderItem {
 
     product?: Product;
 }
+
+
+export interface AggregateOrderResponse {
+    month: string
+    total: number
+}
+
+export interface AggregateOrderStatusResponse {
+    name: string
+    total: number
+}
+
+export interface AggregateOrderCategoryResponse {
+    name: string
+    total: number
+}
