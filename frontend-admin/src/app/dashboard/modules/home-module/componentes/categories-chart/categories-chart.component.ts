@@ -2,6 +2,7 @@ import { Component, Input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
+import { SalesByCategory } from 'app/shared/interfaces/home/HomeModuleState';
 
 @Component({
   selector: 'fuse-categories-chart',
@@ -11,10 +12,18 @@ import { EChartsOption } from 'echarts';
   styleUrls: ['./categories-chart.component.scss'],
 })
 export class CategoriesChartComponent {
-  @Input() data: number[] = [];
-  @Input() categories: string[] = [];
+  @Input() data: SalesByCategory[] = [];
   @Input() title = 'Vendas por Categoria';
   @Input() loading = false;
+
+  // Extrair valores e categorias dos dados
+  chartValues = computed<number[]>(() => {
+    return this.data.map(item => item.total_quantity);
+  });
+
+  chartCategories = computed<string[]>(() => {
+    return this.data.map(item => item.category_name);
+  });
 
   chartOption = computed<EChartsOption>(() => ({
     title: {
@@ -35,8 +44,8 @@ export class CategoriesChartComponent {
     xAxis: {
       type: 'category',
       data:
-        this.categories.length > 0
-          ? this.categories
+        this.chartCategories().length > 0
+          ? this.chartCategories()
           : [
               'Eletrônicos',
               'Roupas',
@@ -52,7 +61,7 @@ export class CategoriesChartComponent {
     yAxis: {
       type: 'value',
       axisLabel: {
-        formatter: 'R$ {value}',
+        formatter: '{value}',
       },
     },
     series: [
@@ -60,8 +69,8 @@ export class CategoriesChartComponent {
         name: 'Vendas',
         type: 'bar',
         data:
-          this.data.length > 0
-            ? this.data
+          this.chartValues().length > 0
+            ? this.chartValues()
             : [25000, 18000, 15000, 12000, 8000, 10000],
         itemStyle: {
           color: {

@@ -15,15 +15,35 @@ export interface DashboardMetrics {
   activeClients: number;
 }
 
-export interface ChartsMetrics {
-  salesByMonth: any | unknown;
-  topProducts: any | unknown;
-  salesByCategory: any | unknown;
-  orderStatus: any | unknown;
-}
-
 export interface HomeModuleState extends BaseModuleState {
   indicators: DashboardMetrics;
-  chartsMetrics: ChartsMetrics;
+  charts: DashboardCharts;
   selectedPeriod: 'today' | 'week' | 'month' | 'year';
+}
+export interface DashboardCharts {
+  salesByMonth: SalesByMonth[]
+  topProducts: TopProduct[]
+  orderStatus: OrderStatu[]
+  salesByCategory: SalesByCategory[]
+}
+
+export interface SalesByMonth {
+  year: number
+  month: string
+  total: number
+}
+
+export interface TopProduct {
+  name: string
+  total: number
+}
+
+export interface OrderStatu {
+  name: string
+  total: number
+}
+
+export interface SalesByCategory {
+  category_name: string
+  total_quantity: number
 }

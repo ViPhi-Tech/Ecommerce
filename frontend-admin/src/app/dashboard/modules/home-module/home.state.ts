@@ -1,9 +1,9 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { BaseState } from 'app/shared/store/base.state';
-import { catchError, finalize, lastValueFrom, tap } from 'rxjs';
+import { catchError, lastValueFrom, tap } from 'rxjs';
 import { HomeService } from './home.service';
 import {
-  ChartsMetrics,
+  DashboardCharts,
   DashboardMetrics,
   HomeModuleState,
 } from 'app/shared/interfaces/home/HomeModuleState';
@@ -21,11 +21,11 @@ export class HomeState extends BaseState<HomeModuleState> {
       totalSales: 0,
       activeClients: 0,
     },
-    chartsMetrics: {
-      salesByMonth: null,
-      topProducts: null,
-      salesByCategory: null,
-      orderStatus: null,
+    charts: {
+      salesByMonth: [],
+      topProducts: [],
+      orderStatus: [],
+      salesByCategory: [],
     },
     selectedPeriod: 'month',
     loading: false,
@@ -33,13 +33,10 @@ export class HomeState extends BaseState<HomeModuleState> {
   });
 
   indicators = computed(() => this.state().indicators);
-  chartsMetrics = computed(() => this.state().chartsMetrics);
+  charts = computed(() => this.state().charts);
   selectedPeriod = computed(() => this.state().selectedPeriod);
 
   async getDashboardMetrics(skipLoader = true): Promise<void> {
-    this.setLoading(true);
-    this.clearError();
-
     try {
       await lastValueFrom(
         this.homeService
@@ -56,12 +53,34 @@ export class HomeState extends BaseState<HomeModuleState> {
               }
             }),
             catchError(error => this.handleError(error)),
-            finalize(() => this.setLoading(false))
           )
       );
     } catch {
       this.setError('Erro ao carregar métricas do dashboard.');
-      this.setLoading(false);
+    }
+  }
+
+  async getDashboardCharts(skipLoader = true): Promise<void> {
+    try {
+      await lastValueFrom(
+        this.homeService
+          .getDashboardCharts(this.state().selectedPeriod, skipLoader)
+          .pipe(
+            tap((response: any) => {
+              const metrics = Array.isArray(response)
+                ? response[0]
+                : response.dados || response;
+              if (metrics) {
+                this.setCharts(metrics);
+              } else {
+                this.setError('Nenhum dado encontrado.');
+              }
+            }),
+            catchError(error => this.handleError(error)),
+          )
+      );
+    } catch {
+      this.setError('Erro ao carregar gráficos do dashboard.');
     }
   }
 
@@ -70,7 +89,7 @@ export class HomeState extends BaseState<HomeModuleState> {
     this.clearError();
 
     try {
-      await Promise.all([this.getDashboardMetrics(skipLoader)]);
+      await Promise.all([this.getDashboardMetrics(skipLoader), this.getDashboardCharts(skipLoader)]);
     } catch {
       this.setError('Erro ao carregar dados do dashboard.');
     } finally {
@@ -82,8 +101,8 @@ export class HomeState extends BaseState<HomeModuleState> {
     this.updateState('indicators', metrics);
   }
 
-  setChartsMetrics(metrics: ChartsMetrics) {
-    this.updateState('chartsMetrics', metrics);
+  setCharts(metrics: DashboardCharts) {
+    this.updateState('charts', metrics);
   }
 
   setSelectedPeriod(period: HomeModuleState['selectedPeriod']) {

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
-import { ChartsMetrics } from 'app/shared/interfaces/home/HomeModuleState';
+import { DashboardCharts } from 'app/shared/interfaces/home/HomeModuleState';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
@@ -26,7 +26,13 @@ export class HomeService {
     });
   }
 
-  getDashboardCharts(): Observable<ApiResponse<ChartsMetrics>> {
-    return this.http.get<ApiResponse<ChartsMetrics>>(`${this.apiUrl}/charts`);
+  getDashboardCharts(
+    period: 'today' | 'week' | 'month' | 'year' = 'month',
+    skipLoader = true
+  ): Observable<ApiResponse<DashboardCharts>> {
+    return this.http.get<ApiResponse<DashboardCharts>>(`${this.apiUrl}/charts`, {
+      params: { period },
+      headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
+    });
   }
 }

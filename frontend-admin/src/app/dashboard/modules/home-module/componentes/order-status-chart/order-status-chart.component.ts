@@ -2,6 +2,7 @@ import { Component, Input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
+import { OrderStatu } from 'app/shared/interfaces/home/HomeModuleState';
 
 export interface OrderStatusData {
   value: number;
@@ -17,9 +18,34 @@ export interface OrderStatusData {
   styleUrls: ['./order-status-chart.component.scss'],
 })
 export class OrderStatusChartComponent {
-  @Input() data: OrderStatusData[] = [];
+  @Input() data: OrderStatu[] = [];
   @Input() title = 'Status dos Pedidos';
   @Input() loading = false;
+
+  // Mapeamento de cores para cada status
+  private statusColors: Record<string, string> = {
+    'Pendente': '#f59e0b',
+    'Processando': '#3b82f6',
+    'Enviado': '#10b981',
+    'Entregue': '#059669',
+    'Cancelado': '#ef4444',
+    'Aguardando Pagamento': '#f59e0b',
+    'Pagamento Aprovado': '#3b82f6',
+    'Em Preparação': '#8b5cf6',
+    'Pronto para Envio': '#06b6d4',
+    'Em Trânsito': '#10b981'
+  };
+
+  // Converte os dados para o formato esperado pelo gráfico
+  chartData = computed<OrderStatusData[]>(() => {
+    return this.data.map(item => ({
+      name: item.name,
+      value: item.total,
+      itemStyle: { 
+        color: this.statusColors[item.name] || '#6b7280' 
+      }
+    }));
+  });
 
   chartOption = computed<EChartsOption>(() => ({
     title: {
@@ -66,7 +92,7 @@ export class OrderStatusChartComponent {
         },
         data:
           this.data.length > 0
-            ? this.data
+            ? this.chartData()
             : [
                 {
                   value: 156,
