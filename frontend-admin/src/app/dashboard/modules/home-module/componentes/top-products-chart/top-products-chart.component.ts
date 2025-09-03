@@ -51,13 +51,7 @@ export class TopProductsChartComponent {
         data:
           this.data.length > 0
             ? this.chartData()
-            : [
-                { value: 335, name: 'Smartphone Galaxy' },
-                { value: 310, name: 'Notebook Dell' },
-                { value: 234, name: 'Fone Bluetooth' },
-                { value: 135, name: 'Tablet iPad' },
-                { value: 156, name: 'Smartwatch' },
-              ],
+            : [],
         itemStyle: {
           borderRadius: 10,
           borderColor: '#fff',
