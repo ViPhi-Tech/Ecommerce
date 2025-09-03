@@ -42,7 +42,8 @@ export class AuthUseCase {
     const token = this.authService.generateToken({
       sub: user.id,
       email: login.email ?? '',
-      name: user.fullName ?? ''
+      name: user.fullName ?? '',
+      roles: user.roles ?? []
     });
 
     return {

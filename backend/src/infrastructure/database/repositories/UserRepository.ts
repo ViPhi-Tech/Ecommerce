@@ -17,11 +17,24 @@ export class UserRepository implements IUserRepository {
     });
   }
 
-  async findByLoginId(loginId: number): Promise<User | null> {
-    return this.prisma.user.findUnique({
-      where: { loginId: loginId }
-    });
-  }
+async findByLoginId(loginId: number): Promise<User | null> {
+  const user = await this.prisma.user.findUnique({
+    where: { loginId },
+    include: {
+      roles: {
+        select: { roleId: true }
+      }
+    }
+  });
+
+  if (!user) return null;
+
+  return {
+    ...user,
+    roles: user.roles.map(r => r.roleId)
+  };
+};
+
 
   async findAll(): Promise<User[]> {
     return this.prisma.user.findMany();

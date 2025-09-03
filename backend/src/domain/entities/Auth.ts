@@ -5,4 +5,5 @@ export interface TokenPayload {
   name: string;
   iat?: number;     // issued at (opcional)
   exp?: number;     // expiration (opcional)
+  roles?: string[] | null;
 }

@@ -17,6 +17,7 @@ model User {
   stockMovements StockMovement[]
   company        Company?        @relation(fields: [companyId], references: [id])
   login          Login?          @relation(fields: [loginId], references: [id])
+  roles          UserRole[]
 }
 
 model Address {
@@ -33,4 +34,19 @@ model Address {
   client     Client?  @relation(fields: [clientId], references: [id])
   partner    Partner? @relation(fields: [partnerId], references: [id])
   user       User?    @relation(fields: [userId], references: [id])
+}
+
+
+model Role {
+  uuid      String   @id @default(uuid())
+  nome      String
+  userRoles UserRole[]
+}
+
+model UserRole {
+  id     Int   @id @default(autoincrement())
+  userId Int
+  user   User  @relation(fields: [userId], references: [id])
+  roleId String
+  role   Role  @relation(fields: [roleId], references: [uuid])
 }

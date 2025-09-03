@@ -6,4 +6,5 @@ export interface User {
   fullName: string | null;  // Permite null
   isActive: boolean;
   companyId: number | null;
+  roles?: string[] | null;
 }
