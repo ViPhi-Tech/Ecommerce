@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AccountsReceivableCreateComponent } from './screens/create/accounts-receivable-create.component';
 
 export const accountsReceivableRoutes: Routes = [
   {
@@ -39,5 +40,26 @@ export const accountsReceivableRoutes: Routes = [
     path: '',
     redirectTo: 'list',
     pathMatch: 'full',
+  },
+];
+
+// Accounts Receivable Dialog Routes
+export const dialogAccountsReceivableRoutes: Routes = [
+  {
+    path: 'accounts-receivable',
+    children: [
+      {
+        path: 'new',
+        component: AccountsReceivableCreateComponent,
+      },
+      {
+        path: ':id/view',
+        component: AccountsReceivableCreateComponent,
+      },
+      {
+        path: ':id',
+        component: AccountsReceivableCreateComponent,
+      },
+    ],
   },
 ];

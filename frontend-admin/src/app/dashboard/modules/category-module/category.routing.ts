@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { CategoryCreateComponent } from './screens/create/category-create.component';
 
 export const categoryRoutes: Routes = [
   {
@@ -15,5 +16,22 @@ export const categoryRoutes: Routes = [
     path: '',
     redirectTo: 'list',
     pathMatch: 'full',
+  },
+];
+
+// Category Dialog Routes
+export const dialogCategoryRoutes: Routes = [
+  {
+    path: 'categories',
+    children: [
+      {
+        path: 'new',
+        component: CategoryCreateComponent,
+      },
+      {
+        path: ':id',
+        component: CategoryCreateComponent,
+      },
+    ],
   },
 ];

@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit {
   // Computed signals do state
   loading = this.homeState.loading;
   error = this.homeState.error;
-  chartsMetrics = this.homeState.chartsMetrics;
+  charts = this.homeState.charts;
   selectedPeriod = this.homeState.selectedPeriod;
 
   indicators = computed(() => {
@@ -97,6 +97,10 @@ export class HomeComponent implements OnInit {
         icon: 'lucidePackage',
       },
     ];
+  });
+
+  chart = computed(() => {
+    return this.homeState.charts();
   });
 
   constructor() {}

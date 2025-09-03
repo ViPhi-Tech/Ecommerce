@@ -1,7 +1,8 @@
-import { Component, Input, computed } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
+import { SalesByMonth } from 'app/shared/interfaces/home/HomeModuleState';
 
 @Component({
   selector: 'fuse-sales-chart',
@@ -11,14 +12,21 @@ import { EChartsOption } from 'echarts';
   styleUrls: ['./sales-chart.component.scss'],
 })
 export class SalesChartComponent {
-  @Input() data: number[] = [];
-  @Input() labels: string[] = [];
-  @Input() title = 'Vendas por Mês';
-  @Input() loading = false;
+  data = input<SalesByMonth[]>([]);
+  title = input<string>('Vendas por Mês');
+  loading = input<boolean>(false);
 
+  totals = computed<number[]>(() => {
+    return this.data().map(item => item.total);
+  });
+
+  labels = computed<string[]>(() => {
+    return this.data().map(item => item.month);
+  })
+  
   chartOption = computed<EChartsOption>(() => ({
     title: {
-      text: this.title,
+      text: this.title(),
       left: 'center',
       top: '0px',
       textStyle: {
@@ -28,13 +36,20 @@ export class SalesChartComponent {
     },
     tooltip: {
       trigger: 'axis',
-      formatter: '{b}: R$ {c}',
+      formatter: (params: any) => {
+        const value = params[0]?.value || 0;
+        const formattedValue = new Intl.NumberFormat('pt-BR', {
+          style: 'currency',
+          currency: 'BRL'
+        }).format(value);
+        return `${params[0]?.name}: ${formattedValue}`;
+      },
     },
     xAxis: {
       type: 'category',
       data:
-        this.labels.length > 0
-          ? this.labels
+        this.labels().length > 0
+          ? this.labels()
           : [
               'Jan',
               'Fev',
@@ -53,18 +68,20 @@ export class SalesChartComponent {
     yAxis: {
       type: 'value',
       axisLabel: {
-        formatter: 'R$ {value}',
+        formatter: (value: number) => {
+          return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL'
+          }).format(value);
+        },
       },
     },
     series: [
       {
         data:
-          this.data.length > 0
-            ? this.data
-            : [
-                15000, 18000, 22000, 25000, 28000, 32000, 35000, 38000, 42000,
-                45000, 48000, 52000,
-              ],
+          this.data().length > 0
+            ? this.totals()
+            : [],
         type: 'line',
         smooth: true,
         itemStyle: {

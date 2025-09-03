@@ -2,11 +2,7 @@ import { Component, Input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
-
-export interface ProductData {
-  value: number;
-  name: string;
-}
+import { TopProduct } from 'app/shared/interfaces/home/HomeModuleState';
 
 @Component({
   selector: 'fuse-top-products-chart',
@@ -16,9 +12,17 @@ export interface ProductData {
   styleUrls: ['./top-products-chart.component.scss'],
 })
 export class TopProductsChartComponent {
-  @Input() data: ProductData[] = [];
+  @Input() data: TopProduct[] = [];
   @Input() title = 'Produtos Mais Vendidos';
   @Input() loading = false;
+
+  // Converte os dados para o formato esperado pelo gráfico
+  chartData = computed(() => {
+    return this.data.map(item => ({
+      name: item.name,
+      value: item.total
+    }));
+  });
 
   chartOption = computed<EChartsOption>(() => ({
     title: {
@@ -46,7 +50,7 @@ export class TopProductsChartComponent {
         center: ['50%', '45%'],
         data:
           this.data.length > 0
-            ? this.data
+            ? this.chartData()
             : [
                 { value: 335, name: 'Smartphone Galaxy' },
                 { value: 310, name: 'Notebook Dell' },

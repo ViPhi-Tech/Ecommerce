@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { OrderViewComponent } from './screens/order-view/order-view.component';
 
 export const orderRoutes: Routes = [
   {
@@ -32,5 +33,18 @@ export const orderRoutes: Routes = [
     path: '',
     redirectTo: 'list',
     pathMatch: 'full',
+  },
+];
+
+// Order Dialog Routes
+export const dialogOrderRoutes: Routes = [
+  {
+    path: 'orders',
+    children: [
+      {
+        path: ':id/view',
+        component: OrderViewComponent,
+      },
+    ],
   },
 ];

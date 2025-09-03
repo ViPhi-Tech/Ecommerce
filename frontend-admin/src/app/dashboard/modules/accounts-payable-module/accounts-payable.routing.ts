@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { AccountsPayableCreateComponent } from './screens/create/accounts-payable-create.component';
 
 export const accountsPayableRoutes: Routes = [
   {
@@ -25,5 +26,26 @@ export const accountsPayableRoutes: Routes = [
     path: '',
     redirectTo: 'list',
     pathMatch: 'full',
+  },
+];
+
+// Accounts Payable Dialog Routes
+export const dialogAccountsPayableRoutes: Routes = [
+  {
+    path: 'accounts-payable',
+    children: [
+      {
+        path: 'new',
+        component: AccountsPayableCreateComponent,
+      },
+      {
+        path: ':id/view',
+        component: AccountsPayableCreateComponent,
+      },
+      {
+        path: ':id',
+        component: AccountsPayableCreateComponent,
+      },
+    ],
   },
 ];

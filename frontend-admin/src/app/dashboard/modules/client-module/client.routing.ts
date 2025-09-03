@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { ClientCreateComponent } from './screens/create/client-create.component';
 
 export const clientRoutes: Routes = [
   {
@@ -15,5 +16,22 @@ export const clientRoutes: Routes = [
     path: '',
     redirectTo: 'list',
     pathMatch: 'full',
+  },
+];
+
+// Client Dialog Routes
+export const dialogClientRoutes: Routes = [
+  {
+    path: 'clients',
+    children: [
+      {
+        path: 'new',
+        component: ClientCreateComponent,
+      },
+      {
+        path: ':id',
+        component: ClientCreateComponent,
+      },
+    ],
   },
 ];
