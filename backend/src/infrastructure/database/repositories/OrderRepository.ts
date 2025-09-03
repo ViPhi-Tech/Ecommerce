@@ -1,5 +1,5 @@
 import { Order } from "../../../domain/entities/Order";
-import { OrderItem } from "../../../domain/entities/OrderItem";
+import { AggregateOrderResponse, AggregateOrderStatusResponse, OrderItem, AggregateOrderCategoryResponse } from "../../../domain/entities/OrderItem";
 import { IOrderRepository } from "../../../domain/repositories/IOrderRepository";
 import { Prisma, PrismaClient } from "@prisma/client";
 
@@ -127,6 +127,67 @@ export class OrderRepository implements IOrderRepository {
     }
   })
   return result._sum.total ?? 0
+};
+
+async aggregateSalesByMonth(initialMonth: number, finalMonth: number): Promise<AggregateOrderResponse[]> {
+  const monthNames = [
+    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+  ];
+
+  const results = await this.prisma.$queryRaw<
+    { year: number; month: number; total: number }[]
+  >`
+    SELECT 
+      EXTRACT(YEAR FROM "createdAt")::int AS year,
+      EXTRACT(MONTH FROM "createdAt")::int AS month,
+      COALESCE(SUM("total"), 0) AS total
+    FROM "Order"
+    WHERE EXTRACT(MONTH FROM "createdAt") BETWEEN ${initialMonth} AND ${finalMonth}
+    GROUP BY year, month
+    ORDER BY year, month;
+  `;
+
+  return results.map(r => ({
+    year: r.year,
+    month: monthNames[r.month - 1],
+    total: Number(r.total) ?? 0,
+  }));
+};
+
+async aggregateSalesByStatus(initialMonth: number, finalMonth: number): Promise<AggregateOrderStatusResponse[]> {
+  const results = await this.prisma.$queryRaw<
+    { name: string; total: number }[]
+  >`
+    SELECT 
+      o."status" AS name,
+      COALESCE(SUM(oi."quantity")::int, 0) AS total
+    FROM "Order" o
+    JOIN "OrderItem" oi ON oi."orderId" = o."id"
+    WHERE EXTRACT(MONTH FROM o."createdAt") BETWEEN ${initialMonth} AND ${finalMonth}
+    GROUP BY o."status"
+    ORDER BY total DESC;
+  `;
+
+  return results;
+}
+
+async aggregateSalesByCategory(initialMonth: number, finalMonth: number): Promise<AggregateOrderCategoryResponse[]> {
+  const results = await this.prisma.$queryRaw<{ name: string; total: number }[]
+  >`
+    SELECT 
+      c."name" AS category_name,
+      COALESCE(SUM(oi."quantity")::int, 0) AS total_quantity
+    FROM "OrderItem" oi
+    JOIN "Product" p ON p."id" = oi."productId"
+    JOIN "Category" c ON c."id" = p."categoryId"
+    JOIN "Order" o ON o."id" = oi."orderId"
+    WHERE EXTRACT(MONTH FROM o."createdAt") BETWEEN ${initialMonth} AND ${finalMonth}
+    GROUP BY c."id", c."name"
+    ORDER BY total_quantity DESC;
+  `;
+
+  return results;
 }
  
 }

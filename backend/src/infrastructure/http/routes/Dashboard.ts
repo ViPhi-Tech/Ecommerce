@@ -18,4 +18,14 @@ export default async function dashboardRoutes(
   });
 
 
+
+  fastify.get('/charts', {
+    schema: {
+      tags: ['dashboard'],
+      params: '',
+    },
+    preValidation: [authenticate],
+    handler: dashboardController.getDashboardCharts.bind(dashboardController)
+  });
+
 }

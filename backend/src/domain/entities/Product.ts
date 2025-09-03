@@ -40,3 +40,9 @@ export interface findMoviment {
     date: Date;
     type: "IN" | "OUT" | undefined | null;
 }
+
+
+export interface TopProducts {
+    name: string;
+    total: number;
+}
