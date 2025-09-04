@@ -40,11 +40,20 @@ export class CreateUserUseCase {
       hashedPassword: hashed_password || undefined
     });
 
+
     // Criar usuário
-    return this.userRepository.create({
+    const user = await this.userRepository.create({
       fullName: data.fullName,
       isActive: data.isActive ?? true,
       loginId: login.id
     });
+
+    await this.userRepository.createRoles(
+      user.id,
+      data.roles
+    )
+
+
+    return user
   }
 }

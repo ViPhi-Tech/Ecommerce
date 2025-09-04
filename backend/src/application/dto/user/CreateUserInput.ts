@@ -4,6 +4,7 @@ export interface CreateUserInput {
   email: string;
   googleId?: string;
   password?: string;
+  roles: string[]
 }
 
 export interface UpdateUserInput {

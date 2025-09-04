@@ -113,5 +113,18 @@ async findByLoginId(loginId: number): Promise<User | null> {
     if (!login) return null;
 
     return this.findByLoginId(login.id);
+  };
+
+
+  async createRoles(userId: number, roles: string[]): Promise<void> {
+    await this.prisma.userRole.createMany({
+      data: roles.map(roleId => ({
+        userId,
+        roleId
+      })),
+      skipDuplicates: true 
+    });
   }
+
+
 }
