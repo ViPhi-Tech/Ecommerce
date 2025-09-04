@@ -24,7 +24,6 @@ const findByStatusAccountsReceivableUseCase = new FindByStatusAccountsReceivable
 const findOverdueAccountsReceivableUseCase = new FindOverdueAccountsReceivableUseCase(accountsReceivableRepository);
 const updateAccountsReceivableUseCase = new UpdateAccountsReceivableUseCase(accountsReceivableRepository);
 const deleteAccountsReceivableUseCase = new DeleteAccountsReceivableUseCase(accountsReceivableRepository);
-
 // Controller
 export const accountsReceivableController = new AccountsReceivableController(
   createAccountsReceivableUseCase,
