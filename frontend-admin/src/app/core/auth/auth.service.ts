@@ -16,7 +16,7 @@ export class AuthService {
 
   apiUrl = environments?.apiUrl;
 
-  constructor() {}
+  constructor() { }
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http.post(
@@ -70,6 +70,15 @@ export class AuthService {
         return expirationDate > new Date();
       }
       return false;
+    }
+    return false;
+  }
+
+  checkAnyRole(roles: string[]): boolean {
+    const decodedToken = this.getDecodedToken();
+    if (decodedToken && decodedToken['roles']) {
+      const userRoles: string[] = decodedToken['roles'];
+      return roles.some(role => userRoles.includes(role));
     }
     return false;
   }

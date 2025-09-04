@@ -14,8 +14,11 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { ROLES_SITEMAP } from 'app/shared/constants/roles.sitemap';
+import { AuthService } from 'app/core/auth/auth.service';
 
 interface QuickAccessItem {
+  id: string;
   label: string;
   icon: string;
   click: () => void;
@@ -37,6 +40,7 @@ interface QuickAccessItem {
 export class QuickAccessComponent implements OnInit, OnDestroy {
   // Dependencies
   router = inject(Router);
+  private authService = inject(AuthService);
 
   show = signal<boolean>(false);
   title = model<string>('Cadastro rápido');
@@ -46,6 +50,7 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
   quickAccessItemsFiltered = signal<QuickAccessItem[]>([]);
   quickAccessItems = signal<QuickAccessItem[]>([
     {
+      id: ROLES_SITEMAP.Produtos,
       label: 'Cadastro de Produtos',
       icon: 'lucideBox',
       click: () => {
@@ -54,6 +59,7 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
       },
     },
     {
+      id: ROLES_SITEMAP.Categorias,
       label: 'Cadastro de Categorias',
       icon: 'lucideTag',
       click: () => {
@@ -62,14 +68,7 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
       },
     },
     {
-      label: 'Cadastro de Marcas',
-      icon: 'lucideBookA',
-      click: () => {
-        this.toggleQuickAccess();
-        this.router.navigate([{ outlets: { drawer: ['brands', 'new'] } }]);
-      },
-    },
-    {
+      id: ROLES_SITEMAP.Clientes,
       label: 'Cadastro de Clientes',
       icon: 'lucideUserPlus',
       click: () => {
@@ -78,15 +77,16 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
       },
     },
     {
-      label: 'Importação de Nota Fiscal',
-      icon: 'lucideFileText',
+      id: ROLES_SITEMAP.Fornecedores,
+      label: 'Cadastro de Fornecedores',
+      icon: 'lucideUsers',
       click: () => {
         this.toggleQuickAccess();
-        this.router.navigate([{ outlets: { drawer: ['import', 'invoice'] } }]);
+        this.router.navigate([{ outlets: { drawer: ['suppliers', 'new'] } }]);
       },
     },
-    // contas a pagar
     {
+      id: ROLES_SITEMAP.ContasPagar,
       label: 'Cadastro de Contas a Pagar',
       icon: 'lucideFileText',
       click: () => {
@@ -97,6 +97,7 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
       },
     },
     {
+      id: ROLES_SITEMAP.MovimentacaoEstoque,
       label: 'Entrada de Produtos',
       icon: 'lucidePackagePlus',
       click: () => {
@@ -105,6 +106,7 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
       },
     },
     {
+      id: ROLES_SITEMAP.MovimentacaoEstoque,
       label: 'Saída de Produtos',
       icon: 'lucidePackageMinus',
       click: () => {
@@ -113,41 +115,36 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
       },
     },
     {
-      label: 'Cadastro de Clientes',
-      icon: 'lucideUser',
-      click: () => {},
-    },
-    {
-      label: 'Cadastro de Fornecedores',
-      icon: 'lucideUsers',
-      click: () => {
-        this.toggleQuickAccess();
-        this.router.navigate([{ outlets: { drawer: ['suppliers', 'new'] } }]);
-      },
-    },
-    {
+      id: ROLES_SITEMAP.Relatorios,
       label: 'Relatórios',
       icon: 'lucideChartBar',
-      click: () => {},
+      click: () => { },
     },
     {
-      label: 'Configurações',
-      icon: 'lucideSettings',
-      click: () => {},
+      id: ROLES_SITEMAP.Usuarios,
+      label: 'Cadastro de Usuários',
+      icon: 'lucideUser',
+      click: () => {
+        this.toggleQuickAccess();
+        this.router.navigate([{ outlets: { drawer: ['users', 'new'] } }]);
+      },
     },
   ]);
 
   private _searchSubscription!: Subscription;
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit() {
-    this.quickAccessItemsFiltered.set(this.quickAccessItems());
+    const filteredItems = this.quickAccessItems().filter(item =>
+      this.authService.checkAnyRole([item.id])
+    );
+    this.quickAccessItemsFiltered.set(filteredItems);
 
     this._searchSubscription = this.searchInput.valueChanges.subscribe(
       (value = '') => {
         this.quickAccessItemsFiltered.set(
-          this.quickAccessItems().filter(item =>
+          filteredItems.filter(item =>
             item.label.toLowerCase().includes((value ?? '').toLowerCase())
           )
         );

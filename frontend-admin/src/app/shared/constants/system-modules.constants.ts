@@ -1,68 +1,69 @@
 import { IUserModule } from '../interfaces/user/UserModule';
+import { ROLES_SITEMAP } from './roles.sitemap';
 
 export const SYSTEM_MODULES: IUserModule[] = [
   {
-    id: 'home-module',
+    id: ROLES_SITEMAP.Dashboard,
     name: 'Dashboard',
     description: 'Painel principal com visão geral do sistema',
     route: '/dashboard/home',
   },
   {
-    id: 'product-module',
+    id: ROLES_SITEMAP.Produtos,
     name: 'Produtos',
     description: 'Gerenciamento de produtos e catálogo',
     route: '/dashboard/products',
   },
   {
-    id: 'category-module',
+    id: ROLES_SITEMAP.Categorias,
     name: 'Categorias',
     description: 'Gerenciamento de categorias de produtos',
     route: '/dashboard/categories',
   },
   {
-    id: 'client-module',
+    id: ROLES_SITEMAP.Clientes,
     name: 'Clientes',
     description: 'Gerenciamento de clientes',
     route: '/dashboard/clients',
   },
   {
-    id: 'supplier-module',
+    id: ROLES_SITEMAP.Fornecedores,
     name: 'Fornecedores',
     description: 'Gerenciamento de fornecedores',
     route: '/dashboard/suppliers',
   },
   {
-    id: 'order-module',
+    id: ROLES_SITEMAP.Pedidos,
     name: 'Pedidos',
     description: 'Gerenciamento de pedidos e vendas',
     route: '/dashboard/orders',
   },
   {
-    id: 'stock-movement-module',
+    id: ROLES_SITEMAP.MovimentacaoEstoque,
     name: 'Movimentação de Estoque',
     description: 'Controle de entrada e saída de estoque',
     route: '/dashboard/stock',
   },
   {
-    id: 'accounts-payable-module',
+    id: ROLES_SITEMAP.ContasPagar,
     name: 'Contas a Pagar',
     description: 'Gerenciamento de contas a pagar',
     route: '/dashboard/accounts-payable',
   },
   {
-    id: 'accounts-receivable-module',
+    id: ROLES_SITEMAP.ContasReceber,
     name: 'Contas a Receber',
     description: 'Gerenciamento de contas a receber',
     route: '/dashboard/accounts-receivable',
   },
   {
-    id: 'report-module',
+    id: ROLES_SITEMAP.Relatorios,
     name: 'Relatórios',
     description: 'Relatórios e análises do sistema',
     route: '/dashboard/reports',
   },
   {
-    id: 'user-module',
+    id: ROLES_SITEMAP.Usuarios,
     name: 'Usuários',
     description: 'Gerenciamento de usuários do sistema',
     route: '/dashboard/users',

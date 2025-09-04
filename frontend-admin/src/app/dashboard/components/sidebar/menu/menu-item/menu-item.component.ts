@@ -4,6 +4,7 @@ import { NgIcon } from '@ng-icons/core';
 import { heightAnimation } from 'app/shared/utils/animations';
 
 export interface MenuItem {
+  id: string;
   label: string;
   icon: string;
   route?: string;
@@ -21,6 +22,7 @@ export interface MenuItem {
 })
 export class MenuItemComponent implements OnInit {
   item = model<MenuItem>({
+    id: '',
     label: '',
     icon: '',
     route: '',
@@ -30,9 +32,9 @@ export class MenuItemComponent implements OnInit {
 
   addictionalClass = input<any>();
 
-  constructor() {}
+  constructor() { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   toggleMenu(state: boolean) {
     if (!this.item().items?.length) return;
