@@ -14,3 +14,20 @@ model AccountsPayable {
   updatedAt         DateTime  @updatedAt
   supplier          Supplier  @relation("SupplierToPayables", fields: [supplierId], references: [id])
 }
+
+model AccountsReceivable {
+  id              Int       @id @default(autoincrement())
+  uuid            String    @unique @default(uuid())
+  clientId        Int
+  originalDueDate DateTime?
+  issueDate       DateTime
+  dueDate         DateTime
+  competenceDate  DateTime?
+  recurringIncome Boolean   @default(false)
+  description     String
+  status          String
+  amount          Float
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  client          Client    @relation(fields: [clientId], references: [id])
+}

@@ -36,17 +36,16 @@ model Address {
   user       User?    @relation(fields: [userId], references: [id])
 }
 
-
 model Role {
-  uuid      String   @id @default(uuid())
   nome      String
+  uuid      String     @id @default(uuid())
   userRoles UserRole[]
 }
 
 model UserRole {
-  id     Int   @id @default(autoincrement())
+  id     Int    @id @default(autoincrement())
   userId Int
-  user   User  @relation(fields: [userId], references: [id])
   roleId String
-  role   Role  @relation(fields: [roleId], references: [uuid])
+  role   Role   @relation(fields: [roleId], references: [uuid])
+  user   User   @relation(fields: [userId], references: [id])
 }

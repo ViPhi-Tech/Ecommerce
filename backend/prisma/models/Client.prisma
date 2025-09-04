@@ -1,15 +1,16 @@
 model Client {
-  id        Int       @id @default(autoincrement())
-  fullName  String?
-  document  String?   @unique
-  email     String?   @unique
-  phone     String?
-  isActive  Boolean   @default(true)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  loginId   Int?      @unique
-  address   Address?
-  login     Login?    @relation(fields: [loginId], references: [id])
-  invoices  Invoice[]
-  orders    Order[]
+  id                 Int                  @id @default(autoincrement())
+  fullName           String?
+  document           String?              @unique
+  email              String?              @unique
+  phone              String?
+  isActive           Boolean              @default(true)
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  loginId            Int?                 @unique
+  accountsReceivable AccountsReceivable[]
+  address            Address?
+  login              Login?               @relation(fields: [loginId], references: [id])
+  invoices           Invoice[]
+  orders             Order[]
 }
