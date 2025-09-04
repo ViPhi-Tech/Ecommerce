@@ -39,17 +39,19 @@
   </div>
 
   <!-- Kanban Board -->
-  <div class="kanban-container">
-    <fuse-kanban
-      title=""
-      [columns]="kanbanColumns()"
-      [loading]="loading()"
-      [cardHeight]="140"
-      [allowDragDrop]="true"
-      (cardClick)="onCardClick($event)"
-      (cardDrop)="onCardDrop($event)"
-    ></fuse-kanban>
-  </div>
+  @if (loading() || kanbanColumns().length > 0) {
+    <div class="kanban-container">
+      <fuse-kanban
+        title=""
+        [columns]="kanbanColumns()"
+        [loading]="loading()"
+        [cardHeight]="140"
+        [allowDragDrop]="true"
+        (cardClick)="onCardClick($event)"
+        (cardDrop)="onCardDrop($event)"
+      ></fuse-kanban>
+    </div>
+  }
 
   <!-- Empty State -->
   @if (!loading() && kanbanColumns().length === 0) {

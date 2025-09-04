@@ -13,64 +13,69 @@ import {
   Validators,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { Dialog, DialogModule } from 'primeng/dialog';
-import { FormModule } from 'app/shared/components/form/form.module';
 import { AccountsReceivableService } from '../../accounts-receivable.service';
-import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
+import { Drawer } from 'primeng/drawer';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
+import dayjs from 'dayjs';
+import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
+import { FormModule } from 'app/shared/components/form/form.module';
+import { CheckboxModule } from 'primeng/checkbox';
+import { ClientState } from 'app/dashboard/modules/client-module/client.state';
 import { AccountsReceivableState } from '../../accounts-receivable.state';
 import { IAccountsReceivable } from 'app/shared/interfaces/accounts-receivable/AccountsReceivable';
-import dayjs from 'dayjs';
 
 @Component({
-  selector: 'fuse-accounts-receivable-create',
+  selector: 'fuse-accounts-receivable-create-drawer',
   templateUrl: './accounts-receivable-create.component.html',
   imports: [
     DialogModule,
     ButtonModule,
     ReactiveFormsModule,
     FormModule,
-    ToastModule,
+    CheckboxModule,
   ],
 })
 export class AccountsReceivableCreateComponent implements OnInit {
-  destroyedRef = inject(DestroyRef);
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
   private toast = inject(MessageService);
-  private accountsReceivableService = inject(AccountsReceivableService);
+  public clientState = inject(ClientState);
   public accountsReceivableState = inject(AccountsReceivableState);
+  private accountsReceivableService = inject(AccountsReceivableService);
 
-  @ViewChild('dialogRef') dialogRef!: Dialog;
+  @ViewChild('drawerRef') drawerRef!: Drawer;
 
-  formGroup = this.formBuilder.group({});
-
-  title = signal('Adicionar Conta a Receber');
+  title = signal('Cadastrar conta a receber');
   subtitle = signal('Preencha os dados da nova conta a receber abaixo');
   submitButtonLabel = signal('Salvar');
   isLoading = signal(true);
   isView = signal(false);
-  visible = signal(true);
 
   accountsReceivableForm!: FormGroup;
+
+  destroyedRef = inject(DestroyRef);
+
+  @ViewChild('dialogRef') dialogRef!: Dialog;
+
+  // signals
+  visible = signal(false);
 
   constructor() {
     this.initForm();
   }
 
-  ngOnInit(): void {
-    this.initForm();
+  ngOnInit() {
+    this.clientState.getClientList();
     this.activatedRoute.params
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe(params => {
         const id = params['id'];
         if (id) {
           this.title.set('Editar Conta a Receber');
-          this.subtitle.set('Preencha os dados da conta a receber abaixo');
           this.loadInfos(id);
         } else {
           this.loadInfos();
@@ -99,8 +104,11 @@ export class AccountsReceivableCreateComponent implements OnInit {
 
           this.accountsReceivableForm.patchValue({
             ...data,
-            dueDate: data.dueDate
-              ? dayjs(data.dueDate).format('DD/MM/YYYY')
+            originalDueDate: dayjs(data.originalDueDate).format('DD/MM/YYYY'),
+            issueDate: dayjs(data.issueDate).format('DD/MM/YYYY'),
+            dueDate: dayjs(data.dueDate).format('DD/MM/YYYY'),
+            competenceDate: data.competenceDate
+              ? dayjs(data.competenceDate).format('DD/MM/YYYY')
               : '',
           });
           this.isLoading.set(false);
@@ -122,9 +130,16 @@ export class AccountsReceivableCreateComponent implements OnInit {
   initForm(): void {
     this.accountsReceivableForm = this.formBuilder.group({
       id: [''],
-      description: ['', [Validators.required, Validators.maxLength(255)]],
+      uuid: [''],
+      clientId: ['', [Validators.required]],
+      originalDueDate: [{ value: '', disabled: true }],
+      issueDate: [dayjs().format('DD/MM/YYYY')],
       dueDate: ['', Validators.required],
+      competenceDate: [''],
+      recurringIncome: [false],
       amount: ['', Validators.required],
+      status: ['pending'],
+      description: [''],
     });
   }
 
@@ -134,8 +149,6 @@ export class AccountsReceivableCreateComponent implements OnInit {
     this.accountsReceivableForm.markAllAsTouched();
 
     const formValue = this.accountsReceivableForm.getRawValue();
-    console.log('Form Value:', formValue);
-
     if (!this.accountsReceivableForm.valid) {
       this.toast.add({
         severity: 'error',
@@ -145,8 +158,24 @@ export class AccountsReceivableCreateComponent implements OnInit {
       return;
     }
 
+    const payload: any = {
+      originalDueDate: formValue.originalDueDate || formValue.dueDate,
+      issueDate: formValue.issueDate,
+      dueDate: formValue.dueDate,
+      competenceDate: formValue.competenceDate,
+      amount: formValue.amount,
+      recurringIncome: formValue.recurringIncome,
+      description: formValue.description,
+      clientId: formValue.clientId,
+      status: formValue.status,
+    };
+
+    if (formValue.id) {
+      payload.id = formValue.id;
+    }
+
     this.accountsReceivableService
-      .upsert(formValue)
+      .upsert(payload)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: () => {
@@ -171,7 +200,6 @@ export class AccountsReceivableCreateComponent implements OnInit {
   }
 
   back() {
-    // remover outlet da url
     this.router.navigate([{ outlets: { drawer: null } }], {
       relativeTo: this.activatedRoute.root,
     });

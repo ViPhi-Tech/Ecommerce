@@ -14,7 +14,7 @@
           {{ title() }}
         </h2>
         <p class="text-sm text-muted-foreground">
-          {{ subtitle() }}
+          Preencha os dados da nova conta a receber abaixo
         </p>
       </div>
     </div>
@@ -23,13 +23,34 @@
   <div class="flex flex-col gap-4 scroll-form">
     <div>
       <form [formGroup]="accountsReceivableForm" class="row">
-        <div class="col-12 md:col-12">
-          <fuse-input
+        <div class="col-12">
+          <fuse-select
+            label="Cliente"
+            [items]="clientState.clientList()"
+            valueRef="id"
+            labelRef="fullName"
             [isLoading]="isLoading()"
-            type="textarea"
-            label="Descrição"
-            [control]="accountsReceivableForm.get('description')"
-            placeholder="Ex: Venda de produto X"
+            [drawerAux]="['clients', 'new']"
+            [control]="accountsReceivableForm.get('clientId')"
+            placeholder="Adicione um cliente"
+          />
+        </div>
+        <div class="col-12 md:col-6 mt-4">
+          <fuse-datepicker
+            label="Data de vencimento (Original)"
+            [isLoading]="isLoading()"
+            placeholder="00/00/0000"
+            [control]="accountsReceivableForm.get('originalDueDate')"
+            type="date"
+          />
+        </div>
+        <div class="col-12 md:col-6 mt-4">
+          <fuse-datepicker
+            label="Data de Emissão"
+            [isLoading]="isLoading()"
+            placeholder="00/00/0000"
+            [control]="accountsReceivableForm.get('issueDate')"
+            type="date"
           />
         </div>
         <div class="col-12 md:col-6 mt-4">
@@ -42,12 +63,44 @@
           />
         </div>
         <div class="col-12 md:col-6 mt-4">
+          <fuse-datepicker
+            label="Data de competência"
+            [isLoading]="isLoading()"
+            placeholder="00/00/0000"
+            [control]="accountsReceivableForm.get('competenceDate')"
+            type="date"
+          />
+        </div>
+        <div class="col-12 md:col-12 mt-4">
           <fuse-input
             [isLoading]="isLoading()"
             label="Valor"
             [control]="accountsReceivableForm.get('amount')"
             type="money"
             placeholder="Ex: 100,00"
+          />
+        </div>
+        <div class="col-12 md:col-12 mt-4">
+          <div class="flex items-center">
+            <p-checkbox
+              inputId="recurringIncome"
+              name="recurringIncome"
+              [value]="true"
+              [binary]="true"
+              formControlName="recurringIncome"
+            />
+            <label for="recurringIncome" class="ml-2">
+              Receita recorrente (Mensalmente no dia do vencimento)
+            </label>
+          </div>
+        </div>
+        <div class="col-12 md:col-12 mt-4">
+          <fuse-input
+            [isLoading]="isLoading()"
+            type="textarea"
+            label="Descrição"
+            [control]="accountsReceivableForm.get('description')"
+            placeholder="Ex: Venda de produto X"
           />
         </div>
       </form>
@@ -82,5 +135,3 @@
     </div>
   </ng-template>
 </p-dialog>
-
-<p-toast baseZIndex="9000" />

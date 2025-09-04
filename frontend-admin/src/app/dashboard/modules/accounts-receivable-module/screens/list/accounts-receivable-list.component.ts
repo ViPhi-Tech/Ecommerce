@@ -33,6 +33,12 @@ export class AccountsReceivableListComponent implements OnInit {
     pageLinkSize: 5,
     columns: [
       {
+        field: 'clientName',
+        caption: 'Cliente',
+        sortable: true,
+        filter: true,
+      },
+      {
         field: 'description',
         caption: 'Descrição',
         sortable: true,
@@ -43,6 +49,7 @@ export class AccountsReceivableListComponent implements OnInit {
         caption: 'Data de Vencimento',
         type: 'date',
         sortable: true,
+        filter: true,
       },
       {
         field: 'amount',
@@ -52,14 +59,33 @@ export class AccountsReceivableListComponent implements OnInit {
         filter: true,
       },
       {
+        field: 'statusLabel',
+        caption: 'Situação',
+        type: 'badge',
+        filter: true,
+        sortable: true,
+        badgeSeverityKey: 'statusBadgeColor',
+        align: 'center',
+      },
+      {
         field: 'actions',
         caption: 'Ações',
         actionButtonsType: 'buttons',
         actionButtons: [
           {
+            icon: 'lucideCircleCheckBig',
+            label: 'Dar Baixa',
+            tooltip: 'Dar Baixa na Conta a Receber',
+            variant: 'text',
+            action: (rowData: any) => {
+              this.markAsReceived(rowData?.id);
+            },
+          },
+          {
             icon: 'lucideSquarePen',
             label: 'Editar',
             tooltip: 'Editar Conta a Receber',
+            colorIcon: '#3B82F6',
             variant: 'text',
             action: (rowData: any) => {
               this.edit(rowData?.id);
@@ -81,7 +107,7 @@ export class AccountsReceivableListComponent implements OnInit {
     ],
   });
 
-  constructor() {}
+  constructor() { }
 
   async ngOnInit() {
     await this.loadAccountsReceivable();
@@ -98,6 +124,41 @@ export class AccountsReceivableListComponent implements OnInit {
 
   async loadAccountsReceivable() {
     await this.state.getAccountsReceivableList();
+  }
+
+  // Método para dar baixa na conta a receber
+  async markAsReceived(id: number) {
+    this.confirmationService.confirm({
+      message: 'Você tem certeza que deseja dar baixa nesta conta a receber?',
+      header: 'Confirmação de Baixa',
+      icon: 'pi pi-exclamation-triangle text-yellow-500',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      acceptButtonStyleClass: 'p-button-success',
+      rejectButtonStyleClass: 'p-button-secondary',
+      accept: () => {
+        this.accountsReceivableService
+          .markAsReceived(id)
+          .pipe(takeUntilDestroyed(this.destroyedRef))
+          .subscribe({
+            next: () => {
+              this.toast.add({
+                severity: 'success',
+                summary: 'Sucesso',
+                detail: 'Conta a receber marcada como recebida com sucesso',
+              });
+              this.state.updateAccountReceivableStatus(id, 'received');
+            },
+            error: () => {
+              this.toast.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: 'Erro ao dar baixa na conta a receber',
+              });
+            },
+          });
+      },
+    });
   }
 
   navigateToKanban() {

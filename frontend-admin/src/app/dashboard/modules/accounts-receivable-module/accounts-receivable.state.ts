@@ -102,15 +102,15 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
   convertStatus(item: IAccountsReceivable) {
     switch (item.status) {
       case 'pending':
-        return { statusLabel: 'Pendente' };
+        return { statusLabel: 'Pendente', statusBadgeColor: 'info' };
       case 'received':
-        return { statusLabel: 'Recebido' };
+        return { statusLabel: 'Recebido', statusBadgeColor: 'success' };
       case 'overdue':
-        return { statusLabel: 'Vencido' };
+        return { statusLabel: 'Vencido', statusBadgeColor: 'danger' };
       case 'due_soon':
-        return { statusLabel: 'Vence em Breve' };
+        return { statusLabel: 'Vence em Breve', statusBadgeColor: 'warn' };
       default:
-        return { statusLabel: 'Desconhecido' };
+        return { statusLabel: 'Desconhecido', statusBadgeColor: 'secondary' };
     }
   }
 }
