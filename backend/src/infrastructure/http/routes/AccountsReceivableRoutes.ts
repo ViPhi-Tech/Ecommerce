@@ -86,4 +86,14 @@ export default async function accountsReceivableRoutes(
     },
     handler: accountsReceivableController.delete.bind(accountsReceivableController),
   });
+
+
+  fastify.get("/getAll", {
+    preValidation: [authenticate],
+    schema: {
+      tags: ["accounts-receivable"],
+      summary: "Busca todas as contas a receber",
+    },
+    handler: accountsReceivableController.findAll.bind(accountsReceivableController)
+  });
 }

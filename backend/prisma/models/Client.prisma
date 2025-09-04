@@ -8,6 +8,7 @@ model Client {
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @updatedAt
   loginId            Int?                 @unique
+  isResetPassword    Boolean              @default(false)
   accountsReceivable AccountsReceivable[]
   address            Address?
   login              Login?               @relation(fields: [loginId], references: [id])
