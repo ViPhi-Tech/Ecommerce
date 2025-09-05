@@ -9,6 +9,7 @@ import { dialogAccountsReceivableRoutes } from './dashboard/modules/accounts-rec
 import { dialogOrderRoutes } from './dashboard/modules/order-module/order.routing';
 import { dialogUserRoutes } from './dashboard/modules/user-module/user.routing';
 import { dialogProductRoutes } from './dashboard/modules/product-module/product.routing';
+import { dialogServiceOrderRoutes } from './dashboard/modules/service-order-module/service-order.routing';
 
 // Combined dialog routes
 export const dialogRoutes: Routes = [
@@ -21,6 +22,7 @@ export const dialogRoutes: Routes = [
   ...dialogOrderRoutes,
   ...dialogUserRoutes,
   ...dialogProductRoutes,
+  ...dialogServiceOrderRoutes,
 ];
 
 export const routes: Routes = [

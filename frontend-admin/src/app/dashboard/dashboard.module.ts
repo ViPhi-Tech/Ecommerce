@@ -17,6 +17,7 @@ import { clientRoutes } from './modules/client-module/client.routing';
 import { supplierRoutes } from './modules/supplier-module/supplier.routing';
 import { homeRoutes } from './modules/home-module/home.routing';
 import { reportRoutes } from './modules/report-module/report.routing';
+import { serviceOrderRoutes } from './modules/service-order-module/service-order.routing';
 
 const routes: Routes = [
   {
@@ -79,6 +80,11 @@ const routes: Routes = [
         path: 'accounts-receivable',
         children: accountsReceivableRoutes,
         data: { animation: 'accounts-receivable' },
+      },
+      {
+        path: 'service-orders',
+        children: serviceOrderRoutes,
+        data: { animation: 'service-orders' },
       },
       {
         path: 'reports',
