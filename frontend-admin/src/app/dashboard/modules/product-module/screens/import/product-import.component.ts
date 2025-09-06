@@ -12,13 +12,19 @@ import { Dialog, DialogModule } from 'primeng/dialog';
 import { MessageService } from 'primeng/api';
 import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
 import { convertFileToJson, generateXlsxFile } from 'app/shared/utils/utils';
+import { ProductImportListComponent } from './product-import-list/product-import-list.component';
 import { CategoryState } from 'app/dashboard/modules/category-module/category.state';
 
 @Component({
   selector: 'fuse-product-import',
   templateUrl: './product-import.component.html',
   styleUrls: ['./product-import.component.scss'],
-  imports: [DialogModule, ButtonModule, FileUploadModule],
+  imports: [
+    DialogModule,
+    ButtonModule,
+    FileUploadModule,
+    ProductImportListComponent,
+  ],
 })
 export class ProductImportComponent implements OnInit {
   destroyedRef = inject(DestroyRef);
@@ -47,6 +53,7 @@ export class ProductImportComponent implements OnInit {
   // signals
   visible = signal(false);
   selectedFile: File | null = null;
+  convertedProducts = signal<any[]>([]);
 
   constructor() {}
 
@@ -70,30 +77,34 @@ export class ProductImportComponent implements OnInit {
     // Converter o arquivo para JSON
     convertFileToJson(this.selectedFile)
       .then(jsonData => {
-        console.log('Dados convertidos:', jsonData);
-        // Aqui você pode processar os dados JSON, por exemplo, enviar para o serviço
-        this.toast.add({
-          severity: 'success',
-          summary: 'Sucesso',
-          detail: 'Produtos importados com sucesso!',
-        });
-        this.closeDialog();
+        const converted = this.convertFields(jsonData);
+        this.convertedProducts.set(converted);
       })
       .catch(error => {
         console.error('Erro ao converter arquivo:', error);
-        this.toast.add({
-          severity: 'error',
-          summary: 'Erro',
-          detail: 'Erro ao processar o arquivo.',
-        });
       });
   }
 
   downloadProductsTemplate(): void {
     generateXlsxFile(
       [
-        { data: this.xlsxBase, sheetName: 'Produtos' },
-        { data: this.categoryState.categoryList(), sheetName: 'Categorias' }
+        {
+          data: this.xlsxBase,
+          sheetName: 'Produtos',
+          mandatoryColumns: [
+            'Nome do Produto',
+            'EAN',
+            'SKU',
+            'Categoria',
+            'Marca',
+            'Preço Custo',
+            'Preço Venda',
+            'Estoque',
+            'Descrição Curta',
+            'Descrição',
+          ],
+        },
+        { data: this.categoryState.categoryList(), sheetName: 'Categorias' },
       ],
       'produtos.xlsx'
     );
@@ -102,6 +113,29 @@ export class ProductImportComponent implements OnInit {
       severity: 'success',
       summary: 'Sucesso',
       detail: 'Arquivo de exemplo gerado com sucesso!',
+    });
+  }
+
+  convertFields(data: any[]): any[] {
+    const fieldsMapper = {
+      'Nome do Produto': 'name',
+      Ean: 'ean',
+      'Código/SKU': 'sku',
+      Categoria: 'categoryId',
+      'Marca / Fabricante': 'brand',
+      'Preço de custo': 'initialPrice',
+      'Preço de venda': 'finalPrice',
+      'Estoque inicial': 'quantity',
+      'Descrição curta': 'shortDescription',
+      Descrição: 'description',
+    };
+
+    return data.map(item => {
+      const convertedItem: any = {};
+      for (const [key, value] of Object.entries(fieldsMapper)) {
+        convertedItem[value] = item[key];
+      }
+      return convertedItem;
     });
   }
 

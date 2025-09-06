@@ -5,7 +5,7 @@
   [modal]="true"
   [closeOnEscape]="true"
   [draggable]="false"
-  styleClass="max-w-[800px] w-full"
+  styleClass="max-w-[80vw] w-full"
 >
   <ng-template #header>
     <div class="flex flex-col space-y-1.5 text-center sm:text-left">
@@ -41,6 +41,31 @@
       </p>
       <p class="mt-2 text-sm text-muted-foreground">Tamanho máximo: 1MB</p>
     </div>
+
+    <div class="text-sm text-muted-foreground">
+      <p><strong>Instruções:</strong></p>
+      <ul class="list-disc list-inside">
+        <li>
+          Certifique-se de que o arquivo esteja no formato correto (.xls, .xlsx
+          ou .csv).
+        </li>
+        <li>
+          Na coluna "Categoria", coloque o ID da categoria, que pode ser
+          encontrado na aba "Categoria" do arquivo XLS.
+        </li>
+        <li>Caso a categoria não exista, o campo sinalizará um erro.</li>
+        <li>
+          Verifique se todos os campos obrigatórios estão preenchidos antes de
+          importar.
+        </li>
+      </ul>
+    </div>
+
+    @if (convertedProducts().length > 0) {
+      <fuse-product-import-list
+        [products]="convertedProducts()"
+      ></fuse-product-import-list>
+    }
   </div>
 
   <ng-template #footer>

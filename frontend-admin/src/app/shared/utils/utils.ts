@@ -120,12 +120,26 @@ export const convertFileToJson = (file: File): Promise<any[]> => {
 };
 
 export const generateXlsxFile = (
-  sheets: { data: any[]; sheetName: string }[],
+  sheets: { data: any[]; sheetName: string; mandatoryColumns?: string[] }[],
   fileName: string
 ): void => {
   const wb = XLSX.utils.book_new();
   sheets.forEach(sheet => {
     const ws = XLSX.utils.json_to_sheet(sheet.data);
+    // Make header row bold for mandatory columns
+    for (const col in ws) {
+      if (col[0] !== '!' && ws[col].v) {
+        const match = col.match(/\d+/);
+        if (
+          match &&
+          parseInt(match[0]) === 1 &&
+          sheet.mandatoryColumns?.includes(ws[col].v)
+        ) {
+          if (!ws[col].s) ws[col].s = {};
+          ws[col].s.font = { bold: true };
+        }
+      }
+    }
     XLSX.utils.book_append_sheet(wb, ws, sheet.sheetName);
   });
   const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
