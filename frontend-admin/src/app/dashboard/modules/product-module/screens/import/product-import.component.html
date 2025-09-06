@@ -19,12 +19,27 @@
   </ng-template>
 
   <div class="flex flex-col gap-4">
-    <div>
-      <fuse-file-upload
-        [multiple]="false"
-        accept=".csv,.xlsx,.xls"
-        (uploadedFilesEvent)="onFileSelected($event)"
+    <div class="flex gap-4">
+      <p-button
+        label="Baixar Modelo"
+        icon="pi pi-download"
+        (click)="downloadProductsTemplate()"
+      ></p-button>
+
+      <p-fileupload
+        mode="basic"
+        name="file[]"
+        chooseIcon="pi pi-upload"
+        accept=".xls,.xlsx,.csv"
+        maxFileSize="1000000"
+        (onSelect)="onFileSelected($event)"
+        [auto]="true"
+        chooseLabel="Importar"
       />
+      <p class="mt-2 text-sm text-muted-foreground">
+        Formatos suportados: .xls, .xlsx, .csv
+      </p>
+      <p class="mt-2 text-sm text-muted-foreground">Tamanho máximo: 1MB</p>
     </div>
   </div>
 
@@ -38,7 +53,6 @@
           icon="pi pi-upload"
           class="w-[200px]"
           size="small"
-          (click)="onImport($event)"
           [disabled]="!selectedFile"
         ></button>
 

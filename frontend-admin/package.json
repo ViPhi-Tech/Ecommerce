@@ -50,6 +50,7 @@
     "tailwindcss-primeui": "^0.6.1",
     "tslib": "^2.3.0",
     "tw-bootstrap-grid-optimizer": "^1.0.2",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {

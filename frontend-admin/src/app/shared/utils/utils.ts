@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import * as XLSX from 'xlsx';
 
 export const randomId = () => {
   return Math.random().toString(36).substring(2, 15);
@@ -96,4 +97,45 @@ export const formatCurrency = (value: number): string => {
     style: 'currency',
     currency: 'BRL',
   }).format(value);
+};
+
+export const convertFileToJson = (file: File): Promise<any[]> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[sheetName];
+        const json = XLSX.utils.sheet_to_json(worksheet);
+        resolve(json);
+      } catch (error) {
+        reject(error);
+      }
+    };
+    reader.onerror = () => reject(new Error('Erro ao ler o arquivo'));
+    reader.readAsArrayBuffer(file);
+  });
+};
+
+export const generateXlsxFile = (
+  sheets: { data: any[]; sheetName: string }[],
+  fileName: string
+): void => {
+  const wb = XLSX.utils.book_new();
+  sheets.forEach(sheet => {
+    const ws = XLSX.utils.json_to_sheet(sheet.data);
+    XLSX.utils.book_append_sheet(wb, ws, sheet.sheetName);
+  });
+  const buffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+  const blob = new Blob([buffer], {
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = fileName;
+  a.click();
+  URL.revokeObjectURL(url);
 };
