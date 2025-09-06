@@ -28,9 +28,15 @@ export class ServiceOrderService {
 
   upsertServiceOrder(serviceOrderData: any): Observable<ApiResponse> {
     if (serviceOrderData.id) {
-      return this.http.put<ApiResponse>(`${this.apiUrl}/update`, serviceOrderData);
+      return this.http.put<ApiResponse>(
+        `${this.apiUrl}/update`,
+        serviceOrderData
+      );
     }
-    return this.http.post<ApiResponse>(`${this.apiUrl}/create`, serviceOrderData);
+    return this.http.post<ApiResponse>(
+      `${this.apiUrl}/create`,
+      serviceOrderData
+    );
   }
 
   deleteServiceOrder(serviceOrderId: string): Observable<ApiResponse> {

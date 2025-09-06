@@ -16,7 +16,7 @@ export class AuthService {
 
   apiUrl = environments?.apiUrl;
 
-  constructor() { }
+  constructor() {}
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http.post(

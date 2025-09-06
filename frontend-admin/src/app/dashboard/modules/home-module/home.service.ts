@@ -30,9 +30,12 @@ export class HomeService {
     period: 'today' | 'week' | 'month' | 'year' = 'month',
     skipLoader = true
   ): Observable<ApiResponse<DashboardCharts>> {
-    return this.http.get<ApiResponse<DashboardCharts>>(`${this.apiUrl}/charts`, {
-      params: { period },
-      headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
-    });
+    return this.http.get<ApiResponse<DashboardCharts>>(
+      `${this.apiUrl}/charts`,
+      {
+        params: { period },
+        headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
+      }
+    );
   }
 }

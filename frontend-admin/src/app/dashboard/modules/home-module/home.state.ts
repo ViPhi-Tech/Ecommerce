@@ -52,7 +52,7 @@ export class HomeState extends BaseState<HomeModuleState> {
                 this.setError('Nenhum dado encontrado.');
               }
             }),
-            catchError(error => this.handleError(error)),
+            catchError(error => this.handleError(error))
           )
       );
     } catch {
@@ -76,7 +76,7 @@ export class HomeState extends BaseState<HomeModuleState> {
                 this.setError('Nenhum dado encontrado.');
               }
             }),
-            catchError(error => this.handleError(error)),
+            catchError(error => this.handleError(error))
           )
       );
     } catch {
@@ -89,7 +89,10 @@ export class HomeState extends BaseState<HomeModuleState> {
     this.clearError();
 
     try {
-      await Promise.all([this.getDashboardMetrics(skipLoader), this.getDashboardCharts(skipLoader)]);
+      await Promise.all([
+        this.getDashboardMetrics(skipLoader),
+        this.getDashboardCharts(skipLoader),
+      ]);
     } catch {
       this.setError('Erro ao carregar dados do dashboard.');
     } finally {

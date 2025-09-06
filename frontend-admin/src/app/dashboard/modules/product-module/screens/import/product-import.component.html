@@ -1,0 +1,59 @@
+<p-dialog
+  #dialogRef
+  [(visible)]="visible"
+  (onHide)="onCloseDialog()"
+  [modal]="true"
+  [closeOnEscape]="true"
+  [draggable]="false"
+  styleClass="max-w-[800px] w-full"
+>
+  <ng-template #header>
+    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
+      <h2 class="text-2xl font-semibold leading-none tracking-tight">
+        Importar Produtos
+      </h2>
+      <p class="text-sm text-muted-foreground">
+        Faça upload de um arquivo para importar produtos
+      </p>
+    </div>
+  </ng-template>
+
+  <div class="flex flex-col gap-4">
+    <div>
+      <fuse-file-upload
+        [multiple]="false"
+        accept=".csv,.xlsx,.xls"
+        (uploadedFilesEvent)="onFileSelected($event)"
+      />
+    </div>
+  </div>
+
+  <ng-template #footer>
+    <div class="w-full justify-end flex items-center gap-4">
+      <div class="flex gap-2">
+        <button
+          pButton
+          type="submit"
+          label="Importar"
+          icon="pi pi-upload"
+          class="w-[200px]"
+          size="small"
+          (click)="onImport($event)"
+          [disabled]="!selectedFile"
+        ></button>
+
+        <button
+          pButton
+          type="button"
+          label="Cancelar"
+          icon="pi pi-times"
+          (click)="closeDialog($event)"
+          severity="secondary"
+          [outlined]="true"
+          class="w-[200px]"
+          size="small"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-dialog>

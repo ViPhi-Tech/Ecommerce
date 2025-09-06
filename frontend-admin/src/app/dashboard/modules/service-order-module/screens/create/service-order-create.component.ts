@@ -105,7 +105,10 @@ export class ServiceOrderCreateComponent implements OnInit {
       description: ['', [Validators.required]],
       status: ['pending', [Validators.required]],
       priority: ['medium', [Validators.required]],
-      createdDate: [new Date().toISOString().split('T')[0], [Validators.required]],
+      createdDate: [
+        new Date().toISOString().split('T')[0],
+        [Validators.required],
+      ],
       dueDate: ['', [Validators.required]],
       assignedTo: ['', [Validators.required]],
       notes: [''],

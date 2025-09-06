@@ -41,6 +41,13 @@
       </p-button>
 
       <p-button
+        [text]="true"
+        icon="pi pi-upload"
+        pTooltip="Importar Produtos"
+        (onClick)="importProducts()"
+      ></p-button>
+
+      <p-button
         icon="pi pi-plus"
         label="Novo Produto"
         (onClick)="addNewProduct()"

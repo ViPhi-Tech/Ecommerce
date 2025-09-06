@@ -118,7 +118,7 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
       id: ROLES_SITEMAP.Relatorios,
       label: 'Relatórios',
       icon: 'lucideChartBar',
-      click: () => { },
+      click: () => {},
     },
     {
       id: ROLES_SITEMAP.Usuarios,
@@ -133,7 +133,7 @@ export class QuickAccessComponent implements OnInit, OnDestroy {
 
   private _searchSubscription!: Subscription;
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     const filteredItems = this.quickAccessItems().filter(item =>

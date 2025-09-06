@@ -32,9 +32,9 @@ export class MenuItemComponent implements OnInit {
 
   addictionalClass = input<any>();
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit() { }
+  ngOnInit() {}
 
   toggleMenu(state: boolean) {
     if (!this.item().items?.length) return;

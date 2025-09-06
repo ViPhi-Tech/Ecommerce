@@ -107,7 +107,7 @@ export class AccountsReceivableListComponent implements OnInit {
     ],
   });
 
-  constructor() { }
+  constructor() {}
 
   async ngOnInit() {
     await this.loadAccountsReceivable();

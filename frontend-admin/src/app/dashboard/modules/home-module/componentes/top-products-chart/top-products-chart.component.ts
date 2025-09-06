@@ -20,7 +20,7 @@ export class TopProductsChartComponent {
   chartData = computed(() => {
     return this.data.map(item => ({
       name: item.name,
-      value: item.total
+      value: item.total,
     }));
   });
 
@@ -48,10 +48,7 @@ export class TopProductsChartComponent {
         type: 'pie',
         radius: ['20%', '45%'],
         center: ['50%', '45%'],
-        data:
-          this.data.length > 0
-            ? this.chartData()
-            : [],
+        data: this.data.length > 0 ? this.chartData() : [],
         itemStyle: {
           borderRadius: 10,
           borderColor: '#fff',

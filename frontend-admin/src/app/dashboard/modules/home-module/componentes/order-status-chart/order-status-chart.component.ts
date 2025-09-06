@@ -24,16 +24,16 @@ export class OrderStatusChartComponent {
 
   // Mapeamento de cores para cada status
   private statusColors: Record<string, string> = {
-    'Pendente': '#f59e0b',
-    'Processando': '#3b82f6',
-    'Enviado': '#10b981',
-    'Entregue': '#059669',
-    'Cancelado': '#ef4444',
+    Pendente: '#f59e0b',
+    Processando: '#3b82f6',
+    Enviado: '#10b981',
+    Entregue: '#059669',
+    Cancelado: '#ef4444',
     'Aguardando Pagamento': '#f59e0b',
     'Pagamento Aprovado': '#3b82f6',
     'Em Preparação': '#8b5cf6',
     'Pronto para Envio': '#06b6d4',
-    'Em Trânsito': '#10b981'
+    'Em Trânsito': '#10b981',
   };
 
   // Converte os dados para o formato esperado pelo gráfico
@@ -41,9 +41,9 @@ export class OrderStatusChartComponent {
     return this.data.map(item => ({
       name: item.name,
       value: item.total,
-      itemStyle: { 
-        color: this.statusColors[item.name] || '#6b7280' 
-      }
+      itemStyle: {
+        color: this.statusColors[item.name] || '#6b7280',
+      },
     }));
   });
 

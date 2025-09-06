@@ -141,22 +141,24 @@ export class MenuComponent implements OnInit {
     },
   ];
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
     this.updateMenuVisibility();
   }
 
   updateMenuVisibility() {
-    this.menu = this.menu.map(group => {
-      group.items = group.items.filter(item => {
-        let enable = true;
-        if (item.id) {
-          enable = this.authService.checkAnyRole([item.id]);
-        }
-        return enable;
-      });
-      return group;
-    }).filter(group => group.items.length > 0);
+    this.menu = this.menu
+      .map(group => {
+        group.items = group.items.filter(item => {
+          let enable = true;
+          if (item.id) {
+            enable = this.authService.checkAnyRole([item.id]);
+          }
+          return enable;
+        });
+        return group;
+      })
+      .filter(group => group.items.length > 0);
   }
 }

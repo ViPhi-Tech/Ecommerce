@@ -21,29 +21,29 @@ export interface HomeModuleState extends BaseModuleState {
   selectedPeriod: 'today' | 'week' | 'month' | 'year';
 }
 export interface DashboardCharts {
-  salesByMonth: SalesByMonth[]
-  topProducts: TopProduct[]
-  orderStatus: OrderStatu[]
-  salesByCategory: SalesByCategory[]
+  salesByMonth: SalesByMonth[];
+  topProducts: TopProduct[];
+  orderStatus: OrderStatu[];
+  salesByCategory: SalesByCategory[];
 }
 
 export interface SalesByMonth {
-  year: number
-  month: string
-  total: number
+  year: number;
+  month: string;
+  total: number;
 }
 
 export interface TopProduct {
-  name: string
-  total: number
+  name: string;
+  total: number;
 }
 
 export interface OrderStatu {
-  name: string
-  total: number
+  name: string;
+  total: number;
 }
 
 export interface SalesByCategory {
-  category_name: string
-  total_quantity: number
+  category_name: string;
+  total_quantity: number;
 }

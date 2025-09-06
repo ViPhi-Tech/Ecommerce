@@ -37,7 +37,7 @@
               { label: 'Pendente', value: 'pending' },
               { label: 'Em Andamento', value: 'in-progress' },
               { label: 'Concluída', value: 'completed' },
-              { label: 'Cancelada', value: 'cancelled' }
+              { label: 'Cancelada', value: 'cancelled' },
             ]"
             [isLoading]="isLoading()"
             [control]="serviceOrderForm.get('status')"
@@ -51,7 +51,7 @@
             [items]="[
               { label: 'Baixa', value: 'low' },
               { label: 'Média', value: 'medium' },
-              { label: 'Alta', value: 'high' }
+              { label: 'Alta', value: 'high' },
             ]"
             [isLoading]="isLoading()"
             [control]="serviceOrderForm.get('priority')"

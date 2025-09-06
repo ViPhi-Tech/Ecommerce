@@ -14,7 +14,7 @@ export class AccountsReceivableService {
 
   refreshAccountsReceivableList$ = signal<any>(undefined);
 
-  constructor() { }
+  constructor() {}
 
   getAll(skipLoader = true) {
     const headers: any = {};

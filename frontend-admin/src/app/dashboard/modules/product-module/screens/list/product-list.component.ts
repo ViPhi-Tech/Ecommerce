@@ -19,6 +19,7 @@ import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { ProductState } from '../../product.state';
 import { CurrencyPipe, NgTemplateOutlet } from '@angular/common';
+import { Tooltip } from "primeng/tooltip";
 
 @Component({
   selector: 'fuse-product-list',
@@ -32,7 +33,8 @@ import { CurrencyPipe, NgTemplateOutlet } from '@angular/common';
     ButtonModule,
     NgTemplateOutlet,
     CurrencyPipe,
-  ],
+    Tooltip
+],
 })
 export class ProductListComponent implements OnInit {
   private router = inject(Router);
@@ -123,6 +125,10 @@ export class ProductListComponent implements OnInit {
 
   addNewProduct() {
     this.router.navigate([{ outlets: { drawer: ['products', 'new'] } }]);
+  }
+
+  importProducts() {
+    this.router.navigate([{ outlets: { drawer: ['products', 'import'] } }]);
   }
 
   refreshProducts() {

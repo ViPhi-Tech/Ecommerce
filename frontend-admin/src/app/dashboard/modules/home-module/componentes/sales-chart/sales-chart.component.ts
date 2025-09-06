@@ -22,8 +22,8 @@ export class SalesChartComponent {
 
   labels = computed<string[]>(() => {
     return this.data().map(item => item.month);
-  })
-  
+  });
+
   chartOption = computed<EChartsOption>(() => ({
     title: {
       text: this.title(),
@@ -40,7 +40,7 @@ export class SalesChartComponent {
         const value = params[0]?.value || 0;
         const formattedValue = new Intl.NumberFormat('pt-BR', {
           style: 'currency',
-          currency: 'BRL'
+          currency: 'BRL',
         }).format(value);
         return `${params[0]?.name}: ${formattedValue}`;
       },
@@ -71,17 +71,14 @@ export class SalesChartComponent {
         formatter: (value: number) => {
           return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
-            currency: 'BRL'
+            currency: 'BRL',
           }).format(value);
         },
       },
     },
     series: [
       {
-        data:
-          this.data().length > 0
-            ? this.totals()
-            : [],
+        data: this.data().length > 0 ? this.totals() : [],
         type: 'line',
         smooth: true,
         itemStyle: {

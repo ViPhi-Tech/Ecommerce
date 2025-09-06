@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { ProductCreateComponent } from './screens/create/product-create.component';
+import { ProductImportComponent } from './screens/import/product-import.component';
 
 export const productRoutes: Routes = [
   {
@@ -21,6 +22,10 @@ export const dialogProductRoutes: Routes = [
   {
     path: 'products',
     children: [
+      {
+        path: 'import',
+        component: ProductImportComponent,
+      },
       {
         path: 'new',
         component: ProductCreateComponent,

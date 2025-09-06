@@ -14,8 +14,9 @@ export class ServiceOrderState extends BaseState<ServiceOrderModuleState> {
   protected state = signal<ServiceOrderModuleState>({
     serviceOrderList: [],
     view:
-      (localStorage.getItem('serviceOrderView') as ServiceOrderModuleState['view']) ||
-      'list',
+      (localStorage.getItem(
+        'serviceOrderView'
+      ) as ServiceOrderModuleState['view']) || 'list',
     loading: false,
     error: null,
     orderFilter: '',
@@ -48,9 +49,14 @@ export class ServiceOrderState extends BaseState<ServiceOrderModuleState> {
     });
 
     if (searchTerm.trim()) {
-      filteredServiceOrders = filteredServiceOrders.filter(serviceOrder =>
-        serviceOrder.client.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        serviceOrder.description.toLowerCase().includes(searchTerm.toLowerCase())
+      filteredServiceOrders = filteredServiceOrders.filter(
+        serviceOrder =>
+          serviceOrder.client
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase()) ||
+          serviceOrder.description
+            .toLowerCase()
+            .includes(searchTerm.toLowerCase())
       );
     }
 
@@ -65,7 +71,9 @@ export class ServiceOrderState extends BaseState<ServiceOrderModuleState> {
     await lastValueFrom(
       this.serviceOrderService.getAll(skipLoader).pipe(
         tap((response: any) => {
-          const serviceOrders = Array.isArray(response) ? response : response.dados;
+          const serviceOrders = Array.isArray(response)
+            ? response
+            : response.dados;
           if (serviceOrders && serviceOrders.length > 0) {
             this.setServiceOrderList(serviceOrders);
           } else {
@@ -87,7 +95,9 @@ export class ServiceOrderState extends BaseState<ServiceOrderModuleState> {
       .filterServiceOrders(query)
       .pipe(
         tap((response: any) => {
-          const serviceOrders = Array.isArray(response) ? response : response.dados;
+          const serviceOrders = Array.isArray(response)
+            ? response
+            : response.dados;
           if (serviceOrders && serviceOrders.length > 0) {
             this.setFilteredServiceOrders(serviceOrders);
           } else {

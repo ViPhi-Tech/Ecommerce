@@ -51,10 +51,25 @@ export class ServiceOrderListComponent implements OnInit {
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'client', caption: 'Cliente', sortable: true, filter: true },
-      { field: 'description', caption: 'Descrição', sortable: true, filter: true },
+      {
+        field: 'description',
+        caption: 'Descrição',
+        sortable: true,
+        filter: true,
+      },
       { field: 'status', caption: 'Status', sortable: true, filter: true },
-      { field: 'priority', caption: 'Prioridade', sortable: true, filter: true },
-      { field: 'createdDate', caption: 'Data de Criação', sortable: true, filter: true },
+      {
+        field: 'priority',
+        caption: 'Prioridade',
+        sortable: true,
+        filter: true,
+      },
+      {
+        field: 'createdDate',
+        caption: 'Data de Criação',
+        sortable: true,
+        filter: true,
+      },
       {
         field: 'actions',
         caption: 'Ações',
@@ -95,7 +110,10 @@ export class ServiceOrderListComponent implements OnInit {
 
   ngOnInit() {
     this.state.getServiceOrderList();
-    this.coreService.setPageTitle('Ordens de Serviço', 'Lista de ordens de serviço');
+    this.coreService.setPageTitle(
+      'Ordens de Serviço',
+      'Lista de ordens de serviço'
+    );
   }
 
   addNewServiceOrder() {
@@ -107,7 +125,9 @@ export class ServiceOrderListComponent implements OnInit {
   }
 
   editServiceOrder(serviceOrderId: string) {
-    this.router.navigate([{ outlets: { drawer: ['service-orders', serviceOrderId] } }]);
+    this.router.navigate([
+      { outlets: { drawer: ['service-orders', serviceOrderId] } },
+    ]);
   }
 
   deleteServiceOrder(serviceOrderId: string) {
