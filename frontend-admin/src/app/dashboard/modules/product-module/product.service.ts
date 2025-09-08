@@ -52,4 +52,11 @@ export class ProductService {
   refreshProductList() {
     this.refreshProductList$.set(Math.random());
   }
+
+  validateImportProducts(products: any[]): Observable<ApiResponse> {
+    return this.http.post<ApiResponse>(
+      `${this.apiUrl}/validateImportProducts`,
+      { products }
+    );
+  }
 }

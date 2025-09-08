@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { productController } from "../../config/dependencies/productDependencies";
 import { authenticate } from "../middlewares/authMiddleware";
-import { createProductJsonSchema, updateProductJsonSchema, productIdJsonSchema } from "../../../application/dto/product/ProductDTOs";
+import { createProductJsonSchema, updateProductJsonSchema, productIdJsonSchema, validateProductsSchema } from "../../../application/dto/product/ProductDTOs";
 import { updateStockJsonSchema, findMovementJsonSchema, updateManyStockJsonSchema } from "../../../application/dto/product/ProductDTOs";
 
 export default async function productRoutes(
@@ -139,5 +139,13 @@ export default async function productRoutes(
         },
         preValidation: [authenticate],
         handler: productController.updateManyStocks.bind(productController)
+    })
+
+    fastify.post('/validateImportProducts', {
+        schema: {
+            tags: ['product'],
+        },
+        preValidation: [authenticate],
+        handler: productController.validateProducts.bind(productController)
     })
 }

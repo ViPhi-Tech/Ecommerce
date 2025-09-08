@@ -106,7 +106,10 @@ export const stockMovementSchema = z.object({
   })
 });
 
-// ===== JSON SCHEMAS (Para Swagger) =====
+export const validateProductsSchema = z.object({
+  products: z.array(createProductSchema)
+});
+
 export const createProductJsonSchema = zodToJsonSchema(createProductSchema);
 export const updateProductJsonSchema = zodToJsonSchema(updateProductSchema);
 export const updateStockJsonSchema = zodToJsonSchema(updateStockSchema);
@@ -115,8 +118,7 @@ export const findMovementJsonSchema = zodToJsonSchema(findMovementSchema);
 export const productIdJsonSchema = zodToJsonSchema(productIdSchema);
 export const productIdsMovementJsonSchema = zodToJsonSchema(productIdsMovementSchema);
 export const stockMovementJsonSchema = zodToJsonSchema(stockMovementSchema);
-
-// ===== TYPES (Para TypeScript) =====
+export const validateProductsJsonSchema = zodToJsonSchema(validateProductsSchema);
 export type CreateProductDTO = z.infer<typeof createProductSchema>;
 export type UpdateProductDTO = z.infer<typeof updateProductSchema>;
 export type UpdateStockDTO = z.infer<typeof updateStockSchema>;
@@ -125,8 +127,7 @@ export type FindMovementDTO = z.infer<typeof findMovementSchema>;
 export type ProductIdDTO = z.infer<typeof productIdSchema>;
 export type ProductIdsMovementDTO = z.infer<typeof productIdsMovementSchema>;
 export type StockMovementDTO = z.infer<typeof stockMovementSchema>;
-
-// ===== RESPONSE DTOs =====
+export type ValidateProductsDTO = z.infer<typeof validateProductsSchema>;
 export interface ProductResponse {
   id: number;
   name: string;

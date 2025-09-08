@@ -14,7 +14,9 @@ import { UpdateManyStocksUseCase } from '../../../application/use-cases/product/
 import { ApiResponse } from "../../../shared/types/apiResponse";
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
-import { CreateProductDTO, UpdateProductDTO, ProductIdDTO, createProductSchema, updateProductSchema, productIdSchema, UpdateStockDTO, ProductIdsMovementDTO, FindMovementDTO, UpdateManyStockDTO } from "../../../application/dto/product/ProductDTOs";
+import { CreateProductDTO, UpdateProductDTO, ProductIdDTO, createProductSchema, updateProductSchema, productIdSchema, UpdateStockDTO, ProductIdsMovementDTO, FindMovementDTO, UpdateManyStockDTO, validateProductsSchema, ValidateProductsDTO } from "../../../application/dto/product/ProductDTOs";
+import { Product } from '@prisma/client';
+import { ValidateProductsUseCase } from '../../../application/use-cases/product/ValidateProductsUseCase';
 
 
 export class ProductController {
@@ -30,7 +32,8 @@ export class ProductController {
         private findProductByParam: FindByParamProductUseCase,
         private getMetricsUseCase: GetMetricsUseCase,
         private findMovimentByDateUseCase: FindMovimentByDateUseCase,
-        private movimentManyUseCase: UpdateManyStocksUseCase
+        private movimentManyUseCase: UpdateManyStocksUseCase,
+        private validateProductsUseCase: ValidateProductsUseCase
     ) {}
 
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
@@ -180,4 +183,15 @@ export class ProductController {
             return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
         }
     }
+
+    async validateProducts(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try {
+            const productData = request.body as ValidateProductsDTO;
+            const { products } = productData;
+            const data_product = await this.validateProductsUseCase.execute(products);
+            return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, data: data_product }); 
+        } catch (error) {
+            return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
+        }
+    };
 }

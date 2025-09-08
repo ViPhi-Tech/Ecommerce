@@ -340,5 +340,41 @@ async getTopProductsByMonth(initialMonth: number, finalMonth: number): Promise<T
     total: r._sum.quantity ?? 0,
   }))
 }
+  async validateProducts(products: Product[]): Promise<{
+    skuExisting: string[],
+    eanExisting: string[]
+  }> {
+    const skuList = products.map(p => p.sku);
+    const eanList = products.map(p => p.ean.toString());
+    try {
+      const existingProducts = await this.prisma.product.findMany({
+        where: {
+          OR: [
+            { sku: { in: skuList } },
+            { ean: { in: eanList } }
+          ]
+        },
+        select: {
+          sku: true,
+          ean: true
+        }
+      });
+
+      const skuExisting = [...new Set(existingProducts.map(p => p.sku))];
+      const eanExisting = [...new Set(existingProducts.map(p => p.ean))];
+
+      return {
+        skuExisting,
+        eanExisting
+      }
+
+    } catch (error) {
+      console.log(error);
+      return {
+        skuExisting: [],
+        eanExisting: []
+      };
+    }
+  }
 
 }

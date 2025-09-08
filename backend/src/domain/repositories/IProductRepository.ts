@@ -20,5 +20,5 @@ export interface IProductRepository {
     countMoviment(startDate: Date, endDate: Date, type: 'IN' | 'OUT'): Promise<number>;
     countByMonth(initialMonth: number, finalMonth: number): Promise<number>;
     getTopProductsByMonth(initialMonth: number, finalMonth: number): Promise<TopProducts[]>;
-    
+    validateProducts(products: Product[]): Promise<{ skuExisting: string[], eanExisting: string[] }>;
 }

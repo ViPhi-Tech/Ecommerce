@@ -64,6 +64,7 @@
     @if (convertedProducts().length > 0) {
       <fuse-product-import-list
         [products]="convertedProducts()"
+        [errors]="importValidationErrors()"
       ></fuse-product-import-list>
     }
   </div>

@@ -14,6 +14,7 @@ import { GetMetricsUseCase } from "../../../application/use-cases/product/GetMet
 import { FindMovimentByDateUseCase } from "../../../application/use-cases/product/FindMovimentByDate";
 import { UpdateManyStocksUseCase } from "../../../application/use-cases/product/UpdateManyStocksUseCase";
 import { JwtAuthService } from "../../services/AuthService";
+import { ValidateProductsUseCase } from "../../../application/use-cases/product/ValidateProductsUseCase";
 
 const JWT_SECRET = process.env.SECRET_KEY || '';
 
@@ -32,6 +33,7 @@ const findProductByNameUseCase = new FindByNameProductUseCase(productRepository)
 const findProductByParam = new FindByParamProductUseCase(productRepository)
 const getMetricsUseCase = new GetMetricsUseCase(productRepository);
 const findMovimentByDateUseCase = new FindMovimentByDateUseCase(productRepository);
+const validateProductsUseCase = new ValidateProductsUseCase(productRepository);
 
 const movimentManyUseCase = new UpdateManyStocksUseCase(productRepository, jwtService);
 
@@ -47,5 +49,6 @@ export const productController = new ProductController(
     findProductByParam,
     getMetricsUseCase,
     findMovimentByDateUseCase,
-    movimentManyUseCase
+    movimentManyUseCase,
+    validateProductsUseCase
 );

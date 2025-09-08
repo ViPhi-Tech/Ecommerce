@@ -14,6 +14,8 @@ import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
 import { convertFileToJson, generateXlsxFile } from 'app/shared/utils/utils';
 import { ProductImportListComponent } from './product-import-list/product-import-list.component';
 import { CategoryState } from 'app/dashboard/modules/category-module/category.state';
+import { ProductService } from '../../product.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'fuse-product-import',
@@ -31,6 +33,7 @@ export class ProductImportComponent implements OnInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private toast = inject(MessageService);
+  private productService = inject(ProductService);
   private categoryState = inject(CategoryState);
 
   xlsxBase = [
@@ -54,6 +57,7 @@ export class ProductImportComponent implements OnInit {
   visible = signal(false);
   selectedFile: File | null = null;
   convertedProducts = signal<any[]>([]);
+  importValidationErrors = signal<any>(null);
 
   constructor() {}
 
@@ -78,7 +82,16 @@ export class ProductImportComponent implements OnInit {
     convertFileToJson(this.selectedFile)
       .then(jsonData => {
         const converted = this.convertFields(jsonData);
-        this.convertedProducts.set(converted);
+        this.productService
+          .validateImportProducts(converted)
+          .pipe(takeUntilDestroyed(this.destroyedRef))
+          .subscribe({
+            next: response => {
+              this.convertedProducts.set(converted);
+              this.importValidationErrors.set(response.data);
+              console.log(this.importValidationErrors());
+            },
+          });
       })
       .catch(error => {
         console.error('Erro ao converter arquivo:', error);
