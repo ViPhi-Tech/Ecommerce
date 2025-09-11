@@ -105,6 +105,17 @@
         </div>
       </form>
     </div>
+
+    @if (dateErrors.length > 0) {
+      <div class="mt-4 p-4 bg-red-50 border border-red-200 rounded-md">
+        <h4 class="text-red-800 font-semibold">Erros de validação:</h4>
+        <ul class="list-disc list-inside text-red-700 mt-2">
+          @for (error of dateErrors; track $index) {
+            <li>{{ error }}</li>
+          }
+        </ul>
+      </div>
+    }
   </div>
 
   <ng-template #footer>
@@ -129,6 +140,7 @@
           icon="pi pi-check"
           class="w-[200px]"
           size="small"
+          [disabled]="accountsReceivableForm.invalid"
           (click)="onSubmit($event)"
         ></button>
       }

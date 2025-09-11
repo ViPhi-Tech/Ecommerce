@@ -14,7 +14,8 @@
   input-background: #18181b;
 }
 
-:root[class='dark'] {}
+:root[class='dark'] {
+}
 
 .card {
   @apply bg-white rounded-lg shadow-md p-4 dark:text-white dark:bg-card-background;

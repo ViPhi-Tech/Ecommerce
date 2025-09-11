@@ -64,6 +64,40 @@ export class AccountsReceivableCreateComponent implements OnInit {
   // signals
   visible = signal(false);
 
+  dateValidation(formGroup: FormGroup): Record<string, any> | null {
+    const issueDate = formGroup.get('issueDate')?.value;
+    const dueDate = formGroup.get('dueDate')?.value;
+    const competenceDate = formGroup.get('competenceDate')?.value;
+
+    const errors: Record<string, any> = {};
+
+    if (issueDate && dueDate) {
+      const issue = dayjs(issueDate, 'DD/MM/YYYY');
+      const due = dayjs(dueDate, 'DD/MM/YYYY');
+      if (due.isBefore(issue)) {
+        errors['dueDateBeforeIssue'] = true;
+      }
+    }
+
+    if (issueDate && competenceDate) {
+      const issue = dayjs(issueDate, 'DD/MM/YYYY');
+      const comp = dayjs(competenceDate, 'DD/MM/YYYY');
+      if (comp.isBefore(issue)) {
+        errors['competenceDateBeforeIssue'] = true;
+      }
+    }
+
+    if (dueDate && competenceDate) {
+      const due = dayjs(dueDate, 'DD/MM/YYYY');
+      const comp = dayjs(competenceDate, 'DD/MM/YYYY');
+      if (comp.isBefore(due)) {
+        errors['competenceDateBeforeDue'] = true;
+      }
+    }
+
+    return Object.keys(errors).length > 0 ? errors : null;
+  }
+
   constructor() {
     this.initForm();
   }
@@ -86,6 +120,14 @@ export class AccountsReceivableCreateComponent implements OnInit {
           this.accountsReceivableForm.disable();
           this.title.set('Visualizar Conta a Receber');
         }
+      });
+
+    // Validação em tempo real usando valueChanges
+    this.accountsReceivableForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe(() => {
+        const errors = this.dateValidation(this.accountsReceivableForm);
+        this.accountsReceivableForm.setErrors(errors);
       });
   }
 
@@ -216,5 +258,28 @@ export class AccountsReceivableCreateComponent implements OnInit {
         relativeTo: this.activatedRoute.root,
       });
     }, 300);
+  }
+
+  get dateErrors(): string[] {
+    const errors = this.accountsReceivableForm.errors;
+    const errorMessages: string[] = [];
+
+    if (errors?.['dueDateBeforeIssue']) {
+      errorMessages.push(
+        'A data de vencimento não pode ser anterior à data de emissão.'
+      );
+    }
+    if (errors?.['competenceDateBeforeIssue']) {
+      errorMessages.push(
+        'A data de competência não pode ser anterior à data de emissão.'
+      );
+    }
+    if (errors?.['competenceDateBeforeDue']) {
+      errorMessages.push(
+        'A data de competência não pode ser anterior à data de vencimento.'
+      );
+    }
+
+    return errorMessages;
   }
 }

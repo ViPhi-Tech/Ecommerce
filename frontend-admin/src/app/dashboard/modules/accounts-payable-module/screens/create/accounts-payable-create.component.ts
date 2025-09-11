@@ -64,6 +64,39 @@ export class AccountsPayableCreateComponent implements OnInit {
   // signals
   visible = signal(false);
 
+  dateValidation(formGroup: FormGroup): Record<string, any> | null {
+    const issueDate = formGroup.get('issueDate')?.value;
+    const dueDate = formGroup.get('dueDate')?.value;
+    const competenceDate = formGroup.get('competenceDate')?.value;
+    const errors: Record<string, any> = {};
+
+    if (issueDate && dueDate) {
+      const issue = dayjs(issueDate, 'DD/MM/YYYY');
+      const due = dayjs(dueDate, 'DD/MM/YYYY');
+      if (due.isBefore(issue)) {
+        errors['dueDateBeforeIssue'] = true;
+      }
+    }
+
+    if (issueDate && competenceDate) {
+      const issue = dayjs(issueDate, 'DD/MM/YYYY');
+      const comp = dayjs(competenceDate, 'DD/MM/YYYY');
+      if (comp.isBefore(issue)) {
+        errors['competenceDateBeforeIssue'] = true;
+      }
+    }
+
+    if (dueDate && competenceDate) {
+      const due = dayjs(dueDate, 'DD/MM/YYYY');
+      const comp = dayjs(competenceDate, 'DD/MM/YYYY');
+      if (comp.isBefore(due)) {
+        errors['competenceDateBeforeDue'] = true;
+      }
+    }
+
+    return Object.keys(errors).length > 0 ? errors : null;
+  }
+
   constructor() {
     this.initForm();
   }
@@ -86,6 +119,14 @@ export class AccountsPayableCreateComponent implements OnInit {
           this.accountsPayableForm.disable();
           this.title.set('Visualizar Conta a Pagar');
         }
+      });
+
+    // Validação em tempo real usando valueChanges
+    this.accountsPayableForm.valueChanges
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe(() => {
+        const errors = this.dateValidation(this.accountsPayableForm);
+        this.accountsPayableForm.setErrors(errors);
       });
   }
 
@@ -206,5 +247,43 @@ export class AccountsPayableCreateComponent implements OnInit {
         relativeTo: this.activatedRoute.root,
       });
     }, 300);
+  }
+
+  get dateErrors(): string[] {
+    const errors = this.accountsPayableForm.errors;
+    const errorMessages: string[] = [];
+
+    if (errors?.['dueDateBeforeIssue']) {
+      errorMessages.push(
+        'A data de vencimento não pode ser anterior à data de emissão.'
+      );
+      this.accountsPayableForm.get('dueDate')?.setErrors({ incorrect: true });
+    } else {
+      this.accountsPayableForm.get('dueDate')?.setErrors(null);
+    }
+
+    if (errors?.['competenceDateBeforeIssue']) {
+      errorMessages.push(
+        'A data de competência não pode ser anterior à data de emissão.'
+      );
+      this.accountsPayableForm
+        .get('competenceDate')
+        ?.setErrors({ incorrect: true });
+    } else {
+      this.accountsPayableForm.get('competenceDate')?.setErrors(null);
+    }
+
+    if (errors?.['competenceDateBeforeDue']) {
+      errorMessages.push(
+        'A data de competência não pode ser anterior à data de vencimento.'
+      );
+      this.accountsPayableForm
+        .get('competenceDate')
+        ?.setErrors({ incorrect: true });
+    } else {
+      this.accountsPayableForm.get('competenceDate')?.setErrors(null);
+    }
+
+    return errorMessages;
   }
 }
