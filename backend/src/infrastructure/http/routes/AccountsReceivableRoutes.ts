@@ -88,7 +88,7 @@ export default async function accountsReceivableRoutes(
   });
 
 
-  fastify.get("/getAll", {
+  fastify.get("/all", {
     preValidation: [authenticate],
     schema: {
       tags: ["accounts-receivable"],
