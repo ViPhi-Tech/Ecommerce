@@ -136,7 +136,7 @@ export class OrderListComponent implements OnInit {
               variant: 'text',
               tooltip: 'Excluir Pedido',
               action: (data, index) => {
-                console.log('Excluir Pedido', data, index);
+                console.log('Excluir pedido:', data, index);
               },
             },
           ],

@@ -2,9 +2,9 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { ProductState } from 'app/dashboard/modules/product-module/product.state';
 import { FormModule } from '../form/form.module';
 import { FormControl } from '@angular/forms';
-import { Product } from 'app/shared/interfaces/product-module.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CurrencyPipe } from '@angular/common';
+import { IProduct } from 'app/shared/interfaces/product/Product';
 
 @Component({
   selector: 'fuse-search-product',
@@ -17,7 +17,7 @@ export class SearchProductComponent implements OnInit {
 
   searchControl = new FormControl('');
 
-  products = signal<Product[]>([]);
+  products = signal<IProduct[]>([]);
 
   constructor() {}
 
@@ -26,8 +26,7 @@ export class SearchProductComponent implements OnInit {
 
     this.searchControl.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(products => {
-        console.log('Search value changed:', products);
+      .subscribe(() => {
         if (!this.searchControl.value) {
           this.products.set([]); // Clear the product list if search value is empty
           return;
@@ -36,7 +35,7 @@ export class SearchProductComponent implements OnInit {
       });
   }
 
-  selectProduct(product: Product) {
+  selectProduct(product: IProduct) {
     this.searchControl.setValue(product.name);
     this.products.set([]); // Clear the product list after selection
   }

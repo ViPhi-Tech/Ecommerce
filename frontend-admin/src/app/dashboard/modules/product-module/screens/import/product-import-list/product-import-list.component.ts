@@ -18,9 +18,8 @@ export class ProductImportListComponent {
 
   constructor() {}
 
-  isCategoryValid(categoryId: number): boolean {
-    const categories = this.categoryState.categoryList();
-    return categories.some((cat: any) => cat.id === categoryId);
+  isInvalidCategory(categoryId: number): boolean {
+    return this.errors()?.categoryInvalid?.includes(categoryId);
   }
 
   isInvalidSKU(sku: string): boolean {

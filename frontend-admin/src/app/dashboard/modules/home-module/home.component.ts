@@ -129,7 +129,6 @@ export class HomeComponent implements OnInit {
   }
 
   public onPeriodChange(period: string): void {
-    console.log('Período selecionado:', period);
     this.homeState.setSelectedPeriod(
       period as 'today' | 'week' | 'month' | 'year'
     );
@@ -141,8 +140,8 @@ export class HomeComponent implements OnInit {
   }
 
   public onDateRangeChange(dateRange: Date): void {
-    console.log('Data selecionada:', dateRange);
     // Aqui você pode implementar a lógica para filtrar por data personalizada
+    console.log('Data personalizada selecionada:', dateRange);
     this.loadDashboardData();
   }
 

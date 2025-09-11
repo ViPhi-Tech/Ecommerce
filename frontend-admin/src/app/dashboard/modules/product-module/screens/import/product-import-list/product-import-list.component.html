@@ -63,7 +63,7 @@
         [pEditableColumn]="product.categoryId"
         pEditableColumnField="categoryId"
         [class]="
-          !isCategoryValid(product.categoryId) ? 'bg-red-500 text-white' : ''
+          !isInvalidCategory(product.categoryId) ? 'bg-red-500 text-white' : ''
         "
       >
         <p-cellEditor>

@@ -111,10 +111,6 @@ export class AccountsReceivableListComponent implements OnInit {
 
   async ngOnInit() {
     await this.loadAccountsReceivable();
-    console.log(
-      'Accounts Receivable List:',
-      this.state.accountsReceivableList()
-    );
 
     this.coreService.setPageTitle(
       'Contas a Receber',
@@ -123,7 +119,7 @@ export class AccountsReceivableListComponent implements OnInit {
   }
 
   async loadAccountsReceivable() {
-    await this.state.getAccountsReceivableList();
+    await this.state.getAccountsReceivableList(true);
   }
 
   // Método para dar baixa na conta a receber

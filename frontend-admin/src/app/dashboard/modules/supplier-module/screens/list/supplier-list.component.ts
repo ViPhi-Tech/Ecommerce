@@ -51,7 +51,6 @@ export class SupplierListComponent implements OnInit {
             variant: 'text',
             action: (rowData: ISupplier) => {
               // Exemplo de navegação para o outlet auxiliar "drawer"
-              console.log(rowData);
               this.router.navigate([
                 { outlets: { drawer: ['suppliers', rowData?.uuid] } },
               ]);

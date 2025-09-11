@@ -185,15 +185,6 @@ export class AccountsReceivableKanbanComponent implements OnInit {
     return 'low'; // Vence em mais de 7 dias
   }
 
-  onCardClick(card: any) {
-    console.log('Card clicked:', card);
-    // Navegar para detalhes ou edição da conta
-    // const account = card['accountData'] as IAccountsReceivable;
-    // this.router.navigate([
-    //   { outlets: { drawer: ['accounts-receivable', account.uuid] } },
-    // ]);
-  }
-
   onCardDrop(dropEvent: {
     event: CdkDragDrop<KanbanCard[]>;
     sourceColumn: string;
@@ -245,6 +236,9 @@ export class AccountsReceivableKanbanComponent implements OnInit {
 
   private updateAccountStatus(accountId: number, newStatus: any) {
     // Atualizar o status no state
+    if (newStatus !== 'received') {
+      newStatus = 'pending';
+    }
     this.state.updateAccountReceivableStatus(accountId, newStatus);
   }
 
@@ -323,15 +317,6 @@ export class AccountsReceivableKanbanComponent implements OnInit {
       if (confirm(`Marcar a conta "${account.description}" como recebida?`)) {
         this.updateAccountStatus(account.id, 'received');
       }
-    }
-  }
-
-  generateReceipt(card: KanbanCard) {
-    const account = card['accountData'] as IAccountsReceivable;
-    if (account) {
-      console.log('Gerando comprovante para:', account.description);
-      // Implementar lógica de geração de comprovante
-      alert('Funcionalidade de gerar comprovante será implementada em breve.');
     }
   }
 }

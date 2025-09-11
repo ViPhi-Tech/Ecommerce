@@ -5,6 +5,7 @@ import {
   ViewChild,
   inject,
   DestroyRef,
+  computed,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
@@ -15,7 +16,7 @@ import { convertFileToJson, generateXlsxFile } from 'app/shared/utils/utils';
 import { ProductImportListComponent } from './product-import-list/product-import-list.component';
 import { CategoryState } from 'app/dashboard/modules/category-module/category.state';
 import { ProductService } from '../../product.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ProductState } from '../../product.state';
 
 @Component({
   selector: 'fuse-product-import',
@@ -34,6 +35,7 @@ export class ProductImportComponent implements OnInit {
   private activatedRoute = inject(ActivatedRoute);
   private toast = inject(MessageService);
   private productService = inject(ProductService);
+  private productState = inject(ProductState);
   private categoryState = inject(CategoryState);
 
   xlsxBase = [
@@ -54,6 +56,9 @@ export class ProductImportComponent implements OnInit {
   @ViewChild('dialogRef') dialogRef!: Dialog;
 
   // signals
+  currentProducts = computed(() => this.productState.productList());
+  currentCategories = computed(() => this.categoryState.categoryList());
+
   visible = signal(false);
   selectedFile: File | null = null;
   convertedProducts = signal<any[]>([]);
@@ -62,7 +67,13 @@ export class ProductImportComponent implements OnInit {
   constructor() {}
 
   async ngOnInit() {
-    await this.categoryState.getCategoryList(false);
+    if (!this.categoryState.categoryList().length) {
+      await this.categoryState.getCategoryList(false);
+    }
+    if (!this.productState.productList().length) {
+      await this.productState.getProductList(false);
+    }
+
     this.visible.set(true);
   }
 
@@ -82,16 +93,10 @@ export class ProductImportComponent implements OnInit {
     convertFileToJson(this.selectedFile)
       .then(jsonData => {
         const converted = this.convertFields(jsonData);
-        this.productService
-          .validateImportProducts(converted)
-          .pipe(takeUntilDestroyed(this.destroyedRef))
-          .subscribe({
-            next: response => {
-              this.convertedProducts.set(converted);
-              this.importValidationErrors.set(response.data);
-              console.log(this.importValidationErrors());
-            },
-          });
+
+        // Validar dados
+        this.importValidationErrors.set(this.validateProducts(converted));
+        this.convertedProducts.set(converted);
       })
       .catch(error => {
         console.error('Erro ao converter arquivo:', error);
@@ -150,6 +155,43 @@ export class ProductImportComponent implements OnInit {
       }
       return convertedItem;
     });
+  }
+
+  validateProducts(products: any[]): any {
+    const errors: any = {
+      skuExisting: [] as string[],
+      eanExisting: [] as string[],
+      categoryInvalid: [] as number[],
+    };
+
+    products.forEach(product => {
+      const duplicateSKU = products.filter(
+        prod => prod.sku === product.sku
+      ).length;
+      const duplicateEAN = products.filter(
+        prod => prod.ean === product.ean
+      ).length;
+      const eanExists = this.currentProducts()?.some(
+        prod => prod.ean === product.ean
+      );
+      const skuExists = this.currentProducts()?.some(
+        prod => prod.sku === product.sku
+      );
+
+      if (
+        !this.currentCategories().some(cat => cat.id === product.categoryId)
+      ) {
+        errors.categoryInvalid.push(product.categoryId);
+      }
+      if (duplicateSKU > 1 || eanExists) {
+        errors.skuExisting.push(product.sku);
+      }
+      if (duplicateEAN > 1 || skuExists) {
+        errors.eanExisting.push(product.ean);
+      }
+    });
+
+    return errors;
   }
 
   closeDialog(e = new Event('close')): void {

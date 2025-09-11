@@ -27,10 +27,12 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
 
     await lastValueFrom(
       this.service.getAll(skipLoader).pipe(
-        tap(data => this.setAccountsReceivableList(data.dados)),
-        catchError(() =>
-          this.handleError('Erro ao carregar a lista de contas a receber')
-        ),
+        tap(data => this.setAccountsReceivableList(data.data)),
+        catchError(() => {
+          return this.handleError(
+            'Erro ao carregar a lista de contas a receber'
+          );
+        }),
         finalize(() => this.setLoading(false))
       )
     );

@@ -30,7 +30,10 @@ export class AccountsReceivableService {
 
   upsert(data: any): Observable<ApiResponse> {
     if (data.id) {
-      return this.http.put<ApiResponse>(`${this.apiUrl}/update`, data);
+      return this.http.put<ApiResponse>(
+        `${this.apiUrl}/update/${data.id}`,
+        data
+      );
     }
     return this.http.post<ApiResponse>(`${this.apiUrl}/create`, data);
   }
@@ -41,11 +44,19 @@ export class AccountsReceivableService {
 
   updateAccountReceivableStatus(
     id: number,
-    status: AccountsReceivableStatus
+    status: AccountsReceivableStatus,
+    skipLoader = true
   ): Observable<ApiResponse> {
-    return this.http.patch<ApiResponse>(`${this.apiUrl}/${id}/status`, {
-      status,
-    });
+    const headers: any = {};
+    if (skipLoader) {
+      headers['Skip-Loader'] = 'true';
+    }
+
+    return this.http.patch<ApiResponse>(
+      `${this.apiUrl}/update-status/${id}`,
+      { status },
+      { headers }
+    );
   }
 
   markAsReceived(id: number): Observable<ApiResponse> {

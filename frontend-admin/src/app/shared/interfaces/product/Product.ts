@@ -4,6 +4,7 @@ export interface IProduct {
   id: string | number; // Identificador único do produto
   name: string;
   sku: string;
+  ean: string;
   category: string;
   brand: string;
   initialPrice: number;

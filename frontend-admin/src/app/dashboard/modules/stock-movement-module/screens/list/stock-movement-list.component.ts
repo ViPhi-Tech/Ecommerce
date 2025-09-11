@@ -107,7 +107,6 @@ export class StockMovementListComponent implements OnInit {
             tooltip: 'Editar Movimento',
             variant: 'text',
             action: (rowData: any) => {
-              console.log(rowData);
               this.router.navigate([
                 'dashboard/config/stock-movements/edit',
                 rowData?.id,

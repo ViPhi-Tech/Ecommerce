@@ -40,7 +40,6 @@ export class InvoiceDetailsComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    console.log('Invoice Details:', this.invoice());
     this.initTable();
   }
 
@@ -67,7 +66,9 @@ export class InvoiceDetailsComponent implements OnInit {
               label: 'Editar',
               tooltip: 'Editar Categoria',
               variant: 'text',
-              action: (rowData: any) => {},
+              action: (rowData: any) => {
+                console.log(rowData);
+              },
             },
             {
               icon: 'lucideTrash2',
@@ -76,7 +77,9 @@ export class InvoiceDetailsComponent implements OnInit {
               colorText: '#EF4444',
               colorIcon: '#EF4444',
               tooltip: 'Excluir Categoria',
-              action: (rowData: any) => {},
+              action: (rowData: any) => {
+                console.log(rowData);
+              },
             },
           ],
         },

@@ -47,7 +47,6 @@ export class CategoryListComponent implements OnInit {
             variant: 'text',
             action: (rowData: any) => {
               // Exemplo de navegação para o outlet auxiliar "drawer"
-              console.log(rowData);
               this.router.navigate([
                 { outlets: { drawer: ['categories', rowData?.id] } },
               ]);

@@ -328,13 +328,4 @@ export class AccountsPayableKanbanComponent implements OnInit {
       }
     }
   }
-
-  generateReceipt(card: KanbanCard) {
-    const account = card['accountData'] as IAccountsPayable;
-    if (account) {
-      console.log('Gerando comprovante para:', account.description);
-      // Implementar lógica de geração de comprovante
-      alert('Funcionalidade de gerar comprovante será implementada em breve.');
-    }
-  }
 }
