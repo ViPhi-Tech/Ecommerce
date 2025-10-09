@@ -66,7 +66,7 @@ export class DebtListComponent implements OnInit {
       { field: 'title', caption: 'Título', sortable: true, filter: true },
       {
         field: 'creditorName',
-        caption: 'Credor',
+        caption: 'Cliente',
         sortable: true,
         filter: true,
       },
