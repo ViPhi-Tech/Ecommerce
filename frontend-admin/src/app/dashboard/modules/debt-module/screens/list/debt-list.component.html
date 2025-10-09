@@ -31,6 +31,68 @@
   </div>
 
   <div class="animate-left">
+    <!-- Sumário de Itens Selecionados -->
+    @if (selectedSummary().count > 0) {
+      <div class="my-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800 shadow-sm animate-fade-in">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <ng-icon name="lucideCheckCircle2" class="text-blue-600 dark:text-blue-400" size="20" />
+            <h3 class="text-sm font-semibold text-gray-800 dark:text-gray-200">
+              Itens Selecionados
+            </h3>
+          </div>
+          
+          <div class="flex gap-6 items-center">
+            <!-- Quantidade -->
+            <div class="text-center">
+              <div class="text-xs text-gray-600 dark:text-gray-400 mb-1">Quantidade</div>
+              <div class="text-lg font-bold text-blue-600 dark:text-blue-400">
+                {{ selectedSummary().count }}
+              </div>
+            </div>
+
+            <!-- Valor Total -->
+            <div class="text-center px-4 border-l border-r border-blue-200 dark:border-blue-700">
+              <div class="text-xs text-gray-600 dark:text-gray-400 mb-1">Valor Total</div>
+              <div class="text-lg font-bold text-green-600 dark:text-green-400">
+                {{ selectedSummary().totalAmount | currency: 'BRL' }}
+              </div>
+            </div>
+
+            <!-- Status Distribution -->
+            <div class="flex gap-4">
+              @if (selectedSummary().pendingCount > 0) {
+                <div class="text-center">
+                  <div class="text-xs text-gray-600 dark:text-gray-400 mb-1">Pendentes</div>
+                  <div class="text-sm font-semibold text-blue-600 dark:text-blue-400">
+                    {{ selectedSummary().pendingCount }}
+                  </div>
+                </div>
+              }
+              
+              @if (selectedSummary().overdueCount > 0) {
+                <div class="text-center">
+                  <div class="text-xs text-gray-600 dark:text-gray-400 mb-1">Vencidas</div>
+                  <div class="text-sm font-semibold text-red-600 dark:text-red-400">
+                    {{ selectedSummary().overdueCount }}
+                  </div>
+                </div>
+              }
+              
+              @if (selectedSummary().paidCount > 0) {
+                <div class="text-center">
+                  <div class="text-xs text-gray-600 dark:text-gray-400 mb-1">Pagas</div>
+                  <div class="text-sm font-semibold text-green-600 dark:text-green-400">
+                    {{ selectedSummary().paidCount }}
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
     <fuse-table
       [data]="state.debtList()"
       [loading]="state.loading()"

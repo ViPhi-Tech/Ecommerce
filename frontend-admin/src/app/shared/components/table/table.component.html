@@ -147,7 +147,7 @@
       [class.cursor-pointer]="config().rowClick"
       (click)="onRowClick(rowData, rowIndex)"
     >
-      @if (config().selection?.mode === 'single') {
+      @if (config().selection?.mode) {
         <td>
           <p-tableCheckbox [value]="rowData" />
         </td>

@@ -5,6 +5,7 @@ import {
   inject,
   OnInit,
   signal,
+  computed,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
@@ -24,6 +25,7 @@ import { IDebt } from 'app/shared/interfaces/debt/Debt';
 import PeriodComponent, {
   PeriodRange,
 } from 'app/shared/components/period/period.component';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'fuse-debt-list',
@@ -38,6 +40,7 @@ import PeriodComponent, {
     TagModule,
     FormsModule,
     PeriodComponent,
+    CurrencyPipe,
   ],
 })
 export class DebtListComponent implements OnInit {
@@ -56,7 +59,7 @@ export class DebtListComponent implements OnInit {
     paginator: true,
     pageLinkSize: 5,
     selection: {
-      mode: 'single',
+      mode: 'multiple',
     },
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
@@ -126,6 +129,24 @@ export class DebtListComponent implements OnInit {
   ]);
 
   selectedData = signal<IDebt[]>([]);
+
+  // Computed para o sumário dos itens selecionados
+  selectedSummary = computed(() => {
+    const selected = this.selectedData();
+    const count = selected.length;
+    const totalAmount = selected.reduce((sum, debt) => sum + (debt.amount || 0), 0);
+    const pendingCount = selected.filter(d => d.status === 'pending').length;
+    const overdueCount = selected.filter(d => d.status === 'overdue').length;
+    const paidCount = selected.filter(d => d.status === 'paid').length;
+
+    return {
+      count,
+      totalAmount,
+      pendingCount,
+      overdueCount,
+      paidCount,
+    };
+  });
 
   constructor() {
     effect(() => {
