@@ -38,7 +38,24 @@
       [(selectedData)]="selectedData"
     >
       <ng-container data-headerFilter>
-        <!-- // aqui crie um fril -->
+        <div class="flex gap-4 items-center">
+          <div class="flex-1 max-w-xs">
+            <fuse-period
+              [availablePeriods]="[
+                'today',
+                'yesterday',
+                'last7days',
+                'last15days',
+                'last30days',
+                'currentMonth',
+                'all',
+              ]"
+              [placeholder]="'Selecione o período'"
+              [defaultValue]="'last30days'"
+              (periodChange)="onPeriodChange($event)"
+            />
+          </div>
+        </div>
       </ng-container>
     </fuse-table>
   </div>

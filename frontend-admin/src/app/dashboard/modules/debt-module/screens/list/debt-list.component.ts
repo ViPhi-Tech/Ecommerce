@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
-import { TableFilterComponent } from 'app/shared/components/table/components/table-filter/table-filter.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { DebtService } from '../../debt.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -18,16 +17,13 @@ import { heightAnimation } from 'app/shared/utils/animations';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { DebtState } from '../../debt.state';
-import {
-  CurrencyPipe,
-  DatePipe,
-  JsonPipe,
-  NgClass,
-} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Tooltip } from 'primeng/tooltip';
 import { TagModule } from 'primeng/tag';
 import { IDebt } from 'app/shared/interfaces/debt/Debt';
+import PeriodComponent, {
+  PeriodRange,
+} from 'app/shared/components/period/period.component';
 
 @Component({
   selector: 'fuse-debt-list',
@@ -36,16 +32,12 @@ import { IDebt } from 'app/shared/interfaces/debt/Debt';
   animations: [heightAnimation],
   imports: [
     TableComponent,
-    TableFilterComponent,
     NgIcon,
     ButtonModule,
-    CurrencyPipe,
-    DatePipe,
     Tooltip,
     TagModule,
-    NgClass,
     FormsModule,
-    JsonPipe
+    PeriodComponent,
   ],
 })
 export class DebtListComponent implements OnInit {
@@ -224,5 +216,15 @@ export class DebtListComponent implements OnInit {
       default:
         return status;
     }
+  }
+
+  onPeriodChange(range: PeriodRange) {
+    console.log('Período selecionado:', range);
+    console.log('Data inicial:', range.startDate);
+    console.log('Data final:', range.endDate);
+    console.log('Tipo:', range.periodType);
+
+    // Aqui você pode filtrar a lista de dívidas pelo período
+    // Exemplo: this.state.getDebtList(range.startDate, range.endDate);
   }
 }

@@ -1,0 +1,9 @@
+.period-selector {
+  width: 100%;
+
+  ::ng-deep {
+    .p-dropdown {
+      width: 100%;
+    }
+  }
+}

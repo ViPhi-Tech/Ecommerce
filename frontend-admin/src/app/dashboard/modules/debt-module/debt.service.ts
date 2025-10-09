@@ -27,7 +27,7 @@ export class DebtService {
           status: 'pending',
           createdAt: '2025-01-01',
           updatedAt: '2025-01-01',
-        }
+        },
       ],
       message: 'Dívidas carregadas com sucesso',
       status: 200,
@@ -53,5 +53,4 @@ export class DebtService {
   deleteDebt(debtId: string): Observable<ApiResponse> {
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${debtId}`);
   }
-
 }

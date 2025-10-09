@@ -1,4 +1,11 @@
-import { Component, computed, input, InputSignal, model, OnInit } from '@angular/core';
+import {
+  Component,
+  computed,
+  input,
+  InputSignal,
+  model,
+  OnInit,
+} from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
