@@ -15,7 +15,8 @@
     "dist": "ng build --base-href ./ && electron-builder",
     "clean": "rimraf dist .angular node_modules/.cache .tsbuildinfo",
     "clean:install": "npm run clean && npm install",
-    "serve:optimized": "npm run clean && npm run dev"
+    "serve:optimized": "npm run clean && npm run dev",
+    "prepare": "husky"
   },
   "private": true,
   "browser": {
@@ -63,12 +64,14 @@
     "electron": "^36.4.0",
     "eslint": "^9.23.0",
     "eslint-config-prettier": "^10.1.1",
+    "husky": "^9.1.7",
     "jasmine-core": "~5.6.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "lint-staged": "^16.2.3",
     "postcss": "^8.5.6",
     "prettier": "3.5.3",
     "rimraf": "^6.0.1",
