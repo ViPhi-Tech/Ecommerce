@@ -26,6 +26,8 @@ import PeriodComponent, {
   PeriodRange,
 } from 'app/shared/components/period/period.component';
 import { CurrencyPipe } from '@angular/common';
+import { ClientState } from '../../../client-module/client.state';
+import { SelectModule } from 'primeng/select';
 
 @Component({
   selector: 'fuse-debt-list',
@@ -41,6 +43,7 @@ import { CurrencyPipe } from '@angular/common';
     FormsModule,
     PeriodComponent,
     CurrencyPipe,
+    SelectModule,
   ],
 })
 export class DebtListComponent implements OnInit {
@@ -52,6 +55,7 @@ export class DebtListComponent implements OnInit {
   private destroyedRef = inject(DestroyRef);
 
   state = inject(DebtState);
+  clientState = inject(ClientState);
 
   tableConfig = signal<TableConfig>({
     rowsPerPageOptions: [5, 10, 20],
@@ -128,6 +132,32 @@ export class DebtListComponent implements OnInit {
     { label: 'Cancelada', value: 'cancelled' },
   ]);
 
+  selectedClient = signal<string | null>(null);
+
+  // Computed para lista de clientes no formato do dropdown
+  clientOptions = computed(() => {
+    const clients = this.clientState.clientList();
+    return [
+      { label: 'Todos os clientes', value: null },
+      ...clients.map(client => ({
+        label: client.fullName || client.document || 'Cliente sem nome',
+        value: client.fullName || client.document || '',
+      }))
+    ];
+  });
+
+  // Computed para filtrar dívidas por cliente
+  filteredDebtList = computed(() => {
+    const debts = this.state.debtList();
+    const selectedClient = this.selectedClient();
+
+    if (!selectedClient) {
+      return debts;
+    }
+
+    return debts.filter(debt => debt.creditorName === selectedClient);
+  });
+
   selectedData = signal<IDebt[]>([]);
 
   // Computed para o sumário dos itens selecionados
@@ -158,10 +188,15 @@ export class DebtListComponent implements OnInit {
 
   ngOnInit() {
     this.state.getDebtList();
+    this.clientState.getClientList();
     this.coreService.setPageTitle(
       'Dívidas',
       'Gestão de dívidas e contas a pagar'
     );
+  }
+
+  onClientChange(clientName: string | null) {
+    this.selectedClient.set(clientName);
   }
 
   addNewDebt() {
