@@ -49,10 +49,10 @@ import { SelectModule } from 'primeng/select';
 export class DebtListComponent implements OnInit {
   private router = inject(Router);
   private coreService = inject(CoreService);
-        private toast = inject(MessageService);
-        private confirmationService = inject(ConfirmationService);
-        private debtService = inject(DebtService);
-        private destroyedRef = inject(DestroyRef);
+  private toast = inject(MessageService);
+    private confirmationService = inject(ConfirmationService);
+  private debtService = inject(DebtService);
+  private destroyedRef = inject(DestroyRef);
 
   state = inject(DebtState);
   clientState = inject(ClientState);
