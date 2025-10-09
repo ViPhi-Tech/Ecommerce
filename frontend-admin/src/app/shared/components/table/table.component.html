@@ -7,6 +7,7 @@
   [loading]="loading()"
   [showGridlines]="true"
   [showLoader]="false"
+  [(selection)]="selectedData"
   [paginator]="true"
   [globalFilterFields]="globalFilterFields()"
   [tableStyle]="{ 'min-width': 'auto' }"
@@ -81,6 +82,13 @@
   }
   <ng-template #header>
     <tr>
+      @if (config().selection?.mode){
+        <th style="width: 4rem">
+          @if (config().selection?.mode === 'multiple'){
+            <p-tableHeaderCheckbox />
+          }
+        </th>
+      }
       @for (column of config().columns; track $index) {
         <th
           pSortableColumn="{{ column?.sortable ? column?.field : '' }}"
@@ -139,6 +147,11 @@
       [class.cursor-pointer]="config().rowClick"
       (click)="onRowClick(rowData, rowIndex)"
     >
+      @if (config().selection?.mode === 'single'){
+        <td>
+          <p-tableCheckbox [value]="rowData" />
+        </td>
+      }
       @for (column of config().columns; track $index) {
         <td
           class="overflow-auto text-ellipsis whitespace-nowrap"

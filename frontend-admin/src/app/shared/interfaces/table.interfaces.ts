@@ -12,6 +12,9 @@ export interface TableConfig {
   showCurrentPageReport?: boolean;
   emptyMessage?: string;
   textWrap?: boolean;
+  selection?: {
+    mode: 'single' | 'multiple';
+  };
   columns: TableColumn[];
   headerButtons?: HeaderButton[];
   rowClick?: (rowData: any, rowIndex: number) => void;

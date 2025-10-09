@@ -1,4 +1,4 @@
-import { Component, computed, input, InputSignal, OnInit } from '@angular/core';
+import { Component, computed, input, InputSignal, model, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
@@ -62,6 +62,8 @@ export class TableComponent implements OnInit {
       return TABLE_CONFIG;
     },
   });
+
+  selectedData = model<any>([]);
 
   // Campos de filtro
   globalFilterFields = computed(() => {

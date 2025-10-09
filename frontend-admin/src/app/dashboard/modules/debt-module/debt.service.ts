@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { IDebt } from 'app/shared/interfaces/debt/Debt';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
 @Injectable({
@@ -16,7 +16,22 @@ export class DebtService {
 
   constructor() {}
 
-  getAll(skipLoader: boolean): Observable<ApiResponse<IDebt[]>> {
+  getAll(skipLoader: boolean): Observable<any> {
+    return of({
+      data: [
+        {
+          id: '1',
+          title: 'Dívida 1',
+          amount: 100,
+          dueDate: '2025-01-01',
+          status: 'pending',
+          createdAt: '2025-01-01',
+          updatedAt: '2025-01-01',
+        }
+      ],
+      message: 'Dívidas carregadas com sucesso',
+      status: 200,
+    });
     return this.http.get<ApiResponse<IDebt[]>>(`${this.apiUrl}/all`, {
       headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
     });
@@ -39,20 +54,4 @@ export class DebtService {
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${debtId}`);
   }
 
-  filterDebts(query: string): Observable<ApiResponse<IDebt[]>> {
-    return this.http.get<ApiResponse<IDebt[]>>(
-      `${this.apiUrl}/search/${query}`,
-      {
-        headers: { 'Skip-Loader': 'false' },
-      }
-    );
-  }
-
-  markAsPaid(debtId: string): Observable<ApiResponse> {
-    return this.http.patch<ApiResponse>(`${this.apiUrl}/${debtId}/pay`, {});
-  }
-
-  refreshDebtList() {
-    this.refreshDebtList$.set(Math.random());
-  }
 }

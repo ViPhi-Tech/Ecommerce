@@ -21,12 +21,13 @@ import { DebtState } from '../../debt.state';
 import {
   CurrencyPipe,
   DatePipe,
+  JsonPipe,
   NgClass,
-  NgTemplateOutlet,
 } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Tooltip } from 'primeng/tooltip';
 import { TagModule } from 'primeng/tag';
+import { IDebt } from 'app/shared/interfaces/debt/Debt';
 
 @Component({
   selector: 'fuse-debt-list',
@@ -38,13 +39,13 @@ import { TagModule } from 'primeng/tag';
     TableFilterComponent,
     NgIcon,
     ButtonModule,
-    NgTemplateOutlet,
     CurrencyPipe,
     DatePipe,
     Tooltip,
     TagModule,
     NgClass,
     FormsModule,
+    JsonPipe
   ],
 })
 export class DebtListComponent implements OnInit {
@@ -62,6 +63,9 @@ export class DebtListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    selection: {
+      mode: 'single',
+    },
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'title', caption: 'Título', sortable: true, filter: true },
@@ -106,19 +110,6 @@ export class DebtListComponent implements OnInit {
             },
           },
           {
-            icon: 'lucideCheckCircle',
-            label: 'Pagar',
-            variant: 'text',
-            colorText: '#10B981',
-            colorIcon: '#10B981',
-            tooltip: 'Marcar como Paga',
-            action: (rowData: any) => {
-              if (rowData?.status !== 'paid') {
-                this.markAsPaid(rowData?.id);
-              }
-            },
-          },
-          {
             icon: 'lucideTrash2',
             label: 'Excluir',
             variant: 'text',
@@ -141,6 +132,8 @@ export class DebtListComponent implements OnInit {
     { label: 'Vencida', value: 'overdue' },
     { label: 'Cancelada', value: 'cancelled' },
   ]);
+
+  selectedData = signal<IDebt[]>([]);
 
   constructor() {
     effect(() => {
@@ -170,40 +163,6 @@ export class DebtListComponent implements OnInit {
     this.router.navigate([{ outlets: { drawer: ['debts', debtId] } }]);
   }
 
-  markAsPaid(debtId: string) {
-    this.confirmationService.confirm({
-      message: 'Você tem certeza que deseja marcar esta dívida como paga?',
-      header: 'Confirmação de Pagamento',
-      icon: 'pi pi-check-circle text-green-500',
-      acceptLabel: 'Sim',
-      rejectLabel: 'Não',
-      acceptButtonStyleClass: 'p-button-success',
-      rejectButtonStyleClass: 'p-button-secondary',
-      accept: () => {
-        this.debtService
-          .markAsPaid(debtId)
-          .pipe(takeUntilDestroyed(this.destroyedRef))
-          .subscribe({
-            next: () => {
-              this.toast.add({
-                severity: 'success',
-                summary: 'Sucesso',
-                detail: 'Dívida marcada como paga com sucesso',
-              });
-              this.debtService.refreshDebtList();
-            },
-            error: () => {
-              this.toast.add({
-                severity: 'error',
-                summary: 'Erro',
-                detail: 'Erro ao marcar dívida como paga',
-              });
-            },
-          });
-      },
-    });
-  }
-
   deleteDebt(debtId: string) {
     this.confirmationService.confirm({
       message: 'Você tem certeza que deseja excluir esta dívida?',
@@ -224,7 +183,6 @@ export class DebtListComponent implements OnInit {
                 summary: 'Sucesso',
                 detail: 'Dívida excluída com sucesso',
               });
-              this.debtService.refreshDebtList();
             },
             error: () => {
               this.toast.add({

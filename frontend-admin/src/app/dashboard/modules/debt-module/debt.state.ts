@@ -27,7 +27,7 @@ export class DebtState extends BaseState<DebtModuleState> {
     await lastValueFrom(
       this.debtService.getAll(skipLoader).pipe(
         tap((response: any) => {
-          const debts = Array.isArray(response) ? response : response.dados;
+          const debts = Array.isArray(response) ? response : response.data;
           if (debts && debts.length > 0) {
             this.setDebtList(debts);
           } else {
