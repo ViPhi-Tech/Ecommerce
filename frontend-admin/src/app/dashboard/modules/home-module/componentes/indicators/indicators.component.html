@@ -5,7 +5,7 @@
   @if (loading) {
     @for (skeleton of [1, 2, 3, 4]; track $index) {
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
+        class="rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
       >
         <div class="flex items-center justify-between">
           <div class="flex-1">
@@ -40,7 +40,7 @@
   @if (!loading) {
     @for (indicator of indicators; track $index) {
       <div
-        class="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
+        class="rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
       >
         <div class="flex items-center justify-between">
           <div>
