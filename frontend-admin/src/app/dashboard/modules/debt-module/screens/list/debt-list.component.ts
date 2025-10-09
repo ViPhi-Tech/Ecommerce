@@ -18,7 +18,12 @@ import { heightAnimation } from 'app/shared/utils/animations';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { DebtState } from '../../debt.state';
-import { CurrencyPipe, DatePipe, NgClass, NgTemplateOutlet } from '@angular/common';
+import {
+  CurrencyPipe,
+  DatePipe,
+  NgClass,
+  NgTemplateOutlet,
+} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Tooltip } from 'primeng/tooltip';
 import { TagModule } from 'primeng/tag';
@@ -147,7 +152,10 @@ export class DebtListComponent implements OnInit {
 
   ngOnInit() {
     this.state.getDebtList();
-    this.coreService.setPageTitle('Dívidas', 'Gestão de dívidas e contas a pagar');
+    this.coreService.setPageTitle(
+      'Dívidas',
+      'Gestão de dívidas e contas a pagar'
+    );
   }
 
   addNewDebt() {

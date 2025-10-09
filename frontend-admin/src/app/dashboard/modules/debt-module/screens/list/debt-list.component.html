@@ -43,8 +43,6 @@
       </ng-container>
     </fuse-table>
   </div>
-  
- 
 </div>
 
 <ng-template #debtItem let-item>
@@ -54,7 +52,7 @@
     [ngClass]="{
       'border-red-300': item.status === 'overdue',
       'border-green-300': item.status === 'paid',
-      'border-yellow-300': item.status === 'pending'
+      'border-yellow-300': item.status === 'pending',
     }"
   >
     <div class="p-4">
