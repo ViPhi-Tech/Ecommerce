@@ -57,6 +57,12 @@ export const SYSTEM_MODULES: IUserModule[] = [
     route: '/dashboard/accounts-receivable',
   },
   {
+    id: ROLES_SITEMAP.Dividas,
+    name: 'Dívidas',
+    description: 'Gerenciamento de dívidas',
+    route: '/dashboard/debts',
+  },
+  {
     id: ROLES_SITEMAP.Relatorios,
     name: 'Relatórios',
     description: 'Relatórios e análises do sistema',

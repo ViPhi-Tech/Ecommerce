@@ -18,6 +18,7 @@ import { supplierRoutes } from './modules/supplier-module/supplier.routing';
 import { homeRoutes } from './modules/home-module/home.routing';
 import { reportRoutes } from './modules/report-module/report.routing';
 import { serviceOrderRoutes } from './modules/service-order-module/service-order.routing';
+import { debtRoutes } from './modules/debt-module/debt.routing';
 
 const routes: Routes = [
   {
@@ -90,6 +91,11 @@ const routes: Routes = [
         path: 'reports',
         children: reportRoutes,
         data: { animation: 'reports' },
+      },
+      {
+        path: 'debts',
+        children: debtRoutes,
+        data: { animation: 'debts' },
       },
       {
         path: '**',

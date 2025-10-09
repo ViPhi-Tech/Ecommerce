@@ -8,6 +8,7 @@ export const ROLES_SITEMAP = {
   MovimentacaoEstoque: '5f6a7b8c-9d0e-1f2a-3b4c-5d6e7f8a9b17',
   ContasPagar: 'c1d2e3f4-5a6b-7c8d-9e0f-1a2b3c4d5e18',
   ContasReceber: '8a9b0c1d-2e3f-4a5b-6c7d-8e9f0a1b2c19',
+  Dividas: '6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f22',
   Relatorios: '4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d20',
   Usuarios: '1c2d3e4f-5a6b-7c8d-9e0f-1b2c3d4e5f21',
 };
