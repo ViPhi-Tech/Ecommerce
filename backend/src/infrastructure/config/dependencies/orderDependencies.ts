@@ -5,6 +5,8 @@ import { CreatePreOrderUseCase } from "../../../application/use-cases/order/Crea
 import { FindByIdOrderUseCase } from "../../../application/use-cases/order/FindByIdOrderUseCase";
 import { FindAllOrderUseCase } from "../../../application/use-cases/order/FindAllOrderUseCase";
 import { UpdateOrderUseCase } from "../../../application/use-cases/order/UpdateOrderUseCase";
+import { GetOrderByClientUseCase } from "../../../application/use-cases/order/GetOrderByClientUseCase";
+
 import { OrderController } from "../../http/controllers/OrderController";
 import { ProductRepository } from "../../database/repositories/ProductRepository";
 import { PrismaTransactionRunner } from "../../database/PrismaTransactionRunner";
@@ -30,6 +32,7 @@ export const createPreOrderUseCase = new CreatePreOrderUseCase(orderRepository);
 export const findByIdOrderUseCase = new FindByIdOrderUseCase(orderRepository);
 export const findAllOrderUseCase = new FindAllOrderUseCase(orderRepository);
 export const updateOrderUseCase = new UpdateOrderUseCase(transactionRunner, orderRepositoryFactory, productRepositoryFactory, paymentRepositoryFactory);
+export const getOrderByClientUseCase = new GetOrderByClientUseCase(orderRepository);
 
 // Controller com todos use cases
 export const orderController = new OrderController(
@@ -37,5 +40,6 @@ export const orderController = new OrderController(
      findByIdOrderUseCase,
      findAllOrderUseCase,
      createPreOrderUseCase,
-     updateOrderUseCase
+     updateOrderUseCase,
+     getOrderByClientUseCase
 );

@@ -3,6 +3,7 @@ import { CreateOrderUseCase } from '../../../application/use-cases/order/CreateO
 import { FindByIdOrderUseCase } from '../../../application/use-cases/order/FindByIdOrderUseCase';
 import { FindAllOrderUseCase } from '../../../application/use-cases/order/FindAllOrderUseCase';
 import { CreatePreOrderUseCase } from '../../../application/use-cases/order/CreatePreOrderUseCase';
+import { GetOrderByClientUseCase } from '../../../application/use-cases/order/GetOrderByClientUseCase';
 import { ApiResponse } from "../../../shared/types/apiResponse";
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
@@ -16,7 +17,8 @@ export class OrderController {
         private findByIdOrderUseCase: FindByIdOrderUseCase,
         private findallOrderUseCase: FindAllOrderUseCase,
         private createPreOrderUseCase: CreatePreOrderUseCase,
-        private updateOrderUseCase: UpdateOrderUseCase
+        private updateOrderUseCase: UpdateOrderUseCase,
+        private getOrderByClientUseCase: GetOrderByClientUseCase
     ) {}
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
     try {
@@ -83,10 +85,17 @@ export class OrderController {
     async updateOrder(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try {
             const orderData = createOrderSchema.parse(request.body);
+            const { id } = request.params as { id?: number };
+            if (typeof id !== 'number') {
+                return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
+                    status: false,
+                    descricao: 'Order ID is required and must be a number'
+                });
+            }
             return reply.status(HTTP_STATUS.API_STATUS_SUCCESS).send({
                 status: true,
                 descricao: HTTP_MESSAGES.API_STATUS_SUCCESS,
-                data: await this.updateOrderUseCase.execute(orderData.clientId, orderData)
+                data: await this.updateOrderUseCase.execute(id, orderData)
             });
         } catch (error) {
             return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
@@ -94,5 +103,34 @@ export class OrderController {
                 descricao: error instanceof Error? error.message : HTTP_MESSAGES.API_STATUS_BAD_REQUEST
             });
         }
-    }
+    };
+
+
+    async getOrdersByClient(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try {
+            const query = request.query as { clientId?: number; startDate?: string; endDate?: string; paymentTypeId?: string };
+            if (!query.clientId || !query.startDate || !query.endDate) {
+                return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
+                    status: false,
+                    descricao: 'clientId, startDate and endDate are required'
+                });
+            }
+            const orders = await this.getOrderByClientUseCase.execute({
+                clientId: query.clientId,
+                startDate: query.startDate,
+                endDate: query.endDate,
+                paymentTypeId: query.paymentTypeId
+            });
+            return reply.status(HTTP_STATUS.API_STATUS_SUCCESS).send({
+                status: true,
+                descricao: HTTP_MESSAGES.API_STATUS_SUCCESS,
+                data: orders
+            });
+        } catch (error) {
+            return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
+                status: false,
+                descricao: error instanceof Error? error.message : HTTP_MESSAGES.API_STATUS_BAD_REQUEST
+            });
+        }
+    };
 }

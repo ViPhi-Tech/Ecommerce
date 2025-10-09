@@ -15,7 +15,6 @@ type PaymentRepositoryFactory = (tx: ITransactionClient) => IPaymentRepository;
 export class CreateOrderUseCase {
   constructor(
     private transactionRunner: ITransactionRunner,
-
     private orderRepositoryFactory: OrderRepositoryFactory,
     private productRepositoryFactory: ProductRepositoryFactory,
     private paymentRepositoryFactory: PaymentRepositoryFactory,
@@ -107,18 +106,13 @@ export class CreateOrderUseCase {
     await productRepository.updateManyStockMovements(formattedStockMovements);
   }
 
-  private async processPayments(
-    orderId: number,
-    payments: any[], // Consider defining a more specific type for payments if possible
-    paymentRepository: IPaymentRepository
-  ): Promise<void> {
+  private async processPayments(orderId: number, payments: any[], paymentRepository: IPaymentRepository): Promise<void> {
     const paymentsToCreate = payments.map((payment) => ({
       ...payment,
-      orderId: orderId, // Ensure orderId is explicitly assigned
-      statusId: "pending", // Default status, adjust as needed
+      orderId: orderId, 
+      statusId: "pending", 
     }));
 
-    // The createMany method usually implies creating multiple records related to an orderId
-    await paymentRepository.createMany(orderId, paymentsToCreate); // Adjusted to remove orderId as separate arg if createMany uses it from objects
+    await paymentRepository.createMany(orderId, paymentsToCreate); 
   }
 }

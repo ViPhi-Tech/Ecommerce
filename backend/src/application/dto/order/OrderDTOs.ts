@@ -43,7 +43,7 @@ export const paymentLabelSchema = z.object({
 });
 
 export const createOrderSchema = z.object({
-  clientId: z.number().min(1, { message: "ID do cliente é obrigatório" }),
+  clientId: z.number().optional(),
   total: z.number().min(0, { message: "Total deve ser maior ou igual a zero" }),
   items: z.array(orderItemSchema).min(1, { message: "Pelo menos um item é obrigatório" }),
   payments: z.array(paymentLabelSchema).min(1, { message: "Pelo menos um pagamento é obrigatório" })
@@ -63,6 +63,14 @@ export const createPreOrderSchema = z.object({
   clientId: z.number().min(1, { message: "ID do cliente é obrigatório" }),
 });
 
+
+export const getOrders = z.object({
+  clientId: z.number().min(1, { message: "ID do cliente é obrigatório" }).optional(),
+  startDate: z.string().min(1, { message: "Data inicial é obrigatória" }),
+  endDate: z.string().min(1, { message: "Data final é obrigatória" }),
+  paymentTypeId: z.string().min(1, { message: "Tipo de pagamento é obrigatório" }).optional(),
+});
+
 // ===== JSON SCHEMAS (Para Swagger) =====
 export const createOrderJsonSchema = zodToJsonSchema(createOrderSchema);
 export const updateOrderJsonSchema = zodToJsonSchema(updateOrderSchema);
@@ -70,6 +78,7 @@ export const orderIdJsonSchema = zodToJsonSchema(orderIdSchema);
 export const orderItemJsonSchema = zodToJsonSchema(orderItemSchema);
 export const paymentLabelJsonSchema = zodToJsonSchema(paymentLabelSchema);
 export const createPreOrderJsonSchema = zodToJsonSchema(createPreOrderSchema);
+export const getOrdersJsonSchema = zodToJsonSchema(getOrders);
 
 // ===== TYPES (Para TypeScript) =====
 export type CreateOrderDTO = z.infer<typeof createOrderSchema>;
@@ -78,6 +87,7 @@ export type OrderIdDTO = z.infer<typeof orderIdSchema>;
 export type OrderItemDTO = z.infer<typeof orderItemSchema>;
 export type PaymentLabelDTO = z.infer<typeof paymentLabelSchema>;
 export type CreatePreOrderDTO = z.infer<typeof createPreOrderSchema>;
+export type GetOrdersDTO = z.infer<typeof getOrders>;
 
 // ===== RESPONSE DTOs =====
 export interface OrderResponse {

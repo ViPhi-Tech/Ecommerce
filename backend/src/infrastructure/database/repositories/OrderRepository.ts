@@ -10,13 +10,14 @@ export class OrderRepository implements IOrderRepository {
     return this.prisma.order.findMany({
         include: {
           items: true,
-          client: true
+          client: true,
+          payments: true,
         },
         orderBy: {
           createdAt: 'desc'
         }
     });
-  }
+  };
 
   async createItems(orderId: number, items: any[]): Promise<OrderItem[]> {
     await this.prisma.orderItem.createMany({
@@ -33,7 +34,7 @@ export class OrderRepository implements IOrderRepository {
         orderId
       }
     });
-  }
+  };
 
   
   async findById(id: number): Promise<Order | null> {
@@ -49,7 +50,7 @@ export class OrderRepository implements IOrderRepository {
         }
       },
     });
-  }
+  };
 
   async create(saleData: Partial<Order>): Promise<Order> {
     const { clientId, total } = saleData;
@@ -62,7 +63,7 @@ export class OrderRepository implements IOrderRepository {
       }
     );
     return result as Order;
-  }
+  };
 
   async update(id: number, saleData: Partial<Order>): Promise<Order> {
     const sale = await this.findById(id);
@@ -80,7 +81,7 @@ export class OrderRepository implements IOrderRepository {
     });
     
     return updatedSale as Order;
-  }
+  };
 
   async delete(id: number): Promise<void> {
     const sale = await this.findById(id);
@@ -91,7 +92,7 @@ export class OrderRepository implements IOrderRepository {
         }
       );
     }
-  }
+  };
 
   async createPreOrder(clientId: number): Promise<Order> {
     return await this.prisma.order.create({
@@ -170,7 +171,7 @@ async aggregateSalesByStatus(initialMonth: number, finalMonth: number): Promise<
   `;
 
   return results;
-}
+};
 
 async aggregateSalesByCategory(initialMonth: number, finalMonth: number): Promise<AggregateOrderCategoryResponse[]> {
   const results = await this.prisma.$queryRaw<{ name: string; total: number }[]
@@ -188,6 +189,20 @@ async aggregateSalesByCategory(initialMonth: number, finalMonth: number): Promis
   `;
 
   return results;
-}
+};
+
+
+async getOrdersByClient(clientId: number, startDate: string, endDate: string, paymentTypeId: string): Promise<Order[]> {
+  return this.prisma.order.findMany({
+      where: { clientId, createdAt: { gte: new Date(startDate), lte: new Date(endDate) }, payments: paymentTypeId ? { some: { typeId: paymentTypeId } } : undefined },
+      include: {
+        items: true,
+        client: true,
+        payments: true,
+      },
+      orderBy: {
+        id: 'desc'
+      }
+  })}
  
 }

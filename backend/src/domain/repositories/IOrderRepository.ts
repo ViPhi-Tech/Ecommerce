@@ -1,5 +1,6 @@
 import { Order } from '../entities/Order';
 import { OrderItem, AggregateOrderResponse, AggregateOrderStatusResponse, AggregateOrderCategoryResponse } from '../entities/OrderItem';
+
 export interface IOrderRepository {
     create(data: Order): Promise<Order>;
     createItems(saleId: number, items: OrderItem[]): Promise<OrderItem[]>;  
@@ -13,4 +14,5 @@ export interface IOrderRepository {
     aggregateSalesByMonth(initialMonth: number, finalMonth: number): Promise<AggregateOrderResponse[]>;
     aggregateSalesByStatus(initialMonth: number, finalMonth: number): Promise<AggregateOrderStatusResponse[]>;
     aggregateSalesByCategory(initialMonth: number, finalMonth: number): Promise<AggregateOrderCategoryResponse[]>;
+    getOrdersByClient(clientId: number, startDate: string, endDate: string, paymentTypeId: string): Promise<Order[]>;
 }

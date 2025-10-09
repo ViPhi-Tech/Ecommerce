@@ -7,7 +7,7 @@ export interface OrderCreateItem {
 }
 export interface CreateOrderInput {
     id?: number
-    clientId: number;
+    clientId?: number | null;
     total: number;
     items: OrderCreateItem[];
     payments: {
