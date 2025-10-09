@@ -1,1 +1,1 @@
-npm run formatar
+npx lint-staged

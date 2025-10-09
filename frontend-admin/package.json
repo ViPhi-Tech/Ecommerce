@@ -18,6 +18,12 @@
     "serve:optimized": "npm run clean && npm run dev",
     "prepare": "husky"
   },
+  "lint-staged": {
+    "src/**/*.{ts,scss,html}": [
+      "prettier --write",
+      "ng lint"
+    ]
+  },
   "private": true,
   "browser": {
     "timers": false
