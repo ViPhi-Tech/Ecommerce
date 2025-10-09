@@ -11,7 +11,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "formatar": "prettier --write src",
-        "electron": "ng build --base-href ./ && electron .",
+    "electron": "ng build --base-href ./ && electron .",
     "dist": "ng build --base-href ./ && electron-builder",
     "clean": "rimraf dist .angular node_modules/.cache .tsbuildinfo",
     "clean:install": "npm run clean && npm install",
