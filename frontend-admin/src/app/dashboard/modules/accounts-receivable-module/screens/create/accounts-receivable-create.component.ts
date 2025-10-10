@@ -135,6 +135,30 @@ export class AccountsReceivableCreateComponent implements OnInit {
     if (!id) {
       this.isLoading.set(false);
       this.visible.set(true);
+      
+      // Verifica se há dados de conversão de pedidos
+      const debtsToConvert = sessionStorage.getItem('debtsToConvert');
+      if (debtsToConvert) {
+        const data = JSON.parse(debtsToConvert);
+        
+        // Preenche o formulário com os dados dos pedidos
+        this.accountsReceivableForm.patchValue({
+          amount: data.totalAmount,
+          description: data.description,
+          clientId: data.clientId || '',
+          dueDate: '', // Deixa vazio para o usuário preencher
+        });
+        
+        // Limpa o sessionStorage
+        sessionStorage.removeItem('debtsToConvert');
+        
+        this.toast.add({
+          severity: 'info',
+          summary: 'Pedidos Convertidos',
+          detail: `${data.orders.length} pedido(s) convertido(s) para conta a receber`,
+        });
+      }
+      
       return;
     }
     this.accountsReceivableService

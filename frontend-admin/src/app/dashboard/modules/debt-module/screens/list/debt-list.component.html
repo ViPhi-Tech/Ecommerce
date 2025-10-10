@@ -2,10 +2,10 @@
   <div class="flex items-center">
     <div>
       <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
-        Dívidas - Listagem
+        Pedidos Pendentes - Contas a Receber
       </h1>
       <p class="text-gray-600 dark:text-gray-400 mt-1">
-        Gerencie suas dívidas e contas a pagar de forma organizada
+        Gerencie pedidos com pagamentos pendentes e converta em contas a receber
       </p>
     </div>
 
@@ -20,13 +20,7 @@
         <ng-icon name="lucideRefreshCw" />
       </p-button>
 
-      <p-button
-        icon="pi pi-plus"
-        label="Nova Dívida"
-        (onClick)="addNewDebt()"
-        pTooltip="Adicionar nova dívida"
-        tooltipPosition="bottom"
-      />
+      
     </div>
   </div>
 
@@ -41,24 +35,49 @@
         <div class="flex gap-4 items-center">
           <!-- Sumário de Itens Selecionados -->
           @if (selectedSummary().count > 0) {
-            <div class="flex-1 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800 shadow-sm animate-fade-in">
-              <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
-                  <ng-icon name="lucideCheckCheck" class="text-blue-600 dark:text-blue-400" size="18" />
-                  <span class="text-xs font-semibold text-gray-700 dark:text-gray-300">
-                    {{ selectedSummary().count }} selecionado(s)
-                  </span>
-                </div>
-                
-                <div class="flex gap-3 items-center">
-                  <!-- Valor Total -->
-                  <div class="flex items-center gap-1">
-                    <span class="text-xs text-gray-600 dark:text-gray-400">Total:</span>
-                    <span class="text-sm font-bold text-green-600 dark:text-green-400">
-                      {{ selectedSummary().totalAmount | currency: 'BRL' }}
+            <div
+              class="flex-1 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800 shadow-sm animate-fade-in"
+            >
+              <div class="flex items-center gap-4 justify-between">
+                <div class="flex items-center gap-4">
+                  <div class="flex items-center gap-2">
+                    <ng-icon
+                      name="lucideCheckCheck"
+                      class="text-blue-600 dark:text-blue-400"
+                      size="18"
+                    />
+                    <span
+                      class="text-xs font-semibold text-gray-700 dark:text-gray-300"
+                    >
+                      {{ selectedSummary().count }} selecionado(s)
                     </span>
                   </div>
+
+                  <div class="flex gap-3 items-center">
+                    <!-- Valor Total -->
+                    <div class="flex items-center gap-1">
+                      <span class="text-xs text-gray-600 dark:text-gray-400"
+                        >Total:</span
+                      >
+                      <span
+                        class="text-sm font-bold text-green-600 dark:text-green-400"
+                      >
+                        {{ selectedSummary().totalAmount | currency: 'BRL' }}
+                      </span>
+                    </div>
+                  </div>
                 </div>
+
+                <!-- Botão Converter em Conta a Receber -->
+                <p-button
+                  label="Converter"
+                  icon="pi pi-arrow-right"
+                  size="small"
+                  severity="success"
+                  (onClick)="convertToAccountsReceivable()"
+                  pTooltip="Converte as dívidas selecionadas em contas a receber"
+                  tooltipPosition="left"
+                />
               </div>
             </div>
           }
@@ -66,7 +85,7 @@
           <!-- Filtro de Cliente -->
           <div class="flex-shrink-0">
             <p-select
-              class="w-full max-w-52"
+              class="w-full max-w-64"
               [options]="clientOptions()"
               [(ngModel)]="selectedClient"
               optionLabel="label"
@@ -84,7 +103,7 @@
           </div>
 
           <!-- Filtro de Período -->
-          <div class="flex-shrink-0 w-64">
+          <div class="flex-shrink-0">
             <fuse-period
               [availablePeriods]="[
                 'today',

@@ -49,8 +49,8 @@ import { SelectModule } from 'primeng/select';
 export class DebtListComponent implements OnInit {
   private router = inject(Router);
   private coreService = inject(CoreService);
-      private toast = inject(MessageService);
-        private confirmationService = inject(ConfirmationService);
+  private toast = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
   private debtService = inject(DebtService);
   private destroyedRef = inject(DestroyRef);
 
@@ -67,23 +67,28 @@ export class DebtListComponent implements OnInit {
     },
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
-      { field: 'title', caption: 'Título', sortable: true, filter: true },
       {
-        field: 'creditorName',
+        field: 'client.fullName',
         caption: 'Cliente',
         sortable: true,
         filter: true,
       },
       {
-        field: 'amount',
-        caption: 'Valor',
+        field: 'total',
+        caption: 'Valor Total',
         type: 'currency',
         sortable: true,
         filter: true,
       },
       {
-        field: 'dueDate',
-        caption: 'Vencimento',
+        field: 'payments',
+        caption: 'Pagamentos',
+        sortable: false,
+        filter: false,
+      },
+      {
+        field: 'createdAt',
+        caption: 'Data do Pedido',
         type: 'date',
         sortable: true,
         filter: true,
@@ -102,7 +107,7 @@ export class DebtListComponent implements OnInit {
           {
             icon: 'lucideSquarePen',
             label: 'Editar',
-            tooltip: 'Editar Dívida',
+            tooltip: 'Editar Pedido',
             variant: 'text',
             action: (rowData: any) => {
               this.editDebt(rowData?.id);
@@ -114,7 +119,7 @@ export class DebtListComponent implements OnInit {
             variant: 'text',
             colorText: '#EF4444',
             colorIcon: '#EF4444',
-            tooltip: 'Excluir Dívida',
+            tooltip: 'Excluir Pedido',
             action: (rowData: any) => {
               this.deleteDebt(rowData?.id);
             },
@@ -126,10 +131,9 @@ export class DebtListComponent implements OnInit {
 
   statusOptions = signal([
     { label: 'Todos', value: 'all' },
-    { label: 'Pendente', value: 'pending' },
-    { label: 'Paga', value: 'paid' },
-    { label: 'Vencida', value: 'overdue' },
-    { label: 'Cancelada', value: 'cancelled' },
+    { label: 'Pendente', value: 'PENDING' },
+    { label: 'Pago', value: 'PAID' },
+    { label: 'Cancelado', value: 'CANCELLED' },
   ]);
 
   selectedClient = signal<string | null>(null);
@@ -142,11 +146,11 @@ export class DebtListComponent implements OnInit {
       ...clients.map(client => ({
         label: client.fullName || client.document || 'Cliente sem nome',
         value: client.fullName || client.document || '',
-      }))
+      })),
     ];
   });
 
-  // Computed para filtrar dívidas por cliente
+  // Computed para filtrar pedidos por cliente
   filteredDebtList = computed(() => {
     const debts = this.state.debtList();
     const selectedClient = this.selectedClient();
@@ -155,7 +159,7 @@ export class DebtListComponent implements OnInit {
       return debts;
     }
 
-    return debts.filter(debt => debt.creditorName === selectedClient);
+    return debts.filter(debt => debt.client?.fullName === selectedClient);
   });
 
   selectedData = signal<IDebt[]>([]);
@@ -164,17 +168,20 @@ export class DebtListComponent implements OnInit {
   selectedSummary = computed(() => {
     const selected = this.selectedData();
     const count = selected.length;
-    const totalAmount = selected.reduce((sum, debt) => sum + (debt.amount || 0), 0);
-    const pendingCount = selected.filter(d => d.status === 'pending').length;
-    const overdueCount = selected.filter(d => d.status === 'overdue').length;
-    const paidCount = selected.filter(d => d.status === 'paid').length;
+    const totalAmount = selected.reduce(
+      (sum, debt) => sum + (debt.total || 0),
+      0
+    );
+    const pendingCount = selected.filter(d => d.status === 'PENDING').length;
+    const paidCount = selected.filter(d => d.status === 'PAID').length;
+    const cancelledCount = selected.filter(d => d.status === 'CANCELLED').length;
 
     return {
       count,
       totalAmount,
       pendingCount,
-      overdueCount,
       paidCount,
+      cancelledCount,
     };
   });
 
@@ -190,8 +197,8 @@ export class DebtListComponent implements OnInit {
     this.state.getDebtList();
     this.clientState.getClientList();
     this.coreService.setPageTitle(
-      'Dívidas',
-      'Gestão de dívidas e contas a pagar'
+      'Pedidos Pendentes',
+      'Gestão de pedidos com pagamentos pendentes'
     );
   }
 
@@ -246,13 +253,11 @@ export class DebtListComponent implements OnInit {
 
   getStatusSeverity(status: string): 'success' | 'warn' | 'danger' | 'info' {
     switch (status) {
-      case 'paid':
+      case 'PAID':
         return 'success';
-      case 'pending':
+      case 'PENDING':
         return 'info';
-      case 'overdue':
-        return 'danger';
-      case 'cancelled':
+      case 'CANCELLED':
         return 'warn';
       default:
         return 'info';
@@ -261,14 +266,12 @@ export class DebtListComponent implements OnInit {
 
   getStatusLabel(status: string): string {
     switch (status) {
-      case 'paid':
-        return 'Paga';
-      case 'pending':
+      case 'PAID':
+        return 'Pago';
+      case 'PENDING':
         return 'Pendente';
-      case 'overdue':
-        return 'Vencida';
-      case 'cancelled':
-        return 'Cancelada';
+      case 'CANCELLED':
+        return 'Cancelado';
       default:
         return status;
     }
@@ -282,5 +285,90 @@ export class DebtListComponent implements OnInit {
 
     // Aqui você pode filtrar a lista de dívidas pelo período
     // Exemplo: this.state.getDebtList(range.startDate, range.endDate);
+  }
+
+  convertToAccountsReceivable() {
+    const selected = this.selectedData();
+    
+    if (selected.length === 0) {
+      this.toast.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'Selecione pelo menos um pedido para converter',
+      });
+      return;
+    }
+
+    // Verifica se todos os pedidos selecionados têm cliente
+    const hasNoClient = selected.some(debt => !debt.client);
+    if (hasNoClient) {
+      this.toast.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'Todos os pedidos devem ter um cliente associado para converter',
+      });
+      return;
+    }
+
+    // Verifica se todos os pedidos selecionados são do mesmo cliente
+    const firstClient = selected[0].client;
+    const allSameClient = selected.every(debt => debt.client?.id === firstClient?.id);
+
+    if (!allSameClient) {
+      this.toast.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'Todos os pedidos devem ser do mesmo cliente para converter',
+      });
+      return;
+    }
+
+    // Verifica se existem pedidos já pagos ou cancelados
+    const hasInvalidStatus = selected.some(debt => 
+      debt.status === 'PAID' || debt.status === 'CANCELLED'
+    );
+
+    if (hasInvalidStatus) {
+      this.toast.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'Não é possível converter pedidos pagos ou cancelados',
+      });
+      return;
+    }
+
+    // Calcula o total de contas a receber dos pagamentos do tipo 'account-receivable'
+    let accountReceivableTotal = 0;
+    selected.forEach(order => {
+      if (order.payments && order.payments.length > 0) {
+        order.payments.forEach(payment => {
+          if (payment.typeId === 'account-receivable' && payment.statusId === 'pending') {
+            accountReceivableTotal += payment.value;
+          }
+        });
+      }
+    });
+
+    // Se não houver pagamentos do tipo 'account-receivable', usa o total dos pedidos
+    if (accountReceivableTotal === 0) {
+      accountReceivableTotal = this.selectedSummary().totalAmount;
+    }
+
+    const description = selected.length > 1 
+      ? `Conversão de ${selected.length} pedidos - Cliente: ${firstClient?.fullName}` 
+      : `Pedido #${selected[0].id} - Cliente: ${firstClient?.fullName}`;
+
+    // Armazena temporariamente os dados para serem usados no modal
+    sessionStorage.setItem('debtsToConvert', JSON.stringify({
+      orders: selected,
+      totalAmount: accountReceivableTotal,
+      clientId: firstClient?.id,
+      clientName: firstClient?.fullName,
+      description,
+    }));
+
+    this.router.navigate([
+      { outlets: { drawer: ['accounts-receivable', 'new'] } },
+    ]);
   }
 }
