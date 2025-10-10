@@ -68,36 +68,30 @@ export class DebtListComponent implements OnInit {
       mode: 'multiple',
     },
     columns: [
-      { field: 'id', caption: 'ID', sortable: true, filter: true },
       {
-        field: 'client.fullName',
+        field: 'id',
+        caption: 'Cód. Pedido',
+        sortable: true,
+        filter: true,
+        width: '150px',
+      },
+      {
+        field: 'customerName',
         caption: 'Cliente',
         sortable: true,
         filter: true,
       },
       {
         field: 'total',
-        caption: 'Valor Total',
+        caption: 'Valor',
         type: 'currency',
         sortable: true,
         filter: true,
       },
       {
-        field: 'payments',
-        caption: 'Pagamentos',
-        sortable: false,
-        filter: false,
-      },
-      {
         field: 'createdAt',
-        caption: 'Data do Pedido',
-        type: 'date',
-        sortable: true,
-        filter: true,
-      },
-      {
-        field: 'status',
-        caption: 'Status',
+        caption: 'Data de Criação',
+        type: 'datetime',
         sortable: true,
         filter: true,
       },
@@ -107,23 +101,13 @@ export class DebtListComponent implements OnInit {
         actionButtonsType: 'buttons',
         actionButtons: [
           {
-            icon: 'lucideSquarePen',
-            label: 'Editar',
-            tooltip: 'Editar Pedido',
+            icon: 'lucideArrowRight',
+            label: 'Converter',
+            tooltip: 'Converter em Conta a Receber',
             variant: 'text',
+            color: 'success',
             action: (rowData: any) => {
-              this.editDebt(rowData?.id);
-            },
-          },
-          {
-            icon: 'lucideTrash2',
-            label: 'Excluir',
-            variant: 'text',
-            colorText: '#EF4444',
-            colorIcon: '#EF4444',
-            tooltip: 'Excluir Pedido',
-            action: (rowData: any) => {
-              this.deleteDebt(rowData?.id);
+              this.convertToAccountsReceivable(rowData?.id);
             },
           },
         ],
@@ -289,8 +273,9 @@ export class DebtListComponent implements OnInit {
     // Exemplo: this.state.getDebtList(range.startDate, range.endDate);
   }
 
-  convertToAccountsReceivable() {
-    const selected = this.selectedData();
+  convertToAccountsReceivable(debtId?: number) {
+    const debt = this.state.debtList().find(debt => debt.id === debtId)
+    const selected = debt ? [debt] : this.selectedData();
     
     if (selected.length === 0) {
       this.toast.add({
@@ -302,7 +287,8 @@ export class DebtListComponent implements OnInit {
     }
 
     // Verifica se todos os pedidos selecionados têm cliente
-    const hasNoClient = selected.some(debt => !debt.client);
+    console.log('selected', selected);
+    const hasNoClient = selected.some(debt => !debt?.client);
     if (hasNoClient) {
       this.toast.add({
         severity: 'warn',
@@ -313,9 +299,20 @@ export class DebtListComponent implements OnInit {
     }
 
     const firstClient = selected[0]?.client?.id;
+    console.log('firstClient', firstClient);
+    const allSameClient = selected.every(debt => debt?.client?.id === firstClient);
+
+    if (!allSameClient) {
+      this.toast.add({
+        severity: 'warn', 
+        summary: 'Atenção',
+        detail: 'Todos os pedidos devem ser do mesmo cliente para converter',
+      });
+      return;
+    }
 
     // Calcula o total de contas a receber dos pagamentos do tipo 'account-receivable'
-    const accountReceivableTotal = this.selectedSummary().totalAmount;
+    const accountReceivableTotal = selected.reduce((sum, debt) => sum + (debt?.total || 0), 0);
 
     // Armazena temporariamente os dados para serem usados no modal
     const formData = {

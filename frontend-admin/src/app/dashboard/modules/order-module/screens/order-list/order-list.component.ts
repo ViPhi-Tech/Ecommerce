@@ -122,15 +122,6 @@ export class OrderListComponent implements OnInit {
               },
             },
             {
-              icon: 'lucideSquarePen',
-              color: 'primary',
-              variant: 'text',
-              tooltip: 'Editar Pedido',
-              action: data => {
-                this.editOrder(data);
-              },
-            },
-            {
               icon: 'lucideTrash2',
               color: 'warn',
               variant: 'text',

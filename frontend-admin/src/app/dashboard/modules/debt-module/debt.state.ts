@@ -42,7 +42,14 @@ export class DebtState extends BaseState<DebtModuleState> {
   }
 
   setDebtList(debtList: IDebt[]) {
-    this.updateState('debtList', debtList);
+    const transformedDebtList = debtList.map(debt => {
+      return {
+        ...debt,
+        customerName: debt.client?.fullName,
+      };
+    });
+
+    this.updateState('debtList', transformedDebtList);
   }
 
   clearState() {
