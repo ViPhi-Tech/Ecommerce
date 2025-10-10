@@ -6,10 +6,8 @@ export interface IAccountsPayable {
   uuid: string;
   supplierId?: number;
   supplier?: ISupplier;
-  originalDueDate: Date;
   issueDate: Date;
   dueDate: Date;
-  competenceDate: Date;
   amount: number;
   recurringPurchase: boolean;
   description: string;

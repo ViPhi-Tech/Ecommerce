@@ -6,10 +6,8 @@ export interface IAccountsReceivable {
   uuid: string;
   clientId?: number;
   client?: IClient;
-  originalDueDate: Date;
   issueDate: Date;
   dueDate: Date;
-  competenceDate: Date;
   amount: number;
   recurringIncome: boolean;
   description: string;

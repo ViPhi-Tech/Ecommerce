@@ -67,7 +67,6 @@ export class AccountsReceivableCreateComponent implements OnInit {
   dateValidation(formGroup: FormGroup): Record<string, any> | null {
     const issueDate = formGroup.get('issueDate')?.value;
     const dueDate = formGroup.get('dueDate')?.value;
-    const competenceDate = formGroup.get('competenceDate')?.value;
 
     const errors: Record<string, any> = {};
 
@@ -76,22 +75,6 @@ export class AccountsReceivableCreateComponent implements OnInit {
       const due = dayjs(dueDate, 'DD/MM/YYYY');
       if (due.isBefore(issue)) {
         errors['dueDateBeforeIssue'] = true;
-      }
-    }
-
-    if (issueDate && competenceDate) {
-      const issue = dayjs(issueDate, 'DD/MM/YYYY');
-      const comp = dayjs(competenceDate, 'DD/MM/YYYY');
-      if (comp.isBefore(issue)) {
-        errors['competenceDateBeforeIssue'] = true;
-      }
-    }
-
-    if (dueDate && competenceDate) {
-      const due = dayjs(dueDate, 'DD/MM/YYYY');
-      const comp = dayjs(competenceDate, 'DD/MM/YYYY');
-      if (comp.isBefore(due)) {
-        errors['competenceDateBeforeDue'] = true;
       }
     }
 
@@ -170,12 +153,8 @@ export class AccountsReceivableCreateComponent implements OnInit {
 
           this.accountsReceivableForm.patchValue({
             ...data,
-            originalDueDate: dayjs(data.originalDueDate).format('DD/MM/YYYY'),
             issueDate: dayjs(data.issueDate).format('DD/MM/YYYY'),
             dueDate: dayjs(data.dueDate).format('DD/MM/YYYY'),
-            competenceDate: data.competenceDate
-              ? dayjs(data.competenceDate).format('DD/MM/YYYY')
-              : '',
           });
           this.isLoading.set(false);
           this.visible.set(true);
@@ -198,10 +177,8 @@ export class AccountsReceivableCreateComponent implements OnInit {
       id: [''],
       uuid: [''],
       clientId: ['', [Validators.required]],
-      originalDueDate: [{ value: '', disabled: true }],
-      issueDate: [dayjs().format('DD/MM/YYYY')],
+      issueDate: [dayjs().format('DD/MM/YYYY'), Validators.required],
       dueDate: ['', Validators.required],
-      competenceDate: [''],
       recurringIncome: [false],
       amount: ['', Validators.required],
       status: ['pending'],
@@ -225,10 +202,8 @@ export class AccountsReceivableCreateComponent implements OnInit {
     }
 
     const payload: any = {
-      originalDueDate: formValue.originalDueDate || formValue.dueDate,
       issueDate: formValue.issueDate,
       dueDate: formValue.dueDate,
-      competenceDate: formValue.competenceDate,
       amount: formValue.amount,
       recurringIncome: formValue.recurringIncome,
       description: formValue.description,
@@ -291,16 +266,6 @@ export class AccountsReceivableCreateComponent implements OnInit {
     if (errors?.['dueDateBeforeIssue']) {
       errorMessages.push(
         'A data de vencimento não pode ser anterior à data de emissão.'
-      );
-    }
-    if (errors?.['competenceDateBeforeIssue']) {
-      errorMessages.push(
-        'A data de competência não pode ser anterior à data de emissão.'
-      );
-    }
-    if (errors?.['competenceDateBeforeDue']) {
-      errorMessages.push(
-        'A data de competência não pode ser anterior à data de vencimento.'
       );
     }
 

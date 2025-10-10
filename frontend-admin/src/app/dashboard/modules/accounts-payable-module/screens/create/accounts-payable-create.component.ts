@@ -67,7 +67,6 @@ export class AccountsPayableCreateComponent implements OnInit {
   dateValidation(formGroup: FormGroup): Record<string, any> | null {
     const issueDate = formGroup.get('issueDate')?.value;
     const dueDate = formGroup.get('dueDate')?.value;
-    const competenceDate = formGroup.get('competenceDate')?.value;
     const errors: Record<string, any> = {};
 
     if (issueDate && dueDate) {
@@ -75,22 +74,6 @@ export class AccountsPayableCreateComponent implements OnInit {
       const due = dayjs(dueDate, 'DD/MM/YYYY');
       if (due.isBefore(issue)) {
         errors['dueDateBeforeIssue'] = true;
-      }
-    }
-
-    if (issueDate && competenceDate) {
-      const issue = dayjs(issueDate, 'DD/MM/YYYY');
-      const comp = dayjs(competenceDate, 'DD/MM/YYYY');
-      if (comp.isBefore(issue)) {
-        errors['competenceDateBeforeIssue'] = true;
-      }
-    }
-
-    if (dueDate && competenceDate) {
-      const due = dayjs(dueDate, 'DD/MM/YYYY');
-      const comp = dayjs(competenceDate, 'DD/MM/YYYY');
-      if (comp.isBefore(due)) {
-        errors['competenceDateBeforeDue'] = true;
       }
     }
 
@@ -145,12 +128,8 @@ export class AccountsPayableCreateComponent implements OnInit {
 
           this.accountsPayableForm.patchValue({
             ...data,
-            originalDueDate: dayjs(data.originalDueDate).format('DD/MM/YYYY'),
             issueDate: dayjs(data.issueDate).format('DD/MM/YYYY'),
             dueDate: dayjs(data.dueDate).format('DD/MM/YYYY'),
-            competenceDate: data.competenceDate
-              ? dayjs(data.competenceDate).format('DD/MM/YYYY')
-              : '',
           });
           this.isLoading.set(false);
           this.visible.set(true);
@@ -173,10 +152,8 @@ export class AccountsPayableCreateComponent implements OnInit {
       id: [''],
       uuid: [''],
       supplierId: ['', [Validators.required]],
-      originalDueDate: [{ value: '', disabled: true }],
-      issueDate: [dayjs().format('DD/MM/YYYY')],
+      issueDate: [dayjs().format('DD/MM/YYYY'), Validators.required],
       dueDate: ['', Validators.required],
-      competenceDate: [''],
       recurringPurchase: [false],
       amount: ['', Validators.required],
       status: ['pending'],
@@ -200,10 +177,6 @@ export class AccountsPayableCreateComponent implements OnInit {
     }
 
     const payload = { ...formValue };
-
-    if (!payload.originalDueDate || payload.originalDueDate === '') {
-      payload.originalDueDate = payload.dueDate;
-    }
 
     this.accountsPayableService
       .upsert(payload)
@@ -260,28 +233,6 @@ export class AccountsPayableCreateComponent implements OnInit {
       this.accountsPayableForm.get('dueDate')?.setErrors({ incorrect: true });
     } else {
       this.accountsPayableForm.get('dueDate')?.setErrors(null);
-    }
-
-    if (errors?.['competenceDateBeforeIssue']) {
-      errorMessages.push(
-        'A data de competência não pode ser anterior à data de emissão.'
-      );
-      this.accountsPayableForm
-        .get('competenceDate')
-        ?.setErrors({ incorrect: true });
-    } else {
-      this.accountsPayableForm.get('competenceDate')?.setErrors(null);
-    }
-
-    if (errors?.['competenceDateBeforeDue']) {
-      errorMessages.push(
-        'A data de competência não pode ser anterior à data de vencimento.'
-      );
-      this.accountsPayableForm
-        .get('competenceDate')
-        ?.setErrors({ incorrect: true });
-    } else {
-      this.accountsPayableForm.get('competenceDate')?.setErrors(null);
     }
 
     return errorMessages;
