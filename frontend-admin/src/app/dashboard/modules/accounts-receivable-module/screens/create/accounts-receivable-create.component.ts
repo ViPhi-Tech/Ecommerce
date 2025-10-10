@@ -112,36 +112,21 @@ export class AccountsReceivableCreateComponent implements OnInit {
         const errors = this.dateValidation(this.accountsReceivableForm);
         this.accountsReceivableForm.setErrors(errors);
       });
+
+    // Escuta o Subject para pré-preencher o formulário
+    this.accountsReceivableState.formPrefill$
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe(data => {
+        if (data && Object.keys(data).length > 0) {
+          this.accountsReceivableForm.patchValue(data);
+        }
+      });
   }
 
   async loadInfos(id?: string): Promise<void> {
     if (!id) {
       this.isLoading.set(false);
       this.visible.set(true);
-      
-      // Verifica se há dados de conversão de pedidos
-      const debtsToConvert = sessionStorage.getItem('debtsToConvert');
-      if (debtsToConvert) {
-        const data = JSON.parse(debtsToConvert);
-        
-        // Preenche o formulário com os dados dos pedidos
-        this.accountsReceivableForm.patchValue({
-          amount: data.totalAmount,
-          description: data.description,
-          clientId: data.clientId || '',
-          dueDate: '', // Deixa vazio para o usuário preencher
-        });
-        
-        // Limpa o sessionStorage
-        sessionStorage.removeItem('debtsToConvert');
-        
-        this.toast.add({
-          severity: 'info',
-          summary: 'Pedidos Convertidos',
-          detail: `${data.orders.length} pedido(s) convertido(s) para conta a receber`,
-        });
-      }
-      
       return;
     }
     this.accountsReceivableService
@@ -183,6 +168,7 @@ export class AccountsReceivableCreateComponent implements OnInit {
       amount: ['', Validators.required],
       status: ['pending'],
       description: [''],
+      orders: [[]],
     });
   }
 
@@ -202,13 +188,8 @@ export class AccountsReceivableCreateComponent implements OnInit {
     }
 
     const payload: any = {
-      issueDate: formValue.issueDate,
-      dueDate: formValue.dueDate,
-      amount: formValue.amount,
-      recurringIncome: formValue.recurringIncome,
-      description: formValue.description,
-      clientId: formValue.clientId,
-      status: formValue.status,
+      ...formValue,
+      orders: formValue?.orders?.map((order: any) => order.id),
     };
 
     if (formValue.id) {

@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { catchError, finalize, lastValueFrom, tap } from 'rxjs';
+import { catchError, finalize, lastValueFrom, Subject, tap } from 'rxjs';
 import { AccountsPayableService } from './accounts-payable.service';
 import { BaseState } from 'app/shared/store/base.state';
 import { AccountsPayableModuleState } from 'app/shared/interfaces/accounts-payable/AccountsPayableModuleState';
@@ -19,6 +19,10 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
   });
 
   accountsPayableList = computed(() => this.state().accountsPayableList);
+
+  // Subject para pré-preencher o formulário de contas a pagar
+  private formPrefillSubject = new Subject<Partial<IAccountsPayable>>();
+  formPrefill$ = this.formPrefillSubject.asObservable();
 
   async getAccountsPayableList(skipLoader = true): Promise<void> {
     this.setLoading(true);
@@ -127,5 +131,20 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
     };
 
     return statusMap[item?.status || 'unknown'];
+  }
+
+  /**
+   * Emite dados para pré-preencher o formulário de contas a pagar
+   * @param data Dados parciais para preencher o formulário
+   */
+  prefillForm(data: Partial<IAccountsPayable>): void {
+    this.formPrefillSubject.next(data);
+  }
+
+  /**
+   * Limpa os dados de pré-preenchimento
+   */
+  clearFormPrefill(): void {
+    this.formPrefillSubject.next({});
   }
 }

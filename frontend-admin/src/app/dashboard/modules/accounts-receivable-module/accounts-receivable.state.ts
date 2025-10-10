@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { catchError, finalize, lastValueFrom, tap } from 'rxjs';
+import { catchError, finalize, lastValueFrom, Subject, tap } from 'rxjs';
 import { AccountsReceivableService } from './accounts-receivable.service';
 import { BaseState } from 'app/shared/store/base.state';
 import { AccountsReceivableModuleState } from 'app/shared/interfaces/accounts-receivable/AccountsReceivableModuleState';
@@ -19,6 +19,10 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
   });
 
   accountsReceivableList = computed(() => this.state().accountsReceivableList);
+
+  // Subject para pré-preencher o formulário de contas a receber
+  private formPrefillSubject = new Subject<Partial<IAccountsReceivable>>();
+  formPrefill$ = this.formPrefillSubject.asObservable();
 
   async getAccountsReceivableList(skipLoader = true): Promise<void> {
     this.setLoading(true);
@@ -114,5 +118,20 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
       default:
         return { statusLabel: 'Desconhecido', statusBadgeColor: 'secondary' };
     }
+  }
+
+  /**
+   * Emite dados para pré-preencher o formulário de contas a receber
+   * @param data Dados parciais para preencher o formulário
+   */
+  prefillForm(data: Partial<IAccountsReceivable>): void {
+    this.formPrefillSubject.next(data);
+  }
+
+  /**
+   * Limpa os dados de pré-preenchimento
+   */
+  clearFormPrefill(): void {
+    this.formPrefillSubject.next({});
   }
 }

@@ -28,6 +28,7 @@ import PeriodComponent, {
 import { CurrencyPipe } from '@angular/common';
 import { ClientState } from '../../../client-module/client.state';
 import { SelectModule } from 'primeng/select';
+import { AccountsReceivableState } from 'app/dashboard/modules/accounts-receivable-module/accounts-receivable.state';
 
 @Component({
   selector: 'fuse-debt-list',
@@ -56,6 +57,7 @@ export class DebtListComponent implements OnInit {
 
   state = inject(DebtState);
   clientState = inject(ClientState);
+  accountsReceivableState = inject(AccountsReceivableState);
 
   tableConfig = signal<TableConfig>({
     rowsPerPageOptions: [5, 10, 20],
@@ -310,65 +312,21 @@ export class DebtListComponent implements OnInit {
       return;
     }
 
-    // Verifica se todos os pedidos selecionados são do mesmo cliente
-    const firstClient = selected[0].client;
-    const allSameClient = selected.every(debt => debt.client?.id === firstClient?.id);
-
-    if (!allSameClient) {
-      this.toast.add({
-        severity: 'warn',
-        summary: 'Atenção',
-        detail: 'Todos os pedidos devem ser do mesmo cliente para converter',
-      });
-      return;
-    }
-
-    // Verifica se existem pedidos já pagos ou cancelados
-    const hasInvalidStatus = selected.some(debt => 
-      debt.status === 'PAID' || debt.status === 'CANCELLED'
-    );
-
-    if (hasInvalidStatus) {
-      this.toast.add({
-        severity: 'warn',
-        summary: 'Atenção',
-        detail: 'Não é possível converter pedidos pagos ou cancelados',
-      });
-      return;
-    }
+    const firstClient = selected[0]?.client?.id;
 
     // Calcula o total de contas a receber dos pagamentos do tipo 'account-receivable'
-    let accountReceivableTotal = 0;
-    selected.forEach(order => {
-      if (order.payments && order.payments.length > 0) {
-        order.payments.forEach(payment => {
-          if (payment.typeId === 'account-receivable' && payment.statusId === 'pending') {
-            accountReceivableTotal += payment.value;
-          }
-        });
-      }
-    });
-
-    // Se não houver pagamentos do tipo 'account-receivable', usa o total dos pedidos
-    if (accountReceivableTotal === 0) {
-      accountReceivableTotal = this.selectedSummary().totalAmount;
-    }
-
-    const description = selected.length > 1 
-      ? `Conversão de ${selected.length} pedidos - Cliente: ${firstClient?.fullName}` 
-      : `Pedido #${selected[0].id} - Cliente: ${firstClient?.fullName}`;
+    const accountReceivableTotal = this.selectedSummary().totalAmount;
 
     // Armazena temporariamente os dados para serem usados no modal
-    sessionStorage.setItem('debtsToConvert', JSON.stringify({
+    const formData = {
       orders: selected,
-      totalAmount: accountReceivableTotal,
-      clientId: firstClient?.id,
-      clientName: firstClient?.fullName,
-      description,
-    }));
+      amount: accountReceivableTotal,
+      clientId: firstClient,
+    };
 
-    this.router.navigate([
-      { outlets: { drawer: ['accounts-receivable', 'new'] } },
-    ]);
+    this.router.navigate([{ outlets: { drawer: ['accounts-receivable', 'new'] } }]);
+    setTimeout(() => {
+      this.accountsReceivableState.prefillForm(formData);
+    }, 100);
   }
 }

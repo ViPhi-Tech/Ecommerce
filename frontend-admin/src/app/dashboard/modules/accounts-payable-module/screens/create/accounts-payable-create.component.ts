@@ -111,6 +111,15 @@ export class AccountsPayableCreateComponent implements OnInit {
         const errors = this.dateValidation(this.accountsPayableForm);
         this.accountsPayableForm.setErrors(errors);
       });
+
+    // Escuta o Subject para pré-preencher o formulário
+    this.accountsPayableState.formPrefill$
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe(data => {
+        if (data && Object.keys(data).length > 0) {
+          this.accountsPayableForm.patchValue(data);
+        }
+      });
   }
 
   async loadInfos(id?: number): Promise<void> {
