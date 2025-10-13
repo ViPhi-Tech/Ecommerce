@@ -7,6 +7,7 @@ import {
   TemplateRef,
   ViewChild,
   computed,
+  effect,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
@@ -102,7 +103,24 @@ export class OrderListComponent implements OnInit {
     return { count, totalAmount, pendingCount, paidCount, cancelledCount };
   });
 
-  constructor() {}
+  constructor() {
+    // Liga/desliga seleção múltipla baseado no cliente selecionado
+    effect(() => {
+      const hasClientSelected = !!this.selectedClient();
+      const currentConfig = this.tableConfig();
+      const hasSelection = !!currentConfig?.selection?.mode;
+
+      if (hasClientSelected && !hasSelection) {
+        this.tableConfig.set({ ...currentConfig, selection: { mode: 'multiple' } });
+      }
+
+      if (!hasClientSelected && hasSelection) {
+        const next: any = { ...currentConfig };
+        delete next.selection;
+        this.tableConfig.set(next as TableConfig);
+      }
+    });
+  }
 
   ngOnInit() {
     this.coreService.setPageTitle(
@@ -113,6 +131,8 @@ export class OrderListComponent implements OnInit {
     this.state.getOrderList();
     this.clientState.getClientList();
   }
+
+  
 
   addNewOrder() {
     this.router.navigate(['dashboard', 'orders', 'new']);
@@ -232,7 +252,6 @@ export class OrderListComponent implements OnInit {
       rowsPerPage: 10,
       paginator: true,
       pageLinkSize: 5,
-      selection: { mode: 'multiple' },
       columns: [
         {
           field: 'id',
