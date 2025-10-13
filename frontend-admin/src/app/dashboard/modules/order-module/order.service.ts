@@ -39,4 +39,8 @@ export class OrderService {
   getOrderById(orderId: string | number): Observable<ApiResponse<Order>> {
     return this.http.get<ApiResponse<Order>>(`${this.apiUrl}order/${orderId}`);
   }
+
+  deleteOrder(orderId: string | number): Observable<ApiResponse<any>> {
+    return this.http.delete<ApiResponse<any>>(`${this.apiUrl}order/${orderId}`);
+  }
 }

@@ -112,6 +112,27 @@
   }
 </div>
 
+<ng-template #payment let-row>
+  <div class="flex items-center justify-center gap-2">
+    @if (row.payments.length > 1) {
+      <p-button [outlined]="true" (onFocus)="popover?.toggle($event)">
+        <ng-icon name="lucideInfo" />
+      </p-button>
+      <p-popover #popover>
+        @for (payment of row.payments; track payment.id) {
+          @if (payment.name) {
+            <p-tag [value]="payment.name"  severity="info"></p-tag>
+          }
+        }
+      </p-popover>
+    } @else if (row.payments.length === 1) {
+      <p-tag [value]="row.payments[0].name" severity="info"></p-tag>
+    } @else {
+      <span>--</span>
+    }
+  </div>
+</ng-template>
+
 <ng-template #orderItem let-item>
   <div
     class="rounded-lg border-gray-200 dark:border-dark bg-card text-card-foreground shadow-sm hover:shadow-lg transition-shadow duration-200"

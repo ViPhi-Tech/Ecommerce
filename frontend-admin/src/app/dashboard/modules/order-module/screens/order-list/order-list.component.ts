@@ -1,5 +1,6 @@
 import {
   Component,
+  DestroyRef,
   inject,
   OnInit,
   signal,
@@ -19,6 +20,11 @@ import { CommonModule } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { heightAnimation } from 'app/shared/utils/animations';
+import { TagModule } from 'primeng/tag';
+import { PopoverModule } from 'primeng/popover';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { OrderService } from '../../order.service';
 
 @Component({
   selector: 'fuse-order-list',
@@ -30,16 +36,23 @@ import { heightAnimation } from 'app/shared/utils/animations';
     TableFilterComponent,
     CommonModule,
     NgIcon,
-    ButtonModule,
+    ButtonModule, 
+    PopoverModule,
+    TagModule,
   ],
   providers: [OrderState],
 })
 export class OrderListComponent implements OnInit {
   private router = inject(Router);
   private coreService = inject(CoreService);
+  private toast = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
+  private destroyedRef = inject(DestroyRef);
+  private orderService = inject(OrderService);
   state = inject(OrderState);
 
   @ViewChild('name', { static: true }) name!: TemplateRef<any>;
+  @ViewChild('payment', { static: true }) payment!: TemplateRef<any>;
 
   tableConfig = signal<TableConfig>(DEFAULT_TABLE_CONFIG);
 
@@ -74,6 +87,40 @@ export class OrderListComponent implements OnInit {
     this.router.navigate(['dashboard', 'orders', orderData.id]);
   }
 
+  deleteOrder(orderId: string | number) {
+    this.confirmationService.confirm({
+      message: 'Você tem certeza que deseja excluir este pedido?',
+      header: 'Confirmação de Exclusão',
+      icon: 'pi pi-exclamation-triangle text-red-500',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      acceptButtonStyleClass: 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-secondary',
+      accept: () => {
+        this.orderService
+          .deleteOrder(orderId)
+          .pipe(takeUntilDestroyed(this.destroyedRef))
+          .subscribe({
+            next: () => {
+              this.toast.add({
+                severity: 'success',
+                summary: 'Sucesso',
+                detail: 'Pedido excluído com sucesso',
+              });
+              this.state.getOrderList();
+            },
+            error: () => {
+              this.toast.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: 'Erro ao excluir pedido',
+              });
+            },
+          });
+      },
+    });
+  }
+
   setTableConfig() {
     this.tableConfig.set({
       rowsPerPageOptions: [5, 10, 20],
@@ -93,6 +140,13 @@ export class OrderListComponent implements OnInit {
           caption: 'Cliente',
           sortable: true,
           filter: true,
+        },
+        {
+          field: 'payments',
+          width: '150px',
+          align: 'center',
+          caption: 'Formas de Pagamento',
+          template: this.payment,
         },
         {
           field: 'total',
@@ -126,8 +180,8 @@ export class OrderListComponent implements OnInit {
               color: 'warn',
               variant: 'text',
               tooltip: 'Excluir Pedido',
-              action: (data, index) => {
-                console.log('Excluir pedido:', data, index);
+              action: (data) => {
+                this.deleteOrder(data?.id);
               },
             },
           ],

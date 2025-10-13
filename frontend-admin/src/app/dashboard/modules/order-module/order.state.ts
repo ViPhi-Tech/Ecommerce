@@ -5,6 +5,7 @@ import { lastValueFrom } from 'rxjs';
 import { OrderService } from './order.service';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { BaseState } from 'app/shared/store/base.state';
+import { PAYMENTS_SITEMAP } from 'app/shared/constants/payments.sitemap';
 
 @Injectable({
   providedIn: 'root',
@@ -73,6 +74,11 @@ export class OrderState extends BaseState<OrderModuleState> {
       return {
         ...order,
         customerName: order.client?.fullName,
+        payments: order.payments?.map(payment => ({
+          ...payment,
+          typeId: payment.typeId.toString(),
+          name: PAYMENTS_SITEMAP[payment.typeId.toUpperCase() as keyof typeof PAYMENTS_SITEMAP]?.name,
+        })),
       };
     });
 
