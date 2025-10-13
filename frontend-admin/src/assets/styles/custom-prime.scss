@@ -13,7 +13,7 @@
   .p-datatable-tbody > tr,
   .p-datatable-tbody > tr > td,
   .p-paginator.p-component {
-    background-color: transparent;
+    @apply bg-white dark:bg-card-background;
   }
 }
 
@@ -177,3 +177,8 @@ input {
 .p-popover:after {
   margin-left: -3px !important;
 }
+
+.p-datatable-frozen-column{
+  position: sticky !important;
+}
+

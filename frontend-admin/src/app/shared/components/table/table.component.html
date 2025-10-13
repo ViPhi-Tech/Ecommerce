@@ -95,6 +95,9 @@
           [ngStyle]="{
             width: column?.width,
           }"
+          alignFrozen="right" 
+          pFrozenColumn 
+          [frozen]="column?.frozen || column.field === 'actions'"
         >
           <div
             class="flex items-center"
@@ -165,6 +168,9 @@
           [class.text-center]="
             column?.align === 'center' || column.caption === 'Ações'
           "
+          alignFrozen="right" 
+          pFrozenColumn 
+          [frozen]="column?.frozen || column.field === 'actions'"
         >
           @if (column.field === 'actions' && column?.actionButtons?.length) {
             <fuse-table-actions

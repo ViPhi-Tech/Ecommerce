@@ -36,6 +36,7 @@ export interface TableColumn {
   align?: 'left' | 'center' | 'right'; // Alignment of the column
   style?: string;
   badgeSeverityKey?: string; // Key for badge severity, used for status badges
+  frozen?: boolean; // Whether the column should be frozen on the right/left
 }
 
 export interface HeaderButton {
