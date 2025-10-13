@@ -62,4 +62,13 @@ export default async function saleRoutes(
         handler: orderController.getOrdersByClient.bind(orderController)
      })
 
+     fastify.delete('/:id', {
+        schema: {
+            tags: ['order'],
+            params: orderIdJsonSchema
+        },
+        preValidation: [authenticate],
+        handler: orderController.delete.bind(orderController)
+     });
+
 }

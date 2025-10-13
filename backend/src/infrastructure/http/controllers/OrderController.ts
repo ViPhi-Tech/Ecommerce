@@ -10,6 +10,7 @@ import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 
 import { UpdateOrderUseCase } from '../../../application/use-cases/order/UpdateOrderUseCase';
 import { CreateOrderDTO, OrderIdDTO, CreatePreOrderDTO, createOrderSchema, orderIdSchema, createPreOrderSchema } from "../../../application/dto/order/OrderDTOs";
+import { DeleteOrderUseCase } from '../../../application/use-cases/order/DeleteOrderUseCase';
 
 export class OrderController {
     constructor(
@@ -18,7 +19,8 @@ export class OrderController {
         private findallOrderUseCase: FindAllOrderUseCase,
         private createPreOrderUseCase: CreatePreOrderUseCase,
         private updateOrderUseCase: UpdateOrderUseCase,
-        private getOrderByClientUseCase: GetOrderByClientUseCase
+        private getOrderByClientUseCase: GetOrderByClientUseCase,
+        private deleteOrderUseCase: DeleteOrderUseCase
     ) {}
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
     try {
@@ -133,4 +135,17 @@ export class OrderController {
             });
         }
     };
+
+    async delete(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try {
+            const { id } = request.params as OrderIdDTO;
+            await this.deleteOrderUseCase.execute(id);
+            return reply.status(HTTP_STATUS.API_STATUS_NO_CONTENT).send();
+        } catch (error) {
+            return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
+                status: HTTP_MESSAGES.API_STATUS_BAD_REQUEST,
+                description: error instanceof Error ? error.message : 'An unknown error occurred',
+            });
+        }
+    }
 }

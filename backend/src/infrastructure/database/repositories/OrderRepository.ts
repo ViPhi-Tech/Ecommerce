@@ -13,6 +13,9 @@ export class OrderRepository implements IOrderRepository {
           client: true,
           payments: true,
         },
+        where: {
+          isActive: true
+        },
         orderBy: {
           createdAt: 'desc'
         }
@@ -85,12 +88,13 @@ export class OrderRepository implements IOrderRepository {
 
   async delete(id: number): Promise<void> {
     const sale = await this.findById(id);
-    if (sale) {
-      await this.prisma.order.delete(
-        {
-            where: { id },
-        }
-      );
+    if (sale && sale.isActive) {
+      await this.prisma.order.update({
+        where: { id },
+        data: { isActive: false }
+      });
+    }else {
+      throw new Error('Order not found.');
     }
   };
 

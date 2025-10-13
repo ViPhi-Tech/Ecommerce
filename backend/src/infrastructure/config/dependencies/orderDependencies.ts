@@ -6,6 +6,7 @@ import { FindByIdOrderUseCase } from "../../../application/use-cases/order/FindB
 import { FindAllOrderUseCase } from "../../../application/use-cases/order/FindAllOrderUseCase";
 import { UpdateOrderUseCase } from "../../../application/use-cases/order/UpdateOrderUseCase";
 import { GetOrderByClientUseCase } from "../../../application/use-cases/order/GetOrderByClientUseCase";
+import { DeleteOrderUseCase } from "../../../application/use-cases/order/DeleteOrderUseCase";
 
 import { OrderController } from "../../http/controllers/OrderController";
 import { ProductRepository } from "../../database/repositories/ProductRepository";
@@ -33,6 +34,7 @@ export const findByIdOrderUseCase = new FindByIdOrderUseCase(orderRepository);
 export const findAllOrderUseCase = new FindAllOrderUseCase(orderRepository);
 export const updateOrderUseCase = new UpdateOrderUseCase(transactionRunner, orderRepositoryFactory, productRepositoryFactory, paymentRepositoryFactory);
 export const getOrderByClientUseCase = new GetOrderByClientUseCase(orderRepository);
+export const deleteOrderUseCase = new DeleteOrderUseCase(orderRepository);
 
 // Controller com todos use cases
 export const orderController = new OrderController(
@@ -41,5 +43,6 @@ export const orderController = new OrderController(
      findAllOrderUseCase,
      createPreOrderUseCase,
      updateOrderUseCase,
-     getOrderByClientUseCase
+     getOrderByClientUseCase,
+     deleteOrderUseCase
 );

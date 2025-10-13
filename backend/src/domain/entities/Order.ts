@@ -5,7 +5,7 @@ export interface Order {
     total: number;
     createdAt?: Date;
     updatedAt?: Date;
-    
+    isActive?: boolean;
     clientId?: number | null;
 }
 
