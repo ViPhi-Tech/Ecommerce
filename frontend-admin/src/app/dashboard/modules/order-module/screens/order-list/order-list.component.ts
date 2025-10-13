@@ -6,6 +6,7 @@ import {
   signal,
   TemplateRef,
   ViewChild,
+  computed,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
@@ -14,7 +15,6 @@ import {
   DEFAULT_TABLE_CONFIG,
   TableConfig,
 } from 'app/shared/interfaces/table.interfaces';
-import { TableFilterComponent } from 'app/shared/components/table/components/table-filter/table-filter.component';
 import { OrderState } from '../../order.state';
 import { CommonModule } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
@@ -25,6 +25,13 @@ import { PopoverModule } from 'primeng/popover';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { OrderService } from '../../order.service';
+import { FormsModule } from '@angular/forms';
+import { Tooltip } from 'primeng/tooltip';
+import { SelectModule } from 'primeng/select';
+import PeriodComponent, { PeriodRange } from 'app/shared/components/period/period.component';
+import { CurrencyPipe } from '@angular/common';
+import { ClientState } from '../../../client-module/client.state';
+import { AccountsReceivableState } from 'app/dashboard/modules/accounts-receivable-module/accounts-receivable.state';
 
 @Component({
   selector: 'fuse-order-list',
@@ -33,12 +40,16 @@ import { OrderService } from '../../order.service';
   animations: [heightAnimation],
   imports: [
     TableComponent,
-    TableFilterComponent,
     CommonModule,
     NgIcon,
-    ButtonModule, 
+    ButtonModule,
     PopoverModule,
     TagModule,
+    FormsModule,
+    Tooltip,
+    SelectModule,
+    PeriodComponent,
+    CurrencyPipe,
   ],
   providers: [OrderState],
 })
@@ -50,6 +61,8 @@ export class OrderListComponent implements OnInit {
   private destroyedRef = inject(DestroyRef);
   private orderService = inject(OrderService);
   state = inject(OrderState);
+  clientState = inject(ClientState);
+  accountsReceivableState = inject(AccountsReceivableState);
 
   @ViewChild('name', { static: true }) name!: TemplateRef<any>;
   @ViewChild('payment', { static: true }) payment!: TemplateRef<any>;
@@ -57,6 +70,37 @@ export class OrderListComponent implements OnInit {
   tableConfig = signal<TableConfig>(DEFAULT_TABLE_CONFIG);
 
   title = '';
+
+  selectedClient = signal<string | null>(null);
+  selectedData = signal<any[]>([]);
+
+  clientOptions = computed(() => {
+    const clients = this.clientState.clientList();
+    return [
+      { label: 'Todos os clientes', value: null },
+      ...clients.map(client => ({
+        label: client.fullName || client.document || 'Cliente sem nome',
+        value: client.fullName || client.document || '',
+      })),
+    ];
+  });
+
+  filteredOrderList = computed(() => {
+    const orders = this.state.orderList();
+    const selectedClient = this.selectedClient();
+    if (!selectedClient) return orders;
+    return orders.filter(order => order.client?.fullName === selectedClient);
+  });
+
+  selectedSummary = computed(() => {
+    const selected = this.selectedData();
+    const count = selected.length;
+    const totalAmount = selected.reduce((sum: number, order: any) => sum + (order.total || 0), 0);
+    const pendingCount = selected.filter((o: any) => o.status === 'PENDING').length;
+    const paidCount = selected.filter((o: any) => o.status === 'PAID').length;
+    const cancelledCount = selected.filter((o: any) => o.status === 'CANCELLED').length;
+    return { count, totalAmount, pendingCount, paidCount, cancelledCount };
+  });
 
   constructor() {}
 
@@ -67,6 +111,7 @@ export class OrderListComponent implements OnInit {
     );
     this.setTableConfig();
     this.state.getOrderList();
+    this.clientState.getClientList();
   }
 
   addNewOrder() {
@@ -85,6 +130,10 @@ export class OrderListComponent implements OnInit {
 
   editOrder(orderData: any) {
     this.router.navigate(['dashboard', 'orders', orderData.id]);
+  }
+
+  onClientChange(clientName: string | null) {
+    this.selectedClient.set(clientName);
   }
 
   deleteOrder(orderId: string | number) {
@@ -121,12 +170,69 @@ export class OrderListComponent implements OnInit {
     });
   }
 
+  onPeriodChange(range: PeriodRange) {
+    // TODO: Filtrar pedidos por período se necessário
+    console.log('Período selecionado:', range);
+  }
+
+  convertToAccountsReceivable(orderId?: number | string) {
+    const order = this.state.orderList().find(o => o.id === orderId);
+    const selected = order ? [order] : this.selectedData();
+
+    if (selected.length === 0) {
+      this.toast.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'Selecione pelo menos um pedido para converter',
+      });
+      return;
+    }
+
+    const hasNoClient = selected.some(o => !o?.client);
+    if (hasNoClient) {
+      this.toast.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'Todos os pedidos devem ter um cliente associado para converter',
+      });
+      return;
+    }
+
+    const firstClient = selected[0]?.client?.id;
+    const allSameClient = selected.every(o => o?.client?.id === firstClient);
+    if (!allSameClient) {
+      this.toast.add({
+        severity: 'warn',
+        summary: 'Atenção',
+        detail: 'Todos os pedidos devem ser do mesmo cliente para converter',
+      });
+      return;
+    }
+
+    const accountReceivableTotal = selected.reduce(
+      (sum: number, o: any) => sum + (o?.total || 0),
+      0
+    );
+
+    const formData = {
+      orders: selected,
+      amount: accountReceivableTotal,
+      clientId: firstClient,
+    } as any;
+
+    this.router.navigate([{ outlets: { drawer: ['accounts-receivable', 'new'] } }]);
+    setTimeout(() => {
+      this.accountsReceivableState.prefillForm(formData);
+    }, 100);
+  }
+
   setTableConfig() {
     this.tableConfig.set({
       rowsPerPageOptions: [5, 10, 20],
       rowsPerPage: 10,
       paginator: true,
       pageLinkSize: 5,
+      selection: { mode: 'multiple' },
       columns: [
         {
           field: 'id',
@@ -166,6 +272,15 @@ export class OrderListComponent implements OnInit {
           field: 'actions',
           caption: 'Ações',
           actionButtons: [
+            {
+              icon: 'lucideArrowRight',
+              color: 'success',
+              variant: 'text',
+              tooltip: 'Converter em Conta a Receber',
+              action: (data: any) => {
+                this.convertToAccountsReceivable(data?.id);
+              },
+            },
             {
               icon: 'lucideEye',
               color: 'info',

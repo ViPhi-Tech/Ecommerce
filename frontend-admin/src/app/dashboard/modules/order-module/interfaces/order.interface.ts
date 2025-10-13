@@ -3,7 +3,6 @@ import { BaseModuleState } from 'app/shared/store/base.state';
 export interface OrderModuleState extends BaseModuleState {
   orderList: Order[];
   orderDetails: Order; // Detalhes do pedido atual, pode ser null se não houver detalhes carregados
-  view: 'list' | 'grid'; // Tipo de visualização atual (tabela ou lista)
 }
 
 export interface Order {

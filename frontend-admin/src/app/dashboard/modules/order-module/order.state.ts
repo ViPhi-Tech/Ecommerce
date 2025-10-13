@@ -19,15 +19,12 @@ export class OrderState extends BaseState<OrderModuleState> {
   protected state = signal<OrderModuleState>({
     orderList: [],
     orderDetails: {} as Order, // Inicializa com um objeto vazio ou pode ser null se não houver detalhes carregados
-    view:
-      (localStorage.getItem('orderView') as OrderModuleState['view']) || 'list',
     loading: false,
     error: null,
   });
 
   orderList = computed(() => this.state().orderList);
   orderDetails = computed(() => this.state().orderDetails);
-  currentView = computed(() => this.state().view);
 
   createPreOrder(clientId: string | number): Promise<Order> {
     this.setLoading(true);
@@ -103,10 +100,5 @@ export class OrderState extends BaseState<OrderModuleState> {
 
   resetOrder() {
     this.updateState('orderDetails', {} as Order);
-  }
-
-  setView(view: 'list' | 'grid') {
-    this.updateState('view', view);
-    localStorage.setItem('orderView', view);
   }
 }
