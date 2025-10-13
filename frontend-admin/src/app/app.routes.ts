@@ -10,7 +10,6 @@ import { dialogOrderRoutes } from './dashboard/modules/order-module/order.routin
 import { dialogUserRoutes } from './dashboard/modules/user-module/user.routing';
 import { dialogProductRoutes } from './dashboard/modules/product-module/product.routing';
 import { dialogServiceOrderRoutes } from './dashboard/modules/service-order-module/service-order.routing';
-import { dialogDebtRoutes } from './dashboard/modules/debt-module/debt.routing';
 
 // Combined dialog routes
 export const dialogRoutes: Routes = [
@@ -24,7 +23,6 @@ export const dialogRoutes: Routes = [
   ...dialogUserRoutes,
   ...dialogProductRoutes,
   ...dialogServiceOrderRoutes,
-  ...dialogDebtRoutes,
 ];
 
 export const routes: Routes = [
