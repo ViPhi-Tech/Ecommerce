@@ -1,0 +1,132 @@
+<div class="scheduling-calendar-container">
+  <div class="header-section">
+    <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+      <div>
+        <h2 class="text-2xl font-bold text-gray-800">Calendário de Agendamentos</h2>
+        <p class="text-gray-600 mt-1">Visualize seus agendamentos por dia, semana ou mês</p>
+      </div>
+      
+      <div class="flex gap-2">
+        <p-selectButton 
+          [options]="viewOptions()" 
+          [(ngModel)]="selectedView"
+          (onChange)="onViewChange($event.value)"
+          optionLabel="label" 
+          optionValue="value"
+        >
+          <ng-template let-item>
+            <i [class]="item.icon" class="mr-2"></i>
+            <span>{{ item.label }}</span>
+          </ng-template>
+        </p-selectButton>
+      </div>
+    </div>
+  </div>
+
+  <div class="calendar-wrapper">
+    <p-card>
+      <ng-template pTemplate="header">
+        <div class="calendar-controls">
+          <div class="flex items-center gap-3">
+            <p-button 
+              icon="pi pi-chevron-left" 
+              [text]="true"
+              (onClick)="previousPeriod()"
+              severity="secondary"
+            />
+            <h3 class="calendar-title">{{ currentTitle() }}</h3>
+            <p-button 
+              icon="pi pi-chevron-right" 
+              [text]="true"
+              (onClick)="nextPeriod()"
+              severity="secondary"
+            />
+          </div>
+          <p-button 
+            label="Hoje" 
+            [outlined]="true"
+            (onClick)="goToToday()"
+            severity="secondary"
+          />
+        </div>
+      </ng-template>
+      
+      <!-- Visualização de Mês -->
+      @if (selectedView() === 'month') {
+        <div class="month-view">
+          <div class="month-grid">
+            <!-- Cabeçalho dos dias da semana -->
+            <div class="weekdays-header">
+              @for (dayName of weekDaysNames; track dayName) {
+                <div class="weekday-name">{{ dayName }}</div>
+              }
+            </div>
+            
+            <!-- Grade de dias -->
+            <div class="days-grid">
+              @for (day of monthDays(); track day.date.getTime()) {
+                <div 
+                  class="day-cell"
+                  [class.other-month]="!day.isCurrentMonth"
+                  [class.today]="day.isToday"
+                >
+                  <div class="day-number">{{ day.day }}</div>
+                  <div class="day-events">
+                    <!-- Espaço para eventos futuros -->
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- Visualização de Semana -->
+      @if (selectedView() === 'week') {
+        <div class="week-view">
+          <div class="week-header">
+            <div class="time-column"></div>
+            @for (day of weekDays(); track day.day) {
+              <div class="day-column">
+                <div class="day-header" [class.today]="day.isToday">
+                  <div class="day-name">{{ day.dayName }}</div>
+                  <div class="day-number">{{ day.day }}</div>
+                </div>
+              </div>
+            }
+          </div>
+          
+          <div class="week-grid">
+            @for (slot of timeSlots(); track slot.label) {
+              <div class="time-row">
+                <div class="time-label">{{ slot.label }}</div>
+                @for (day of weekDays(); track day.day) {
+                  <div class="day-cell">
+                    <!-- Espaço para eventos futuros -->
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+      
+      <!-- Visualização de Dia -->
+      @if (selectedView() === 'day') {
+        <div class="day-view">
+          <div class="day-grid">
+            @for (slot of timeSlots(); track slot.label) {
+              <div class="time-row">
+                <div class="time-label">{{ slot.label }}</div>
+                <div class="day-cell">
+                  <!-- Espaço para eventos futuros -->
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </p-card>
+  </div>
+</div>
+

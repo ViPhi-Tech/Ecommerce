@@ -47,6 +47,13 @@ export class MenuComponent implements OnInit {
           icon: 'lucidePlus',
           route: '/dashboard/orders/new',
         },
+        {
+          id: ROLES_SITEMAP.Dashboard,
+          label: 'Agendamentos',
+          icon: 'lucideCalendar',
+          route: '/dashboard/scheduling',
+          visible: true,
+        },
       ],
     },
     {
