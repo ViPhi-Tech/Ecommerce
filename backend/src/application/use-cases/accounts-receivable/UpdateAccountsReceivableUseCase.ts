@@ -17,10 +17,10 @@ export class UpdateAccountsReceivableUseCase {
 
   private validateDates(data: UpdateAccountsReceivableInput): void {
     const dateFields = [
-      { field: 'originalDueDate', value: data.originalDueDate },
+      // { field: 'originalDueDate', value: data.originalDueDate },
       { field: 'issueDate', value: data.issueDate },
       { field: 'dueDate', value: data.dueDate },
-      { field: 'competenceDate', value: data.competenceDate }
+      // { field: 'competenceDate', value: data.competenceDate }
     ];
     for (const dateField of dateFields) {
       if (dateField.value !== undefined) {

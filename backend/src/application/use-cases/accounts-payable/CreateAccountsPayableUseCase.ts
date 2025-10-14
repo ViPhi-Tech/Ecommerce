@@ -15,14 +15,18 @@ export class CreateAccountsPayableUseCase {
 
   private validateDates(data: CreateAccountsPayableInput): void {
     const dates = [
-      { field: 'originalDueDate', value: data.originalDueDate },
+      // { field: 'originalDueDate', value: data.originalDueDate },
       { field: 'issueDate', value: data.issueDate },
       { field: 'dueDate', value: data.dueDate },
-      { field: 'competenceDate', value: data.competenceDate }
+      // { field: 'competenceDate', value: data.competenceDate }
     ];
 
     for (const dateField of dates) {
-      const date = parseDate(dateField.value);
+      if (dateField.value === undefined || dateField.value === null) {
+        throw new Error(`Campo de data ausente para ${dateField.field}`);
+      }
+
+      const date = parseDate(String(dateField.value));
       if (isNaN(date.getTime())) {
         throw new Error(`Data inválida para o campo ${dateField.field}: ${dateField.value}`);
       }

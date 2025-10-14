@@ -13,10 +13,10 @@ export class CreateAccountsReceivableUseCase {
 
   private validateDates(data: CreateAccountsReceivableInput): void {
     const dates = [
-      { field: 'originalDueDate', value: data.originalDueDate },
+      // { field: 'originalDueDate', value: data.originalDueDate },
       { field: 'issueDate', value: data.issueDate },
       { field: 'dueDate', value: data.dueDate },
-      { field: 'competenceDate', value: data.competenceDate }
+      // { field: 'competenceDate', value: data.competenceDate }
     ];
     for (const dateField of dates) {
       const date = parseDate(dateField.value);
