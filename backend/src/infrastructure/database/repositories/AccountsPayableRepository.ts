@@ -11,13 +11,13 @@ export class AccountsPayableRepository implements IAccountsPayableRepository {
     return await this.prisma.accountsPayable.create({
       data: {
         supplierId: data.supplierId!,
-        originalDueDate: parseDate(data.originalDueDate),
+        // originalDueDate: parseDate(data.originalDueDate),
         issueDate: parseDate(data.issueDate),
         dueDate: parseDate(data.dueDate),
-        competenceDate: parseDate(data.competenceDate),
+        // competenceDate: parseDate(data.competenceDate),
         amount: data.amount,
         recurringPurchase: data.recurringPurchase ?? false,
-        description: data.description,
+        description: data.description ?? '',
         status: data.status ?? 'pending',
       },
     });
@@ -91,10 +91,10 @@ export class AccountsPayableRepository implements IAccountsPayableRepository {
     const updateData: any = {};
 
     if (data.supplierId !== undefined) updateData.supplierId = data.supplierId;
-    if (data.originalDueDate !== undefined) updateData.originalDueDate = parseDate(data.originalDueDate);
+    // if (data.originalDueDate !== undefined) updateData.originalDueDate = parseDate(data.originalDueDate);
     if (data.issueDate !== undefined) updateData.issueDate = parseDate(data.issueDate);
     if (data.dueDate !== undefined) updateData.dueDate = parseDate(data.dueDate);
-    if (data.competenceDate !== undefined) updateData.competenceDate = parseDate(data.competenceDate);
+    // if (data.competenceDate !== undefined) updateData.competenceDate = parseDate(data.competenceDate);
     if (data.amount !== undefined) updateData.amount = data.amount;
     if (data.recurringPurchase !== undefined) updateData.recurringPurchase = data.recurringPurchase;
     if (data.description !== undefined) updateData.description = data.description;

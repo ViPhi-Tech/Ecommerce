@@ -6,23 +6,23 @@ export interface CreateAccountsPayableInput {
   originalDueDate: string;
   issueDate: string;
   dueDate: string;
-  competenceDate: string;
+  // competenceDate: string;
   amount: number;
   recurringPurchase?: boolean;
-  description: string;
+  description?: string | null;
   supplierId: number;
   status?: 'pending' | 'paid' | 'overdue' | 'cancelled';
 }
 
 export interface UpdateAccountsPayableInput {
   supplierId?: number;
-  originalDueDate?: string;
+  // originalDueDate?: string;
   issueDate?: string;
   dueDate?: string;
-  competenceDate?: string;
+  // competenceDate?: string;
   amount?: number;
   recurringPurchase?: boolean;
-  description?: string;
+  description?: string | null;
   status?: 'pending' | 'paid' | 'overdue' | 'cancelled';
 }
 
@@ -41,13 +41,13 @@ export interface UpdateAccountsPayableStatusInput {
 // ===== VALIDATION SCHEMAS (Para HTTP) =====
 // Todas as datas devem ser enviadas no formato 'YYYY-MM-DD' (ex: 2023-12-31)
 export const createAccountsPayableSchema = z.object({
-  originalDueDate: z.string().min(1, { message: 'Data de vencimento original é obrigatória' }),
+  // originalDueDate: z.string().min(1, { message: 'Data de vencimento original é obrigatória' }),
   issueDate: z.string().min(1, { message: 'Data de emissão é obrigatória' }),
   dueDate: z.string().min(1, { message: 'Data de vencimento é obrigatória' }),
-  competenceDate: z.string().min(1, { message: 'Data de competência é obrigatória' }),
+  // competenceDate: z.string().min(1, { message: 'Data de competência é obrigatória' }),
   amount: z.number().positive({ message: 'Valor deve ser positivo' }),
   recurringPurchase: z.boolean().optional(),
-  description: z.string().min(1, { message: 'Descrição é obrigatória' }),
+  description: z.string().optional(),
   supplierId: z.number().int().positive({ message: 'ID do fornecedor deve ser um número inteiro positivo' }),
   status: z.enum(['pending', 'paid', 'overdue', 'cancelled'], { 
     message: 'Status deve ser: pending, paid, overdue ou cancelled' 
@@ -56,10 +56,10 @@ export const createAccountsPayableSchema = z.object({
 
 export const updateAccountsPayableSchema = z.object({
   supplierId: z.number().int().positive({ message: 'ID do fornecedor deve ser um número inteiro positivo' }).optional(),
-  originalDueDate: z.string().min(1, { message: 'Data de vencimento original inválida' }).optional(),
+  // originalDueDate: z.string().min(1, { message: 'Data de vencimento original inválida' }).optional(),
   issueDate: z.string().min(1, { message: 'Data de emissão inválida' }).optional(),
   dueDate: z.string().min(1, { message: 'Data de vencimento inválida' }).optional(),
-  competenceDate: z.string().min(1, { message: 'Data de competência inválida' }).optional(),
+  // competenceDate: z.string().min(1, { message: 'Data de competência inválida' }).optional(),
   amount: z.number().positive({ message: 'Valor deve ser positivo' }).optional(),
   recurringPurchase: z.boolean().optional(),
   description: z.string().min(1, { message: 'Descrição é obrigatória' }).optional(),
@@ -107,10 +107,10 @@ export type UpdateAccountsPayableStatusDTO = z.infer<typeof updateAccountsPayabl
 // ===== RESPONSE DTOs =====
 export interface AccountsPayableResponse {
   id: number;
-  originalDueDate: Date;
+  // originalDueDate: Date;
   issueDate: Date;
   dueDate: Date;
-  competenceDate: Date;
+  // competenceDate: Date;
   amount: number;
   recurringPurchase: boolean;
   description: string;

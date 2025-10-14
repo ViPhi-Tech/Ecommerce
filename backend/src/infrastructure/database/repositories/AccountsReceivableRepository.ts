@@ -11,10 +11,10 @@ export class AccountsReceivableRepository implements IAccountsReceivableReposito
     return await this.prisma.accountsReceivable.create({
       data: {
         clientId: data.clientId!,
-        originalDueDate: parseDate(data.originalDueDate),
+        // originalDueDate: parseDate(data.originalDueDate),
         issueDate: parseDate(data.issueDate),
         dueDate: parseDate(data.dueDate),
-        competenceDate: parseDate(data.competenceDate),
+        // competenceDate: parseDate(data.competenceDate),
         amount: data.amount,
         recurringIncome: data.recurringIncome ?? false,
         description: data.description,
@@ -91,10 +91,10 @@ export class AccountsReceivableRepository implements IAccountsReceivableReposito
     const updateData: any = {};
 
     if (data.clientId !== undefined) updateData.clientId = data.clientId;
-    if (data.originalDueDate !== undefined) updateData.originalDueDate = parseDate(data.originalDueDate);
+    // if (data.originalDueDate !== undefined) updateData.originalDueDate = parseDate(data.originalDueDate);
     if (data.issueDate !== undefined) updateData.issueDate = parseDate(data.issueDate);
     if (data.dueDate !== undefined) updateData.dueDate = parseDate(data.dueDate);
-    if (data.competenceDate !== undefined) updateData.competenceDate = parseDate(data.competenceDate);
+    // if (data.competenceDate !== undefined) updateData.competenceDate = parseDate(data.competenceDate);
     if (data.amount !== undefined) updateData.amount = data.amount;
     if (data.recurringIncome !== undefined) updateData.recurringIncome = data.recurringIncome;
     if (data.description !== undefined) updateData.description = data.description;

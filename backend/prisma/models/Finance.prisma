@@ -2,7 +2,7 @@ model AccountsPayable {
   id                Int       @id @default(autoincrement())
   uuid              String    @unique @default(uuid())
   supplierId        Int
-  originalDueDate   DateTime
+  originalDueDate   DateTime?
   issueDate         DateTime
   dueDate           DateTime
   competenceDate    DateTime?
