@@ -12,23 +12,8 @@
   <!-- Filtros -->
   <div class="flex gap-4 mb-8 flex-wrap justify-end">
     <!-- Filtro de Cliente -->
-    <div class="flex-1 max-w-[280px]">
-      <p-select
-        class="w-full"
-        [options]="clientOptions()"
-        [(ngModel)]="selectedClient"
-        optionLabel="label"
-        optionValue="value"
-        placeholder="Selecione um cliente"
-        (onChange)="onClientChange($event.value)"
-      >
-        <ng-template #selectedItem let-selectedOption>
-          <div class="flex items-center gap-2">
-            <ng-icon name="lucideUser" size="16" />
-            <span>{{ selectedOption.label }}</span>
-          </div>
-        </ng-template>
-      </p-select>
+    <div class="max-w-[280px]">
+      <fuse-client-select [(selectedClient)]="selectedClient" />
     </div>
 
     <!-- Filtro de Período -->
@@ -52,7 +37,7 @@
     <p-button
       [text]="true"
       styleClass="h-full"
-      (onClick)="state.getOrderList()"
+      (onClick)="getOrderList()"
       pTooltip="Atualizar dados"
       tooltipPosition="bottom"
     >

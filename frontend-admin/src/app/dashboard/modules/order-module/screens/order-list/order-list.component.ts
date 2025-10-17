@@ -31,9 +31,9 @@ import { SelectModule } from 'primeng/select';
 import PeriodComponent, {
   PeriodRange,
 } from 'app/shared/components/period/period.component';
-import { ClientState } from '../../../client-module/client.state';
 import { AccountsReceivableState } from 'app/dashboard/modules/accounts-receivable-module/accounts-receivable.state';
 import { PAYMENTS_SITEMAP } from 'app/shared/constants/payments.sitemap';
+import { ClientSelectComponent } from 'app/shared/components/client-select/client-select.component';
 
 @Component({
   selector: 'fuse-order-list',
@@ -51,6 +51,7 @@ import { PAYMENTS_SITEMAP } from 'app/shared/constants/payments.sitemap';
     Tooltip,
     SelectModule,
     PeriodComponent,
+    ClientSelectComponent,
   ],
   providers: [OrderState],
 })
@@ -62,7 +63,6 @@ export class OrderListComponent implements OnInit {
   private destroyedRef = inject(DestroyRef);
   private orderService = inject(OrderService);
   state = inject(OrderState);
-  clientState = inject(ClientState);
   accountsReceivableState = inject(AccountsReceivableState);
 
   @ViewChild('name', { static: true }) name!: TemplateRef<any>;
@@ -75,17 +75,6 @@ export class OrderListComponent implements OnInit {
   title = '';
 
   selectedClient = signal<string | null>(null);
-
-  clientOptions = computed(() => {
-    const clients = this.clientState.clientList();
-    return [
-      { label: 'Todos os clientes', value: null },
-      ...clients.map(client => ({
-        label: client.fullName || client.document || 'Cliente sem nome',
-        value: client.fullName || client.document || '',
-      })),
-    ];
-  });
 
   filteredOrderList = computed(() => {
     const orders = this.state.orderList();
@@ -104,7 +93,6 @@ export class OrderListComponent implements OnInit {
     );
     this.setTableConfig();
     this.state.getOrderList();
-    this.clientState.getClientList();
   }
 
   addNewOrder() {
@@ -123,10 +111,6 @@ export class OrderListComponent implements OnInit {
 
   editOrder(orderData: any) {
     this.router.navigate(['dashboard', 'orders', orderData.id]);
-  }
-
-  onClientChange(clientName: string | null) {
-    this.selectedClient.set(clientName);
   }
 
   deleteOrder(orderId: string | number) {

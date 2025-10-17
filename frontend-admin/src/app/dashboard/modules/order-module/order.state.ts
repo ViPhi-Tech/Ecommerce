@@ -40,13 +40,13 @@ export class OrderState extends BaseState<OrderModuleState> {
     });
   }
 
-  getOrderList(skipLoader = true, filter?: any): void {
+  getOrderList(skipLoader = true): void {
     this.setLoading(true);
     this.clearError();
     this.setOrderList([]);
 
     lastValueFrom(
-      this.orderService.getOrdersByClient(skipLoader, filter).pipe(
+      this.orderService.getOrders(skipLoader).pipe(
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
       )
@@ -106,7 +106,7 @@ export class OrderState extends BaseState<OrderModuleState> {
     this.setOrderList([]);
 
     lastValueFrom(
-      this.orderService.getOrdersByClient(false, { clientId, startDate, endDate, paymentTypeId }).pipe(
+      this.orderService.getOrdersByClient(true, { clientId, startDate, endDate, paymentTypeId }).pipe(
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
       )

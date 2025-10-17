@@ -100,13 +100,6 @@ export class MenuComponent implements OnInit {
           visible: true,
         },
         {
-          id: ROLES_SITEMAP.ContasReceber,
-          label: 'Dívidas',
-          icon: 'lucideWallet',
-          route: '/dashboard/debts/list',
-          visible: true,
-        },
-        {
           id: ROLES_SITEMAP.Relatorios,
           label: 'Relatórios',
           icon: 'lucideChartPie',
