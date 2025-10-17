@@ -26,6 +26,33 @@ export class OrderService {
     );
   }
 
+  getOrdersByClient(skipLoader = true, filter?: any): Observable<Order[] | { data: Order[] }> {
+    const headers: any = {};
+    if (skipLoader) {
+      headers['Skip-Loader'] = 'true';
+    }
+    const params: any = {};
+    if (filter) {
+      if (filter.clientId !== undefined && filter.clientId !== null && filter.clientId !== '') {
+        params.clientId = filter.clientId;
+      }
+      if (filter.startDate) {
+        params.startDate = filter.startDate;
+      }
+      if (filter.endDate) {
+        params.endDate = filter.endDate;
+      }
+      if (filter.paymentTypeId) {
+        params.paymentTypeId = filter.paymentTypeId;
+      }
+    }
+
+    return this.http.get<Order[] | { data: Order[] }>(
+      `${this.apiUrl}order/getOrdersByClient`,
+      { headers, params }
+    );
+  }
+
   createOrder(data: any): Observable<Order> {
     return this.http.post<Order>(`${this.apiUrl}order/create`, data);
   }
