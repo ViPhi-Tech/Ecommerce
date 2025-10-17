@@ -34,7 +34,7 @@ export class ClientSelectComponent implements OnInit {
 
   // Model para two-way binding
   selectedClient = model<string | null>(null);
-  
+
   // Input para placeholder customizado
   placeholder = model<string>('Selecione um cliente');
 
@@ -58,4 +58,3 @@ export class ClientSelectComponent implements OnInit {
     this.selectedClient.set(value);
   }
 }
-

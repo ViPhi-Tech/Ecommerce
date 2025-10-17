@@ -83,8 +83,7 @@ export class OrderListComponent implements OnInit {
     return orders.filter(order => order.client?.fullName === selectedClient);
   });
 
-  constructor() {
-  }
+  constructor() {}
 
   ngOnInit() {
     this.coreService.setPageTitle(

@@ -54,7 +54,7 @@ export class NotedOrdersComponent implements OnInit {
     effect(() => {
       const client = this.selectedClient();
       const period = this.selectedPeriod();
-      
+
       // Só busca se tiver período selecionado
       if (client && period) {
         this.getOrderList();
@@ -75,7 +75,12 @@ export class NotedOrdersComponent implements OnInit {
       startDate: dayjs(this.selectedPeriod()?.startDate).format('YYYY-MM-DD'),
       endDate: dayjs(this.selectedPeriod()?.endDate).format('YYYY-MM-DD'),
     };
-    this.state.getOrderListByClient(this.selectedClient() || '', filter.startDate, filter.endDate, 'account_receivable');
+    this.state.getOrderListByClient(
+      this.selectedClient() || '',
+      filter.startDate,
+      filter.endDate,
+      'account_receivable'
+    );
   }
 
   onPeriodChange(range: PeriodRange) {
@@ -102,4 +107,3 @@ export class NotedOrdersComponent implements OnInit {
     return labelMap[status] || status;
   }
 }
-

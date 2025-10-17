@@ -41,22 +41,19 @@ import { MessageLoaderComponent } from 'app/shared/components/loader/message-loa
 
 ## Propriedades (Inputs)
 
-| Propriedade | Tipo | Padrão | Descrição |
-|------------|------|--------|-----------|
-| `visible` | `boolean` | `false` | Controla a visibilidade do loader |
-| `message` | `string` | `'Carregando...'` | Mensagem principal exibida |
-| `description` | `string` | `''` | Descrição opcional (texto secundário) |
-| `icon` | `string` | `'lucideLoader2'` | Nome do ícone do ng-icons |
+| Propriedade   | Tipo      | Padrão            | Descrição                             |
+| ------------- | --------- | ----------------- | ------------------------------------- |
+| `visible`     | `boolean` | `false`           | Controla a visibilidade do loader     |
+| `message`     | `string`  | `'Carregando...'` | Mensagem principal exibida            |
+| `description` | `string`  | `''`              | Descrição opcional (texto secundário) |
+| `icon`        | `string`  | `'lucideLoader2'` | Nome do ícone do ng-icons             |
 
 ## Exemplos de uso
 
 ### Exemplo 1: Loader simples
 
 ```html
-<fuse-message-loader
-  [visible]="isLoading"
-  [message]="'Carregando dados...'"
-/>
+<fuse-message-loader [visible]="isLoading" [message]="'Carregando dados...'" />
 ```
 
 ### Exemplo 2: Loader com descrição
@@ -89,7 +86,7 @@ import { signal } from '@angular/core';
 
 export class MyComponent {
   isLoading = signal(false);
-  
+
   async saveData() {
     this.isLoading.set(true);
     try {
@@ -103,10 +100,7 @@ export class MyComponent {
 
 ```html
 <!-- No template -->
-<fuse-message-loader
-  [visible]="isLoading()"
-  [message]="'Salvando...'"
-/>
+<fuse-message-loader [visible]="isLoading()" [message]="'Salvando...'" />
 ```
 
 ## Ícones disponíveis
@@ -129,4 +123,3 @@ Você pode usar qualquer ícone do [Lucide Icons](https://lucide.dev/icons/). Ex
 - As animações são otimizadas para performance
 - Totalmente compatível com dark mode usando classes do Tailwind
 - O componente é standalone e não requer módulo adicional
-

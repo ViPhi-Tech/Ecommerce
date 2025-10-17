@@ -10,8 +10,6 @@ import { NgxMaskDirective } from 'ngx-mask';
 import { InputTextModule } from 'primeng/inputtext';
 import { PAYMENTS_SITEMAP } from 'app/shared/constants/payments.sitemap';
 
-
-
 @Component({
   selector: 'fuse-payment-selection',
   templateUrl: './payment-selection.component.html',
@@ -30,9 +28,7 @@ export class PaymentSelectionComponent implements OnInit {
   public cartState = inject(CartState);
 
   // Dados das formas de pagamento
-  paymentMethods = signal<any[]>([
-    ...Object.values(PAYMENTS_SITEMAP),
-  ]);
+  paymentMethods = signal<any[]>([...Object.values(PAYMENTS_SITEMAP)]);
 
   constructor() {}
 

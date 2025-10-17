@@ -26,14 +26,21 @@ export class OrderService {
     );
   }
 
-  getOrdersByClient(skipLoader = true, filter?: any): Observable<Order[] | { data: Order[] }> {
+  getOrdersByClient(
+    skipLoader = true,
+    filter?: any
+  ): Observable<Order[] | { data: Order[] }> {
     const headers: any = {};
     if (skipLoader) {
       headers['Skip-Loader'] = 'true';
     }
     const params: any = {};
     if (filter) {
-      if (filter.clientId !== undefined && filter.clientId !== null && filter.clientId !== '') {
+      if (
+        filter.clientId !== undefined &&
+        filter.clientId !== null &&
+        filter.clientId !== ''
+      ) {
         params.clientId = filter.clientId;
       }
       if (filter.startDate) {
