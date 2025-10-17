@@ -19,6 +19,10 @@ import { ClientState } from 'app/dashboard/modules/client-module/client.state';
       [placeholder]="placeholder()"
       [loading]="clientState.loading()"
       (onChange)="onClientChange($event.value)"
+      [showClear]="true"
+      [filter]="true"
+      filterBy="label"
+      [filterPlaceholder]="'Pesquisar cliente...'"
     >
       <ng-template #selectedItem let-selectedOption>
         <div class="flex items-center gap-2">
@@ -34,19 +38,27 @@ export class ClientSelectComponent implements OnInit {
 
   // Model para two-way binding
   selectedClient = model<string | null>(null);
-
+  
   // Input para placeholder customizado
   placeholder = model<string>('Selecione um cliente');
+  
+  // Input para controlar se exibe "Todos os clientes"
+  allowAll = model<boolean>(true);
 
   clientOptions = computed(() => {
     const clients = this.clientState.clientList();
-    return [
-      { label: 'Todos os clientes', value: null },
-      ...clients.map(client => ({
-        label: client.fullName || client.document || 'Cliente sem nome',
-        value: client.fullName || client.document || '',
-      })),
-    ];
+    const options = clients.map(client => ({
+      label: client.fullName || client.document || 'Cliente sem nome',
+      value: client.fullName || client.document || '',
+    }));
+
+    
+    
+    if (this.allowAll()) {
+      return [{ label: 'Todos os clientes', value: null }, ...options];
+    }
+    
+    return options;
   });
 
   ngOnInit() {

@@ -13,7 +13,7 @@
   <div class="flex gap-4 mb-8 flex-wrap justify-end">
     <!-- Filtro de Cliente -->
     <div class="max-w-[280px]">
-      <fuse-client-select [(selectedClient)]="selectedClient" />
+      <fuse-client-select [allowAll]="false" [(selectedClient)]="selectedClient" />
     </div>
 
     <!-- Filtro de Período -->
