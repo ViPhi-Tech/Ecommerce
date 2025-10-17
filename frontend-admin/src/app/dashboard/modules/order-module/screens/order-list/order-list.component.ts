@@ -17,7 +17,7 @@ import {
   TableConfig,
 } from 'app/shared/interfaces/table.interfaces';
 import { OrderState } from '../../order.state';
-import { CommonModule, JsonPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { heightAnimation } from 'app/shared/utils/animations';
@@ -54,7 +54,6 @@ import { PAYMENTS_SITEMAP } from 'app/shared/constants/payments.sitemap';
     SelectModule,
     PeriodComponent,
     CurrencyPipe,
-    JsonPipe,
   ],
   providers: [OrderState],
 })

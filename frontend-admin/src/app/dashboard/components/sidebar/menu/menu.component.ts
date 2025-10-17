@@ -54,6 +54,13 @@ export class MenuComponent implements OnInit {
           icon: 'lucidePlus',
           route: '/dashboard/orders/new',
         },
+        {
+          id: ROLES_SITEMAP.Pedidos,
+          label: 'Pedidos Anotados',
+          icon: 'lucideClipboard',
+          route: '/dashboard/orders/noted',
+          visible: true,
+        },
       ],
     },
     {

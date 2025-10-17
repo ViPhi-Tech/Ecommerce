@@ -13,6 +13,16 @@ export const orderRoutes: Routes = [
     },
   },
   {
+    path: 'noted',
+    loadComponent: () =>
+      import('./screens/noted-orders/noted-orders.component').then(
+        m => m.NotedOrdersComponent
+      ),
+    data: {
+      title: ['Dashboard', 'Pedidos Anotados'],
+    },
+  },
+  {
     path: ':id/view',
     loadComponent: () =>
       import('./screens/order-view/order-view.component').then(
