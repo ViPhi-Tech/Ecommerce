@@ -110,7 +110,7 @@ export class OrderController {
 
     async getOrdersByClient(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try {
-            const query = request.query as { clientId?: number; startDate?: string; endDate?: string; paymentTypeId?: string };
+            const query = request.query as { clientId?: string; startDate?: string; endDate?: string; paymentTypeId?: string };
             if (!query.clientId || !query.startDate || !query.endDate) {
                 return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
                     status: false,
@@ -118,7 +118,7 @@ export class OrderController {
                 });
             }
             const orders = await this.getOrderByClientUseCase.execute({
-                clientId: query.clientId,
+                clientId: parseInt(query.clientId),
                 startDate: query.startDate,
                 endDate: query.endDate,
                 paymentTypeId: query.paymentTypeId
