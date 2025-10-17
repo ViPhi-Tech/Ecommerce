@@ -71,6 +71,14 @@ export const getOrders = z.object({
   paymentTypeId: z.string().min(1, { message: "Tipo de pagamento é obrigatório" }).optional(),
 });
 
+
+export const getOrdersByClient = z.object({
+  clientId: z.number().min(1, { message: "ID do cliente é obrigatório" }).optional(),
+  startDate: z.string().min(1, { message: "Data inicial é obrigatória" }),
+  endDate: z.string().min(1, { message: "Data final é obrigatória" }),
+  paymentTypeId: z.string().min(1, { message: "Tipo de pagamento é obrigatório" }).optional(),
+});
+
 // ===== JSON SCHEMAS (Para Swagger) =====
 export const createOrderJsonSchema = zodToJsonSchema(createOrderSchema);
 export const updateOrderJsonSchema = zodToJsonSchema(updateOrderSchema);
@@ -79,6 +87,7 @@ export const orderItemJsonSchema = zodToJsonSchema(orderItemSchema);
 export const paymentLabelJsonSchema = zodToJsonSchema(paymentLabelSchema);
 export const createPreOrderJsonSchema = zodToJsonSchema(createPreOrderSchema);
 export const getOrdersJsonSchema = zodToJsonSchema(getOrders);
+export const getOrdersByClientJsonSchema = zodToJsonSchema(getOrdersByClient);
 
 // ===== TYPES (Para TypeScript) =====
 export type CreateOrderDTO = z.infer<typeof createOrderSchema>;
@@ -88,6 +97,7 @@ export type OrderItemDTO = z.infer<typeof orderItemSchema>;
 export type PaymentLabelDTO = z.infer<typeof paymentLabelSchema>;
 export type CreatePreOrderDTO = z.infer<typeof createPreOrderSchema>;
 export type GetOrdersDTO = z.infer<typeof getOrders>;
+export type GetOrdersByClientDTO = z.infer<typeof getOrdersByClient>;
 
 // ===== RESPONSE DTOs =====
 export interface OrderResponse {
