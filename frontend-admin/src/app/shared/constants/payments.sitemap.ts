@@ -25,7 +25,7 @@ export const PAYMENTS_SITEMAP = {
     severity: 'success',
   },
   ACCOUNT_RECEIVABLE: {
-    id: 'account-receivable',
+    id: 'account_receivable',
     name: 'Pedido anotado',
     description: 'Pedido anotado',
     icon: 'lucideNotebook',
