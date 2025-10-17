@@ -3,7 +3,6 @@ import {
   inject,
   OnInit,
   ChangeDetectorRef,
-  signal,
 } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CurrencyPipe, NgClass } from '@angular/common';
@@ -12,12 +11,12 @@ import { sleep } from 'app/shared/utils/utils';
 import { CartItem, CartState } from './order-cart.state';
 import { ClientSelectionComponent } from '../client-selection/client-selection.component';
 import { StepperModule } from 'primeng/stepper';
-// import { DeliverySelectionComponent } from '../delivery-selection/delivery-selection.component';
 import { DialogModule } from 'primeng/dialog';
 import { PaymentSelectionComponent } from '../payment-selection/payment-selection.component';
 import { ClientState } from 'app/dashboard/modules/client-module/client.state';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { MessageLoaderComponent } from 'app/shared/components/loader/message-loader.component';
 
 @Component({
   selector: 'fuse-order-cart',
@@ -29,10 +28,10 @@ import { MessageService } from 'primeng/api';
     NgClass,
     NgIcon,
     ClientSelectionComponent,
-    // DeliverySelectionComponent,
     PaymentSelectionComponent,
     StepperModule,
     DialogModule,
+    MessageLoaderComponent,
   ],
 })
 export class OrderCartComponent implements OnInit {
@@ -45,8 +44,6 @@ export class OrderCartComponent implements OnInit {
 
   // Mapeia os itens que estão sendo removidos
   removingItems: Record<string | number, boolean> = {};
-
-  finishing = signal(false);
 
   showCheckout = false;
   step = 1;

@@ -23,6 +23,7 @@ export interface ICartState {
   client: any; // Adicionando client ao estado
   loading: boolean; // Adicionando loading para satisfazer BaseModuleState
   error: any; // Adicionando error para satisfazer BaseModuleState
+  finishing: boolean; // Adicionando finishing ao estado
 }
 
 export interface CartItem {
@@ -66,6 +67,7 @@ export class CartState extends BaseState<ICartState> {
   public paymentMethods = computed(() => this.state().paymentMethods);
   public deliveryType = computed(() => this.state().deliveryType);
   public client = computed(() => this.state().client);
+  public finishing = computed(() => this.state().finishing);
 
   public getCartData() {
     return this.state();
@@ -290,19 +292,25 @@ export class CartState extends BaseState<ICartState> {
   }
 
   async checkout(data: any): Promise<ApiResponse> {
+    this.state.update(state => ({ ...state, finishing: true }));
     this.setLoading(true);
     return await lastValueFrom(this.orderService.createOrder(data))
       .then((response: any) => {
         this.resetCart();
         this.setLoading(false);
+        this.state.update(state => ({ ...state, finishing: false }));
         return response;
       })
       .catch((error: any) => {
         this.setError(error);
         this.setLoading(false);
+        this.state.update(state => ({ ...state, finishing: false }));
         throw error; // Re-throw the error to handle it in the component
       })
-      .finally(() => this.setLoading(false));
+      .finally(() => {
+        this.setLoading(false);
+        this.state.update(state => ({ ...state, finishing: false }));
+      });
   }
 
   public resetCart() {

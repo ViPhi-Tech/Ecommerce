@@ -8,29 +8,13 @@ export const PAYMENTS_SITEMAP = {
     discountColor: '#16a34a', // Verde direto
     severity: 'info',
   },
-  CREDIT: {
-    id: 'credit',
-    name: 'Cartão de Crédito',
+  CARD: {
+    id: 'card',
+    name: 'Cartão de Crédito/Débito',
     description: 'Visa, Mastercard, Elo',
     icon: 'lucideCreditCard',
     iconColor: '#2563eb', // Azul direto
     severity: 'warn',
-  },
-  DEBIT: {
-    id: 'debit',
-    name: 'Cartão de Débito',
-    description: 'Visa, Mastercard, Elo',
-    icon: 'lucideCreditCard',
-    iconColor: '#2563eb', // Azul direto
-    severity: 'warn',
-  },
-  BOLETO: {
-    id: 'boleto',
-    name: 'Boleto',
-    description: 'Boleto Bancário',
-    icon: 'lucideBanknote',
-    iconColor: '#15803d', // Verde escuro direto
-    severity: 'success',
   },
   MONEY: {
     id: 'money',
@@ -39,5 +23,13 @@ export const PAYMENTS_SITEMAP = {
     icon: 'lucideBanknote',
     iconColor: '#15803d', // Verde escuro direto
     severity: 'success',
+  },
+  ACCOUNT_RECEIVABLE: {
+    id: 'account_receivable',
+    name: 'Pedido anotado',
+    description: 'Pedido anotado',
+    icon: 'lucideNotebook',
+    iconColor: '#f59e0b', // amarelo
+    severity: 'warn',
   },
 };

@@ -235,12 +235,20 @@
       }
       <p-button
         [loading]="this.cartState.loading()"
-        [disabled]="step === 3 && cartState.getRemainingAmount() > 0"
-        [label]="step === 3 ? 'Finalizar Pedido' : 'Próximo'"
+        [disabled]="step === 2 && cartState.getRemainingAmount() > 0"
+        [label]="step === 2 ? 'Finalizar Pedido' : 'Próximo'"
         icon="pi pi-check"
         iconPos="right"
-        (onClick)="step === 3 ? checkout() : (step = step + 1)"
+        (onClick)="step === 2 ? checkout() : (step = step + 1)"
       />
     </div>
   </ng-template>
 </p-dialog>
+
+<!-- Loader de finalização do pedido -->
+<fuse-message-loader
+  [visible]="cartState.finishing()"
+  [message]="'Finalizando pedido'"
+  [description]="'Aguarde enquanto processamos seu pedido...'"
+  [icon]="'lucideShoppingCart'"
+/>

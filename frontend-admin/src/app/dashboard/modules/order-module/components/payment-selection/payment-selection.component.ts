@@ -8,17 +8,9 @@ import { MessageService } from 'primeng/api';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { NgxMaskDirective } from 'ngx-mask';
 import { InputTextModule } from 'primeng/inputtext';
+import { PAYMENTS_SITEMAP } from 'app/shared/constants/payments.sitemap';
 
-interface PaymentMethod {
-  id: string;
-  name: string;
-  description: string;
-  icon: string;
-  iconColor: string;
-  discount?: string;
-  discountColor?: string;
-  value?: number; // Valor pago com este método
-}
+
 
 @Component({
   selector: 'fuse-payment-selection',
@@ -38,44 +30,15 @@ export class PaymentSelectionComponent implements OnInit {
   public cartState = inject(CartState);
 
   // Dados das formas de pagamento
-  paymentMethods = signal<PaymentMethod[]>([
-    {
-      id: 'pix',
-      name: 'PIX',
-      description: 'Pagamento instantâneo',
-      icon: 'lucideSmartphone',
-      iconColor: '#16a34a', // Verde direto
-      discountColor: '#16a34a', // Verde direto
-    },
-    {
-      id: 'credit',
-      name: 'Cartão de Crédito',
-      description: 'Visa, Mastercard, Elo',
-      icon: 'lucideCreditCard',
-      iconColor: '#2563eb', // Azul direto
-    },
-
-    {
-      id: 'debit',
-      name: 'Cartão de Débito',
-      description: 'Visa, Mastercard, Elo',
-      icon: 'lucideCreditCard',
-      iconColor: '#2563eb', // Azul direto
-    },
-    {
-      id: 'money',
-      name: 'Dinheiro',
-      description: 'Pagamento na entrega/retirada',
-      icon: 'lucideBanknote',
-      iconColor: '#15803d', // Verde escuro direto
-    },
+  paymentMethods = signal<any[]>([
+    ...Object.values(PAYMENTS_SITEMAP),
   ]);
 
   constructor() {}
 
   ngOnInit() {}
 
-  onPaymentMethodChange(paymentMethod: PaymentMethod) {
+  onPaymentMethodChange(paymentMethod: any) {
     if (this.getTotalToPay() <= 0) {
       this.toast.add({
         severity: 'warn',
