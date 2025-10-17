@@ -37,25 +37,56 @@ export class SchedulingCalendarComponent implements OnInit {
 
   selectedView = signal<'month' | 'week' | 'day'>('month');
   currentDate = signal(new Date());
-  
+
   ptBr = {
     firstDayOfWeek: 0,
-    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+    dayNames: [
+      'Domingo',
+      'Segunda',
+      'Terça',
+      'Quarta',
+      'Quinta',
+      'Sexta',
+      'Sábado',
+    ],
     dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
     dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
     monthNames: [
-      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+      'Janeiro',
+      'Fevereiro',
+      'Março',
+      'Abril',
+      'Maio',
+      'Junho',
+      'Julho',
+      'Agosto',
+      'Setembro',
+      'Outubro',
+      'Novembro',
+      'Dezembro',
     ],
-    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    monthNamesShort: [
+      'Jan',
+      'Fev',
+      'Mar',
+      'Abr',
+      'Mai',
+      'Jun',
+      'Jul',
+      'Ago',
+      'Set',
+      'Out',
+      'Nov',
+      'Dez',
+    ],
     today: 'Hoje',
-    clear: 'Limpar'
+    clear: 'Limpar',
   };
 
   currentTitle = computed(() => {
     const date = dayjs(this.currentDate());
     const view = this.selectedView();
-    
+
     if (view === 'month') {
       return date.format('MMMM [de] YYYY');
     } else if (view === 'week') {
@@ -96,10 +127,10 @@ export class SchedulingCalendarComponent implements OnInit {
     const endOfMonth = date.endOf('month');
     const startDate = startOfMonth.startOf('week');
     const endDate = endOfMonth.endOf('week');
-    
+
     const days = [];
     let currentDay = startDate;
-    
+
     while (currentDay.isBefore(endDate) || currentDay.isSame(endDate, 'day')) {
       days.push({
         date: currentDay.toDate(),
@@ -112,7 +143,7 @@ export class SchedulingCalendarComponent implements OnInit {
       });
       currentDay = currentDay.add(1, 'day');
     }
-    
+
     return days;
   });
 
@@ -132,7 +163,7 @@ export class SchedulingCalendarComponent implements OnInit {
   previousPeriod() {
     const date = dayjs(this.currentDate());
     const view = this.selectedView();
-    
+
     let newDate: dayjs.Dayjs;
     if (view === 'month') {
       newDate = date.subtract(1, 'month');
@@ -141,14 +172,14 @@ export class SchedulingCalendarComponent implements OnInit {
     } else {
       newDate = date.subtract(1, 'day');
     }
-    
+
     this.currentDate.set(newDate.toDate());
   }
 
   nextPeriod() {
     const date = dayjs(this.currentDate());
     const view = this.selectedView();
-    
+
     let newDate: dayjs.Dayjs;
     if (view === 'month') {
       newDate = date.add(1, 'month');
@@ -157,7 +188,7 @@ export class SchedulingCalendarComponent implements OnInit {
     } else {
       newDate = date.add(1, 'day');
     }
-    
+
     this.currentDate.set(newDate.toDate());
   }
 
@@ -165,4 +196,3 @@ export class SchedulingCalendarComponent implements OnInit {
     this.currentDate.set(new Date());
   }
 }
-

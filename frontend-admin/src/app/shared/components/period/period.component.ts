@@ -46,6 +46,7 @@ export default class PeriodComponent implements OnInit {
   placeholder = input<string>('Selecione o período');
   disabled = input<boolean>(false);
   defaultValue = input<PeriodType | undefined>(undefined);
+  storeKey = input<string>('period_selector');
 
   // Outputs
   periodChange = output<PeriodRange>();
@@ -57,7 +58,7 @@ export default class PeriodComponent implements OnInit {
       .filter(option => option !== undefined);
   });
 
-  selectedPeriod: string | undefined;
+  selectedPeriod: PeriodType | undefined;
 
   // Todas as opções disponíveis
   private allOptions: Record<PeriodType, PeriodOption> = {
@@ -71,16 +72,23 @@ export default class PeriodComponent implements OnInit {
   };
 
   ngOnInit() {
-    if (this.defaultValue()) {
+    const storedPeriod = localStorage.getItem(this.storeKey());
+    if (storedPeriod) {
+      this.selectedPeriod = JSON.parse(storedPeriod).periodType;
+      this.onPeriodChange(this.selectedPeriod);
+    } else if (this.defaultValue()) {
       this.selectedPeriod = this.defaultValue();
+      this.onPeriodChange(this.selectedPeriod);
+    } else {
+      this.selectedPeriod = 'today';
       this.onPeriodChange(this.selectedPeriod);
     }
   }
 
   onPeriodChange(periodType: string | undefined) {
     if (!periodType) return;
-
     const range = this.calculatePeriodRange(periodType as PeriodType);
+    localStorage.setItem(this.storeKey(), JSON.stringify(range));
     this.periodChange.emit(range);
   }
 

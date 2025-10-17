@@ -95,8 +95,8 @@
           [ngStyle]="{
             width: column?.width,
           }"
-          alignFrozen="right" 
-          pFrozenColumn 
+          alignFrozen="right"
+          pFrozenColumn
           [frozen]="column?.frozen || column.field === 'actions'"
         >
           <div
@@ -168,8 +168,8 @@
           [class.text-center]="
             column?.align === 'center' || column.caption === 'Ações'
           "
-          alignFrozen="right" 
-          pFrozenColumn 
+          alignFrozen="right"
+          pFrozenColumn
           [frozen]="column?.frozen || column.field === 'actions'"
         >
           @if (column.field === 'actions' && column?.actionButtons?.length) {

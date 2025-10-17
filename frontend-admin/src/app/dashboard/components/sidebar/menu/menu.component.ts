@@ -17,7 +17,7 @@ interface MenuGroup {
 })
 export class MenuComponent implements OnInit {
   private authService = inject(AuthService);
-  
+
   menu: MenuGroup[] = [
     {
       groupTitle: 'Dashboard',

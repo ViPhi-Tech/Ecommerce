@@ -74,7 +74,9 @@ export class OrderState extends BaseState<OrderModuleState> {
         payments: order.payments?.map(payment => ({
           ...payment,
           typeId: payment.typeId.toString(),
-          name: PAYMENTS_SITEMAP[payment.typeId.toUpperCase() as keyof typeof PAYMENTS_SITEMAP]?.name,
+          name: PAYMENTS_SITEMAP[
+            payment.typeId.toUpperCase() as keyof typeof PAYMENTS_SITEMAP
+          ]?.name,
         })),
       };
     });

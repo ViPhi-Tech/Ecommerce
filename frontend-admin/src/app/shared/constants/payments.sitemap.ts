@@ -6,6 +6,7 @@ export const PAYMENTS_SITEMAP = {
     icon: 'lucideSmartphone',
     iconColor: '#16a34a', // Verde direto
     discountColor: '#16a34a', // Verde direto
+    severity: 'info',
   },
   CREDIT: {
     id: 'credit',
@@ -13,6 +14,7 @@ export const PAYMENTS_SITEMAP = {
     description: 'Visa, Mastercard, Elo',
     icon: 'lucideCreditCard',
     iconColor: '#2563eb', // Azul direto
+    severity: 'warn',
   },
   DEBIT: {
     id: 'debit',
@@ -20,6 +22,7 @@ export const PAYMENTS_SITEMAP = {
     description: 'Visa, Mastercard, Elo',
     icon: 'lucideCreditCard',
     iconColor: '#2563eb', // Azul direto
+    severity: 'warn',
   },
   BOLETO: {
     id: 'boleto',
@@ -27,6 +30,7 @@ export const PAYMENTS_SITEMAP = {
     description: 'Boleto Bancário',
     icon: 'lucideBanknote',
     iconColor: '#15803d', // Verde escuro direto
+    severity: 'success',
   },
   MONEY: {
     id: 'money',
@@ -34,5 +38,6 @@ export const PAYMENTS_SITEMAP = {
     description: 'Pagamento na entrega/retirada',
     icon: 'lucideBanknote',
     iconColor: '#15803d', // Verde escuro direto
+    severity: 'success',
   },
 };

@@ -17,7 +17,8 @@
           (click)="onPaymentMethodChange(paymentMethod)"
           [ngClass]="{
             'w-full flex flex-col space-y-3 py-4 px-6 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 dark:border-gray-700 transition-colors h-max': true,
-            'border-green-500 bg-green-50 dark:bg-green-900/20': isPaymentMethodSelected(paymentMethod.id)
+            'border-green-500 bg-green-50 dark:bg-green-900/20':
+              isPaymentMethodSelected(paymentMethod.id),
           }"
         >
           <div class="flex space-x-3">
@@ -28,8 +29,11 @@
               <div
                 [ngClass]="{
                   'flex items-center justify-center w-5 h-5 rounded border-2 transition-colors': true,
-                  'border-green-500 bg-green-500': isPaymentMethodSelected(paymentMethod.id),
-                  'border-gray-300 dark:border-gray-600': !isPaymentMethodSelected(paymentMethod.id)
+                  'border-green-500 bg-green-500': isPaymentMethodSelected(
+                    paymentMethod.id
+                  ),
+                  'border-gray-300 dark:border-gray-600':
+                    !isPaymentMethodSelected(paymentMethod.id),
                 }"
               >
                 @if (isPaymentMethodSelected(paymentMethod.id)) {
@@ -86,7 +90,9 @@
   </div>
   <div class="flex flex-col gap-4 mt-6">
     @if (cartState.paymentMethods().length > 0) {
-      <div class="border rounded-lg p-4 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
+      <div
+        class="border rounded-lg p-4 bg-gray-50 dark:bg-gray-800 dark:border-gray-700"
+      >
         <h4 class="font-medium text-sm mb-3">Resumo do Pagamento</h4>
         <div class="space-y-2">
           <div class="flex justify-between text-sm">
@@ -110,13 +116,16 @@
               }}</span>
             </div>
           }
-          <div class="flex justify-between text-sm border-t pt-2 dark:border-gray-700">
+          <div
+            class="flex justify-between text-sm border-t pt-2 dark:border-gray-700"
+          >
             <span>Restante:</span>
             <span
               [ngClass]="{
                 'font-medium': true,
-                'text-green-600 dark:text-green-400': getRemainingAmount() === 0,
-                'text-red-600 dark:text-red-400': getRemainingAmount() > 0
+                'text-green-600 dark:text-green-400':
+                  getRemainingAmount() === 0,
+                'text-red-600 dark:text-red-400': getRemainingAmount() > 0,
               }"
             >
               {{

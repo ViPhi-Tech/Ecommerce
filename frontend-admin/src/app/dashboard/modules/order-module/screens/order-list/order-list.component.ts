@@ -17,7 +17,7 @@ import {
   TableConfig,
 } from 'app/shared/interfaces/table.interfaces';
 import { OrderState } from '../../order.state';
-import { CommonModule } from '@angular/common';
+import { CommonModule, JsonPipe } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { heightAnimation } from 'app/shared/utils/animations';
@@ -29,10 +29,13 @@ import { OrderService } from '../../order.service';
 import { FormsModule } from '@angular/forms';
 import { Tooltip } from 'primeng/tooltip';
 import { SelectModule } from 'primeng/select';
-import PeriodComponent, { PeriodRange } from 'app/shared/components/period/period.component';
+import PeriodComponent, {
+  PeriodRange,
+} from 'app/shared/components/period/period.component';
 import { CurrencyPipe } from '@angular/common';
 import { ClientState } from '../../../client-module/client.state';
 import { AccountsReceivableState } from 'app/dashboard/modules/accounts-receivable-module/accounts-receivable.state';
+import { PAYMENTS_SITEMAP } from 'app/shared/constants/payments.sitemap';
 
 @Component({
   selector: 'fuse-order-list',
@@ -51,6 +54,7 @@ import { AccountsReceivableState } from 'app/dashboard/modules/accounts-receivab
     SelectModule,
     PeriodComponent,
     CurrencyPipe,
+    JsonPipe,
   ],
   providers: [OrderState],
 })
@@ -69,6 +73,8 @@ export class OrderListComponent implements OnInit {
   @ViewChild('payment', { static: true }) payment!: TemplateRef<any>;
 
   tableConfig = signal<TableConfig>(DEFAULT_TABLE_CONFIG);
+
+  paymentSeverities = signal<any>(PAYMENTS_SITEMAP);
 
   title = '';
 
@@ -96,10 +102,17 @@ export class OrderListComponent implements OnInit {
   selectedSummary = computed(() => {
     const selected = this.selectedData();
     const count = selected.length;
-    const totalAmount = selected.reduce((sum: number, order: any) => sum + (order.total || 0), 0);
-    const pendingCount = selected.filter((o: any) => o.status === 'PENDING').length;
+    const totalAmount = selected.reduce(
+      (sum: number, order: any) => sum + (order.total || 0),
+      0
+    );
+    const pendingCount = selected.filter(
+      (o: any) => o.status === 'PENDING'
+    ).length;
     const paidCount = selected.filter((o: any) => o.status === 'PAID').length;
-    const cancelledCount = selected.filter((o: any) => o.status === 'CANCELLED').length;
+    const cancelledCount = selected.filter(
+      (o: any) => o.status === 'CANCELLED'
+    ).length;
     return { count, totalAmount, pendingCount, paidCount, cancelledCount };
   });
 
@@ -111,7 +124,10 @@ export class OrderListComponent implements OnInit {
       const hasSelection = !!currentConfig?.selection?.mode;
 
       if (hasClientSelected && !hasSelection) {
-        this.tableConfig.set({ ...currentConfig, selection: { mode: 'multiple' } });
+        this.tableConfig.set({
+          ...currentConfig,
+          selection: { mode: 'multiple' },
+        });
       }
 
       if (!hasClientSelected && hasSelection) {
@@ -131,8 +147,6 @@ export class OrderListComponent implements OnInit {
     this.state.getOrderList();
     this.clientState.getClientList();
   }
-
-  
 
   addNewOrder() {
     this.router.navigate(['dashboard', 'orders', 'new']);
@@ -213,7 +227,8 @@ export class OrderListComponent implements OnInit {
       this.toast.add({
         severity: 'warn',
         summary: 'Atenção',
-        detail: 'Todos os pedidos devem ter um cliente associado para converter',
+        detail:
+          'Todos os pedidos devem ter um cliente associado para converter',
       });
       return;
     }
@@ -240,7 +255,9 @@ export class OrderListComponent implements OnInit {
       clientId: firstClient,
     } as any;
 
-    this.router.navigate([{ outlets: { drawer: ['accounts-receivable', 'new'] } }]);
+    this.router.navigate([
+      { outlets: { drawer: ['accounts-receivable', 'new'] } },
+    ]);
     setTimeout(() => {
       this.accountsReceivableState.prefillForm(formData);
     }, 100);
@@ -314,7 +331,7 @@ export class OrderListComponent implements OnInit {
               color: 'warn',
               variant: 'text',
               tooltip: 'Excluir Pedido',
-              action: (data) => {
+              action: data => {
                 this.deleteOrder(data?.id);
               },
             },

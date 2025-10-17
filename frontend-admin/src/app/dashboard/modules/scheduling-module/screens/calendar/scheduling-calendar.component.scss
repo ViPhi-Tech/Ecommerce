@@ -9,8 +9,10 @@
   .calendar-wrapper {
     ::ng-deep {
       .p-card {
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-        
+        box-shadow:
+          0 1px 3px 0 rgba(0, 0, 0, 0.1),
+          0 1px 2px 0 rgba(0, 0, 0, 0.06);
+
         .p-card-header {
           padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
@@ -27,7 +29,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+
     .calendar-title {
       font-size: 1.5rem;
       font-weight: 600;
@@ -40,14 +42,14 @@
   // Visualização de Mês
   .month-view {
     padding: 1.5rem;
-    
+
     .month-grid {
       .weekdays-header {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
         background-color: #f9fafb;
         border-bottom: 2px solid #e5e7eb;
-        
+
         .weekday-name {
           padding: 0.75rem;
           text-align: center;
@@ -57,12 +59,12 @@
           color: #6b7280;
         }
       }
-      
+
       .days-grid {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
         gap: 0;
-        
+
         .day-cell {
           min-height: 120px;
           border: 1px solid #e5e7eb;
@@ -71,32 +73,32 @@
           padding: 0.75rem;
           transition: all 0.2s;
           cursor: pointer;
-          
+
           &:nth-child(7n) {
             border-right: none;
           }
-          
+
           &:hover {
             background-color: #f9fafb;
           }
-          
+
           &.other-month {
             background-color: #f9fafb;
-            
+
             .day-number {
               color: #9ca3af;
             }
           }
-          
+
           &.today {
             background-color: #eff6ff;
-            
+
             .day-number {
               background-color: #3b82f6;
               font-weight: 600;
             }
           }
-          
+
           .day-number {
             width: 2rem;
             height: 2rem;
@@ -109,7 +111,7 @@
             color: #374151;
             margin-bottom: 0.5rem;
           }
-          
+
           .day-events {
             display: flex;
             flex-direction: column;
@@ -128,33 +130,33 @@
       grid-template-columns: 80px repeat(7, 1fr);
       border-bottom: 2px solid #e5e7eb;
       background-color: #f9fafb;
-      
+
       .time-column {
         border-right: 1px solid #e5e7eb;
       }
-      
+
       .day-column {
         padding: 1rem;
         text-align: center;
         border-right: 1px solid #e5e7eb;
-        
+
         &:last-child {
           border-right: none;
         }
-        
+
         .day-header {
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 0.25rem;
-          
+
           .day-name {
             font-size: 0.875rem;
             font-weight: 600;
             color: #6b7280;
             text-transform: uppercase;
           }
-          
+
           .day-number {
             font-size: 1.5rem;
             font-weight: 600;
@@ -166,7 +168,7 @@
             justify-content: center;
             border-radius: 50%;
           }
-          
+
           &.today .day-number {
             background-color: #3b82f6;
           }
@@ -178,13 +180,13 @@
       max-height: 600px;
       overflow-y: scroll;
       scrollbar-gutter: stable;
-      
+
       .time-row {
         display: grid;
         grid-template-columns: 80px repeat(7, 1fr);
         border-bottom: 1px solid #e5e7eb;
         min-height: 60px;
-        
+
         .time-label {
           padding: 0.5rem;
           font-size: 0.75rem;
@@ -193,17 +195,17 @@
           text-align: right;
           padding-right: 0.75rem;
         }
-        
+
         .day-cell {
           border-right: 1px solid #e5e7eb;
           padding: 0.5rem;
           position: relative;
-          
+
           &:hover {
             background-color: #f9fafb;
             cursor: pointer;
           }
-          
+
           &:last-child {
             border-right: none;
           }
@@ -218,13 +220,13 @@
       max-height: 600px;
       overflow-y: scroll;
       scrollbar-gutter: stable;
-      
+
       .time-row {
         display: grid;
         grid-template-columns: 80px 1fr;
         border-bottom: 1px solid #e5e7eb;
         min-height: 60px;
-        
+
         .time-label {
           padding: 0.5rem;
           font-size: 0.75rem;
@@ -233,11 +235,11 @@
           text-align: right;
           padding-right: 0.75rem;
         }
-        
+
         .day-cell {
           padding: 0.5rem;
           position: relative;
-          
+
           &:hover {
             background-color: #f9fafb;
             cursor: pointer;
@@ -256,7 +258,7 @@
       flex-direction: column;
       gap: 1rem;
       align-items: stretch !important;
-      
+
       .calendar-title {
         min-width: auto;
         font-size: 1.25rem;
@@ -298,15 +300,15 @@
       .week-header {
         grid-template-columns: 60px repeat(7, 1fr);
         font-size: 0.75rem;
-        
+
         .day-column {
           padding: 0.5rem;
-          
+
           .day-header {
             .day-name {
               font-size: 0.625rem;
             }
-            
+
             .day-number {
               font-size: 1rem;
               width: 1.75rem;
@@ -320,7 +322,7 @@
         .time-row {
           grid-template-columns: 60px repeat(7, 1fr);
           min-height: 50px;
-          
+
           .time-label {
             font-size: 0.625rem;
             padding-right: 0.5rem;
@@ -333,7 +335,7 @@
       .day-grid {
         .time-row {
           grid-template-columns: 60px 1fr;
-          
+
           .time-label {
             font-size: 0.625rem;
           }
@@ -349,16 +351,16 @@
     .calendar-wrapper {
       ::ng-deep {
         .p-card {
-          background-color: #1E1E1E;
+          background-color: #1e1e1e;
           color: #e5e7eb;
 
           .p-card-header {
-            background-color: #1E1E1E;
-            border-bottom: 1px solid #1F1F23;
+            background-color: #1e1e1e;
+            border-bottom: 1px solid #1f1f23;
           }
 
           .p-card-body {
-            background-color: #1E1E1E;
+            background-color: #1e1e1e;
           }
         }
       }
@@ -368,8 +370,8 @@
     .month-view {
       .month-grid {
         .weekdays-header {
-          background-color: #1F1F23;
-          border-bottom-color: #1F1F23;
+          background-color: #1f1f23;
+          border-bottom-color: #1f1f23;
 
           .weekday-name {
             color: #94a3b8;
@@ -378,10 +380,10 @@
 
         .days-grid {
           .day-cell {
-            border-color: #1F1F23;
+            border-color: #1f1f23;
 
             &:hover {
-              background-color: #1F2937;
+              background-color: #1f2937;
             }
 
             &.other-month {
@@ -412,15 +414,15 @@
     // Semana
     .week-view {
       .week-header {
-        border-bottom-color: #1F1F23;
-        background-color: #1F1F23;
+        border-bottom-color: #1f1f23;
+        background-color: #1f1f23;
 
         .time-column {
-          border-right-color: #1F1F23;
+          border-right-color: #1f1f23;
         }
 
         .day-column {
-          border-right-color: #1F1F23;
+          border-right-color: #1f1f23;
 
           .day-header {
             .day-name {
@@ -441,18 +443,18 @@
 
       .week-grid {
         .time-row {
-          border-bottom-color: #1F1F23;
+          border-bottom-color: #1f1f23;
 
           .time-label {
             color: #94a3b8;
-            border-right-color: #1F1F23;
+            border-right-color: #1f1f23;
           }
 
           .day-cell {
-            border-right-color: #1F1F23;
+            border-right-color: #1f1f23;
 
             &:hover {
-              background-color: #1F2937;
+              background-color: #1f2937;
             }
           }
         }
@@ -463,16 +465,16 @@
     .day-view {
       .day-grid {
         .time-row {
-          border-bottom-color: #1F1F23;
+          border-bottom-color: #1f1f23;
 
           .time-label {
             color: #94a3b8;
-            border-right-color: #1F1F23;
+            border-right-color: #1f1f23;
           }
 
           .day-cell {
             &:hover {
-              background-color: #1F2937;
+              background-color: #1f2937;
             }
           }
         }

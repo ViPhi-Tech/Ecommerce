@@ -41,7 +41,7 @@ export interface IDebt {
   items: IOrderItem[];
   client: IOrderClient | null;
   payments: IOrderPayment[];
-  
+
   // Campos opcionais da estrutura antiga (para compatibilidade)
   title?: string;
   description?: string;
