@@ -197,8 +197,19 @@ async aggregateSalesByCategory(initialMonth: number, finalMonth: number): Promis
 
 
 async getOrdersByClient(clientId: number, startDate: string, endDate: string, paymentTypeId: string): Promise<Order[]> {
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  end.setDate(end.getDate() + 1);
+  
   return this.prisma.order.findMany({
-      where: { clientId, createdAt: { gte: new Date(startDate), lte: new Date(endDate) }, payments: paymentTypeId ? { some: { typeId: paymentTypeId } } : undefined },
+      where: { 
+        clientId, 
+        createdAt: { 
+          gte: start, 
+          lte: end 
+        }, 
+        payments: paymentTypeId ? { some: { typeId: paymentTypeId } } : undefined 
+      },
       include: {
         items: true,
         client: true,
