@@ -2,7 +2,7 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { FormsModule } from '@angular/forms';
-import { CurrencyPipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { CartState } from '../order-cart/order-cart.state';
 import { MessageService } from 'primeng/api';
 import { FormModule } from 'app/shared/components/form/form.module';
@@ -24,11 +24,11 @@ interface PaymentMethod {
   selector: 'fuse-payment-selection',
   templateUrl: './payment-selection.component.html',
   imports: [
+    CommonModule,
     NgIcon,
     ButtonModule,
     InputTextModule,
     FormsModule,
-    CurrencyPipe,
     FormModule,
     NgxMaskDirective,
   ],

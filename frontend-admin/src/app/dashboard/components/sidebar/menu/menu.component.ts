@@ -17,7 +17,7 @@ interface MenuGroup {
 })
 export class MenuComponent implements OnInit {
   private authService = inject(AuthService);
-
+  
   menu: MenuGroup[] = [
     {
       groupTitle: 'Dashboard',
@@ -27,6 +27,13 @@ export class MenuComponent implements OnInit {
           label: 'Visão Geral',
           icon: 'lucideLayoutDashboard',
           route: '/dashboard',
+          visible: true,
+        },
+        {
+          id: ROLES_SITEMAP.Agendamentos,
+          label: 'Agendamentos',
+          icon: 'lucideCalendar',
+          route: '/dashboard/scheduling',
           visible: true,
         },
       ],
@@ -46,13 +53,6 @@ export class MenuComponent implements OnInit {
           label: 'Nova Venda',
           icon: 'lucidePlus',
           route: '/dashboard/orders/new',
-        },
-        {
-          id: ROLES_SITEMAP.Dashboard,
-          label: 'Agendamentos',
-          icon: 'lucideCalendar',
-          route: '/dashboard/scheduling',
-          visible: true,
         },
       ],
     },

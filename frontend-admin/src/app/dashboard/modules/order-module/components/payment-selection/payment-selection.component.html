@@ -5,7 +5,7 @@
     <ng-icon name="lucideCreditCard" class="h-5 w-5" />
     Formas de Pagamento
   </h3>
-  <p class="text-sm text-muted-foreground">
+  <p class="text-sm text-muted-foreground dark:text-gray-400">
     Escolha uma ou mais formas de pagamento para seu pedido
   </p>
 </div>
@@ -15,11 +15,10 @@
       @for (paymentMethod of paymentMethods(); track paymentMethod.id) {
         <button
           (click)="onPaymentMethodChange(paymentMethod)"
-          class="w-full flex flex-col space-y-3 py-4 px-6 border rounded-lg hover:bg-gray-50 transition-colors h-max"
-          [class.border-blue-500]="isPaymentMethodSelected(paymentMethod.id)"
-          [class.bg-blue-50]="isPaymentMethodSelected(paymentMethod.id)"
-          [class.border-green-500]="isPaymentMethodSelected(paymentMethod.id)"
-          [class.bg-green-50]="isPaymentMethodSelected(paymentMethod.id)"
+          [ngClass]="{
+            'w-full flex flex-col space-y-3 py-4 px-6 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 dark:border-gray-700 transition-colors h-max': true,
+            'border-green-500 bg-green-50 dark:bg-green-900/20': isPaymentMethodSelected(paymentMethod.id)
+          }"
         >
           <div class="flex space-x-3">
             <label
@@ -27,14 +26,11 @@
               [for]="paymentMethod.id"
             >
               <div
-                class="flex items-center justify-center w-5 h-5 rounded border-2 transition-colors"
-                [class.border-green-500]="
-                  isPaymentMethodSelected(paymentMethod.id)
-                "
-                [class.bg-green-500]="isPaymentMethodSelected(paymentMethod.id)"
-                [class.border-gray-300]="
-                  !isPaymentMethodSelected(paymentMethod.id)
-                "
+                [ngClass]="{
+                  'flex items-center justify-center w-5 h-5 rounded border-2 transition-colors': true,
+                  'border-green-500 bg-green-500': isPaymentMethodSelected(paymentMethod.id),
+                  'border-gray-300 dark:border-gray-600': !isPaymentMethodSelected(paymentMethod.id)
+                }"
               >
                 @if (isPaymentMethodSelected(paymentMethod.id)) {
                   <ng-icon name="lucideCheck" class="h-3 w-3 text-white" />
@@ -47,7 +43,7 @@
               />
               <div>
                 <div class="font-medium">{{ paymentMethod.name }}</div>
-                <div class="text-sm text-gray-500">
+                <div class="text-sm text-gray-500 dark:text-gray-400">
                   {{ paymentMethod.description }}
                 </div>
               </div>
@@ -63,7 +59,7 @@
           </div>
           @if (isPaymentMethodSelected(paymentMethod.id)) {
             <button
-              class="flex items-center gap-3 border-t pt-4 border-gray-200"
+              class="flex items-center gap-3 border-t pt-4 border-gray-200 dark:border-gray-700"
               (click)="$event.stopPropagation()"
             >
               <span class="text-sm font-medium">Valor a pagar:</span>
@@ -90,7 +86,7 @@
   </div>
   <div class="flex flex-col gap-4 mt-6">
     @if (cartState.paymentMethods().length > 0) {
-      <div class="border rounded-lg p-4 bg-gray-50">
+      <div class="border rounded-lg p-4 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
         <h4 class="font-medium text-sm mb-3">Resumo do Pagamento</h4>
         <div class="space-y-2">
           <div class="flex justify-between text-sm">
@@ -108,18 +104,20 @@
           @if (getTotalPaid() - cartState.total() > 0) {
             <div class="flex justify-between text-sm">
               <span>Troco:</span>
-              <span class="font-medium text-blue-600">{{
+              <span class="font-medium text-blue-600 dark:text-blue-400">{{
                 getTotalPaid() - cartState.total()
                   | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
               }}</span>
             </div>
           }
-          <div class="flex justify-between text-sm border-t pt-2">
+          <div class="flex justify-between text-sm border-t pt-2 dark:border-gray-700">
             <span>Restante:</span>
             <span
-              class="font-medium"
-              [class.text-green-600]="getRemainingAmount() === 0"
-              [class.text-red-600]="getRemainingAmount() > 0"
+              [ngClass]="{
+                'font-medium': true,
+                'text-green-600 dark:text-green-400': getRemainingAmount() === 0,
+                'text-red-600 dark:text-red-400': getRemainingAmount() > 0
+              }"
             >
               {{
                 getRemainingAmount()
@@ -132,7 +130,7 @@
     }
 
     <div class="flex justify-between items-center gap-2">
-      <div class="text-sm text-gray-600">
+      <div class="text-sm text-gray-600 dark:text-gray-400">
         @if (cartState.paymentMethods().length > 0) {
           {{ cartState.paymentMethods().length }} método(s) selecionado(s)
         } @else {

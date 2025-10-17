@@ -12,7 +12,7 @@ import { sleep } from 'app/shared/utils/utils';
 import { CartItem, CartState } from './order-cart.state';
 import { ClientSelectionComponent } from '../client-selection/client-selection.component';
 import { StepperModule } from 'primeng/stepper';
-import { DeliverySelectionComponent } from '../delivery-selection/delivery-selection.component';
+// import { DeliverySelectionComponent } from '../delivery-selection/delivery-selection.component';
 import { DialogModule } from 'primeng/dialog';
 import { PaymentSelectionComponent } from '../payment-selection/payment-selection.component';
 import { ClientState } from 'app/dashboard/modules/client-module/client.state';
@@ -29,7 +29,7 @@ import { MessageService } from 'primeng/api';
     NgClass,
     NgIcon,
     ClientSelectionComponent,
-    DeliverySelectionComponent,
+    // DeliverySelectionComponent,
     PaymentSelectionComponent,
     StepperModule,
     DialogModule,

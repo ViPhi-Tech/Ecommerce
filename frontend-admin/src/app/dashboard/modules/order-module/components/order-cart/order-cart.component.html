@@ -20,11 +20,6 @@
     </div>
     <div
       class="relative overflow-hidden flex-1 p-4"
-      style="
-        position: relative;
-        --radix-scroll-area-corner-width: 0px;
-        --radix-scroll-area-corner-height: 0px;
-      "
     >
       <div
         class="h-full w-full rounded-[inherit]"
@@ -197,8 +192,8 @@
     <p-stepper [(value)]="step" class="basis-[50rem]">
       <p-step-list>
         <p-step [value]="1">Cliente</p-step>
-        <p-step [value]="2">Entrega</p-step>
-        <p-step [value]="3">Pagamento</p-step>
+        <!-- <p-step [value]="2">Entrega</p-step> -->
+        <p-step [value]="2">Pagamento</p-step>
       </p-step-list>
       <p-step-panels>
         <p-step-panel [value]="1">
@@ -207,15 +202,15 @@
           </ng-template>
         </p-step-panel>
 
-        <p-step-panel [value]="2">
+        <!-- <p-step-panel [value]="2">
           <ng-template #content>
             <fuse-delivery-selection
               (deliveryTypeSelected)="onDeliverySelected()"
             ></fuse-delivery-selection>
           </ng-template>
-        </p-step-panel>
+        </p-step-panel> -->
 
-        <p-step-panel [value]="3">
+        <p-step-panel [value]="2">
           <ng-template #content>
             <fuse-payment-selection></fuse-payment-selection>
           </ng-template>
