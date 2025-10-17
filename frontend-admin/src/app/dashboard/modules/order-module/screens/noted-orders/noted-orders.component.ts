@@ -17,6 +17,7 @@ import { ClientState } from '../../../client-module/client.state';
 import { CoreService } from 'app/shared/services/core.service';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'fuse-noted-orders',
@@ -45,35 +46,16 @@ export class NotedOrdersComponent implements OnInit {
   clientOptions = computed(() => {
     const clients = this.clientState.clientList();
     return [
-      { label: 'Todos os clientes', value: null },
       ...clients.map(client => ({
         label: client.fullName || client.document || 'Cliente sem nome',
-        value: client.fullName || client.document || '',
+        value: client.id || client.document || '',
       })),
     ];
   });
 
   filteredOrderList = computed(() => {
     const orders = this.state.orderList();
-    const selectedClient = this.selectedClient();
-    const period = this.selectedPeriod();
-
-    let filtered = orders;
-
-    // Filtrar por cliente
-    if (selectedClient) {
-      filtered = filtered.filter(
-        order => order.client?.fullName === selectedClient
-      );
-    }
-
-    // Filtrar por período (se necessário implementar)
-    if (period) {
-      // TODO: Implementar filtro por período se os pedidos tiverem data
-      console.log('Filtrar por período:', period);
-    }
-
-    return filtered;
+    return orders;
   });
 
   ngOnInit() {
@@ -81,16 +63,26 @@ export class NotedOrdersComponent implements OnInit {
       'Pedidos Anotados',
       'Visualize os pedidos pendentes de forma organizada'
     );
-    this.state.getOrderList();
-    this.clientState.getClientList();
+    this.clientState.getClientList(true);
+  }
+
+  getOrderList() {
+    const filter = {
+      client: this.selectedClient(),
+      startDate: dayjs(this.selectedPeriod()?.startDate).format('YYYY-MM-DD'),
+      endDate: dayjs(this.selectedPeriod()?.endDate).format('YYYY-MM-DD'),
+    };
+    this.state.getOrderListByClient(this.selectedClient() || '', filter.startDate, filter.endDate, 'account_receivable');
   }
 
   onClientChange(clientName: string | null) {
     this.selectedClient.set(clientName);
+    this.getOrderList();
   }
 
   onPeriodChange(range: PeriodRange) {
     this.selectedPeriod.set(range);
+    this.getOrderList();
   }
 
   getStatusSeverity(status: string): any {

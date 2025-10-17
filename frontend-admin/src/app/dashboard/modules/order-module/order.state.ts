@@ -40,19 +40,19 @@ export class OrderState extends BaseState<OrderModuleState> {
     });
   }
 
-  getOrderList(skipLoader = true): void {
+  getOrderList(skipLoader = true, filter?: any): void {
     this.setLoading(true);
     this.clearError();
     this.setOrderList([]);
 
     lastValueFrom(
-      this.orderService.getOrders(skipLoader).pipe(
+      this.orderService.getOrdersByClient(skipLoader, filter).pipe(
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
       )
     )
       .then((response: ApiResponse<Order[]>) => {
-        const orders = Array.isArray(response) ? response : response.data;
+        const orders = Array.isArray(response) ? response : response?.data || response?.dados;
         if (orders && orders.length > 0) {
           this.setOrderList(orders);
         } else {
@@ -98,6 +98,32 @@ export class OrderState extends BaseState<OrderModuleState> {
       this.refreshOrderSubject.next(response.data); // Notifica que os detalhes do pedido foram atualizados
       return response.data;
     });
+  }
+
+  getOrderListByClient(clientId: string | number, startDate: string, endDate: string, paymentTypeId: string): void {
+    this.setLoading(true);
+    this.clearError();
+    this.setOrderList([]);
+
+    lastValueFrom(
+      this.orderService.getOrdersByClient(false, { clientId, startDate, endDate, paymentTypeId }).pipe(
+        catchError(error => this.handleError(error)),
+        finalize(() => this.setLoading(false))
+      )
+    )
+      .then((response: ApiResponse<Order[]>) => {
+        const orders = Array.isArray(response) ? response : response?.data || response?.dados;
+        if (orders && orders.length > 0) {
+          this.setOrderList(orders);
+        } else {
+          this.setOrderList([]);
+          this.setError('Nenhum pedido encontrado.');
+        }
+      })
+      .catch(error => {
+        this.setError('Erro ao carregar a lista de pedidos');
+        console.error('Erro ao buscar pedidos:', error);
+      });
   }
 
   resetOrder() {
