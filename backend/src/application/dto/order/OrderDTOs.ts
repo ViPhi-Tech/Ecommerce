@@ -73,7 +73,7 @@ export const getOrders = z.object({
 
 
 export const getOrdersByClient = z.object({
-  clientId: z.number().min(1, { message: "ID do cliente é obrigatório" }).optional(),
+  clientId: z.string().min(1, { message: "ID do cliente é obrigatório" }),
   startDate: z.string().min(1, { message: "Data inicial é obrigatória" }),
   endDate: z.string().min(1, { message: "Data final é obrigatória" }),
   paymentTypeId: z.string().min(1, { message: "Tipo de pagamento é obrigatório" }).optional(),
