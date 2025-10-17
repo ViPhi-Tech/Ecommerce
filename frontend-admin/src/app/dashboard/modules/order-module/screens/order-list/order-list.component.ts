@@ -185,6 +185,7 @@ export class OrderListComponent implements OnInit {
         {
           field: 'customerName',
           caption: 'Cliente',
+          defaultValue: 'Cliente não informado',
           sortable: true,
           filter: true,
         },

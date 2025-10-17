@@ -9,7 +9,7 @@ import { CoreService } from '../../services/core.service';
   template: `
     <div
       *ngIf="coreService.loading$ | async"
-      class="fixed inset-0 flex items-center justify-center bg-primary"
+      class="fixed inset-0 flex items-center justify-center bg-gray-500"
       style="  z-index: 5001;
         opacity: .3"
     >
