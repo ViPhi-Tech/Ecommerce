@@ -17,7 +17,6 @@ import { ClientState } from '../../../client-module/client.state';
 import { CoreService } from 'app/shared/services/core.service';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
-import { Tooltip } from 'primeng/tooltip';
 
 @Component({
   selector: 'fuse-noted-orders',
@@ -31,7 +30,6 @@ import { Tooltip } from 'primeng/tooltip';
     PeriodComponent,
     ButtonModule,
     TagModule,
-    Tooltip,
     CurrencyPipe,
   ],
   providers: [OrderState],
