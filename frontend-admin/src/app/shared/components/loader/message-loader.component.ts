@@ -17,10 +17,10 @@ import { NgIcon } from '@ng-icons/core';
           <!-- Ícone com animação -->
           <div class="relative">
             <div
-              class="absolute inset-0 bg-primary/20 dark:bg-primary/30 rounded-full animate-ping"
+              class="absolute inset-0 bg-gray/20 dark:bg-gray/30 rounded-full animate-ping"
             ></div>
             <div
-              class="relative flex items-center justify-center w-16 h-16 bg-primary/10 dark:bg-primary/20 rounded-full"
+              class="relative flex items-center justify-center w-16 h-16 bg-gray/10 dark:bg-gray/20 rounded-full"
             >
               <ng-icon
                 [name]="icon()"

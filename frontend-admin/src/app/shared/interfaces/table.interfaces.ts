@@ -37,6 +37,7 @@ export interface TableColumn {
   style?: string;
   badgeSeverityKey?: string; // Key for badge severity, used for status badges
   frozen?: boolean; // Whether the column should be frozen on the right/left
+  defaultValue?: string; // Default value when field is empty or null
 }
 
 export interface HeaderButton {

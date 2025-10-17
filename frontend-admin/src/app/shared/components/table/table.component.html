@@ -223,7 +223,7 @@
                 [severity]="rowData?.[column?.badgeSeverityKey || '']"
               ></p-badge>
             } @else {
-              {{ rowData?.[column?.field || ''] }}
+              {{ rowData?.[column?.field || ''] || column?.defaultValue || '' }}
             }
           }
         </td>

@@ -10,9 +10,9 @@
   </div>
 
   <!-- Filtros -->
-  <div class="flex gap-4 mb-8 flex-wrap">
+  <div class="flex gap-4 mb-8 flex-wrap justify-end">
     <!-- Filtro de Cliente -->
-    <div class="flex-1 min-w-[280px]">
+    <div class="flex-1 max-w-[280px]">
       <p-select
         class="w-full"
         [options]="clientOptions()"
@@ -32,7 +32,7 @@
     </div>
 
     <!-- Filtro de Período -->
-    <div class="flex-1 min-w-[280px]">
+    <div>
       <fuse-period
         [availablePeriods]="[
           'today',
@@ -48,6 +48,16 @@
         (periodChange)="onPeriodChange($event)"
       />
     </div>
+
+    <p-button
+      [text]="true"
+      styleClass="h-full"
+      (onClick)="state.getOrderList()"
+      pTooltip="Atualizar dados"
+      tooltipPosition="bottom"
+    >
+      <ng-icon name="lucideRefreshCw" />
+    </p-button>
   </div>
 
   <!-- Cards Pendurados -->

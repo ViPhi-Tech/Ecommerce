@@ -7,7 +7,6 @@ import {
   TemplateRef,
   ViewChild,
   computed,
-  effect,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
@@ -32,7 +31,6 @@ import { SelectModule } from 'primeng/select';
 import PeriodComponent, {
   PeriodRange,
 } from 'app/shared/components/period/period.component';
-import { CurrencyPipe } from '@angular/common';
 import { ClientState } from '../../../client-module/client.state';
 import { AccountsReceivableState } from 'app/dashboard/modules/accounts-receivable-module/accounts-receivable.state';
 import { PAYMENTS_SITEMAP } from 'app/shared/constants/payments.sitemap';
@@ -53,7 +51,6 @@ import { PAYMENTS_SITEMAP } from 'app/shared/constants/payments.sitemap';
     Tooltip,
     SelectModule,
     PeriodComponent,
-    CurrencyPipe,
   ],
   providers: [OrderState],
 })
@@ -78,7 +75,6 @@ export class OrderListComponent implements OnInit {
   title = '';
 
   selectedClient = signal<string | null>(null);
-  selectedData = signal<any[]>([]);
 
   clientOptions = computed(() => {
     const clients = this.clientState.clientList();
@@ -98,43 +94,7 @@ export class OrderListComponent implements OnInit {
     return orders.filter(order => order.client?.fullName === selectedClient);
   });
 
-  selectedSummary = computed(() => {
-    const selected = this.selectedData();
-    const count = selected.length;
-    const totalAmount = selected.reduce(
-      (sum: number, order: any) => sum + (order.total || 0),
-      0
-    );
-    const pendingCount = selected.filter(
-      (o: any) => o.status === 'PENDING'
-    ).length;
-    const paidCount = selected.filter((o: any) => o.status === 'PAID').length;
-    const cancelledCount = selected.filter(
-      (o: any) => o.status === 'CANCELLED'
-    ).length;
-    return { count, totalAmount, pendingCount, paidCount, cancelledCount };
-  });
-
   constructor() {
-    // Liga/desliga seleção múltipla baseado no cliente selecionado
-    effect(() => {
-      const hasClientSelected = !!this.selectedClient();
-      const currentConfig = this.tableConfig();
-      const hasSelection = !!currentConfig?.selection?.mode;
-
-      if (hasClientSelected && !hasSelection) {
-        this.tableConfig.set({
-          ...currentConfig,
-          selection: { mode: 'multiple' },
-        });
-      }
-
-      if (!hasClientSelected && hasSelection) {
-        const next: any = { ...currentConfig };
-        delete next.selection;
-        this.tableConfig.set(next as TableConfig);
-      }
-    });
   }
 
   ngOnInit() {
@@ -208,60 +168,6 @@ export class OrderListComponent implements OnInit {
     console.log('Período selecionado:', range);
   }
 
-  convertToAccountsReceivable(orderId?: number | string) {
-    const order = this.state.orderList().find(o => o.id === orderId);
-    const selected = order ? [order] : this.selectedData();
-
-    if (selected.length === 0) {
-      this.toast.add({
-        severity: 'warn',
-        summary: 'Atenção',
-        detail: 'Selecione pelo menos um pedido para converter',
-      });
-      return;
-    }
-
-    const hasNoClient = selected.some(o => !o?.client);
-    if (hasNoClient) {
-      this.toast.add({
-        severity: 'warn',
-        summary: 'Atenção',
-        detail:
-          'Todos os pedidos devem ter um cliente associado para converter',
-      });
-      return;
-    }
-
-    const firstClient = selected[0]?.client?.id;
-    const allSameClient = selected.every(o => o?.client?.id === firstClient);
-    if (!allSameClient) {
-      this.toast.add({
-        severity: 'warn',
-        summary: 'Atenção',
-        detail: 'Todos os pedidos devem ser do mesmo cliente para converter',
-      });
-      return;
-    }
-
-    const accountReceivableTotal = selected.reduce(
-      (sum: number, o: any) => sum + (o?.total || 0),
-      0
-    );
-
-    const formData = {
-      orders: selected,
-      amount: accountReceivableTotal,
-      clientId: firstClient,
-    } as any;
-
-    this.router.navigate([
-      { outlets: { drawer: ['accounts-receivable', 'new'] } },
-    ]);
-    setTimeout(() => {
-      this.accountsReceivableState.prefillForm(formData);
-    }, 100);
-  }
-
   setTableConfig() {
     this.tableConfig.set({
       rowsPerPageOptions: [5, 10, 20],
@@ -279,6 +185,7 @@ export class OrderListComponent implements OnInit {
         {
           field: 'customerName',
           caption: 'Cliente',
+          defaultValue: 'Cliente não informado',
           sortable: true,
           filter: true,
         },
@@ -307,15 +214,6 @@ export class OrderListComponent implements OnInit {
           field: 'actions',
           caption: 'Ações',
           actionButtons: [
-            {
-              icon: 'lucideArrowRight',
-              color: 'success',
-              variant: 'text',
-              tooltip: 'Converter em Conta a Receber',
-              action: (data: any) => {
-                this.convertToAccountsReceivable(data?.id);
-              },
-            },
             {
               icon: 'lucideEye',
               color: 'info',
