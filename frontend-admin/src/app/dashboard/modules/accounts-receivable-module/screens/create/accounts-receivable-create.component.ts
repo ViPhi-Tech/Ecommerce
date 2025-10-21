@@ -54,6 +54,7 @@ export class AccountsReceivableCreateComponent implements OnInit {
   submitButtonLabel = signal('Salvar');
   isLoading = signal(true);
   isView = signal(false);
+  typeAction = signal<string>('');
 
   accountsReceivableForm!: FormGroup;
 
@@ -87,6 +88,13 @@ export class AccountsReceivableCreateComponent implements OnInit {
 
   ngOnInit() {
     this.clientState.getClientList();
+    this.handleRouteParams();
+    this.handleFormValueChanges();
+    this.handleFormPrefill();
+  }
+
+  // Função 1: lida com params da rota
+  private handleRouteParams(): void {
     this.activatedRoute.params
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe(params => {
@@ -97,23 +105,27 @@ export class AccountsReceivableCreateComponent implements OnInit {
         } else {
           this.loadInfos();
         }
-        const url = this.router.url;
+        const url = this.router.url
         this.isView.set(url.includes('/view'));
         if (this.isView()) {
           this.accountsReceivableForm.disable();
           this.title.set('Visualizar Conta a Receber');
         }
-      });
+      })
+  }
 
-    // Validação em tempo real usando valueChanges
+  // Função 2: validação em tempo real usando valueChanges
+  private handleFormValueChanges(): void {
     this.accountsReceivableForm.valueChanges
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe(() => {
         const errors = this.dateValidation(this.accountsReceivableForm);
         this.accountsReceivableForm.setErrors(errors);
       });
+  }
 
-    // Escuta o Subject para pré-preencher o formulário
+  // Função 3: escuta para pré-preencher o formulário
+  private handleFormPrefill(): void {
     this.accountsReceivableState.formPrefill$
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe(data => {
