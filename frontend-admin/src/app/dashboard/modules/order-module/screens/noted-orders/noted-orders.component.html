@@ -64,7 +64,31 @@
     } @else {
       <div class="noted-cards-grid">
         @for (order of filteredOrderList(); track order.id) {
-          <div class="noted-card">
+          <div 
+            class="noted-card" 
+            [class.selected]="isOrderSelected(order.id)"
+            (click)="toggleOrderSelection(order.id)"
+            (keydown.enter)="toggleOrderSelection(order.id)"
+            tabindex="0"
+            role="button"
+          >
+            <!-- Checkbox de seleção -->
+            <div 
+              class="absolute top-4 right-4 z-10" 
+              (click)="$event.stopPropagation()"
+              (keydown.enter)="$event.stopPropagation()"
+              tabindex="0"
+              role="button"
+            >
+              <p-checkbox
+                [binary]="true"
+                [ngModel]="isOrderSelected(order.id)"
+                (ngModelChange)="toggleOrderSelection(order.id); $event.stopPropagation()"
+                (onClick)="$event.stopPropagation()"
+                styleClass="select-checkbox"
+              />
+            </div>
+
             <!-- Pin/Clipe -->
             <div class="pin">
               <div class="pin-head"></div>
@@ -184,4 +208,45 @@
       </div>
     }
   </div>
+
+  <!-- Toolbar de ações -->
+  @if (hasSelections()) {
+    <div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-2xl border-t border-gray-200 dark:border-gray-700 p-4 z-50 animate-slide-up">
+      <div class="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-4">
+        <div class="flex items-center gap-4 flex-wrap">
+          <div class="flex items-center gap-2">
+            <ng-icon name="lucideCheckCircle2" class="text-blue-600 dark:text-blue-400" size="24" />
+            <div class="text-sm">
+              <span class="font-semibold text-gray-900 dark:text-gray-100">
+                {{ getSelectedOrdersCount() }}
+              </span>
+              <span class="text-gray-600 dark:text-gray-400 ml-1">
+                pedido(s) selecionado(s)
+              </span>
+            </div>
+          </div>
+          <div class="text-sm font-bold text-green-600 dark:text-green-400">
+            Total: {{ getTotalValueOfSelectedOrders() | currency: 'BRL' }}
+          </div>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <p-button
+            label="Limpar"
+            [outlined]="true"
+            severity="secondary"
+            size="small"
+            (onClick)="clearSelection()"
+            icon="pi pi-times"
+          />
+          <p-button
+            label="Gerar Conta a Receber"
+            severity="success"
+            size="small"
+            (onClick)="generateAccountsReceivable()"
+            icon="pi pi-dollar"
+          />
+        </div>
+      </div>
+    </div>
+  }
 </div>

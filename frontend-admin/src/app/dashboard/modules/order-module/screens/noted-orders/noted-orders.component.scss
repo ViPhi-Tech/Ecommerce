@@ -1,6 +1,37 @@
 .noted-orders-container {
   width: 100%;
   min-height: 400px;
+  padding-bottom: 100px; // Espaço para a toolbar fixada
+}
+
+.select-checkbox {
+  cursor: pointer;
+  
+  :deep(.p-checkbox-box) {
+    background-color: white;
+    border: 2px solid #3b82f6;
+    
+    &.p-highlight {
+      background-color: #3b82f6;
+      border-color: #3b82f6;
+    }
+  }
+}
+
+// Animação para a toolbar
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
 }
 
 .noted-cards-grid {
@@ -22,6 +53,16 @@
   transition: all 0.3s ease;
   // animation: swing 3s ease-in-out infinite;
   transform-origin: top center;
+  cursor: pointer;
+
+  &.selected {
+    border: 2px solid #3b82f6;
+    box-shadow:
+      0 4px 6px -1px rgba(59, 130, 246, 0.3),
+      0 2px 4px -1px rgba(59, 130, 246, 0.2),
+      0 10px 15px -3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-3px);
+  }
 
   // Diferentes cores de fundo para variar
   &:nth-child(4n + 1) {
@@ -147,6 +188,26 @@
       box-shadow:
         0 20px 25px -5px rgba(0, 0, 0, 0.4),
         0 10px 10px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    &.selected {
+      border: 2px solid #60a5fa;
+      box-shadow:
+        0 4px 6px -1px rgba(96, 165, 250, 0.3),
+        0 2px 4px -1px rgba(96, 165, 250, 0.2),
+        0 10px 15px -3px rgba(96, 165, 250, 0.1);
+    }
+  }
+
+  .select-checkbox {
+    :deep(.p-checkbox-box) {
+      background-color: #374151;
+      border: 2px solid #60a5fa;
+      
+      &.p-highlight {
+        background-color: #3b82f6;
+        border-color: #60a5fa;
+      }
     }
   }
 }

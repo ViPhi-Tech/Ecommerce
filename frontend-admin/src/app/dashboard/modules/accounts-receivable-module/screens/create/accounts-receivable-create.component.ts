@@ -84,13 +84,14 @@ export class AccountsReceivableCreateComponent implements OnInit {
 
   constructor() {
     this.initForm();
-  }
-
-  ngOnInit() {
     this.clientState.getClientList();
     this.handleRouteParams();
     this.handleFormValueChanges();
     this.handleFormPrefill();
+  }
+
+  ngOnInit() {
+  
   }
 
   // Função 1: lida com params da rota
@@ -201,7 +202,6 @@ export class AccountsReceivableCreateComponent implements OnInit {
 
     const payload: any = {
       ...formValue,
-      orders: formValue?.orders?.map((order: any) => order.id),
     };
 
     if (formValue.id) {

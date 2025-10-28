@@ -13,6 +13,7 @@ export interface IAccountsReceivable {
   description: string;
   status?: AccountsReceivableStatus; // ex: 'pending', 'received', 'overdue'
   statusLabel?: string; // ex: 'Pendente', 'Recebido', 'Vencido'
+  orders?: string[] | number[];
   createdAt: Date;
   updatedAt: Date;
 }
