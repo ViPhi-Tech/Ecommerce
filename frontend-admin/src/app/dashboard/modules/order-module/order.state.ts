@@ -111,7 +111,7 @@ export class OrderState extends BaseState<OrderModuleState> {
     this.setLoading(true);
     this.clearError();
     this.setOrderList([]);
-
+    
     lastValueFrom(
       this.orderService
         .getOrdersByClient(true, {

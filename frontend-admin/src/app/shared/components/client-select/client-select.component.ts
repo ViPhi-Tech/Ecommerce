@@ -49,7 +49,7 @@ export class ClientSelectComponent implements OnInit {
     const clients = this.clientState.clientList();
     const options = clients.map(client => ({
       label: client.fullName || client.document || 'Cliente sem nome',
-      value: client.fullName || client.document || '',
+      value: client.id || client.document || '',
     }));
 
     
