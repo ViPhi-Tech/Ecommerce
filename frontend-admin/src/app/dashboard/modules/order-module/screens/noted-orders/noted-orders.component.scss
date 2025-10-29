@@ -1,6 +1,74 @@
 .noted-orders-container {
   width: 100%;
   min-height: 400px;
+  padding-bottom: 100px; // Espaço para a toolbar fixada
+}
+
+// Checkbox container - oculto por padrão
+.checkbox-container {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease-in-out;
+  transform: translateY(-5px);
+  
+  .checkbox-hover-container {
+    cursor: pointer;
+    
+    :deep(.p-checkbox-box) {
+      background-color: white;
+      border: 2px solid #3b82f6;
+      border-radius: 4px;
+      width: 20px;
+      height: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+      
+      &.p-highlight {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+      }
+      
+      &:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+    }
+    
+    :deep(.p-checkbox-icon) {
+      color: white;
+      font-size: 12px;
+    }
+  }
+}
+
+.select-checkbox {
+  cursor: pointer;
+  
+  :deep(.p-checkbox-box) {
+    background-color: white;
+    border: 2px solid #3b82f6;
+    
+    &.p-highlight {
+      background-color: #3b82f6;
+      border-color: #3b82f6;
+    }
+  }
+}
+
+// Animação para a toolbar
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.3s ease-out;
 }
 
 .noted-cards-grid {
@@ -15,42 +83,67 @@
   background: linear-gradient(135deg, #fefce8 0%, #fef9c3 100%);
   border-radius: 8px;
   padding: 1.5rem;
-  box-shadow: 
+  box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -1px rgba(0, 0, 0, 0.06),
     0 10px 15px -3px rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
   // animation: swing 3s ease-in-out infinite;
   transform-origin: top center;
-  
+  cursor: pointer;
+
+  &.selected {
+    border: 2px solid #3b82f6;
+    box-shadow:
+      0 4px 6px -1px rgba(59, 130, 246, 0.3),
+      0 2px 4px -1px rgba(59, 130, 246, 0.2),
+      0 10px 15px -3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-3px);
+    
+    // Manter checkbox visível quando selecionado
+    .checkbox-container {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+  }
+
   // Diferentes cores de fundo para variar
   &:nth-child(4n + 1) {
     background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
   }
-  
+
   &:nth-child(4n + 2) {
     background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
   }
-  
+
   &:nth-child(4n + 3) {
     background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
   }
-  
+
   &:nth-child(4n + 4) {
     background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
   }
 
   &:hover {
     transform: translateY(-5px) rotate(0deg) !important;
-    box-shadow: 
+    box-shadow:
       0 20px 25px -5px rgba(0, 0, 0, 0.1),
       0 10px 10px -5px rgba(0, 0, 0, 0.04);
     animation-play-state: paused;
+    
+    // Mostrar checkbox no hover
+    .checkbox-container {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
   }
 
   // Animação de balanço suave
   @keyframes swing {
-    0%, 100% {
+    0%,
+    100% {
       transform: rotate(-1deg);
     }
     50% {
@@ -62,11 +155,11 @@
   &:nth-child(3n + 1) {
     animation-delay: 0s;
   }
-  
+
   &:nth-child(3n + 2) {
     animation-delay: 0.5s;
   }
-  
+
   &:nth-child(3n + 3) {
     animation-delay: 1s;
   }
@@ -79,17 +172,17 @@
   left: 50%;
   transform: translateX(-50%);
   z-index: 10;
-  
+
   .pin-head {
     width: 24px;
     height: 24px;
     background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
     border-radius: 50%;
-    box-shadow: 
+    box-shadow:
       0 2px 4px rgba(0, 0, 0, 0.2),
       inset 0 2px 2px rgba(255, 255, 255, 0.3);
     position: relative;
-    
+
     &::after {
       content: '';
       position: absolute;
@@ -102,7 +195,7 @@
       border-radius: 50%;
     }
   }
-  
+
   .pin-needle {
     width: 2px;
     height: 8px;
@@ -121,31 +214,83 @@
 :host-context(.dark) {
   .noted-card {
     background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
-    box-shadow: 
+    box-shadow:
       0 4px 6px -1px rgba(0, 0, 0, 0.3),
       0 2px 4px -1px rgba(0, 0, 0, 0.2),
       0 10px 15px -3px rgba(0, 0, 0, 0.2);
-    
+
     &:nth-child(4n + 1) {
       background: linear-gradient(135deg, #422006 0%, #78350f 100%);
     }
-    
+
     &:nth-child(4n + 2) {
       background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
     }
-    
+
     &:nth-child(4n + 3) {
       background: linear-gradient(135deg, #701a75 0%, #86198f 100%);
     }
-    
+
     &:nth-child(4n + 4) {
       background: linear-gradient(135deg, #065f46 0%, #047857 100%);
     }
 
     &:hover {
-      box-shadow: 
+      box-shadow:
         0 20px 25px -5px rgba(0, 0, 0, 0.4),
         0 10px 10px -5px rgba(0, 0, 0, 0.3);
+      
+      // Mostrar checkbox no hover (modo escuro)
+      .checkbox-container {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+    }
+
+    &.selected {
+      border: 2px solid #60a5fa;
+      box-shadow:
+        0 4px 6px -1px rgba(96, 165, 250, 0.3),
+        0 2px 4px -1px rgba(96, 165, 250, 0.2),
+        0 10px 15px -3px rgba(96, 165, 250, 0.1);
+      
+      // Manter checkbox visível quando selecionado (modo escuro)
+      .checkbox-container {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  .checkbox-container {
+    .checkbox-hover-container {
+      :deep(.p-checkbox-box) {
+        background-color: #374151;
+        border: 2px solid #60a5fa;
+        
+        &.p-highlight {
+          background-color: #3b82f6;
+          border-color: #60a5fa;
+        }
+        
+        &:hover {
+          background-color: #4b5563;
+        }
+      }
+    }
+  }
+
+  .select-checkbox {
+    :deep(.p-checkbox-box) {
+      background-color: #374151;
+      border: 2px solid #60a5fa;
+      
+      &.p-highlight {
+        background-color: #3b82f6;
+        border-color: #60a5fa;
+      }
     }
   }
 }
@@ -164,4 +309,3 @@
     gap: 1.5rem;
   }
 }
-

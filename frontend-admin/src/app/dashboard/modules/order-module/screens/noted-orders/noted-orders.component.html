@@ -12,23 +12,8 @@
   <!-- Filtros -->
   <div class="flex gap-4 mb-8 flex-wrap justify-end">
     <!-- Filtro de Cliente -->
-    <div class="flex-1 max-w-[280px]">
-      <p-select
-        class="w-full"
-        [options]="clientOptions()"
-        [(ngModel)]="selectedClient"
-        optionLabel="label"
-        optionValue="value"
-        placeholder="Selecione um cliente"
-        (onChange)="onClientChange($event.value)"
-      >
-        <ng-template #selectedItem let-selectedOption>
-          <div class="flex items-center gap-2">
-            <ng-icon name="lucideUser" size="16" />
-            <span>{{ selectedOption.label }}</span>
-          </div>
-        </ng-template>
-      </p-select>
+    <div class="max-w-[280px]">
+      <fuse-client-select [allowAll]="false" [(selectedClient)]="selectedClient" />
     </div>
 
     <!-- Filtro de Período -->
@@ -52,7 +37,7 @@
     <p-button
       [text]="true"
       styleClass="h-full"
-      (onClick)="state.getOrderList()"
+      (onClick)="getOrderList()"
       pTooltip="Atualizar dados"
       tooltipPosition="bottom"
     >
@@ -64,10 +49,14 @@
   <div class="noted-orders-container">
     @if (state.loading()) {
       <div class="flex justify-center items-center py-20">
-        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <div
+          class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"
+        ></div>
       </div>
     } @else if (filteredOrderList().length === 0) {
-      <div class="flex flex-col items-center justify-center py-20 text-gray-500 dark:text-gray-400">
+      <div
+        class="flex flex-col items-center justify-center py-20 text-gray-500 dark:text-gray-400"
+      >
         <ng-icon name="lucideFileText" size="64" class="mb-4 opacity-50" />
         <p class="text-lg font-medium">Nenhum pedido encontrado</p>
         <p class="text-sm mt-2">Tente ajustar os filtros acima</p>
@@ -75,7 +64,32 @@
     } @else {
       <div class="noted-cards-grid">
         @for (order of filteredOrderList(); track order.id) {
-          <div class="noted-card">
+          <div 
+            class="noted-card" 
+            [class.selected]="isOrderSelected(order.id)"
+            (click)="toggleOrderSelection(order.id)"
+            (keydown.enter)="toggleOrderSelection(order.id)"
+            tabindex="0"
+            role="button"
+          >
+            <!-- Checkbox de seleção -->
+            <div 
+              class="checkbox-container absolute top-4 right-4 z-10" 
+              (click)="$event.stopPropagation()"
+              (keydown.enter)="$event.stopPropagation()"
+              tabindex="0"
+              role="button"
+            >
+              <div class="checkbox-hover-container">
+                <p-checkbox
+                  [binary]="true"
+                  [ngModel]="isOrderSelected(order.id)"
+                  (ngModelChange)="toggleOrderSelection(order.id); $event.stopPropagation()"
+                  (onClick)="$event.stopPropagation()"
+                />
+              </div>
+            </div>
+
             <!-- Pin/Clipe -->
             <div class="pin">
               <div class="pin-head"></div>
@@ -88,8 +102,14 @@
               <div class="flex items-start justify-between mb-4">
                 <div>
                   <div class="flex items-center gap-2 mb-1">
-                    <ng-icon name="lucideFileText" size="18" class="text-blue-600 dark:text-blue-400" />
-                    <span class="text-lg font-bold text-gray-800 dark:text-gray-200">
+                    <ng-icon
+                      name="lucideFileText"
+                      size="18"
+                      class="text-blue-600 dark:text-blue-400"
+                    />
+                    <span
+                      class="text-lg font-bold text-gray-800 dark:text-gray-200"
+                    >
                       #{{ order.id }}
                     </span>
                   </div>
@@ -111,11 +131,21 @@
 
               <!-- Cliente -->
               @if (order.client || order.customerName) {
-                <div class="mb-3 pb-3 border-b border-gray-200 dark:border-gray-700">
+                <div
+                  class="mb-3 pb-3 border-b border-gray-200 dark:border-gray-700"
+                >
                   <div class="flex items-center gap-2 text-sm">
-                    <ng-icon name="lucideUser" size="14" class="text-gray-600 dark:text-gray-400" />
+                    <ng-icon
+                      name="lucideUser"
+                      size="14"
+                      class="text-gray-600 dark:text-gray-400"
+                    />
                     <span class="font-medium text-gray-700 dark:text-gray-300">
-                      {{ order.client?.fullName || order.customerName || 'Cliente sem nome' }}
+                      {{
+                        order.client?.fullName ||
+                          order.customerName ||
+                          'Cliente sem nome'
+                      }}
                     </span>
                   </div>
                 </div>
@@ -124,22 +154,31 @@
               <!-- Itens do Pedido -->
               @if (order.items && order.items.length > 0) {
                 <div class="mb-3">
-                  <div class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2">
+                  <div
+                    class="text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2"
+                  >
                     Itens ({{ order.items.length }})
                   </div>
                   <div class="space-y-1">
                     @for (item of order.items.slice(0, 3); track item.id) {
                       <div class="flex items-center justify-between text-xs">
-                        <span class="text-gray-700 dark:text-gray-300 truncate flex-1">
-                          {{ item.quantity }}x {{ item.product?.name || 'Produto' }}
+                        <span
+                          class="text-gray-700 dark:text-gray-300 truncate flex-1"
+                        >
+                          {{ item.quantity }}x
+                          {{ item.product?.name || 'Produto' }}
                         </span>
-                        <span class="text-gray-600 dark:text-gray-400 font-medium ml-2">
-                          {{ (item.quantity * item.price) | currency: 'BRL' }}
+                        <span
+                          class="text-gray-600 dark:text-gray-400 font-medium ml-2"
+                        >
+                          {{ item.quantity * item.price | currency: 'BRL' }}
                         </span>
                       </div>
                     }
                     @if (order.items.length > 3) {
-                      <div class="text-xs text-gray-500 dark:text-gray-400 italic">
+                      <div
+                        class="text-xs text-gray-500 dark:text-gray-400 italic"
+                      >
                         +{{ order.items.length - 3 }} item(ns) a mais...
                       </div>
                     }
@@ -148,12 +187,18 @@
               }
 
               <!-- Total -->
-              <div class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+              <div
+                class="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700"
+              >
                 <div class="flex items-center justify-between">
-                  <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                  <span
+                    class="text-sm font-semibold text-gray-700 dark:text-gray-300"
+                  >
                     Total:
                   </span>
-                  <span class="text-xl font-bold text-green-600 dark:text-green-400">
+                  <span
+                    class="text-xl font-bold text-green-600 dark:text-green-400"
+                  >
                     {{ order.total | currency: 'BRL' }}
                   </span>
                 </div>
@@ -164,5 +209,45 @@
       </div>
     }
   </div>
-</div>
 
+  <!-- Toolbar de ações -->
+  @if (hasSelections()) {
+    <div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-2xl border-t border-gray-200 dark:border-gray-700 p-4 z-50 animate-slide-up">
+      <div class="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-4">
+        <div class="flex items-center gap-4 flex-wrap">
+          <div class="flex items-center gap-2">
+            <ng-icon name="lucideCheckCircle2" class="text-blue-600 dark:text-blue-400" size="24" />
+            <div class="text-sm">
+              <span class="font-semibold text-gray-900 dark:text-gray-100">
+                {{ getSelectedOrdersCount() }}
+              </span>
+              <span class="text-gray-600 dark:text-gray-400 ml-1">
+                pedido(s) selecionado(s)
+              </span>
+            </div>
+          </div>
+          <div class="text-sm font-bold text-green-600 dark:text-green-400">
+            Total: {{ getTotalValueOfSelectedOrders() | currency: 'BRL' }}
+          </div>
+        </div>
+        <div class="flex items-center gap-2 flex-wrap">
+          <p-button
+            label="Limpar"
+            [outlined]="true"
+            severity="secondary"
+            size="small"
+            (onClick)="clearSelection()"
+            icon="pi pi-times"
+          />
+          <p-button
+            label="Gerar Conta a Receber"
+            severity="success"
+            size="small"
+            (onClick)="generateAccountsReceivable()"
+            icon="pi pi-dollar"
+          />
+        </div>
+      </div>
+    </div>
+  }
+</div>

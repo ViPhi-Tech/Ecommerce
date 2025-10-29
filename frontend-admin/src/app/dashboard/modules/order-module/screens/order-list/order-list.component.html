@@ -39,22 +39,7 @@
       <ng-container data-headerFilter>
         <div class="flex gap-4 items-center w-full">
           <div class="flex-shrink-0">
-            <p-select
-              class="w-full max-w-64"
-              [options]="clientOptions()"
-              [(ngModel)]="selectedClient"
-              optionLabel="label"
-              optionValue="value"
-              placeholder="Selecione um cliente"
-              (onChange)="onClientChange($event.value)"
-            >
-              <ng-template #selectedItem let-selectedOption>
-                <div class="flex items-center gap-2">
-                  <ng-icon name="lucideUser" size="16" />
-                  <span>{{ selectedOption.label }}</span>
-                </div>
-              </ng-template>
-            </p-select>
+            <fuse-client-select [(selectedClient)]="selectedClient" />
           </div>
 
           <div class="flex-shrink-0">

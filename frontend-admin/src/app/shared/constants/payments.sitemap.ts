@@ -31,5 +31,6 @@ export const PAYMENTS_SITEMAP = {
     icon: 'lucideNotebook',
     iconColor: '#f59e0b', // amarelo
     severity: 'warn',
+    needClient: true,
   },
 };

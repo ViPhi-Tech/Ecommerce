@@ -1,9 +1,4 @@
-import {
-  Component,
-  inject,
-  OnInit,
-  ChangeDetectorRef,
-} from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CurrencyPipe, NgClass } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
@@ -15,7 +10,7 @@ import { DialogModule } from 'primeng/dialog';
 import { PaymentSelectionComponent } from '../payment-selection/payment-selection.component';
 import { ClientState } from 'app/dashboard/modules/client-module/client.state';
 import { Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { MessageLoaderComponent } from 'app/shared/components/loader/message-loader.component';
 
 @Component({
@@ -38,6 +33,7 @@ export class OrderCartComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
   public toast = inject(MessageService);
+  private confirmationService = inject(ConfirmationService);
 
   private clientState = inject(ClientState);
   cartState = inject(CartState);
@@ -118,13 +114,37 @@ export class OrderCartComponent implements OnInit {
     };
     const response = await this.cartState.checkout(data);
     if (response) {
-      this.router.navigate(['/dashboard/orders']);
       this.toast.add({
         severity: 'success',
         summary: 'Pedido realizado com sucesso',
         detail: `Pedido #${response.data.id} realizado com sucesso!`,
         life: 3000,
       });
+      const hasAccountReceivable = cart.paymentMethods.some((payment: any) => payment.id === 'account_receivable');
+      if (hasAccountReceivable) {
+        this.router.navigate(['']);
+      } else {
+        this.router.navigate(['/dashboard/orders']);
+      }
     }
+  }
+
+  confimationAccountReceivable() {
+    this.confirmationService.confirm({
+      message: 'Você tem certeza que deseja finalizar o pedido com conta a receber?',
+      header: 'Confirmação de Finalização',
+      icon: 'pi pi-exclamation-triangle text-red-500',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      acceptButtonStyleClass: 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-secondary',
+      accept: () => {
+        this.router.navigate(['/dashboard/orders']);
+
+      },
+      reject: () => {
+        this.router.navigate(['/dashboard/orders']);
+      },
+    });
   }
 }

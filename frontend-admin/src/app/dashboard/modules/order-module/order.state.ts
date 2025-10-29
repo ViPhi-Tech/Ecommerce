@@ -40,19 +40,21 @@ export class OrderState extends BaseState<OrderModuleState> {
     });
   }
 
-  getOrderList(skipLoader = true, filter?: any): void {
+  getOrderList(skipLoader = true): void {
     this.setLoading(true);
     this.clearError();
     this.setOrderList([]);
 
     lastValueFrom(
-      this.orderService.getOrdersByClient(skipLoader, filter).pipe(
+      this.orderService.getOrders(skipLoader).pipe(
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
       )
     )
       .then((response: ApiResponse<Order[]>) => {
-        const orders = Array.isArray(response) ? response : response?.data || response?.dados;
+        const orders = Array.isArray(response)
+          ? response
+          : response?.data || response?.dados;
         if (orders && orders.length > 0) {
           this.setOrderList(orders);
         } else {
@@ -100,19 +102,33 @@ export class OrderState extends BaseState<OrderModuleState> {
     });
   }
 
-  getOrderListByClient(clientId: string | number, startDate: string, endDate: string, paymentTypeId: string): void {
+  getOrderListByClient(
+    clientId: string | number,
+    startDate: string,
+    endDate: string,
+    paymentTypeId: string
+  ): void {
     this.setLoading(true);
     this.clearError();
     this.setOrderList([]);
-
+    
     lastValueFrom(
-      this.orderService.getOrdersByClient(false, { clientId, startDate, endDate, paymentTypeId }).pipe(
-        catchError(error => this.handleError(error)),
-        finalize(() => this.setLoading(false))
-      )
+      this.orderService
+        .getOrdersByClient(true, {
+          clientId,
+          startDate,
+          endDate,
+          paymentTypeId,
+        })
+        .pipe(
+          catchError(error => this.handleError(error)),
+          finalize(() => this.setLoading(false))
+        )
     )
       .then((response: ApiResponse<Order[]>) => {
-        const orders = Array.isArray(response) ? response : response?.data || response?.dados;
+        const orders = Array.isArray(response)
+          ? response
+          : response?.data || response?.dados;
         if (orders && orders.length > 0) {
           this.setOrderList(orders);
         } else {

@@ -100,4 +100,3 @@ export class MessageLoaderComponent {
   description = input<string>('');
   icon = input<string>('lucideLoader2');
 }
-
