@@ -1,7 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import { IAccountsReceivableRepository } from '../../../domain/repositories/IAccountsReceivableRepository';
 import { AccountsReceivable } from '../../../domain/entities/AccountsReceivable';
-import { CreateAccountsReceivableInput, UpdateAccountsReceivableInput } from '../../../application/dto/accountsReceivable/AccountsReceivableDTOs';
+import {
+  CreateAccountsReceivableInput,
+  DatesFilter,
+  UpdateAccountsReceivableInput
+} from '../../../application/dto/accountsReceivable/AccountsReceivableDTOs';
 import { parseDate } from '../../../shared/utils/dateUtils';
 
 export class AccountsReceivableRepository implements IAccountsReceivableRepository {
@@ -23,8 +27,25 @@ export class AccountsReceivableRepository implements IAccountsReceivableReposito
     });
   }
 
-  async findAll(): Promise<AccountsReceivable[]> {
+  async findAll(data: DatesFilter): Promise<AccountsReceivable[]> {
+    const start = data.startDate ? new Date(data.startDate) : new Date();
+    const end = data.endDate ? new Date(data.endDate) : new Date();
+
     return await this.prisma.accountsReceivable.findMany({
+      where: {
+        OR: [
+          // Todos os registros que NÃO são RECEIVED
+          { NOT: { status: 'received' } },
+          // Todos os RECEIVED que estão dentro do intervalo
+          {
+            status: 'received',
+            dueDate: {
+              gte: start,
+              lte: end,
+            },
+          },
+        ],
+      },
       include: {
         client: true,
       },

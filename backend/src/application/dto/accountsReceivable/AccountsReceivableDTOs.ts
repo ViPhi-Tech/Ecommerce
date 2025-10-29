@@ -1,6 +1,11 @@
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
 
+
+export interface DatesFilter {
+    startDate?: string;
+    endDate?: string;
+}
 // ===== INPUT DTOs (Para Use Cases) =====
 export interface CreateAccountsReceivableInput {
   // originalDueDate: string;
@@ -85,6 +90,13 @@ export const accountsReceivableStatusSchema = z.object({
     message: 'Status deve ser: pending, received, overdue ou cancelled'
   }),
 });
+
+export const datesFilterSchema = z.object({
+  startDate: z.string().min(1).optional(),
+  endDate: z.string().min(1).optional(),
+});
+
+export const dateFilterJsonSchema = zodToJsonSchema(datesFilterSchema);
 
 // ===== RESPONSE DTOs =====
 export interface AccountsReceivableResponse {

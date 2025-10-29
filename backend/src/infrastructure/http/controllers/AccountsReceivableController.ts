@@ -33,7 +33,8 @@ export class AccountsReceivableController {
 
   async findAll(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const accountsReceivable = await this.findAllAccountsReceivableUseCase.execute();
+      const data = request.query as {};
+      const accountsReceivable = await this.findAllAccountsReceivableUseCase.execute(data);
       return reply.status(200).send({ success: true, data: accountsReceivable });
     } catch (error) {
       return reply.status(500).send({ success: false, message: error instanceof Error ? error.message : 'Erro ao buscar contas a receber' });
