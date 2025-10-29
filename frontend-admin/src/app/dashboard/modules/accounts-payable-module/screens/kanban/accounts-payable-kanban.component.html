@@ -10,7 +10,28 @@
       </p>
     </div>
 
-    <div class="flex gap-3">
+    <div class="flex gap-3 items-center">
+      <!-- Filtro de Fornecedor -->
+      <div class="flex items-center gap-2">
+        <p-select
+          id="supplier-filter"
+          [options]="supplierOptions()"
+          [(ngModel)]="selectedSupplierIdModel"
+          (onChange)="onSupplierFilterChange($event)"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Todos os fornecedores"
+          [showClear]="true"
+          [filter]="true"
+          filterBy="label"
+          class="min-w-[200px]"
+          pTooltip="Filtrar por fornecedor"
+          tooltipPosition="bottom"
+        />
+      </div>
+
+      <div class="h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
+
       <p-button
         icon="pi pi-list"
         label="Lista"
@@ -39,17 +60,20 @@
   </div>
 
   <!-- Kanban Board -->
-  <div class="kanban-container">
-    <fuse-kanban
-      title=""
-      [columns]="kanbanColumns()"
-      [loading]="loading()"
-      [cardHeight]="140"
-      [allowDragDrop]="true"
-      (cardClick)="onCardClick($event)"
-      (cardDrop)="onCardDrop($event)"
-    ></fuse-kanban>
-  </div>
+  @if (loading() || kanbanColumns().length > 0) {
+    <div class="kanban-container">
+      <fuse-kanban
+        title=""
+        [columns]="kanbanColumns()"
+        [loading]="loading()"
+        [cardHeight]="140"
+        [allowDragDrop]="true"
+        (cardClick)="onCardClick($event)"
+        (cardDrop)="onCardDrop($event)"
+        (periodChange)="onPeriodChange($event)"
+      ></fuse-kanban>
+    </div>
+  }
 
   <!-- Empty State -->
   @if (!loading() && kanbanColumns().length === 0) {

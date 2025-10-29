@@ -48,13 +48,13 @@ export class KanbanCardComponent {
     const priority = this.card().priority;
     switch (priority) {
       case 'high':
-        return 'lucideAlertTriangle';
+        return 'lucideArrowUp';
       case 'medium':
-        return 'lucideClock';
-      case 'low':
-        return 'lucideChevronDown';
-      default:
         return 'lucideMinus';
+      case 'low':
+        return 'lucideArrowDown';
+      default:
+        return 'lucideArrowDown';
     }
   });
 

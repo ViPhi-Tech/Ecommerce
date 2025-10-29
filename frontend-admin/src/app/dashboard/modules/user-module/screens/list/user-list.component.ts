@@ -58,7 +58,9 @@ export class UserListComponent implements OnInit {
         actionButtonsType: 'buttons',
         actionButtons: [
           {
-            icon: 'pi pi-pencil',
+            icon: 'lucideEdit',
+            color: 'info',
+            variant: 'text',
             tooltip: 'Editar usuário',
             action: (rowData: any) => {
               this.router.navigate([
@@ -67,14 +69,16 @@ export class UserListComponent implements OnInit {
             },
           },
           {
-            icon: 'pi pi-info-circle',
+            icon: 'lucideInfo',
+            variant: 'text',
             tooltip: 'Ver módulos do usuário',
             action: (rowData: any) => {
               this.showUserModules(rowData);
             },
           },
           {
-            icon: 'pi pi-trash',
+            icon: 'lucideTrash2',
+            variant: 'text',
             tooltip: 'Excluir usuário',
             action: (rowData: any) => {
               this.confirmDelete(rowData);
@@ -93,15 +97,18 @@ export class UserListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.state.getUserList();
+    this.loadUsers();
   }
 
   addNewUser() {
     this.router.navigate([{ outlets: { drawer: ['users', 'new'] } }]);
   }
+  loadUsers() {
+    this.state.getUserList();
+  }
 
   refreshUsers() {
-    this.state.getUserList();
+    this.loadUsers();
   }
 
   showUserModules(user: any) {
@@ -150,7 +157,7 @@ export class UserListComponent implements OnInit {
             summary: 'Sucesso',
             detail: 'Usuário excluído com sucesso',
           });
-          this.state.getUserList();
+          this.loadUsers();
         },
         error: error => {
           this.toast.add({

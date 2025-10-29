@@ -52,7 +52,7 @@ export class UserState extends BaseState<UserModuleState> {
 
     await lastValueFrom(
       this.http
-        .get<ApiResponse<IUser[]>>(`${this.apiUrl}user/all`, {
+        .get<ApiResponse<IUser[]>>(`${this.apiUrl}user`, {
           headers: { 'Skip-Loader': 'true' },
         })
         .pipe(

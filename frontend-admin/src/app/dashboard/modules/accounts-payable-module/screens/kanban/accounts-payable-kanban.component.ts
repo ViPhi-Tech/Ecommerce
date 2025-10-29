@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { SelectModule } from 'primeng/select';
+import { FormsModule } from '@angular/forms';
 import { NgIcon } from '@ng-icons/core';
 import { Router } from '@angular/router';
 import { AccountsPayableState } from '../../accounts-payable.state';
@@ -23,12 +25,16 @@ import { CoreService } from 'app/shared/services/core.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AccountsPayableService } from '../../accounts-payable.service';
+import { PeriodRange } from 'app/shared/components/period/period.component';
+import { SupplierState } from '../../../supplier-module/supplier.state';
+import { ISupplier } from 'app/shared/interfaces/supplier/Supplier';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'fuse-accounts-payable-kanban',
   templateUrl: './accounts-payable-kanban.component.html',
   styleUrls: ['./accounts-payable-kanban.component.scss'],
-  imports: [CommonModule, ButtonModule, NgIcon, KanbanComponent],
+  imports: [CommonModule, ButtonModule, SelectModule, FormsModule, NgIcon, KanbanComponent],
   providers: [CurrencyPipe],
 })
 export class AccountsPayableKanbanComponent implements OnInit {
@@ -40,16 +46,36 @@ export class AccountsPayableKanbanComponent implements OnInit {
   private currencyPipe = inject(CurrencyPipe);
   private destroyedRef = inject(DestroyRef);
   private toast = inject(MessageService);
+  private supplierState = inject(SupplierState);
 
   // Signals
   kanbanColumns = signal<KanbanColumn[]>([]);
+  selectedPeriod = signal<PeriodRange | null>(null);
+  selectedSupplierId = signal<string | null>(null);
+  selectedSupplierIdModel: string | null = null;
+  supplierOptions = signal<{label: string, value: string}[]>([]);
 
   // Computed
   loading = computed(() => this.state.loading());
-  accountsPayableList = computed(() => this.state.accountsPayableList());
+  accountsPayableList = computed(() => {
+    const accounts = this.state.accountsPayableList();
+    const selectedSupplier = this.selectedSupplierId();
+    
+    if (!selectedSupplier) {
+      return accounts;
+    }
+    
+    return accounts.filter(account => account.supplier?.id === parseInt(selectedSupplier));
+  });
+  suppliersLoading = computed(() => this.supplierState.loading());
 
   constructor() {
     this.coreService.setPageTitle('Financeiro', '');
+
+    const localStoragePeriod = localStorage.getItem('payable_period');
+    if (localStoragePeriod) {
+      this.selectedPeriod.set(JSON.parse(localStoragePeriod));
+    }
 
     // Effect que executa automaticamente quando accountsPayableList mudar
     effect(() => {
@@ -58,10 +84,21 @@ export class AccountsPayableKanbanComponent implements OnInit {
         this.setupKanbanColumns();
       }
     });
+
+    // Effect para carregar opções de fornecedores
+    effect(() => {
+      const suppliers = this.supplierState.supplierList();
+      const options = suppliers.map((supplier: ISupplier) => ({
+        label: supplier.tradeName || supplier.legalName,
+        value: supplier.id.toString()
+      }));
+      this.supplierOptions.set(options);
+    });
   }
 
   ngOnInit() {
     this.loadAccountsPayable();
+    this.loadSuppliers();
   }
 
   async loadAccountsPayable() {
@@ -127,6 +164,9 @@ export class AccountsPayableKanbanComponent implements OnInit {
         color: 'green',
         cards: [],
         cardsActions: actions,
+        filter: {
+          date: true
+        }
       },
     ];
 
@@ -248,7 +288,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
     if (newStatus !== 'paid') {
       newStatus = 'pending';
     }
-    this.state.updateAccountPayableStatus(accountId, newStatus);
+    this.loadAccountsPayable();
   }
 
   navigateToList() {
@@ -325,7 +365,30 @@ export class AccountsPayableKanbanComponent implements OnInit {
     if (account) {
       if (confirm(`Marcar a conta "${account.description}" como paga?`)) {
         this.updateAccountStatus(account.id, 'paid');
+        this.loadAccountsPayable();
       }
     }
+  }
+
+  async loadSuppliers() {
+    await this.supplierState.getSupplierList(true);
+  }
+
+  onSupplierFilterChange(event: any) {
+    this.selectedSupplierIdModel = event.value;
+    this.selectedSupplierId.set(event.value);
+    // O filtro será aplicado automaticamente através do computed
+  }
+
+  clearSupplierFilter() {
+    this.selectedSupplierId.set(null);
+  }
+
+  onPeriodChange(data: any){
+    this.selectedPeriod.set({
+      ...data.period
+    })
+    localStorage.setItem('payable_period', JSON.stringify(data.period));
+    this.loadAccountsPayable();
   }
 }

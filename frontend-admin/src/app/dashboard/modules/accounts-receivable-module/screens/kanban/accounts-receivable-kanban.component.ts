@@ -282,7 +282,7 @@ export class AccountsReceivableKanbanComponent implements OnInit {
     if (newStatus !== 'received') {
       newStatus = 'pending';
     }
-    this.state.updateAccountReceivableStatus(accountId, newStatus);
+    this.loadAccountsReceivable();
   }
 
   navigateToList() {
@@ -359,6 +359,7 @@ export class AccountsReceivableKanbanComponent implements OnInit {
     if (account) {
       if (confirm(`Marcar a conta "${account.description}" como recebida?`)) {
         this.updateAccountStatus(account.id, 'received');
+        this.loadAccountsReceivable();
       }
     }
   }
