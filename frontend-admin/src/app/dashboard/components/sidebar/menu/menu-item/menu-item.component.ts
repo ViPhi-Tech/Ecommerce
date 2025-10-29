@@ -8,6 +8,7 @@ export interface MenuItem {
   label: string;
   icon: string;
   route?: string;
+  exact?: boolean;
   items?: MenuItem[];
   visible?: boolean;
   tree?: number; // Used to indicate the level of the menu item in a tree structure
@@ -26,6 +27,7 @@ export class MenuItemComponent implements OnInit {
     label: '',
     icon: '',
     route: '',
+    exact: false,
     items: [],
     visible: true,
   });

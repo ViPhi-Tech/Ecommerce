@@ -136,6 +136,7 @@
           icon="pi pi-check"
           class="w-[200px]"
           size="small"
+          [disabled]="productForm.invalid"
           (click)="onSubmit($event)"
         ></button>
 

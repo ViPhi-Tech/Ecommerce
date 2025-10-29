@@ -115,7 +115,7 @@ export class ProductCreateComponent implements OnInit {
       finalPrice: [0, [Validators.min(0.01), Validators.required]],
       quantity: ['', [Validators.required]],
       shortDescription: [''],
-      description: ['', [Validators.required]],
+      description: [''],
       companyId: ['1'],
     });
   }

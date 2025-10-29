@@ -9,7 +9,7 @@ export class UpdateProductUseCase {
   
     }
     async execute(input: CreateProductInput): Promise<ProductResponse> {
-
+      console.log('input', input);
       if(input.id == undefined) {
         throw new Error("Product id is required");
       }

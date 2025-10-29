@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AccountsPayableCreateComponent } from './screens/create/accounts-payable-create.component';
+import { AccountsPayableRedirectComponent } from './screens/accounts-payable-redirect.component';
 
 export const accountsPayableRoutes: Routes = [
   {
@@ -24,7 +25,7 @@ export const accountsPayableRoutes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'list',
+    component: AccountsPayableRedirectComponent,
     pathMatch: 'full',
   },
 ];

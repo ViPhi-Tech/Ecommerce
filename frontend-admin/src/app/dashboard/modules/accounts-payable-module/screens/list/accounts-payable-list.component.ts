@@ -111,6 +111,9 @@ export class AccountsPayableListComponent implements OnInit {
   }
 
   async ngOnInit() {
+    // Salvar preferência atual como lista
+    localStorage.setItem('accounts-payable-view-preference', 'list');
+
     this.loadAccountsPayable();
   }
 
@@ -198,6 +201,8 @@ export class AccountsPayableListComponent implements OnInit {
   }
 
   navigateToKanban() {
+    // Salvar preferência de visualização
+    localStorage.setItem('accounts-payable-view-preference', 'kanban');
     this.router.navigate(['/dashboard/accounts-payable/kanban']);
   }
 }

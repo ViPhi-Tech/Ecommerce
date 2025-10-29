@@ -110,6 +110,9 @@ export class AccountsReceivableListComponent implements OnInit {
   constructor() {}
 
   async ngOnInit() {
+    // Salvar preferência atual como lista
+    localStorage.setItem('accounts-receivable-view-preference', 'list');
+
     this.loadAccountsReceivable();
 
     this.coreService.setPageTitle(
@@ -158,6 +161,8 @@ export class AccountsReceivableListComponent implements OnInit {
   }
 
   navigateToKanban() {
+    // Salvar preferência de visualização
+    localStorage.setItem('accounts-receivable-view-preference', 'kanban');
     this.router.navigate(['/dashboard/accounts-receivable/kanban']);
   }
 

@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { AccountsReceivableCreateComponent } from './screens/create/accounts-receivable-create.component';
+import { AccountsReceivableRedirectComponent } from './screens/accounts-receivable-redirect.component';
 
 export const accountsReceivableRoutes: Routes = [
   {
@@ -38,7 +39,7 @@ export const accountsReceivableRoutes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'list',
+    component: AccountsReceivableRedirectComponent,
     pathMatch: 'full',
   },
 ];

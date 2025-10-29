@@ -3,7 +3,7 @@
   (onmouseleave)="onMouseLeave()"
   (click)="toggleMenu(!item().visible)"
   routerLinkActive="menu-item-active"
-  [routerLinkActiveOptions]="{ exact: true }"
+  [routerLinkActiveOptions]="{ exact: item().exact ?? false }"
   [routerLink]="item().route"
   class="menu-item {{ addictionalClass() }}"
 >

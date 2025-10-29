@@ -89,14 +89,16 @@ export class MenuComponent implements OnInit {
           id: ROLES_SITEMAP.ContasPagar,
           label: 'Contas a Pagar',
           icon: 'lucideCreditCard',
-          route: '/dashboard/accounts-payable/kanban',
+          route: '/dashboard/accounts-payable',
+          exact: false,
           visible: true,
         },
         {
           id: ROLES_SITEMAP.ContasReceber,
           label: 'Contas a Receber',
           icon: 'lucideDollarSign',
-          route: '/dashboard/accounts-receivable/kanban',
+          route: '/dashboard/accounts-receivable',
+          exact: false,
           visible: true,
         },
         {
