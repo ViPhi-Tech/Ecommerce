@@ -33,6 +33,27 @@
     </div>
   </div>
 
+  <div class="d-flex text-center">
+    @if (column().filter?.date) {
+      <fuse-period
+        [availablePeriods]="[
+          'all',
+          'today',
+          'yesterday',
+          'last7days',
+          'last15days',
+          'last30days',
+          'currentMonth',
+        ]"
+        [storeKey]="column().id + '_period'"
+        [placeholder]="'Selecione o período'"
+        [defaultValue]="'last30days'"
+        (periodChange)="onPeriodChange($event)"
+        [firstEmit]="false"
+      />
+    }
+  </div>
+
   <!-- Área de Drop dos Cards -->
   @if (!isCollapsed()) {
     <div

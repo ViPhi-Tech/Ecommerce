@@ -23,6 +23,8 @@ import { CoreService } from 'app/shared/services/core.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AccountsReceivableService } from '../../accounts-receivable.service';
+import { PeriodRange } from 'app/shared/components/period/period.component';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'fuse-accounts-receivable-kanban',
@@ -44,12 +46,19 @@ export class AccountsReceivableKanbanComponent implements OnInit {
   // Signals
   kanbanColumns = signal<KanbanColumn[]>([]);
 
+  selectedPeriod = signal<PeriodRange | null>(null);
+
   // Computed
   loading = computed(() => this.state.loading());
   accountsReceivableList = computed(() => this.state.accountsReceivableList());
 
   constructor() {
     this.coreService.setPageTitle('Financeiro', '');
+
+    const localStoragePeriod = localStorage.getItem('received_period');
+    if (localStoragePeriod) {
+      this.selectedPeriod.set(JSON.parse(localStoragePeriod));
+    }
 
     // Effect que executa automaticamente quando accountsReceivableList mudar
     effect(() => {
@@ -65,7 +74,10 @@ export class AccountsReceivableKanbanComponent implements OnInit {
   }
 
   async loadAccountsReceivable() {
-    await this.state.getAccountsReceivableList(true);
+    await this.state.getAccountsReceivableList(true, {
+      startDate: dayjs(this.selectedPeriod()?.startDate).format('YYYY-MM-DD'),
+      endDate: dayjs(this.selectedPeriod()?.endDate).format('YYYY-MM-DD'),
+    });
   }
 
   private setupKanbanColumns() {
@@ -127,6 +139,9 @@ export class AccountsReceivableKanbanComponent implements OnInit {
         color: 'green',
         cards: [],
         cardsActions: actions,
+        filter: {
+          date: true
+        }
       },
     ];
 
@@ -318,5 +333,13 @@ export class AccountsReceivableKanbanComponent implements OnInit {
         this.updateAccountStatus(account.id, 'received');
       }
     }
+  }
+
+  onPeriodChange(data: any){
+    this.selectedPeriod.set({
+      ...data.period
+    })
+    localStorage.setItem('received_period', JSON.stringify(data.period));
+    this.loadAccountsReceivable();
   }
 }

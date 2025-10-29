@@ -28,6 +28,9 @@ export interface KanbanColumn {
   cards: KanbanCard[];
   maxCards?: number;
   cardsActions?: CardAction[];
+  filter?: {
+    date: boolean
+  }
 }
 
 @Component({
@@ -51,6 +54,7 @@ export class KanbanComponent implements OnInit {
     sourceColumn: string;
     targetColumn: string;
   }>();
+  periodChange = output<unknown>()
 
   ngOnInit() {}
 
@@ -72,4 +76,10 @@ export class KanbanComponent implements OnInit {
   getColumnCards(columnId: string): KanbanCard[] {
     return this.columns().find(col => col.id === columnId)?.cards || [];
   }
+
+
+  onPeriodChange(data: unknown) {
+    this.periodChange.emit(data)
+  }
+
 }

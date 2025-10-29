@@ -16,12 +16,24 @@ export class AccountsReceivableService {
 
   constructor() {}
 
-  getAll(skipLoader = true) {
+  getAll(skipLoader = true, filter?: {
+    startDate?: string,
+    endDate?: string
+  }) {
     const headers: any = {};
     if (skipLoader) {
       headers['Skip-Loader'] = 'true';
     }
-    return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/all`, { headers });
+    const params: any = {};
+    if (filter) {
+      if (filter.startDate) {
+        params.startDate = filter.startDate;
+      }
+      if (filter.endDate) {
+        params.endDate = filter.endDate;
+      }
+    }
+    return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/all`, { headers, params });
   }
 
   getById(id: string): Observable<ApiResponse> {

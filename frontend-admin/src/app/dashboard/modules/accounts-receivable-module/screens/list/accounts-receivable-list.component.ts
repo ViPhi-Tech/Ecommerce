@@ -110,7 +110,6 @@ export class AccountsReceivableListComponent implements OnInit {
   constructor() {}
 
   async ngOnInit() {
-    await this.loadAccountsReceivable();
 
     this.coreService.setPageTitle(
       'Contas a Receber',

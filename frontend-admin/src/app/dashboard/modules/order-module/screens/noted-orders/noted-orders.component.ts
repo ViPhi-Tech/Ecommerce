@@ -1,6 +1,7 @@
 import {
   Component,
   computed,
+  DestroyRef,
   effect,
   inject,
   OnInit,
@@ -23,6 +24,7 @@ import dayjs from 'dayjs';
 import { AccountsReceivableState } from 'app/dashboard/modules/accounts-receivable-module/accounts-receivable.state';
 import { Router } from '@angular/router';
 import { IAccountsReceivable } from 'app/shared/interfaces/accounts-receivable/AccountsReceivable';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'fuse-noted-orders',
@@ -47,6 +49,7 @@ export class NotedOrdersComponent implements OnInit {
   private router = inject(Router);
   private accountsReceivableState = inject(AccountsReceivableState);
   state = inject(OrderState);
+  destroyedRef = inject(DestroyRef);
 
   selectedClient = signal<string | null>(null);
   selectedPeriod = signal<PeriodRange | null>(null);
@@ -75,6 +78,16 @@ export class NotedOrdersComponent implements OnInit {
       'Pedidos Anotados',
       'Visualize os pedidos pendentes de forma organizada'
     );
+
+    this.handleAccountsReceivableSubmit();
+  }
+
+  handleAccountsReceivableSubmit() {
+    this.accountsReceivableState.onSubmit$.pipe(takeUntilDestroyed(this.destroyedRef)).subscribe(success => {
+      if (success) {
+        this.getOrderList();
+      }
+    });
   }
 
   getOrderList() {
@@ -168,10 +181,12 @@ export class NotedOrdersComponent implements OnInit {
     );
     console.log(selectedOrdersData);
 
-    const data: Partial<IAccountsReceivable> = {
+    const data: Partial<IAccountsReceivable & { action: string }> = {
       clientId: Number(this.selectedClient()),
       amount: total,
       orders: selectedOrdersData.map(order => order.id.toString()),
+      action: 'noted-orders',
+      description: 'Pedidos anotados: ' + selectedOrdersData.map(order => order.id.toString()).join(', '),
     };
 
     this.router

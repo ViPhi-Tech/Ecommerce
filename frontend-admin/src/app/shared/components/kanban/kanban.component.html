@@ -21,6 +21,7 @@
           [allowDragDrop]="allowDragDrop()"
           (cardClick)="onCardClick($event)"
           (cardDrop)="onCardDrop($event)"
+          (periodChange)="onPeriodChange($event)"
           class="kanban-column flex-shrink-0"
         ></fuse-kanban-pipe>
       }

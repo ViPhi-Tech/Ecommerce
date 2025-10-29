@@ -131,6 +131,7 @@ export class AccountsReceivableCreateComponent implements OnInit {
         if (data && Object.keys(data).length > 0) {
           this.accountsReceivableForm.patchValue(data);
         }
+        this.typeAction.set(data.action || '');
       });
   }
 
@@ -218,7 +219,11 @@ export class AccountsReceivableCreateComponent implements OnInit {
               ? 'Conta a receber atualizada com sucesso!'
               : 'Conta a receber criada com sucesso!',
           });
-          this.accountsReceivableState.getAccountsReceivableList();
+          if (this.typeAction() === 'noted-orders') {
+            this.accountsReceivableState.onSubmit(true);
+          }else {
+            this.accountsReceivableState.getAccountsReceivableList();
+          }
           this.back();
         },
         error: () => {

@@ -4,12 +4,13 @@ import { NgIcon } from '@ng-icons/core';
 import { KanbanCard, KanbanColumn } from '../kanban.component';
 import { KanbanCardComponent } from '../kanban-card/kanban-card.component';
 import { CdkDropList, CdkDrag, CdkDragDrop } from '@angular/cdk/drag-drop';
+import PeriodComponent, { PeriodRange } from '../../period/period.component';
 
 @Component({
   selector: 'fuse-kanban-pipe',
   templateUrl: './kanban-pipe.component.html',
   styleUrls: ['./kanban-pipe.component.scss'],
-  imports: [NgClass, NgIcon, KanbanCardComponent, CdkDropList, CdkDrag],
+  imports: [NgClass, NgIcon, KanbanCardComponent, CdkDropList, CdkDrag, PeriodComponent],
 })
 export class KanbanPipeComponent {
   // Inputs
@@ -20,6 +21,7 @@ export class KanbanPipeComponent {
   // Outputs
   cardClick = output<KanbanCard>();
   cardDrop = output<CdkDragDrop<KanbanCard[]>>();
+  periodChange = output<any>();
 
   // Signals
   isCollapsed = signal<boolean>(false);
@@ -77,4 +79,12 @@ export class KanbanPipeComponent {
   toggleCollapse() {
     this.isCollapsed.update(collapsed => !collapsed);
   }
+
+  onPeriodChange(range: PeriodRange) {
+    this.periodChange.emit({
+      column: this.column(),
+      period: range
+    })
+  }
+
 }

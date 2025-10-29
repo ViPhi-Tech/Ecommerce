@@ -47,6 +47,8 @@ export default class PeriodComponent implements OnInit {
   disabled = input<boolean>(false);
   defaultValue = input<PeriodType | undefined>(undefined);
   storeKey = input<string>('period_selector');
+  size = input<string>('small')
+  firstEmit = input<boolean>(true);
 
   // Outputs
   periodChange = output<PeriodRange>();
@@ -75,13 +77,19 @@ export default class PeriodComponent implements OnInit {
     const storedPeriod = localStorage.getItem(this.storeKey());
     if (storedPeriod) {
       this.selectedPeriod = JSON.parse(storedPeriod).periodType;
-      this.onPeriodChange(this.selectedPeriod);
+      if (this.firstEmit()) {
+        this.onPeriodChange(this.selectedPeriod);
+      }
     } else if (this.defaultValue()) {
       this.selectedPeriod = this.defaultValue();
-      this.onPeriodChange(this.selectedPeriod);
+      if (this.firstEmit()) {
+        this.onPeriodChange(this.selectedPeriod);
+      }
     } else {
       this.selectedPeriod = 'today';
-      this.onPeriodChange(this.selectedPeriod);
+      if (this.firstEmit()) {
+        this.onPeriodChange(this.selectedPeriod);
+      }
     }
   }
 

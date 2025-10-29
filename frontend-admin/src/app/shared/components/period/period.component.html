@@ -1,33 +1,31 @@
-<div class="period-selector">
-  <p-select
-    [(ngModel)]="selectedPeriod"
-    [options]="periodOptions()"
-    optionLabel="label"
-    optionValue="value"
-    [placeholder]="placeholder()"
-    [disabled]="disabled()"
-    (onChange)="onPeriodChange(selectedPeriod)"
-    style="min-width: 200px"
-  >
-    <ng-template pTemplate="header">
-      <span class="flex items-center gap-2 p-2 cursor-default">
-        <ng-icon
-          name="lucideCalendar"
-          class="text-gray-500"
-          style="font-size: 1.2em"
-        ></ng-icon>
-        <span>{{ placeholder() }}</span>
-      </span>
-    </ng-template>
-    <ng-template pTemplate="selectedItem" let-selectedOption>
-      <span class="flex items-center gap-2">
-        <ng-icon
-          name="lucideCalendar"
-          class="text-gray-500"
-          style="font-size: 1.2em"
-        ></ng-icon>
-        <span>{{ selectedOption?.label }}</span>
-      </span>
-    </ng-template>
-  </p-select>
-</div>
+<p-select
+  [(ngModel)]="selectedPeriod"
+  [options]="periodOptions()"
+  optionLabel="label"
+  optionValue="value"
+  [placeholder]="placeholder()"
+  [disabled]="disabled()"
+  (onChange)="onPeriodChange(selectedPeriod)"
+  style="min-width: 200px"
+>
+  <ng-template pTemplate="header">
+    <span class="flex items-center gap-2 p-2 cursor-default">
+      <ng-icon
+        name="lucideCalendar"
+        class="text-gray-500"
+        style="font-size: 1.2em"
+      ></ng-icon>
+      <span>{{ placeholder() }}</span>
+    </span>
+  </ng-template>
+  <ng-template pTemplate="selectedItem" let-selectedOption>
+    <span class="flex items-center gap-2">
+      <ng-icon
+        name="lucideCalendar"
+        class="text-gray-500"
+        style="font-size: 1.2em"
+      ></ng-icon>
+      <span>{{ selectedOption?.label }}</span>
+    </span>
+  </ng-template>
+</p-select>
