@@ -1,4 +1,4 @@
-<div class="p-6 animate-fade-in min-h-screen">
+<div class="p-6 animate-fade-in min-h-screen relative">
   <!-- Header -->
   <div class="mb-6">
     <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
@@ -13,20 +13,23 @@
   <div class="flex gap-4 mb-8 flex-wrap justify-end">
     <!-- Filtro de Cliente -->
     <div class="max-w-[280px]">
-      <fuse-client-select [allowAll]="false" [(selectedClient)]="selectedClient" />
+      <fuse-client-select
+        [allowAll]="false"
+        [(selectedClient)]="selectedClient"
+      />
     </div>
 
     <!-- Filtro de Período -->
     <div>
       <fuse-period
         [availablePeriods]="[
+          'all',
           'today',
           'yesterday',
           'last7days',
           'last15days',
           'last30days',
           'currentMonth',
-          'all',
         ]"
         [placeholder]="'Selecione o período'"
         [defaultValue]="'last30days'"
@@ -64,8 +67,8 @@
     } @else {
       <div class="noted-cards-grid">
         @for (order of filteredOrderList(); track order.id) {
-          <div 
-            class="noted-card" 
+          <div
+            class="noted-card"
             [class.selected]="isOrderSelected(order.id)"
             (click)="toggleOrderSelection(order.id)"
             (keydown.enter)="toggleOrderSelection(order.id)"
@@ -73,8 +76,8 @@
             role="button"
           >
             <!-- Checkbox de seleção -->
-            <div 
-              class="checkbox-container absolute top-4 right-4 z-10" 
+            <div
+              class="checkbox-container absolute top-4 right-4 z-10"
               (click)="$event.stopPropagation()"
               (keydown.enter)="$event.stopPropagation()"
               tabindex="0"
@@ -84,7 +87,9 @@
                 <p-checkbox
                   [binary]="true"
                   [ngModel]="isOrderSelected(order.id)"
-                  (ngModelChange)="toggleOrderSelection(order.id); $event.stopPropagation()"
+                  (ngModelChange)="
+                    toggleOrderSelection(order.id); $event.stopPropagation()
+                  "
                   (onClick)="$event.stopPropagation()"
                 />
               </div>
@@ -212,11 +217,19 @@
 
   <!-- Toolbar de ações -->
   @if (hasSelections()) {
-    <div class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-2xl border-t border-gray-200 dark:border-gray-700 p-4 z-50 animate-slide-up">
-      <div class="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-4">
+    <div
+      class="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-2xl border-t border-gray-200 dark:border-gray-700 p-4 z-50 animate-slide-up"
+    >
+      <div
+        class="max-w-7xl mx-auto flex items-center justify-between flex-wrap gap-4"
+      >
         <div class="flex items-center gap-4 flex-wrap">
           <div class="flex items-center gap-2">
-            <ng-icon name="lucideCheckCircle2" class="text-blue-600 dark:text-blue-400" size="24" />
+            <ng-icon
+              name="lucideCheckCircle2"
+              class="text-blue-600 dark:text-blue-400"
+              size="24"
+            />
             <div class="text-sm">
               <span class="font-semibold text-gray-900 dark:text-gray-100">
                 {{ getSelectedOrdersCount() }}

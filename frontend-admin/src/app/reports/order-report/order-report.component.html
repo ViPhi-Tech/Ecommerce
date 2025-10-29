@@ -1,0 +1,324 @@
+<div
+  class="text-card-foreground flex flex-col gap-6 rounded-xl py-6 overflow-hidden border-2 border-border bg-card shadow-lg"
+>
+  <div class="border-b-2 border-border bg-accent/30 px-6 py-3">
+    <div class="flex items-center justify-between">
+      <h1 class="text-sm font-semibold uppercase tracking-wide text-foreground">
+        Pedido #{{ orderState.orderDetails().id || 'Carregando...' }}
+      </h1>
+      <p class="text-xs text-muted-foreground">{{ orderState.orderDetails().client?.phone || '' }}</p>
+    </div>
+  </div>
+  <div class="space-y-2 p-6">
+    <section>
+      <h2
+        class="mb-3 border-l-4 border-primary pl-3 text-base font-bold uppercase text-foreground"
+      >
+        Período de Venda
+      </h2>
+      <div
+        class="grid gap-3 rounded-md bg-accent/20 px-4 py-2 text-sm md:grid-cols-2"
+      >
+        <div class="space-y-2">
+          <div class="flex gap-2">
+            <span class="font-semibold text-foreground">Status:</span
+            ><span class="text-muted-foreground">{{ orderState.orderDetails().status || 'N/A' }}</span>
+          </div>
+          <div class="flex gap-2">
+            <span class="font-semibold text-foreground">Cliente:</span
+            ><span class="text-muted-foreground"
+              >{{ orderState.orderDetails().client?.fullName || 'N/A' }}</span
+            >
+          </div>
+          <div class="flex gap-2">
+            <span class="font-semibold text-foreground">Documento:</span
+            ><span class="text-muted-foreground">{{ orderState.orderDetails().client?.document || 'N/A' }}</span>
+          </div>
+          <div class="flex gap-2">
+            <span class="font-semibold text-foreground">E-Mail:</span
+            ><span class="text-muted-foreground"
+              >{{ orderState.orderDetails().client?.email || 'N/A' }}</span
+            >
+          </div>
+        </div>
+        <div class="space-y-2">
+          <div class="flex gap-2">
+            <span class="font-semibold text-foreground">ID do Pedido:</span
+            ><span class="text-muted-foreground">{{ orderState.orderDetails().id || 'N/A' }}</span>
+          </div>
+          <div class="flex gap-2">
+            <span class="font-semibold text-foreground">Telefone:</span
+            ><span class="text-muted-foreground">{{ orderState.orderDetails().client?.phone || 'N/A' }}</span>
+          </div>
+          <div class="flex gap-2">
+            <span class="font-semibold text-foreground">Data de criação:</span
+            ><span class="text-muted-foreground">{{ orderState.orderDetails().createdAt | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="flex gap-2">
+            <span class="font-semibold text-foreground">Última atualização:</span
+            ><span class="text-muted-foreground">{{ orderState.orderDetails().updatedAt | date:'dd/MM/yyyy' }}</span>
+          </div>
+          <div class="flex gap-2">
+            <span class="font-semibold text-foreground">Total do Pedido:</span
+            ><span class="text-muted-foreground">{{ orderState.orderDetails().total | currency:'BRL' }}</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2
+        class="mb-3 border-l-4 border-primary pl-3 text-base font-bold uppercase text-foreground"
+      >
+        Itens do Pedido
+      </h2>
+      <div class="overflow-x-auto rounded-md border border-border table-container">
+        <div
+          data-slot="table-container"
+          class="relative w-full overflow-x-auto"
+        >
+          <table data-slot="table" class="w-full caption-bottom text-sm">
+            <thead data-slot="table-header" class="[&amp;_tr]:border-b">
+              <tr
+                class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors bg-accent/40"
+              >
+                <th
+                  class="h-10 px-2 text-left align-middle whitespace-nowrap font-bold text-foreground"
+                >
+                  Referência
+                </th>
+                <th
+                  class="h-10 px-2 text-left align-middle whitespace-nowrap font-bold text-foreground"
+                  style="width: 200px; display: block;"
+                >
+                  Descrição
+                </th>
+                <th
+                  class="h-10 px-2 text-left align-middle whitespace-nowrap font-bold text-foreground"
+                >
+                  Unidade
+                </th>
+                <th
+                  class="h-10 px-2 align-middle whitespace-nowrap text-right font-bold text-foreground"
+                >
+                  Quantidade
+                </th>
+                <th
+                  class="h-10 px-2 align-middle whitespace-nowrap text-right font-bold text-foreground"
+                >
+                  Unitário
+                </th>
+                <th
+                  class="h-10 px-2 align-middle whitespace-nowrap text-right font-bold text-foreground"
+                >
+                  Desconto
+                </th>
+                <th
+                  class="h-10 px-2 align-middle whitespace-nowrap text-right font-bold text-foreground"
+                >
+                  Total
+                </th>
+              </tr>
+            </thead>
+            <tbody data-slot="table-body">
+              @if (orderState.orderDetails().items && orderState.orderDetails().items!.length > 0) {
+                @for (item of orderState.orderDetails().items; track item.id) {
+                  <tr
+                    class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors bg-card"
+                  >
+                    <td
+                      class="p-2 align-middle whitespace-nowrap font-mono text-xs"
+                    >
+                      {{ item.product?.sku || 'N/A' }}
+                    </td>
+                    <td
+                      class="p-2 align-middle text-sm truncate"
+                      style="width: 200px; display: block;"
+                    >
+                      {{ item.product?.name || 'N/A' }}
+                    </td>
+                    <td
+                      class="p-2 align-middle whitespace-nowrap text-sm"
+                    >
+                      Unidade
+                    </td>
+                    <td
+                      class="p-2 align-middle whitespace-nowrap text-right text-sm"
+                    >
+                      {{ item.quantity || 0 }}
+                    </td>
+                    <td
+                      class="p-2 align-middle whitespace-nowrap text-right text-sm"
+                    >
+                      {{ item.price | currency:'BRL' }}
+                    </td>
+                    <td
+                      class="p-2 align-middle whitespace-nowrap text-right text-sm"
+                    >
+                      R$ 0,00
+                    </td>
+                    <td
+                      class="p-2 align-middle whitespace-nowrap text-right font-semibold text-sm"
+                    >
+                      {{ (item.quantity * item.price) | currency:'BRL' }}
+                    </td>
+                  </tr>
+                }
+              } @else {
+                <tr>
+                  <td colspan="7" class="p-4 text-center text-muted-foreground">
+                    Nenhum item encontrado
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div
+        class="mt-3 flex justify-between rounded-md bg-accent/20 p-3 text-sm"
+      >
+        <div>
+          <span class="font-semibold text-foreground"
+            >Quantidade de itens: </span
+          ><span class="text-muted-foreground">
+            {{ getTotalItemsQuantity() }}
+          </span>
+        </div>
+        <div>
+          <span class="font-semibold text-foreground"
+            >Valor total dos itens: </span
+          ><span class="text-muted-foreground">{{ orderState.orderDetails().total | currency:'BRL' }}</span>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2
+        class="mb-3 border-l-4 border-primary pl-3 text-base font-bold uppercase text-foreground"
+      >
+        Valor Total de Pedido
+      </h2>
+      <div
+        class="grid grid-cols-2 gap-4 rounded-md bg-accent/20 px-4 py-2 text-sm md:grid-cols-5"
+      >
+        <div class="text-center">
+          <p class="font-semibold text-foreground">Total dos itens</p>
+          <p class="mt-1 text-lg font-bold text-primary">{{ orderState.orderDetails().total | currency:'BRL' }}</p>
+        </div>
+        <div class="text-center">
+          <p class="font-semibold text-foreground">Desconto</p>
+          <p class="mt-1 text-lg font-bold text-primary">R$ 0,00</p>
+        </div>
+        <div class="text-center">
+          <p class="font-semibold text-foreground">Frete</p>
+          <p class="mt-1 text-lg font-bold text-primary">R$ 0,00</p>
+        </div>
+        <div class="text-center">
+          <p class="font-semibold text-foreground">Outros</p>
+          <p class="mt-1 text-lg font-bold text-primary">R$ 0,00</p>
+        </div>
+        <div class="text-center">
+          <p class="font-semibold text-foreground">Valor Total</p>
+          <p class="mt-1 text-lg font-bold text-primary">{{ orderState.orderDetails().total | currency:'BRL' }}</p>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h2
+        class="mb-3 border-l-4 border-primary pl-3 text-base font-bold uppercase text-foreground"
+      >
+        Forma / Condições de Pagamento
+      </h2>
+      <div class="overflow-x-auto rounded-md border border-border">
+        <div
+          data-slot="table-container"
+          class="relative w-full overflow-x-auto"
+        >
+          <table data-slot="table" class="w-full caption-bottom text-sm">
+            <thead data-slot="table-header" class="[&amp;_tr]:border-b">
+              <tr
+                class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors bg-accent/40"
+              >
+                <th
+                  class="h-10 px-2 text-left align-middle whitespace-nowrap font-bold text-foreground"
+                >
+                  Descrição
+                </th>
+                <th
+                  class="h-10 px-2 text-left align-middle whitespace-nowrap font-bold text-foreground"
+                >
+                  Vencimento
+                </th>
+                <th
+                  class="h-10 px-2 align-middle whitespace-nowrap text-right font-bold text-foreground"
+                >
+                  Pagamento
+                </th>
+                <th
+                  class="h-10 px-2 align-middle whitespace-nowrap text-right font-bold text-foreground"
+                >
+                  Valor
+                </th>
+                <th
+                  class="h-10 px-2 align-middle whitespace-nowrap text-right font-bold text-foreground"
+                >
+                  Saldo
+                </th>
+                <th
+                  class="h-10 px-2 text-left align-middle whitespace-nowrap font-bold text-foreground"
+                >
+                  Observação
+                </th>
+              </tr>
+            </thead>
+            <tbody data-slot="table-body">
+              @if (orderState.orderDetails().payments && orderState.orderDetails().payments!.length > 0) {
+                @for (payment of orderState.orderDetails().payments; track payment.id) {
+                  <tr
+                    class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors bg-card"
+                  >
+                    <td
+                      class="p-2 align-middle whitespace-nowrap text-sm"
+                    >
+                      {{ (payment.typeId | titlecase) || 'N/A' }}
+                    </td>
+                    <td
+                      class="p-2 align-middle whitespace-nowrap text-sm"
+                    >
+                      {{ payment.createdAt | date: 'dd/MM/yyyy' }}
+                    </td>
+                    <td
+                      class="p-2 align-middle whitespace-nowrap text-right text-sm"
+                    >
+                      {{ payment.value | currency:'BRL' }}
+                    </td>
+                    <td
+                      class="p-2 align-middle whitespace-nowrap text-right text-sm"
+                    >
+                      {{ payment.value | currency:'BRL' }}
+                    </td>
+                    <td
+                      class="p-2 align-middle whitespace-nowrap text-right text-sm"
+                    >
+                      {{ payment.value | currency:'BRL' }}
+                    </td>
+                    <td
+                      class="p-2 align-middle whitespace-nowrap text-sm"
+                    >
+                      {{ (payment.statusId | titlecase) || 'N/A' }}
+                    </td>
+                  </tr>
+                }
+              } @else { 
+                <tr>
+                  <td colspan="6" class="p-4 text-center text-muted-foreground">
+                    Nenhum pagamento encontrado
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

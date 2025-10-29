@@ -90,9 +90,7 @@ export class AccountsReceivableCreateComponent implements OnInit {
     this.handleFormPrefill();
   }
 
-  ngOnInit() {
-  
-  }
+  ngOnInit() {}
 
   // Função 1: lida com params da rota
   private handleRouteParams(): void {
@@ -106,13 +104,13 @@ export class AccountsReceivableCreateComponent implements OnInit {
         } else {
           this.loadInfos();
         }
-        const url = this.router.url
+        const url = this.router.url;
         this.isView.set(url.includes('/view'));
         if (this.isView()) {
           this.accountsReceivableForm.disable();
           this.title.set('Visualizar Conta a Receber');
         }
-      })
+      });
   }
 
   // Função 2: validação em tempo real usando valueChanges

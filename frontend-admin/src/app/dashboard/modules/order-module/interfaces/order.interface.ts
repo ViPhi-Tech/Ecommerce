@@ -22,6 +22,17 @@ export interface Order {
 
 export interface Client {
   fullName: string;
+  document: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  birthDate: Date | string;
+  isActive: boolean;
+  createdAt: Date | string;
+  updatedAt: Date | string;
 }
 
 export interface Payment {

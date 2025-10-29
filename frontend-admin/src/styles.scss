@@ -97,3 +97,26 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
 }
+
+/* Estilos globais para impressão */
+@media print {
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  // Garantir que valores monetários sejam sempre visíveis
+  [class*="currency"], 
+  [class*="price"], 
+  [class*="total"],
+  td:contains("R$") {
+    color: #000 !important;
+    font-weight: bold !important;
+  }
+}

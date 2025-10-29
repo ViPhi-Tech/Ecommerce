@@ -162,19 +162,22 @@ export class NotedOrdersComponent implements OnInit {
       return;
     }
 
-    const total = selectedOrdersData.reduce((sum, order) => sum + order.total, 0);
+    const total = selectedOrdersData.reduce(
+      (sum, order) => sum + order.total,
+      0
+    );
     console.log(selectedOrdersData);
-    
+
     const data: Partial<IAccountsReceivable> = {
       clientId: Number(this.selectedClient()),
       amount: total,
       orders: selectedOrdersData.map(order => order.id.toString()),
     };
-    
-    this.router.navigate([
-      { outlets: { drawer: ['accounts-receivable', 'new'] } },
-    ]).then(() => {
-      this.accountsReceivableState.prefillForm(data);
-    });
+
+    this.router
+      .navigate([{ outlets: { drawer: ['accounts-receivable', 'new'] } }])
+      .then(() => {
+        this.accountsReceivableState.prefillForm(data);
+      });
   }
 }

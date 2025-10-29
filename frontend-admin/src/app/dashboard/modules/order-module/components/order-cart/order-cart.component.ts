@@ -120,7 +120,9 @@ export class OrderCartComponent implements OnInit {
         detail: `Pedido #${response.data.id} realizado com sucesso!`,
         life: 3000,
       });
-      const hasAccountReceivable = cart.paymentMethods.some((payment: any) => payment.id === 'account_receivable');
+      const hasAccountReceivable = cart.paymentMethods.some(
+        (payment: any) => payment.id === 'account_receivable'
+      );
       if (hasAccountReceivable) {
         this.router.navigate(['']);
       } else {
@@ -131,7 +133,8 @@ export class OrderCartComponent implements OnInit {
 
   confimationAccountReceivable() {
     this.confirmationService.confirm({
-      message: 'Você tem certeza que deseja finalizar o pedido com conta a receber?',
+      message:
+        'Você tem certeza que deseja finalizar o pedido com conta a receber?',
       header: 'Confirmação de Finalização',
       icon: 'pi pi-exclamation-triangle text-red-500',
       acceptLabel: 'Sim',
@@ -140,7 +143,6 @@ export class OrderCartComponent implements OnInit {
       rejectButtonStyleClass: 'p-button-secondary',
       accept: () => {
         this.router.navigate(['/dashboard/orders']);
-
       },
       reject: () => {
         this.router.navigate(['/dashboard/orders']);

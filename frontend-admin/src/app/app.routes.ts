@@ -25,7 +25,19 @@ export const dialogRoutes: Routes = [
   ...dialogServiceOrderRoutes,
 ];
 
+export const reportRoutes: Routes = [
+  {
+    path: 'order-report/:id',
+    loadComponent: () =>
+      import('app/reports/order-report/order-report.component').then(
+        m => m.OrderReportComponent
+      ),
+  },
+];
+
 export const routes: Routes = [
+  ...reportRoutes,
+
   {
     path: '',
     pathMatch: 'full',
@@ -46,6 +58,7 @@ export const routes: Routes = [
     data: { animation: 'dashboard' },
   },
 
+  
   {
     path: '**',
     pathMatch: 'full',

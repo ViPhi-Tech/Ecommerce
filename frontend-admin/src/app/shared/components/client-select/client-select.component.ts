@@ -38,10 +38,10 @@ export class ClientSelectComponent implements OnInit {
 
   // Model para two-way binding
   selectedClient = model<string | null>(null);
-  
+
   // Input para placeholder customizado
   placeholder = model<string>('Selecione um cliente');
-  
+
   // Input para controlar se exibe "Todos os clientes"
   allowAll = model<boolean>(true);
 
@@ -52,12 +52,10 @@ export class ClientSelectComponent implements OnInit {
       value: client.id || client.document || '',
     }));
 
-    
-    
     if (this.allowAll()) {
       return [{ label: 'Todos os clientes', value: null }, ...options];
     }
-    
+
     return options;
   });
 
