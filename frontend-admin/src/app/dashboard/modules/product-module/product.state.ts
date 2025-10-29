@@ -13,9 +13,6 @@ export class ProductState extends BaseState<ProductModuleState> {
 
   protected state = signal<ProductModuleState>({
     productList: [],
-    view:
-      (localStorage.getItem('productView') as ProductModuleState['view']) ||
-      'list',
     loading: false,
     error: null,
     orderFilter: '',
@@ -24,7 +21,6 @@ export class ProductState extends BaseState<ProductModuleState> {
   });
 
   productList = computed(() => this.state().productList);
-  currentView = computed(() => this.state().view);
   currentOrderFilter = computed(() => this.state().orderFilter);
   currentSearchTerm = computed(() => this.state().searchTerm);
 
@@ -108,11 +104,6 @@ export class ProductState extends BaseState<ProductModuleState> {
     this.updateState('filteredProducts', filteredProducts);
   }
 
-  setView(view: ProductModuleState['view']) {
-    this.updateState('view', view);
-    localStorage.setItem('productView', view);
-  }
-
   setOrderFilter(filter: string) {
     this.updateState('orderFilter', filter);
   }
@@ -124,7 +115,6 @@ export class ProductState extends BaseState<ProductModuleState> {
   clearState() {
     this.state.set({
       productList: [],
-      view: 'list',
       loading: false,
       error: null,
       orderFilter: '',
