@@ -14,7 +14,7 @@ export const PAYMENTS_SITEMAP = {
     description: 'Visa, Mastercard, Elo',
     icon: 'lucideCreditCard',
     iconColor: '#2563eb', // Azul direto
-    severity: 'warn',
+    severity: 'help',
   },
   MONEY: {
     id: 'money',

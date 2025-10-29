@@ -127,18 +127,12 @@ export class OrderListComponent implements OnInit {
           .pipe(takeUntilDestroyed(this.destroyedRef))
           .subscribe({
             next: () => {
+              const newOrderList = this.state.orderList().filter(order => order.id !== orderId);
+              this.state.setOrderList(newOrderList);
               this.toast.add({
                 severity: 'success',
                 summary: 'Sucesso',
                 detail: 'Pedido excluído com sucesso',
-              });
-              this.state.getOrderList();
-            },
-            error: () => {
-              this.toast.add({
-                severity: 'error',
-                summary: 'Erro',
-                detail: 'Erro ao excluir pedido',
               });
             },
           });
@@ -174,7 +168,7 @@ export class OrderListComponent implements OnInit {
         },
         {
           field: 'payments',
-          width: '150px',
+          width: '200px',
           align: 'center',
           caption: 'Formas de Pagamento',
           template: this.payment,
