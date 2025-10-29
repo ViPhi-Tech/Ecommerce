@@ -202,6 +202,7 @@ async getOrdersByClient(clientId: number, startDate: string, endDate: string, pa
   const now = new Date();
   start.setDate(start.getDate() + 1);
   end.setDate(end.getDate() + 1);
+  end.setHours(23, 59, 59, 999);
   if (now.getHours() >= 21) {
     end.setDate(end.getDate() + 1);
 }
