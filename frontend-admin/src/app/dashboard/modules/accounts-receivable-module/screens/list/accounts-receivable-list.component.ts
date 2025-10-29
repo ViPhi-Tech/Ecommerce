@@ -110,6 +110,7 @@ export class AccountsReceivableListComponent implements OnInit {
   constructor() {}
 
   async ngOnInit() {
+    this.loadAccountsReceivable();
 
     this.coreService.setPageTitle(
       'Contas a Receber',
@@ -167,7 +168,9 @@ export class AccountsReceivableListComponent implements OnInit {
   }
 
   edit(id: string) {
-    this.router.navigate(['dashboard/accounts-receivable/edit/', id]);
+    this.router.navigate([
+      { outlets: { drawer: ['accounts-receivable', id] } },
+    ]);
   }
 
   delete(id: string) {
