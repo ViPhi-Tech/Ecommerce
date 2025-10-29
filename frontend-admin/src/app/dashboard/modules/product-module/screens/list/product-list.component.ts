@@ -10,7 +10,6 @@ import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
-import { TableFilterComponent } from 'app/shared/components/table/components/table-filter/table-filter.component';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ProductService } from '../../product.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -18,7 +17,7 @@ import { heightAnimation } from 'app/shared/utils/animations';
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { ProductState } from '../../product.state';
-import { CurrencyPipe, NgTemplateOutlet } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { Tooltip } from 'primeng/tooltip';
 
 @Component({
@@ -28,10 +27,8 @@ import { Tooltip } from 'primeng/tooltip';
   animations: [heightAnimation],
   imports: [
     TableComponent,
-    TableFilterComponent,
     NgIcon,
     ButtonModule,
-    NgTemplateOutlet,
     CurrencyPipe,
     Tooltip,
   ],

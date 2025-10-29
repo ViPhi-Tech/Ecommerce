@@ -5,7 +5,7 @@
   [modal]="true"
   [closeOnEscape]="true"
   [draggable]="false"
-  styleClass="max-ww-full"
+  styleClass="max-w-[80vw] w-full"
 >
   <ng-template #header>
     <div class="flex flex-col space-y-1.5 text-center sm:text-left">
@@ -57,6 +57,68 @@
             [control]="clientForm.get('phone')"
             placeholder="(00) 00000-0000"
             mask="(99) 99999-9999"
+          />
+        </div>
+
+        <!-- Separador para Endereço de Cobrança -->
+        <div class="col-12 mb-4">
+          <div class="border-t border-gray-200 dark:border-gray-700 pt-4">
+            <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-4">
+              Endereço de Cobrança
+            </h3>
+          </div>
+        </div>
+
+        <!-- Campos de Endereço -->
+        <div class="col-12 md:col-8 mb-4">
+          <fuse-input
+            label="Endereço"
+            [control]="clientForm.get('billingAddress.street')"
+            placeholder="Ex: Rua das Flores"
+          />
+        </div>
+
+        <div class="col-12 md:col-4 mb-4">
+          <fuse-input
+            label="Número"
+            [control]="clientForm.get('billingAddress.number')"
+            placeholder="Ex: 123"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="Bairro"
+            [control]="clientForm.get('billingAddress.neighborhood')"
+            placeholder="Ex: Centro"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            type="text"
+            label="CEP"
+            [control]="clientForm.get('billingAddress.zipCode')"
+            placeholder="00000-000"
+            mask="99999-999"
+            (blurChange)="onZipCodeBlur($event)"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="Cidade"
+            [control]="clientForm.get('billingAddress.city')"
+            placeholder="Ex: São Paulo"
+          />
+        </div>
+
+        <div class="col-12 md:col-6 mb-4">
+          <fuse-input
+            label="Estado"
+            [control]="clientForm.get('billingAddress.state')"
+            placeholder="Ex: SP"
+            (inputChange)="onStateInput($event)"
           />
         </div>
       </form>

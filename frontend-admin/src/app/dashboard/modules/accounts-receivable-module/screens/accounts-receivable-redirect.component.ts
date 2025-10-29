@@ -16,13 +16,13 @@ export class AccountsReceivableRedirectComponent implements OnInit {
 
   ngOnInit() {
     // Verificar preferência de visualização salva
-    const viewPreference = localStorage.getItem('accounts-receivable-view-preference');
+    // const viewPreference = localStorage.getItem('accounts-receivable-view-preference');
     
-    if (viewPreference === 'kanban') {
-      this.router.navigate(['/dashboard/accounts-receivable/kanban']);
-    } else {
-      // Padrão é lista
+    // if (viewPreference === 'kanban') {
+    //   this.router.navigate(['/dashboard/accounts-receivable/kanban']);
+    // } else {
+    //   // Padrão é lista
       this.router.navigate(['/dashboard/accounts-receivable/list']);
-    }
+    // }
   }
 }

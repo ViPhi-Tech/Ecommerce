@@ -10,14 +10,14 @@
     </div>
 
     <div class="flex gap-3 ml-auto">
-      <p-button
+      <!-- <p-button
         icon="pi pi-table"
         label="Kanban"
         [text]="true"
         (onClick)="navigateToKanban()"
         pTooltip="Visualizar em Kanban"
         tooltipPosition="bottom"
-      />
+      /> -->
 
       <p-button
         icon="pi pi-refresh"
@@ -39,10 +39,38 @@
 
   <div class="animate-left">
     <fuse-table
-      [data]="state.accountsReceivableList()"
+      [data]="filteredAccountsReceivable()"
       [loading]="state.loading()"
       [config]="tableConfig()"
     >
+      <!-- Filtros personalizados -->
+      <div data-headerFilter class="flex gap-4 flex-wrap items-center">
+        <!-- Filtro de Cliente -->
+        <fuse-client-select
+          [(selectedClient)]="selectedClientId"
+          [placeholder]="'Filtrar por cliente'"
+          [allowAll]="true"
+        />
+
+        <!-- Filtro de Período -->
+        <fuse-period
+          [availablePeriods]="['today', 'last7days', 'last15days', 'last30days', 'currentMonth', 'all']"
+          [placeholder]="'Filtrar por período'"
+          [defaultValue]="'all'"
+          [size]="'small'"
+          (periodChange)="onPeriodChange($event)"
+        />
+
+        <!-- Botão para limpar filtros -->
+        <p-button
+          icon="pi pi-filter-slash"
+          [text]="true"
+          size="small"
+          (onClick)="clearFilters()"
+          pTooltip="Limpar filtros"
+          tooltipPosition="bottom"
+        />
+      </div>
     </fuse-table>
   </div>
 </div>
