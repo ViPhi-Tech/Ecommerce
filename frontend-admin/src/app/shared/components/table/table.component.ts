@@ -5,6 +5,7 @@ import {
   InputSignal,
   model,
   OnInit,
+  inject,
 } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { IconFieldModule } from 'primeng/iconfield';
@@ -27,6 +28,8 @@ import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import dayjs from 'dayjs';
 import { BadgeModule } from 'primeng/badge';
+import { ExcelExportService } from '../../services/excel-export.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'fuse-table',
@@ -56,6 +59,9 @@ import { BadgeModule } from 'primeng/badge';
   ],
 })
 export class TableComponent implements OnInit {
+  private excelExportService = inject(ExcelExportService);
+  private messageService = inject(MessageService);
+
   constructor() {}
 
   title: InputSignal<string> = input('');
@@ -102,14 +108,16 @@ export class TableComponent implements OnInit {
   });
 
   exportColumns = computed(() => {
-    return this.config().columns.map(col => {
+    const columns = this.config().columns.map(col => {
       return {
         title: col.caption,
         dataKey: col.field,
         type: col.type || 'text',
         headerAlign: col.headerAlign || 'left',
       };
-    });
+    }).filter(col => col.dataKey !== 'actions' || col.title !== 'Ações');
+    
+    return columns;
   });
   ngOnInit() {}
 
@@ -121,8 +129,36 @@ export class TableComponent implements OnInit {
     dt2.clear();
   }
 
-  exportTable(dt2: any) {
-    dt2?.exportCSV();
+  exportTable() {
+    const columns = this.exportColumns();
+    const data = this.data();
+    
+    if (!data || data.length === 0) {
+      this.messageService.add({
+        severity: 'warn',
+        summary: 'Aviso',
+        detail: 'Não há dados para exportar'
+      });
+      return;
+    }
+
+    try {
+      const fileName = this.title() || 'dados';
+      this.excelExportService.exportToExcel(data, columns, fileName);
+      
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Sucesso',
+        detail: 'Excel exportado com sucesso!'
+      });
+    } catch (error) {
+      console.error('Erro ao exportar Excel:', error);
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'Erro ao exportar dados para Excel'
+      });
+    }
   }
 
   onRowClick(rowData: any, rowIndex: number) {

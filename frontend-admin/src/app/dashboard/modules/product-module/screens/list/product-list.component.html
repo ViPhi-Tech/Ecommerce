@@ -39,6 +39,7 @@
 
   <div class="animate-left">
     <fuse-table
+      [title]="title"
       [data]="state.productList()"
       [loading]="state.loading()"
       [config]="tableConfig()"

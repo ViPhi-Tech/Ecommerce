@@ -51,6 +51,7 @@ export class ProductListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    showExport: true,
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'name', caption: 'Nome', sortable: true, filter: true },
@@ -98,7 +99,7 @@ export class ProductListComponent implements OnInit {
     ],
   });
 
-  title = '';
+  title = 'produtos';
 
   categorias = signal([
     { label: 'Dinheiro', value: 'money' },

@@ -69,10 +69,10 @@
             @if (config().showExport) {
               <p-button
                 size="small"
-                pTooltip="Exportar tabela"
-                (click)="exportTable(dt2)"
+                pTooltip="Baixar excel"
+                (click)="exportTable()"
               >
-                <ng-icon name="lucideFileChartColumn"></ng-icon>
+                <ng-icon name="lucideDownload"></ng-icon>
               </p-button>
             }
           </div>
