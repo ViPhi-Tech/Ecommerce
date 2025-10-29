@@ -12,6 +12,7 @@ export interface CreateAccountsReceivableInput {
   description: string;
   clientId: number;
   status?: 'pending' | 'received' | 'overdue' | 'cancelled';
+  orders: number[];
 }
 
 export interface UpdateAccountsReceivableInput {
@@ -51,7 +52,8 @@ export const createAccountsReceivableSchema = z.object({
   clientId: z.number().int().positive({ message: 'ID do cliente deve ser um número inteiro positivo' }),
   status: z.enum(['pending', 'received', 'overdue', 'cancelled'], {
     message: 'Status deve ser: pending, received, overdue ou cancelled'
-  }).optional()
+  }).optional(),
+  orders: z.array(z.number().int().positive({ message: 'IDs dos pedidos devem ser números inteiros positivos' })).optional(),
 });
 
 export const createAccountsReceivableJsonSchema = zodToJsonSchema(createAccountsReceivableSchema);

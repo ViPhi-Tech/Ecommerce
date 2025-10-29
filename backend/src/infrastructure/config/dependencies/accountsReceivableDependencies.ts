@@ -9,14 +9,14 @@ import { FindOverdueAccountsReceivableUseCase } from '../../../application/use-c
 import { UpdateAccountsReceivableUseCase } from '../../../application/use-cases/accounts-receivable/UpdateAccountsReceivableUseCase';
 import { DeleteAccountsReceivableUseCase } from '../../../application/use-cases/accounts-receivable/DeleteAccountsReceivableUseCase';
 import { AccountsReceivableController } from '../../http/controllers/AccountsReceivableController';
-
+import { OrderRepository } from '../../database/repositories/OrderRepository';
 const prisma = new PrismaClient();
 
 // Repository
 const accountsReceivableRepository = new AccountsReceivableRepository(prisma);
-
+const orderRepository = new OrderRepository(prisma);
 // Use Cases
-const createAccountsReceivableUseCase = new CreateAccountsReceivableUseCase(accountsReceivableRepository);
+const createAccountsReceivableUseCase = new CreateAccountsReceivableUseCase(accountsReceivableRepository, orderRepository);
 const findAllAccountsReceivableUseCase = new FindAllAccountsReceivableUseCase(accountsReceivableRepository);
 const findByIdAccountsReceivableUseCase = new FindByIdAccountsReceivableUseCase(accountsReceivableRepository);
 const findByClientAccountsReceivableUseCase = new FindByClientAccountsReceivableUseCase(accountsReceivableRepository);
