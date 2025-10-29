@@ -4,6 +4,43 @@
   padding-bottom: 100px; // Espaço para a toolbar fixada
 }
 
+// Checkbox container - oculto por padrão
+.checkbox-container {
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease-in-out;
+  transform: translateY(-5px);
+  
+  .checkbox-hover-container {
+    cursor: pointer;
+    
+    :deep(.p-checkbox-box) {
+      background-color: white;
+      border: 2px solid #3b82f6;
+      border-radius: 4px;
+      width: 20px;
+      height: 20px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s ease;
+      
+      &.p-highlight {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+      }
+      
+      &:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+    }
+    
+    :deep(.p-checkbox-icon) {
+      color: white;
+      font-size: 12px;
+    }
+  }
+}
+
 .select-checkbox {
   cursor: pointer;
   
@@ -62,6 +99,13 @@
       0 2px 4px -1px rgba(59, 130, 246, 0.2),
       0 10px 15px -3px rgba(59, 130, 246, 0.1);
     transform: translateY(-3px);
+    
+    // Manter checkbox visível quando selecionado
+    .checkbox-container {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
   }
 
   // Diferentes cores de fundo para variar
@@ -87,6 +131,13 @@
       0 20px 25px -5px rgba(0, 0, 0, 0.1),
       0 10px 10px -5px rgba(0, 0, 0, 0.04);
     animation-play-state: paused;
+    
+    // Mostrar checkbox no hover
+    .checkbox-container {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
   }
 
   // Animação de balanço suave
@@ -188,6 +239,13 @@
       box-shadow:
         0 20px 25px -5px rgba(0, 0, 0, 0.4),
         0 10px 10px -5px rgba(0, 0, 0, 0.3);
+      
+      // Mostrar checkbox no hover (modo escuro)
+      .checkbox-container {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
     }
 
     &.selected {
@@ -196,6 +254,31 @@
         0 4px 6px -1px rgba(96, 165, 250, 0.3),
         0 2px 4px -1px rgba(96, 165, 250, 0.2),
         0 10px 15px -3px rgba(96, 165, 250, 0.1);
+      
+      // Manter checkbox visível quando selecionado (modo escuro)
+      .checkbox-container {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+    }
+  }
+
+  .checkbox-container {
+    .checkbox-hover-container {
+      :deep(.p-checkbox-box) {
+        background-color: #374151;
+        border: 2px solid #60a5fa;
+        
+        &.p-highlight {
+          background-color: #3b82f6;
+          border-color: #60a5fa;
+        }
+        
+        &:hover {
+          background-color: #4b5563;
+        }
+      }
     }
   }
 

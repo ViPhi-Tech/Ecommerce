@@ -74,19 +74,20 @@
           >
             <!-- Checkbox de seleção -->
             <div 
-              class="absolute top-4 right-4 z-10" 
+              class="checkbox-container absolute top-4 right-4 z-10" 
               (click)="$event.stopPropagation()"
               (keydown.enter)="$event.stopPropagation()"
               tabindex="0"
               role="button"
             >
-              <p-checkbox
-                [binary]="true"
-                [ngModel]="isOrderSelected(order.id)"
-                (ngModelChange)="toggleOrderSelection(order.id); $event.stopPropagation()"
-                (onClick)="$event.stopPropagation()"
-                styleClass="select-checkbox"
-              />
+              <div class="checkbox-hover-container">
+                <p-checkbox
+                  [binary]="true"
+                  [ngModel]="isOrderSelected(order.id)"
+                  (ngModelChange)="toggleOrderSelection(order.id); $event.stopPropagation()"
+                  (onClick)="$event.stopPropagation()"
+                />
+              </div>
             </div>
 
             <!-- Pin/Clipe -->
