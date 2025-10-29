@@ -1,4 +1,13 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  signal,
+  ViewChild,
+  TemplateRef,
+  AfterViewInit,
+} from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
@@ -7,12 +16,14 @@ import { StockMovementService } from '../../stock-movement.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { heightAnimation } from 'app/shared/utils/animations';
 import { ButtonModule } from 'primeng/button';
+import { BadgeModule } from 'primeng/badge';
 import { StockMovementState } from '../../stock-movement.state';
 import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/simple-indicator.component';
 import { MovementItemComponent } from '../../components/movement-item/movement-item.component';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NgIcon } from '@ng-icons/core';
+import { TableComponent } from 'app/shared/components/table/table.component';
 import dayjs from 'dayjs';
 
 @Component({
@@ -22,14 +33,17 @@ import dayjs from 'dayjs';
   animations: [heightAnimation],
   imports: [
     ButtonModule,
+    BadgeModule,
     SimpleIndicatorComponent,
     MovementItemComponent,
     FormModule,
     ReactiveFormsModule,
     NgIcon,
+    TableComponent,
   ],
 })
-export class StockMovementListComponent implements OnInit {
+export class StockMovementListComponent implements OnInit, AfterViewInit {
+  @ViewChild('typeTemplate') typeTemplate!: TemplateRef<any>;
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute);
@@ -42,6 +56,7 @@ export class StockMovementListComponent implements OnInit {
   state = inject(StockMovementState);
 
   productId: string | null = null;
+  activeViewMode: 'cards' | 'table' = 'cards';
 
   tableConfig = signal<TableConfig>({
     rowsPerPageOptions: [5, 10, 20],
@@ -49,7 +64,11 @@ export class StockMovementListComponent implements OnInit {
     paginator: true,
     pageLinkSize: 5,
     columns: [
-      { field: 'id', caption: 'ID', sortable: true, filter: true },
+      {
+        field: 'date',
+        caption: 'Data',
+        sortable: true,
+      },
       {
         field: 'productName',
         caption: 'Produto',
@@ -62,7 +81,8 @@ export class StockMovementListComponent implements OnInit {
         caption: 'Tipo',
         sortable: true,
         filter: true,
-        type: 'custom',
+        template: this.typeTemplate,
+        align: 'center',
       },
       {
         field: 'quantity',
@@ -95,36 +115,6 @@ export class StockMovementListComponent implements OnInit {
         caption: 'Criado Por',
         sortable: true,
         filter: true,
-      },
-      {
-        field: 'actions',
-        caption: 'Ações',
-        actionButtonsType: 'buttons',
-        actionButtons: [
-          {
-            icon: 'lucideSquarePen',
-            label: 'Editar',
-            tooltip: 'Editar Movimento',
-            variant: 'text',
-            action: (rowData: any) => {
-              this.router.navigate([
-                'dashboard/config/stock-movements/edit',
-                rowData?.id,
-              ]);
-            },
-          },
-          {
-            icon: 'lucideTrash2',
-            label: 'Excluir',
-            variant: 'text',
-            colorText: '#EF4444',
-            colorIcon: '#EF4444',
-            tooltip: 'Excluir Movimento',
-            action: (rowData: any) => {
-              this.deleteStockMovement(rowData?.id);
-            },
-          },
-        ],
       },
     ],
     headerButtons: [
@@ -188,6 +178,16 @@ export class StockMovementListComponent implements OnInit {
       });
   }
 
+  ngAfterViewInit() {
+    // Atualiza a configuração da tabela com o template após a view estar inicializada
+    this.tableConfig.update(config => ({
+      ...config,
+      columns: config.columns.map(col =>
+        col.field === 'type' ? { ...col, template: this.typeTemplate } : col
+      ),
+    }));
+  }
+
   onFilterChange() {
     this.loadStockMovements();
   }
@@ -232,37 +232,15 @@ export class StockMovementListComponent implements OnInit {
     });
   }
 
-  getMovementTypeBadge(type: string): string {
-    switch (type) {
-      case 'IN':
-        return 'success';
-      case 'OUT':
-        return 'danger';
-      case 'ADJUSTMENT':
-        return 'warning';
-      default:
-        return 'info';
-    }
-  }
-
-  getMovementTypeLabel(type: string): string {
-    switch (type) {
-      case 'IN':
-        return 'Entrada';
-      case 'OUT':
-        return 'Saída';
-      case 'ADJUSTMENT':
-        return 'Ajuste';
-      default:
-        return type;
-    }
-  }
-
   newInbound() {
     this.router.navigate([{ outlets: { drawer: ['inbound', 'new'] } }]);
   }
 
   newOutbound() {
     this.router.navigate([{ outlets: { drawer: ['outbound', 'new'] } }]);
+  }
+
+  setViewMode(mode: 'cards' | 'table') {
+    this.activeViewMode = mode;
   }
 }

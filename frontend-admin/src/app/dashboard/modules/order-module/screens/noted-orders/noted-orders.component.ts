@@ -83,11 +83,13 @@ export class NotedOrdersComponent implements OnInit {
   }
 
   handleAccountsReceivableSubmit() {
-    this.accountsReceivableState.onSubmit$.pipe(takeUntilDestroyed(this.destroyedRef)).subscribe(success => {
-      if (success) {
-        this.getOrderList();
-      }
-    });
+    this.accountsReceivableState.onSubmit$
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe(success => {
+        if (success) {
+          this.getOrderList();
+        }
+      });
   }
 
   getOrderList() {
@@ -186,7 +188,9 @@ export class NotedOrdersComponent implements OnInit {
       amount: total,
       orders: selectedOrdersData.map(order => order.id.toString()),
       action: 'noted-orders',
-      description: 'Pedidos anotados: ' + selectedOrdersData.map(order => order.id.toString()).join(', '),
+      description:
+        'Pedidos anotados: ' +
+        selectedOrdersData.map(order => order.id.toString()).join(', '),
     };
 
     this.router

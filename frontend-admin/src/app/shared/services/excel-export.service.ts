@@ -11,11 +11,10 @@ export interface ExportColumn {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ExcelExportService {
-
-  constructor() { }
+  constructor() {}
 
   /**
    * Exporta dados para Excel
@@ -25,8 +24,8 @@ export class ExcelExportService {
    * @param sheetName Nome da planilha
    */
   exportToExcel(
-    data: any[], 
-    columns: ExportColumn[], 
+    data: any[],
+    columns: ExportColumn[],
     fileName = 'exportacao',
     sheetName = 'Dados'
   ): void {
@@ -38,35 +37,35 @@ export class ExcelExportService {
     // Preparar os dados formatados
     const formattedData = data.map(item => {
       const formattedItem: any = {};
-      
+
       columns.forEach(column => {
         const value = item[column.dataKey];
         formattedItem[column.title] = this.formatValue(value, column.type);
       });
-      
+
       return formattedItem;
     });
 
     // Criar workbook e worksheet
     const worksheet = XLSX.utils.json_to_sheet(formattedData);
     const workbook = XLSX.utils.book_new();
-    
+
     // Aplicar estilos ao cabeçalho
     this.styleHeader(worksheet, columns);
-    
+
     // Ajustar largura das colunas
     this.autoSizeColumns(worksheet, formattedData, columns);
-    
+
     // Adicionar worksheet ao workbook
     XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-    
+
     // Gerar arquivo e fazer download
-    const excelBuffer = XLSX.write(workbook, { 
-      bookType: 'xlsx', 
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
       type: 'array',
-      cellStyles: true
+      cellStyles: true,
     });
-    
+
     this.saveExcelFile(excelBuffer, fileName);
   }
 
@@ -81,25 +80,25 @@ export class ExcelExportService {
     switch (type) {
       case 'date':
         return dayjs(value).format('DD/MM/YYYY');
-      
+
       case 'datetime':
         return dayjs(value).format('DD/MM/YYYY HH:mm');
-      
+
       case 'currency':
         return new Intl.NumberFormat('pt-BR', {
           style: 'currency',
           currency: 'BRL',
         }).format(value);
-      
+
       case 'phone':
         return this.formatPhone(value);
-      
+
       case 'document':
         return this.formatDocument(value);
-      
+
       case 'activeOrNot':
         return value === true ? 'Ativo' : value === false ? 'Inativo' : '';
-      
+
       default:
         return value;
     }
@@ -110,15 +109,15 @@ export class ExcelExportService {
    */
   private formatPhone(phone: string): string {
     if (!phone) return '';
-    
+
     const cleanPhone = phone.replace(/\D/g, '');
-    
+
     if (cleanPhone.length === 11) {
       return cleanPhone.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
     } else if (cleanPhone.length === 10) {
       return cleanPhone.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
     }
-    
+
     return phone;
   }
 
@@ -127,44 +126,50 @@ export class ExcelExportService {
    */
   private formatDocument(document: string): string {
     if (!document) return '';
-    
+
     const cleanDoc = document.replace(/\D/g, '');
-    
+
     if (cleanDoc.length === 11) {
       // CPF
       return cleanDoc.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
     } else if (cleanDoc.length === 14) {
       // CNPJ
-      return cleanDoc.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+      return cleanDoc.replace(
+        /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
+        '$1.$2.$3/$4-$5'
+      );
     }
-    
+
     return document;
   }
 
   /**
    * Aplica estilos ao cabeçalho
    */
-  private styleHeader(worksheet: XLSX.WorkSheet, columns: ExportColumn[]): void {
+  private styleHeader(
+    worksheet: XLSX.WorkSheet,
+    columns: ExportColumn[]
+  ): void {
     const headerRow = 1;
-    
+
     columns.forEach((column, index) => {
       const cellRef = XLSX.utils.encode_cell({ r: 0, c: index });
-      
+
       if (!worksheet[cellRef]) return;
-      
+
       worksheet[cellRef].s = {
-        font: { bold: true, color: { rgb: "FFFFFF" } },
-        fill: { fgColor: { rgb: "4472C4" } },
-        alignment: { 
+        font: { bold: true, color: { rgb: 'FFFFFF' } },
+        fill: { fgColor: { rgb: '4472C4' } },
+        alignment: {
           horizontal: column.headerAlign || 'left',
-          vertical: 'center'
+          vertical: 'center',
         },
         border: {
-          top: { style: 'thin', color: { rgb: "000000" } },
-          bottom: { style: 'thin', color: { rgb: "000000" } },
-          left: { style: 'thin', color: { rgb: "000000" } },
-          right: { style: 'thin', color: { rgb: "000000" } }
-        }
+          top: { style: 'thin', color: { rgb: '000000' } },
+          bottom: { style: 'thin', color: { rgb: '000000' } },
+          left: { style: 'thin', color: { rgb: '000000' } },
+          right: { style: 'thin', color: { rgb: '000000' } },
+        },
       };
     });
   }
@@ -172,13 +177,17 @@ export class ExcelExportService {
   /**
    * Ajusta automaticamente a largura das colunas
    */
-  private autoSizeColumns(worksheet: XLSX.WorkSheet, data: any[], columns: ExportColumn[]): void {
+  private autoSizeColumns(
+    worksheet: XLSX.WorkSheet,
+    data: any[],
+    columns: ExportColumn[]
+  ): void {
     const colWidths: number[] = [];
-    
+
     columns.forEach((column, index) => {
       // Largura mínima baseada no título
       let maxWidth = column.title.length;
-      
+
       // Verificar largura dos dados
       data.forEach(row => {
         const cellValue = String(row[column.title] || '');
@@ -186,11 +195,11 @@ export class ExcelExportService {
           maxWidth = cellValue.length;
         }
       });
-      
+
       // Limitar largura máxima e mínima
       colWidths[index] = Math.min(Math.max(maxWidth + 2, 10), 50);
     });
-    
+
     worksheet['!cols'] = colWidths.map(width => ({ width }));
   }
 
@@ -201,7 +210,7 @@ export class ExcelExportService {
     const data = new Blob([buffer], { type: 'application/octet-stream' });
     const timestamp = dayjs().format('YYYY-MM-DD_HH-mm-ss');
     const fullFileName = `${fileName}_${timestamp}.xlsx`;
-    
+
     // Usar file-saver se disponível, senão fallback para download nativo
     if (typeof saveAs === 'function') {
       saveAs(data, fullFileName);
@@ -237,8 +246,11 @@ export class ExcelExportService {
     const worksheet = XLSX.utils.json_to_sheet(data);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Dados');
-    
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: 'xlsx',
+      type: 'array',
+    });
     this.saveExcelFile(excelBuffer, fileName);
   }
 }

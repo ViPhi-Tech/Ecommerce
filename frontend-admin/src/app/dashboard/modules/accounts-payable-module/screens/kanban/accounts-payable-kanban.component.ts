@@ -34,7 +34,14 @@ import dayjs from 'dayjs';
   selector: 'fuse-accounts-payable-kanban',
   templateUrl: './accounts-payable-kanban.component.html',
   styleUrls: ['./accounts-payable-kanban.component.scss'],
-  imports: [CommonModule, ButtonModule, SelectModule, FormsModule, NgIcon, KanbanComponent],
+  imports: [
+    CommonModule,
+    ButtonModule,
+    SelectModule,
+    FormsModule,
+    NgIcon,
+    KanbanComponent,
+  ],
   providers: [CurrencyPipe],
 })
 export class AccountsPayableKanbanComponent implements OnInit {
@@ -53,19 +60,21 @@ export class AccountsPayableKanbanComponent implements OnInit {
   selectedPeriod = signal<PeriodRange | null>(null);
   selectedSupplierId = signal<string | null>(null);
   selectedSupplierIdModel: string | null = null;
-  supplierOptions = signal<{label: string, value: string}[]>([]);
+  supplierOptions = signal<{ label: string; value: string }[]>([]);
 
   // Computed
   loading = computed(() => this.state.loading());
   accountsPayableList = computed(() => {
     const accounts = this.state.accountsPayableList();
     const selectedSupplier = this.selectedSupplierId();
-    
+
     if (!selectedSupplier) {
       return accounts;
     }
-    
-    return accounts.filter(account => account.supplier?.id === parseInt(selectedSupplier));
+
+    return accounts.filter(
+      account => account.supplier?.id === parseInt(selectedSupplier)
+    );
   });
   suppliersLoading = computed(() => this.supplierState.loading());
 
@@ -90,7 +99,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
       const suppliers = this.supplierState.supplierList();
       const options = suppliers.map((supplier: ISupplier) => ({
         label: supplier.tradeName || supplier.legalName,
-        value: supplier.id.toString()
+        value: supplier.id.toString(),
       }));
       this.supplierOptions.set(options);
     });
@@ -168,8 +177,8 @@ export class AccountsPayableKanbanComponent implements OnInit {
         cards: [],
         cardsActions: actions,
         filter: {
-          date: true
-        }
+          date: true,
+        },
       },
     ];
 
@@ -389,10 +398,10 @@ export class AccountsPayableKanbanComponent implements OnInit {
     this.selectedSupplierId.set(null);
   }
 
-  onPeriodChange(data: any){
+  onPeriodChange(data: any) {
     this.selectedPeriod.set({
-      ...data.period
-    })
+      ...data.period,
+    });
     localStorage.setItem('payable_period', JSON.stringify(data.period));
     this.loadAccountsPayable();
   }

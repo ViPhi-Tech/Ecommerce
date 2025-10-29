@@ -57,33 +57,77 @@
       </div>
     </div>
 
-    <div class="flex-1 flex flex-col space-y-4">
-      @if (state.loading()) {
-        <div class="flex flex-col gap-4">
-          <fuse-movement-item [loading]="true" />
-          <fuse-movement-item [loading]="true" />
-          <fuse-movement-item [loading]="true" />
-        </div>
-      }
+    <div class="flex-1 flex flex-col">
+      <!-- Botões de alternância de visualização -->
+      <div class="flex gap-2 mb-4 view-toggle-buttons">
+        <p-button
+          [label]="'Visualização em Cards'"
+          [icon]="'pi pi-th-large'"
+          [outlined]="activeViewMode !== 'cards'"
+          [severity]="activeViewMode === 'cards' ? 'primary' : 'secondary'"
+          (onClick)="setViewMode('cards')"
+          size="small"
+        />
+        <p-button
+          [label]="'Visualização em Tabela'"
+          [icon]="'pi pi-table'"
+          [outlined]="activeViewMode !== 'table'"
+          [severity]="activeViewMode === 'table' ? 'primary' : 'secondary'"
+          (onClick)="setViewMode('table')"
+          size="small"
+        />
+      </div>
 
-      @for (item of state.stockMovementList(); track $index) {
-        <div>
-          <fuse-movement-item [item]="item" />
-        </div>
-      } @empty {
-        @if (!state.loading()) {
-          <div class="flex-1 flex items-center justify-center flex-col">
-            <ng-icon
-              name="lucidePackage"
-              class="text-gray-400 mb-4"
-              size="60"
-            ></ng-icon>
-            <p class="text-gray-500 text-lg">
-              Nenhum movimento de estoque encontrado para esta data.
-            </p>
+      <!-- Conteúdo das visualizações -->
+      <div class="flex-1 flex flex-col view-content">
+        @if (activeViewMode === 'cards') {
+          <!-- Visualização em Cards -->
+          <div class="flex-1 flex flex-col space-y-4">
+            @if (state.loading()) {
+              <div class="flex flex-col gap-4">
+                <fuse-movement-item [loading]="true" />
+                <fuse-movement-item [loading]="true" />
+                <fuse-movement-item [loading]="true" />
+              </div>
+            }
+
+            @for (item of state.stockMovementList(); track $index) {
+              <div>
+                <fuse-movement-item [item]="item" />
+              </div>
+            } @empty {
+              @if (!state.loading()) {
+                <div
+                  class="flex-1 flex items-center justify-center flex-col py-8"
+                >
+                  <ng-icon
+                    name="lucidePackage"
+                    class="text-gray-400 mb-4"
+                    size="60"
+                  ></ng-icon>
+                  <p class="text-gray-500 text-lg">
+                    Nenhum movimento de estoque encontrado para esta data.
+                  </p>
+                </div>
+              }
+            }
+          </div>
+        } @else if (activeViewMode === 'table') {
+          <!-- Visualização em Tabela -->
+          <div class="flex-1">
+            <fuse-table
+              [data]="state.stockMovementList()"
+              [loading]="state.loading()"
+              [config]="tableConfig()"
+            >
+            </fuse-table>
           </div>
         }
-      }
+      </div>
     </div>
   </div>
 </div>
+
+<ng-template #typeTemplate let-rowData>
+  <p-badge [value]="rowData.typeLabel" [severity]="rowData.typeBadge" />
+</ng-template>

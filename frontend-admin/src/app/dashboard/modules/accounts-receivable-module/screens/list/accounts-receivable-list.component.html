@@ -54,7 +54,14 @@
 
         <!-- Filtro de Período -->
         <fuse-period
-          [availablePeriods]="['today', 'last7days', 'last15days', 'last30days', 'currentMonth', 'all']"
+          [availablePeriods]="[
+            'today',
+            'last7days',
+            'last15days',
+            'last30days',
+            'currentMonth',
+            'all',
+          ]"
           [placeholder]="'Filtrar por período'"
           [defaultValue]="'all'"
           [size]="'small'"

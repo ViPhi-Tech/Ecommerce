@@ -25,13 +25,7 @@ import { Tooltip } from 'primeng/tooltip';
   templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
   animations: [heightAnimation],
-  imports: [
-    TableComponent,
-    NgIcon,
-    ButtonModule,
-    CurrencyPipe,
-    Tooltip,
-  ],
+  imports: [TableComponent, NgIcon, ButtonModule, CurrencyPipe, Tooltip],
 })
 export class ProductListComponent implements OnInit {
   private router = inject(Router);

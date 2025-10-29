@@ -221,7 +221,7 @@ export class AccountsReceivableCreateComponent implements OnInit {
           });
           if (this.typeAction() === 'noted-orders') {
             this.accountsReceivableState.onSubmit(true);
-          }else {
+          } else {
             this.accountsReceivableState.getAccountsReceivableList();
           }
           this.back();

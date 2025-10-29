@@ -85,3 +85,31 @@
   background-color: #fef3c7;
   color: #92400e;
 }
+
+/* Estilos para os botões de alternância de visualização */
+.view-toggle-buttons {
+  .p-button {
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+  }
+}
+
+/* Animações para transição entre visualizações */
+.view-content {
+  animation: fadeInView 0.3s ease-in-out;
+}
+
+@keyframes fadeInView {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

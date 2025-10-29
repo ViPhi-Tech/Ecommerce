@@ -310,7 +310,7 @@ export const Preset = definePreset(Lara, {
     iconSize: '1rem',
     anchorGutter: '2px',
     primary: {
-      50:  '#e8f1fd',
+      50: '#e8f1fd',
       100: '#c8dbfa',
       200: '#9dbff6',
       300: '#6699ee',

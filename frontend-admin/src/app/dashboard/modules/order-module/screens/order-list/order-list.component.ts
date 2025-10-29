@@ -127,7 +127,9 @@ export class OrderListComponent implements OnInit {
           .pipe(takeUntilDestroyed(this.destroyedRef))
           .subscribe({
             next: () => {
-              const newOrderList = this.state.orderList().filter(order => order.id !== orderId);
+              const newOrderList = this.state
+                .orderList()
+                .filter(order => order.id !== orderId);
               this.state.setOrderList(newOrderList);
               this.toast.add({
                 severity: 'success',

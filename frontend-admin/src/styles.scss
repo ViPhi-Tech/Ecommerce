@@ -105,17 +105,17 @@
     color-adjust: exact !important;
     print-color-adjust: exact !important;
   }
-  
+
   body {
     background: white !important;
     color: black !important;
   }
-  
+
   // Garantir que valores monetários sejam sempre visíveis
-  [class*="currency"], 
-  [class*="price"], 
-  [class*="total"],
-  td:contains("R$") {
+  [class*='currency'],
+  [class*='price'],
+  [class*='total'],
+  td:contains('R$') {
     color: #000 !important;
     font-weight: bold !important;
   }

@@ -6,7 +6,9 @@
       <h1 class="text-sm font-semibold uppercase tracking-wide text-foreground">
         Pedido #{{ orderState.orderDetails().id || 'Carregando...' }}
       </h1>
-      <p class="text-xs text-muted-foreground">{{ orderState.orderDetails().client?.phone || '' }}</p>
+      <p class="text-xs text-muted-foreground">
+        {{ orderState.orderDetails().client?.phone || '' }}
+      </p>
     </div>
   </div>
   <div class="space-y-2 p-6">
@@ -22,45 +24,60 @@
         <div class="space-y-2">
           <div class="flex gap-2">
             <span class="font-semibold text-foreground">Status:</span
-            ><span class="text-muted-foreground">{{ orderState.orderDetails().status || 'N/A' }}</span>
+            ><span class="text-muted-foreground">{{
+              orderState.orderDetails().status || 'N/A'
+            }}</span>
           </div>
           <div class="flex gap-2">
             <span class="font-semibold text-foreground">Cliente:</span
-            ><span class="text-muted-foreground"
-              >{{ orderState.orderDetails().client?.fullName || 'N/A' }}</span
-            >
+            ><span class="text-muted-foreground">{{
+              orderState.orderDetails().client?.fullName || 'N/A'
+            }}</span>
           </div>
           <div class="flex gap-2">
             <span class="font-semibold text-foreground">Documento:</span
-            ><span class="text-muted-foreground">{{ orderState.orderDetails().client?.document || 'N/A' }}</span>
+            ><span class="text-muted-foreground">{{
+              orderState.orderDetails().client?.document || 'N/A'
+            }}</span>
           </div>
           <div class="flex gap-2">
             <span class="font-semibold text-foreground">E-Mail:</span
-            ><span class="text-muted-foreground"
-              >{{ orderState.orderDetails().client?.email || 'N/A' }}</span
-            >
+            ><span class="text-muted-foreground">{{
+              orderState.orderDetails().client?.email || 'N/A'
+            }}</span>
           </div>
         </div>
         <div class="space-y-2">
           <div class="flex gap-2">
             <span class="font-semibold text-foreground">ID do Pedido:</span
-            ><span class="text-muted-foreground">{{ orderState.orderDetails().id || 'N/A' }}</span>
+            ><span class="text-muted-foreground">{{
+              orderState.orderDetails().id || 'N/A'
+            }}</span>
           </div>
           <div class="flex gap-2">
             <span class="font-semibold text-foreground">Telefone:</span
-            ><span class="text-muted-foreground">{{ orderState.orderDetails().client?.phone || 'N/A' }}</span>
+            ><span class="text-muted-foreground">{{
+              orderState.orderDetails().client?.phone || 'N/A'
+            }}</span>
           </div>
           <div class="flex gap-2">
             <span class="font-semibold text-foreground">Data de criação:</span
-            ><span class="text-muted-foreground">{{ orderState.orderDetails().createdAt | date:'dd/MM/yyyy' }}</span>
+            ><span class="text-muted-foreground">{{
+              orderState.orderDetails().createdAt | date: 'dd/MM/yyyy'
+            }}</span>
           </div>
           <div class="flex gap-2">
-            <span class="font-semibold text-foreground">Última atualização:</span
-            ><span class="text-muted-foreground">{{ orderState.orderDetails().updatedAt | date:'dd/MM/yyyy' }}</span>
+            <span class="font-semibold text-foreground"
+              >Última atualização:</span
+            ><span class="text-muted-foreground">{{
+              orderState.orderDetails().updatedAt | date: 'dd/MM/yyyy'
+            }}</span>
           </div>
           <div class="flex gap-2">
             <span class="font-semibold text-foreground">Total do Pedido:</span
-            ><span class="text-muted-foreground">{{ orderState.orderDetails().total | currency:'BRL' }}</span>
+            ><span class="text-muted-foreground">{{
+              orderState.orderDetails().total | currency: 'BRL'
+            }}</span>
           </div>
         </div>
       </div>
@@ -71,7 +88,9 @@
       >
         Itens do Pedido
       </h2>
-      <div class="overflow-x-auto rounded-md border border-border table-container">
+      <div
+        class="overflow-x-auto rounded-md border border-border table-container"
+      >
         <div
           data-slot="table-container"
           class="relative w-full overflow-x-auto"
@@ -88,7 +107,7 @@
                 </th>
                 <th
                   class="h-10 px-2 text-left align-middle whitespace-nowrap font-bold text-foreground"
-                  style="width: 200px; display: block;"
+                  style="width: 200px; display: block"
                 >
                   Descrição
                 </th>
@@ -120,7 +139,10 @@
               </tr>
             </thead>
             <tbody data-slot="table-body">
-              @if (orderState.orderDetails().items && orderState.orderDetails().items!.length > 0) {
+              @if (
+                orderState.orderDetails().items &&
+                orderState.orderDetails().items!.length > 0
+              ) {
                 @for (item of orderState.orderDetails().items; track item.id) {
                   <tr
                     class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors bg-card"
@@ -132,13 +154,11 @@
                     </td>
                     <td
                       class="p-2 align-middle text-sm truncate"
-                      style="width: 200px; display: block;"
+                      style="width: 200px; display: block"
                     >
                       {{ item.product?.name || 'N/A' }}
                     </td>
-                    <td
-                      class="p-2 align-middle whitespace-nowrap text-sm"
-                    >
+                    <td class="p-2 align-middle whitespace-nowrap text-sm">
                       Unidade
                     </td>
                     <td
@@ -149,7 +169,7 @@
                     <td
                       class="p-2 align-middle whitespace-nowrap text-right text-sm"
                     >
-                      {{ item.price | currency:'BRL' }}
+                      {{ item.price | currency: 'BRL' }}
                     </td>
                     <td
                       class="p-2 align-middle whitespace-nowrap text-right text-sm"
@@ -159,7 +179,7 @@
                     <td
                       class="p-2 align-middle whitespace-nowrap text-right font-semibold text-sm"
                     >
-                      {{ (item.quantity * item.price) | currency:'BRL' }}
+                      {{ item.quantity * item.price | currency: 'BRL' }}
                     </td>
                   </tr>
                 }
@@ -187,7 +207,9 @@
         <div>
           <span class="font-semibold text-foreground"
             >Valor total dos itens: </span
-          ><span class="text-muted-foreground">{{ orderState.orderDetails().total | currency:'BRL' }}</span>
+          ><span class="text-muted-foreground">{{
+            orderState.orderDetails().total | currency: 'BRL'
+          }}</span>
         </div>
       </div>
     </section>
@@ -202,7 +224,9 @@
       >
         <div class="text-center">
           <p class="font-semibold text-foreground">Total dos itens</p>
-          <p class="mt-1 text-lg font-bold text-primary">{{ orderState.orderDetails().total | currency:'BRL' }}</p>
+          <p class="mt-1 text-lg font-bold text-primary">
+            {{ orderState.orderDetails().total | currency: 'BRL' }}
+          </p>
         </div>
         <div class="text-center">
           <p class="font-semibold text-foreground">Desconto</p>
@@ -218,7 +242,9 @@
         </div>
         <div class="text-center">
           <p class="font-semibold text-foreground">Valor Total</p>
-          <p class="mt-1 text-lg font-bold text-primary">{{ orderState.orderDetails().total | currency:'BRL' }}</p>
+          <p class="mt-1 text-lg font-bold text-primary">
+            {{ orderState.orderDetails().total | currency: 'BRL' }}
+          </p>
         </div>
       </div>
     </section>
@@ -271,44 +297,44 @@
               </tr>
             </thead>
             <tbody data-slot="table-body">
-              @if (orderState.orderDetails().payments && orderState.orderDetails().payments!.length > 0) {
-                @for (payment of orderState.orderDetails().payments; track payment.id) {
+              @if (
+                orderState.orderDetails().payments &&
+                orderState.orderDetails().payments!.length > 0
+              ) {
+                @for (
+                  payment of orderState.orderDetails().payments;
+                  track payment.id
+                ) {
                   <tr
                     class="hover:bg-muted/50 data-[state=selected]:bg-muted border-b transition-colors bg-card"
                   >
-                    <td
-                      class="p-2 align-middle whitespace-nowrap text-sm"
-                    >
+                    <td class="p-2 align-middle whitespace-nowrap text-sm">
                       {{ (payment.typeId | titlecase) || 'N/A' }}
                     </td>
-                    <td
-                      class="p-2 align-middle whitespace-nowrap text-sm"
-                    >
+                    <td class="p-2 align-middle whitespace-nowrap text-sm">
                       {{ payment.createdAt | date: 'dd/MM/yyyy' }}
                     </td>
                     <td
                       class="p-2 align-middle whitespace-nowrap text-right text-sm"
                     >
-                      {{ payment.value | currency:'BRL' }}
+                      {{ payment.value | currency: 'BRL' }}
                     </td>
                     <td
                       class="p-2 align-middle whitespace-nowrap text-right text-sm"
                     >
-                      {{ payment.value | currency:'BRL' }}
+                      {{ payment.value | currency: 'BRL' }}
                     </td>
                     <td
                       class="p-2 align-middle whitespace-nowrap text-right text-sm"
                     >
-                      {{ payment.value | currency:'BRL' }}
+                      {{ payment.value | currency: 'BRL' }}
                     </td>
-                    <td
-                      class="p-2 align-middle whitespace-nowrap text-sm"
-                    >
+                    <td class="p-2 align-middle whitespace-nowrap text-sm">
                       {{ (payment.statusId | titlecase) || 'N/A' }}
                     </td>
                   </tr>
                 }
-              } @else { 
+              } @else {
                 <tr>
                   <td colspan="6" class="p-4 text-center text-muted-foreground">
                     Nenhum pagamento encontrado

@@ -2,7 +2,12 @@ import { Component, OnInit, Renderer2, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OrderState } from '../../dashboard/modules/order-module/order.state';
 import { Order } from '../../dashboard/modules/order-module/interfaces/order.interface';
-import { DatePipe, CurrencyPipe, TitleCasePipe, CommonModule } from '@angular/common';
+import {
+  DatePipe,
+  CurrencyPipe,
+  TitleCasePipe,
+  CommonModule,
+} from '@angular/common';
 
 @Component({
   selector: 'fuse-order-report',
@@ -10,14 +15,13 @@ import { DatePipe, CurrencyPipe, TitleCasePipe, CommonModule } from '@angular/co
   styleUrls: ['./order-report.component.scss'],
   providers: [OrderState],
   imports: [CommonModule, DatePipe, CurrencyPipe, TitleCasePipe],
-  standalone: true
+  standalone: true,
 })
 export class OrderReportComponent implements OnInit {
-
   private route = inject(ActivatedRoute);
   public orderState = inject(OrderState);
 
-  constructor(private renderer: Renderer2) { }
+  constructor(private renderer: Renderer2) {}
 
   ngOnInit() {
     // Buscar pedido baseado nos parâmetros da URL
@@ -38,13 +42,12 @@ export class OrderReportComponent implements OnInit {
       }
     `;
     this.renderer.appendChild(document.head, style);
-
   }
-  
+
   private getOrderFromParams(): void {
     this.route.params.subscribe(params => {
       const orderId = params['id'];
-      
+
       if (orderId) {
         // Usar o OrderState para buscar o pedido
         this.orderState.getOrderById(orderId).then((order: Order) => {
@@ -53,7 +56,7 @@ export class OrderReportComponent implements OnInit {
           setTimeout(() => {
             window.print();
           }, 0);
-        })
+        });
       } else {
         console.warn('⚠️ Nenhum ID de pedido encontrado nos parâmetros');
       }

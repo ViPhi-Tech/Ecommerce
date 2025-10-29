@@ -58,7 +58,6 @@ export const routes: Routes = [
     data: { animation: 'dashboard' },
   },
 
-  
   {
     path: '**',
     pathMatch: 'full',

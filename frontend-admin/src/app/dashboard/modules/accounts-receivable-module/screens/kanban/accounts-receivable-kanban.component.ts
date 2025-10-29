@@ -34,7 +34,14 @@ import dayjs from 'dayjs';
   selector: 'fuse-accounts-receivable-kanban',
   templateUrl: './accounts-receivable-kanban.component.html',
   styleUrls: ['./accounts-receivable-kanban.component.scss'],
-  imports: [CommonModule, ButtonModule, SelectModule, FormsModule, NgIcon, KanbanComponent],
+  imports: [
+    CommonModule,
+    ButtonModule,
+    SelectModule,
+    FormsModule,
+    NgIcon,
+    KanbanComponent,
+  ],
   providers: [CurrencyPipe],
 })
 export class AccountsReceivableKanbanComponent implements OnInit {
@@ -53,18 +60,18 @@ export class AccountsReceivableKanbanComponent implements OnInit {
   selectedPeriod = signal<PeriodRange | null>(null);
   selectedClientId = signal<string | null>(null);
   selectedClientIdModel: string | null = null;
-  clientOptions = signal<{label: string, value: string}[]>([]);
+  clientOptions = signal<{ label: string; value: string }[]>([]);
 
   // Computed
   loading = computed(() => this.state.loading());
   accountsReceivableList = computed(() => {
     const accounts = this.state.accountsReceivableList();
     const selectedClient = this.selectedClientId();
-    
+
     if (!selectedClient) {
       return accounts;
     }
-    
+
     return accounts.filter(account => account.client?.id === selectedClient);
   });
   clientsLoading = computed(() => this.clientState.loading());
@@ -90,7 +97,7 @@ export class AccountsReceivableKanbanComponent implements OnInit {
       const clients = this.clientState.clientList();
       const options = clients.map((client: IClient) => ({
         label: client.fullName,
-        value: client.id
+        value: client.id,
       }));
       this.clientOptions.set(options);
     });
@@ -171,8 +178,8 @@ export class AccountsReceivableKanbanComponent implements OnInit {
         cards: [],
         cardsActions: actions,
         filter: {
-          date: true
-        }
+          date: true,
+        },
       },
     ];
 
@@ -369,10 +376,10 @@ export class AccountsReceivableKanbanComponent implements OnInit {
     }
   }
 
-  onPeriodChange(data: any){
+  onPeriodChange(data: any) {
     this.selectedPeriod.set({
-      ...data.period
-    })
+      ...data.period,
+    });
     localStorage.setItem('received_period', JSON.stringify(data.period));
     this.loadAccountsReceivable();
   }

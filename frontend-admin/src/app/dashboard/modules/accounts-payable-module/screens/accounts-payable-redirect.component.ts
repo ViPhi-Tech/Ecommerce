@@ -5,7 +5,9 @@ import { Router } from '@angular/router';
   selector: 'fuse-accounts-payable-redirect',
   template: `<div class="flex justify-center items-center h-64">
     <div class="text-center">
-      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"></div>
+      <div
+        class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto"
+      ></div>
       <p class="mt-2 text-gray-600 dark:text-gray-400">Carregando...</p>
     </div>
   </div>`,
@@ -17,12 +19,12 @@ export class AccountsPayableRedirectComponent implements OnInit {
   ngOnInit() {
     // // Verificar preferência de visualização salva
     // const viewPreference = localStorage.getItem('accounts-payable-view-preference');
-    
+
     // if (viewPreference === 'kanban') {
     //   this.router.navigate(['/dashboard/accounts-payable/kanban']);
     // } else {
-      // Padrão é lista
-      this.router.navigate(['/dashboard/accounts-payable/list']);
+    // Padrão é lista
+    this.router.navigate(['/dashboard/accounts-payable/list']);
     // }
   }
 }

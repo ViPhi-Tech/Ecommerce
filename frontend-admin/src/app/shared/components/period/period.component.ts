@@ -47,7 +47,7 @@ export default class PeriodComponent implements OnInit {
   disabled = input<boolean>(false);
   defaultValue = input<PeriodType | undefined>(undefined);
   storeKey = input<string>('period_selector');
-  size = input<string>('small')
+  size = input<string>('small');
   firstEmit = input<boolean>(true);
 
   // Outputs

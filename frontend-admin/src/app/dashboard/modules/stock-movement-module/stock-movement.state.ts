@@ -9,6 +9,7 @@ import { MetricDTO } from './dtos/MetricDTO';
 import dayjs from 'dayjs';
 import { StockMovementModuleState } from 'app/shared/interfaces/stock/StockMovementModuleState';
 import { IMovimentItem } from 'app/shared/interfaces/stock/IMovimentItem';
+import { ButtonSeverityType } from 'app/shared/types/button.types';
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +37,9 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
     list = list.map(item => {
       item.date = dayjs(item.createdAt).format('DD/MM/YYYY');
       item.hour = dayjs(item.createdAt).format('HH:mm');
+      item = this.formatStockMovementData(item);
 
+      console.log(item);
       return item as IMovimentItem;
     });
 
@@ -84,6 +87,42 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
         finalize(() => this.setLoadingCards(false))
       )
     );
+  }
+
+  formatStockMovementData(item: IMovimentItem) {
+    item.date = `${dayjs(item.createdAt).format('DD/MM/YYYY')} ${dayjs(item.createdAt).format('HH:mm')}`;
+
+    item.productName = item.stock.product?.name || '';
+    item.productSku = item.stock.product?.sku || '';
+    item.typeBadge = this.getMovementTypeBadge(item.type);
+    item.typeLabel = this.getMovementTypeLabel(item.type);
+
+    return item;
+  }
+
+  getMovementTypeLabel(type: string): string {
+    switch (type) {
+      case 'IN':
+        return 'Entrada';
+      case 'OUT':
+        return 'Saída';
+      case 'ADJUSTMENT':
+        return 'Ajuste';
+      default:
+        return type;
+    }
+  }
+  getMovementTypeBadge(type: string): ButtonSeverityType {
+    switch (type) {
+      case 'IN':
+        return 'success';
+      case 'OUT':
+        return 'danger';
+      case 'ADJUSTMENT':
+        return 'warn';
+      default:
+        return 'info';
+    }
   }
 
   setLoadingCards(loading: boolean) {

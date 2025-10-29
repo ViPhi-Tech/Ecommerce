@@ -65,9 +65,15 @@ export class ClientCreateComponent implements OnInit {
       street: ['', [Validators.required, Validators.minLength(5)]],
       number: ['', [Validators.required]],
       neighborhood: ['', [Validators.required, Validators.minLength(2)]],
-      zipCode: ['', [Validators.required, Validators.pattern(/^\d{5}-?\d{3}$/)]],
+      zipCode: [
+        '',
+        [Validators.required, Validators.pattern(/^\d{5}-?\d{3}$/)],
+      ],
       city: ['', [Validators.required, Validators.minLength(2)]],
-      state: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(2)]],
+      state: [
+        '',
+        [Validators.required, Validators.minLength(2), Validators.maxLength(2)],
+      ],
     }),
   });
 
@@ -249,12 +255,13 @@ export class ClientCreateComponent implements OnInit {
    */
   onZipCodeBlur(event: any): void {
     const zipCode = event?.target?.value?.replace(/\D/g, '');
-    
+
     if (!zipCode || zipCode.length !== 8) {
       return;
     }
 
-    this.http.get(`https://viacep.com.br/ws/${zipCode}/json/`)
+    this.http
+      .get(`https://viacep.com.br/ws/${zipCode}/json/`)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
         next: (response: any) => {
@@ -262,7 +269,7 @@ export class ClientCreateComponent implements OnInit {
             this.toast.add({
               severity: 'warn',
               summary: 'Aviso',
-              detail: 'CEP não encontrado'
+              detail: 'CEP não encontrado',
             });
             return;
           }
@@ -274,23 +281,23 @@ export class ClientCreateComponent implements OnInit {
               neighborhood: response.bairro || '',
               city: response.localidade || '',
               state: response.uf || '',
-              zipCode: this.formatZipCode(zipCode)
-            }
+              zipCode: this.formatZipCode(zipCode),
+            },
           });
 
           this.toast.add({
             severity: 'success',
             summary: 'Sucesso',
-            detail: 'Endereço preenchido automaticamente'
+            detail: 'Endereço preenchido automaticamente',
           });
         },
         error: () => {
           this.toast.add({
             severity: 'error',
             summary: 'Erro',
-            detail: 'Erro ao buscar CEP'
+            detail: 'Erro ao buscar CEP',
           });
-        }
+        },
       });
   }
 
@@ -310,8 +317,8 @@ export class ClientCreateComponent implements OnInit {
       this.clientForm.patchValue({
         billingAddress: {
           ...this.clientForm.get('billingAddress')?.value,
-          state: state
-        }
+          state: state,
+        },
       });
     }
   }

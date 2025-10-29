@@ -21,16 +21,21 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
   accountsReceivableList = computed(() => this.state().accountsReceivableList);
 
   // Subject para pré-preencher o formulário de contas a receber
-  private formPrefillSubject = new Subject<Partial<IAccountsReceivable & { action: string }>>();
+  private formPrefillSubject = new Subject<
+    Partial<IAccountsReceivable & { action: string }>
+  >();
   formPrefill$ = this.formPrefillSubject.asObservable();
 
   private onSubmitSubject = new Subject<boolean>();
   onSubmit$ = this.onSubmitSubject.asObservable();
 
-  async getAccountsReceivableList(skipLoader = true, filter?: {
-    startDate?: string;
-    endDate?: string;
-  }): Promise<void> {
+  async getAccountsReceivableList(
+    skipLoader = true,
+    filter?: {
+      startDate?: string;
+      endDate?: string;
+    }
+  ): Promise<void> {
     this.setLoading(true);
     this.clearError();
     this.setAccountsReceivableList([]);
@@ -140,7 +145,6 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
   clearFormPrefill(): void {
     this.formPrefillSubject.next({});
   }
-
 
   onSubmit(success: boolean): void {
     this.onSubmitSubject.next(success);

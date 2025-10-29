@@ -108,15 +108,17 @@ export class TableComponent implements OnInit {
   });
 
   exportColumns = computed(() => {
-    const columns = this.config().columns.map(col => {
-      return {
-        title: col.caption,
-        dataKey: col.field,
-        type: col.type || 'text',
-        headerAlign: col.headerAlign || 'left',
-      };
-    }).filter(col => col.dataKey !== 'actions' || col.title !== 'Ações');
-    
+    const columns = this.config()
+      .columns.map(col => {
+        return {
+          title: col.caption,
+          dataKey: col.field,
+          type: col.type || 'text',
+          headerAlign: col.headerAlign || 'left',
+        };
+      })
+      .filter(col => col.dataKey !== 'actions' || col.title !== 'Ações');
+
     return columns;
   });
   ngOnInit() {}
@@ -132,12 +134,12 @@ export class TableComponent implements OnInit {
   exportTable() {
     const columns = this.exportColumns();
     const data = this.data();
-    
+
     if (!data || data.length === 0) {
       this.messageService.add({
         severity: 'warn',
         summary: 'Aviso',
-        detail: 'Não há dados para exportar'
+        detail: 'Não há dados para exportar',
       });
       return;
     }
@@ -145,18 +147,18 @@ export class TableComponent implements OnInit {
     try {
       const fileName = this.title() || 'dados';
       this.excelExportService.exportToExcel(data, columns, fileName);
-      
+
       this.messageService.add({
         severity: 'success',
         summary: 'Sucesso',
-        detail: 'Excel exportado com sucesso!'
+        detail: 'Excel exportado com sucesso!',
       });
     } catch (error) {
       console.error('Erro ao exportar Excel:', error);
       this.messageService.add({
         severity: 'error',
         summary: 'Erro',
-        detail: 'Erro ao exportar dados para Excel'
+        detail: 'Erro ao exportar dados para Excel',
       });
     }
   }

@@ -10,7 +10,14 @@ import PeriodComponent, { PeriodRange } from '../../period/period.component';
   selector: 'fuse-kanban-pipe',
   templateUrl: './kanban-pipe.component.html',
   styleUrls: ['./kanban-pipe.component.scss'],
-  imports: [NgClass, NgIcon, KanbanCardComponent, CdkDropList, CdkDrag, PeriodComponent],
+  imports: [
+    NgClass,
+    NgIcon,
+    KanbanCardComponent,
+    CdkDropList,
+    CdkDrag,
+    PeriodComponent,
+  ],
 })
 export class KanbanPipeComponent {
   // Inputs
@@ -83,8 +90,7 @@ export class KanbanPipeComponent {
   onPeriodChange(range: PeriodRange) {
     this.periodChange.emit({
       column: this.column(),
-      period: range
-    })
+      period: range,
+    });
   }
-
 }
