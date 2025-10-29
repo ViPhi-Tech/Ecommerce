@@ -7,6 +7,7 @@ import {
   updateAccountsReceivableSchema,
   accountsReceivableClientSchema,
   accountsReceivableStatusSchema,
+  dateFilterJsonSchema
 } from "../../../application/dto/accountsReceivable/AccountsReceivableDTOs";
 import { zodToJsonSchema } from "zod-to-json-schema";
 
@@ -93,6 +94,7 @@ export default async function accountsReceivableRoutes(
     schema: {
       tags: ["accounts-receivable"],
       summary: "Busca todas as contas a receber",
+      params: dateFilterJsonSchema,
     },
     handler: accountsReceivableController.findAll.bind(accountsReceivableController)
   });
