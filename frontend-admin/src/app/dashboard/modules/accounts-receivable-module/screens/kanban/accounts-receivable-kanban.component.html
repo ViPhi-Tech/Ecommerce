@@ -10,7 +10,28 @@
       </p>
     </div>
 
-    <div class="flex gap-3">
+    <div class="flex gap-3 items-center">
+      <!-- Filtro de Cliente -->
+      <div class="flex items-center gap-2">
+        <p-select
+          id="client-filter"
+          [options]="clientOptions()"
+          [(ngModel)]="selectedClientIdModel"
+          (onChange)="onClientFilterChange($event)"
+          optionLabel="label"
+          optionValue="value"
+          placeholder="Todos os clientes"
+          [showClear]="true"
+          [filter]="true"
+          filterBy="label"
+          class="min-w-[200px]"
+          pTooltip="Filtrar por cliente"
+          tooltipPosition="bottom"
+        />
+      </div>
+
+      <div class="h-6 w-px bg-gray-300 dark:bg-gray-600"></div>
+
       <p-button
         icon="pi pi-list"
         label="Lista"

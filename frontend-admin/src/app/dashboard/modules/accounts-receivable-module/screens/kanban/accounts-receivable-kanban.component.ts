@@ -9,6 +9,8 @@ import {
 } from '@angular/core';
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
+import { SelectModule } from 'primeng/select';
+import { FormsModule } from '@angular/forms';
 import { NgIcon } from '@ng-icons/core';
 import { Router } from '@angular/router';
 import { AccountsReceivableState } from '../../accounts-receivable.state';
@@ -24,13 +26,15 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AccountsReceivableService } from '../../accounts-receivable.service';
 import { PeriodRange } from 'app/shared/components/period/period.component';
+import { ClientState } from '../../../client-module/client.state';
+import { IClient } from 'app/shared/interfaces/client/Client';
 import dayjs from 'dayjs';
 
 @Component({
   selector: 'fuse-accounts-receivable-kanban',
   templateUrl: './accounts-receivable-kanban.component.html',
   styleUrls: ['./accounts-receivable-kanban.component.scss'],
-  imports: [CommonModule, ButtonModule, NgIcon, KanbanComponent],
+  imports: [CommonModule, ButtonModule, SelectModule, FormsModule, NgIcon, KanbanComponent],
   providers: [CurrencyPipe],
 })
 export class AccountsReceivableKanbanComponent implements OnInit {
@@ -42,15 +46,28 @@ export class AccountsReceivableKanbanComponent implements OnInit {
   private currencyPipe = inject(CurrencyPipe);
   private destroyedRef = inject(DestroyRef);
   private toast = inject(MessageService);
+  private clientState = inject(ClientState);
 
   // Signals
   kanbanColumns = signal<KanbanColumn[]>([]);
-
   selectedPeriod = signal<PeriodRange | null>(null);
+  selectedClientId = signal<string | null>(null);
+  selectedClientIdModel: string | null = null;
+  clientOptions = signal<{label: string, value: string}[]>([]);
 
   // Computed
   loading = computed(() => this.state.loading());
-  accountsReceivableList = computed(() => this.state.accountsReceivableList());
+  accountsReceivableList = computed(() => {
+    const accounts = this.state.accountsReceivableList();
+    const selectedClient = this.selectedClientId();
+    
+    if (!selectedClient) {
+      return accounts;
+    }
+    
+    return accounts.filter(account => account.client?.id === selectedClient);
+  });
+  clientsLoading = computed(() => this.clientState.loading());
 
   constructor() {
     this.coreService.setPageTitle('Financeiro', '');
@@ -67,10 +84,21 @@ export class AccountsReceivableKanbanComponent implements OnInit {
         this.setupKanbanColumns();
       }
     });
+
+    // Effect para carregar opções de clientes
+    effect(() => {
+      const clients = this.clientState.clientList();
+      const options = clients.map((client: IClient) => ({
+        label: client.fullName,
+        value: client.id
+      }));
+      this.clientOptions.set(options);
+    });
   }
 
   ngOnInit() {
     this.loadAccountsReceivable();
+    this.loadClients();
   }
 
   async loadAccountsReceivable() {
@@ -341,5 +369,19 @@ export class AccountsReceivableKanbanComponent implements OnInit {
     })
     localStorage.setItem('received_period', JSON.stringify(data.period));
     this.loadAccountsReceivable();
+  }
+
+  async loadClients() {
+    await this.clientState.getClientList(true);
+  }
+
+  onClientFilterChange(event: any) {
+    this.selectedClientIdModel = event.value;
+    this.selectedClientId.set(event.value);
+    // O filtro será aplicado automaticamente através do computed
+  }
+
+  clearClientFilter() {
+    this.selectedClientId.set(null);
   }
 }
