@@ -15,4 +15,5 @@ export interface IOrderRepository {
     aggregateSalesByStatus(initialMonth: number, finalMonth: number): Promise<AggregateOrderStatusResponse[]>;
     aggregateSalesByCategory(initialMonth: number, finalMonth: number): Promise<AggregateOrderCategoryResponse[]>;
     getOrdersByClient(clientId: number, startDate: string, endDate: string, paymentTypeId: string): Promise<Order[]>;
+    assignOrdersToAccountsReceivable(orders: number[], accountsReceivableId: number): Promise<void>;
 }

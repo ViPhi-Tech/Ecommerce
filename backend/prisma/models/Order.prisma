@@ -10,6 +10,9 @@ model Order {
   client    Client?     @relation(fields: [clientId], references: [id])
   items     OrderItem[]
   payments  Payment[]
+
+  accountsReceivableId Int?
+  accountsReceivable   AccountsReceivable? @relation(fields: [accountsReceivableId], references: [id])
 }
 
 model OrderItem {

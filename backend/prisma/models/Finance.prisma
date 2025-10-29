@@ -30,4 +30,5 @@ model AccountsReceivable {
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
   client          Client    @relation(fields: [clientId], references: [id])
+  orders          Order[]  
 }

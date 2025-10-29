@@ -199,7 +199,12 @@ async aggregateSalesByCategory(initialMonth: number, finalMonth: number): Promis
 async getOrdersByClient(clientId: number, startDate: string, endDate: string, paymentTypeId: string): Promise<Order[]> {
   const start = new Date(startDate);
   const end = new Date(endDate);
+  const now = new Date();
+  start.setDate(start.getDate() + 1);
   end.setDate(end.getDate() + 1);
+  if (now.getHours() >= 21) {
+    end.setDate(end.getDate() + 1);
+}
   
   return this.prisma.order.findMany({
       where: { 
@@ -208,6 +213,7 @@ async getOrdersByClient(clientId: number, startDate: string, endDate: string, pa
           gte: start, 
           lte: end 
         }, 
+        accountsReceivableId: null,
         payments: paymentTypeId ? { some: { typeId: paymentTypeId } } : undefined 
       },
       include: {
@@ -218,6 +224,16 @@ async getOrdersByClient(clientId: number, startDate: string, endDate: string, pa
       orderBy: {
         id: 'desc'
       }
-  })}
- 
+  })};
+
+  async assignOrdersToAccountsReceivable(orders: number[], accountsReceivableId: number): Promise<void> {
+    await this.prisma.order.updateMany({
+      where: {
+        id: { in: orders }
+      },
+      data: {
+        accountsReceivableId
+      }
+    });
+  };
 }
