@@ -15,14 +15,14 @@ export class AccountsPayableRedirectComponent implements OnInit {
   private router = inject(Router);
 
   ngOnInit() {
-    // Verificar preferência de visualização salva
-    const viewPreference = localStorage.getItem('accounts-payable-view-preference');
+    // // Verificar preferência de visualização salva
+    // const viewPreference = localStorage.getItem('accounts-payable-view-preference');
     
-    if (viewPreference === 'kanban') {
-      this.router.navigate(['/dashboard/accounts-payable/kanban']);
-    } else {
+    // if (viewPreference === 'kanban') {
+    //   this.router.navigate(['/dashboard/accounts-payable/kanban']);
+    // } else {
       // Padrão é lista
       this.router.navigate(['/dashboard/accounts-payable/list']);
-    }
+    // }
   }
 }

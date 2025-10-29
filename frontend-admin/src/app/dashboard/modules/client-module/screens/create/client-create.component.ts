@@ -20,6 +20,7 @@ import { ClientService } from '../../client.service';
 import { ClientState } from '../../client.state';
 import { InputMaskModule } from 'primeng/inputmask';
 import { emailAsyncValidator } from 'app/shared/validators/validators';
+import { HttpClient } from '@angular/common/http';
 import {
   formatDocument,
   formatPhone,
@@ -49,6 +50,7 @@ export class ClientCreateComponent implements OnInit {
   private toast = inject(MessageService);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
+  private http = inject(HttpClient);
 
   @ViewChild('dialogRef') dialogRef!: Dialog;
 
@@ -58,6 +60,15 @@ export class ClientCreateComponent implements OnInit {
     document: ['', [Validators.required]],
     email: ['', [Validators.required, Validators.email]],
     phone: ['', [Validators.required]],
+    // Endereço de Cobrança
+    billingAddress: this.formBuilder.group({
+      street: ['', [Validators.required, Validators.minLength(5)]],
+      number: ['', [Validators.required]],
+      neighborhood: ['', [Validators.required, Validators.minLength(2)]],
+      zipCode: ['', [Validators.required, Validators.pattern(/^\d{5}-?\d{3}$/)]],
+      city: ['', [Validators.required, Validators.minLength(2)]],
+      state: ['', [Validators.required, Validators.minLength(2), Validators.maxLength(2)]],
+    }),
   });
 
   // signals
@@ -101,6 +112,14 @@ export class ClientCreateComponent implements OnInit {
             document: formatDocument(data?.document),
             email: data?.email,
             phone: formatPhone(data?.phone),
+            billingAddress: {
+              street: data?.billingAddress?.street || '',
+              number: data?.billingAddress?.number || '',
+              neighborhood: data?.billingAddress?.neighborhood || '',
+              zipCode: data?.billingAddress?.zipCode || '',
+              city: data?.billingAddress?.city || '',
+              state: data?.billingAddress?.state || '',
+            },
           });
 
           this.handleDocumentInput(this.clientForm.get('document')?.value);
@@ -222,6 +241,78 @@ export class ClientCreateComponent implements OnInit {
         detail: 'CNPJ inválido',
       });
       this.clientForm.get('document')?.setErrors({ invalid: true });
+    }
+  }
+
+  /**
+   * Busca endereço por CEP usando a API ViaCEP
+   */
+  onZipCodeBlur(event: any): void {
+    const zipCode = event?.target?.value?.replace(/\D/g, '');
+    
+    if (!zipCode || zipCode.length !== 8) {
+      return;
+    }
+
+    this.http.get(`https://viacep.com.br/ws/${zipCode}/json/`)
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe({
+        next: (response: any) => {
+          if (response.erro) {
+            this.toast.add({
+              severity: 'warn',
+              summary: 'Aviso',
+              detail: 'CEP não encontrado'
+            });
+            return;
+          }
+
+          // Preencher automaticamente os campos de endereço
+          this.clientForm.patchValue({
+            billingAddress: {
+              street: response.logradouro || '',
+              neighborhood: response.bairro || '',
+              city: response.localidade || '',
+              state: response.uf || '',
+              zipCode: this.formatZipCode(zipCode)
+            }
+          });
+
+          this.toast.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: 'Endereço preenchido automaticamente'
+          });
+        },
+        error: () => {
+          this.toast.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: 'Erro ao buscar CEP'
+          });
+        }
+      });
+  }
+
+  /**
+   * Formata CEP
+   */
+  private formatZipCode(zipCode: string): string {
+    return zipCode.replace(/(\d{5})(\d{3})/, '$1-$2');
+  }
+
+  /**
+   * Converte estado para maiúsculo
+   */
+  onStateInput(event: any): void {
+    const state = event?.target?.value?.toUpperCase();
+    if (state && state.length <= 2) {
+      this.clientForm.patchValue({
+        billingAddress: {
+          ...this.clientForm.get('billingAddress')?.value,
+          state: state
+        }
+      });
     }
   }
 }

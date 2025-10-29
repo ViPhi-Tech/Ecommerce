@@ -64,7 +64,7 @@ export class MenuComponent implements OnInit {
       ],
     },
     {
-      groupTitle: 'Estoque',
+      groupTitle: 'Produto',
       items: [
         {
           id: ROLES_SITEMAP.Produtos,

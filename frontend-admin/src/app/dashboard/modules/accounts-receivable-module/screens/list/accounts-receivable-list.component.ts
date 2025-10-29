@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
@@ -9,12 +9,15 @@ import { heightAnimation } from 'app/shared/utils/animations';
 import { AccountsReceivableState } from '../../accounts-receivable.state';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { ButtonModule } from 'primeng/button';
+import { ClientSelectComponent } from 'app/shared/components/client-select/client-select.component';
+import PeriodComponent, { PeriodRange } from 'app/shared/components/period/period.component';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'fuse-accounts-receivable-list',
   templateUrl: './accounts-receivable-list.component.html',
   animations: [heightAnimation],
-  imports: [TableComponent, ButtonModule],
+  imports: [TableComponent, ButtonModule, ClientSelectComponent, PeriodComponent],
 })
 export class AccountsReceivableListComponent implements OnInit {
   private router = inject(Router);
@@ -25,6 +28,24 @@ export class AccountsReceivableListComponent implements OnInit {
   private destroyedRef = inject(DestroyRef);
 
   state = inject(AccountsReceivableState);
+
+  // Filtros
+  selectedClientId: string | null = null;
+  currentPeriodRange: PeriodRange | null = null;
+
+  // Computed signals
+  filteredAccountsReceivable = computed(() => {
+    let accounts = this.state.accountsReceivableList();
+    
+    // Filtro por cliente (apenas frontend)
+    if (this.selectedClientId) {
+      accounts = accounts.filter(account => 
+        account.client?.id === this.selectedClientId
+      );
+    }
+    
+    return accounts;
+  });
 
   tableConfig = signal<TableConfig>({
     rowsPerPageOptions: [5, 10, 20],
@@ -112,8 +133,8 @@ export class AccountsReceivableListComponent implements OnInit {
   async ngOnInit() {
     // Salvar preferência atual como lista
     localStorage.setItem('accounts-receivable-view-preference', 'list');
-
-    this.loadAccountsReceivable();
+    
+    // this.loadAccountsReceivable();
 
     this.coreService.setPageTitle(
       'Contas a Receber',
@@ -122,7 +143,41 @@ export class AccountsReceivableListComponent implements OnInit {
   }
 
   async loadAccountsReceivable() {
-    await this.state.getAccountsReceivableList(true);
+    const dateFilter = this.getDateFilter();
+    await this.state.getAccountsReceivableList(true, dateFilter);
+  }
+
+  // Métodos dos filtros
+  onPeriodChange(periodRange: PeriodRange): void {
+    this.currentPeriodRange = periodRange;
+    // O filtro de data é enviado para o backend
+    this.loadAccountsReceivable();
+  }
+
+  clearFilters(): void {
+    this.selectedClientId = null;
+    this.currentPeriodRange = null;
+    
+    // Recarregar dados sem filtros
+    this.loadAccountsReceivable();
+    
+    // Mostrar mensagem de feedback
+    this.toast.add({
+      severity: 'info',
+      summary: 'Filtros Limpos',
+      detail: 'Todos os filtros foram removidos'
+    });
+  }
+
+  private getDateFilter(): { startDate?: string; endDate?: string } | undefined {
+    if (!this.currentPeriodRange) {
+      return undefined;
+    }
+
+    return {
+      startDate: dayjs(this.currentPeriodRange.startDate).format('YYYY-MM-DD'),
+      endDate: dayjs(this.currentPeriodRange.endDate).format('YYYY-MM-DD')
+    };
   }
 
   // Método para dar baixa na conta a receber
