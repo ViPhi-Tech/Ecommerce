@@ -21,6 +21,7 @@ export interface Order {
 }
 
 export interface Client {
+  id: number;
   fullName: string;
   document: string;
   email: string;

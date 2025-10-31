@@ -20,13 +20,13 @@ import { ClientService } from '../../client.service';
 import { ClientState } from '../../client.state';
 import { InputMaskModule } from 'primeng/inputmask';
 import { emailAsyncValidator } from 'app/shared/validators/validators';
-import { HttpClient } from '@angular/common/http';
 import {
   formatDocument,
   formatPhone,
   isCnpjValid,
   isCpfValid,
 } from 'app/shared/utils/utils';
+import { ViaCepService } from 'app/shared/services/viacep.service';
 
 @Component({
   selector: 'fuse-client-create',
@@ -50,7 +50,7 @@ export class ClientCreateComponent implements OnInit {
   private toast = inject(MessageService);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
-  private http = inject(HttpClient);
+  private viaCepService = inject(ViaCepService);
 
   @ViewChild('dialogRef') dialogRef!: Dialog;
 
@@ -172,11 +172,11 @@ export class ClientCreateComponent implements OnInit {
         this.clientService.createClientRefresh();
         this.closeDialog();
       },
-      error: () => {
+      error: (data: any) => {
         this.toast.add({
           severity: 'error',
           summary: 'Erro',
-          detail: 'Erro ao salvar cliente',
+          detail: data?.error?.descricao || 'Erro ao salvar cliente',
         });
       },
     });
@@ -260,11 +260,11 @@ export class ClientCreateComponent implements OnInit {
       return;
     }
 
-    this.http
-      .get(`https://viacep.com.br/ws/${zipCode}/json/`)
+    this.viaCepService
+      .getAddressByZipCode(zipCode)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
-        next: (response: any) => {
+        next: (response) => {
           if (response.erro) {
             this.toast.add({
               severity: 'warn',

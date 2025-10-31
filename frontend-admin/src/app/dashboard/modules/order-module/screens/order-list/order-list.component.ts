@@ -80,7 +80,7 @@ export class OrderListComponent implements OnInit {
     const orders = this.state.orderList();
     const selectedClient = this.selectedClient();
     if (!selectedClient) return orders;
-    return orders.filter(order => order.client?.fullName === selectedClient);
+    return orders.filter(order => order.client?.id === Number(selectedClient));
   });
 
   constructor() {}

@@ -13,6 +13,14 @@ export function CoreInterceptor(
   // Verifica se o cabeçalho 'Skip-Loader' está presente
   const skipLoader = req.headers.has('Skip-Loader');
 
+  // Verifica se é uma requisição para API externa (ex: ViaCEP, BrasilAPI)
+  const isViaCep = req.url.includes('viacep.com.br');
+  
+  // Se for API externa, não aplica credenciais, headers de autenticação nem loader
+  if (isViaCep) {
+    return next(req);
+  }
+
   if (!skipLoader) {
     coreService.showLoader();
   }
