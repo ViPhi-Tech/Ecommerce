@@ -1,10 +1,10 @@
 {
   "name": "sellup",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "main.js",
   "scripts": {
     "ng": "ng",
-    "dev": "node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng serve --configuration development",
+    "dev": "ng serve --configuration development",
     "build": "node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --configuration production",
     "build:dev": "node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --configuration development",
     "watch": "node --max-old-space-size=4096 ./node_modules/@angular/cli/bin/ng build --watch --configuration development",
