@@ -94,7 +94,7 @@ export class ClientListComponent implements OnInit {
   }
 
   refreshClients() {
-    this.state.getClientList();
+    this.state.getClientList(true, true); // Force refresh do cache
   }
 
   deleteClient(id: string) {

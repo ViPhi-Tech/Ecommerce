@@ -45,3 +45,15 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Design services around a single responsibility
 - Use the `providedIn: 'root'` option for singleton services
 - Use the `inject()` function instead of constructor injection
+
+
+## State Management (only for modules)
+- Use signals for state management
+- Use `computed()` for derived state
+- Keep state transformations pure and predictable
+- Do NOT use `mutate` on signals, use `update` or `set` instead
+- Use `invalidateCache()` to invalidate the cache of a state
+- Use `getList()` to get the list of a state
+- Use `create()` to create a new item in a state
+- Use `update()` to update an item in a state
+- Use `delete()` to delete an item in a state

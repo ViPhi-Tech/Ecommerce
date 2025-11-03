@@ -87,7 +87,7 @@ export class SupplierListComponent implements OnInit {
   }
 
   refreshSuppliers() {
-    this.state.getSupplierList();
+    this.state.getSupplierList(true, true); // Force refresh do cache
   }
 
   deleteSupplier(id: string) {

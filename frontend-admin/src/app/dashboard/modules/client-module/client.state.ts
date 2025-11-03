@@ -19,6 +19,9 @@ export class ClientState extends BaseState<ClientModuleState> {
     error: null,
   });
 
+  // Cache control - indica se o cache é válido
+  private cacheValid = signal<boolean>(false);
+
   clientList = computed(() => this.state().clientList);
   searchTerm = computed(() => this.state().searchTerm);
 
@@ -26,17 +29,30 @@ export class ClientState extends BaseState<ClientModuleState> {
     super();
   }
 
-  async getClientList(skipLoader = true): Promise<void> {
+  async getClientList(skipLoader = true, forceRefresh = false): Promise<void> {
+    // Se o cache é válido e não está forçando refresh, retorna sem fazer requisição
+    if (this.cacheValid() && !forceRefresh && this.state().clientList.length > 0) {
+      return;
+    }
+
     this.setLoading(true);
     this.setError(null);
-    this.setClientList([]);
+
+    // Só limpa a lista se estiver forçando refresh
+    if (forceRefresh) {
+      this.setClientList([]);
+    }
 
     try {
       await lastValueFrom(
         this.clientService.getClients(skipLoader).pipe(
-          tap(data => this.setClientList(data.dados)),
+          tap(data => {
+            this.setClientList(data.dados);
+            this.cacheValid.set(true); // Marca o cache como válido após carregar
+          }),
           catchError(error => {
             this.handleError(error, 'Erro ao carregar clientes');
+            this.cacheValid.set(false); // Invalida o cache em caso de erro
             throw error;
           }),
           finalize(() => this.setLoading(false))
@@ -71,5 +87,13 @@ export class ClientState extends BaseState<ClientModuleState> {
 
   setSearchTerm(term: string) {
     this.updateState('searchTerm', term);
+  }
+
+  /**
+   * Invalida o cache da lista de clientes
+   * Deve ser chamado após operações de criar, atualizar ou deletar
+   */
+  invalidateCache() {
+    this.cacheValid.set(false);
   }
 }

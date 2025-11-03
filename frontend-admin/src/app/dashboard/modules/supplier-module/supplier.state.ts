@@ -17,23 +17,39 @@ export class SupplierState extends BaseState<SupplierModuleState> {
     error: null,
   });
 
+  // Cache control - indica se o cache é válido
+  private cacheValid = signal<boolean>(false);
+
   supplierList = computed(() => this.state().supplierList);
 
   constructor() {
     super();
   }
 
-  async getSupplierList(skipLoader = true): Promise<void> {
+  async getSupplierList(skipLoader = true, forceRefresh = false): Promise<void> {
+    // Se o cache é válido e não está forçando refresh, retorna sem fazer requisição
+    if (this.cacheValid() && !forceRefresh && this.state().supplierList.length > 0) {
+      return;
+    }
+
     this.setLoading(true);
     this.setError(null);
-    this.setSupplierList([]);
+
+    // Só limpa a lista se estiver forçando refresh
+    if (forceRefresh) {
+      this.setSupplierList([]);
+    }
 
     try {
       await lastValueFrom(
         this.supplierService.getSuppliers(skipLoader).pipe(
-          tap(data => this.setSupplierList(data.dados)),
+          tap(data => {
+            this.setSupplierList(data.dados);
+            this.cacheValid.set(true); // Marca o cache como válido após carregar
+          }),
           catchError(error => {
             this.handleError(error, 'Erro ao carregar fornecedores');
+            this.cacheValid.set(false); // Invalida o cache em caso de erro
             throw error;
           }),
           finalize(() => this.setLoading(false))
@@ -47,5 +63,13 @@ export class SupplierState extends BaseState<SupplierModuleState> {
 
   setSupplierList(supplierList: any) {
     this.updateState('supplierList', supplierList);
+  }
+
+  /**
+   * Invalida o cache da lista de fornecedores
+   * Deve ser chamado após operações de criar, atualizar ou deletar
+   */
+  invalidateCache() {
+    this.cacheValid.set(false);
   }
 }
