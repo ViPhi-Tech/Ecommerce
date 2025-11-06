@@ -62,7 +62,7 @@ export class MenuComponent implements OnInit {
           visible: true,
         },
         {
-          id: ROLES_SITEMAP.Entregas,
+          id: ROLES_SITEMAP.Pedidos,
           label: 'Entregas',
           icon: 'lucideTruck',
           route: '/dashboard/deliveries/list',
