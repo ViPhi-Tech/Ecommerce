@@ -1,0 +1,163 @@
+<div class="p-6 animate-fade-in">
+  <div>
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+        {{ isEditMode() ? 'Editar Entrega' : 'Nova Entrega' }}
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-1">
+        {{ isEditMode() ? 'Edite as informações da entrega' : 'Agrupe pedidos e crie uma nova entrega' }}
+      </p>
+    </div>
+
+    <form [formGroup]="deliveryForm" (ngSubmit)="saveDelivery()">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Formulário Principal -->
+        <div class="lg:col-span-1 space-y-4">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+              Informações da Entrega
+            </h2>
+
+            <div class="space-y-4">
+              <div>
+                <span class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                  Nome da Entrega <span class="text-red-500">*</span>
+                </span>
+                <input
+                  pInputText
+                  formControlName="name"
+                  placeholder="Ex: Entrega Zona Norte"
+                  class="w-full"
+                  [class.ng-invalid]="deliveryForm.get('name')?.invalid && deliveryForm.get('name')?.touched"
+                />
+                @if (deliveryForm.get('name')?.invalid && deliveryForm.get('name')?.touched) {
+                  <small class="text-red-500">Nome é obrigatório</small>
+                }
+              </div>
+
+              <div>
+                <span class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                  Descrição
+                </span>
+                <textarea
+                  pTextarea
+                  formControlName="description"
+                  placeholder="Descrição opcional da entrega"
+                  [rows]="3"
+                  class="w-full"
+                ></textarea>
+              </div>
+
+              <div>
+                <span class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                  Data de Entrega <span class="text-red-500">*</span>
+                </span>
+                <p-datepicker
+                  formControlName="deliveryDate"
+                  [showIcon]="true"
+                  dateFormat="dd/mm/yy"
+                  [showButtonBar]="true"
+                  styleClass="w-full"
+                  [class.ng-invalid]="deliveryForm.get('deliveryDate')?.invalid && deliveryForm.get('deliveryDate')?.touched"
+                ></p-datepicker>
+                @if (deliveryForm.get('deliveryDate')?.invalid && deliveryForm.get('deliveryDate')?.touched) {
+                  <small class="text-red-500">Data de entrega é obrigatória</small>
+                }
+              </div>
+
+              <div>
+                <span class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                  Nome do Entregador
+                </span>
+                <input
+                  pInputText
+                  formControlName="driverName"
+                  placeholder="Nome do entregador"
+                  class="w-full"
+                />
+              </div>
+
+              <div>
+                <span class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
+                  Placa do Veículo
+                </span>
+                <input
+                  pInputText
+                  formControlName="vehiclePlate"
+                  placeholder="ABC-1234"
+                  class="w-full"
+                />
+              </div>
+            </div>
+          </div>
+
+          <!-- Resumo dos Pedidos Selecionados -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+              Resumo
+            </h2>
+            <div class="space-y-2">
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Pedidos selecionados:</span>
+                <span class="font-semibold">{{ selectedOrders().size }}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400">Valor total:</span>
+                <span class="font-semibold">
+                  {{ totalValue() | currency:'BRL' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Seleção de Pedidos -->
+        <div class="lg:col-span-2">
+          <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                Selecionar Pedidos
+              </h2>
+              <div class="flex gap-2">
+                <p-button
+                  label="Selecionar Todos"
+                  [outlined]="true"
+                  size="small"
+                  (onClick)="selectAllOrders()"
+                />
+                <p-button
+                  label="Limpar Seleção"
+                  [outlined]="true"
+                  size="small"
+                  (onClick)="deselectAllOrders()"
+                />
+              </div>
+            </div>
+
+            <fuse-table
+              [data]="availableOrders()"
+              [loading]="orderState.loading()"
+              [config]="tableConfig()"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Botões de Ação -->
+      <div class="flex justify-end gap-3 mt-6">
+        <p-button
+          label="Cancelar"
+          [outlined]="true"
+          (onClick)="cancel()"
+        />
+        <p-button
+          label="{{ isEditMode() ? 'Atualizar' : 'Criar Entrega' }}"
+          icon="pi pi-check"
+          (onClick)="saveDelivery()"
+          [disabled]="deliveryForm.invalid || selectedOrders().size === 0"
+        />
+      </div>
+    </form>
+  </div>
+</div>
+

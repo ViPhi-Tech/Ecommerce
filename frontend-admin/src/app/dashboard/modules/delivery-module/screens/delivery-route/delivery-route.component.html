@@ -1,0 +1,137 @@
+<div class="p-6 animate-fade-in">
+  @if (delivery(); as deliveryData) {
+    <div>
+      <!-- Header -->
+      <div class="flex items-center justify-between mb-6">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+            Rota de Entrega #{{ deliveryData.id }}
+          </h1>
+          <p class="text-gray-600 dark:text-gray-400 mt-1">
+            {{ deliveryData.name }}
+          </p>
+        </div>
+        <div class="flex gap-3">
+          <p-button
+            label="Voltar"
+            icon="pi pi-arrow-left"
+            [outlined]="true"
+            (onClick)="backToDelivery()"
+          />
+          @if (!route()) {
+            <p-button
+              label="Gerar Rota"
+              icon="pi pi-map"
+              (onClick)="generateRoute()"
+            />
+          } @else {
+            <p-button
+              label="Otimizar Rota"
+              icon="pi pi-refresh"
+              (onClick)="optimizeRoute()"
+            />
+          }
+        </div>
+      </div>
+
+      @if (route(); as routeData) {
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <!-- Mapa e Rota -->
+          <div class="lg:col-span-2">
+            <p-card>
+              <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+                Mapa da Rota
+              </h2>
+              <!-- Aqui você pode integrar um componente de mapa (Google Maps, Leaflet, etc.) -->
+              <div class="bg-gray-200 dark:bg-gray-700 rounded-lg h-96 flex items-center justify-center">
+                <div class="text-center">
+                  <ng-icon name="lucideMap" class="text-6xl text-gray-400 mb-4" />
+                  <p class="text-gray-600 dark:text-gray-400">
+                    Integre um componente de mapa aqui
+                  </p>
+                  <p class="text-sm text-gray-500 dark:text-gray-500 mt-2">
+                    (Google Maps, Leaflet, Mapbox, etc.)
+                  </p>
+                </div>
+              </div>
+
+              <!-- Informações da Rota -->
+              <div class="grid grid-cols-2 gap-4 mt-4">
+                @if (routeData.totalDistance) {
+                  <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                    <span class="text-sm text-gray-600 dark:text-gray-400">Distância Total</span>
+                    <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                      {{ routeData.totalDistance }} km
+                    </p>
+                  </div>
+                }
+                @if (routeData.estimatedTime) {
+                  <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                    <span class="text-sm text-gray-600 dark:text-gray-400">Tempo Estimado</span>
+                    <p class="text-2xl font-bold text-green-600 dark:text-green-400">
+                      {{ routeData.estimatedTime }} min
+                    </p>
+                  </div>
+                }
+              </div>
+            </p-card>
+          </div>
+
+          <!-- Lista de Paradas -->
+          <div>
+            <p-card>
+              <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+                Paradas da Rota
+              </h2>
+              <div class="space-y-3">
+                @for (waypoint of routeData.waypoints; track waypoint.orderId) {
+                  <div class="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold text-sm">
+                      {{ waypoint.sequence }}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                      <p class="font-semibold text-sm">Pedido #{{ waypoint.orderId }}</p>
+                      <p class="text-xs text-gray-600 dark:text-gray-400 mt-1 break-words">
+                        {{ waypoint.address }}
+                      </p>
+                      @if (waypoint.estimatedArrival) {
+                        <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                          Chegada: {{ waypoint.estimatedArrival | date:'HH:mm' }}
+                        </p>
+                      }
+                    </div>
+                    @if (waypoint.completed) {
+                      <ng-icon name="lucideCheckCircle" class="text-green-500 flex-shrink-0" />
+                    }
+                  </div>
+                }
+              </div>
+            </p-card>
+          </div>
+        </div>
+      } @else {
+        <p-card>
+          <div class="text-center py-12">
+            <ng-icon name="lucideMap" class="text-6xl text-gray-400 mb-4" />
+            <h3 class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">
+              Nenhuma rota gerada
+            </h3>
+            <p class="text-gray-600 dark:text-gray-400 mb-6">
+              Gere uma rota para visualizar o trajeto de entrega
+            </p>
+            <p-button
+              label="Gerar Rota"
+              icon="pi pi-map"
+              (onClick)="generateRoute()"
+            />
+          </div>
+        </p-card>
+      }
+    </div>
+  } @else {
+    <div class="flex items-center justify-center h-64">
+      <p class="text-gray-600 dark:text-gray-400">Carregando...</p>
+    </div>
+  }
+</div>
+

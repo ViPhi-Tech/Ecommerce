@@ -12,4 +12,5 @@ export const ROLES_SITEMAP = {
   Dividas: '6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f22',
   Relatorios: '4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d20',
   Usuarios: '1c2d3e4f-5a6b-7c8d-9e0f-1b2c3d4e5f21',
+  Entregas: 'a2b3c4d5-6e7f-8a9b-0c1d-2e3f4a5b6c23',
 };

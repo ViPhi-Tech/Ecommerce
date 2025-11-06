@@ -74,4 +74,10 @@ export const SYSTEM_MODULES: IUserModule[] = [
     description: 'Gerenciamento de usuários do sistema',
     route: '/dashboard/users',
   },
+  {
+    id: ROLES_SITEMAP.Entregas,
+    name: 'Entregas',
+    description: 'Gerenciamento de entregas e rotas',
+    route: '/dashboard/deliveries',
+  },
 ];
