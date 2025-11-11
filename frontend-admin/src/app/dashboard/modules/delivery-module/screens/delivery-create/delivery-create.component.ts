@@ -7,6 +7,7 @@ import {
   computed,
   effect,
   ChangeDetectionStrategy,
+  Signal,
 } from '@angular/core';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { DeliveryState } from '../../delivery.state';
@@ -198,8 +199,8 @@ export class DeliveryCreateComponent implements OnInit {
               action: (rowData: Order) => {
                 this.toggleOrderSelection(rowData.id);
               },
-              show: (rowData: Order) => {
-                return !this.isOrderSelected(rowData.id);
+              show: (rowData: Signal<Order>) => {
+                return !this.isOrderSelected(rowData().id);
               },
             },
             {
@@ -210,8 +211,8 @@ export class DeliveryCreateComponent implements OnInit {
               action: (rowData: Order) => {
                 this.toggleOrderSelection(rowData.id);
               },
-              show: (rowData: Order) => {
-                return this.isOrderSelected(rowData.id);
+              show: (rowData: Signal<Order>) => {
+                return this.isOrderSelected(rowData().id);
               },
             },
           ],
