@@ -237,4 +237,26 @@ async getOrdersByClient(clientId: number, startDate: string, endDate: string, pa
       }
     });
   };
+
+  async assignOrdersToDelivery(orderIds: number[], deliveryId: number): Promise<void> {
+    await this.prisma.order.updateMany({
+      where: {
+        id: { in: orderIds }
+      },
+      data: {
+        deliveryId
+      }
+    });
+  }
+
+  async removeDeliveryFromOrders(orderIds: number[]): Promise<void> {
+    await this.prisma.order.updateMany({
+      where: {
+        id: { in: orderIds }
+      },
+      data: {
+        deliveryId: null
+      }
+    });
+  }
 }
