@@ -56,8 +56,12 @@ export class AccountsReceivableService {
     return this.http.post<ApiResponse>(`${this.apiUrl}/create`, data);
   }
 
-  delete(id: string): Observable<ApiResponse> {
-    return this.http.delete<ApiResponse>(`${this.apiUrl}/${id}`);
+  delete(id: string, skipLoader?: boolean): Observable<ApiResponse> {
+    const headers: any = {};
+    if (skipLoader) {
+      headers['Skip-Loader'] = 'true';
+    }
+    return this.http.delete<ApiResponse>(`${this.apiUrl}/${id}`, { headers });
   }
 
   updateAccountReceivableStatus(
@@ -77,14 +81,4 @@ export class AccountsReceivableService {
     );
   }
 
-  markAsReceived(id: number): Observable<ApiResponse> {
-    return this.http.patch<ApiResponse>(
-      `${this.apiUrl}/mark-as-received/${id}`,
-      {}
-    );
-  }
-
-  refreshList() {
-    this.refreshAccountsReceivableList$.set(Math.random());
-  }
 }
