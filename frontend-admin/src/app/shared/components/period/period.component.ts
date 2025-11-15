@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import dayjs from 'dayjs';
 import { SelectModule } from 'primeng/select';
 import { NgIcon } from '@ng-icons/core';
+import { TooltipModule } from 'primeng/tooltip';
 
 export interface PeriodOption {
   label: string;
@@ -28,7 +29,7 @@ export type PeriodType =
 
 @Component({
   selector: 'fuse-period',
-  imports: [CommonModule, FormsModule, SelectModule, NgIcon],
+  imports: [CommonModule, FormsModule, SelectModule, NgIcon, TooltipModule],
   templateUrl: './period.component.html',
   styleUrls: ['./period.component.scss'],
 })
@@ -49,6 +50,8 @@ export default class PeriodComponent implements OnInit {
   storeKey = input<string>('period_selector');
   size = input<string>('small');
   firstEmit = input<boolean>(true);
+  tooltip = input<string>('');
+  tooltipPosition = input<'top' | 'left' | 'right' | 'bottom'>('bottom');
 
   // Outputs
   periodChange = output<PeriodRange>();

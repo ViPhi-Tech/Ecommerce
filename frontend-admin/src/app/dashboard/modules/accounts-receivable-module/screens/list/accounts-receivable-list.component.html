@@ -10,15 +10,6 @@
     </div>
 
     <div class="flex gap-3 ml-auto">
-      <!-- <p-button
-        icon="pi pi-table"
-        label="Kanban"
-        [text]="true"
-        (onClick)="navigateToKanban()"
-        pTooltip="Visualizar em Kanban"
-        tooltipPosition="bottom"
-      /> -->
-
       <p-button
         icon="pi pi-refresh"
         [text]="true"
@@ -54,6 +45,8 @@
 
         <!-- Filtro de Período -->
         <fuse-period
+          tooltip="Filtrar pedidos recebidos"
+          tooltipPosition="bottom"
           [availablePeriods]="[
             'today',
             'last7days',
