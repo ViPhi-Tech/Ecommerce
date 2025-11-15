@@ -13,6 +13,19 @@ import { PAYMENTS_SITEMAP } from 'app/shared/constants/payments.sitemap';
 @Component({
   selector: 'fuse-payment-selection',
   templateUrl: './payment-selection.component.html',
+  styles: `
+    button:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      background-color: #f0f0f0 !important;
+      border-color: #f0f0f0 !important;
+      color: #666 !important;
+
+      * {
+        cursor: not-allowed !important;
+      }
+    }
+  `,
   imports: [
     CommonModule,
     NgIcon,
@@ -35,6 +48,15 @@ export class PaymentSelectionComponent implements OnInit {
   ngOnInit() {}
 
   onPaymentMethodChange(paymentMethod: any) {
+    if (paymentMethod.needClient && !this.cartState.client()) {
+      this.toast.add({
+        severity: 'warn',
+        summary: 'Aviso',
+        detail: 'Selecione um cliente para continuar.',
+        life: 3000,
+      });
+      return;
+    }
     if (this.getTotalToPay() <= 0) {
       this.toast.add({
         severity: 'warn',

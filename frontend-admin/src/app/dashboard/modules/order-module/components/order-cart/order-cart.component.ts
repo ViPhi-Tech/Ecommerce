@@ -124,7 +124,7 @@ export class OrderCartComponent implements OnInit {
         (payment: any) => payment.id === 'account_receivable'
       );
       if (hasAccountReceivable) {
-        this.router.navigate(['']);
+        this.router.navigate(['/dashboard/orders/noted']);
       } else {
         this.router.navigate(['/dashboard/orders']);
       }
