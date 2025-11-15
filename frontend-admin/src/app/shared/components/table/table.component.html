@@ -41,15 +41,14 @@
           }
         </div>
 
-        <div class="flex flex-col w-full sm:w-auto sm:flex-row gap-2">
+        <div class="flex flex-col w-full sm:w-auto sm:flex-row gap-4">
           <ng-content select="[data-headerFilter]"></ng-content>
 
           <div class="flex items-center gap-2 w-full sm:w-auto">
-            <p-iconfield class="small" iconPosition="left">
+            <p-iconfield class="medium" iconPosition="left">
               <p-inputicon class="pi pi-search" />
               <input
                 pInputText
-                pSize="small"
                 type="text"
                 class="w-full sm:w-[250px]"
                 (input)="search($event, dt2)"
