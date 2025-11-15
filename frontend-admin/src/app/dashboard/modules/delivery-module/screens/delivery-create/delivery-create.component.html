@@ -1,13 +1,13 @@
 <div class="p-6 animate-fade-in">
   <div>
-    <div class="mb-6">
+    <!-- <div class="mb-6">
       <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
         {{ isEditMode() ? 'Editar Entrega' : 'Nova Entrega' }}
       </h1>
       <p class="text-gray-600 dark:text-gray-400 mt-1">
         {{ isEditMode() ? 'Edite as informações da entrega' : 'Agrupe pedidos e crie uma nova entrega' }}
       </p>
-    </div>
+    </div> -->
 
     <form [formGroup]="deliveryForm" (ngSubmit)="saveDelivery()">
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -18,76 +18,41 @@
               Informações da Entrega
             </h2>
 
-            <div class="space-y-4">
-              <div>
-                <span class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                  Nome da Entrega <span class="text-red-500">*</span>
-                </span>
-                <input
-                  pInputText
-                  formControlName="name"
-                  placeholder="Ex: Entrega Zona Norte"
-                  class="w-full"
-                  [class.ng-invalid]="deliveryForm.get('name')?.invalid && deliveryForm.get('name')?.touched"
-                />
-                @if (deliveryForm.get('name')?.invalid && deliveryForm.get('name')?.touched) {
-                  <small class="text-red-500">Nome é obrigatório</small>
-                }
-              </div>
+            <div class="gap-4 flex flex-col">
+              <fuse-input
+                label="Nome da Entrega"
+                [control]="deliveryForm.get('name')"
+                placeholder="Ex: Entrega Zona Norte"
+                errorMessage="Nome é obrigatório"
+              />
 
-              <div>
-                <span class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                  Descrição
-                </span>
-                <textarea
-                  pTextarea
-                  formControlName="description"
-                  placeholder="Descrição opcional da entrega"
-                  [rows]="3"
-                  class="w-full"
-                ></textarea>
-              </div>
+              <fuse-input
+                type="textarea"
+                label="Descrição"
+                [control]="deliveryForm.get('description')"
+                placeholder="Descrição opcional da entrega"
+                [rows]="3"
+              />
 
-              <div>
-                <span class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                  Data de Entrega <span class="text-red-500">*</span>
-                </span>
-                <p-datepicker
-                  formControlName="deliveryDate"
-                  [showIcon]="true"
-                  dateFormat="dd/mm/yy"
-                  [showButtonBar]="true"
-                  styleClass="w-full"
-                  [class.ng-invalid]="deliveryForm.get('deliveryDate')?.invalid && deliveryForm.get('deliveryDate')?.touched"
-                ></p-datepicker>
-                @if (deliveryForm.get('deliveryDate')?.invalid && deliveryForm.get('deliveryDate')?.touched) {
-                  <small class="text-red-500">Data de entrega é obrigatória</small>
-                }
-              </div>
+              <fuse-datepicker
+                label="Data de Entrega"
+                [control]="deliveryForm.get('deliveryDate')"
+                type="date"
+                placeholder="00/00/0000"
+              />
 
-              <div>
-                <span class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                  Nome do Entregador
-                </span>
-                <input
-                  pInputText
-                  formControlName="driverName"
-                  placeholder="Nome do entregador"
-                  class="w-full"
-                />
-              </div>
+              <fuse-input
+                label="Nome do Entregador"
+                [control]="deliveryForm.get('driverName')"
+                placeholder="Nome do entregador"
+              />
 
-              <div>
-                <span class="block text-sm font-medium mb-2 text-gray-700 dark:text-gray-300">
-                  Placa do Veículo
-                </span>
-                <input
-                  pInputText
-                  formControlName="vehiclePlate"
-                  placeholder="ABC-1234"
-                  class="w-full"
-                />
-              </div>
+              <fuse-input
+                label="Placa do Veículo"
+                [control]="deliveryForm.get('vehiclePlate')"
+                placeholder="ABC-1234"
+                mask="AAA-0000"
+              />
             </div>
           </div>
 

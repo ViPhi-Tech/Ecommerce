@@ -16,9 +16,6 @@ import { OrderState } from 'app/dashboard/modules/order-module/order.state';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { TextareaModule } from 'primeng/textarea';
-import { DatePickerModule } from 'primeng/datepicker';
 import { MessageService } from 'primeng/api';
 import { Delivery, DeliveryStatus } from '../../interfaces/delivery.interface';
 import { Order } from 'app/dashboard/modules/order-module/interfaces/order.interface';
@@ -27,6 +24,7 @@ import {
   DEFAULT_TABLE_CONFIG,
   TableConfig,
 } from 'app/shared/interfaces/table.interfaces';
+import { FormModule } from 'app/shared/components/form/form.module';
 
 @Component({
   selector: 'fuse-delivery-create',
@@ -39,10 +37,8 @@ import {
     FormsModule,
     ReactiveFormsModule,
     ButtonModule,
-    InputTextModule,
-    TextareaModule,
-    DatePickerModule,
     TableComponent,
+    FormModule,
   ],
   providers: [DeliveryState],
 })
