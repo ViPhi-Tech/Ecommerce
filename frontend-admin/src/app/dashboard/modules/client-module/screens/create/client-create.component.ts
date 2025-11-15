@@ -158,7 +158,10 @@ export class ClientCreateComponent implements OnInit {
     const formData = {
       ...this.clientForm.value,
       documentType: this.currentDocumentType,
+      ...this.clientForm.get('billingAddress')?.value,
     };
+
+    delete formData.billingAddress;
 
     this.clientService.upsertClient(formData).subscribe({
       next: () => {
