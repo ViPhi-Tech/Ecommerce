@@ -1,5 +1,4 @@
 import { BaseModuleState } from 'app/shared/store/base.state';
-import { Order } from 'app/dashboard/modules/order-module/interfaces/order.interface';
 
 export interface DeliveryModuleState extends BaseModuleState {
   deliveryList: Delivery[];
@@ -14,7 +13,7 @@ export interface Delivery {
   deliveryDate: Date | string;
   driverName?: string;
   vehiclePlate?: string;
-  orders: Order[];
+  orderIds: any[];
   route?: DeliveryRoute;
   createdAt: Date | string;
   updatedAt: Date | string;

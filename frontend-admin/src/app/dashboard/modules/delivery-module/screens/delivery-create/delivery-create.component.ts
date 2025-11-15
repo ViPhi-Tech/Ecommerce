@@ -116,8 +116,8 @@ export class DeliveryCreateComponent implements OnInit {
           vehiclePlate: delivery.vehiclePlate || '',
         });
         
-        if (delivery.orders && delivery.orders.length > 0) {
-          const orderIds = new Set(delivery.orders.map(order => order.id));
+        if (delivery.orderIds && delivery.orderIds.length > 0) {
+          const orderIds = new Set(delivery.orderIds);
           this.selectedOrders.set(orderIds);
         }
       } catch (error) {
@@ -246,7 +246,7 @@ export class DeliveryCreateComponent implements OnInit {
     
     // Buscar os pedidos completos
     const orders = this.availableOrders().filter(order => 
-      selectedOrderIds.includes(order.id)
+      selectedOrderIds.some(id => id === order.id)
     );
 
     const deliveryData: Partial<Delivery> = {
@@ -255,7 +255,7 @@ export class DeliveryCreateComponent implements OnInit {
       deliveryDate: formValue.deliveryDate,
       driverName: formValue.driverName,
       vehiclePlate: formValue.vehiclePlate,
-      orders: orders,
+      orderIds: orders.map(order => order.id),
       status: DeliveryStatus.PENDING,
     };
 
