@@ -117,7 +117,8 @@ export class ClientListComponent implements OnInit {
                 summary: 'Sucesso',
                 detail: 'Cliente excluído com sucesso',
               });
-              this.state.getClientList();
+              // Força o refresh da lista após deletar
+              this.state.getClientList(true, true);
             },
             error: () => {
               this.toast.add({
