@@ -4,14 +4,12 @@ import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { ISupplier } from 'app/shared/interfaces/supplier/Supplier';
 import { Observable, Subject, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
-import { SupplierState } from './supplier.state';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SupplierService {
   private http = inject(HttpClient);
-  private supplierState = inject(SupplierState);
   private apiUrl = environments.apiUrl + 'supplier';
 
   private refreshSubj = new Subject<any>();
@@ -41,19 +39,19 @@ export class SupplierService {
         )
       : this.http.post<ApiResponse>(`${this.apiUrl}/create`, supplierData);
 
-    // Invalida o cache após criar ou atualizar
+    // Emite evento para invalidar o cache após criar ou atualizar
     return operation.pipe(
       tap(() => {
-        this.supplierState.invalidateCache();
+        this.refreshSupplierList();
       })
     );
   }
 
   deleteSupplier(supplierId: string): Observable<ApiResponse> {
-    // Invalida o cache após deletar
+    // Emite evento para invalidar o cache após deletar
     return this.http.delete<ApiResponse>(`${this.apiUrl}/${supplierId}`).pipe(
       tap(() => {
-        this.supplierState.invalidateCache();
+        this.refreshSupplierList();
       })
     );
   }

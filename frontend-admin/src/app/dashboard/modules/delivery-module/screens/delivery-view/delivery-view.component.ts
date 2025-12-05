@@ -9,7 +9,7 @@ import {
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { DeliveryState } from '../../delivery.state';
 import { CoreService } from 'app/shared/services/core.service';
-import { CommonModule, CurrencyPipe, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
 import { MessageService } from 'primeng/api';
@@ -29,7 +29,7 @@ import { CardModule } from 'primeng/card';
     TagModule,
     NgIcon,
     CardModule,
-    CurrencyPipe,
+    // CurrencyPipe,
     DatePipe,
   ],
   providers: [DeliveryState],
