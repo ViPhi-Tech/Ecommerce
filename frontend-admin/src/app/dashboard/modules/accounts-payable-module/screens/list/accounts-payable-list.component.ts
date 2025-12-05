@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, Signal, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
@@ -75,7 +75,11 @@ export class AccountsPayableListComponent implements OnInit {
             icon: 'lucideCircleCheckBig',
             label: 'Dar Baixa',
             tooltip: 'Dar Baixa na Conta a Pagar',
+            colorIcon: '#22C55E',
             variant: 'text',
+            show: (rowData: Signal<IAccountsPayable>) => {
+              return rowData().status !== 'paid';
+            },
             action: (rowData: IAccountsPayable) => {
               this.markAsPaid(rowData?.id);
             },
@@ -133,7 +137,7 @@ export class AccountsPayableListComponent implements OnInit {
       rejectButtonStyleClass: 'p-button-secondary',
       accept: () => {
         this.accountsPayableService
-          .markAsPaid(id)
+          .updateAccountPayableStatus(id, 'paid')
           .pipe(takeUntilDestroyed(this.destroyedRef))
           .subscribe({
             next: () => {
