@@ -5,9 +5,8 @@ services:
       args:
         DATABASE_URL: ${DATABASE_URL:-}
     container_name: ecommerce-backend
-    expose:
-      - "8000"
-    # Funciona localmente com .env e no Coolify com variáveis da interface
+    ports:
+      - "8000:8000"   # agora acessível externamente
     env_file:
       - ./backend/.env
     environment:
@@ -22,11 +21,11 @@ services:
 
   frontend:
     build:
-      context: .                        
+      context: .
       dockerfile: frontend-admin/Dockerfile
     container_name: ecommerce-frontend-1
-    expose:
-      - "80"
+    ports:
+      - "3000:80"     # frontend acessível externamente
     depends_on:
       - backend
     restart: unless-stopped
