@@ -6,7 +6,7 @@ services:
         DATABASE_URL: ${DATABASE_URL:-}
     container_name: ecommerce-backend
     ports:
-      - "8000:8000"   # agora acessível externamente
+      - "8010:8000"   # agora acessível externamente
     env_file:
       - ./backend/.env
     environment:
