@@ -19,6 +19,7 @@ server.register(cors, {
     if (/\.sslip\.io$/.test(origin)) return cb(null, true);
 
     const allowed = [
+      "https://sellup.app.br",
       "http://localhost:3000",
       "http://localhost:4200",
       "https://vendaqui.onrender.com",
