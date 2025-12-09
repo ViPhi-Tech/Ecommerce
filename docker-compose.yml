@@ -24,8 +24,6 @@ services:
       context: .
       dockerfile: frontend-admin/Dockerfile
     container_name: ecommerce-frontend-1
-    ports:
-      - "3000:80"     # frontend acessível externamente
     depends_on:
       - backend
     restart: unless-stopped
