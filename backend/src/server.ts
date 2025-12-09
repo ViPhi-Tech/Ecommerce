@@ -13,19 +13,25 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 const server = fastify({logger: true});
 
 server.register(cors, {
-	origin: [
-		"http://localhost:3000",
-		"http://localhost:4200",
-		"http://127.0.0.1:4200",
-		"http://127.0.0.1",
-		"https://vendaqui.onrender.com",
-		"http://iwscoc8kg0ogc0ok4co0c404.86.48.22.217.sslip.io",
-		/\.sslip\.io$/, // 🔥 AQUI RESOLVE TUDO
-		
-	],
-	credentials: true,
-	methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  origin: (origin, cb) => {
+    if (!origin) return cb(null, true); // requests server-side, tipo curl
+
+    if (/\.sslip\.io$/.test(origin)) return cb(null, true);
+
+    const allowed = [
+      "http://localhost:3000",
+      "http://localhost:4200",
+      "https://vendaqui.onrender.com",
+    ];
+
+    if (allowed.includes(origin)) return cb(null, true);
+
+    cb(new Error("Not allowed by CORS"), false);
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
 });
+
 server.register(swagger);
 server.register(cookie);
 server.register(cloudinary);

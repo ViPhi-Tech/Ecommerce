@@ -13,7 +13,7 @@ export default fp(async (fastify: FastifyInstance) => {
                 version: '1.0.0',
             },
             servers: [
-                { url: 'http://api.86.48.22.217.sslip.io' }
+                    { url: 'http://api.86.48.22.217.sslip.io' }
             ],
         },
     });
