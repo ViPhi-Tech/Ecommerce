@@ -20,6 +20,8 @@ server.register(cors, {
 		"http://127.0.0.1",
 		"https://vendaqui.onrender.com",
 		"http://iwscoc8kg0ogc0ok4co0c404.86.48.22.217.sslip.io",
+		/\.sslip\.io$/, // 🔥 AQUI RESOLVE TUDO
+		
 	],
 	credentials: true,
 	methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
