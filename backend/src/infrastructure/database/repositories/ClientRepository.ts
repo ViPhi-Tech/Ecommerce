@@ -6,8 +6,31 @@ import { CreateClientDTO, UpdateClientDTO } from '../../../application/dto/clien
 export class ClientRepository implements IClientRepository {
   constructor(private prisma: PrismaClient) {}
 
-  async create(data: CreateClientDTO): Promise<Client> {
-    return this.prisma.client.create({ data });
+  async create(data: CreateClientDTO & { street?: string; number?: string; neighborhood?: string; zipCode?: string; city?: string; state?: string }): Promise<Client> {
+    const { street, number, neighborhood, zipCode, city, state, ...clientData } = data;
+    
+    // Verificar se há dados de endereço para criar
+    const hasAddress = street && number && zipCode && city && state;
+    
+    return this.prisma.client.create({
+      data: {
+        ...clientData,
+        // Criar endereço junto com o cliente se houver dados
+        address: hasAddress ? {
+          create: {
+            street,
+            number,
+            city,
+            state,
+            zipCode,
+            complement: neighborhood || null, // Mapear neighborhood para complement
+          }
+        } : undefined,
+      },
+      include: {
+        address: true
+      }
+    }) as any;
   }
 
   async findAll(): Promise<Client[]> {

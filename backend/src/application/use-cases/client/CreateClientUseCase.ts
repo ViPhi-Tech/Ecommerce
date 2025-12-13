@@ -13,7 +13,14 @@ export class CreateClientUseCase {
         document: data.document,
         phone: data.phone ?? null,
         isActive: data.isActive ?? true,
-      });
+        // Passar dados de endereço
+        street: data.street,
+        number: data.number,
+        neighborhood: data.neighborhood,
+        zipCode: data.zipCode,
+        city: data.city,
+        state: data.state,
+      } as any);
 
       return createdClient;
 

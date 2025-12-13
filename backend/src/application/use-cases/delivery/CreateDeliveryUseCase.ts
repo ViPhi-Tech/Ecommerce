@@ -65,11 +65,13 @@ export class CreateDeliveryUseCase {
     orderIds: number[],
     orderRepository: IOrderRepository
   ): Promise<void> {
-    for (const orderId of orderIds) {
-      const order = await orderRepository.findById(orderId);
-      if (!order) {
-        throw new Error(`Pedido com ID ${orderId} não encontrado.`);
-      }
+    // Usar método otimizado que faz uma única query em vez de loop
+    const foundIds = await orderRepository.validateIds(orderIds);
+    
+    // Verificar se todos os IDs foram encontrados
+    const missingIds = orderIds.filter(id => !foundIds.includes(id));
+    if (missingIds.length > 0) {
+      throw new Error(`Pedidos com IDs ${missingIds.join(', ')} não encontrados.`);
     }
   }
 
@@ -96,6 +98,15 @@ export class CreateDeliveryUseCase {
           id: order.client.id,
           fullName: order.client.fullName,
           document: order.client.document,
+          address: order.client.address ? {
+            id: order.client.address.id,
+            street: order.client.address.street,
+            number: order.client.address.number,
+            city: order.client.address.city,
+            state: order.client.address.state,
+            zipCode: order.client.address.zipCode,
+            complement: order.client.address.complement,
+          } : null,
         } : null,
         items: order.items?.map((item: any) => ({
           id: item.id,

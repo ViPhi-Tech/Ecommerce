@@ -35,6 +35,15 @@ export class FindByUuidDeliveryUseCase {
           id: order.client.id,
           fullName: order.client.fullName,
           document: order.client.document,
+          address: order.client.address ? {
+            id: order.client.address.id,
+            street: order.client.address.street,
+            number: order.client.address.number,
+            city: order.client.address.city,
+            state: order.client.address.state,
+            zipCode: order.client.address.zipCode,
+            complement: order.client.address.complement,
+          } : null,
         } : null,
         items: order.items?.map((item: any) => ({
           id: item.id,

@@ -80,6 +80,15 @@ export interface DeliveryResponse {
       id: number;
       fullName: string | null;
       document: string | null;
+      address?: {
+        id: number;
+        street: string;
+        number: string;
+        city: string;
+        state: string;
+        zipCode: string;
+        complement: string | null;
+      } | null;
     } | null;
     items?: Array<{
       id: number;

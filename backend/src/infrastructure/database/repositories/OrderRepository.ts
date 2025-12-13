@@ -55,6 +55,20 @@ export class OrderRepository implements IOrderRepository {
     });
   };
 
+  // Método otimizado para validar múltiplos IDs sem includes pesados
+  async validateIds(ids: number[]): Promise<number[]> {
+    const orders = await this.prisma.order.findMany({
+      where: {
+        id: { in: ids },
+        isActive: true
+      },
+      select: {
+        id: true // Apenas o ID, sem includes pesados
+      }
+    });
+    return orders.map(order => order.id);
+  };
+
   async create(saleData: Partial<Order>): Promise<Order> {
     const { clientId, total } = saleData;
     const result = await this.prisma.order.create(

@@ -10,7 +10,11 @@ export class DeliveryRepository implements IDeliveryRepository {
       include: {
         orders: {
           include: {
-            client: true,
+            client: {
+              include: {
+                address: true,
+              },
+            },
             items: {
               include: {
                 product: true,
@@ -31,7 +35,11 @@ export class DeliveryRepository implements IDeliveryRepository {
       include: {
         orders: {
           include: {
-            client: true,
+            client: {
+              include: {
+                address: true,
+              },
+            },
             items: {
               include: {
                 product: true,
@@ -86,7 +94,11 @@ export class DeliveryRepository implements IDeliveryRepository {
       include: {
         orders: {
           include: {
-            client: true,
+            client: {
+              include: {
+                address: true,
+              },
+            },
             items: {
               include: {
                 product: true,

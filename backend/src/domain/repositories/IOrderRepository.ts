@@ -18,4 +18,5 @@ export interface IOrderRepository {
     assignOrdersToAccountsReceivable(orders: number[], accountsReceivableId: number): Promise<void>;
     assignOrdersToDelivery(orderIds: number[], deliveryId: number): Promise<void>;
     removeDeliveryFromOrders(orderIds: number[]): Promise<void>;
+    validateIds(ids: number[]): Promise<number[]>;
 }
