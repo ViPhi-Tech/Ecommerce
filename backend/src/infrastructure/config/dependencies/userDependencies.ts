@@ -7,13 +7,13 @@ import { GetUserUseCase } from '../../../application/use-cases/user/GetUserUseCa
 import { UpdateUserUseCase } from '../../../application/use-cases/user/UpdateUserUseCase';
 import { DeleteUserUseCase } from '../../../application/use-cases/user/DeleteUserUseCase';
 import { UserController } from '../../http/controllers/UserController';
-import { GetUserRolesUseCase } from '../../../application/use-cases/user/getUserRolesUseCase';
+import { GetUserRolesUseCase } from '../../../application/use-cases/user/GetUserRolesUseCase';
 
 // Repositories
 export const userRepository = new UserRepository(prisma);
 export const loginRepository = new LoginRepository(prisma);
 
-// Services
+// Servicesʋ
 export const passwordService = new BcryptPasswordService();
 
 // Use Cases
