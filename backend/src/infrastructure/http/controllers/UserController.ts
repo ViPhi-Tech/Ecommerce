@@ -3,6 +3,9 @@ import { CreateUserUseCase } from '../../../application/use-cases/user/CreateUse
 import { GetUserUseCase } from '../../../application/use-cases/user/GetUserUseCase';
 import { UpdateUserUseCase } from '../../../application/use-cases/user/UpdateUserUseCase';
 import { DeleteUserUseCase } from '../../../application/use-cases/user/DeleteUserUseCase';
+import { GetUserRolesUseCase } from '../../../application/use-cases/user/getUserRolesUseCase';
+import { ApiResponse } from '../../../shared/types/apiResponse';
+
 import { 
   CreateUserDTO, 
   UpdateUserDTO, 
@@ -20,7 +23,8 @@ export class UserController {
     private createUserUseCase: CreateUserUseCase,
     private getUserUseCase: GetUserUseCase,
     private updateUserUseCase: UpdateUserUseCase,
-    private deleteUserUseCase: DeleteUserUseCase
+    private deleteUserUseCase: DeleteUserUseCase,
+    private getUserRolesUseCase: GetUserRolesUseCase
   ) {}
 
   async create(request: FastifyRequest, reply: FastifyReply) {
@@ -53,7 +57,7 @@ export class UserController {
       console.error(error);
       return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ message: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
     }
-  }
+  };
 
   async getById(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
     try {
@@ -74,7 +78,7 @@ export class UserController {
       console.error(error);
       return reply.code(500).send({ message: 'Internal server error' });
     }
-  }
+  };
 
   async getAll(request: FastifyRequest, reply: FastifyReply) {
     try {
@@ -89,7 +93,7 @@ export class UserController {
       console.error(error);
       return reply.code(500).send({ message: 'Internal server error' });
     }
-  }
+  };
 
   async update(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
     try {
@@ -123,7 +127,7 @@ export class UserController {
       console.error(error);
       return reply.code(500).send({ message: 'Internal server error' });
     }
-  }
+  };
 
   async delete(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
     try {
@@ -144,5 +148,28 @@ export class UserController {
       console.error(error);
       return reply.code(500).send({ message: 'Internal server error' });
     }
-  }
+  };
+
+
+  async getUserRoles(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply): Promise<ApiResponse>  {
+    try {
+      const id = parseInt(request.params.id, 10);
+      
+      if (isNaN(id)) {
+        return reply.code(400).send({ message: 'Invalid ID format' });
+      }
+      
+      const roles = await this.getUserRolesUseCase.execute(id);
+
+      return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: roles})
+
+    } catch (error) {
+      if (error instanceof UserNotFoundError) {
+        return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: error instanceof Error ? error.message : HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR});
+      }
+      
+      console.error(error);
+        return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: error instanceof Error ? error.message : HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR});
+    }
+};
 }

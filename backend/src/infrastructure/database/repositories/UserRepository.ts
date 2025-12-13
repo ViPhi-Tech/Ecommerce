@@ -37,13 +37,17 @@ async findByLoginId(loginId: number): Promise<User | null> {
 
 
   async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany(
+      { where: { isActive: true } }
+    );
   }
 
   async findAllWithLogin(): Promise<(User & { login: any })[]> {
     return this.prisma.user.findMany({
       include: {
         login: true
+      }, where: {
+        isActive: true
       }
     });
   }
@@ -56,8 +60,9 @@ async findByLoginId(loginId: number): Promise<User | null> {
   }
 
   async delete(id: number): Promise<void> {
-    await this.prisma.user.delete({
-      where: { id }
+    await this.prisma.user.update({
+      where: { id },
+      data: { isActive: false }
     });
   }
 
@@ -124,7 +129,15 @@ async findByLoginId(loginId: number): Promise<User | null> {
       })),
       skipDuplicates: true 
     });
-  }
+  };
+
+  async getUserRoles(userId: number): Promise<string[]> {
+    const userRoles = await this.prisma.userRole.findMany({
+      where: { userId },
+      select: { roleId: true }
+    });
+    return userRoles.map(ur => ur.roleId);
+  };
 
 
 }

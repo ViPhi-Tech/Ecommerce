@@ -16,5 +16,6 @@ export interface IUserRepository {
   create_access_token_for_user(userId: number, token: string): Promise<void>;
   get_user_by_email(email: string): Promise<User | null>;
   authenticate_user(email: string, password: string): Promise<User | null>;
+  getUserRoles(userId: number): Promise<string[]>;
   
 }
