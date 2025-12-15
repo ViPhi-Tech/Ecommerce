@@ -8,6 +8,13 @@ export interface CreateClientInput {
   email: string;
   phone: string;
   isActive?: boolean;
+  // Campos de endereço
+  street?: string;
+  number?: string;
+  neighborhood?: string; // Será mapeado para complement
+  zipCode?: string;
+  city?: string;
+  state?: string;
 }
 
 export interface UpdateClientInput {
@@ -25,6 +32,13 @@ export const createClientSchema = z.object({
   email: z.string().email({ message: 'Email inválido' }),
   phone: z.string().min(1, { message: 'Telefone é obrigatório' }),
   isActive: z.boolean().optional().default(true),
+  // Campos de endereço (opcionais)
+  street: z.string().optional(),
+  number: z.string().optional(),
+  neighborhood: z.string().optional(),
+  zipCode: z.string().optional(),
+  city: z.string().optional(),
+  state: z.string().optional(),
 });
 
 export const updateClientSchema = z.object({

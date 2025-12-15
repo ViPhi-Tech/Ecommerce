@@ -22,7 +22,7 @@ import { ClientSelectComponent } from 'app/shared/components/client-select/clien
 import { CheckboxModule } from 'primeng/checkbox';
 import dayjs from 'dayjs';
 import { AccountsReceivableState } from 'app/dashboard/modules/accounts-receivable-module/accounts-receivable.state';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IAccountsReceivable } from 'app/shared/interfaces/accounts-receivable/AccountsReceivable';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -47,6 +47,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class NotedOrdersComponent implements OnInit {
   private coreService = inject(CoreService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private accountsReceivableState = inject(AccountsReceivableState);
   state = inject(OrderState);
   destroyedRef = inject(DestroyRef);
@@ -55,8 +56,8 @@ export class NotedOrdersComponent implements OnInit {
   selectedPeriod = signal<PeriodRange | null>(null);
   selectedOrders = signal<Set<string | number>>(new Set());
 
-  filteredOrderList = computed(() => {
-    const orders = this.state.orderList();
+  filteredNotedOrderList = computed(() => {
+    const orders = this.state.notedOrderList();
     return orders;
   });
 
@@ -78,6 +79,16 @@ export class NotedOrdersComponent implements OnInit {
       'Pedidos Anotados',
       'Visualize os pedidos pendentes de forma organizada'
     );
+
+    // Pega o clientId dos query params e seta no select
+    this.route.queryParams
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe(params => {
+        const clientId = params['clientId'];
+        if (clientId) {
+          this.selectedClient.set(clientId);
+        }
+      });
 
     this.handleAccountsReceivableSubmit();
   }
@@ -102,7 +113,8 @@ export class NotedOrdersComponent implements OnInit {
       this.selectedClient() || '',
       filter.startDate,
       filter.endDate,
-      'account_receivable'
+      'account_receivable',
+      true
     );
   }
 
@@ -154,7 +166,7 @@ export class NotedOrdersComponent implements OnInit {
 
   getTotalValueOfSelectedOrders(): number {
     const selectedIds = this.selectedOrders();
-    return this.filteredOrderList()
+    return this.filteredNotedOrderList()
       .filter(order => selectedIds.has(order.id))
       .reduce((sum, order) => sum + order.total, 0);
   }
@@ -169,7 +181,7 @@ export class NotedOrdersComponent implements OnInit {
       return;
     }
 
-    const selectedOrdersData = this.filteredOrderList().filter(order =>
+    const selectedOrdersData = this.filteredNotedOrderList().filter(order =>
       selectedIds.includes(order.id)
     );
 

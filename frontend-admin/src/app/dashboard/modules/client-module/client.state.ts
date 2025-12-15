@@ -27,6 +27,11 @@ export class ClientState extends BaseState<ClientModuleState> {
 
   constructor() {
     super();
+    // Se inscreve no refresh$ do ClientService para invalidar o cache quando necessário
+    // Como é um serviço singleton (providedIn: 'root'), não precisa de takeUntil
+    this.clientService.refresh$.subscribe(() => {
+      this.invalidateCache();
+    });
   }
 
   async getClientList(skipLoader = true, forceRefresh = false): Promise<void> {

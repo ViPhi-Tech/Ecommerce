@@ -18,6 +18,7 @@ export class OrderState extends BaseState<OrderModuleState> {
 
   protected state = signal<OrderModuleState>({
     orderList: [],
+    notedOrderList: [],
     orderDetails: {} as Order, // Inicializa com um objeto vazio ou pode ser null se não houver detalhes carregados
     loading: false,
     error: null,
@@ -25,6 +26,7 @@ export class OrderState extends BaseState<OrderModuleState> {
 
   orderList = computed(() => this.state().orderList);
   orderDetails = computed(() => this.state().orderDetails);
+  notedOrderList = computed(() => this.state().notedOrderList);
 
   createPreOrder(clientId: string | number): Promise<Order> {
     this.setLoading(true);
@@ -40,10 +42,10 @@ export class OrderState extends BaseState<OrderModuleState> {
     });
   }
 
-  getOrderList(skipLoader = true): void {
+  getOrderList(skipLoader = true, isNoted = false): void {
     this.setLoading(true);
     this.clearError();
-    this.setOrderList([]);
+    this.setOrderList([], isNoted);
 
     lastValueFrom(
       this.orderService.getOrders(skipLoader).pipe(
@@ -56,9 +58,9 @@ export class OrderState extends BaseState<OrderModuleState> {
           ? response
           : response?.data || response?.dados;
         if (orders && orders.length > 0) {
-          this.setOrderList(orders);
+          this.setOrderList(orders, isNoted);
         } else {
-          this.setOrderList([]);
+          this.setOrderList([], isNoted);
           this.setError('Nenhum pedido encontrado.');
         }
       })
@@ -68,8 +70,8 @@ export class OrderState extends BaseState<OrderModuleState> {
       });
   }
 
-  setOrderList(orderList: Order[]) {
-    const transformedOrders = orderList.map(order => {
+  setOrderList(orderList: Order[], isNoted = false) {
+    let transformedOrders = orderList.map(order => {
       return {
         ...order,
         customerName: order.client?.fullName,
@@ -83,7 +85,18 @@ export class OrderState extends BaseState<OrderModuleState> {
       };
     });
 
-    this.updateState('orderList', transformedOrders);
+    if (isNoted) {
+      // Calcula o total dos pedidos anotados
+      transformedOrders = transformedOrders.map(order => ({
+        ...order,
+        total: order?.payments
+          ?.filter(p => p.typeId.toUpperCase() === PAYMENTS_SITEMAP.ACCOUNT_RECEIVABLE.id.toUpperCase())
+          .reduce((acc, p) => acc + p.value, 0) || 0
+      }));
+      this.updateState('notedOrderList', transformedOrders);
+    } else {
+      this.updateState('orderList', transformedOrders);
+    }
   }
 
   getOrderById(orderId: string | number): Promise<Order> {
@@ -106,11 +119,12 @@ export class OrderState extends BaseState<OrderModuleState> {
     clientId: string | number,
     startDate: string,
     endDate: string,
-    paymentTypeId: string
+    paymentTypeId: string,
+    isNoted = false
   ): void {
     this.setLoading(true);
     this.clearError();
-    this.setOrderList([]);
+    this.setOrderList([], isNoted);
 
     lastValueFrom(
       this.orderService
@@ -130,9 +144,9 @@ export class OrderState extends BaseState<OrderModuleState> {
           ? response
           : response?.data || response?.dados;
         if (orders && orders.length > 0) {
-          this.setOrderList(orders);
+          this.setOrderList(orders, isNoted);
         } else {
-          this.setOrderList([]);
+          this.setOrderList([], isNoted);
           this.setError('Nenhum pedido encontrado.');
         }
       })

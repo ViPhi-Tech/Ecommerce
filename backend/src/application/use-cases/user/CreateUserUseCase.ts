@@ -48,12 +48,18 @@ export class CreateUserUseCase {
       loginId: login.id
     });
 
-    await this.userRepository.createRoles(
-      user.id,
-      data.roles
-    )
+    try {
+      await this.userRepository.createRoles(
+        user.id,
+        data.roles
+      );
+    } catch (error: any) {
+      console.error('Erro ao criar roles:', error);
+      // Se houver erro ao criar roles, ainda retornamos o usuário criado
+      // mas logamos o erro para investigação
+      throw new Error(`Erro ao associar roles ao usuário: ${error?.message || 'Erro desconhecido'}`);
+    }
 
-
-    return user
+    return user;
   }
 }

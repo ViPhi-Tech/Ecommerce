@@ -33,19 +33,23 @@
         productState.filteredProducts().length === 0,
     }"
   >
-    @for (product of productState.filteredProducts(); track $index) {
-      <ng-container
-        [ngTemplateOutlet]="productView() === 'grid' ? gridView : listView"
-        [ngTemplateOutletContext]="{ $implicit: product }"
-      >
-      </ng-container>
-    } @empty {
-      <div
-        class="w-full flex flex-col justify-center items-center p-4 text-center text-muted-foreground"
-      >
-        <ng-icon name="lucideSearchX" size="40" />
-        <span class="text-xl">Nenhum produto encontrado.</span>
-      </div>
+    @if (productState.loading()) {
+      <fuse-message-loader [modal]="false" [visible]="true" [message]="'Carregando produtos...'"></fuse-message-loader>
+    }@else {
+      @for (product of productState.filteredProducts(); track $index) {
+        <ng-container
+          [ngTemplateOutlet]="productView() === 'grid' ? gridView : listView"
+          [ngTemplateOutletContext]="{ $implicit: product }"
+        >
+        </ng-container>
+      } @empty {
+        <div
+          class="w-full flex flex-col justify-center items-center p-4 text-center text-muted-foreground"
+        >
+          <ng-icon name="lucideSearchX" size="40" />
+          <span class="text-xl">Nenhum produto encontrado.</span>
+        </div>
+      }
     }
   </div>
 </div>
@@ -53,39 +57,53 @@
 <ng-template #listView let-product>
   <div class="animate-left">
     <div
-      class="flex items-center flex-wrap justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+      class="group flex items-center flex-wrap justify-between p-5 border border-border rounded-xl bg-card hover:bg-muted/30 hover:shadow-md transition-all duration-200 gap-4"
     >
-      <div class="flex items-center gap-4">
-        <div>
-          <h3 class="font-semibold">{{ product?.name }}</h3>
-          <div class="flex items-center gap-2 text-sm text-muted-foreground">
+      <!-- Informações do Produto -->
+      <div class="flex items-center gap-4 flex-1 min-w-0">
+        <div class="flex-1 min-w-0">
+          <h3 class="font-semibold text-base text-foreground mb-2 line-clamp-2 group-hover:text-primary transition-colors">
+            {{ product?.name }}
+          </h3>
+          <div class="flex items-center gap-3 flex-wrap">
             @if (product?.sku) {
-              <span>{{ product?.sku }}</span
-              ><span>•</span>
+              <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <ng-icon name="lucideHash" class="w-3.5 h-3.5" />
+                <span class="font-mono">{{ product?.sku }}</span>
+              </div>
             }
             @if (product?.ean) {
-              <span>{{ product?.ean }}</span>
+              <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+                <ng-icon name="lucideBarcode" class="w-3.5 h-3.5" />
+                <span class="font-mono">{{ product?.ean }}</span>
+              </div>
+            }
+            @if (product?.category?.name) {
+              <div
+                class="inline-flex items-center rounded-md border border-border bg-muted/50 px-2.5 py-1 text-xs font-medium text-foreground transition-colors hover:bg-muted"
+              >
+                <ng-icon name="lucideTag" class="w-3 h-3 mr-1" />
+                {{ product?.category?.name }}
+              </div>
             }
           </div>
         </div>
       </div>
-      <div class="flex items-center gap-4">
-        @if (product?.category?.name) {
-          <div
-            class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground"
-          >
-            {{ product?.category?.name }}
-          </div>
-        }
-        <span class="font-bold text-lg">{{
-          product?.finalPrice | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
-        }}</span>
+
+      <!-- Preço e Ação -->
+      <div class="flex items-center gap-4 flex-shrink-0">
+        <div class="flex flex-col items-end">
+          <span class="font-bold text-xl text-foreground leading-tight">
+            {{ product?.finalPrice | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+          </span>
+        </div>
         <p-button
           (onClick)="addProductToCart(product)"
           [loading]="product?.loading"
           label="Adicionar"
           size="small"
           icon="pi pi-cart-arrow-down"
+          styleClass="shadow-sm hover:shadow-md transition-shadow"
         ></p-button>
       </div>
     </div>
@@ -94,38 +112,51 @@
 
 <ng-template #gridView let-product>
   <div
-    class="animate-right rounded-lg border border-gray-200 dark:border-dark bg-card text-card-foreground shadow-sm overflow-hidden"
+    class="group animate-right rounded-xl border border-border bg-card text-card-foreground shadow-sm hover:shadow-lg hover:border-primary/20 overflow-hidden transition-all duration-200 flex flex-col h-full"
   >
-    <div class="p-4">
-      <h3 class="font-semibold line-clamp-2 min-h-[48px]">
+    <!-- Conteúdo Principal -->
+    <div class="p-5 flex-1 flex flex-col">
+      <h3 class="font-semibold text-base line-clamp-2 mb-3 text-foreground group-hover:text-primary transition-colors min-h-[48px]">
         {{ product?.name }}
       </h3>
-      <div class="flex items-center gap-2 text-muted-foreground text-sm mb-1">
-        @if (product?.sku) {
-          <span>SKU: {{ product?.sku }}</span>
-          <span>•</span>
-        }
-        @if (product?.ean) {
-          <span>EAN: {{ product?.ean }}</span>
-        }
-      </div>
-      @if (product?.category?.name) {
-        <div
-          class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors text-foreground mb-1"
-        >
-          {{ product?.category?.name }}
+      
+      <!-- Informações Secundárias -->
+      <div class="flex flex-col gap-2 mb-3">
+        <div class="flex items-center gap-2 flex-wrap">
+          @if (product?.sku) {
+            <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <ng-icon name="lucideHash" class="w-3.5 h-3.5" />
+              <span class="font-mono">{{ product?.sku }}</span>
+            </div>
+          }
+          @if (product?.ean) {
+            <div class="flex items-center gap-1.5 text-xs text-muted-foreground">
+              <ng-icon name="lucideBarcode" class="w-3.5 h-3.5" />
+              <span class="font-mono">{{ product?.ean }}</span>
+            </div>
+          }
         </div>
-      }
-    </div>
-    <div class="p-4 pt-0 flex flex-col justify-between items-center">
-      <div class="mb-2">
-        <span class="font-bold text-lg">{{
-          product?.finalPrice | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
-        }}</span>
+        @if (product?.category?.name) {
+          <div
+            class="inline-flex items-center rounded-md border border-border bg-muted/50 px-2.5 py-1 text-xs font-medium text-foreground transition-colors hover:bg-muted w-fit"
+          >
+            <ng-icon name="lucideTag" class="w-3 h-3 mr-1" />
+            {{ product?.category?.name }}
+          </div>
+        }
       </div>
-      <div class="w-full">
+    </div>
+
+    <!-- Rodapé com Preço e Botão -->
+    <div class="p-5 pt-2 border-t border-border bg-muted/20">
+      <div class="flex flex-col gap-3">
+        <div class="text-center">
+          <span class="font-bold text-xl text-foreground">
+            {{ product?.finalPrice | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+          </span>
+        </div>
         <p-button
-          styleClass="w-full"
+          styleClass="w-full shadow-sm hover:shadow-md transition-shadow"
           (onClick)="addProductToCart(product)"
           [loading]="product?.loading"
           label="Adicionar"

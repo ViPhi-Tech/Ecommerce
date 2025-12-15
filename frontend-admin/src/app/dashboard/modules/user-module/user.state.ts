@@ -65,7 +65,12 @@ export class UserState extends BaseState<UserModuleState> {
           ? response
           : response.dados || response.data;
         if (users && users.length > 0) {
-          this.setUserList(users);
+          // Mapear os dados para extrair email do objeto login
+          const mappedUsers = users.map((user: any) => ({
+            ...user,
+            email: user.login?.email || user.email || '',
+          }));
+          this.setUserList(mappedUsers);
         } else {
           this.setUserList([]);
           this.setError('Nenhum usuário encontrado.');

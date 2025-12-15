@@ -10,6 +10,7 @@ import { ProductFilterComponent } from './components/product-filter/product-filt
 import { FormModule } from '../../../../../shared/components/form/form.module';
 import { NgIcon } from '@ng-icons/core';
 import { SelectButtonModule } from 'primeng/selectbutton';
+import { MessageLoaderComponent } from 'app/shared/components/loader/message-loader.component';
 
 @Component({
   selector: 'fuse-product-list',
@@ -26,6 +27,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
     ReactiveFormsModule,
     NgIcon,
     CommonModule,
+    MessageLoaderComponent,
   ],
 })
 export class ProductListComponent implements OnInit {

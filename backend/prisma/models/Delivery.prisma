@@ -1,0 +1,13 @@
+model Delivery {
+  id              Int              @id @default(autoincrement())
+  uuid            String           @default(uuid()) @unique
+  name            String
+  description     String?
+  deliveryDate    DateTime
+  driverName      String?
+  vehiclePlate    String?
+  status          String           @default("pending")
+  orders          Order[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+}

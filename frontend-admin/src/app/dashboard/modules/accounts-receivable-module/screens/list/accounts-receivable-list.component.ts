@@ -5,6 +5,7 @@ import {
   OnInit,
   signal,
   computed,
+  Signal,
 } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
@@ -21,6 +22,7 @@ import PeriodComponent, {
   PeriodRange,
 } from 'app/shared/components/period/period.component';
 import dayjs from 'dayjs';
+import { IAccountsReceivable } from 'app/shared/interfaces/accounts-receivable/AccountsReceivable';
 
 @Component({
   selector: 'fuse-accounts-receivable-list',
@@ -108,11 +110,28 @@ export class AccountsReceivableListComponent implements OnInit {
         actionButtonsType: 'buttons',
         actionButtons: [
           {
+            icon: 'lucideCalendarClock',
+            label: 'Marcar como Pendente/Vencido' ,
+            colorIcon: '#FACC15',
+            tooltip: 'Marcar como Pendente/Vencido',
+            variant: 'text',
+            show: (rowData: Signal<IAccountsReceivable>) => {
+              return rowData().status === 'received';
+            },
+            action: (rowData: IAccountsReceivable) => {
+              this.markAsPendingOrOverdue(rowData?.id);
+            },
+          },
+          {
             icon: 'lucideCircleCheckBig',
-            label: 'Dar Baixa',
+            label: 'Dar Baixa ',
+            colorIcon: '#22C55E',
             tooltip: 'Dar Baixa na Conta a Receber',
             variant: 'text',
-            action: (rowData: any) => {
+            show: (rowData: Signal<IAccountsReceivable>) => {
+              return rowData().status !== 'received';
+            },
+            action: (rowData: IAccountsReceivable) => {
               this.markAsReceived(rowData?.id);
             },
           },
@@ -196,6 +215,19 @@ export class AccountsReceivableListComponent implements OnInit {
     };
   }
 
+  async markAsPendingOrOverdue(id: number) {
+    this.confirmationService.confirm({
+      message: 'Você tem certeza que deseja marcar como pendente/vencido esta conta a receber?',
+      header: 'Confirmação de Marcação',
+      icon: 'pi pi-exclamation-triangle text-yellow-500',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      accept: () => {
+        this.state.updateAccountReceivableStatus(id, 'pending');
+      },
+    });
+  }
+
   // Método para dar baixa na conta a receber
   async markAsReceived(id: number) {
     this.confirmationService.confirm({
@@ -207,26 +239,7 @@ export class AccountsReceivableListComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-success',
       rejectButtonStyleClass: 'p-button-secondary',
       accept: () => {
-        this.accountsReceivableService
-          .markAsReceived(id)
-          .pipe(takeUntilDestroyed(this.destroyedRef))
-          .subscribe({
-            next: () => {
-              this.toast.add({
-                severity: 'success',
-                summary: 'Sucesso',
-                detail: 'Conta a receber marcada como recebida com sucesso',
-              });
-              this.state.updateAccountReceivableStatus(id, 'received');
-            },
-            error: () => {
-              this.toast.add({
-                severity: 'error',
-                summary: 'Erro',
-                detail: 'Erro ao dar baixa na conta a receber',
-              });
-            },
-          });
+        this.state.updateAccountReceivableStatus(id, 'received');
       },
     });
   }
@@ -259,8 +272,9 @@ export class AccountsReceivableListComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-danger',
       rejectButtonStyleClass: 'p-button-secondary',
       accept: () => {
+        this.state.removeAccountReceivable(Number(id));
         this.accountsReceivableService
-          .delete(id)
+          .delete(id, true)
           .pipe(takeUntilDestroyed(this.destroyedRef))
           .subscribe({
             next: () => {
@@ -269,9 +283,9 @@ export class AccountsReceivableListComponent implements OnInit {
                 summary: 'Sucesso',
                 detail: 'Conta a receber excluída com sucesso',
               });
-              this.state.removeAccountReceivable(Number(id));
             },
             error: () => {
+              this.loadAccountsReceivable();
               this.toast.add({
                 severity: 'error',
                 summary: 'Erro',

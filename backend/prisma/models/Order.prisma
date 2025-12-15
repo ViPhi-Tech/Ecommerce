@@ -6,13 +6,15 @@ model Order {
   status    String?     @default("PENDING")
   isActive  Boolean     @default(true)
   clientId  Int?
+  deliveryId Int?
   invoice   Invoice[]
   client    Client?     @relation(fields: [clientId], references: [id])
   items     OrderItem[]
   payments  Payment[]
-
+  
   accountsReceivableId Int?
   accountsReceivable   AccountsReceivable? @relation(fields: [accountsReceivableId], references: [id])
+  delivery   Delivery? @relation(fields: [deliveryId], references: [id])
 }
 
 model OrderItem {

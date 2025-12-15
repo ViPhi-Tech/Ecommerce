@@ -16,4 +16,7 @@ export interface IOrderRepository {
     aggregateSalesByCategory(initialMonth: number, finalMonth: number): Promise<AggregateOrderCategoryResponse[]>;
     getOrdersByClient(clientId: number, startDate: string, endDate: string, paymentTypeId: string): Promise<Order[]>;
     assignOrdersToAccountsReceivable(orders: number[], accountsReceivableId: number): Promise<void>;
+    assignOrdersToDelivery(orderIds: number[], deliveryId: number): Promise<void>;
+    removeDeliveryFromOrders(orderIds: number[]): Promise<void>;
+    validateIds(ids: number[]): Promise<number[]>;
 }

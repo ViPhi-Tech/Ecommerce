@@ -1,0 +1,52 @@
+<div class="p-6 animate-fade-in">
+  <div class="flex items-center">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+        Entregas - Listagem
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400 mt-1">
+        Gerencie suas entregas e rotas de forma organizada
+      </p>
+    </div>
+
+    <div class="flex gap-3 ml-auto">
+      <p-button
+        [text]="true"
+        styleClass="h-full"
+        (onClick)="refreshDeliveries()"
+        pTooltip="Atualizar dados"
+        tooltipPosition="bottom"
+      >
+        <ng-icon name="lucideRefreshCw" />
+      </p-button>
+
+      <p-button
+        icon="pi pi-plus"
+        label="Nova Entrega"
+        (onClick)="addNewDelivery()"
+        pTooltip="Criar nova entrega"
+        tooltipPosition="bottom"
+      />
+    </div>
+  </div>
+
+  <div class="animate-left">
+    <fuse-table
+      [data]="state.deliveryList()"
+      [loading]="state.loading()"
+      [config]="tableConfig()"
+    />
+  </div>
+</div>
+
+<ng-template #status let-row>
+  <!-- <p-tag
+    [value]="statusLabelMap[row.status]"
+    [severity]="statusSeverityMap[row.status]"
+  ></p-tag> -->
+</ng-template>
+
+<ng-template #orders let-row>
+  <span class="font-semibold">{{ row.orders?.length || 0 }}</span>
+</ng-template>
+

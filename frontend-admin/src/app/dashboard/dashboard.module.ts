@@ -19,6 +19,7 @@ import { homeRoutes } from './modules/home-module/home.routing';
 import { reportRoutes } from './modules/report-module/report.routing';
 import { serviceOrderRoutes } from './modules/service-order-module/service-order.routing';
 import { schedulingRoutes } from './modules/scheduling-module/scheduling.routing';
+import { deliveryRoutes } from './modules/delivery-module/delivery.routing';
 
 const routes: Routes = [
   {
@@ -96,6 +97,11 @@ const routes: Routes = [
         path: 'scheduling',
         children: schedulingRoutes,
         data: { animation: 'scheduling' },
+      },
+      {
+        path: 'deliveries',
+        children: deliveryRoutes,
+        data: { animation: 'deliveries' },
       },
       {
         path: '**',

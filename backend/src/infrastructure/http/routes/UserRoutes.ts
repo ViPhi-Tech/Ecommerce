@@ -118,4 +118,19 @@ fastify.post('/create', {
     preValidation: [authenticate],
     handler: userController.delete.bind(userController)
   });
+
+  fastify.get<{ Params: { id: string } }>('/:id/roles', {
+    schema: {
+      tags: ['user'],
+      params: {
+        type: 'object',
+        required: ['id'],
+        properties: {
+          id: { type: 'string', pattern: '^\\d+$' }
+        }
+      }
+    },
+    preValidation: [authenticate],
+    handler: userController.getUserRoles.bind(userController)
+  }); 
 }

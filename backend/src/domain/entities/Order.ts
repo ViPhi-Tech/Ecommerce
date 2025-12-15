@@ -7,6 +7,7 @@ export interface Order {
     updatedAt?: Date;
     isActive?: boolean;
     clientId?: number | null;
+    deliveryId?: number | null;
 }
 
 

@@ -48,9 +48,7 @@ export class TableActionsComponent implements OnInit {
 
     if (this.buttons()?.length) {
       for (const btn of this.buttons()) {
-        if (!btn.show || (btn.show && btn.show(this.data))) {
-          buttonRef.push(btn);
-        }
+        buttonRef.push(btn);
       }
     }
 

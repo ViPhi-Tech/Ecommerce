@@ -7,12 +7,13 @@ import { GetUserUseCase } from '../../../application/use-cases/user/GetUserUseCa
 import { UpdateUserUseCase } from '../../../application/use-cases/user/UpdateUserUseCase';
 import { DeleteUserUseCase } from '../../../application/use-cases/user/DeleteUserUseCase';
 import { UserController } from '../../http/controllers/UserController';
+import { GetUserRolesUseCase } from '../../../application/use-cases/user/GetUserRolesUseCase';
 
 // Repositories
 export const userRepository = new UserRepository(prisma);
 export const loginRepository = new LoginRepository(prisma);
 
-// Services
+// Servicesʋ
 export const passwordService = new BcryptPasswordService();
 
 // Use Cases
@@ -20,11 +21,13 @@ const createUserUseCase = new CreateUserUseCase(userRepository, loginRepository,
 const getUserUseCase = new GetUserUseCase(userRepository);
 const updateUserUseCase = new UpdateUserUseCase(userRepository, loginRepository, passwordService);
 const deleteUserUseCase = new DeleteUserUseCase(userRepository, loginRepository);
+const getUserRolesUseCase = new GetUserRolesUseCase(userRepository);
 
 // Controllers
 export const userController = new UserController(
   createUserUseCase,
   getUserUseCase,
   updateUserUseCase,
-  deleteUserUseCase
+  deleteUserUseCase,
+  getUserRolesUseCase
 );

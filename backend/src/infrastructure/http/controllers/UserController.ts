@@ -3,6 +3,10 @@ import { CreateUserUseCase } from '../../../application/use-cases/user/CreateUse
 import { GetUserUseCase } from '../../../application/use-cases/user/GetUserUseCase';
 import { UpdateUserUseCase } from '../../../application/use-cases/user/UpdateUserUseCase';
 import { DeleteUserUseCase } from '../../../application/use-cases/user/DeleteUserUseCase';
+import { GetUserRolesUseCase } from '../../../application/use-cases/user/GetUserRolesUseCase';
+
+import { ApiResponse } from '../../../shared/types/apiResponse';
+
 import { 
   CreateUserDTO, 
   UpdateUserDTO, 
@@ -20,15 +24,34 @@ export class UserController {
     private createUserUseCase: CreateUserUseCase,
     private getUserUseCase: GetUserUseCase,
     private updateUserUseCase: UpdateUserUseCase,
-    private deleteUserUseCase: DeleteUserUseCase
+    private deleteUserUseCase: DeleteUserUseCase,
+    private getUserRolesUseCase: GetUserRolesUseCase
   ) {}
 
   async create(request: FastifyRequest, reply: FastifyReply) {
     try {
+      // Mapear 'modules' para 'roles' se necessário (compatibilidade com frontend)
+      const body = request.body as any;
+      console.log('Body recebido:', JSON.stringify(body, null, 2));
+      
+      if (body.modules && !body.roles) {
+        body.roles = body.modules;
+        delete body.modules;
+      }
+      
+      // Garantir que roles seja um array
+      if (body.roles && !Array.isArray(body.roles)) {
+        body.roles = [body.roles];
+      }
+      
+      console.log('Body após mapeamento:', JSON.stringify(body, null, 2));
+      console.log('Roles após processamento:', body.roles);
+      
       // Validação usando o schema do application
-      const validationResult = createUserSchema.safeParse(request.body);
+      const validationResult = createUserSchema.safeParse(body);
       
       if (!validationResult.success) {
+        console.error('Erro de validação completo:', JSON.stringify(validationResult.error.errors, null, 2));
         return reply.code(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
           message: 'Dados inválidos',
           errors: validationResult.error.errors
@@ -37,7 +60,17 @@ export class UserController {
       
       const userData = validationResult.data;
       
-      const user = await this.createUserUseCase.execute(userData);
+      // Converter CreateUserDTO para CreateUserInput
+      const createUserInput = {
+        fullName: userData.fullName,
+        isActive: userData.isActive,
+        email: userData.email,
+        googleId: userData.googleId,
+        password: userData.password,
+        roles: userData.roles
+      };
+      
+      const user = await this.createUserUseCase.execute(createUserInput);
 
       return reply.code(HTTP_STATUS.API_STATUS_CREATED).send({
         id: user.id,
@@ -45,15 +78,22 @@ export class UserController {
         is_active: user.isActive,
         login_id: user.loginId
       });
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Erro completo ao criar usuário:', error);
+      console.error('Stack trace:', error?.stack);
+      
       if (error instanceof EmailAlreadyExistsError) {
         return reply.code(HTTP_STATUS.API_STATUS_CONFLICT).send({ message: error.message });
       }
       
-      console.error(error);
-      return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ message: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
+      // Retornar mensagem de erro mais detalhada
+      const errorMessage = error?.message || HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR;
+      return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ 
+        message: errorMessage,
+        error: process.env.NODE_ENV === 'development' ? error?.stack : undefined
+      });
     }
-  }
+  };
 
   async getById(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
     try {
@@ -74,7 +114,7 @@ export class UserController {
       console.error(error);
       return reply.code(500).send({ message: 'Internal server error' });
     }
-  }
+  };
 
   async getAll(request: FastifyRequest, reply: FastifyReply) {
     try {
@@ -89,7 +129,7 @@ export class UserController {
       console.error(error);
       return reply.code(500).send({ message: 'Internal server error' });
     }
-  }
+  };
 
   async update(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
     try {
@@ -123,7 +163,7 @@ export class UserController {
       console.error(error);
       return reply.code(500).send({ message: 'Internal server error' });
     }
-  }
+  };
 
   async delete(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply) {
     try {
@@ -144,5 +184,28 @@ export class UserController {
       console.error(error);
       return reply.code(500).send({ message: 'Internal server error' });
     }
-  }
+  };
+
+
+  async getUserRoles(request: FastifyRequest<{ Params: { id: string } }>, reply: FastifyReply): Promise<ApiResponse>  {
+    try {
+      const id = parseInt(request.params.id, 10);
+      
+      if (isNaN(id)) {
+        return reply.code(400).send({ message: 'Invalid ID format' });
+      }
+      
+      const roles = await this.getUserRolesUseCase.execute(id);
+
+      return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: roles})
+
+    } catch (error) {
+      if (error instanceof UserNotFoundError) {
+        return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: error instanceof Error ? error.message : HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR});
+      }
+      
+      console.error(error);
+        return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: error instanceof Error ? error.message : HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR});
+    }
+};
 }

@@ -37,13 +37,35 @@ async findByLoginId(loginId: number): Promise<User | null> {
 
 
   async findAll(): Promise<User[]> {
-    return this.prisma.user.findMany();
+    return this.prisma.user.findMany({
+      where: { isActive: true },
+      include: {
+        login: {
+          select: {
+            id: true,
+            email: true,
+            googleId: true
+            // hashedPassword não é incluído
+          }
+        }
+      }
+    });
   }
 
   async findAllWithLogin(): Promise<(User & { login: any })[]> {
     return this.prisma.user.findMany({
+      where: {
+        isActive: true
+      },
       include: {
-        login: true
+        login: {
+          select: {
+            id: true,
+            email: true,
+            googleId: true
+            // hashedPassword não é incluído
+          }
+        }
       }
     });
   }
@@ -56,8 +78,9 @@ async findByLoginId(loginId: number): Promise<User | null> {
   }
 
   async delete(id: number): Promise<void> {
-    await this.prisma.user.delete({
-      where: { id }
+    await this.prisma.user.update({
+      where: { id },
+      data: { isActive: false }
     });
   }
 
@@ -117,14 +140,37 @@ async findByLoginId(loginId: number): Promise<User | null> {
 
 
   async createRoles(userId: number, roles: string[]): Promise<void> {
-    await this.prisma.userRole.createMany({
-      data: roles.map(roleId => ({
-        userId,
-        roleId
-      })),
-      skipDuplicates: true 
+    try {
+      // Verificar se os roles existem antes de criar
+      if (!roles || roles.length === 0) {
+        console.warn('Nenhum role fornecido para o usuário');
+        return;
+      }
+
+      await this.prisma.userRole.createMany({
+        data: roles.map(roleId => ({
+          userId,
+          roleId
+        })),
+        skipDuplicates: true 
+      });
+    } catch (error: any) {
+      console.error('Erro ao criar roles no repositório:', error);
+      // Se for erro de foreign key, significa que algum UUID não existe
+      if (error?.code === 'P2003') {
+        throw new Error(`Um ou mais roles não existem no banco de dados. Verifique os UUIDs: ${roles.join(', ')}`);
+      }
+      throw error;
+    }
+  };
+
+  async getUserRoles(userId: number): Promise<string[]> {
+    const userRoles = await this.prisma.userRole.findMany({
+      where: { userId },
+      select: { roleId: true }
     });
-  }
+    return userRoles.map(ur => ur.roleId);
+  };
 
 
 }

@@ -1,9 +1,10 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, Signal, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { finalize } from 'rxjs';
 import { heightAnimation } from 'app/shared/utils/animations';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { ButtonModule } from 'primeng/button';
@@ -72,10 +73,27 @@ export class AccountsPayableListComponent implements OnInit {
         actionButtonsType: 'buttons',
         actionButtons: [
           {
+            icon: 'lucideCalendarClock',
+            label: 'Marcar como Pendente/Vencido',
+            colorIcon: '#FACC15',
+            tooltip: 'Marcar como Pendente/Vencido',
+            variant: 'text',
+            show: (rowData: Signal<IAccountsPayable>) => {
+              return rowData().status === 'paid';
+            },
+            action: (rowData: IAccountsPayable) => {
+              this.markAsPendingOrOverdue(rowData?.id);
+            },
+          },
+          {
             icon: 'lucideCircleCheckBig',
             label: 'Dar Baixa',
             tooltip: 'Dar Baixa na Conta a Pagar',
+            colorIcon: '#22C55E',
             variant: 'text',
+            show: (rowData: Signal<IAccountsPayable>) => {
+              return rowData().status !== 'paid';
+            },
             action: (rowData: IAccountsPayable) => {
               this.markAsPaid(rowData?.id);
             },
@@ -121,6 +139,45 @@ export class AccountsPayableListComponent implements OnInit {
     this.state.getAccountsPayableList();
   }
 
+  // Método para marcar como pendente/vencido
+  async markAsPendingOrOverdue(id: number) {
+    this.confirmationService.confirm({
+      message: 'Você tem certeza que deseja marcar como pendente/vencido esta conta a pagar?',
+      header: 'Confirmação de Marcação',
+      icon: 'pi pi-exclamation-triangle text-yellow-500',
+      acceptLabel: 'Sim',
+      rejectLabel: 'Não',
+      acceptButtonStyleClass: 'p-button-warning',
+      rejectButtonStyleClass: 'p-button-secondary',
+      accept: () => {
+        this.coreService.showLoader();
+        this.accountsPayableService
+          .updateAccountPayableStatus(id, 'pending', false)
+          .pipe(
+            takeUntilDestroyed(this.destroyedRef),
+            finalize(() => this.coreService.hideLoader())
+          )
+          .subscribe({
+            next: () => {
+              this.toast.add({
+                severity: 'success',
+                summary: 'Sucesso',
+                detail: 'Conta a pagar marcada como pendente/vencido com sucesso',
+              });
+              this.state.updateAccountPayableStatus(id, 'pending');
+            },
+            error: () => {
+              this.toast.add({
+                severity: 'error',
+                summary: 'Erro',
+                detail: 'Erro ao atualizar status da conta a pagar',
+              });
+            },
+          });
+      },
+    });
+  }
+
   // Método para dar baixa na conta a pagar
   async markAsPaid(id: number) {
     this.confirmationService.confirm({
@@ -132,9 +189,13 @@ export class AccountsPayableListComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-success',
       rejectButtonStyleClass: 'p-button-secondary',
       accept: () => {
+        this.coreService.showLoader();
         this.accountsPayableService
-          .markAsPaid(id)
-          .pipe(takeUntilDestroyed(this.destroyedRef))
+          .updateAccountPayableStatus(id, 'paid', false)
+          .pipe(
+            takeUntilDestroyed(this.destroyedRef),
+            finalize(() => this.coreService.hideLoader())
+          )
           .subscribe({
             next: () => {
               this.toast.add({
@@ -176,9 +237,13 @@ export class AccountsPayableListComponent implements OnInit {
       acceptButtonStyleClass: 'p-button-danger',
       rejectButtonStyleClass: 'p-button-secondary',
       accept: () => {
+        this.coreService.showLoader();
         this.accountsPayableService
           .delete(id)
-          .pipe(takeUntilDestroyed(this.destroyedRef))
+          .pipe(
+            takeUntilDestroyed(this.destroyedRef),
+            finalize(() => this.coreService.hideLoader())
+          )
           .subscribe({
             next: () => {
               this.toast.add({

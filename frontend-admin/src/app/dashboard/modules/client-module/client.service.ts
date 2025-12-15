@@ -4,14 +4,12 @@ import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { IClient } from 'app/shared/interfaces/client/Client';
 import { Observable, Subject, tap } from 'rxjs';
 import { environments } from 'src/environments/environments';
-import { ClientState } from './client.state';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ClientService {
   private http = inject(HttpClient);
-  private clientState = inject(ClientState);
   private apiUrl = environments.apiUrl + 'client';
 
   private refreshSubj = new Subject<any>();
@@ -42,19 +40,20 @@ export class ClientService {
         )
       : this.http.post<ApiResponse>(`${this.apiUrl}/create`, clientData);
 
-    // Invalida o cache após criar ou atualizar
+    // Emite evento para notificar que o cache precisa ser invalidado
     return operation.pipe(
       tap(() => {
-        this.clientState.invalidateCache();
+        this.refreshClientList();
+        this.createClientRefresh();
       })
     );
   }
 
   deleteClient(clientId: string): Observable<ApiResponse> {
-    // Invalida o cache após deletar
+    // Emite evento para notificar que o cache precisa ser invalidado
     return this.http.delete<ApiResponse>(`${this.apiUrl}/delete/${clientId}`).pipe(
       tap(() => {
-        this.clientState.invalidateCache();
+        this.refreshClientList();
       })
     );
   }

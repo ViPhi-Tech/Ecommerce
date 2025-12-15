@@ -24,6 +24,11 @@ export class SupplierState extends BaseState<SupplierModuleState> {
 
   constructor() {
     super();
+    // Se inscreve no refresh$ do SupplierService para invalidar o cache quando necessário
+    // Como é um serviço singleton (providedIn: 'root'), não precisa de takeUntil
+    this.supplierService.refresh$.subscribe(() => {
+      this.invalidateCache();
+    });
   }
 
   async getSupplierList(skipLoader = true, forceRefresh = false): Promise<void> {
