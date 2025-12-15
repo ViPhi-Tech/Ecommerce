@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
@@ -41,6 +41,12 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  @HostListener('keydown.enter', ['$event'])
+  onEnterKey(event: KeyboardEvent) {
+    event.preventDefault();
+    this.onSubmit();
+  }
 
   onSubmit() {
     this.form.markAllAsTouched();
