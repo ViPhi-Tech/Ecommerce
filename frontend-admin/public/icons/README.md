@@ -46,3 +46,7 @@ Crie imagens PNG nos tamanhos listados acima e salve-as nesta pasta com o nome `
 ## Nota
 
 Se você não tiver os ícones, o PWA ainda funcionará, mas os usuários não verão um ícone personalizado ao instalar o aplicativo.
+
+
+
+

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { InboundComponent } from './screens/inbound/inbound.component';
 import { OutboundComponent } from './screens/outbound/outbound.component';
+import { ImportNfeComponent } from './screens/import-nfe/import-nfe.component';
 
 export const stockMovementRoutes: Routes = [
   {
@@ -47,5 +48,9 @@ export const dialogStockMovementRoutes: Routes = [
         component: OutboundComponent,
       },
     ],
+  },
+  {
+    path: 'import-nfe',
+    component: ImportNfeComponent,
   },
 ];

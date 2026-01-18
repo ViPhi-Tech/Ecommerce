@@ -31,6 +31,13 @@
       <div>
         <form [formGroup]="formFilter" class="flex items-center gap-4">
           <p-button
+            label="Importar NFe"
+            icon="pi pi-upload"
+            (onClick)="openImportModal()"
+            size="small"
+            severity="info"
+          ></p-button>
+          <p-button
             label="Nova Entrada"
             (onClick)="newInbound()"
             size="small"

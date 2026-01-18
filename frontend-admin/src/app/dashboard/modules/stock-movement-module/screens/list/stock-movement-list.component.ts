@@ -58,6 +58,7 @@ export class StockMovementListComponent implements OnInit, AfterViewInit {
   productId: string | null = null;
   activeViewMode: 'cards' | 'table' = 'cards';
 
+
   tableConfig = signal<TableConfig>({
     rowsPerPageOptions: [5, 10, 20],
     rowsPerPage: 10,
@@ -242,5 +243,9 @@ export class StockMovementListComponent implements OnInit, AfterViewInit {
 
   setViewMode(mode: 'cards' | 'table') {
     this.activeViewMode = mode;
+  }
+
+  openImportModal() {
+    this.router.navigate([{ outlets: { drawer: ['import-nfe'] } }]);
   }
 }
