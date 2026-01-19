@@ -13,12 +13,14 @@ SHARED_APPS = (
     'corsheaders',
     'tenants',  # App de tenants
     'core',
+    'accounts',
 )
 
 # Apps que ficam nos schemas dos tenants
 TENANT_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.auth',
+    'django.contrib.admin',
     'rest_framework',
     # Seus apps tenant-aware vão aqui
     # 'products',
