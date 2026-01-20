@@ -2,6 +2,8 @@ import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
+import { CommonModule } from '@angular/common';
+import { NgIcon } from '@ng-icons/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
 import { FormModule } from 'app/shared/components/form/form.module';
@@ -16,7 +18,14 @@ import {
   selector: 'fuse-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [ButtonModule, FormModule, ReactiveFormsModule, MessageModule],
+  imports: [
+    CommonModule,
+    ButtonModule,
+    FormModule,
+    ReactiveFormsModule,
+    MessageModule,
+    NgIcon,
+  ],
   providers: [],
 })
 export class LoginComponent implements OnInit {
@@ -35,6 +44,7 @@ export class LoginComponent implements OnInit {
   errorMessage = signal('');
   primeiroLogin = signal(false);
   userEmail = signal('');
+  showPassword = signal(false);
 
   constructor() {
     this.form.get('email')?.addAsyncValidators(emailAsyncValidator);
@@ -43,9 +53,11 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   @HostListener('keydown.enter', ['$event'])
-  onEnterKey(event: KeyboardEvent) {
-    event.preventDefault();
-    this.onSubmit();
+  onEnterKey(event: Event) {
+    if (event instanceof KeyboardEvent) {
+      event.preventDefault();
+      this.onSubmit();
+    }
   }
 
   onSubmit() {

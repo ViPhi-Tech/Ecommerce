@@ -1,120 +1,264 @@
-<div class="grid min-h-svh lg:grid-cols-2">
-  <div class="flex flex-col gap-4 p-6 md:p-10">
-    <div class="flex flex-1 items-center justify-center">
-      <div class="w-full max-w-xs">
-        <form [formGroup]="form" class="flex flex-col gap-6">
-          <div class="flex flex-col items-center gap-2 text-center">
-            <h1 class="text-2xl font-bold">
-              {{
-                primeiroLogin() ? 'Defina sua nova senha' : 'Acesse sua conta'
-              }}
-            </h1>
-            <p class="text-balance text-sm">
-              {{
-                primeiroLogin()
-                  ? 'Como é seu primeiro acesso, defina uma nova senha para sua conta'
-                  : 'Digite seu e-mail abaixo para entrar na sua conta'
-              }}
-            </p>
+<div class="min-h-screen flex">
+  <!-- Formulário de Login -->
+  <div class="flex-1 flex items-center justify-center p-8">
+    <div class="w-full max-w-md">
+      <div class="mb-10">
+        <div class="flex items-center gap-3 mb-8">
+          <div class="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
+            <span class="text-primary-foreground font-bold text-lg">SU</span>
           </div>
-          <div class="grid gap-6">
-            @if (!primeiroLogin()) {
-              <div class="grid gap-2">
-                <fuse-input
-                  label="Email"
-                  placeholder="m@examplo.com"
-                  [control]="form.get('email')"
-                  errorMessage="Email inválido"
-                />
-              </div>
-              <div class="grid gap-2">
-                <fuse-input
-                  label="Senha"
-                  placeholder="********"
-                  type="password"
-                  [control]="form.get('password')"
-                  errorMessage="Senha inválida"
-                />
-              </div>
-            } @else {
-              <div class="grid gap-2">
-                <fuse-input
-                  label="Nova Senha"
-                  placeholder="********"
-                  type="password"
-                  [control]="form.get('novaSenha')"
-                  errorMessage="Nova senha é obrigatória (mínimo 6 caracteres)"
-                />
-              </div>
-              <div class="grid gap-2">
-                <fuse-input
-                  label="Confirmar Nova Senha"
-                  placeholder="********"
-                  type="password"
-                  [control]="form.get('confirmarSenha')"
-                  errorMessage="Confirmação de senha é obrigatória"
-                />
-              </div>
-            }
-            @if (errorMessage()) {
-              <p-message
-                severity="error"
-                icon="pi pi-times-circle"
-                styleClass="mt-2"
-                size="small"
-              >
-                {{ errorMessage() }}
-              </p-message>
-            }
-            <p-button
-              [loading]="loading()"
-              [disabled]="
-                primeiroLogin()
-                  ? form.get('novaSenha')?.invalid ||
-                    form.get('confirmarSenha')?.invalid
-                  : form.invalid
-              "
-              size="small"
-              (onClick)="onSubmit()"
-              [label]="primeiroLogin() ? 'Definir Senha' : 'Acessar'"
-              styleClass="w-full"
-            />
-            @if (primeiroLogin()) {
-              <p-button
-                size="small"
-                severity="secondary"
-                (onClick)="voltarParaLogin()"
-                label="Voltar ao Login"
-                styleClass="w-full"
-              />
-            }
-            <!-- @if (!primeiroLogin()) {
-              <div
-                class="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border"
-              >
-                <span
-                  class="relative z-10 bg-white dark:bg-container-background px-2"
-                >
-                  Ou
-                </span>
-              </div>
-            } -->
-          </div>
-          <!-- @if (!primeiroLogin()) {
-            <div class="text-center text-sm">
-              Não tem uma conta?
-              <a href="#" class="underline underline-offset-4">Cadastre-se</a>
-            </div>
-          } -->
-        </form>
+          <span class="text-2xl font-bold">Sell Up</span>
+        </div>
+        <h1 class="text-3xl font-bold mb-2">
+          {{ primeiroLogin() ? 'Defina sua nova senha' : 'Bem-vindo de volta' }}
+        </h1>
+        <p class="text-muted-foreground">
+          {{
+            primeiroLogin()
+              ? 'Como é seu primeiro acesso, defina uma nova senha para sua conta'
+              : 'Entre na sua conta para gerenciar seu negócio'
+          }}
+        </p>
       </div>
+
+      <form [formGroup]="form" class="space-y-5" (ngSubmit)="onSubmit()">
+        @if (!primeiroLogin()) {
+          <!-- Campos de Login Normal -->
+          <div class="space-y-2">
+            <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="email"
+            >
+              Email
+            </label>
+            <div class="relative">
+              <ng-icon
+                name="lucideMail"
+                class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground"
+              />
+              <input
+                type="email"
+                class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-11 h-12"
+                id="email"
+                placeholder="seu@email.com"
+                formControlName="email"
+                [class.border-red-500]="
+                  form.get('email')?.invalid && form.get('email')?.touched
+                "
+              />
+            </div>
+            @if (
+              form.get('email')?.invalid && form.get('email')?.touched
+            ) {
+              <p class="text-sm text-red-500">Email inválido</p>
+            }
+          </div>
+
+          <div class="space-y-2">
+            <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="password"
+            >
+              Senha
+            </label>
+            <div class="relative">
+              <ng-icon
+                name="lucideLock"
+                class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground"
+              />
+              <input
+                [type]="showPassword() ? 'text' : 'password'"
+                class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-11 pr-11 h-12"
+                id="password"
+                placeholder="••••••••"
+                formControlName="password"
+                [class.border-red-500]="
+                  form.get('password')?.invalid &&
+                  form.get('password')?.touched
+                "
+              />
+              <button
+                type="button"
+                class="absolute right-3 top-[55%] -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                (click)="showPassword.set(!showPassword())"
+              >
+                @if (showPassword()) {
+                  <ng-icon name="lucideEyeOff" class="h-5 w-5" />
+                } @else {
+                  <ng-icon name="lucideEye" class="h-5 w-5" />
+                }
+              </button>
+            </div>
+            @if (
+              form.get('password')?.invalid && form.get('password')?.touched
+            ) {
+              <p class="text-sm text-red-500">Senha inválida</p>
+            }
+          </div>
+
+          <!-- <div class="flex items-center justify-between">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" class="rounded border-input" />
+              <span class="text-sm text-muted-foreground">Lembrar de mim</span>
+            </label>
+            <a href="#" class="text-sm text-primary hover:underline"
+              >Esqueceu a senha?</a
+            >
+          </div> -->
+        } @else {
+          <!-- Campos de Primeiro Login -->
+          <div class="space-y-2">
+            <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="novaSenha"
+            >
+              Nova Senha
+            </label>
+            <div class="relative">
+              <ng-icon
+                name="lucideLock"
+                class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground"
+              />
+              <input
+                type="password"
+                class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-11 h-12"
+                id="novaSenha"
+                placeholder="••••••••"
+                formControlName="novaSenha"
+                [class.border-red-500]="
+                  form.get('novaSenha')?.invalid &&
+                  form.get('novaSenha')?.touched
+                "
+              />
+            </div>
+            @if (
+              form.get('novaSenha')?.invalid && form.get('novaSenha')?.touched
+            ) {
+              <p class="text-sm text-red-500">
+                Nova senha é obrigatória (mínimo 6 caracteres)
+              </p>
+            }
+          </div>
+
+          <div class="space-y-2">
+            <label
+              class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              for="confirmarSenha"
+            >
+              Confirmar Nova Senha
+            </label>
+            <div class="relative">
+              <ng-icon
+                name="lucideLock"
+                class="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground"
+              />
+              <input
+                type="password"
+                class="flex w-full rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm pl-11 h-12"
+                id="confirmarSenha"
+                placeholder="••••••••"
+                formControlName="confirmarSenha"
+                [class.border-red-500]="
+                  form.get('confirmarSenha')?.invalid &&
+                  form.get('confirmarSenha')?.touched
+                "
+              />
+            </div>
+            @if (
+              form.get('confirmarSenha')?.invalid &&
+              form.get('confirmarSenha')?.touched
+            ) {
+              <p class="text-sm text-red-500">
+                Confirmação de senha é obrigatória
+              </p>
+            }
+          </div>
+        }
+
+        @if (errorMessage()) {
+          <p-message
+            severity="error"
+            icon="pi pi-times-circle"
+            styleClass="mt-2"
+            size="small"
+          >
+            {{ errorMessage() }}
+          </p-message>
+        }
+
+        <button
+          class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:opacity-90 shadow-md hover:shadow-lg active:scale-[0.98] px-4 py-2 w-full h-12"
+          type="submit"
+          [disabled]="
+            primeiroLogin()
+              ? form.get('novaSenha')?.invalid ||
+                form.get('confirmarSenha')?.invalid
+              : form.invalid || loading()
+          "
+        >
+          @if (loading()) {
+            <i class="pi pi-spin pi-spinner"></i>
+          } @else {
+            {{ primeiroLogin() ? 'Definir Senha' : 'Entrar' }}
+            <ng-icon name="lucideArrowRight" class="h-5 w-5" />
+          }
+        </button>
+
+        @if (primeiroLogin()) {
+          <button
+            type="button"
+            class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium ring-offset-background transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 w-full h-12 border border-input bg-background hover:bg-accent hover:text-accent-foreground"
+            (click)="voltarParaLogin()"
+          >
+            Voltar ao Login
+          </button>
+        }
+      </form>
+
+      <!-- <p class="text-center text-sm text-muted-foreground mt-8">
+        Não tem uma conta?
+        <a href="#" class="text-primary hover:underline font-medium"
+          >Entre em contato com o admin</a
+        >
+      </p> -->
     </div>
   </div>
-  <div class="relative hidden bg-muted lg:block">
-    <img
-      alt="Image"
-      class="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
-      src="https://g66knp9qlv84vs28z.lite.vusercontent.net/placeholder.svg"
-    />
+
+  <!-- Painel Lateral -->
+  <div
+    class="hidden lg:flex flex-1 bg-primary items-center justify-center p-12 relative overflow-hidden"
+  >
+    <div class="absolute inset-0 opacity-10">
+      <div
+        class="absolute top-20 left-20 w-64 h-64 rounded-full bg-white/20 blur-3xl"
+      ></div>
+      <div
+        class="absolute bottom-20 right-20 w-96 h-96 rounded-full bg-white/10 blur-3xl"
+      ></div>
+    </div>
+    <div class="relative z-10 text-center text-primary-foreground">
+      <h2 class="text-4xl font-bold mb-4">
+        Gestão Completa<br />do Seu Negócio
+      </h2>
+      <p class="text-lg opacity-90 max-w-md mx-auto">
+        Gerencie vendas, estoque, clientes e fornecedores em um único lugar.
+        Tenha controle total sobre suas operações e impulsione o crescimento do
+        seu negócio.
+      </p>
+      <!-- <div class="mt-12 grid grid-cols-3 gap-6 text-center">
+        <div class="p-4 rounded-xl bg-white/10 backdrop-blur-sm">
+          <div class="text-3xl font-bold">1000+</div>
+          <div class="text-sm opacity-80">Vendas</div>
+        </div>
+        <div class="p-4 rounded-xl bg-white/10 backdrop-blur-sm">
+          <div class="text-3xl font-bold">500+</div>
+          <div class="text-sm opacity-80">Clientes</div>
+        </div>
+        <div class="p-4 rounded-xl bg-white/10 backdrop-blur-sm">
+          <div class="text-3xl font-bold">98%</div>
+          <div class="text-sm opacity-80">Satisfação</div>
+        </div>
+      </div> -->
+    </div>
   </div>
 </div>
