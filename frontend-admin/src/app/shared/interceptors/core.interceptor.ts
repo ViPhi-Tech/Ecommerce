@@ -1,14 +1,16 @@
-import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
+import { HttpEvent, HttpHandlerFn, HttpRequest, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { finalize, catchError } from 'rxjs/operators';
 import { CoreService } from '../services/core.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 export function CoreInterceptor(
   req: HttpRequest<unknown>,
   next: HttpHandlerFn
 ): Observable<HttpEvent<unknown>> {
   const coreService = inject(CoreService);
+  const authService = inject(AuthService);
 
   // Verifica se o cabeçalho 'Skip-Loader' está presente
   const skipLoader = req.headers.has('Skip-Loader');
@@ -70,6 +72,21 @@ export function CoreInterceptor(
   });
 
   return next(newReq).pipe(
+    catchError((error: HttpErrorResponse) => {
+      // Se a resposta for 401 (Não Autorizado), faz logout automático
+      if (error.status === 401) {
+        // Verifica se não é uma requisição de login para evitar loop infinito
+        const isLoginRequest = req.url.includes('/auth/token') || req.url.includes('/auth/login');
+        
+        if (!isLoginRequest) {
+          console.error('Erro 401 detectado. Fazendo logout automático...');
+          authService.forceLogout();
+        }
+      }
+      
+      // Re-lança o erro para que outros manipuladores possam tratá-lo
+      return throwError(() => error);
+    }),
     finalize(() => {
       if (!skipLoader) {
         coreService.hideLoader();

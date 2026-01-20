@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   AuthResponse,
   ChangePasswordRequest,
@@ -13,6 +14,7 @@ import { environments } from 'src/environments/environments';
 })
 export class AuthService {
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   apiUrl = environments?.apiUrl;
 
@@ -81,5 +83,28 @@ export class AuthService {
       return roles.some(role => userRoles.includes(role));
     }
     return false;
+  }
+
+  /**
+   * Realiza logout do usuário removendo tokens e redirecionando para login
+   */
+  logout(): void {
+    // Remove tokens do localStorage
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    
+    // Limpa outros dados de sessão se necessário
+    localStorage.clear();
+    
+    // Redireciona para a página de login
+    this.router.navigate(['/auth/login']);
+  }
+
+  /**
+   * Logout forçado em caso de token inválido/expirado (401)
+   */
+  forceLogout(): void {
+    console.warn('Sessão expirada ou token inválido. Redirecionando para login...');
+    this.logout();
   }
 }
