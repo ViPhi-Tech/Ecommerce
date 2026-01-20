@@ -85,7 +85,7 @@ export class ProductController {
 
     async update(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const product = request.body as CreateProductDTO
+            const product = updateProductSchema.parse(request.body);
             const data_product = await this.updateProductUseCase.execute(product)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_product})
         } catch (error) {

@@ -43,7 +43,6 @@ export interface FindMovementInput {
 
 // ===== VALIDATION SCHEMAS (Para HTTP) =====
 export const createProductSchema = z.object({
-  id: z.number().optional(),
   name: z.string().min(1, { message: "Nome é obrigatório" }),
   ean: z.string().min(1, { message: "EAN é obrigatório" }),
   description: z.string().optional(),
@@ -60,7 +59,7 @@ export const createProductSchema = z.object({
 });
 
 export const updateProductSchema = z.object({
-  id: z.number().optional(),
+  id: z.number().min(1, { message: "ID do produto é obrigatório" }),
   name: z.string().min(1, { message: "Nome é obrigatório" }),
   ean: z.string().min(1, { message: "EAN é obrigatório" }),
   description: z.string().optional(),
