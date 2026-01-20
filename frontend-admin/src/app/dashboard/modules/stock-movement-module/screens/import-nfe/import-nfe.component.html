@@ -61,7 +61,7 @@
         } @else {
           @if (nfeFormatted()) {
             <div class="max-h-[60vh] overflow-auto">
-              <fuse-invoice-details [invoice]="nfeFormatted()!" />
+              <fuse-invoice-details [invoice]="nfeFormatted()!" (removeProduct)="removeProduct($event)" />
             </div>
           }
         }
@@ -71,6 +71,20 @@
 
   <ng-template #footer>
     <div class="flex items-center gap-2">
+      @if ((nfeFormatted() || nfeJson()) && !loadingImport()) {
+        <button
+          pButton
+          type="button"
+          label="Enviar para o Backend"
+          icon="pi pi-send"
+          (click)="sendToBackend()"
+          [loading]="loadingSend()"
+          [disabled]="loadingSend()"
+          severity="success"
+          class="w-[200px]"
+          size="small"
+        ></button>
+      }
       <button
         pButton
         type="button"

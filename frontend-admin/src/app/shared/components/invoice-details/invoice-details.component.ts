@@ -2,6 +2,7 @@ import {
   Component,
   input,
   OnInit,
+  output,
   signal,
   TemplateRef,
   ViewChild,
@@ -37,6 +38,8 @@ export class InvoiceDetailsComponent implements OnInit {
 
   tableConfig = signal<TableConfig>(DEFAULT_TABLE_CONFIG);
 
+  removeProduct = output<string>();
+
   constructor() {}
 
   ngOnInit() {
@@ -61,24 +64,24 @@ export class InvoiceDetailsComponent implements OnInit {
           caption: 'Ações',
           actionButtonsType: 'buttons',
           actionButtons: [
-            {
-              icon: 'lucideSquarePen',
-              label: 'Editar',
-              tooltip: 'Editar Categoria',
-              variant: 'text',
-              action: (rowData: any) => {
-                console.log(rowData);
-              },
-            },
+            // {
+            //   icon: 'lucideSquarePen',
+            //   label: 'Editar',
+            //   tooltip: 'Editar Categoria',
+            //   variant: 'text',
+            //   action: (rowData: any) => {
+            //     console.log(rowData);
+            //   },
+            // },
             {
               icon: 'lucideTrash2',
               label: 'Excluir',
               variant: 'text',
               colorText: '#EF4444',
               colorIcon: '#EF4444',
-              tooltip: 'Excluir Categoria',
+              tooltip: 'Excluir Produto',
               action: (rowData: any) => {
-                console.log(rowData);
+                this.removeProduct.emit(rowData?.itemNumber || rowData?.id);
               },
             },
           ],
