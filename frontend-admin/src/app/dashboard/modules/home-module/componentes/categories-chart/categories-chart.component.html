@@ -138,6 +138,14 @@
       </div>
     </div>
   } @else {
-    <div echarts [options]="chartOption()" class="h-80"></div>
+    @if (hasData()) {
+      <div echarts [options]="chartOption()" class="h-80"></div>
+    } @else {
+      <fuse-empty-state
+        title="Nenhuma categoria encontrada"
+        description="Não há dados de vendas por categoria disponíveis no momento."
+        icon="chart-bar">
+      </fuse-empty-state>
+    }
   }
 </div>

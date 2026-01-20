@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { SalesByCategory } from 'app/shared/interfaces/home/HomeModuleState';
+import { EmptyStateComponent } from 'app/shared/components/empty-state/empty-state.component';
 
 @Component({
   selector: 'fuse-categories-chart',
   standalone: true,
-  imports: [CommonModule, NgxEchartsModule],
+  imports: [CommonModule, NgxEchartsModule, EmptyStateComponent],
   templateUrl: './categories-chart.component.html',
   styleUrls: ['./categories-chart.component.scss'],
 })
@@ -23,6 +24,11 @@ export class CategoriesChartComponent {
 
   chartCategories = computed<string[]>(() => {
     return this.data.map(item => item.category_name);
+  });
+
+  // Computed para verificar se há dados
+  hasData = computed<boolean>(() => {
+    return this.data.length > 0 && this.data.some(item => item.total_quantity > 0);
   });
 
   chartOption = computed<EChartsOption>(() => ({
@@ -43,17 +49,7 @@ export class CategoriesChartComponent {
     },
     xAxis: {
       type: 'category',
-      data:
-        this.chartCategories().length > 0
-          ? this.chartCategories()
-          : [
-              'Eletrônicos',
-              'Roupas',
-              'Casa e Jardim',
-              'Esportes',
-              'Livros',
-              'Beleza',
-            ],
+      data: this.hasData() ? this.chartCategories() : [],
       axisLabel: {
         rotate: 45,
       },
@@ -68,10 +64,7 @@ export class CategoriesChartComponent {
       {
         name: 'Vendas',
         type: 'bar',
-        data:
-          this.chartValues().length > 0
-            ? this.chartValues()
-            : [25000, 18000, 15000, 12000, 8000, 10000],
+        data: this.hasData() ? this.chartValues() : [],
         itemStyle: {
           color: {
             type: 'linear',

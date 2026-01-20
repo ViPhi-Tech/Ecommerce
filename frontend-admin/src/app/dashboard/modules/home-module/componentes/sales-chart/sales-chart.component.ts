@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { SalesByMonth } from 'app/shared/interfaces/home/HomeModuleState';
+import { EmptyStateComponent } from 'app/shared/components/empty-state/empty-state.component';
 
 @Component({
   selector: 'fuse-sales-chart',
   standalone: true,
-  imports: [CommonModule, NgxEchartsModule],
+  imports: [CommonModule, NgxEchartsModule, EmptyStateComponent],
   templateUrl: './sales-chart.component.html',
   styleUrls: ['./sales-chart.component.scss'],
 })
@@ -22,6 +23,11 @@ export class SalesChartComponent {
 
   labels = computed<string[]>(() => {
     return this.data().map(item => item.month);
+  });
+
+  // Computed para verificar se há dados
+  hasData = computed<boolean>(() => {
+    return this.data().length > 0 && this.data().some(item => item.total > 0);
   });
 
   chartOption = computed<EChartsOption>(() => ({
@@ -47,23 +53,22 @@ export class SalesChartComponent {
     },
     xAxis: {
       type: 'category',
-      data:
-        this.labels().length > 0
-          ? this.labels()
-          : [
-              'Jan',
-              'Fev',
-              'Mar',
-              'Abr',
-              'Mai',
-              'Jun',
-              'Jul',
-              'Ago',
-              'Set',
-              'Out',
-              'Nov',
-              'Dez',
-            ],
+      data: this.hasData() 
+        ? this.labels()
+        : [
+            'Jan',
+            'Fev',
+            'Mar',
+            'Abr',
+            'Mai',
+            'Jun',
+            'Jul',
+            'Ago',
+            'Set',
+            'Out',
+            'Nov',
+            'Dez',
+          ],
     },
     yAxis: {
       type: 'value',
@@ -78,7 +83,7 @@ export class SalesChartComponent {
     },
     series: [
       {
-        data: this.data().length > 0 ? this.totals() : [],
+        data: this.hasData() ? this.totals() : [],
         type: 'line',
         smooth: true,
         itemStyle: {

@@ -71,6 +71,14 @@
       </div>
     </div>
   } @else {
-    <div echarts [options]="chartOption()" class="h-80"></div>
+    @if (hasData()) {
+      <div echarts [options]="chartOption()" class="h-80"></div>
+    } @else {
+      <fuse-empty-state
+        title="Nenhum produto encontrado"
+        description="Não há dados de produtos mais vendidos disponíveis no momento."
+        icon="shopping-bag">
+      </fuse-empty-state>
+    }
   }
 </div>
