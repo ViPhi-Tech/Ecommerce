@@ -27,3 +27,46 @@ model InvoiceItem {
   invoice     Invoice @relation(fields: [invoiceId], references: [id])
   product     Product @relation(fields: [productId], references: [id])
 }
+
+
+
+model PurchaseInvoice {
+  id             Int      @id @default(autoincrement())
+  accessKey      String   @unique // chNFe
+  number         String
+  series         String
+  model          Int
+  issueDate      DateTime
+  entryDate      DateTime
+  totalAmount    Decimal  @db.Decimal(14,2)
+  totalTax       Decimal  @db.Decimal(14,2)
+
+  xmlRaw         Json     // XML inteiro convertido pra JSON
+  protocol       Json     // protNFe.infProt
+
+  supplierId     Int
+  supplier       Supplier @relation(fields: [supplierId], references: [id])
+
+  items          PurchaseInvoiceItem[]
+
+  createdAt      DateTime @default(now())
+}
+
+
+model PurchaseInvoiceItem {
+  id                 Int     @id @default(autoincrement())
+  purchaseInvoiceId  Int
+  productId          Int?
+
+  description        String
+  ncm                String
+  cfop               String
+  quantity           Decimal @db.Decimal(14,4)
+  unitPrice          Decimal @db.Decimal(14,4)
+  totalAmount        Decimal @db.Decimal(14,2)
+
+  taxData            Json    // imposto inteiro do item
+
+  purchaseInvoice    PurchaseInvoice @relation(fields: [purchaseInvoiceId], references: [id])
+  product             Product?       @relation(fields: [productId], references: [id])
+}

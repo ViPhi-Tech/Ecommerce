@@ -1,0 +1,10 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../../src/generated"
+  // Removi a linha previewFeatures daqui
+}
+
+datasource db {
+  provider = "postgresql"
+  // Sem a linha url = env(...)
+}

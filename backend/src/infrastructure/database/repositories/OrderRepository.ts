@@ -1,7 +1,7 @@
 import { Order } from "../../../domain/entities/Order";
 import { AggregateOrderResponse, AggregateOrderStatusResponse, OrderItem, AggregateOrderCategoryResponse } from "../../../domain/entities/OrderItem";
 import { IOrderRepository } from "../../../domain/repositories/IOrderRepository";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "../prismaClient";
 
 export class OrderRepository implements IOrderRepository {
   constructor(private prisma:  PrismaClient | Prisma.TransactionClient) {}

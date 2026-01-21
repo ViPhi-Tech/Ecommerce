@@ -1,6 +1,6 @@
 import { Delivery } from "../../../domain/entities/Delivery";
 import { IDeliveryRepository, DeliveryMetrics } from "../../../domain/repositories/IDeliveryRepository";
-import { Prisma, PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "../prismaClient";
 
 export class DeliveryRepository implements IDeliveryRepository {
   constructor(private prisma: PrismaClient | Prisma.TransactionClient) {}

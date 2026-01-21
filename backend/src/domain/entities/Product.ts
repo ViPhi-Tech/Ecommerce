@@ -32,7 +32,9 @@ export interface stockMovement {
     userId?: number | null;
     stockId: number;
     type: string;
-    quantity: number
+    quantity: number;
+    unitCost?: number | null;
+    invoiceNumber?: string | null;
 }
 
 

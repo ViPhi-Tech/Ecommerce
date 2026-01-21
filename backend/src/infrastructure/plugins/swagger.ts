@@ -13,7 +13,8 @@ export default fp(async (fastify: FastifyInstance) => {
                 version: '1.0.0',
             },
             servers: [
-                    { url: 'https://sellup.app.br' }
+                    { url: 'https://sellup.app.br' },
+                    { url: 'http://localhost:8000' }
             ],
         },
     });

@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from '@prisma/client';
+import { PrismaClient, Prisma } from '../prismaClient';
 import { Product, Stock, stockMovement, findMoviment, TopProducts } from '../../../domain/entities/Product';
 import { IProductRepository } from "../../../domain/repositories/IProductRepository";
 import {CreateProductDTO, UpdateProductDTO, FindMovementDTO} from "../../../application/dto/product/ProductDTOs";
@@ -46,6 +46,15 @@ export class ProductRepository implements IProductRepository {
         });
     };
 
+    async findByEan(ean: string): Promise<Product | null> {
+        return this.prisma.product.findFirst({
+            where: {ean, isActive: true},
+            include: {
+                stock: true
+            }
+        });
+    };
+
     async update(id: number, data: UpdateProductDTO): Promise<Product> {
         return this.prisma.product.update({
             where: {id},
@@ -62,7 +71,7 @@ export class ProductRepository implements IProductRepository {
       });
     };
 
-    async updateStock(sku: number, quantity: number, companyId: number): Promise<Stock> {
+    async updateStock(sku: number, quantity: number, companyId?: number | undefined): Promise<Stock> {
         return this.prisma.stock.upsert({
             where: {
               productId: sku
@@ -108,7 +117,10 @@ export class ProductRepository implements IProductRepository {
           data: {
             stockId: data.stockId,
             quantity: data.quantity,
-            type: data.type as 'IN' | 'OUT'
+            type: data.type as 'IN' | 'OUT',
+            unitCost: data.unitCost ?? null,
+            invoiceNumber: data.invoiceNumber ?? null,
+            userId: data.userId ?? null
           }
         })
     };
@@ -119,7 +131,9 @@ export class ProductRepository implements IProductRepository {
       stockId: item.stockId, 
       quantity: item.quantity,
       type: item.type as 'IN' | 'OUT',
-      userId: item.userId ?? null
+      userId: item.userId ?? null,
+      unitCost: item.unitCost ?? null,
+      invoiceNumber: item.invoiceNumber ?? null
     })),
     skipDuplicates: false, 
   });
@@ -231,7 +245,7 @@ async findMovimentByDate(data: findMoviment): Promise<stockMovement[]> {
     whereCondition.type = data.type;
   }
 
-return this.prisma.stockMovement.findMany({
+const movements = await this.prisma.stockMovement.findMany({
   where: whereCondition,
   include: {
     stock: {
@@ -240,7 +254,8 @@ return this.prisma.stockMovement.findMany({
         product: {
           select: {
             name: true,
-            sku: true
+            sku: true,
+            id: true
           }
         }
       }
@@ -254,7 +269,90 @@ return this.prisma.stockMovement.findMany({
     orderBy: {
       id: 'desc'
     }
-  })
+  });
+
+  // Para movimentações de entrada (IN) com invoiceNumber, buscar informações da nota fiscal
+  const movementsWithInvoice = await Promise.all(
+    movements.map(async (movement) => {
+      const result: any = {
+        id: movement.id,
+        userId: movement.userId ?? null,
+        createdAt: movement.createdAt.toISOString(),
+        stockId: movement.stockId,
+        type: movement.type,
+        quantity: movement.quantity,
+        unitCost: movement.unitCost ?? null,
+        invoiceNumber: movement.invoiceNumber ?? null,
+        product: movement.stock?.product ? {
+          name: movement.stock.product.name,
+          sku: movement.stock.product.sku
+        } : undefined,
+        user: movement.user ? {
+          name: movement.user.fullName
+        } : undefined,
+        purchaseInvoice: null
+      };
+
+      // Se for entrada e tiver invoiceNumber, buscar informações da nota fiscal
+      if (movement.type === 'IN' && movement.invoiceNumber && movement.stock?.product?.id) {
+        try {
+          // O invoiceNumber está no formato "série-número" (ex: "1-487569")
+          // Pode ter múltiplos hífens, então pegamos o primeiro como série e o resto como número
+          const parts = movement.invoiceNumber.split('-');
+          
+          if (parts.length >= 2) {
+            const series = parts[0];
+            const number = parts.slice(1).join('-'); // Junta o resto caso tenha mais hífens
+            
+            const purchaseInvoice = await this.prisma.purchaseInvoice.findFirst({
+              where: {
+                series: series,
+                number: number
+              },
+              include: {
+                supplier: true,
+                items: {
+                  where: {
+                    productId: movement.stock.product.id
+                  }
+                }
+              }
+            });
+
+            if (purchaseInvoice && purchaseInvoice.items.length > 0) {
+              const item = purchaseInvoice.items[0]; // Pega o primeiro item que corresponde ao produto
+              
+              result.purchaseInvoice = {
+                id: purchaseInvoice.id,
+                number: purchaseInvoice.number,
+                series: purchaseInvoice.series,
+                issueDate: purchaseInvoice.issueDate,
+                entryDate: purchaseInvoice.entryDate,
+                supplier: {
+                  tradeName: purchaseInvoice.supplier.tradeName,
+                  legalName: purchaseInvoice.supplier.legalName,
+                  cnpj: purchaseInvoice.supplier.cnpj
+                },
+                item: {
+                  quantity: Number(item.quantity),
+                  unitPrice: Number(item.unitPrice),
+                  totalAmount: Number(item.totalAmount),
+                  description: item.description
+                }
+              };
+            }
+          }
+        } catch (error) {
+          console.error('Erro ao buscar informações da nota fiscal:', error);
+          // Continua sem as informações da nota fiscal em caso de erro
+        }
+      }
+
+      return result;
+    })
+  );
+
+  return movementsWithInvoice;
 };
 
 

@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import { AccountsPayableRepository } from '../../database/repositories/AccountsPayableRepository';
 import { CreateAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/CreateAccountsPayableUseCase';
 import { FindAllAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/FindAllAccountsPayableUseCase';
@@ -9,8 +8,7 @@ import { FindOverdueAccountsPayableUseCase } from '../../../application/use-case
 import { UpdateAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/UpdateAccountsPayableUseCase';
 import { DeleteAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/DeleteAccountsPayableUseCase';
 import { AccountsPayableController } from '../../http/controllers/AccountsPayableController';
-
-const prisma = new PrismaClient();
+import { prisma } from '../../database/prismaClient';
 
 // Repository
 const accountsPayableRepository = new AccountsPayableRepository(prisma);

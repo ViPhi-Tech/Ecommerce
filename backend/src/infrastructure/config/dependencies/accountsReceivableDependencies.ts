@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import { AccountsReceivableRepository } from '../../database/repositories/AccountsReceivableRepository';
 import { CreateAccountsReceivableUseCase } from '../../../application/use-cases/accounts-receivable/CreateAccountsReceivableUseCase';
 import { FindAllAccountsReceivableUseCase } from '../../../application/use-cases/accounts-receivable/FindAllAccountsReceivableUseCase';
@@ -10,7 +9,7 @@ import { UpdateAccountsReceivableUseCase } from '../../../application/use-cases/
 import { DeleteAccountsReceivableUseCase } from '../../../application/use-cases/accounts-receivable/DeleteAccountsReceivableUseCase';
 import { AccountsReceivableController } from '../../http/controllers/AccountsReceivableController';
 import { OrderRepository } from '../../database/repositories/OrderRepository';
-const prisma = new PrismaClient();
+import { prisma } from '../../database/prismaClient';
 
 // Repository
 const accountsReceivableRepository = new AccountsReceivableRepository(prisma);
