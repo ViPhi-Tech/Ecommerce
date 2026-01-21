@@ -95,4 +95,12 @@ export class StockMovementService {
       `${this.apiUrl}/delete/${stockMovementId}`
     );
   }
+
+  createPurchaseInvoice(xmlData: any): Observable<ApiResponse> {
+    const purchaseInvoiceApiUrl = environments.apiUrl + 'purchase-invoice';
+    return this.http.post<ApiResponse>(
+      `${purchaseInvoiceApiUrl}/create`,
+      { xmlData }
+    );
+  }
 }

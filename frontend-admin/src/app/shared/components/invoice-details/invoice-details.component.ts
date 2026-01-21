@@ -7,7 +7,6 @@ import {
   TemplateRef,
   ViewChild,
 } from '@angular/core';
-import { CurrencyPipe, DatePipe } from '@angular/common';
 import { PanelModule } from 'primeng/panel';
 import {
   DEFAULT_TABLE_CONFIG,
@@ -22,8 +21,6 @@ import { InvoiceDetails } from 'app/shared/interfaces/invoice/InvoiceDetails';
   templateUrl: './invoice-details.component.html',
   styleUrls: ['./invoice-details.component.scss'],
   imports: [
-    CurrencyPipe,
-    DatePipe,
     PanelModule,
     TableComponent,
     TooltipModule,
@@ -57,22 +54,51 @@ export class InvoiceDetailsComponent implements OnInit {
           field: 'status',
           caption: 'Status',
           template: this.statusProductTemplate,
+          align: 'center',
+          width: '80px',
         },
-        { field: 'description', caption: 'Nome', sortable: true, filter: true },
+        { 
+          field: 'description', 
+          caption: 'Nome', 
+          sortable: true, 
+          filter: true 
+        },
+        {
+          field: 'quantity',
+          caption: 'Quantidade',
+          sortable: true,
+          align: 'right',
+          width: '120px',
+        },
+        {
+          field: 'unit',
+          caption: 'Unidade',
+          sortable: true,
+          align: 'center',
+          width: '100px',
+        },
+        {
+          field: 'unitValue',
+          caption: 'Valor Unitário',
+          sortable: true,
+          align: 'right',
+          width: '150px',
+          type: 'currency',
+        },
+        {
+          field: 'totalValue',
+          caption: 'Valor Total',
+          sortable: true,
+          align: 'right',
+          width: '150px',
+          type: 'currency',
+        },
         {
           field: 'actions',
           caption: 'Ações',
           actionButtonsType: 'buttons',
+          width: '100px',
           actionButtons: [
-            // {
-            //   icon: 'lucideSquarePen',
-            //   label: 'Editar',
-            //   tooltip: 'Editar Categoria',
-            //   variant: 'text',
-            //   action: (rowData: any) => {
-            //     console.log(rowData);
-            //   },
-            // },
             {
               icon: 'lucideTrash2',
               label: 'Excluir',

@@ -2,16 +2,42 @@ import { ButtonSeverityType } from 'app/shared/types/button.types';
 import { IStock } from './Stock';
 import { IUser } from './User';
 
+export interface IPurchaseInvoice {
+  id: number;
+  number: string;
+  series: string;
+  issueDate: string | Date;
+  entryDate: string | Date;
+  supplier: {
+    tradeName: string;
+    legalName: string;
+    cnpj: string;
+  };
+  item?: {
+    quantity: number;
+    unitPrice: number;
+    totalAmount: number;
+    description: string;
+  };
+}
+
 export interface IMovimentItem {
   id: number;
   stockId: number;
   type: string;
   quantity: number;
-  userId: number;
-  createdAt: Date;
-  updatedAt: Date;
-  stock: IStock;
-  user: IUser;
+  userId?: number | null;
+  unitCost?: number | null;
+  invoiceNumber?: string | null;
+  createdAt: string | Date;
+  updatedAt?: string | Date;
+  stock?: IStock;
+  user?: IUser;
+  product?: {
+    name: string;
+    sku: string;
+  };
+  purchaseInvoice?: IPurchaseInvoice | null;
 
   typeBadge?: ButtonSeverityType;
   typeLabel?: string;

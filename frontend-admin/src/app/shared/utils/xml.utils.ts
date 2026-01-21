@@ -153,6 +153,15 @@ export class XmlUtils {
   }
 
   static productInStockValidation(productsXML: any[], stockProducts: any[]) {
+    // Se não houver produtos no estoque para validar, marca todos como 'found'
+    // pois serão criados automaticamente pelo backend
+    if (!stockProducts || stockProducts.length === 0) {
+      return productsXML.map(product => ({
+        ...product,
+        status: 'found', // Marca como encontrado pois será criado automaticamente
+      }));
+    }
+    
     return productsXML.map(product => {
       const hasSameEan = stockProducts.some(item => item.ean === product.ean);
       const hasSameSku = stockProducts.some(item => item.sku === product.sku);

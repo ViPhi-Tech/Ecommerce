@@ -35,11 +35,26 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
   stockMovementList = computed(() => {
     let list = this.state().stockMovementList;
     list = list.map(item => {
-      item.date = dayjs(item.createdAt).format('DD/MM/YYYY');
-      item.hour = dayjs(item.createdAt).format('HH:mm');
+      // Converter createdAt para Date se for string
+      const createdAtDate = typeof item.createdAt === 'string' 
+        ? new Date(item.createdAt) 
+        : item.createdAt;
+      
+      item.date = dayjs(createdAtDate).format('DD/MM/YYYY');
+      item.hour = dayjs(createdAtDate).format('HH:mm');
+      
+      // Converter datas do purchaseInvoice se existir
+      if (item.purchaseInvoice) {
+        if (typeof item.purchaseInvoice.issueDate === 'string') {
+          item.purchaseInvoice.issueDate = new Date(item.purchaseInvoice.issueDate);
+        }
+        if (typeof item.purchaseInvoice.entryDate === 'string') {
+          item.purchaseInvoice.entryDate = new Date(item.purchaseInvoice.entryDate);
+        }
+      }
+      
       item = this.formatStockMovementData(item);
 
-      console.log(item);
       return item as IMovimentItem;
     });
 
@@ -90,10 +105,16 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
   }
 
   formatStockMovementData(item: IMovimentItem) {
-    item.date = `${dayjs(item.createdAt).format('DD/MM/YYYY')} ${dayjs(item.createdAt).format('HH:mm')}`;
+    // Converter createdAt para Date se for string
+    const createdAtDate = typeof item.createdAt === 'string' 
+      ? new Date(item.createdAt) 
+      : item.createdAt;
+    
+    item.date = `${dayjs(createdAtDate).format('DD/MM/YYYY')} ${dayjs(createdAtDate).format('HH:mm')}`;
 
-    item.productName = item.stock.product?.name || '';
-    item.productSku = item.stock.product?.sku || '';
+    // Usar product diretamente se disponível, senão usar stock.product
+    item.productName = item.product?.name || item.stock?.product?.name || '';
+    item.productSku = item.product?.sku || item.stock?.product?.sku || '';
     item.typeBadge = this.getMovementTypeBadge(item.type);
     item.typeLabel = this.getMovementTypeLabel(item.type);
 
