@@ -2,6 +2,7 @@
 # === Node.js (Backend) ===
 # ========================
 backend/node_modules/
+backend/src/generated/
 backend/dist/
 backend/build/
 backend/.env*
