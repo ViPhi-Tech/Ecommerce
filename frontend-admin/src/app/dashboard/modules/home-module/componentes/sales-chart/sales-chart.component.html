@@ -82,6 +82,14 @@
       </div>
     </div>
   } @else {
-    <div echarts [options]="chartOption()" class="h-80"></div>
+    @if (hasData()) {
+      <div echarts [options]="chartOption()" class="h-80"></div>
+    } @else {
+      <fuse-empty-state
+        title="Nenhuma venda encontrada"
+        description="Não há dados de vendas mensais disponíveis no momento."
+        icon="chart-line">
+      </fuse-empty-state>
+    }
   }
 </div>

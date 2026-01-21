@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { OrderStatu } from 'app/shared/interfaces/home/HomeModuleState';
+import { EmptyStateComponent } from 'app/shared/components/empty-state/empty-state.component';
 
 export interface OrderStatusData {
   value: number;
@@ -13,7 +14,7 @@ export interface OrderStatusData {
 @Component({
   selector: 'fuse-order-status-chart',
   standalone: true,
-  imports: [CommonModule, NgxEchartsModule],
+  imports: [CommonModule, NgxEchartsModule, EmptyStateComponent],
   templateUrl: './order-status-chart.component.html',
   styleUrls: ['./order-status-chart.component.scss'],
 })
@@ -45,6 +46,11 @@ export class OrderStatusChartComponent {
         color: this.statusColors[item.name] || '#6b7280',
       },
     }));
+  });
+
+  // Computed para verificar se há dados
+  hasData = computed<boolean>(() => {
+    return this.data.length > 0 && this.data.some(item => item.total > 0);
   });
 
   chartOption = computed<EChartsOption>(() => ({
@@ -90,36 +96,7 @@ export class OrderStatusChartComponent {
         labelLine: {
           show: false,
         },
-        data:
-          this.data.length > 0
-            ? this.chartData()
-            : [
-                {
-                  value: 156,
-                  name: 'Pendente',
-                  itemStyle: { color: '#f59e0b' },
-                },
-                {
-                  value: 89,
-                  name: 'Processando',
-                  itemStyle: { color: '#3b82f6' },
-                },
-                {
-                  value: 234,
-                  name: 'Enviado',
-                  itemStyle: { color: '#10b981' },
-                },
-                {
-                  value: 67,
-                  name: 'Entregue',
-                  itemStyle: { color: '#059669' },
-                },
-                {
-                  value: 23,
-                  name: 'Cancelado',
-                  itemStyle: { color: '#ef4444' },
-                },
-              ],
+        data: this.hasData() ? this.chartData() : [],
       },
     ],
   }));
