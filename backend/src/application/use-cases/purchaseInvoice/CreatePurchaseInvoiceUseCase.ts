@@ -138,7 +138,7 @@ export class CreatePurchaseInvoiceUseCase {
               ean: ean,
               sku: productSku,
               initialPrice: unitPrice,
-              finalPrice: unitPrice, // Pode ajustar depois com margem
+              finalPrice: 0, // Valor de venda deve ser cadastrado manualmente depois
               description: productName,
               shortDescription: productName.length > 100 ? productName.substring(0, 100) : productName,
               companyId: null, // Opcional - pode ser ajustado depois
