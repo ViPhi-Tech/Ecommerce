@@ -15,7 +15,7 @@ export function CoreInterceptor(
 
   // Verifica se é uma requisição para API externa (ex: ViaCEP, BrasilAPI)
   const isViaCep = req.url.includes('viacep.com.br');
-  
+
   // Se for API externa, não aplica credenciais, headers de autenticação nem loader
   if (isViaCep) {
     return next(req);

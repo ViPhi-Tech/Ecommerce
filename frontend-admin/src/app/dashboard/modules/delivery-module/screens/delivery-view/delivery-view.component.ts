@@ -132,4 +132,3 @@ export class DeliveryViewComponent implements OnInit {
     });
   }
 }
-

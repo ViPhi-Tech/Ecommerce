@@ -21,13 +21,7 @@ import { CardModule } from 'primeng/card';
   templateUrl: './delivery-route.component.html',
   styleUrls: ['./delivery-route.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    RouterModule,
-    CommonModule,
-    ButtonModule,
-    NgIcon,
-    CardModule,
-  ],
+  imports: [RouterModule, CommonModule, ButtonModule, NgIcon, CardModule],
   providers: [DeliveryState],
 })
 export class DeliveryRouteComponent implements OnInit {
@@ -107,4 +101,3 @@ export class DeliveryRouteComponent implements OnInit {
     }
   }
 }
-

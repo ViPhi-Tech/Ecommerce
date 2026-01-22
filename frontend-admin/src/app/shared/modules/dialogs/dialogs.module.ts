@@ -13,7 +13,7 @@ import { dialogServiceOrderRoutes } from 'app/dashboard/modules/service-order-mo
 import { dialogUserRoutes } from 'app/dashboard/modules/user-module/user.routing';
 
 // Combined dialog routes
-export const dialogRoutes: Routes  = [
+export const dialogRoutes: Routes = [
   ...dialogCategoryRoutes,
   ...dialogClientRoutes,
   ...dialogSupplierRoutes,

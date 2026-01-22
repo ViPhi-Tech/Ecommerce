@@ -42,7 +42,9 @@ export class FileUploadComponent implements OnInit {
   uploadInterno = input<boolean>(true);
   loading = input<boolean>(false);
   maxFileSize = input<number>(0);
-  accept = input<string>('image/*, application/*, text/*, .xml, application/xml, text/xml');
+  accept = input<string>(
+    'image/*, application/*, text/*, .xml, application/xml, text/xml'
+  );
 
   @Output() uploadedFilesPaths = new EventEmitter<Image[]>();
   @Output() uploadedFilesEvent = new EventEmitter<any[]>();
@@ -90,15 +92,20 @@ export class FileUploadComponent implements OnInit {
 
   onSelectedFiles(event: any) {
     const selectedFiles = event.currentFiles || [];
-    
+
     // Validar tipo de arquivo se accept foi especificado
     if (this.accept() && this.accept().includes('xml')) {
       const validFiles = selectedFiles.filter((file: File) => {
         const fileName = file.name.toLowerCase();
         const fileType = file.type.toLowerCase();
-        return fileName.endsWith('.xml') || fileType.includes('xml') || fileType === 'text/xml' || fileType === 'application/xml';
+        return (
+          fileName.endsWith('.xml') ||
+          fileType.includes('xml') ||
+          fileType === 'text/xml' ||
+          fileType === 'application/xml'
+        );
       });
-      
+
       if (validFiles.length !== selectedFiles.length) {
         this.messageService.add({
           severity: 'error',
@@ -108,12 +115,12 @@ export class FileUploadComponent implements OnInit {
         });
         return;
       }
-      
+
       this.files.set(validFiles);
     } else {
       this.files.set(selectedFiles);
     }
-    
+
     this.files().forEach(file => {
       this.totalSize.update(
         size => size + parseInt(this.formatSize(file.size))

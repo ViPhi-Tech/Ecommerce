@@ -267,7 +267,7 @@ export class ClientCreateComponent implements OnInit {
       .getAddressByZipCode(zipCode)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
-        next: (response) => {
+        next: response => {
           if (response.erro) {
             this.toast.add({
               severity: 'warn',

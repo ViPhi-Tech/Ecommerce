@@ -11,4 +11,3 @@ export interface IViaCepResponse {
   siafi: string;
   erro?: boolean;
 }
-

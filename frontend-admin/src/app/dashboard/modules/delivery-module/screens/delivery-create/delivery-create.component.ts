@@ -14,7 +14,13 @@ import { DeliveryState } from '../../delivery.state';
 import { CoreService } from 'app/shared/services/core.service';
 import { OrderState } from 'app/dashboard/modules/order-module/order.state';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { MessageService } from 'primeng/api';
 import { Delivery, DeliveryStatus } from '../../interfaces/delivery.interface';
@@ -64,7 +70,10 @@ export class DeliveryCreateComponent implements OnInit {
   });
 
   totalValue = computed(() => {
-    return this.selectedOrdersList().reduce((sum, order) => sum + (order.total || 0), 0);
+    return this.selectedOrdersList().reduce(
+      (sum, order) => sum + (order.total || 0),
+      0
+    );
   });
 
   tableConfig = signal<TableConfig>(DEFAULT_TABLE_CONFIG);
@@ -100,8 +109,11 @@ export class DeliveryCreateComponent implements OnInit {
     if (id && id !== 'new') {
       this.isEditMode.set(true);
       this.deliveryId.set(id);
-      this.coreService.setPageTitle('Editar Entrega', 'Editar informações da entrega');
-      
+      this.coreService.setPageTitle(
+        'Editar Entrega',
+        'Editar informações da entrega'
+      );
+
       try {
         const delivery = await this.deliveryState.getDeliveryById(id);
         this.deliveryForm.patchValue({
@@ -111,7 +123,7 @@ export class DeliveryCreateComponent implements OnInit {
           driverName: delivery.driverName || '',
           vehiclePlate: delivery.vehiclePlate || '',
         });
-        
+
         if (delivery.orderIds && delivery.orderIds.length > 0) {
           const orderIds = new Set(delivery.orderIds);
           this.selectedOrders.set(orderIds);
@@ -120,7 +132,10 @@ export class DeliveryCreateComponent implements OnInit {
         console.error('Erro ao carregar entrega:', error);
       }
     } else {
-      this.coreService.setPageTitle('Nova Entrega', 'Criar uma nova entrega agrupando pedidos');
+      this.coreService.setPageTitle(
+        'Nova Entrega',
+        'Criar uma nova entrega agrupando pedidos'
+      );
     }
   }
 
@@ -239,9 +254,9 @@ export class DeliveryCreateComponent implements OnInit {
 
     const formValue = this.deliveryForm.value;
     const selectedOrderIds = Array.from(this.selectedOrders());
-    
+
     // Buscar os pedidos completos
-    const orders = this.availableOrders().filter(order => 
+    const orders = this.availableOrders().filter(order =>
       selectedOrderIds.some(id => id === order.id)
     );
 
@@ -257,7 +272,10 @@ export class DeliveryCreateComponent implements OnInit {
 
     try {
       if (this.isEditMode() && this.deliveryId()) {
-        await this.deliveryState.updateDelivery(this.deliveryId()!, deliveryData);
+        await this.deliveryState.updateDelivery(
+          this.deliveryId()!,
+          deliveryData
+        );
         this.toast.add({
           severity: 'success',
           summary: 'Sucesso',
@@ -286,4 +304,3 @@ export class DeliveryCreateComponent implements OnInit {
     this.router.navigate(['dashboard', 'deliveries', 'list']);
   }
 }
-

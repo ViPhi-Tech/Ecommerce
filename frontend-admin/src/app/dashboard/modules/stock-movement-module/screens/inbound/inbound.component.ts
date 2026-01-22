@@ -160,34 +160,39 @@ export class InboundComponent implements OnInit, AfterViewInit {
         sortable: true,
         width: '150px',
       },
-      { 
-        field: 'unitCost', 
-        caption: 'V. Custo Unit.', 
-        sortable: true, 
-        width: '130px', 
+      {
+        field: 'unitCost',
+        caption: 'V. Custo Unit.',
+        sortable: true,
+        width: '130px',
         type: 'currency',
         template: this.unitCostTemplate,
-        component: self
+        component: self,
       },
-      { 
-        field: 'icms', 
-        caption: 'ICMS Unit.', 
-        sortable: true, 
-        width: '120px', 
+      {
+        field: 'icms',
+        caption: 'ICMS Unit.',
+        sortable: true,
+        width: '120px',
         type: 'currency',
         template: this.icmsTemplate,
-        component: self
+        component: self,
       },
-      { 
-        field: 'st', 
-        caption: 'ST Unit.', 
-        sortable: true, 
-        width: '120px', 
+      {
+        field: 'st',
+        caption: 'ST Unit.',
+        sortable: true,
+        width: '120px',
         type: 'currency',
         template: this.stTemplate,
-        component: self
+        component: self,
       },
-      { field: 'invoiceNumber', caption: 'Nº Nota Fiscal', sortable: true, width: '150px' },
+      {
+        field: 'invoiceNumber',
+        caption: 'Nº Nota Fiscal',
+        sortable: true,
+        width: '150px',
+      },
       {
         field: 'actions',
         caption: 'Ações',
@@ -311,7 +316,10 @@ export class InboundComponent implements OnInit, AfterViewInit {
     if (typeof value === 'number') return value;
     if (typeof value === 'string') {
       // Remove R$, espaços e converte vírgula para ponto
-      const cleaned = value.replace(/R\$\s?/g, '').replace(/\./g, '').replace(',', '.');
+      const cleaned = value
+        .replace(/R\$\s?/g, '')
+        .replace(/\./g, '')
+        .replace(',', '.');
       const num = parseFloat(cleaned);
       return isNaN(num) ? null : num;
     }
@@ -341,8 +349,10 @@ export class InboundComponent implements OnInit, AfterViewInit {
       if (existingProductIndex > -1) {
         products[existingProductIndex].quantity += quantity;
         // Atualizar campos se fornecidos
-        if (unitCost !== null) products[existingProductIndex].unitCost = unitCost;
-        if (formData.invoiceNumber) products[existingProductIndex].invoiceNumber = formData.invoiceNumber;
+        if (unitCost !== null)
+          products[existingProductIndex].unitCost = unitCost;
+        if (formData.invoiceNumber)
+          products[existingProductIndex].invoiceNumber = formData.invoiceNumber;
         if (icms !== null) products[existingProductIndex].icms = icms;
         if (st !== null) products[existingProductIndex].st = st;
       } else {
@@ -381,7 +391,7 @@ export class InboundComponent implements OnInit, AfterViewInit {
 
     const products = this.inboundData.get('products')?.value || [];
     const product = products[editing.rowIndex];
-    
+
     if (product) {
       const value = this.editingValue();
       let convertedValue: any = value;

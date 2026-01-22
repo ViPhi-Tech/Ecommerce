@@ -1,4 +1,11 @@
-import { Component, DestroyRef, inject, OnInit, Signal, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+  Signal,
+  signal,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
@@ -142,7 +149,8 @@ export class AccountsPayableListComponent implements OnInit {
   // Método para marcar como pendente/vencido
   async markAsPendingOrOverdue(id: number) {
     this.confirmationService.confirm({
-      message: 'Você tem certeza que deseja marcar como pendente/vencido esta conta a pagar?',
+      message:
+        'Você tem certeza que deseja marcar como pendente/vencido esta conta a pagar?',
       header: 'Confirmação de Marcação',
       icon: 'pi pi-exclamation-triangle text-yellow-500',
       acceptLabel: 'Sim',
@@ -162,7 +170,8 @@ export class AccountsPayableListComponent implements OnInit {
               this.toast.add({
                 severity: 'success',
                 summary: 'Sucesso',
-                detail: 'Conta a pagar marcada como pendente/vencido com sucesso',
+                detail:
+                  'Conta a pagar marcada como pendente/vencido com sucesso',
               });
               this.state.updateAccountPayableStatus(id, 'pending');
             },

@@ -50,8 +50,16 @@
         [config]="tableConfig()"
       >
         <!-- Template para edição de unitCost -->
-        <ng-template #unitCostTemplate let-rowData let-rowIndex="rowIndex" let-component="component">
-          @if (component.editingCell()?.rowIndex === rowIndex && component.editingCell()?.field === 'unitCost') {
+        <ng-template
+          #unitCostTemplate
+          let-rowData
+          let-rowIndex="rowIndex"
+          let-component="component"
+        >
+          @if (
+            component.editingCell()?.rowIndex === rowIndex &&
+            component.editingCell()?.field === 'unitCost'
+          ) {
             <input
               type="text"
               pInputText
@@ -60,23 +68,36 @@
               (keydown.enter)="component.saveEdit()"
               (keydown.escape)="component.cancelEdit()"
               class="w-full"
-              style="text-align: right;"
+              style="text-align: right"
               autofocus
             />
           } @else {
             <span
-              (click)="component.startEdit(rowIndex, 'unitCost', rowData?.unitCost)"
+              (click)="
+                component.startEdit(rowIndex, 'unitCost', rowData?.unitCost)
+              "
               class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded"
-              style="text-align: right; display: block;"
+              style="text-align: right; display: block"
             >
-              {{ rowData?.unitCost | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+              {{
+                rowData?.unitCost
+                  | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+              }}
             </span>
           }
         </ng-template>
 
         <!-- Template para edição de icms -->
-        <ng-template #icmsTemplate let-rowData let-rowIndex="rowIndex" let-component="component">
-          @if (component.editingCell()?.rowIndex === rowIndex && component.editingCell()?.field === 'icms') {
+        <ng-template
+          #icmsTemplate
+          let-rowData
+          let-rowIndex="rowIndex"
+          let-component="component"
+        >
+          @if (
+            component.editingCell()?.rowIndex === rowIndex &&
+            component.editingCell()?.field === 'icms'
+          ) {
             <input
               type="text"
               pInputText
@@ -85,23 +106,33 @@
               (keydown.enter)="component.saveEdit()"
               (keydown.escape)="component.cancelEdit()"
               class="w-full"
-              style="text-align: right;"
+              style="text-align: right"
               autofocus
             />
           } @else {
             <span
               (click)="component.startEdit(rowIndex, 'icms', rowData?.icms)"
               class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded"
-              style="text-align: right; display: block;"
+              style="text-align: right; display: block"
             >
-              {{ rowData?.icms | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+              {{
+                rowData?.icms | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+              }}
             </span>
           }
         </ng-template>
 
         <!-- Template para edição de st -->
-        <ng-template #stTemplate let-rowData let-rowIndex="rowIndex" let-component="component">
-          @if (component.editingCell()?.rowIndex === rowIndex && component.editingCell()?.field === 'st') {
+        <ng-template
+          #stTemplate
+          let-rowData
+          let-rowIndex="rowIndex"
+          let-component="component"
+        >
+          @if (
+            component.editingCell()?.rowIndex === rowIndex &&
+            component.editingCell()?.field === 'st'
+          ) {
             <input
               type="text"
               pInputText
@@ -110,14 +141,14 @@
               (keydown.enter)="component.saveEdit()"
               (keydown.escape)="component.cancelEdit()"
               class="w-full"
-              style="text-align: right;"
+              style="text-align: right"
               autofocus
             />
           } @else {
             <span
               (click)="component.startEdit(rowIndex, 'st', rowData?.st)"
               class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded"
-              style="text-align: right; display: block;"
+              style="text-align: right; display: block"
             >
               {{ rowData?.st | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
             </span>
@@ -128,7 +159,9 @@
   </div>
 
   <ng-template #footer>
-    <div class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4">
+    <div
+      class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4"
+    >
       <button
         pButton
         type="button"
@@ -274,7 +307,9 @@
   </div>
 
   <ng-template #footer>
-    <div class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4">
+    <div
+      class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4"
+    >
       <button
         pButton
         type="button"

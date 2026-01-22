@@ -14,7 +14,9 @@
         <!-- Formulário Principal -->
         <div class="lg:col-span-1 space-y-4">
           <div class="rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+            <h2
+              class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200"
+            >
               Informações da Entrega
             </h2>
 
@@ -58,18 +60,24 @@
 
           <!-- Resumo dos Pedidos Selecionados -->
           <div class="rounded-lg shadow p-6">
-            <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+            <h2
+              class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200"
+            >
               Resumo
             </h2>
             <div class="space-y-2">
               <div class="flex justify-between">
-                <span class="text-gray-600 dark:text-gray-400">Pedidos selecionados:</span>
+                <span class="text-gray-600 dark:text-gray-400"
+                  >Pedidos selecionados:</span
+                >
                 <span class="font-semibold">{{ selectedOrders().size }}</span>
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600 dark:text-gray-400">Valor total:</span>
+                <span class="text-gray-600 dark:text-gray-400"
+                  >Valor total:</span
+                >
                 <span class="font-semibold">
-                  {{ totalValue() | currency:'BRL' }}
+                  {{ totalValue() | currency: 'BRL' }}
                 </span>
               </div>
             </div>
@@ -80,7 +88,9 @@
         <div class="lg:col-span-2">
           <div class="rounded-lg shadow p-6">
             <div class="flex items-center justify-between mb-4">
-              <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+              <h2
+                class="text-lg font-semibold text-gray-800 dark:text-gray-200"
+              >
                 Selecionar Pedidos
               </h2>
               <div class="flex gap-2">
@@ -110,11 +120,7 @@
 
       <!-- Botões de Ação -->
       <div class="flex justify-end gap-3 mt-6">
-        <p-button
-          label="Cancelar"
-          [outlined]="true"
-          (onClick)="cancel()"
-        />
+        <p-button label="Cancelar" [outlined]="true" (onClick)="cancel()" />
         <p-button
           label="{{ isEditMode() ? 'Atualizar' : 'Criar Entrega' }}"
           icon="pi pi-check"
@@ -125,4 +131,3 @@
     </form>
   </div>
 </div>
-

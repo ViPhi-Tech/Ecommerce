@@ -51,11 +51,13 @@ export class ClientService {
 
   deleteClient(clientId: string): Observable<ApiResponse> {
     // Emite evento para notificar que o cache precisa ser invalidado
-    return this.http.delete<ApiResponse>(`${this.apiUrl}/delete/${clientId}`).pipe(
-      tap(() => {
-        this.refreshClientList();
-      })
-    );
+    return this.http
+      .delete<ApiResponse>(`${this.apiUrl}/delete/${clientId}`)
+      .pipe(
+        tap(() => {
+          this.refreshClientList();
+        })
+      );
   }
 
   refreshClientList() {
