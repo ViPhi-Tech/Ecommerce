@@ -1,4 +1,4 @@
-import { CurrencyPipe, NgIf } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import {
   Component,
   DestroyRef,
@@ -28,6 +28,7 @@ import { TableComponent } from 'app/shared/components/table/table.component';
 import {
   DEFAULT_TABLE_CONFIG,
   TableConfig,
+  TableColumn,
 } from 'app/shared/interfaces/table.interfaces';
 import { CoreService } from 'app/shared/services/core.service';
 import { MessageService } from 'primeng/api';
@@ -59,7 +60,6 @@ import { IProduct } from 'app/shared/interfaces/product/Product';
     AutoCompleteModule,
     CurrencyPipe,
     FormsModule,
-    NgIf,
   ],
 })
 export class InboundComponent implements OnInit, AfterViewInit {
@@ -143,7 +143,8 @@ export class InboundComponent implements OnInit, AfterViewInit {
   }
 
   initProductsTable() {
-    const columns = [
+    const self = this; // Referência ao componente para usar nos templates
+    const columns: TableColumn[] = [
       { field: 'name', caption: 'Nome' },
       { field: 'sku', caption: 'SKU', width: '200px' },
       { field: 'ean', caption: 'EAN', width: '200px' },
@@ -165,7 +166,8 @@ export class InboundComponent implements OnInit, AfterViewInit {
         sortable: true, 
         width: '130px', 
         type: 'currency',
-        template: this.unitCostTemplate 
+        template: this.unitCostTemplate,
+        component: self
       },
       { 
         field: 'icms', 
@@ -173,7 +175,8 @@ export class InboundComponent implements OnInit, AfterViewInit {
         sortable: true, 
         width: '120px', 
         type: 'currency',
-        template: this.icmsTemplate 
+        template: this.icmsTemplate,
+        component: self
       },
       { 
         field: 'st', 
@@ -181,29 +184,29 @@ export class InboundComponent implements OnInit, AfterViewInit {
         sortable: true, 
         width: '120px', 
         type: 'currency',
-        template: this.stTemplate 
+        template: this.stTemplate,
+        component: self
       },
       { field: 'invoiceNumber', caption: 'Nº Nota Fiscal', sortable: true, width: '150px' },
-        {
-          field: 'actions',
-          caption: 'Ações',
-          actionButtonsType: 'buttons',
-          actionButtons: [
-            {
-              icon: 'lucideTrash2',
-              label: 'Remover',
-              variant: 'text',
-              colorText: '#EF4444',
-              colorIcon: '#EF4444',
-              tooltip: 'Remover Produto',
-              action: (rowData: any) => {
-                this.removeProduct(rowData?.id);
-              },
+      {
+        field: 'actions',
+        caption: 'Ações',
+        actionButtonsType: 'buttons' as const,
+        actionButtons: [
+          {
+            icon: 'lucideTrash2',
+            label: 'Remover',
+            variant: 'text',
+            colorText: '#EF4444',
+            colorIcon: '#EF4444',
+            tooltip: 'Remover Produto',
+            action: (rowData: any) => {
+              this.removeProduct(rowData?.id);
             },
-          ],
-        },
-      ],
-    };
+          },
+        ],
+      },
+    ];
 
     this.tableConfig.set({
       ...DEFAULT_TABLE_CONFIG,

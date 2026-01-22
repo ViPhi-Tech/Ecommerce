@@ -184,7 +184,7 @@
           } @else if (column?.template) {
             <ng-container
               [ngTemplateOutlet]="column?.template ?? null"
-              [ngTemplateOutletContext]="{ $implicit: rowData }"
+              [ngTemplateOutletContext]="{ $implicit: rowData, rowIndex: rowIndex, component: column?.component }"
             >
             </ng-container>
           } @else {
