@@ -38,17 +38,7 @@
 
   <ng-template #footer>
     @if (invoice()) {
-      <div class="flex items-center gap-2">
-        <button
-          pButton
-          type="submit"
-          label="Importar"
-          icon="pi pi-check"
-          class="w-[200px]"
-          size="small"
-          (click)="import()"
-        ></button>
-
+      <div class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4">
         <button
           pButton
           type="button"
@@ -57,8 +47,17 @@
           [outlined]="true"
           (click)="closeDialog()"
           severity="secondary"
-          class="w-[200px]"
+          class="w-full sm:w-[200px] order-2 sm:order-1"
           size="small"
+        ></button>
+        <button
+          pButton
+          type="submit"
+          label="Importar"
+          icon="pi pi-check"
+          class="w-full sm:w-[200px] order-1 sm:order-2"
+          size="small"
+          (click)="import()"
         ></button>
       </div>
     }

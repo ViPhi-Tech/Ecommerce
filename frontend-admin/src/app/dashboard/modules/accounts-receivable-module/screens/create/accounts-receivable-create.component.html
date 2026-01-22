@@ -101,7 +101,7 @@
   </div>
 
   <ng-template #footer>
-    <div class="flex gap-2">
+    <div class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4">
       <button
         pButton
         type="button"
@@ -110,17 +110,16 @@
         (click)="closeDialog()"
         outlined="true"
         severity="secondary"
-        class="w-[200px]"
+        class="w-full sm:w-[200px] order-2 sm:order-1"
         size="small"
       ></button>
-
       @if (!isView()) {
         <button
           pButton
           type="submit"
           [label]="submitButtonLabel()"
           icon="pi pi-check"
-          class="w-[200px]"
+          class="w-full sm:w-[200px] order-1 sm:order-2"
           size="small"
           [disabled]="accountsReceivableForm.invalid"
           (click)="onSubmit($event)"

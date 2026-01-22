@@ -109,7 +109,18 @@
   </div>
 
   <ng-template #footer>
-    <div class="flex items-center gap-2">
+    <div class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4">
+      <button
+        pButton
+        type="button"
+        label="Fechar"
+        icon="pi pi-times"
+        [outlined]="true"
+        (click)="onCloseDialog()"
+        severity="secondary"
+        class="w-full sm:w-[200px] order-2 sm:order-1"
+        size="small"
+      ></button>
       @if ((nfeFormatted() || nfeJson()) && !loadingImport()) {
         <button
           pButton
@@ -120,21 +131,10 @@
           [loading]="loadingSend()"
           [disabled]="loadingSend()"
           severity="success"
-          class="w-[200px]"
+          class="w-full sm:w-[200px] order-1 sm:order-2"
           size="small"
         ></button>
       }
-      <button
-        pButton
-        type="button"
-        label="Fechar"
-        icon="pi pi-times"
-        [outlined]="true"
-        (click)="onCloseDialog()"
-        severity="secondary"
-        class="w-[200px]"
-        size="small"
-      ></button>
     </div>
   </ng-template>
 </p-dialog>
