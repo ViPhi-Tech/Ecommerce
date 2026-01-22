@@ -362,7 +362,11 @@ const movements = await this.prisma.stockMovement.findMany({
                   quantity: Number(item.quantity),
                   unitPrice: Number(item.unitPrice),
                   totalAmount: Number(item.totalAmount),
-                  description: item.description
+                  description: item.description,
+                  unitCost: (item as any).unitCost ? Number((item as any).unitCost) : null,
+                  unitTotalWithTax: (item as any).unitTotalWithTax ? Number((item as any).unitTotalWithTax) : null,
+                  totalCost: (item as any).totalCost ? Number((item as any).totalCost) : null,
+                  totalWithTax: (item as any).totalWithTax ? Number((item as any).totalWithTax) : null
                 }
               };
             }

@@ -128,7 +128,13 @@ export class CreatePurchaseInvoiceUseCase {
         const quantity = parseFloat(prod.qCom?.toString() || '0');
         const unitPrice = parseFloat(prod.vUnCom?.toString() || '0');
         const totalAmount = parseFloat(prod.vProd?.toString() || '0');
+        const discount = parseFloat(prod.vDesc?.toString() || '0') || null;
 
+        // Extrair dados do ICMS
+        const icms = imposto.ICMS || {};
+        const icmsType = Object.keys(icms)[0] || '';
+        const icmsData = icms[icmsType] || {};
+        
         // Extrair valores totais de ICMS e ST (Substituição Tributária)
         const icmsTotalValue = this.extractICMSValue(imposto);
         const stTotalValue = this.extractSTValue(imposto);
@@ -139,6 +145,30 @@ export class CreatePurchaseInvoiceUseCase {
         
         // Calcular finalPrice = unitPrice + ICMS unitário + ST unitário
         const finalPrice = unitPrice + icmsUnitValue + stUnitValue;
+        
+        // Extrair dados fiscais detalhados
+        const code = prod.cProd?.toString() || null;
+        const cst = icmsData.CST?.toString() || icmsData.CSOSN?.toString() || null;
+        const unit = prod.uCom || null;
+        const icmsBase = icmsData.vBC ? parseFloat(icmsData.vBC.toString()) : null;
+        const icmsValue = icmsData.vICMS ? parseFloat(icmsData.vICMS.toString()) : null;
+        const icmsRate = icmsData.pICMS ? parseFloat(icmsData.pICMS.toString()) : null;
+        const icmsStBase = icmsData.vBCST ? parseFloat(icmsData.vBCST.toString()) : null;
+        const icmsStValue = icmsData.vICMSST ? parseFloat(icmsData.vICMSST.toString()) : null;
+        
+        // Extrair dados do IPI
+        const ipi = imposto.IPI || {};
+        const ipiTrib = ipi.IPITrib || {};
+        const ipiValue = ipiTrib.vIPI ? parseFloat(ipiTrib.vIPI.toString()) : null;
+        const ipiRate = ipiTrib.pIPI ? parseFloat(ipiTrib.pIPI.toString()) : null;
+        
+        // Calcular valores unitários
+        const unitCost = unitPrice; // Valor custo unitário
+        const unitTotalWithTax = finalPrice; // Valor unitário com tributo = unitPrice + ICMS + ST
+        
+        // Calcular valores totais
+        const totalCost = unitCost * quantity; // Valor total do custo
+        const totalWithTax = unitTotalWithTax * quantity; // Valor total com tributo
 
         // Buscar produto por EAN ou criar se não existir
         let productId: number | null = null;
@@ -210,12 +240,27 @@ export class CreatePurchaseInvoiceUseCase {
         items.push({
           purchaseInvoiceId: purchaseInvoice.id!,
           productId: productId,
+          code: code,
           description: prod.xProd || '',
           ncm: prod.NCM?.toString() || '',
+          cst: cst,
           cfop: prod.CFOP?.toString() || '',
+          unit: unit,
           quantity: quantity,
           unitPrice: unitPrice,
+          discount: discount,
           totalAmount: totalAmount,
+          icmsBase: icmsBase,
+          icmsValue: icmsValue,
+          icmsRate: icmsRate,
+          icmsStBase: icmsStBase,
+          icmsStValue: icmsStValue,
+          ipiValue: ipiValue,
+          ipiRate: ipiRate,
+          unitCost: unitCost,
+          unitTotalWithTax: unitTotalWithTax,
+          totalCost: totalCost,
+          totalWithTax: totalWithTax,
           taxData: imposto,
         });
       }

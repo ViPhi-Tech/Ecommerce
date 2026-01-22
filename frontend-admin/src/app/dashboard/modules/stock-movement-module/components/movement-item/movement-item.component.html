@@ -118,13 +118,21 @@
         </div>
 
         <!-- Informações Financeiras e Tributárias -->
-        @if (item()?.unitCost || item()?.icms !== null && item()?.icms !== undefined || item()?.st !== null && item()?.st !== undefined) {
+        @if (item()?.unitCost || item()?.purchaseInvoice?.item?.unitCost || item()?.icms !== null && item()?.icms !== undefined || item()?.st !== null && item()?.st !== undefined) {
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 border-t border-gray-200 dark:border-gray-700">
-            @if (item()?.unitCost) {
+            @if (item()?.purchaseInvoice?.item?.unitCost || item()?.unitCost) {
               <div class="flex flex-col gap-0.5">
-                <span class="text-xs text-gray-500 dark:text-gray-400">Custo Unitário</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">V. Custo Unit.</span>
                 <span class="text-sm font-semibold text-gray-900 dark:text-white">
-                  R$ {{ item()?.unitCost | number:'1.2-2' }}
+                  R$ {{ (item()?.purchaseInvoice?.item?.unitCost ?? item()?.unitCost) | number:'1.2-2' }}
+                </span>
+              </div>
+            }
+            @if (item()?.purchaseInvoice?.item?.totalCost) {
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs text-gray-500 dark:text-gray-400">Total Custo</span>
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">
+                  R$ {{ item()?.purchaseInvoice?.item?.totalCost | number:'1.2-2' }}
                 </span>
               </div>
             }
@@ -144,11 +152,19 @@
                 </span>
               </div>
             }
-            @if (getTotalUnitValue() > 0) {
+            @if (item()?.purchaseInvoice?.item?.unitTotalWithTax || getTotalUnitValue() > 0) {
               <div class="flex flex-col gap-0.5">
-                <span class="text-xs font-medium text-gray-600 dark:text-gray-300">Total Unitário</span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">V. Unit. c/ Tributo</span>
+                <span class="text-sm font-semibold text-gray-900 dark:text-white">
+                  R$ {{ (item()?.purchaseInvoice?.item?.unitTotalWithTax ?? getTotalUnitValue()) | number:'1.2-2' }}
+                </span>
+              </div>
+            }
+            @if (item()?.purchaseInvoice?.item?.totalWithTax) {
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs font-medium text-gray-600 dark:text-gray-300">Total c/ Tributo</span>
                 <span class="text-sm font-bold text-blue-600 dark:text-blue-400">
-                  R$ {{ getTotalUnitValue() | number:'1.2-2' }}
+                  R$ {{ item()?.purchaseInvoice?.item?.totalWithTax | number:'1.2-2' }}
                 </span>
               </div>
             }

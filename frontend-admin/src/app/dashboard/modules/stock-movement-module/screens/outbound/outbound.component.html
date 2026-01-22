@@ -48,7 +48,82 @@
       <fuse-table
         [data]="outboundData.get('products')?.value"
         [config]="tableConfig()"
-      ></fuse-table>
+      >
+        <!-- Template para edição de unitCost -->
+        <ng-template #unitCostTemplate let-rowData let-rowIndex="rowIndex">
+          @if (editingCell()?.rowIndex === rowIndex && editingCell()?.field === 'unitCost') {
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="editingValue"
+              (blur)="saveEdit()"
+              (keydown.enter)="saveEdit()"
+              (keydown.escape)="cancelEdit()"
+              class="w-full"
+              style="text-align: right;"
+              autofocus
+            />
+          } @else {
+            <span
+              (click)="startEdit(rowIndex, 'unitCost', rowData?.unitCost)"
+              class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded"
+              style="text-align: right; display: block;"
+            >
+              {{ rowData?.unitCost | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </span>
+          }
+        </ng-template>
+
+        <!-- Template para edição de icms -->
+        <ng-template #icmsTemplate let-rowData let-rowIndex="rowIndex">
+          @if (editingCell()?.rowIndex === rowIndex && editingCell()?.field === 'icms') {
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="editingValue"
+              (blur)="saveEdit()"
+              (keydown.enter)="saveEdit()"
+              (keydown.escape)="cancelEdit()"
+              class="w-full"
+              style="text-align: right;"
+              autofocus
+            />
+          } @else {
+            <span
+              (click)="startEdit(rowIndex, 'icms', rowData?.icms)"
+              class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded"
+              style="text-align: right; display: block;"
+            >
+              {{ rowData?.icms | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </span>
+          }
+        </ng-template>
+
+        <!-- Template para edição de st -->
+        <ng-template #stTemplate let-rowData let-rowIndex="rowIndex">
+          @if (editingCell()?.rowIndex === rowIndex && editingCell()?.field === 'st') {
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="editingValue"
+              (blur)="saveEdit()"
+              (keydown.enter)="saveEdit()"
+              (keydown.escape)="cancelEdit()"
+              class="w-full"
+              style="text-align: right;"
+              autofocus
+            />
+          } @else {
+            <span
+              (click)="startEdit(rowIndex, 'st', rowData?.st)"
+              class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded"
+              style="text-align: right; display: block;"
+            >
+              {{ rowData?.st | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </span>
+          }
+        </ng-template>
+      </fuse-table>
     </div>
   </div>
 
@@ -97,7 +172,7 @@
         Selecione um Produto
       </h2>
       <p class="text-sm text-muted-foreground">
-        Selecione um produto e uma quantidade para dar entrada ao estoque
+        Selecione um produto e uma quantidade para dar saída do estoque
       </p>
     </div>
   </ng-template>
@@ -158,6 +233,44 @@
             type="number"
             placeholder="Quantidade"
           />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <fuse-input
+            label="Número da Nota Fiscal"
+            [control]="formAddProduct.get('invoiceNumber')"
+            type="text"
+            placeholder="Ex: NF-1234"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="flex flex-col gap-1">
+            <fuse-input
+              label="Valor Custo Unitário"
+              [control]="formAddProduct.get('unitCost')"
+              type="money"
+              placeholder="0,00"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <fuse-input
+              label="ICMS Unitário"
+              [control]="formAddProduct.get('icms')"
+              type="money"
+              placeholder="0,00"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <fuse-input
+              label="ST Unitário"
+              [control]="formAddProduct.get('st')"
+              type="money"
+              placeholder="0,00"
+            />
+          </div>
         </div>
       </div>
     </form>

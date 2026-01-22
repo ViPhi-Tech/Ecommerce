@@ -75,9 +75,13 @@ export class StockMovementService {
     products: IProduct[],
     type: 'IN' | 'OUT'
   ): MovimentManyStocks {
-    const updatedProducts = products.map(({ id, quantity }) => ({
-      productId: id,
-      quantity,
+    const updatedProducts = products.map((product: any) => ({
+      productId: product.id,
+      quantity: product.quantity,
+      unitCost: product.unitCost ?? null,
+      invoiceNumber: product.invoiceNumber ?? null,
+      icms: product.icms ?? null,
+      st: product.st ?? null,
     }));
 
     return {

@@ -63,26 +63,68 @@ export class XmlUtils {
     let products = det.map((item: any) => {
       const prod = item?.prod;
       const imposto = item?.imposto;
+      
+      // Extrair dados do ICMS
+      const icms = imposto?.ICMS || {};
+      const icmsType = Object.keys(icms).find(key => key.startsWith('ICMS')) || '';
+      const icmsData = icms[icmsType] || {};
+      
+      // Extrair dados do IPI
+      const ipi = imposto?.IPI || {};
+      const ipiTrib = ipi?.IPITrib || {};
 
       return {
         itemNumber: item?.$?.nItem,
         sku: prod?.cProd,
         ean: prod?.cEAN,
         description: prod?.xProd,
-        ncm: prod?.NCM,
-        cfop: prod?.CFOP,
+        ncm: prod?.NCM?.toString(),
+        cst: icmsData?.CST?.toString() || icmsData?.CSOSN?.toString(),
+        cfop: prod?.CFOP?.toString(),
         // Comercial
         unit: prod?.uCom,
         quantity: parseFloat(prod?.qCom || 0),
         unitValue: parseFloat(prod?.vUnCom || 0),
+        discount: prod?.vDesc ? parseFloat(prod.vDesc.toString()) : undefined,
         totalValue: parseFloat(prod?.vProd || 0),
-        // Tributação
+        // ICMS
+        icmsBase: icmsData?.vBC ? parseFloat(icmsData.vBC.toString()).toFixed(2) : undefined,
+        icmsValue: icmsData?.vICMS ? parseFloat(icmsData.vICMS.toString()).toFixed(2) : undefined,
+        icmsRate: icmsData?.pICMS ? parseFloat(icmsData.pICMS.toString()) : undefined, // Já vem como percentual
+        // ICMS ST
+        icmsStBase: icmsData?.vBCST ? parseFloat(icmsData.vBCST.toString()).toFixed(2) : undefined,
+        icmsStValue: icmsData?.vICMSST ? parseFloat(icmsData.vICMSST.toString()).toFixed(2) : undefined,
+        // IPI
+        ipiValue: ipiTrib?.vIPI ? parseFloat(ipiTrib.vIPI.toString()).toFixed(2) : undefined,
+        ipiRate: ipiTrib?.pIPI ? parseFloat(ipiTrib.pIPI.toString()) : undefined, // Já vem como percentual
+        // Valores calculados (unitários)
+        unitCost: parseFloat(prod?.vUnCom || 0).toFixed(2), // Valor custo = valor unitário
+        unitTotalWithTax: (() => {
+          const unitPrice = parseFloat(prod?.vUnCom || 0);
+          const icmsUnit = icmsData?.vICMS ? parseFloat(icmsData.vICMS.toString()) / parseFloat(prod?.qCom || 1) : 0;
+          const stUnit = icmsData?.vICMSST ? parseFloat(icmsData.vICMSST.toString()) / parseFloat(prod?.qCom || 1) : 0;
+          return (unitPrice + icmsUnit + stUnit).toFixed(2);
+        })(),
+        // Valores calculados (totais)
+        totalCost: (() => {
+          const unitPrice = parseFloat(prod?.vUnCom || 0);
+          const quantity = parseFloat(prod?.qCom || 0);
+          return (unitPrice * quantity).toFixed(2);
+        })(),
+        totalWithTax: (() => {
+          const unitPrice = parseFloat(prod?.vUnCom || 0);
+          const quantity = parseFloat(prod?.qCom || 0);
+          const icmsTotal = icmsData?.vICMS ? parseFloat(icmsData.vICMS.toString()) : 0;
+          const stTotal = icmsData?.vICMSST ? parseFloat(icmsData.vICMSST.toString()) : 0;
+          return (unitPrice * quantity + icmsTotal + stTotal).toFixed(2);
+        })(),
+        // Tributação (mantido para compatibilidade)
         eanTrib: prod?.cEANTrib,
         unitTrib: prod?.uTrib,
         quantityTrib: prod?.qTrib,
         unitValueTrib: prod?.vUnTrib,
         indTot: prod?.indTot,
-        // Impostos
+        // Impostos (mantido para compatibilidade)
         taxes: {
           totalTaxValue: imposto?.vTotTrib,
           icms: imposto?.ICMS,

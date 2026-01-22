@@ -82,7 +82,11 @@ export const updateProductSchema = z.object({
 
 export const updateStockSchema = z.object({
   productId: z.number().min(1, { message: "ID do produto é obrigatório" }),
-  quantity: z.number().min(1, { message: "Quantidade deve ser maior que zero" })
+  quantity: z.number().min(1, { message: "Quantidade deve ser maior que zero" }),
+  unitCost: z.number().nullable().optional(),
+  invoiceNumber: z.string().nullable().optional(),
+  icms: z.number().nullable().optional(),
+  st: z.number().nullable().optional(),
 });
 
 export const updateManyStockSchema = z.object({

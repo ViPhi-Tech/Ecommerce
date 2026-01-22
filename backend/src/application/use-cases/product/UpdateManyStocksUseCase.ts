@@ -41,14 +41,17 @@ export class UpdateManyStocksUseCase {
         
         const itemsUpdated = updatedStock.map((item) => {
         const inputItem = newItems.find((input) => input.sku === item.productId);
+        const originalInputItem = input.find((inp) => inp.productId === item.productId);
         const productData = productMap.get(item.productId!);
         return {
             stockId: item.id as number,
             userId,
             quantity: inputItem?.quantity ?? 0,
             type: type,
-            icms: productData?.icms ?? null, // Copiar ICMS do produto se existir
-            st: productData?.st ?? null // Copiar ST do produto se existir
+            unitCost: originalInputItem?.unitCost ?? null, // Usar unitCost do input se fornecido
+            invoiceNumber: originalInputItem?.invoiceNumber ?? null, // Usar invoiceNumber do input se fornecido
+            icms: originalInputItem?.icms ?? productData?.icms ?? null, // Usar ICMS do input, senão do produto
+            st: originalInputItem?.st ?? productData?.st ?? null // Usar ST do input, senão do produto
         };
         });
         const moviment = await this.productRepository.updateManyStockMovements(itemsUpdated)

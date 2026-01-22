@@ -18,6 +18,10 @@ export interface IPurchaseInvoice {
     unitPrice: number;
     totalAmount: number;
     description: string;
+    unitCost?: number | null;
+    unitTotalWithTax?: number | null;
+    totalCost?: number | null;
+    totalWithTax?: number | null;
   };
 }
 

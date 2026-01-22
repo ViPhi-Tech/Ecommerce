@@ -201,6 +201,8 @@
                 rowData?.[column?.field || '']
                   | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
               }}
+            } @else if (column?.type === 'percent') {
+              {{ rowData?.[column?.field || ''] | number: '1.2-2' }}%
             } @else if (column?.type === 'activeOrNot') {
               @if (rowData?.[column?.field || ''] === true) {
                 <ng-icon
