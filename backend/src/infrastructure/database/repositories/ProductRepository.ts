@@ -47,8 +47,22 @@ export class ProductRepository implements IProductRepository {
     };
 
     async findByEan(ean: string): Promise<Product | null> {
+        // Não buscar produtos com EAN "0" para evitar conflitos
+        // Produtos sem EAN devem ser identificados apenas por SKU
+        if (!ean || ean === '0') {
+            return null;
+        }
         return this.prisma.product.findFirst({
             where: {ean, isActive: true},
+            include: {
+                stock: true
+            }
+        });
+    };
+
+    async findBySku(sku: string): Promise<Product | null> {
+        return this.prisma.product.findFirst({
+            where: {sku, isActive: true},
             include: {
                 stock: true
             }
@@ -120,6 +134,8 @@ export class ProductRepository implements IProductRepository {
             type: data.type as 'IN' | 'OUT',
             unitCost: data.unitCost ?? null,
             invoiceNumber: data.invoiceNumber ?? null,
+            icms: data.icms ?? null,
+            st: data.st ?? null,
             userId: data.userId ?? null
           }
         })
@@ -133,7 +149,9 @@ export class ProductRepository implements IProductRepository {
       type: item.type as 'IN' | 'OUT',
       userId: item.userId ?? null,
       unitCost: item.unitCost ?? null,
-      invoiceNumber: item.invoiceNumber ?? null
+      invoiceNumber: item.invoiceNumber ?? null,
+      icms: item.icms ?? null,
+      st: item.st ?? null
     })),
     skipDuplicates: false, 
   });
@@ -160,13 +178,19 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
   };
 
   async findByName(param: string): Promise<Product[]> {
-    return this.prisma.$queryRawUnsafe<Product[]>(`
-      SELECT *
-      FROM "Product"
-      WHERE "name" % $1 AND "isActive" = true
-      ORDER BY similarity("name", $1) DESC
-      LIMIT 20
-    `, param);
+    return this.prisma.product.findMany({
+      where: {
+        name: {
+          contains: param,
+          mode: 'insensitive'
+        },
+        isActive: true
+      },
+      take: 20,
+      orderBy: {
+        name: 'asc'
+      }
+    });
   };
 
 
@@ -209,8 +233,7 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
           CAST(p."ean" AS TEXT) ILIKE ${searchTerm} OR
           CAST(p."sku" AS TEXT) ILIKE ${searchTerm} OR
           CAST(p."id" AS TEXT) ILIKE ${searchTerm} OR
-          p."name" ILIKE ${searchTerm} OR
-          similarity(p."name", ${param}) > 0.1
+          p."name" ILIKE ${searchTerm}
         )
       ORDER BY
         CASE
@@ -220,7 +243,7 @@ async findStockByProductId(productId: number[]): Promise<Stock[]> {
           WHEN p."name" ILIKE ${searchTerm} THEN 2
           ELSE 3
         END,
-        similarity(p."name", ${param}) DESC
+        p."name" ASC
       LIMIT 20;
     `);
 
@@ -283,6 +306,8 @@ const movements = await this.prisma.stockMovement.findMany({
         quantity: movement.quantity,
         unitCost: movement.unitCost ?? null,
         invoiceNumber: movement.invoiceNumber ?? null,
+        icms: movement.icms ?? null,
+        st: movement.st ?? null,
         product: movement.stock?.product ? {
           name: movement.stock.product.name,
           sku: movement.stock.product.sku

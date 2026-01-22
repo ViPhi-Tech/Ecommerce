@@ -16,6 +16,8 @@ export interface CreateProductInput {
   companyId: number;
   categoryId: number;
   quantity: number;
+  icms?: number | null; // Valor unitário do ICMS (editável)
+  st?: number | null; // Valor unitário da ST (editável)
 }
 
 export interface UpdateProductInput {
@@ -29,6 +31,8 @@ export interface UpdateProductInput {
   image?: string;
   sku: string;
   cost?: number;
+  icms?: number | null; // Valor unitário do ICMS (editável)
+  st?: number | null; // Valor unitário da ST (editável)
 }
 
 export interface UpdateStockInput {
@@ -56,6 +60,8 @@ export const createProductSchema = z.object({
   companyId: z.number().min(1, { message: "ID da empresa é obrigatório" }),
   categoryId: z.number().min(1, { message: "ID da categoria é obrigatório" }),
   quantity: z.number().min(0, { message: "Quantidade deve ser maior ou igual a zero" }),
+  icms: z.number().nullable().optional(), // Valor unitário do ICMS (editável)
+  st: z.number().nullable().optional(), // Valor unitário da ST (editável)
 });
 
 export const updateProductSchema = z.object({
@@ -70,6 +76,8 @@ export const updateProductSchema = z.object({
   image: z.string().optional(),
   sku: z.string().min(1, { message: "SKU é obrigatório" }),
   cost: z.number().optional(),
+  icms: z.number().nullable().optional(), // Valor unitário do ICMS (editável)
+  st: z.number().nullable().optional(), // Valor unitário da ST (editável)
 });
 
 export const updateStockSchema = z.object({
@@ -143,6 +151,8 @@ export interface ProductResponse {
   cost?: number;
   companyId: number;
   categoryId: number;
+  icms?: number | null; // Valor unitário do ICMS (editável)
+  st?: number | null; // Valor unitário da ST (editável)
   createdAt?: Date;
   updatedAt?: Date;
 }

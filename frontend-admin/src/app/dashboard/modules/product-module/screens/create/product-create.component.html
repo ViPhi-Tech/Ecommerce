@@ -95,6 +95,26 @@
         <div class="col-12 md:col-6">
           <fuse-input
             [isLoading]="isLoading()"
+            type="price"
+            label="ICMS Unitário"
+            [control]="productForm.get('icms')"
+            placeholder="R$ 0,00"
+          />
+        </div>
+
+        <div class="col-12 md:col-6">
+          <fuse-input
+            [isLoading]="isLoading()"
+            type="price"
+            label="ST Unitário (Substituição Tributária)"
+            [control]="productForm.get('st')"
+            placeholder="R$ 0,00"
+          />
+        </div>
+
+        <div class="col-12 md:col-6">
+          <fuse-input
+            [isLoading]="isLoading()"
             label="Estoque inicial"
             type="number"
             [control]="productForm.get('quantity')"

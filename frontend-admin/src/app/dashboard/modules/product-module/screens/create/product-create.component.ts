@@ -113,6 +113,8 @@ export class ProductCreateComponent implements OnInit {
       brand: [''],
       initialPrice: [0, [Validators.min(0.01), Validators.required]],
       finalPrice: [0, [Validators.min(0.01), Validators.required]],
+      icms: [null, [Validators.min(0)]],
+      st: [null, [Validators.min(0)]],
       quantity: ['', [Validators.required]],
       shortDescription: [''],
       description: [''],

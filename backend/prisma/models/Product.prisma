@@ -16,6 +16,8 @@ model Product {
   initialPrice     Float         @default(0)
   shortDescription String?
   brandId          Int?
+  icms             Float?        // Valor unitário do ICMS (editável)
+  st               Float?        // Valor unitário da ST - Substituição Tributária (editável)
   invoices         InvoiceItem[]
   orderItems       OrderItem[]
   brand            Brand?        @relation(fields: [brandId], references: [id])
@@ -57,6 +59,8 @@ model StockMovement {
   
   unitCost      Float?       // Valor de compra unitário
   invoiceNumber String?      // Número da nota fiscal (Ex: "NF-1234")
+  icms          Float?       // Valor unitário do ICMS na hora da nota
+  st            Float?       // Valor unitário da ST (Substituição Tributária) na hora da nota
 
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @updatedAt

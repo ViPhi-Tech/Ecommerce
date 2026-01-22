@@ -33,7 +33,65 @@ export class StockMovementState extends BaseState<StockMovementModuleState> {
   });
 
   stockMovementList = computed(() => {
-    let list = this.state().stockMovementList;
+    let list = [...this.state().stockMovementList];
+    
+    // Agrupar movimentações por produto
+    const movementsByProduct = new Map<number, IMovimentItem[]>();
+    list.forEach(item => {
+      const productIdRaw = item.stock?.product?.id;
+      // Garantir que productId seja sempre um número
+      const productId = typeof productIdRaw === 'string' ? parseInt(productIdRaw, 10) : productIdRaw;
+      if (productId && !isNaN(productId)) {
+        if (!movementsByProduct.has(productId)) {
+          movementsByProduct.set(productId, []);
+        }
+        movementsByProduct.get(productId)!.push(item);
+      }
+    });
+    
+    // Para cada produto, calcular estoque antes e depois de cada movimentação
+    movementsByProduct.forEach((movements, productId) => {
+      // Ordenar por data (mais recente primeiro) - como vem do backend
+      const sortedMovements = [...movements].sort((a, b) => {
+        const dateA = typeof a.createdAt === 'string' ? new Date(a.createdAt) : a.createdAt;
+        const dateB = typeof b.createdAt === 'string' ? new Date(b.createdAt) : b.createdAt;
+        return dateB.getTime() - dateA.getTime(); // Mais recente primeiro
+      });
+      
+      // Pegar o estoque atual (do primeiro item, que é o mais recente)
+      const currentStock = sortedMovements[0]?.stock?.quantity ?? 0;
+      let runningStock = currentStock;
+      
+      // Processar do mais recente para o mais antigo, revertendo as movimentações
+      sortedMovements.forEach((item) => {
+        const quantity = item.quantity || 0;
+        
+        // O estoque após esta movimentação é o runningStock atual
+        const stockAfter = runningStock;
+        
+        // Calcular estoque antes revertendo a movimentação
+        let stockBefore: number;
+        if (item.type === 'IN') {
+          stockBefore = Math.max(0, runningStock - quantity);
+        } else if (item.type === 'OUT') {
+          stockBefore = runningStock + quantity;
+        } else {
+          stockBefore = runningStock;
+        }
+        
+        // Atualizar runningStock para a próxima movimentação (mais antiga)
+        runningStock = stockBefore;
+        
+        // Adicionar informações de estoque ao item original na lista
+        const originalItem = list.find(l => l.id === item.id);
+        if (originalItem) {
+          (originalItem as any).previousStock = stockBefore;
+          (originalItem as any).currentStockAfterMovement = stockAfter;
+        }
+      });
+    });
+    
+    // Formatar os dados
     list = list.map(item => {
       // Converter createdAt para Date se for string
       const createdAtDate = typeof item.createdAt === 'string' 

@@ -24,13 +24,31 @@ export class UpdateManyStocksUseCase {
             updatedStock = await this.productRepository.decrementMultipleStocks(newItems);
         }
         
+        // Buscar produtos para copiar ICMS e ST se existirem
+        const productIds = input.map(item => item.productId);
+        const products = await Promise.all(
+            productIds.map(id => this.productRepository.findById(id))
+        );
+        const productMap = new Map<number, { icms?: number | null; st?: number | null }>();
+        products.forEach((product, index) => {
+            if (product && product.id) {
+                productMap.set(productIds[index], {
+                    icms: product.icms ?? null,
+                    st: product.st ?? null
+                });
+            }
+        });
+        
         const itemsUpdated = updatedStock.map((item) => {
         const inputItem = newItems.find((input) => input.sku === item.productId);
+        const productData = productMap.get(item.productId!);
         return {
             stockId: item.id as number,
             userId,
             quantity: inputItem?.quantity ?? 0,
-            type: type
+            type: type,
+            icms: productData?.icms ?? null, // Copiar ICMS do produto se existir
+            st: productData?.st ?? null // Copiar ST do produto se existir
         };
         });
         const moviment = await this.productRepository.updateManyStockMovements(itemsUpdated)

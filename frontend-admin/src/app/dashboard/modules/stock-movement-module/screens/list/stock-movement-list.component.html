@@ -100,7 +100,7 @@
 
             @for (item of state.stockMovementList(); track $index) {
               <div>
-                <fuse-movement-item [item]="item" />
+                <fuse-movement-item [item]="item" [index]="$index" />
               </div>
             } @empty {
               @if (!state.loading()) {

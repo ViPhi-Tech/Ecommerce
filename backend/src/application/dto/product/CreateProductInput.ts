@@ -13,4 +13,6 @@ export interface CreateProductInput {
     categoryId?: number | null;
     quantity?: number;
     user?: number | null;
+    icms?: number | null; // Valor unitário do ICMS (editável)
+    st?: number | null; // Valor unitário da ST (editável)
   }

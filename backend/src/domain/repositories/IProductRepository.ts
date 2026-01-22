@@ -16,6 +16,7 @@ export interface IProductRepository {
     findMovimentByProductId(stockId: number[]): Promise<stockMovement[]>;
     findByAnyParam(param: string): Promise<Product[]>;
     findByEan(ean: string): Promise<Product | null>;
+    findBySku(sku: string): Promise<Product | null>;
     findMovimentByDate(data: findMoviment): Promise<stockMovement[]>;
     countStock(startDate: Date, endDate: Date): Promise<number>;
     countMoviment(startDate: Date, endDate: Date, type: 'IN' | 'OUT'): Promise<number>;

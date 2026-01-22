@@ -6,6 +6,8 @@ export interface stockMovement {
     quantity: number,
     unitCost?: number | null;
     invoiceNumber?: string | null;
+    icms?: number | null; // Valor unitário do ICMS na hora da nota
+    st?: number | null; // Valor unitário da ST (Substituição Tributária) na hora da nota
     product? : {
         name: string;
         sku: string;

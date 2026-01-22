@@ -29,6 +29,8 @@ export interface IMovimentItem {
   userId?: number | null;
   unitCost?: number | null;
   invoiceNumber?: string | null;
+  icms?: number | null; // Valor unitário do ICMS na hora da nota
+  st?: number | null; // Valor unitário da ST (Substituição Tributária) na hora da nota
   createdAt: string | Date;
   updatedAt?: string | Date;
   stock?: IStock;
@@ -47,4 +49,6 @@ export interface IMovimentItem {
 
   hour?: string; // Hora do movimento, opcional
   date?: string; // Data do movimento, opcional
+  previousStock?: number; // Estoque antes da movimentação
+  currentStockAfterMovement?: number; // Estoque após esta movimentação
 }
