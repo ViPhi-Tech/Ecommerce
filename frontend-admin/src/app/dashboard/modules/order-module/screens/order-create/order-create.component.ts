@@ -4,6 +4,7 @@ import {
   OnDestroy,
   inject,
   DestroyRef,
+  signal,
 } from '@angular/core';
 import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { OrderState } from '../../order.state';
@@ -12,12 +13,22 @@ import { ProductListComponent } from '../../components/product-list/product-list
 import { CoreService } from 'app/shared/services/core.service';
 import { CartState } from '../../components/order-cart/order-cart.state';
 import { ProductState } from 'app/dashboard/modules/product-module/product.state';
+import { DrawerModule } from 'primeng/drawer';
+import { ButtonModule } from 'primeng/button';
+import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'fuse-order-create',
   templateUrl: './order-create.component.html',
   styleUrls: ['./order-create.component.scss'],
-  imports: [RouterModule, OrderCartComponent, ProductListComponent],
+  imports: [
+    RouterModule,
+    OrderCartComponent,
+    ProductListComponent,
+    DrawerModule,
+    ButtonModule,
+    NgIcon,
+  ],
 })
 export class OrderCreateComponent implements OnInit, OnDestroy {
   private router = inject(Router);
@@ -27,7 +38,10 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
   private coreService = inject(CoreService);
   private orderState = inject(OrderState);
   private productState = inject(ProductState);
-  private cartState = inject(CartState);
+  public cartState = inject(CartState);
+
+  // Controla a visibilidade do drawer do carrinho no mobile
+  cartDrawerVisible = signal(false);
 
   constructor() {}
 
@@ -47,5 +61,13 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
       this.orderState.resetOrder();
       this.cartState.resetCart();
     }
+  }
+
+  openCartDrawer() {
+    this.cartDrawerVisible.set(true);
+  }
+
+  closeCartDrawer() {
+    this.cartDrawerVisible.set(false);
   }
 }
