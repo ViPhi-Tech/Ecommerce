@@ -2,26 +2,247 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@use url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Core Brand Colors - Petroil */
+    --background: 210 20% 98%;
+    --foreground: 215 25% 15%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
+
+    /* Deep Blue - Trust & Technology */
+    --primary: 215 80% 25%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Light Blue-Gray */
+    --secondary: 210 25% 93%;
+    --secondary-foreground: 215 25% 15%;
+
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 15% 45%;
+
+    /* Vibrant Green - Sustainability */
+    --accent: 145 65% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 20% 90%;
+    --input: 210 20% 90%;
+    --ring: 215 80% 25%;
+
+    --radius: 0.75rem;
+
+    /* Custom Petroil Colors */
+    --petroil-deep: 215 80% 20%;
+    --petroil-blue: 215 80% 25%;
+    --petroil-light: 210 60% 95%;
+    --petroil-green: 145 65% 40%;
+    --petroil-green-light: 145 50% 85%;
+    --petroil-slate: 215 25% 15%;
+    --petroil-gold: 45 90% 55%;
+
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(215 80% 20%) 0%, hsl(215 70% 35%) 50%, hsl(145 65% 35%) 100%);
+    --gradient-cta: linear-gradient(135deg, hsl(145 65% 40%) 0%, hsl(145 70% 35%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(210 25% 97%) 100%);
+    --gradient-section: linear-gradient(180deg, hsl(210 20% 98%) 0%, hsl(210 25% 95%) 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 2px 8px -2px hsl(215 25% 15% / 0.08);
+    --shadow-md: 0 8px 24px -8px hsl(215 25% 15% / 0.12);
+    --shadow-lg: 0 16px 48px -16px hsl(215 25% 15% / 0.15);
+    --shadow-accent: 0 8px 32px -8px hsl(145 65% 40% / 0.3);
+    --shadow-primary: 0 8px 32px -8px hsl(215 80% 25% / 0.35);
+
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+
+  .dark {
+    --background: 215 25% 8%;
+    --foreground: 210 20% 95%;
+
+    --card: 215 25% 12%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 215 25% 12%;
+    --popover-foreground: 210 20% 95%;
+
+    --primary: 145 65% 45%;
+    --primary-foreground: 215 25% 8%;
+
+    --secondary: 215 20% 18%;
+    --secondary-foreground: 210 20% 95%;
+
+    --muted: 215 20% 15%;
+    --muted-foreground: 210 15% 55%;
+
+    --accent: 145 65% 45%;
+    --accent-foreground: 215 25% 8%;
+
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 215 20% 20%;
+    --input: 215 20% 20%;
+    --ring: 145 65% 45%;
+
+    --petroil-deep: 215 80% 25%;
+    --petroil-blue: 215 70% 45%;
+    --petroil-light: 215 25% 15%;
+    --petroil-green: 145 65% 50%;
+    --petroil-green-light: 145 30% 20%;
+    --petroil-slate: 210 20% 90%;
+    --petroil-gold: 45 85% 60%;
+
+    --gradient-hero: linear-gradient(135deg, hsl(215 80% 12%) 0%, hsl(215 70% 20%) 50%, hsl(145 50% 20%) 100%);
+    
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Inter', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+  }
+}
+
+@layer components {
+  .text-gradient-hero {
+    background: linear-gradient(135deg, hsl(var(--accent)) 0%, hsl(145 70% 50%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .bg-gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .bg-gradient-cta {
+    background: var(--gradient-cta);
+  }
+
+  .bg-gradient-card {
+    background: var(--gradient-card);
+  }
+
+  .bg-gradient-section {
+    background: var(--gradient-section);
+  }
+
+  .shadow-accent {
+    box-shadow: var(--shadow-accent);
+  }
+
+  .shadow-primary {
+    box-shadow: var(--shadow-primary);
+  }
+
+  .card-hover {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .card-hover:hover {
+    @apply -translate-y-2;
+    box-shadow: var(--shadow-lg);
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .animate-pulse-slow {
+    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.6s ease-out forwards;
+  }
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .delay-100 { animation-delay: 100ms; }
+  .delay-200 { animation-delay: 200ms; }
+  .delay-300 { animation-delay: 300ms; }
+  .delay-400 { animation-delay: 400ms; }
+  .delay-500 { animation-delay: 500ms; }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
 }
