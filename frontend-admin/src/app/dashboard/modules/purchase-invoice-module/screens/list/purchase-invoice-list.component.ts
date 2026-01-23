@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
@@ -6,7 +6,6 @@ import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 import { ButtonModule } from 'primeng/button';
 import { PurchaseInvoiceState } from '../../purchase-invoice.state';
 import { PurchaseInvoice } from '../../purchase-invoice.service';
-import dayjs from 'dayjs';
 
 @Component({
   selector: 'fuse-purchase-invoice-list',
@@ -87,7 +86,6 @@ export class PurchaseInvoiceListComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.coreService.setPageTitle('Notas Fiscais de Entrada', 'Listagem de notas fiscais');
     this.state.getPurchaseInvoiceList();
   }
 

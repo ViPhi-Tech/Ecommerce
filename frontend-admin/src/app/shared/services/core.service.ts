@@ -16,12 +16,12 @@ export class CoreService {
 
   constructor() {}
 
-  setPageTitle(title: string, subTitle: string) {
-    this.pageTitleSubj.next({
-      title: title,
-      subTitle: subTitle,
-    });
-  }
+  // setPageTitle(title: string, subTitle: string) {
+  //   this.pageTitleSubj.next({
+  //     title: title,
+  //     subTitle: subTitle,
+  //   });
+  // }
 
   showLoader(): void {
     this.loadingSubject.next(true);
