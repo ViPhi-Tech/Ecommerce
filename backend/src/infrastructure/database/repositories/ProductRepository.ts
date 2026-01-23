@@ -47,9 +47,7 @@ export class ProductRepository implements IProductRepository {
     };
 
     async findByEan(ean: string): Promise<Product | null> {
-        // Não buscar produtos com EAN "0" para evitar conflitos
-        // Produtos sem EAN devem ser identificados apenas por SKU
-        if (!ean || ean === '0') {
+        if (!ean) {
             return null;
         }
         return this.prisma.product.findFirst({

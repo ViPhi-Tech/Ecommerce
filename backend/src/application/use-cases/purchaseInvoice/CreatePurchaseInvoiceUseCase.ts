@@ -120,9 +120,9 @@ export class CreatePurchaseInvoiceUseCase {
         
         // Extrair EAN e validar
         let ean = prod.cEAN?.toString() || prod.cEANTrib?.toString() || '';
-        // Se EAN for inválido, deixar vazio
+        // Se EAN for inválido, gerar um EAN único numérico
         if (!ean || ean === '0' || ean === 'SEM GTIN' || ean.trim() === '') {
-          ean = '0'; // Valor padrão do Prisma
+          ean = await this.generateUniqueEan(productRepository);
         }
         
         const quantity = parseFloat(prod.qCom?.toString() || '0');
@@ -174,25 +174,22 @@ export class CreatePurchaseInvoiceUseCase {
         let productId: number | null = null;
         let product = null;
         
-        // IMPORTANTE: Se EAN for "0" ou inválido, NÃO buscar por EAN para evitar conflitos
-        // Produtos sem EAN devem ser identificados apenas por SKU
-        if (ean && ean !== '0') {
-          product = await productRepository.findByEan(ean);
-        }
+        // Buscar produto por EAN (agora sempre temos um EAN válido, mesmo que gerado)
+        product = await productRepository.findByEan(ean);
         
         // Se produto não existir, criar automaticamente
         if (!product) {
           const productName = prod.xProd || 'Produto sem nome';
-          let productSku = prod.cProd?.toString() || (ean !== '0' ? ean : `PROD-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`);
+          // Usar código do produto ou EAN como base do SKU, senão gerar um SKU único
+          let productSku = prod.cProd?.toString() || ean || `PROD-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
           
           // Verificar se SKU já existe e gerar um único se necessário
           productSku = await this.generateUniqueSku(productRepository, productSku);
           
           // Criar produto com dados do XML
-          // Se EAN for "0", garantir que será salvo como "0" (string) para evitar conflitos
           product = await productRepository.create({
             name: productName,
-            ean: ean !== '0' ? ean : '0', // Sempre salvar "0" como string quando inválido
+            ean: ean, // EAN único gerado quando inválido
             sku: productSku,
             initialPrice: unitPrice,
             finalPrice: finalPrice, // Valor unitário + ST (sem ICMS)
@@ -346,6 +343,43 @@ export class CreatePurchaseInvoiceUseCase {
     }
 
     return 0;
+  }
+
+  /**
+   * Gera um EAN único numérico verificando se já existe no banco
+   * Formato: timestamp (últimos 10 dígitos) + número aleatório (3 dígitos) = 13 dígitos (padrão EAN-13)
+   */
+  private async generateUniqueEan(
+    productRepository: IProductRepository
+  ): Promise<string> {
+    let attempts = 0;
+    const maxAttempts = 100;
+    
+    while (attempts < maxAttempts) {
+      // Gerar EAN único: timestamp (últimos 10 dígitos) + random (3 dígitos) = 13 dígitos
+      const timestamp = Date.now().toString();
+      const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+      // Combinar: últimos 10 dígitos do timestamp + 3 dígitos aleatórios = 13 dígitos
+      const ean = (timestamp.slice(-10) + random).padStart(13, '0');
+      
+      // Verificar se EAN já existe
+      const existingProduct = await productRepository.findByEan(ean);
+      
+      if (!existingProduct) {
+        return ean;
+      }
+      
+      attempts++;
+      // Adicionar pequeno delay para garantir timestamp diferente em caso de colisão
+      if (attempts < maxAttempts) {
+        await new Promise(resolve => setTimeout(resolve, 1));
+      }
+    }
+    
+    // Se não conseguir em 100 tentativas, usar timestamp completo + random maior
+    const timestamp = Date.now().toString();
+    const random = Math.floor(Math.random() * 100000).toString().padStart(5, '0');
+    return (timestamp + random).slice(-13).padStart(13, '0');
   }
 
   /**
