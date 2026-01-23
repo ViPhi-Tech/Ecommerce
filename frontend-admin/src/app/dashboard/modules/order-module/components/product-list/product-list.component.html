@@ -1,8 +1,8 @@
 <div class="h-full">
-  <h2 class="text-xl font-semibold mb-4">Todos os produtos</h2>
+  <h2 class="text-lg sm:text-xl font-semibold mb-4">Todos os produtos</h2>
   <fuse-product-filter />
   <div class="mt-4">
-    <div class="flex justify-between items-center mb-4">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-4">
       <div class="flex items-center gap-2">
         <ng-icon name="lucideFilter" />
         <span class="text-sm text-muted-foreground"
@@ -26,7 +26,7 @@
   </div>
   <div
     [ngClass]="{
-      'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-4':
+      'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6 mt-4':
         productView() === 'grid' && productState.filteredProducts().length > 0,
       'flex flex-col gap-4':
         productView() === 'list' ||
@@ -61,7 +61,7 @@
 <ng-template #listView let-product>
   <div class="animate-left">
     <div
-      class="group flex items-center flex-wrap justify-between p-5 border border-border rounded-xl bg-card hover:bg-muted/30 hover:shadow-md transition-all duration-200 gap-4"
+      class="group flex flex-col sm:flex-row sm:items-center sm:flex-wrap sm:justify-between p-4 sm:p-5 border border-border rounded-xl bg-card hover:bg-muted/30 hover:shadow-md transition-all duration-200 gap-4"
     >
       <!-- Informações do Produto -->
       <div class="flex items-center gap-4 flex-1 min-w-0">
@@ -101,9 +101,9 @@
       </div>
 
       <!-- Preço e Ação -->
-      <div class="flex items-center gap-4 flex-shrink-0">
-        <div class="flex flex-col items-end">
-          <span class="font-bold text-xl text-foreground leading-tight">
+      <div class="flex items-center justify-between sm:justify-end gap-4 flex-shrink-0 w-full sm:w-auto">
+        <div class="flex flex-col items-start sm:items-end">
+          <span class="font-bold text-lg sm:text-xl text-foreground leading-tight">
             {{
               product?.finalPrice
                 | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
@@ -116,7 +116,7 @@
           label="Adicionar"
           size="small"
           icon="pi pi-cart-arrow-down"
-          styleClass="shadow-sm hover:shadow-md transition-shadow"
+          styleClass="shadow-sm hover:shadow-md transition-shadow flex-1 sm:flex-initial"
         ></p-button>
       </div>
     </div>
