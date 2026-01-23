@@ -87,44 +87,6 @@
           }
         </ng-template>
 
-<<<<<<< HEAD
-=======
-        <!-- Template para edição de icms -->
-        <ng-template
-          #icmsTemplate
-          let-rowData
-          let-rowIndex="rowIndex"
-          let-component="component"
-        >
-          @if (
-            component.editingCell()?.rowIndex === rowIndex &&
-            component.editingCell()?.field === 'icms'
-          ) {
-            <input
-              type="text"
-              pInputText
-              [(ngModel)]="component.editingValue"
-              (blur)="component.saveEdit()"
-              (keydown.enter)="component.saveEdit()"
-              (keydown.escape)="component.cancelEdit()"
-              class="w-full"
-              style="text-align: right"
-              autofocus
-            />
-          } @else {
-            <span
-              (click)="component.startEdit(rowIndex, 'icms', rowData?.icms)"
-              class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded"
-              style="text-align: right; display: block"
-            >
-              {{
-                rowData?.icms | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
-              }}
-            </span>
-          }
-        </ng-template>
-
->>>>>>> a1163b2ebe9f01b950b8740c9a90166e3d952423
         <!-- Template para edição de st -->
         <ng-template
           #stTemplate
