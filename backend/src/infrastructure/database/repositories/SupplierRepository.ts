@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../prismaClient';
 import { Supplier } from '../../../domain/entities/Supplier';
 import { ISupplierRepository } from "../../../domain/repositories/ISupplierRepository";
 

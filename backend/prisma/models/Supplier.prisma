@@ -10,4 +10,6 @@ model Supplier {
   uuid            String            @unique @default(uuid())
   id              Int               @id @default(autoincrement())
   accountsPayable AccountsPayable[] @relation("SupplierToPayables")
+
+    invoices  PurchaseInvoice[]
 }

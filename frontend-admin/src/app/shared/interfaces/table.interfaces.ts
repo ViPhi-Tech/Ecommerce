@@ -32,6 +32,7 @@ export interface TableColumn {
   actionButtonsType?: 'buttons' | 'dropdown'; // Type of action buttons, can be 'buttons' or 'dropdown'
   actionButtons?: ActionButtons[];
   template?: TemplateRef<any | null>;
+  component?: any; // Component instance for template context
   headerAlign?: 'left' | 'center' | 'right'; // Alignment of the header
   align?: 'left' | 'center' | 'right'; // Alignment of the column
   style?: string;
@@ -84,6 +85,7 @@ export const DEFAULT_TABLE_CONFIG: TableConfig = {
   pageLinkSize: 5,
   textWrap: false,
   showCurrentPageReport: true,
+  showExport: true,
   emptyMessage: 'Nenhum registro encontrado',
   columns: [],
   headerButtons: [],

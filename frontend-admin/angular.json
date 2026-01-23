@@ -53,6 +53,15 @@
                 }
               ],
               "outputHashing": "all",
+              "optimization": {
+                "scripts": true,
+                "styles": {
+                  "minify": true,
+                  "inlineCritical": false
+                },
+                "fonts": true
+              },
+              "sourceMap": false,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environments.ts",

@@ -22,7 +22,9 @@ export class CreateProductUseCase {
           sku:input.sku,
           companyId: input.companyId ?? null,
           categoryId: input.categoryId ?? null,
-          quantity: input.quantity
+          quantity: input.quantity,
+          icms: input.icms ?? null,
+          st: input.st ?? null
         });
         
         await this.updateStockUseCase.execute({

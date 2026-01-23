@@ -1,5 +1,5 @@
-<div class="flex space-x-4">
-  <p-iconfield class="small" iconPosition="left" class="w-full">
+<div class="flex flex-col sm:flex-row gap-3 sm:space-x-4 sm:space-y-0">
+  <p-iconfield class="small" iconPosition="left" class="w-full sm:flex-1">
     <p-inputicon class="pi pi-search" />
     <input
       pInputText
@@ -12,7 +12,7 @@
     />
   </p-iconfield>
   <fuse-select
-    addictionalClass="min-w-[200px]"
+    addictionalClass="w-full sm:min-w-[200px] sm:w-auto"
     placeholder="Filtrar por"
     [items]="filters()"
     [canSearch]="false"

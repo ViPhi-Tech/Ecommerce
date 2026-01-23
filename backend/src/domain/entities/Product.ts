@@ -12,6 +12,8 @@ export interface Product {
     ean: string;
     companyId?: number | null;
     categoryId?: number | null;
+    icms?: number | null; // Valor unitário do ICMS (editável)
+    st?: number | null; // Valor unitário da ST - Substituição Tributária (editável)
     category?: {
         id: number;
         name: string;
@@ -32,7 +34,11 @@ export interface stockMovement {
     userId?: number | null;
     stockId: number;
     type: string;
-    quantity: number
+    quantity: number;
+    unitCost?: number | null;
+    invoiceNumber?: string | null;
+    icms?: number | null; // Valor unitário do ICMS na hora da nota
+    st?: number | null; // Valor unitário da ST (Substituição Tributária) na hora da nota
 }
 
 

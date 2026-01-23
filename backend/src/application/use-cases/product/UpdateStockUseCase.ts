@@ -19,11 +19,16 @@ export class UpdateStockUseCase {
         // Determina o tipo baseado na quantidade ou usa o tipo fornecido
         const movementType = input.quantity > 0 ? 'IN' : 'OUT';
 
+        // Buscar produto para copiar ICMS e ST se existirem
+        const product = await this.productRepository.findById(input.productId);
+
         await this.productRepository.upsertStockMovement({
             stockId: updatedStock?.id ?? 0,
             quantity: Math.abs(input.quantity),
             type: movementType,
-            userId: input.user
+            userId: input.user,
+            icms: product?.icms ?? null, // Copiar ICMS do produto se existir
+            st: product?.st ?? null // Copiar ST do produto se existir
         });
 
         return updatedStock;

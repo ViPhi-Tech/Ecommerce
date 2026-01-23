@@ -1,6 +1,5 @@
 import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { CoreService } from 'app/shared/services/core.service';
 import { TableComponent } from 'app/shared/components/table/table.component';
 import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 import { ButtonModule } from 'primeng/button';
@@ -22,7 +21,6 @@ export class CategoryListComponent implements OnInit {
   private destroyedRef = inject(DestroyRef);
   private confirmationService = inject(ConfirmationService);
   private router = inject(Router);
-  private coreService = inject(CoreService);
   state = inject(CategoryState);
 
   visible = false;
@@ -72,10 +70,6 @@ export class CategoryListComponent implements OnInit {
 
   ngOnInit() {
     this.state.getCategoryList();
-    this.coreService.setPageTitle(
-      'Categorias',
-      'Lista de categorias disponíveis'
-    );
   }
 
   addNewCategory() {

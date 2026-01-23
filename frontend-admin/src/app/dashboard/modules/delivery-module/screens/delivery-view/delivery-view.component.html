@@ -34,7 +34,9 @@
           <p-card>
             <div class="space-y-4">
               <div class="flex items-center justify-between">
-                <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                <h2
+                  class="text-lg font-semibold text-gray-800 dark:text-gray-200"
+                >
                   Informações da Entrega
                 </h2>
                 <p-tag
@@ -45,18 +47,26 @@
 
               <div class="grid grid-cols-2 gap-4">
                 <div>
-                  <span class="text-sm text-gray-600 dark:text-gray-400">Data de Entrega</span>
-                  <p class="font-semibold">{{ deliveryData.deliveryDate | date:'dd/MM/yyyy' }}</p>
+                  <span class="text-sm text-gray-600 dark:text-gray-400"
+                    >Data de Entrega</span
+                  >
+                  <p class="font-semibold">
+                    {{ deliveryData.deliveryDate | date: 'dd/MM/yyyy' }}
+                  </p>
                 </div>
                 @if (deliveryData.driverName) {
                   <div>
-                    <span class="text-sm text-gray-600 dark:text-gray-400">Entregador</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400"
+                      >Entregador</span
+                    >
                     <p class="font-semibold">{{ deliveryData.driverName }}</p>
                   </div>
                 }
                 @if (deliveryData.vehiclePlate) {
                   <div>
-                    <span class="text-sm text-gray-600 dark:text-gray-400">Placa do Veículo</span>
+                    <span class="text-sm text-gray-600 dark:text-gray-400"
+                      >Placa do Veículo</span
+                    >
                     <p class="font-semibold">{{ deliveryData.vehiclePlate }}</p>
                   </div>
                 }
@@ -64,7 +74,9 @@
 
               @if (deliveryData.description) {
                 <div>
-                  <span class="text-sm text-gray-600 dark:text-gray-400">Descrição</span>
+                  <span class="text-sm text-gray-600 dark:text-gray-400"
+                    >Descrição</span
+                  >
                   <p class="mt-1">{{ deliveryData.description }}</p>
                 </div>
               }
@@ -76,7 +88,9 @@
             <p-card>
               <div class="space-y-4">
                 <div class="flex items-center justify-between">
-                  <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                  <h2
+                    class="text-lg font-semibold text-gray-800 dark:text-gray-200"
+                  >
                     Rota de Entrega
                   </h2>
                   <p-button
@@ -91,30 +105,50 @@
                 @if (deliveryData.route.totalDistance) {
                   <div class="grid grid-cols-2 gap-4">
                     <div>
-                      <span class="text-sm text-gray-600 dark:text-gray-400">Distância Total</span>
-                      <p class="font-semibold">{{ deliveryData.route.totalDistance }} km</p>
+                      <span class="text-sm text-gray-600 dark:text-gray-400"
+                        >Distância Total</span
+                      >
+                      <p class="font-semibold">
+                        {{ deliveryData.route.totalDistance }} km
+                      </p>
                     </div>
                     @if (deliveryData.route.estimatedTime) {
                       <div>
-                        <span class="text-sm text-gray-600 dark:text-gray-400">Tempo Estimado</span>
-                        <p class="font-semibold">{{ deliveryData.route.estimatedTime }} min</p>
+                        <span class="text-sm text-gray-600 dark:text-gray-400"
+                          >Tempo Estimado</span
+                        >
+                        <p class="font-semibold">
+                          {{ deliveryData.route.estimatedTime }} min
+                        </p>
                       </div>
                     }
                   </div>
                 }
 
                 <div class="space-y-2">
-                  @for (waypoint of deliveryData.route.waypoints; track waypoint.orderId) {
+                  @for (
+                    waypoint of deliveryData.route.waypoints;
+                    track waypoint.orderId
+                  ) {
                     <div class="flex items-center gap-3 p-3 border rounded-lg">
-                      <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold">
+                      <div
+                        class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold"
+                      >
                         {{ waypoint.sequence }}
                       </div>
                       <div class="flex-1">
-                        <p class="font-semibold">Pedido #{{ waypoint.orderId }}</p>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">{{ waypoint.address }}</p>
+                        <p class="font-semibold">
+                          Pedido #{{ waypoint.orderId }}
+                        </p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                          {{ waypoint.address }}
+                        </p>
                       </div>
                       @if (waypoint.completed) {
-                        <ng-icon name="lucideCheckCircle" class="text-green-500" />
+                        <ng-icon
+                          name="lucideCheckCircle"
+                          class="text-green-500"
+                        />
                       }
                     </div>
                   }
@@ -162,16 +196,22 @@
         <!-- Sidebar -->
         <div class="space-y-6">
           <p-card>
-            <h2 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200">
+            <h2
+              class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200"
+            >
               Resumo
             </h2>
             <div class="space-y-3">
               <div class="flex justify-between">
-                <span class="text-gray-600 dark:text-gray-400">Total de Pedidos:</span>
+                <span class="text-gray-600 dark:text-gray-400"
+                  >Total de Pedidos:</span
+                >
                 <!-- <span class="font-semibold">{{ deliveryData.orderIds.length ?? 0 }}</span> -->
               </div>
               <div class="flex justify-between">
-                <span class="text-gray-600 dark:text-gray-400">Valor Total:</span>
+                <span class="text-gray-600 dark:text-gray-400"
+                  >Valor Total:</span
+                >
                 <span class="font-semibold">
                   <!-- {{ deliveryData.orders?.reduce((sum, order) => sum + (order.total || 0), 0) | currency:'BRL' }} -->
                 </span>
@@ -187,4 +227,3 @@
     </div>
   }
 </div>
-

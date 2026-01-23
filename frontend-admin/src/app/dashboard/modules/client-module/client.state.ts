@@ -36,7 +36,11 @@ export class ClientState extends BaseState<ClientModuleState> {
 
   async getClientList(skipLoader = true, forceRefresh = false): Promise<void> {
     // Se o cache é válido e não está forçando refresh, retorna sem fazer requisição
-    if (this.cacheValid() && !forceRefresh && this.state().clientList.length > 0) {
+    if (
+      this.cacheValid() &&
+      !forceRefresh &&
+      this.state().clientList.length > 0
+    ) {
       return;
     }
 

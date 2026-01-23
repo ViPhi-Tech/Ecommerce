@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../prismaClient';
 import { Category } from '../../../domain/entities/Category';
 import { ICategoryRepository } from "../../../domain/repositories/ICategoryRepository";
 import { CreateCategoryDTO, UpdateCategoryDTO } from "../../../application/dto/category/CategoryDTOs";

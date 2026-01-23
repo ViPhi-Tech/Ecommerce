@@ -15,7 +15,8 @@ import { ApiResponse } from "../../../shared/types/apiResponse";
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 import { CreateProductDTO, UpdateProductDTO, ProductIdDTO, createProductSchema, updateProductSchema, productIdSchema, UpdateStockDTO, ProductIdsMovementDTO, FindMovementDTO, UpdateManyStockDTO, validateProductsSchema, ValidateProductsDTO } from "../../../application/dto/product/ProductDTOs";
-import { Product } from '@prisma/client';
+import { Prisma } from '../../../infrastructure/database/prismaClient';
+type Product = Prisma.ProductGetPayload<{}>;
 import { ValidateProductsUseCase } from '../../../application/use-cases/product/ValidateProductsUseCase';
 
 

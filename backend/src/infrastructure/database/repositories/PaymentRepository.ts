@@ -1,4 +1,4 @@
-import { PrismaClient, Prisma } from '@prisma/client';
+import { PrismaClient, Prisma } from '../prismaClient';
 import { IPaymentRepository } from '../../../domain/repositories/IPaymentRepository';
 import { Payment, PaymentType } from '../../../domain/entities/Payment';
 import { CreatePaymentDTO, UpdatePaymentDTO } from '../../../application/dto/payment/PaymentDTOs';

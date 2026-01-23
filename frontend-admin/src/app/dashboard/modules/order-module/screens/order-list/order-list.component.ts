@@ -86,10 +86,6 @@ export class OrderListComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.coreService.setPageTitle(
-      'Lista de Pedidos',
-      'Listagem com os pedidos realizados'
-    );
     this.setTableConfig();
     this.state.getOrderList();
   }

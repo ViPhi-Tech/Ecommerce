@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '../prismaClient';
 import { Invoice } from '../../../domain/entities/Invoice';
 import { IInvoiceRepository } from '../../../domain/repositories/IInvoiceRepository';
 import { InvoiceItem } from '../../../domain/entities/InvoiceItem';

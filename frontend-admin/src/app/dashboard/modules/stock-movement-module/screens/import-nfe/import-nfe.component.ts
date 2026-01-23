@@ -19,6 +19,7 @@ import { ButtonModule } from 'primeng/button';
 import { StockMovementService } from '../../stock-movement.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { IProduct } from 'app/shared/interfaces/product/Product';
+import { CurrencyPipe, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'fuse-import-nfe',
@@ -29,6 +30,8 @@ import { IProduct } from 'app/shared/interfaces/product/Product';
     FileUploadComponent,
     InvoiceDetailsComponent,
     ButtonModule,
+    CurrencyPipe,
+    DatePipe,
   ],
 })
 export class ImportNfeComponent implements OnInit {
@@ -56,10 +59,6 @@ export class ImportNfeComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.coreService.setPageTitle(
-      'Importar Nota Fiscal',
-      'Importação de nota fiscal eletrônica'
-    );
   }
 
   onCloseDialog() {
@@ -69,8 +68,22 @@ export class ImportNfeComponent implements OnInit {
 
   async onUploadNFe(files: any) {
     if (files?.length) {
-      this.loadingImport.set(true);
       const file = files[0];
+
+      // Validar se é arquivo XML
+      if (
+        !file.name.toLowerCase().endsWith('.xml') &&
+        !file.type.includes('xml')
+      ) {
+        this.toast.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Por favor, selecione apenas arquivos XML.',
+        });
+        return;
+      }
+
+      this.loadingImport.set(true);
       const reader = new FileReader();
       reader.onload = async () => {
         const xmlString = reader.result as string;
@@ -79,15 +92,20 @@ export class ImportNfeComponent implements OnInit {
           const json = await XmlUtils.xmlToJson(xmlString);
           this.nfeJson.set(json);
 
-          // Formata os dados para exibição bonita
-          await this.productState.getProductList();
-          const products = this.productState.productList();
-          const nfModel =
-            json?.NFe?.infNFe?.ide?.mod ||
-            json?.nfeProc?.NFe?.infNFe?.ide?.mod ||
-            '55';
-          const formatted = XmlUtils.beautifyNFe(json, nfModel, products);
-          this.nfeFormatted.set(formatted);
+          // Formata os dados para exibição bonita (opcional, não necessário para salvar)
+          // Não precisa validar produtos, pois serão criados automaticamente pelo backend
+          try {
+            const nfModel =
+              json?.NFe?.infNFe?.ide?.mod ||
+              json?.nfeProc?.NFe?.infNFe?.ide?.mod ||
+              '55';
+            // Formata sem validação de produtos - apenas para visualização
+            const formatted = XmlUtils.beautifyNFe(json, nfModel, []);
+            this.nfeFormatted.set(formatted);
+          } catch (formatError) {
+            console.warn('Erro ao formatar NFe para exibição:', formatError);
+            // Continua mesmo se não conseguir formatar
+          }
 
           this.toast.add({
             severity: 'success',
@@ -141,103 +159,82 @@ export class ImportNfeComponent implements OnInit {
     if (!nfeFormatted || !nfeFormatted.products) {
       return;
     }
-    
+
     const updatedProducts = nfeFormatted.products.filter(
       (p: any) => p.itemNumber !== itemNumber
     );
-    
+
     this.nfeFormatted.set({
       ...nfeFormatted,
       products: updatedProducts,
     });
   }
 
-  async sendToBackend() {
+  getTotalQuantity(): number {
     const nfeFormatted = this.nfeFormatted();
-    if (!nfeFormatted || !nfeFormatted.products || nfeFormatted.products.length === 0) {
+    if (!nfeFormatted || !nfeFormatted.products) {
+      return 0;
+    }
+
+    return nfeFormatted.products.reduce((total: number, product: any) => {
+      const quantity =
+        typeof product.quantity === 'string'
+          ? parseFloat(product.quantity)
+          : product.quantity || 0;
+      return total + quantity;
+    }, 0);
+  }
+
+  async savePurchaseInvoice() {
+    console.log('savePurchaseInvoice chamado');
+    const nfeJson = this.nfeJson();
+
+    if (!nfeJson) {
       this.toast.add({
         severity: 'warn',
         summary: 'Atenção',
-        detail: 'Não há produtos para enviar.',
+        detail: 'Não há nota fiscal para salvar.',
       });
       return;
     }
 
+    console.log('Enviando nota fiscal para o backend:', nfeJson);
     this.loadingSend.set(true);
 
-    try {
-      // Busca produtos correspondentes na lista de produtos do sistema
-      const products = this.productState.productList();
-      const productsToSend: IProduct[] = [];
-
-      for (const nfeProduct of nfeFormatted.products) {
-        // Tenta encontrar o produto por SKU ou EAN
-        const foundProduct = products.find(
-          (p) =>
-            p.sku === nfeProduct.sku ||
-            p.ean === nfeProduct.ean ||
-            p.ean === nfeProduct.eanTrib
-        );
-
-        if (foundProduct) {
-          // Converte a quantidade da NFe para número
-          const quantity = typeof nfeProduct.quantity === 'string'
-            ? parseFloat(nfeProduct.quantity)
-            : nfeProduct.quantity;
-
-          productsToSend.push({
-            ...foundProduct,
-            quantity: quantity,
+    // Envia o JSON completo da NFe para o backend
+    this.stockMovementService
+      .createPurchaseInvoice(nfeJson)
+      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .subscribe({
+        next: response => {
+          console.log('Resposta do backend:', response);
+          this.stockMovementService.refreshStockData();
+          this.toast.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail:
+              response?.data?.descricao ||
+              response?.data?.dados?.descricao ||
+              'Nota fiscal salva com sucesso!',
           });
-        } else {
-          console.warn(`Produto não encontrado no sistema: ${nfeProduct.description} (SKU: ${nfeProduct.sku}, EAN: ${nfeProduct.ean})`);
-        }
-      }
-
-      if (productsToSend.length === 0) {
-        this.toast.add({
-          severity: 'warn',
-          summary: 'Atenção',
-          detail: 'Nenhum produto da nota fiscal foi encontrado no sistema.',
-        });
-        this.loadingSend.set(false);
-        return;
-      }
-
-      // Envia para o backend
-      this.stockMovementService
-        .updateProductStock(productsToSend, 'IN')
-        .pipe(takeUntilDestroyed(this.destroyedRef))
-        .subscribe({
-          next: () => {
-            this.stockMovementService.refreshStockData();
-            this.toast.add({
-              severity: 'success',
-              summary: 'Sucesso',
-              detail: 'Produtos enviados ao backend com sucesso!',
-            });
-            this.loadingSend.set(false);
-            // Opcional: fechar o diálogo após sucesso
-            // this.onCloseDialog();
-          },
-          error: (error) => {
-            console.error('Erro ao enviar produtos:', error);
-            this.toast.add({
-              severity: 'error',
-              summary: 'Erro',
-              detail: 'Ocorreu um erro ao enviar os produtos ao backend.',
-            });
-            this.loadingSend.set(false);
-          },
-        });
-    } catch (error) {
-      console.error('Erro ao processar envio:', error);
-      this.toast.add({
-        severity: 'error',
-        summary: 'Erro',
-        detail: 'Erro ao processar os dados para envio.',
+          this.loadingSend.set(false);
+          // Fechar o diálogo após sucesso
+          this.onCloseDialog();
+        },
+        error: error => {
+          console.error('Erro ao salvar nota fiscal:', error);
+          const errorMessage =
+            error?.error?.descricao ||
+            error?.error?.message ||
+            error?.message ||
+            'Ocorreu um erro ao salvar a nota fiscal.';
+          this.toast.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: errorMessage,
+          });
+          this.loadingSend.set(false);
+        },
       });
-      this.loadingSend.set(false);
-    }
   }
 }

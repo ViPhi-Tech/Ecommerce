@@ -31,9 +31,16 @@ export class SupplierState extends BaseState<SupplierModuleState> {
     });
   }
 
-  async getSupplierList(skipLoader = true, forceRefresh = false): Promise<void> {
+  async getSupplierList(
+    skipLoader = true,
+    forceRefresh = false
+  ): Promise<void> {
     // Se o cache é válido e não está forçando refresh, retorna sem fazer requisição
-    if (this.cacheValid() && !forceRefresh && this.state().supplierList.length > 0) {
+    if (
+      this.cacheValid() &&
+      !forceRefresh &&
+      this.state().supplierList.length > 0
+    ) {
       return;
     }
 

@@ -1,4 +1,5 @@
-import { PartnerType } from "@prisma/client";
+import { $Enums } from "../../infrastructure/database/prismaClient";
+type PartnerType = $Enums.PartnerType;
 
 export interface Partner {
   id?: number;

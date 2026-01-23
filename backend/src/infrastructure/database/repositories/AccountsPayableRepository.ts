@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../prismaClient';
 import { IAccountsPayableRepository } from '../../../domain/repositories/IAccountsPayableRepository';
 import { AccountsPayable } from '../../../domain/entities/AccountsPayable';
 import { CreateAccountsPayableInput, UpdateAccountsPayableInput } from '../../../application/dto/accountsPayable/AccountsPayableDTOs';

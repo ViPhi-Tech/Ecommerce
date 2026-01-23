@@ -112,7 +112,6 @@ export class ProductListComponent implements OnInit {
 
   ngOnInit() {
     this.state.getProductList();
-    this.coreService.setPageTitle('Produtos', 'Lista de produtos disponíveis');
   }
 
   addNewProduct() {

@@ -1,5 +1,5 @@
 <div
-  class="w-full h-full border-l border-gray-200 dark:border-dark bg-background"
+  class="w-full h-full lg:border-l border-gray-200 dark:border-dark bg-background"
 >
   <div class="flex h-full flex-col">
     <div class="p-4 border-b border-gray-200 dark:border-dark">
@@ -185,9 +185,10 @@
   header="Finalizar Pedido"
   [modal]="true"
   [style]="{ width: '100%', maxWidth: '800px' }"
+  [styleClass]="'w-full sm:w-[90vw] max-w-[800px]'"
 >
   <div class="flex justify-center">
-    <p-stepper [(value)]="step" class="basis-[50rem]">
+    <p-stepper [(value)]="step" class="basis-full sm:basis-[50rem] w-full">
       <p-step-list>
         <p-step [value]="1">Cliente</p-step>
         <!-- <p-step [value]="2">Entrega</p-step> -->
@@ -217,13 +218,14 @@
     </p-stepper>
   </div>
   <ng-template #footer>
-    <div class="flex pt-6 justify-between w-full">
+    <div class="flex flex-col gap-3 pt-6 w-full">
       @if (step > 1) {
         <p-button
           label="Voltar"
           icon="pi pi-arrow-left"
           iconPos="left"
           (onClick)="step = step - 1"
+          styleClass="w-full"
         />
       } @else {
         <p-button
@@ -231,6 +233,7 @@
           icon="pi pi-times"
           iconPos="left"
           (onClick)="showCheckout = false"
+          styleClass="w-full"
         />
       }
       <p-button
@@ -240,6 +243,7 @@
         icon="pi pi-check"
         iconPos="right"
         (onClick)="step === 2 ? checkout() : (step = step + 1)"
+        styleClass="w-full"
       />
     </div>
   </ng-template>

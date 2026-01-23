@@ -48,35 +48,105 @@
       <fuse-table
         [data]="outboundData.get('products')?.value"
         [config]="tableConfig()"
-      ></fuse-table>
+      >
+        <!-- Template para edição de unitCost -->
+        <ng-template
+          #unitCostTemplate
+          let-rowData
+          let-rowIndex="rowIndex"
+          let-component="component"
+        >
+          @if (
+            component.editingCell()?.rowIndex === rowIndex &&
+            component.editingCell()?.field === 'unitCost'
+          ) {
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="component.editingValue"
+              (blur)="component.saveEdit()"
+              (keydown.enter)="component.saveEdit()"
+              (keydown.escape)="component.cancelEdit()"
+              class="w-full"
+              style="text-align: right"
+              autofocus
+            />
+          } @else {
+            <span
+              (click)="
+                component.startEdit(rowIndex, 'unitCost', rowData?.unitCost)
+              "
+              class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded"
+              style="text-align: right; display: block"
+            >
+              {{
+                rowData?.unitCost
+                  | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+              }}
+            </span>
+          }
+        </ng-template>
+
+        <!-- Template para edição de st -->
+        <ng-template
+          #stTemplate
+          let-rowData
+          let-rowIndex="rowIndex"
+          let-component="component"
+        >
+          @if (
+            component.editingCell()?.rowIndex === rowIndex &&
+            component.editingCell()?.field === 'st'
+          ) {
+            <input
+              type="text"
+              pInputText
+              [(ngModel)]="component.editingValue"
+              (blur)="component.saveEdit()"
+              (keydown.enter)="component.saveEdit()"
+              (keydown.escape)="component.cancelEdit()"
+              class="w-full"
+              style="text-align: right"
+              autofocus
+            />
+          } @else {
+            <span
+              (click)="component.startEdit(rowIndex, 'st', rowData?.st)"
+              class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded"
+              style="text-align: right; display: block"
+            >
+              {{ rowData?.st | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+            </span>
+          }
+        </ng-template>
+      </fuse-table>
     </div>
   </div>
 
   <ng-template #footer>
-    <div class="w-full justify-end flex items-center gap-4">
-      <div class="flex gap-2">
-        <button
-          pButton
-          type="submit"
-          label="Salvar"
-          icon="pi pi-check"
-          class="w-[200px]"
-          size="small"
-          (click)="onSubmit()"
-        ></button>
-
-        <button
-          pButton
-          type="button"
-          label="Cancelar"
-          icon="pi pi-times"
-          (click)="closeDialog($event)"
-          [outlined]="true"
-          severity="secondary"
-          class="w-[200px]"
-          size="small"
-        ></button>
-      </div>
+    <div
+      class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4"
+    >
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        (click)="closeDialog($event)"
+        [outlined]="true"
+        severity="secondary"
+        class="w-full sm:w-[200px] order-2 sm:order-1"
+        size="small"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Salvar"
+        icon="pi pi-check"
+        class="w-full sm:w-[200px] order-1 sm:order-2"
+        size="small"
+        (click)="onSubmit()"
+      ></button>
     </div>
   </ng-template>
 </p-dialog>
@@ -97,7 +167,7 @@
         Selecione um Produto
       </h2>
       <p class="text-sm text-muted-foreground">
-        Selecione um produto e uma quantidade para dar entrada ao estoque
+        Selecione um produto e uma quantidade para dar saída do estoque
       </p>
     </div>
   </ng-template>
@@ -159,35 +229,63 @@
             placeholder="Quantidade"
           />
         </div>
+
+        <div class="flex flex-col gap-1">
+          <fuse-input
+            label="Número da Nota Fiscal"
+            [control]="formAddProduct.get('invoiceNumber')"
+            type="text"
+            placeholder="Ex: NF-1234"
+          />
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="flex flex-col gap-1">
+            <fuse-input
+              label="Valor Custo Unitário"
+              [control]="formAddProduct.get('unitCost')"
+              type="money"
+              placeholder="0,00"
+            />
+          </div>
+
+          <div class="flex flex-col gap-1">
+            <fuse-input
+              label="ICMS ST"
+              [control]="formAddProduct.get('st')"
+              type="money"
+              placeholder="0,00"
+            />
+          </div>
+        </div>
       </div>
     </form>
   </div>
 
   <ng-template #footer>
-    <div class="w-full justify-end flex items-center gap-4">
-      <div class="flex gap-2">
-        <button
-          pButton
-          type="submit"
-          label="Adicionar"
-          icon="pi pi-check"
-          class="w-[200px]"
-          size="small"
-          (click)="addProductToList()"
-        ></button>
-
-        <button
-          pButton
-          type="button"
-          label="Cancelar"
-          icon="pi pi-times"
-          (click)="showSelectProductDialog.set(false)"
-          [outlined]="true"
-          severity="secondary"
-          class="w-[200px]"
-          size="small"
-        ></button>
-      </div>
+    <div
+      class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4"
+    >
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        (click)="showSelectProductDialog.set(false)"
+        [outlined]="true"
+        severity="secondary"
+        class="w-full sm:w-[200px] order-2 sm:order-1"
+        size="small"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Adicionar"
+        icon="pi pi-check"
+        class="w-full sm:w-[200px] order-1 sm:order-2"
+        size="small"
+        (click)="addProductToList()"
+      ></button>
     </div>
   </ng-template>
 </p-dialog>

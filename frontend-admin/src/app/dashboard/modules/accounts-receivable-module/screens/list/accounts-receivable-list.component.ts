@@ -111,7 +111,7 @@ export class AccountsReceivableListComponent implements OnInit {
         actionButtons: [
           {
             icon: 'lucideCalendarClock',
-            label: 'Marcar como Pendente/Vencido' ,
+            label: 'Marcar como Pendente/Vencido',
             colorIcon: '#FACC15',
             tooltip: 'Marcar como Pendente/Vencido',
             variant: 'text',
@@ -168,11 +168,6 @@ export class AccountsReceivableListComponent implements OnInit {
     localStorage.setItem('accounts-receivable-view-preference', 'list');
 
     // this.loadAccountsReceivable();
-
-    this.coreService.setPageTitle(
-      'Contas a Receber',
-      'Lista de contas a receber'
-    );
   }
 
   async loadAccountsReceivable() {
@@ -217,7 +212,8 @@ export class AccountsReceivableListComponent implements OnInit {
 
   async markAsPendingOrOverdue(id: number) {
     this.confirmationService.confirm({
-      message: 'Você tem certeza que deseja marcar como pendente/vencido esta conta a receber?',
+      message:
+        'Você tem certeza que deseja marcar como pendente/vencido esta conta a receber?',
       header: 'Confirmação de Marcação',
       icon: 'pi pi-exclamation-triangle text-yellow-500',
       acceptLabel: 'Sim',

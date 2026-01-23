@@ -89,9 +89,14 @@ export class OrderState extends BaseState<OrderModuleState> {
       // Calcula o total dos pedidos anotados
       transformedOrders = transformedOrders.map(order => ({
         ...order,
-        total: order?.payments
-          ?.filter(p => p.typeId.toUpperCase() === PAYMENTS_SITEMAP.ACCOUNT_RECEIVABLE.id.toUpperCase())
-          .reduce((acc, p) => acc + p.value, 0) || 0
+        total:
+          order?.payments
+            ?.filter(
+              p =>
+                p.typeId.toUpperCase() ===
+                PAYMENTS_SITEMAP.ACCOUNT_RECEIVABLE.id.toUpperCase()
+            )
+            .reduce((acc, p) => acc + p.value, 0) || 0,
       }));
       this.updateState('notedOrderList', transformedOrders);
     } else {

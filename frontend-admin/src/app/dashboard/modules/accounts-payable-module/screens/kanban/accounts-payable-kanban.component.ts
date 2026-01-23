@@ -79,8 +79,6 @@ export class AccountsPayableKanbanComponent implements OnInit {
   suppliersLoading = computed(() => this.supplierState.loading());
 
   constructor() {
-    this.coreService.setPageTitle('Financeiro', '');
-
     const localStoragePeriod = localStorage.getItem('payable_period');
     if (localStoragePeriod) {
       this.selectedPeriod.set(JSON.parse(localStoragePeriod));

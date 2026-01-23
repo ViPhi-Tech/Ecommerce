@@ -1,7 +1,17 @@
 ::ng-deep .sidebar {
-  @apply hidden lg:block w-[250px] fixed max-h-screen h-full inset-y-0 left-0 z-[70] bg-primary-600 dark:bg-container-background transform transition-transform duration-200 ease-in-out lg:translate-x-0 lg:static border-r border-gray-200 dark:border-dark -translate-x-full;
-  transition: width 0.3s ease-in-out;
+  @apply w-[250px] fixed max-h-screen h-full inset-y-0 left-0 z-[70] bg-primary-600 dark:bg-container-background transform transition-transform duration-200 ease-in-out border-r border-gray-200 dark:border-dark;
+  transition: width 0.3s ease-in-out, transform 0.3s ease-in-out;
   position: fixed;
+  
+  // Desktop: sempre visível
+  @apply lg:translate-x-0 lg:static;
+  
+  // Mobile: escondida por padrão
+  @apply -translate-x-full lg:translate-x-0;
+}
+
+::ng-deep .sidebar.sidebar-open {
+  @apply translate-x-0;
 }
 
 ::ng-deep .compact-sidebar {

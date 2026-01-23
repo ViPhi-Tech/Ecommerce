@@ -77,8 +77,6 @@ export class AccountsReceivableKanbanComponent implements OnInit {
   clientsLoading = computed(() => this.clientState.loading());
 
   constructor() {
-    this.coreService.setPageTitle('Financeiro', '');
-
     const localStoragePeriod = localStorage.getItem('received_period');
     if (localStoragePeriod) {
       this.selectedPeriod.set(JSON.parse(localStoragePeriod));

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../prismaClient';
 import { IAccountsReceivableRepository } from '../../../domain/repositories/IAccountsReceivableRepository';
 import { AccountsReceivable } from '../../../domain/entities/AccountsReceivable';
 import {

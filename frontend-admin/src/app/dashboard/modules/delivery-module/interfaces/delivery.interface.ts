@@ -47,4 +47,3 @@ export enum DeliveryStatus {
   DELIVERED = 'delivered',
   CANCELLED = 'cancelled',
 }
-

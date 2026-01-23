@@ -9,6 +9,8 @@ export interface IProduct {
   brand: string;
   initialPrice: number;
   finalPrice: number;
+  icms?: number | null; // Valor unitário do ICMS (editável)
+  st?: number | null; // Valor unitário da ST (editável)
   quantity: number; // Quantidade em estoque
   stock: IStock;
   shortDescription: string;

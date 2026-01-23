@@ -58,7 +58,6 @@ export class StockMovementListComponent implements OnInit, AfterViewInit {
   productId: string | null = null;
   activeViewMode: 'cards' | 'table' = 'cards';
 
-
   tableConfig = signal<TableConfig>({
     rowsPerPageOptions: [5, 10, 20],
     rowsPerPage: 10,
@@ -159,18 +158,6 @@ export class StockMovementListComponent implements OnInit, AfterViewInit {
 
     this.loadStockMovements();
     this.state.getStockMetrics();
-
-    if (this.productId) {
-      this.coreService.setPageTitle(
-        'Movimentos de Estoque',
-        `Movimentos do produto ${this.productId}`
-      );
-    } else {
-      this.coreService.setPageTitle(
-        'Movimentos de Estoque',
-        'Lista de movimentos de estoque'
-      );
-    }
 
     this.formFilter.valueChanges
       .pipe(takeUntilDestroyed(this.destroyedRef))

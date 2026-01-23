@@ -77,32 +77,31 @@
   </div>
 
   <ng-template #footer>
-    <div class="w-full justify-end flex items-center gap-4">
-      <div class="flex gap-2">
-        <button
-          pButton
-          type="submit"
-          label="Salvar"
-          icon="pi pi-check"
-          class="w-[200px]"
-          size="small"
-          [loading]="isLoading()"
-          (click)="onSubmit()"
-        ></button>
-
-        <button
-          pButton
-          type="button"
-          label="Cancelar"
-          [disabled]="isLoading()"
-          icon="pi pi-times"
-          (click)="closeDialog($event)"
-          severity="secondary"
-          [outlined]="true"
-          class="w-[200px]"
-          size="small"
-        ></button>
-      </div>
+    <div
+      class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4"
+    >
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        [disabled]="isLoading()"
+        icon="pi pi-times"
+        (click)="closeDialog($event)"
+        severity="secondary"
+        [outlined]="true"
+        class="w-full sm:w-[200px] order-2 sm:order-1"
+        size="small"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Salvar"
+        icon="pi pi-check"
+        class="w-full sm:w-[200px] order-1 sm:order-2"
+        size="small"
+        [loading]="isLoading()"
+        (click)="onSubmit()"
+      ></button>
     </div>
   </ng-template>
 </p-dialog>

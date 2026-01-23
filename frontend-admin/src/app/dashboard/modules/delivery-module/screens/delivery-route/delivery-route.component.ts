@@ -21,13 +21,7 @@ import { CardModule } from 'primeng/card';
   templateUrl: './delivery-route.component.html',
   styleUrls: ['./delivery-route.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    RouterModule,
-    CommonModule,
-    ButtonModule,
-    NgIcon,
-    CardModule,
-  ],
+  imports: [RouterModule, CommonModule, ButtonModule, NgIcon, CardModule],
   providers: [DeliveryState],
 })
 export class DeliveryRouteComponent implements OnInit {
@@ -58,10 +52,6 @@ export class DeliveryRouteComponent implements OnInit {
       const delivery = await this.deliveryState.getDeliveryById(id);
       this.delivery.set(delivery);
       this.route.set(delivery.route || null);
-      this.coreService.setPageTitle(
-        `Rota de Entrega #${delivery.id}`,
-        delivery.name || 'Visualizar Rota'
-      );
     } catch (error) {
       console.error('Erro ao carregar entrega:', error);
       this.toast.add({
@@ -107,4 +97,3 @@ export class DeliveryRouteComponent implements OnInit {
     }
   }
 }
-

@@ -7,7 +7,7 @@ export interface IProductRepository {
     findAll(): Promise<Product[]>;
     update(id: number, data: Partial<Product>): Promise<Product>;
     delete(id: number): Promise<void>;
-    updateStock(sku: number, quantity: number, companyId?: number): Promise<Stock>;
+    updateStock(sku: number, quantity: number, companyId?: number | undefined): Promise<Stock>;
     decrementMultipleStocks(items: { sku: number; quantity: number }[]): Promise<Stock[]>;
     incrementMultipleStocks(item: {sku: number; quantity: number}[]): Promise<Stock[]>;
     upsertStockMovement(data: stockMovement): Promise<void>;
@@ -15,6 +15,8 @@ export interface IProductRepository {
     findStockByProductId(productsId: number[]): Promise<Stock[]>;
     findMovimentByProductId(stockId: number[]): Promise<stockMovement[]>;
     findByAnyParam(param: string): Promise<Product[]>;
+    findByEan(ean: string): Promise<Product | null>;
+    findBySku(sku: string): Promise<Product | null>;
     findMovimentByDate(data: findMoviment): Promise<stockMovement[]>;
     countStock(startDate: Date, endDate: Date): Promise<number>;
     countMoviment(startDate: Date, endDate: Date, type: 'IN' | 'OUT'): Promise<number>;

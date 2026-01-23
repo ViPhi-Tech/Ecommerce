@@ -1,6 +1,8 @@
 <button
   type="button"
-  class="lg:hidden fixed top-4 left-4 z-[70] p-2 rounded-lg bg-white dark:bg-container-background shadow-md"
+  (click)="toggleSidebar()"
+  class="lg:hidden fixed top-4 left-4 z-[70] p-2 rounded-lg bg-white dark:bg-container-background shadow-md hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+  aria-label="Abrir menu"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"

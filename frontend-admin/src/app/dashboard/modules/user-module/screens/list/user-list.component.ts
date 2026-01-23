@@ -49,7 +49,7 @@ export class UserListComponent implements OnInit {
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'fullName', caption: 'Nome', sortable: true, filter: true },
       { field: 'email', caption: 'Email', sortable: true, filter: true },
-      { field: 'isActive', caption: 'Ativo', sortable: true, filter: true },
+      { field: 'isActive', caption: 'Ativo', sortable: true, filter: true, type: 'activeOrNot' },
       {
         field: 'actions',
         caption: 'Ações',
@@ -93,7 +93,6 @@ export class UserListComponent implements OnInit {
   title = 'Usuários';
 
   constructor() {
-    this.coreService.setPageTitle(this.title, 'Listagem com os usuários');
   }
 
   ngOnInit() {

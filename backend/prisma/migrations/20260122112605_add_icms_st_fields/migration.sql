@@ -1,0 +1,7 @@
+-- AlterTable
+ALTER TABLE "Product" ADD COLUMN     "icms" DOUBLE PRECISION,
+ADD COLUMN     "st" DOUBLE PRECISION;
+
+-- AlterTable
+ALTER TABLE "StockMovement" ADD COLUMN     "icms" DOUBLE PRECISION,
+ADD COLUMN     "st" DOUBLE PRECISION;

@@ -4,8 +4,12 @@ import {
   DestroyRef,
   inject,
   OnInit,
+  AfterViewInit,
   signal,
   ViewChild,
+  ViewChildren,
+  QueryList,
+  TemplateRef,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
@@ -13,6 +17,7 @@ import {
   FormGroup,
   ReactiveFormsModule,
   Validators,
+  FormsModule,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ProductService } from 'app/dashboard/modules/product-module/product.service';
@@ -23,6 +28,7 @@ import { TableComponent } from 'app/shared/components/table/table.component';
 import {
   DEFAULT_TABLE_CONFIG,
   TableConfig,
+  TableColumn,
 } from 'app/shared/interfaces/table.interfaces';
 import { CoreService } from 'app/shared/services/core.service';
 import { MessageService } from 'primeng/api';
@@ -53,9 +59,10 @@ import { IProduct } from 'app/shared/interfaces/product/Product';
     DialogModule,
     AutoCompleteModule,
     CurrencyPipe,
+    FormsModule,
   ],
 })
-export class InboundComponent implements OnInit {
+export class InboundComponent implements OnInit, AfterViewInit {
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private fb = inject(FormBuilder);
@@ -68,6 +75,8 @@ export class InboundComponent implements OnInit {
   private productService = inject(ProductService);
 
   @ViewChild('dialogRef') dialogRef!: Dialog;
+  @ViewChild('unitCostTemplate') unitCostTemplate!: TemplateRef<any>;
+  @ViewChild('stTemplate') stTemplate!: TemplateRef<any>;
 
   private importInvoiceService = inject(ImportInvoiceService);
 
@@ -85,25 +94,32 @@ export class InboundComponent implements OnInit {
   subtitle = signal('Cadastro de nova entrada de produtos');
   showSelectProductDialog = signal(false);
   filteredProducts = signal<any[]>([]);
+  editingCell = signal<{ rowIndex: number; field: string } | null>(null);
+  editingValue = signal<string>('');
 
   tableConfig = signal<TableConfig>(DEFAULT_TABLE_CONFIG);
 
   formAddProduct = this.fb.group({
     productId: [null, [Validators.required]],
     quantity: [1, [Validators.required, Validators.min(1)]],
+    unitCost: [null, [Validators.min(0)]],
+    invoiceNumber: [null],
+    st: [null, [Validators.min(0)]],
   });
 
   constructor() {
     this.initForm();
-    this.initProductsTable();
     this.onImportNFe();
   }
 
+  ngAfterViewInit() {
+    // Aguardar templates estarem disponíveis
+    setTimeout(() => {
+      this.initProductsTable();
+    }, 0);
+  }
+
   ngOnInit() {
-    this.coreService.setPageTitle(
-      'Nova entrada',
-      'Cadastro de nova entrada de produtos'
-    );
   }
 
   // ========== INICIALIZAÇÃO ==========
@@ -121,6 +137,67 @@ export class InboundComponent implements OnInit {
   }
 
   initProductsTable() {
+    const self = this; // Referência ao componente para usar nos templates
+    const columns: TableColumn[] = [
+      { field: 'name', caption: 'Nome' },
+      { field: 'sku', caption: 'SKU', width: '200px' },
+      { field: 'ean', caption: 'EAN', width: '200px' },
+      {
+        field: 'quantity',
+        caption: 'Quantidade',
+        sortable: true,
+        width: '150px',
+      },
+      {
+        field: 'stock',
+        caption: 'Estoque atual',
+        sortable: true,
+        width: '150px',
+      },
+      {
+        field: 'unitCost',
+        caption: 'V. Custo Unit.',
+        sortable: true,
+        width: '130px',
+        type: 'currency',
+        template: this.unitCostTemplate,
+        component: self,
+      },
+      {
+        field: 'st',
+        caption: 'ICMS ST',
+        sortable: true,
+        width: '120px',
+        type: 'currency',
+        template: this.stTemplate,
+        component: self,
+      },
+      {
+        field: 'invoiceNumber',
+        caption: 'Nº Nota Fiscal',
+        sortable: true,
+        width: '150px',
+      },
+      {
+        field: 'actions',
+        caption: 'Ações',
+        actionButtonsType: 'buttons' as const,
+        actionButtons: [
+          {
+            icon: 'lucideTrash2',
+            label: 'Remover',
+            variant: 'text',
+            colorText: '#EF4444',
+            colorIcon: '#EF4444',
+            tooltip: 'Remover Produto',
+            action: (rowData: any) => {
+              this.removeProduct(rowData?.id);
+            },
+          },
+        ],
+      },
+    ];
+
     this.tableConfig.set({
       ...DEFAULT_TABLE_CONFIG,
       emptyMessage: 'Nenhum produto selecionado',
@@ -138,41 +215,7 @@ export class InboundComponent implements OnInit {
           },
         },
       ],
-      columns: [
-        { field: 'name', caption: 'Nome' },
-        { field: 'sku', caption: 'SKU', width: '200px' },
-        { field: 'ean', caption: 'EAN', width: '200px' },
-        {
-          field: 'quantity',
-          caption: 'Quantidade',
-          sortable: true,
-          width: '150px',
-        },
-        {
-          field: 'stock',
-          caption: 'Estoque atual',
-          sortable: true,
-          width: '150px',
-        },
-        {
-          field: 'actions',
-          caption: 'Ações',
-          actionButtonsType: 'buttons',
-          actionButtons: [
-            {
-              icon: 'lucideTrash2',
-              label: 'Remover',
-              variant: 'text',
-              colorText: '#EF4444',
-              colorIcon: '#EF4444',
-              tooltip: 'Remover Produto',
-              action: (rowData: any) => {
-                this.removeProduct(rowData?.id);
-              },
-            },
-          ],
-        },
-      ],
+      columns: columns,
     });
   }
 
@@ -252,6 +295,22 @@ export class InboundComponent implements OnInit {
     }
   }
 
+  // Converte valor monetário formatado (string) para número
+  private convertMoneyToNumber(value: any): number | null {
+    if (!value) return null;
+    if (typeof value === 'number') return value;
+    if (typeof value === 'string') {
+      // Remove R$, espaços e converte vírgula para ponto
+      const cleaned = value
+        .replace(/R\$\s?/g, '')
+        .replace(/\./g, '')
+        .replace(',', '.');
+      const num = parseFloat(cleaned);
+      return isNaN(num) ? null : num;
+    }
+    return null;
+  }
+
   addProductToList() {
     if (this.formAddProduct.valid) {
       const formData = this.formAddProduct.value;
@@ -267,13 +326,26 @@ export class InboundComponent implements OnInit {
         (p: any) => p.sku === selectedProduct.sku
       );
 
+      // Converter valores monetários para número
+      const unitCost = this.convertMoneyToNumber(formData.unitCost);
+      const st = this.convertMoneyToNumber(formData.st);
+
       if (existingProductIndex > -1) {
         products[existingProductIndex].quantity += quantity;
+        // Atualizar campos se fornecidos
+        if (unitCost !== null)
+          products[existingProductIndex].unitCost = unitCost;
+        if (formData.invoiceNumber)
+          products[existingProductIndex].invoiceNumber = formData.invoiceNumber;
+        if (st !== null) products[existingProductIndex].st = st;
       } else {
         products.push({
           ...selectedProduct,
           quantity,
           stock: selectedProduct?.stock?.quantity,
+          unitCost: unitCost,
+          invoiceNumber: formData.invoiceNumber || null,
+          st: st,
         });
       }
 
@@ -287,6 +359,41 @@ export class InboundComponent implements OnInit {
     const products = this.inboundData.get('products')?.value || [];
     const updatedProducts = products.filter((p: any) => p.id !== productId);
     this.inboundData.patchValue({ products: updatedProducts });
+  }
+
+  // Edição inline na tabela
+  startEdit(rowIndex: number, field: string, currentValue: any) {
+    this.editingCell.set({ rowIndex, field });
+    this.editingValue.set(currentValue ? currentValue.toString() : '');
+  }
+
+  saveEdit() {
+    const editing = this.editingCell();
+    if (!editing) return;
+
+    const products = this.inboundData.get('products')?.value || [];
+    const product = products[editing.rowIndex];
+
+    if (product) {
+      const value = this.editingValue();
+      let convertedValue: any = value;
+
+      // Converter valores monetários
+      if (['unitCost', 'st'].includes(editing.field)) {
+        convertedValue = this.convertMoneyToNumber(value);
+      }
+
+      product[editing.field] = convertedValue;
+      this.inboundData.patchValue({ products: [...products] });
+    }
+
+    this.editingCell.set(null);
+    this.editingValue.set('');
+  }
+
+  cancelEdit() {
+    this.editingCell.set(null);
+    this.editingValue.set('');
   }
 
   // ========== GERENCIAMENTO DE DIALOGS ==========

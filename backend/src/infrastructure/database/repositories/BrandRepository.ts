@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../prismaClient';
 import { Brand } from '../../../domain/entities/Brand';
 import { IBrandRepository } from "../../../domain/repositories/IBrandRepository";
 

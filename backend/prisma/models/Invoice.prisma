@@ -27,3 +27,72 @@ model InvoiceItem {
   invoice     Invoice @relation(fields: [invoiceId], references: [id])
   product     Product @relation(fields: [productId], references: [id])
 }
+
+
+
+model PurchaseInvoice {
+  id             Int      @id @default(autoincrement())
+  accessKey      String   @unique // chNFe
+  number         String
+  series         String
+  model          Int
+  issueDate      DateTime
+  entryDate      DateTime
+  totalAmount    Decimal  @db.Decimal(14,2)
+  totalTax       Decimal  @db.Decimal(14,2)
+
+  xmlRaw         Json     // XML inteiro convertido pra JSON
+  protocol       Json     // protNFe.infProt
+
+  supplierId     Int
+  supplier       Supplier @relation(fields: [supplierId], references: [id])
+
+  items          PurchaseInvoiceItem[]
+
+  createdAt      DateTime @default(now())
+}
+
+
+model PurchaseInvoiceItem {
+  id                 Int     @id @default(autoincrement())
+  purchaseInvoiceId  Int
+  productId          Int?
+
+  // Dados básicos
+  code               String? // CÓD. PROD - código interno do produto (cProd)
+  description        String  // DESCRIÇÃO DOS PRODUTOS / SERVIÇOS
+  ncm                String  // NCM / SH
+  cst                String? // CST - Código de Situação Tributária
+  cfop               String  // CFOP
+  unit               String? // UN. - unidade comercial (uCom)
+  quantity           Decimal @db.Decimal(14,4) // QUANT.
+  unitPrice          Decimal @db.Decimal(14,4) // V. UNITÁRIO
+  discount           Decimal? @db.Decimal(14,2) // V. DESC. - valor do desconto
+  totalAmount        Decimal @db.Decimal(14,2) // V. TOTAL
+
+  // ICMS
+  icmsBase           Decimal? @db.Decimal(14,2) // BC ICMS
+  icmsValue          Decimal? @db.Decimal(14,2) // V. ICMS
+  icmsRate           Decimal? @db.Decimal(14,4) // ALÍQ. ICMS
+  
+  // ICMS ST
+  icmsStBase         Decimal? @db.Decimal(14,2) // BC ICMS ST
+  icmsStValue        Decimal? @db.Decimal(14,2) // V. ICMS ST
+  
+  // IPI
+  ipiValue           Decimal? @db.Decimal(14,2) // V. IPI
+  ipiRate            Decimal? @db.Decimal(14,4) // ALÍQ. IPI
+
+  // Valores calculados (unitários)
+  unitCost           Decimal? @db.Decimal(14,4) // Valor custo unitário (mesmo que unitPrice)
+  unitTotalWithTax   Decimal? @db.Decimal(14,4) // Valor unitário com tributo (unitPrice + ICMS + ST)
+  
+  // Valores calculados (totais)
+  totalCost          Decimal? @db.Decimal(14,2) // Valor total do custo (unitCost * quantity)
+  totalWithTax       Decimal? @db.Decimal(14,2) // Valor total com tributo (unitTotalWithTax * quantity)
+
+  taxData            Json    // imposto inteiro do item (backup completo)
+
+  purchaseInvoice    PurchaseInvoice @relation(fields: [purchaseInvoiceId], references: [id])
+  product             Product?       @relation(fields: [productId], references: [id])
+}

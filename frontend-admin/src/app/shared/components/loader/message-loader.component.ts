@@ -80,9 +80,7 @@ import { NgIcon } from '@ng-icons/core';
 
         <!-- Mensagem -->
         <div class="text-center">
-          <h3
-            class="text-lg font-semibold text-gray-900 dark:text-white mb-2"
-          >
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
             {{ message() }}
           </h3>
           @if (description()) {

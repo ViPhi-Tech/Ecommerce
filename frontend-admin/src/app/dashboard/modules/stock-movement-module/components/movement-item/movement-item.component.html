@@ -1,8 +1,9 @@
 <div
-  class="rounded-lg border bg-card dark:bg-dark dark:border-dark text-card-foreground shadow-2xs border-l-4 border-l-gray-200 hover:shadow-md transition-shadow"
+  class="rounded-lg border dark:border-dark text-card-foreground shadow-2xs border-l-4 border-l-gray-200 hover:shadow-md transition-shadow"
+  [ngClass]="[getBackgroundClass()]"
   data-v0-t="card"
 >
-  <div class="p-4">
+  <div class="p-3">
     @if (loading()) {
       <!-- Skeleton Loading State -->
       <div
@@ -55,55 +56,207 @@
       </div>
     } @else {
       <!-- Conteúdo Normal -->
-      <div
-        class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
-      >
-        <div class="flex items-start gap-4">
-          <div class="flex flex-col items-center gap-1">
-            @if (item()?.type === 'IN') {
-              <div
-                class="rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-primary/80 bg-green-100 text-green-800 border-green-200 flex items-center gap-1"
-              >
-                <ng-icon name="lucideArrowUp" class="h-4 w-4"></ng-icon>
-                Entrada
-              </div>
-            } @else {
-              <div
-                class="rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 hover:bg-red/80 bg-red-100 text-red-800 border-red-200 flex items-center gap-1"
-              >
-                <ng-icon name="lucideArrowDown" class="h-4 w-4"></ng-icon>
-                Saída
-              </div>
-            }
-            <span class="text-xs text-gray-500">{{ item()?.hour }}</span>
-          </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2 mb-1">
-              <h3 class="font-semibold text-gray-900 dark:text-white truncate">
-                {{ item()?.stock?.product?.name }}
-              </h3>
-              <div
-                class="inline-flex items-center rounded-full border px-2.5 py-0.5 font-semibold transition-colors focus:outline-hidden focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground text-xs"
-              >
-                {{ item()?.stock?.product?.sku }}
-              </div>
+      <div class="flex flex-col gap-2.5">
+        <!-- Cabeçalho: Tipo, Produto e Data -->
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-start gap-2.5 flex-1 min-w-0">
+            <!-- Badge de Tipo -->
+            <div class="flex flex-col items-center gap-1 flex-shrink-0 pt-0.5">
+              @if (item()?.type === 'IN') {
+                <div
+                  class="rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-green-100 text-green-800 border-green-200 flex items-center gap-1"
+                >
+                  <ng-icon name="lucideArrowUp" class="h-3 w-3"></ng-icon>
+                  Entrada
+                </div>
+              } @else {
+                <div
+                  class="rounded-full border px-2.5 py-0.5 text-xs font-semibold bg-red-100 text-red-800 border-red-200 flex items-center gap-1"
+                >
+                  <ng-icon name="lucideArrowDown" class="h-3 w-3"></ng-icon>
+                  Saída
+                </div>
+              }
+              <span class="text-xs text-gray-500 dark:text-gray-400">{{
+                item()?.hour
+              }}</span>
             </div>
-            <div class="flex gap-2 text-sm text-gray-600">
-              <div class="flex items-center gap-1">
-                <ng-icon name="lucideCalendar" class="h-3 w-3"></ng-icon>
-                {{ item()?.date }}
+
+            <!-- Informações do Produto -->
+            <div
+              class="flex-1 min-w-0 border-l-2 border-gray-200 dark:border-gray-700 pl-2.5"
+            >
+              <div class="flex items-center gap-2 mb-1">
+                <h3
+                  class="font-semibold text-base text-gray-900 dark:text-white truncate"
+                >
+                  {{
+                    item()?.productName ||
+                      item()?.product?.name ||
+                      item()?.stock?.product?.name
+                  }}
+                </h3>
+                <span
+                  class="inline-flex items-center rounded-md bg-gray-100 dark:bg-gray-800 px-2 py-0.5 text-xs font-medium text-gray-700 dark:text-gray-300"
+                >
+                  {{
+                    item()?.productSku ||
+                      item()?.product?.sku ||
+                      item()?.stock?.product?.sku
+                  }}
+                </span>
               </div>
-              <div class="flex items-center gap-1">
-                <ng-icon name="lucidePackage" class="h-3 w-3"></ng-icon>
-                Qtd: {{ item()?.quantity }}
-              </div>
-              <div class="flex items-center gap-1">
-                <ng-icon name="lucidePackage" class="h-3 w-3"></ng-icon>
-                Estoque: {{ item()?.stock?.quantity }}
+              <div
+                class="flex items-center gap-2.5 text-xs text-gray-600 dark:text-gray-400"
+              >
+                <div class="flex items-center gap-1">
+                  <ng-icon name="lucideCalendar" class="h-3 w-3"></ng-icon>
+                  <span>{{ item()?.date }}</span>
+                </div>
+                <div class="flex items-center gap-1">
+                  <ng-icon name="lucidePackage" class="h-3 w-3"></ng-icon>
+                  <span class="font-medium">Qtd: {{ item()?.quantity }}</span>
+                </div>
+                @if (
+                  getPreviousStock() !== null && getCurrentStock() !== null
+                ) {
+                  <div class="flex items-center gap-1">
+                    <ng-icon name="lucideBox" class="h-3 w-3"></ng-icon>
+                    <span class="font-medium">
+                      Estoque: {{ getPreviousStock() }} →
+                      {{ getCurrentStock() }}
+                    </span>
+                  </div>
+                } @else if (getCurrentStock() !== null) {
+                  <div class="flex items-center gap-1">
+                    <ng-icon name="lucideBox" class="h-3 w-3"></ng-icon>
+                    <span>Estoque: {{ getCurrentStock() }}</span>
+                  </div>
+                }
               </div>
             </div>
           </div>
         </div>
+
+        <!-- Informações Financeiras e Tributárias -->
+        @if (
+          item()?.unitCost ||
+          item()?.purchaseInvoice?.item?.unitCost ||
+          (item()?.st !== null && item()?.st !== undefined)
+        ) {
+          <div
+            class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 border-t border-gray-200 dark:border-gray-700"
+          >
+            @if (item()?.purchaseInvoice?.item?.unitCost || item()?.unitCost) {
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs text-gray-500 dark:text-gray-400"
+                  >V. Custo Unit.</span
+                >
+                <span
+                  class="text-sm font-semibold text-gray-900 dark:text-white"
+                >
+                  R$
+                  {{
+                    item()?.purchaseInvoice?.item?.unitCost ?? item()?.unitCost
+                      | number: '1.2-2'
+                  }}
+                </span>
+              </div>
+            }
+            @if (item()?.purchaseInvoice?.item?.totalCost) {
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs text-gray-500 dark:text-gray-400"
+                  >Total Custo</span
+                >
+                <span
+                  class="text-sm font-semibold text-gray-900 dark:text-white"
+                >
+                  R$
+                  {{
+                    item()?.purchaseInvoice?.item?.totalCost | number: '1.2-2'
+                  }}
+                </span>
+              </div>
+            }
+            @if (item()?.st !== null && item()?.st !== undefined) {
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs text-gray-500 dark:text-gray-400"
+                  >ICMS ST</span
+                >
+                <span
+                  class="text-sm font-semibold text-gray-900 dark:text-white"
+                >
+                  R$ {{ item()?.st | number: '1.2-2' }}
+                </span>
+              </div>
+            }
+            @if (
+              item()?.purchaseInvoice?.item?.unitTotalWithTax ||
+              getTotalUnitValue() > 0
+            ) {
+              <div class="flex flex-col gap-0.5">
+                <span class="text-xs text-gray-500 dark:text-gray-400"
+                  >V. Unit. c/ Tributo</span
+                >
+                <span
+                  class="text-sm font-semibold text-gray-900 dark:text-white"
+                >
+                  R$
+                  {{
+                    item()?.purchaseInvoice?.item?.unitTotalWithTax ??
+                      getTotalUnitValue() | number: '1.2-2'
+                  }}
+                </span>
+              </div>
+            }
+            @if (item()?.purchaseInvoice?.item?.totalWithTax) {
+              <div class="flex flex-col gap-0.5">
+                <span
+                  class="text-xs font-medium text-gray-600 dark:text-gray-300"
+                  >Total c/ Tributo</span
+                >
+                <span
+                  class="text-sm font-bold text-blue-600 dark:text-blue-400"
+                >
+                  R$
+                  {{
+                    item()?.purchaseInvoice?.item?.totalWithTax
+                      | number: '1.2-2'
+                  }}
+                </span>
+              </div>
+            }
+          </div>
+        }
+
+        <!-- Informações da Nota Fiscal e Compra -->
+        @if (item()?.invoiceNumber || item()?.purchaseInvoice) {
+          <div class="pt-2 border-t border-gray-200 dark:border-gray-700">
+            <div
+              class="flex items-center gap-3 text-xs text-gray-600 dark:text-gray-400"
+            >
+              @if (item()?.invoiceNumber) {
+                <div class="flex items-center gap-1.5">
+                  <ng-icon name="lucideFileText" class="h-3 w-3"></ng-icon>
+                  <span class="font-medium">NF:</span>
+                  <span>{{ item()?.invoiceNumber }}</span>
+                </div>
+              }
+              @if (item()?.purchaseInvoice) {
+                <div class="flex items-center gap-1.5">
+                  <ng-icon name="lucideBuilding" class="h-3 w-3"></ng-icon>
+                  <span>{{
+                    item()?.purchaseInvoice?.supplier?.tradeName
+                  }}</span>
+                  <span class="text-gray-400 dark:text-gray-500">•</span>
+                  <span>{{
+                    item()?.purchaseInvoice?.entryDate | date: 'dd/MM/yyyy'
+                  }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
       </div>
     }
   </div>

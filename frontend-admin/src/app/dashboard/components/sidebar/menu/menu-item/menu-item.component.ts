@@ -1,7 +1,8 @@
-import { Component, input, model, OnInit } from '@angular/core';
+import { Component, input, model, OnInit, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NgIcon } from '@ng-icons/core';
 import { heightAnimation } from 'app/shared/utils/animations';
+import { SidebarService } from 'app/shared/services/sidebar.service';
 
 export interface MenuItem {
   id: string;
@@ -22,6 +23,8 @@ export interface MenuItem {
   animations: [heightAnimation],
 })
 export class MenuItemComponent implements OnInit {
+  private sidebarService = inject(SidebarService);
+
   item = model<MenuItem>({
     id: '',
     label: '',
@@ -45,6 +48,13 @@ export class MenuItemComponent implements OnInit {
       current.visible = state;
       return current;
     });
+  }
+
+  onItemClick() {
+    // Fechar sidebar no mobile quando um item sem submenu for clicado
+    if (!this.item().items?.length && window.innerWidth < 1024) {
+      this.sidebarService.close();
+    }
   }
 
   onMouseEnter() {

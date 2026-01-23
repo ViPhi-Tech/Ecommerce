@@ -3,5 +3,9 @@ export interface MovimentManyStocks {
   stocks: {
     productId: string | number;
     quantity: number;
+    unitCost?: number | null;
+    invoiceNumber?: string | null;
+    icms?: number | null;
+    st?: number | null;
   }[];
 }

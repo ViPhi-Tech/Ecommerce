@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 // import { isAuthGuard } from './shared/guards/is-auth.guard';
 
-
-
 export const reportRoutes: Routes = [
   {
     path: 'order-report/:id',

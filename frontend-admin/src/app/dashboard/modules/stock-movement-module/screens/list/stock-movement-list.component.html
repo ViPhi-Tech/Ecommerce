@@ -1,4 +1,4 @@
-<div class="p-8 animate-fade-in flex flex-col space-y-4 flex-grow">
+<div class="p-4 sm:p-8 animate-fade-in flex flex-col space-y-4 flex-grow">
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 animate-left">
     <fuse-simple-indicator
       [loading]="state.loadingCards()"
@@ -26,27 +26,30 @@
   </div>
 
   <div class="animate-left flex flex-col flex-1">
-    <div class="flex justify-between items-center mb-4">
-      <h1 class="text-xl font-bold">Listagem de Movimentações</h1>
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
+      <h1 class="text-lg sm:text-xl font-bold">Listagem de Movimentações</h1>
       <div>
-        <form [formGroup]="formFilter" class="flex items-center gap-4">
+        <form [formGroup]="formFilter" class="flex items-center gap-2 sm:gap-4 flex-wrap">
           <p-button
             label="Importar NFe"
             icon="pi pi-upload"
             (onClick)="openImportModal()"
             size="small"
             severity="info"
+            class="flex-1 sm:flex-initial"
           ></p-button>
           <p-button
             label="Nova Entrada"
             (onClick)="newInbound()"
             size="small"
+            class="flex-1 sm:flex-initial"
           ></p-button>
           <p-button
             label="Nova Saída"
             severity="danger"
             (onClick)="newOutbound()"
             size="small"
+            class="flex-1 sm:flex-initial"
           ></p-button>
           <fuse-datepicker
             placeholder="Filtrar por data"
@@ -100,7 +103,7 @@
 
             @for (item of state.stockMovementList(); track $index) {
               <div>
-                <fuse-movement-item [item]="item" />
+                <fuse-movement-item [item]="item" [index]="$index" />
               </div>
             } @empty {
               @if (!state.loading()) {

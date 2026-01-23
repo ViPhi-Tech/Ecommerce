@@ -14,6 +14,8 @@ export interface ProductResponse {
       name: string;
   } | null;
   companyId?: number | null;
+  icms?: number | null; // Valor unitário do ICMS (editável)
+  st?: number | null; // Valor unitário da ST (editável)
   stock?: {
       quantity: number;
   } | null;  

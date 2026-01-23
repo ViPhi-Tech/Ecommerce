@@ -1,0 +1,92 @@
+<div class="flex flex-col gap-6 p-6">
+  @if (isLoading()) {
+    <div class="flex items-center justify-center h-64">
+      <p-progressSpinner />
+    </div>
+  } @else if (purchaseInvoiceData()) {
+    @let invoice = purchaseInvoiceData()!;
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+          Nota Fiscal {{ invoice.series }}-{{ invoice.number }}
+        </h1>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+          Chave de Acesso: {{ invoice.accessKey }}
+        </p>
+      </div>
+      <div class="flex gap-2">
+        <p-button
+          icon="lucideArrowLeft"
+          label="Voltar"
+          [outlined]="true"
+          severity="secondary"
+          (onClick)="onCloseDialog()"
+        />
+      </div>
+    </div>
+
+    <!-- Informações Gerais -->
+    <p-card>
+      <ng-template pTemplate="content">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Data de Emissão</p>
+          <p class="text-base font-semibold text-gray-900 dark:text-white">
+            {{ formatDate(invoice.issueDate) }}
+          </p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Data de Entrada</p>
+          <p class="text-base font-semibold text-gray-900 dark:text-white">
+            {{ formatDate(invoice.entryDate) }}
+          </p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Valor Total</p>
+          <p class="text-base font-semibold text-green-600 dark:text-green-400">
+            {{ invoice.totalAmount | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+          </p>
+        </div>
+        <div>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Total de Impostos</p>
+          <p class="text-base font-semibold text-gray-900 dark:text-white">
+            {{ invoice.totalTax | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+          </p>
+        </div>
+      </div>
+      </ng-template>
+    </p-card>
+
+    <!-- Informações do Fornecedor -->
+    <p-panel header="Informações do Fornecedor" [toggleable]="true" [collapsed]="true">
+      <div class="p-4">
+        <p class="font-semibold text-lg text-gray-900 dark:text-white">
+          {{ invoice.supplier?.tradeName || invoice.supplier?.name || 'N/A' }}
+        </p>
+        @if (invoice.supplier?.document) {
+          <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+            CNPJ: {{ invoice.supplier?.document }}
+          </p>
+        }
+      </div>
+    </p-panel>
+
+    <!-- Itens da Nota Fiscal -->
+    <p-panel header="Produtos e Serviços" [toggleable]="true">
+      <div class="pt-0">
+        <fuse-table
+          [data]="invoice.items || []"
+          [config]="tableConfig()"
+        ></fuse-table>
+      </div>
+    </p-panel>
+  } @else {
+    <div class="flex items-center justify-center h-64">
+      <p class="text-gray-500 dark:text-gray-400">
+        Nota fiscal não encontrada
+      </p>
+    </div>
+  }
+</div>

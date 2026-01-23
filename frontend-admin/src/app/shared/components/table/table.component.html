@@ -8,7 +8,7 @@
   [showGridlines]="true"
   [showLoader]="false"
   [(selection)]="selectedData"
-  [scrollable]="true" 
+  [scrollable]="true"
   scrollHeight="calc(100vh - 300px)"
   [paginator]="true"
   [globalFilterFields]="globalFilterFields()"
@@ -70,7 +70,7 @@
             @if (config().showExport) {
               <p-button
                 size="large"
-                pTooltip="Exportar para excel"
+                pTooltip="Exportar para Excel"
                 (click)="exportTable()"
               >
                 <ng-icon name="lucideDownload"></ng-icon>
@@ -184,7 +184,11 @@
           } @else if (column?.template) {
             <ng-container
               [ngTemplateOutlet]="column?.template ?? null"
-              [ngTemplateOutletContext]="{ $implicit: rowData }"
+              [ngTemplateOutletContext]="{
+                $implicit: rowData,
+                rowIndex: rowIndex,
+                component: column?.component,
+              }"
             >
             </ng-container>
           } @else {
@@ -201,6 +205,8 @@
                 rowData?.[column?.field || '']
                   | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
               }}
+            } @else if (column?.type === 'percent') {
+              {{ rowData?.[column?.field || ''] | number: '1.2-2' }}%
             } @else if (column?.type === 'activeOrNot') {
               @if (rowData?.[column?.field || ''] === true) {
                 <ng-icon

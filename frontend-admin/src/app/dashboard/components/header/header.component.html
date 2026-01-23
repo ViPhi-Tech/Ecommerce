@@ -2,23 +2,38 @@
   <nav
     class="px-3 sm:px-6 flex items-center justify-between bg-white dark:bg-container-background border-b border-gray-200 dark:border-dark h-full"
   >
-    <div
-      class="font-medium text-sm hidden sm:flex sm:flex-col items-center sm:items-start space-x-1 sm:space-x-0 truncate max-w-[300px]"
-    >
-      @if (pageTitle().title) {
-        <span class="font-semibold leading-none tracking-tight text-xl">
-          {{ pageTitle().title }}
-        </span>
-      }
-      @if (pageTitle().subTitle) {
-        <span
-          class="text-xs text-gray-500 font-light dark:text-muted-foreground"
-        >
-          {{ pageTitle().subTitle }}
-        </span>
-      }
+    <div class="flex items-center gap-3 flex-1 min-w-0">
+      <!-- Botão de menu para mobile -->
+      <button
+        (click)="toggleSidebar()"
+        type="button"
+        class="lg:hidden p-2 rounded-md hover:bg-muted dark:hover:bg-muted-dark transition-colors flex-shrink-0"
+        aria-label="Abrir menu"
+      >
+        <ng-icon
+          name="lucideMenu"
+          class="text-xl text-gray-600 dark:text-gray-300"
+        />
+      </button>
+      
+      <div
+        class="font-medium text-sm flex flex-col items-start space-x-1 sm:space-x-0 truncate max-w-[300px] sm:max-w-[300px] min-w-0"
+      >
+        @if (pageTitle().title) {
+          <span class="font-semibold leading-none tracking-tight text-base sm:text-xl truncate w-full">
+            {{ pageTitle().title }}
+          </span>
+        }
+        @if (pageTitle().subTitle) {
+          <span
+            class="text-xs text-gray-500 font-light dark:text-muted-foreground truncate w-full hidden sm:block"
+          >
+            {{ pageTitle().subTitle }}
+          </span>
+        }
+      </div>
     </div>
-    <div class="flex items-center gap-2 sm:gap-4 ml-auto sm:ml-0">
+    <div class="flex items-center gap-2 sm:gap-4 ml-auto sm:ml-0 flex-shrink-0">
       <fuse-quick-access />
 
       <button type="button" class="header-button">
