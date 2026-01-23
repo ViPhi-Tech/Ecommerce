@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { NgIcon } from '@ng-icons/core';
-import { CoreService } from 'app/shared/services/core.service';
 import { HomeState } from './home.state';
 import { formatCurrency } from 'app/shared/utils/utils';
 import { IndicatorsComponent } from './componentes/indicators/indicators.component';
@@ -34,7 +33,6 @@ import { DatePickerComponent } from 'app/shared/components/form/datepicker/datep
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit {
-  private coreService = inject(CoreService);
   private homeState = inject(HomeState);
 
   // Form controls para filtros
@@ -106,7 +104,6 @@ export class HomeComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.coreService.setPageTitle('Home', 'Dashboard');
     this.loadDashboardData();
 
     // Configurar valor inicial do controle de período

@@ -20,12 +20,7 @@ import { InvoiceDetails } from 'app/shared/interfaces/invoice/InvoiceDetails';
   selector: 'fuse-invoice-details',
   templateUrl: './invoice-details.component.html',
   styleUrls: ['./invoice-details.component.scss'],
-  imports: [
-    PanelModule,
-    TableComponent,
-    TooltipModule,
-    NgIcon,
-  ],
+  imports: [PanelModule, TableComponent, TooltipModule, NgIcon],
 })
 export class InvoiceDetailsComponent implements OnInit {
   invoice = input<InvoiceDetails>();
@@ -63,11 +58,11 @@ export class InvoiceDetailsComponent implements OnInit {
           sortable: true,
           width: '100px',
         },
-        { 
-          field: 'description', 
-          caption: 'Descrição', 
-          sortable: true, 
-          filter: true 
+        {
+          field: 'description',
+          caption: 'Descrição',
+          sortable: true,
+          filter: true,
         },
         {
           field: 'ncm',

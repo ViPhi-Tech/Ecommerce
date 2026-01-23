@@ -75,10 +75,6 @@ export class NotedOrdersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.coreService.setPageTitle(
-      'Pedidos Anotados',
-      'Visualize os pedidos pendentes de forma organizada'
-    );
 
     // Pega o clientId dos query params e seta no select
     this.route.queryParams

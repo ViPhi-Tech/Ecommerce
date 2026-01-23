@@ -76,10 +76,6 @@ export class SupplierListComponent implements OnInit {
 
   ngOnInit() {
     this.state.getSupplierList();
-    this.coreService.setPageTitle(
-      'Fornecedores',
-      'Lista de fornecedores disponíveis'
-    );
   }
 
   addNewSupplier() {

@@ -7,6 +7,7 @@ export const TABLE_CONFIG: TableConfig = {
   pageLinkSize: 5,
   showHeader: true,
   showCurrentPageReport: true,
+  showExport: true,
   emptyMessage: 'Nenhum registro encontrado',
   columns: [],
 };

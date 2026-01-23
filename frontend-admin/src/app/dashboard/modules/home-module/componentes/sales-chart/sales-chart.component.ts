@@ -53,7 +53,7 @@ export class SalesChartComponent {
     },
     xAxis: {
       type: 'category',
-      data: this.hasData() 
+      data: this.hasData()
         ? this.labels()
         : [
             'Jan',

@@ -76,10 +76,6 @@ export class DeliveryViewComponent implements OnInit {
     try {
       const delivery = await this.deliveryState.getDeliveryById(id);
       this.delivery.set(delivery);
-      this.coreService.setPageTitle(
-        `Entrega #${delivery.id}`,
-        delivery.name || 'Visualizar Entrega'
-      );
     } catch (error) {
       console.error('Erro ao carregar entrega:', error);
       this.toast.add({
@@ -132,4 +128,3 @@ export class DeliveryViewComponent implements OnInit {
     });
   }
 }
-

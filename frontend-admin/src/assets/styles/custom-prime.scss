@@ -181,3 +181,10 @@ input {
 .p-datatable-frozen-column {
   position: sticky !important;
 }
+
+// mobile 
+@media (max-width: 768px) {
+  .p-dialog-footer {
+    padding-top: 1.5rem !important;
+  }
+}

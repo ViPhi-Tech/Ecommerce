@@ -57,4 +57,3 @@ export const deliveryRoutes: Routes = [
     pathMatch: 'full',
   },
 ];
-

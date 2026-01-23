@@ -28,7 +28,9 @@ export class CategoriesChartComponent {
 
   // Computed para verificar se há dados
   hasData = computed<boolean>(() => {
-    return this.data.length > 0 && this.data.some(item => item.total_quantity > 0);
+    return (
+      this.data.length > 0 && this.data.some(item => item.total_quantity > 0)
+    );
   });
 
   chartOption = computed<EChartsOption>(() => ({

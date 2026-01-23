@@ -63,12 +63,13 @@ export class XmlUtils {
     let products = det.map((item: any) => {
       const prod = item?.prod;
       const imposto = item?.imposto;
-      
+
       // Extrair dados do ICMS
       const icms = imposto?.ICMS || {};
-      const icmsType = Object.keys(icms).find(key => key.startsWith('ICMS')) || '';
+      const icmsType =
+        Object.keys(icms).find(key => key.startsWith('ICMS')) || '';
       const icmsData = icms[icmsType] || {};
-      
+
       // Extrair dados do IPI
       const ipi = imposto?.IPI || {};
       const ipiTrib = ipi?.IPITrib || {};
@@ -88,20 +89,37 @@ export class XmlUtils {
         discount: prod?.vDesc ? parseFloat(prod.vDesc.toString()) : undefined,
         totalValue: parseFloat(prod?.vProd || 0),
         // ICMS
-        icmsBase: icmsData?.vBC ? parseFloat(icmsData.vBC.toString()).toFixed(2) : undefined,
-        icmsValue: icmsData?.vICMS ? parseFloat(icmsData.vICMS.toString()).toFixed(2) : undefined,
-        icmsRate: icmsData?.pICMS ? parseFloat(icmsData.pICMS.toString()) : undefined, // Já vem como percentual
+        icmsBase: icmsData?.vBC
+          ? parseFloat(icmsData.vBC.toString()).toFixed(2)
+          : undefined,
+        icmsValue: icmsData?.vICMS
+          ? parseFloat(icmsData.vICMS.toString()).toFixed(2)
+          : undefined,
+        icmsRate: icmsData?.pICMS
+          ? parseFloat(icmsData.pICMS.toString())
+          : undefined, // Já vem como percentual
         // ICMS ST
-        icmsStBase: icmsData?.vBCST ? parseFloat(icmsData.vBCST.toString()).toFixed(2) : undefined,
-        icmsStValue: icmsData?.vICMSST ? parseFloat(icmsData.vICMSST.toString()).toFixed(2) : undefined,
+        icmsStBase: icmsData?.vBCST
+          ? parseFloat(icmsData.vBCST.toString()).toFixed(2)
+          : undefined,
+        icmsStValue: icmsData?.vICMSST
+          ? parseFloat(icmsData.vICMSST.toString()).toFixed(2)
+          : undefined,
         // IPI
-        ipiValue: ipiTrib?.vIPI ? parseFloat(ipiTrib.vIPI.toString()).toFixed(2) : undefined,
-        ipiRate: ipiTrib?.pIPI ? parseFloat(ipiTrib.pIPI.toString()) : undefined, // Já vem como percentual
+        ipiValue: ipiTrib?.vIPI
+          ? parseFloat(ipiTrib.vIPI.toString()).toFixed(2)
+          : undefined,
+        ipiRate: ipiTrib?.pIPI
+          ? parseFloat(ipiTrib.pIPI.toString())
+          : undefined, // Já vem como percentual
         // Valores calculados (unitários)
         unitCost: parseFloat(prod?.vUnCom || 0).toFixed(2), // Valor custo = valor unitário
         unitTotalWithTax: (() => {
           const unitPrice = parseFloat(prod?.vUnCom || 0);
-          const stUnit = icmsData?.vICMSST ? parseFloat(icmsData.vICMSST.toString()) / parseFloat(prod?.qCom || 1) : 0;
+          const stUnit = icmsData?.vICMSST
+            ? parseFloat(icmsData.vICMSST.toString()) /
+              parseFloat(prod?.qCom || 1)
+            : 0;
           return (unitPrice + stUnit).toFixed(2);
         })(),
         // Valores calculados (totais)
@@ -113,7 +131,9 @@ export class XmlUtils {
         totalWithTax: (() => {
           const unitPrice = parseFloat(prod?.vUnCom || 0);
           const quantity = parseFloat(prod?.qCom || 0);
-          const stTotal = icmsData?.vICMSST ? parseFloat(icmsData.vICMSST.toString()) : 0;
+          const stTotal = icmsData?.vICMSST
+            ? parseFloat(icmsData.vICMSST.toString())
+            : 0;
           return (unitPrice * quantity + stTotal).toFixed(2);
         })(),
         // Tributação (mantido para compatibilidade)
@@ -201,7 +221,7 @@ export class XmlUtils {
         status: 'found', // Marca como encontrado pois será criado automaticamente
       }));
     }
-    
+
     return productsXML.map(product => {
       const hasSameEan = stockProducts.some(item => item.ean === product.ean);
       const hasSameSku = stockProducts.some(item => item.sku === product.sku);

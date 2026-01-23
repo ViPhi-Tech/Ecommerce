@@ -59,10 +59,6 @@ export class ImportNfeComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.coreService.setPageTitle(
-      'Importar Nota Fiscal',
-      'Importação de nota fiscal eletrônica'
-    );
   }
 
   onCloseDialog() {
@@ -73,9 +69,12 @@ export class ImportNfeComponent implements OnInit {
   async onUploadNFe(files: any) {
     if (files?.length) {
       const file = files[0];
-      
+
       // Validar se é arquivo XML
-      if (!file.name.toLowerCase().endsWith('.xml') && !file.type.includes('xml')) {
+      if (
+        !file.name.toLowerCase().endsWith('.xml') &&
+        !file.type.includes('xml')
+      ) {
         this.toast.add({
           severity: 'error',
           summary: 'Erro',
@@ -160,11 +159,11 @@ export class ImportNfeComponent implements OnInit {
     if (!nfeFormatted || !nfeFormatted.products) {
       return;
     }
-    
+
     const updatedProducts = nfeFormatted.products.filter(
       (p: any) => p.itemNumber !== itemNumber
     );
-    
+
     this.nfeFormatted.set({
       ...nfeFormatted,
       products: updatedProducts,
@@ -176,11 +175,12 @@ export class ImportNfeComponent implements OnInit {
     if (!nfeFormatted || !nfeFormatted.products) {
       return 0;
     }
-    
+
     return nfeFormatted.products.reduce((total: number, product: any) => {
-      const quantity = typeof product.quantity === 'string' 
-        ? parseFloat(product.quantity) 
-        : product.quantity || 0;
+      const quantity =
+        typeof product.quantity === 'string'
+          ? parseFloat(product.quantity)
+          : product.quantity || 0;
       return total + quantity;
     }, 0);
   }
@@ -188,7 +188,7 @@ export class ImportNfeComponent implements OnInit {
   async savePurchaseInvoice() {
     console.log('savePurchaseInvoice chamado');
     const nfeJson = this.nfeJson();
-    
+
     if (!nfeJson) {
       this.toast.add({
         severity: 'warn',
@@ -206,21 +206,28 @@ export class ImportNfeComponent implements OnInit {
       .createPurchaseInvoice(nfeJson)
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe({
-        next: (response) => {
+        next: response => {
           console.log('Resposta do backend:', response);
           this.stockMovementService.refreshStockData();
           this.toast.add({
             severity: 'success',
             summary: 'Sucesso',
-            detail: response?.data?.descricao || response?.data?.dados?.descricao || 'Nota fiscal salva com sucesso!',
+            detail:
+              response?.data?.descricao ||
+              response?.data?.dados?.descricao ||
+              'Nota fiscal salva com sucesso!',
           });
           this.loadingSend.set(false);
           // Fechar o diálogo após sucesso
           this.onCloseDialog();
         },
-        error: (error) => {
+        error: error => {
           console.error('Erro ao salvar nota fiscal:', error);
-          const errorMessage = error?.error?.descricao || error?.error?.message || error?.message || 'Ocorreu um erro ao salvar a nota fiscal.';
+          const errorMessage =
+            error?.error?.descricao ||
+            error?.error?.message ||
+            error?.message ||
+            'Ocorreu um erro ao salvar a nota fiscal.';
           this.toast.add({
             severity: 'error',
             summary: 'Erro',

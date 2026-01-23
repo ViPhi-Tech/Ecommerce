@@ -8,7 +8,7 @@
   [showGridlines]="true"
   [showLoader]="false"
   [(selection)]="selectedData"
-  [scrollable]="true" 
+  [scrollable]="true"
   scrollHeight="calc(100vh - 300px)"
   [paginator]="true"
   [globalFilterFields]="globalFilterFields()"
@@ -70,7 +70,7 @@
             @if (config().showExport) {
               <p-button
                 size="large"
-                pTooltip="Exportar para excel"
+                pTooltip="Exportar para Excel"
                 (click)="exportTable()"
               >
                 <ng-icon name="lucideDownload"></ng-icon>
@@ -184,7 +184,11 @@
           } @else if (column?.template) {
             <ng-container
               [ngTemplateOutlet]="column?.template ?? null"
-              [ngTemplateOutletContext]="{ $implicit: rowData, rowIndex: rowIndex, component: column?.component }"
+              [ngTemplateOutletContext]="{
+                $implicit: rowData,
+                rowIndex: rowIndex,
+                component: column?.component,
+              }"
             >
             </ng-container>
           } @else {

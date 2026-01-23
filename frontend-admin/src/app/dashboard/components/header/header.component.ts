@@ -5,6 +5,8 @@ import { CoreService } from '../../../shared/services/core.service';
 import { QuickAccessComponent } from '../quick-admin/quick-access.component';
 import { PopoverModule } from 'primeng/popover';
 import { Router } from '@angular/router';
+import { SidebarService } from '../../../shared/services/sidebar.service';
+
 @Component({
   selector: 'fuse-header',
   templateUrl: './header.component.html',
@@ -14,6 +16,7 @@ import { Router } from '@angular/router';
 export class HeaderComponent implements OnInit, OnDestroy {
   private coreService = inject(CoreService);
   private router = inject(Router);
+  private sidebarService = inject(SidebarService);
 
   pageTitle = signal({
     title: '',
@@ -35,6 +38,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   toggleQuickAccess() {
     this.showAdmin.set(!this.showAdmin());
+  }
+
+  toggleSidebar() {
+    this.sidebarService.toggle();
   }
 
   toggleDarkMode() {

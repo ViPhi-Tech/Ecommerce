@@ -85,6 +85,7 @@ export const DEFAULT_TABLE_CONFIG: TableConfig = {
   pageLinkSize: 5,
   textWrap: false,
   showCurrentPageReport: true,
+  showExport: true,
   emptyMessage: 'Nenhum registro encontrado',
   columns: [],
   headerButtons: [],

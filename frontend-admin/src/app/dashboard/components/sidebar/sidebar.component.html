@@ -1,13 +1,27 @@
-<nav [ngClass]="{ 'compact-sidebar': compactMode() }" class="sidebar">
+<!-- Overlay para mobile -->
+@if (isOpen()) {
+  <div
+    class="lg:hidden fixed inset-0 bg-black/50 z-[60] transition-opacity"
+    (click)="closeSidebar()"
+  ></div>
+}
+
+<nav
+  [ngClass]="{
+    'compact-sidebar': compactMode(),
+    'sidebar-open': isOpen()
+  }"
+  class="sidebar"
+>
   <div class="h-full flex flex-col">
-    <!-- Exemplo de logo -->
-    <button
-      target="_blank"
-      rel="noopener noreferrer"
-      (click)="onLogoClick()"
-      class="h-16 px-6 flex items-center border-b border-gray-200 dark:border-dark"
-    >
-      <div class="flex items-center gap-3">
+    <!-- Header com botão de fechar no mobile -->
+    <div class="h-16 px-6 flex items-center justify-between border-b border-gray-200 dark:border-dark">
+      <button
+        target="_blank"
+        rel="noopener noreferrer"
+        (click)="onLogoClick()"
+        class="flex items-center gap-3 flex-1"
+      >
         <img
           alt="Acme"
           width="32"
@@ -25,8 +39,16 @@
         <span class="text-lg font-semibold hover:cursor-pointer text-white"
           >Sellup</span
         >
-      </div>
-    </button>
+      </button>
+      <!-- Botão de fechar no mobile -->
+      <button
+        (click)="closeSidebar()"
+        class="lg:hidden p-2 rounded-md text-white hover:bg-white/10 transition-colors"
+        aria-label="Fechar menu"
+      >
+        <ng-icon name="lucideX" size="20" />
+      </button>
+    </div>
 
     <!-- Menu dinâmico -->
     <fuse-menu />
@@ -37,6 +59,7 @@
         <a
           [routerLink]="['/dashboard/config']"
           routerLinkActive="router-link-active"
+          (click)="closeSidebar()"
           class="flex items-center px-3 py-2 text-sm rounded-md transition-colors text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark"
         >
           <ng-icon size="16" name="lucideSettings" class="mr-3" />
@@ -44,6 +67,7 @@
         </a>
         <a
           href="#"
+          (click)="closeSidebar()"
           class="flex items-center px-3 py-2 text-sm rounded-md transition-colors text-white hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-dark"
         >
           <ng-icon size="16" name="lucideCircleHelp" class="mr-3" />

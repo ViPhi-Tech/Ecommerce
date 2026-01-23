@@ -23,10 +23,10 @@ export class MovementItemComponent implements OnInit {
   getTotalUnitValue(): number {
     const item = this.item();
     if (!item) return 0;
-    
+
     const unitCost = item.unitCost || 0;
     const st = item.st || 0;
-    
+
     return unitCost + st;
   }
 
@@ -39,13 +39,13 @@ export class MovementItemComponent implements OnInit {
     if (!item) {
       return 'bg-white dark:bg-gray-900';
     }
-    
+
     if (item.type === 'IN') {
       return 'bg-green-50 dark:bg-green-900/20'; // Verde para entrada
     } else if (item.type === 'OUT') {
       return 'bg-red-50 dark:bg-red-900/20'; // Vermelho para saída
     }
-    
+
     return 'bg-white dark:bg-gray-900'; // Padrão para outros tipos
   }
 

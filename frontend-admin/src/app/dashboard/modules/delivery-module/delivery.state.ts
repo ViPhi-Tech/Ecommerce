@@ -86,7 +86,10 @@ export class DeliveryState extends BaseState<DeliveryModuleState> {
     });
   }
 
-  updateDelivery(deliveryId: string | number, data: Partial<Delivery>): Promise<Delivery> {
+  updateDelivery(
+    deliveryId: string | number,
+    data: Partial<Delivery>
+  ): Promise<Delivery> {
     this.setLoading(true);
     this.clearError();
 
@@ -120,7 +123,9 @@ export class DeliveryState extends BaseState<DeliveryModuleState> {
       )
     ).then(() => {
       const currentList = this.deliveryList();
-      const filteredList = currentList.filter(delivery => delivery.id !== deliveryId);
+      const filteredList = currentList.filter(
+        delivery => delivery.id !== deliveryId
+      );
       this.setDeliveryList(filteredList);
       if (this.deliveryDetails().id === deliveryId) {
         this.updateState('deliveryDetails', {} as Delivery);
@@ -160,4 +165,3 @@ export class DeliveryState extends BaseState<DeliveryModuleState> {
     this.updateState('deliveryDetails', {} as Delivery);
   }
 }
-

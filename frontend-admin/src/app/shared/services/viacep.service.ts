@@ -17,7 +17,7 @@ export class ViaCepService {
    */
   getAddressByZipCode(zipCode: string): Observable<IViaCepResponse> {
     const cleanZipCode = zipCode.replace(/\D/g, '');
-    
+
     if (cleanZipCode.length !== 8) {
       return throwError(() => new Error('CEP deve conter 8 dígitos'));
     }
@@ -27,4 +27,3 @@ export class ViaCepService {
     );
   }
 }
-

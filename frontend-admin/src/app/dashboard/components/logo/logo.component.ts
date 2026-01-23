@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
+import { SidebarService } from '../../../shared/services/sidebar.service';
 
 @Component({
   selector: 'fuse-logo',
@@ -6,7 +7,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./logo.component.scss'],
 })
 export class LogoComponent implements OnInit {
+  private sidebarService = inject(SidebarService);
+
   constructor() {}
 
   ngOnInit() {}
+
+  toggleSidebar() {
+    this.sidebarService.toggle();
+  }
 }

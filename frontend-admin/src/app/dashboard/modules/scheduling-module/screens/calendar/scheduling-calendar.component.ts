@@ -150,10 +150,6 @@ export class SchedulingCalendarComponent implements OnInit {
   weekDaysNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
   ngOnInit() {
-    this.coreService.setPageTitle(
-      'Agendamento',
-      'Visualize e gerencie seus agendamentos'
-    );
   }
 
   onViewChange(view: 'month' | 'week' | 'day') {

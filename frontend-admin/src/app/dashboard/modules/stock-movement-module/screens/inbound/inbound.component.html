@@ -50,8 +50,16 @@
         [config]="tableConfig()"
       >
         <!-- Template para edição de unitCost -->
-        <ng-template #unitCostTemplate let-rowData let-rowIndex="rowIndex" let-component="component">
-          @if (component.editingCell()?.rowIndex === rowIndex && component.editingCell()?.field === 'unitCost') {
+        <ng-template
+          #unitCostTemplate
+          let-rowData
+          let-rowIndex="rowIndex"
+          let-component="component"
+        >
+          @if (
+            component.editingCell()?.rowIndex === rowIndex &&
+            component.editingCell()?.field === 'unitCost'
+          ) {
             <input
               type="text"
               pInputText
@@ -60,23 +68,36 @@
               (keydown.enter)="component.saveEdit()"
               (keydown.escape)="component.cancelEdit()"
               class="w-full"
-              style="text-align: right;"
+              style="text-align: right"
               autofocus
             />
           } @else {
             <span
-              (click)="component.startEdit(rowIndex, 'unitCost', rowData?.unitCost)"
+              (click)="
+                component.startEdit(rowIndex, 'unitCost', rowData?.unitCost)
+              "
               class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded"
-              style="text-align: right; display: block;"
+              style="text-align: right; display: block"
             >
-              {{ rowData?.unitCost | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
+              {{
+                rowData?.unitCost
+                  | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+              }}
             </span>
           }
         </ng-template>
 
         <!-- Template para edição de st -->
-        <ng-template #stTemplate let-rowData let-rowIndex="rowIndex" let-component="component">
-          @if (component.editingCell()?.rowIndex === rowIndex && component.editingCell()?.field === 'st') {
+        <ng-template
+          #stTemplate
+          let-rowData
+          let-rowIndex="rowIndex"
+          let-component="component"
+        >
+          @if (
+            component.editingCell()?.rowIndex === rowIndex &&
+            component.editingCell()?.field === 'st'
+          ) {
             <input
               type="text"
               pInputText
@@ -85,14 +106,14 @@
               (keydown.enter)="component.saveEdit()"
               (keydown.escape)="component.cancelEdit()"
               class="w-full"
-              style="text-align: right;"
+              style="text-align: right"
               autofocus
             />
           } @else {
             <span
               (click)="component.startEdit(rowIndex, 'st', rowData?.st)"
               class="cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 px-2 py-1 rounded"
-              style="text-align: right; display: block;"
+              style="text-align: right; display: block"
             >
               {{ rowData?.st | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR' }}
             </span>
@@ -103,30 +124,29 @@
   </div>
 
   <ng-template #footer>
-    <div class="w-full justify-end flex items-center gap-4">
-      <div class="flex gap-2">
-        <button
-          pButton
-          type="submit"
-          label="Salvar"
-          icon="pi pi-check"
-          class="w-[200px]"
-          size="small"
-          (click)="onSubmit()"
-        ></button>
-
-        <button
-          pButton
-          type="button"
-          label="Cancelar"
-          icon="pi pi-times"
-          (click)="closeDialog($event)"
-          [outlined]="true"
-          severity="secondary"
-          class="w-[200px]"
-          size="small"
-        ></button>
-      </div>
+    <div
+      class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4"
+    >
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        (click)="closeDialog($event)"
+        [outlined]="true"
+        severity="secondary"
+        class="w-full sm:w-[200px] order-2 sm:order-1"
+        size="small"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Salvar"
+        icon="pi pi-check"
+        class="w-full sm:w-[200px] order-1 sm:order-2"
+        size="small"
+        (click)="onSubmit()"
+      ></button>
     </div>
   </ng-template>
 </p-dialog>
@@ -243,30 +263,29 @@
   </div>
 
   <ng-template #footer>
-    <div class="w-full justify-end flex items-center gap-4">
-      <div class="flex gap-2">
-        <button
-          pButton
-          type="submit"
-          label="Adicionar"
-          icon="pi pi-check"
-          class="w-[200px]"
-          size="small"
-          (click)="addProductToList()"
-        ></button>
-
-        <button
-          pButton
-          type="button"
-          label="Cancelar"
-          icon="pi pi-times"
-          (click)="showSelectProductDialog.set(false)"
-          [outlined]="true"
-          severity="secondary"
-          class="w-[200px]"
-          size="small"
-        ></button>
-      </div>
+    <div
+      class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4"
+    >
+      <button
+        pButton
+        type="button"
+        label="Cancelar"
+        icon="pi pi-times"
+        (click)="showSelectProductDialog.set(false)"
+        [outlined]="true"
+        severity="secondary"
+        class="w-full sm:w-[200px] order-2 sm:order-1"
+        size="small"
+      ></button>
+      <button
+        pButton
+        type="submit"
+        label="Adicionar"
+        icon="pi pi-check"
+        class="w-full sm:w-[200px] order-1 sm:order-2"
+        size="small"
+        (click)="addProductToList()"
+      ></button>
     </div>
   </ng-template>
 </p-dialog>

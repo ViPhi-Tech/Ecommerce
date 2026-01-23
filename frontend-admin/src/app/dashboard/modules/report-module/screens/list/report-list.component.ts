@@ -75,10 +75,6 @@ export class ReportListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.coreService.setPageTitle(
-      'Relatórios',
-      'Consulte e analise os dados do sistema'
-    );
     this.state.loadReportData();
     this.updateTableConfig();
 

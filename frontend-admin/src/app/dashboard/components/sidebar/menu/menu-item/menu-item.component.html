@@ -1,7 +1,7 @@
 <a
   (onmouseenter)="onMouseEnter()"
   (onmouseleave)="onMouseLeave()"
-  (click)="toggleMenu(!item().visible)"
+  (click)="toggleMenu(!item().visible); onItemClick()"
   routerLinkActive="menu-item-active"
   [routerLinkActiveOptions]="{ exact: item().exact ?? false }"
   [routerLink]="item().route"

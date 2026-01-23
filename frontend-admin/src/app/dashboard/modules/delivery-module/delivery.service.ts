@@ -14,7 +14,9 @@ export class DeliveryService {
 
   constructor() {}
 
-  getDeliveries(skipLoader = true): Observable<Delivery[] | { data: Delivery[] }> {
+  getDeliveries(
+    skipLoader = true
+  ): Observable<Delivery[] | { data: Delivery[] }> {
     const headers: Record<string, string> = {};
     if (skipLoader) {
       headers['Skip-Loader'] = 'true';
@@ -26,30 +28,51 @@ export class DeliveryService {
     );
   }
 
-  getDeliveryById(deliveryId: string | number): Observable<ApiResponse<Delivery>> {
-    return this.http.get<ApiResponse<Delivery>>(`${this.apiUrl}delivery/${deliveryId}`);
+  getDeliveryById(
+    deliveryId: string | number
+  ): Observable<ApiResponse<Delivery>> {
+    return this.http.get<ApiResponse<Delivery>>(
+      `${this.apiUrl}delivery/${deliveryId}`
+    );
   }
 
   createDelivery(data: Partial<Delivery>): Observable<ApiResponse<Delivery>> {
-    return this.http.post<ApiResponse<Delivery>>(`${this.apiUrl}delivery/create`, data);
+    return this.http.post<ApiResponse<Delivery>>(
+      `${this.apiUrl}delivery/create`,
+      data
+    );
   }
 
-  updateDelivery(deliveryId: string | number, data: Partial<Delivery>): Observable<ApiResponse<Delivery>> {
-    return this.http.put<ApiResponse<Delivery>>(`${this.apiUrl}delivery/${deliveryId}`, data);
+  updateDelivery(
+    deliveryId: string | number,
+    data: Partial<Delivery>
+  ): Observable<ApiResponse<Delivery>> {
+    return this.http.put<ApiResponse<Delivery>>(
+      `${this.apiUrl}delivery/${deliveryId}`,
+      data
+    );
   }
 
-  deleteDelivery(deliveryId: string | number): Observable<ApiResponse<unknown>> {
-    return this.http.delete<ApiResponse<unknown>>(`${this.apiUrl}delivery/${deliveryId}`);
+  deleteDelivery(
+    deliveryId: string | number
+  ): Observable<ApiResponse<unknown>> {
+    return this.http.delete<ApiResponse<unknown>>(
+      `${this.apiUrl}delivery/${deliveryId}`
+    );
   }
 
-  generateRoute(deliveryId: string | number): Observable<ApiResponse<DeliveryRoute>> {
+  generateRoute(
+    deliveryId: string | number
+  ): Observable<ApiResponse<DeliveryRoute>> {
     return this.http.post<ApiResponse<DeliveryRoute>>(
       `${this.apiUrl}delivery/${deliveryId}/generate-route`,
       {}
     );
   }
 
-  optimizeRoute(deliveryId: string | number): Observable<ApiResponse<DeliveryRoute>> {
+  optimizeRoute(
+    deliveryId: string | number
+  ): Observable<ApiResponse<DeliveryRoute>> {
     return this.http.post<ApiResponse<DeliveryRoute>>(
       `${this.apiUrl}delivery/${deliveryId}/optimize-route`,
       {}
@@ -66,4 +89,3 @@ export class DeliveryService {
     );
   }
 }
-

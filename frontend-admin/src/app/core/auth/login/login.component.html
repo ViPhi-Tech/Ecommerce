@@ -4,7 +4,9 @@
     <div class="w-full max-w-md">
       <div class="mb-10">
         <div class="flex items-center gap-3 mb-8">
-          <div class="w-12 h-12 rounded-xl bg-primary flex items-center justify-center">
+          <div
+            class="w-12 h-12 rounded-xl bg-primary flex items-center justify-center"
+          >
             <span class="text-primary-foreground font-bold text-lg">SU</span>
           </div>
           <span class="text-2xl font-bold">Sell Up</span>
@@ -47,9 +49,7 @@
                 "
               />
             </div>
-            @if (
-              form.get('email')?.invalid && form.get('email')?.touched
-            ) {
+            @if (form.get('email')?.invalid && form.get('email')?.touched) {
               <p class="text-sm text-red-500">Email inválido</p>
             }
           </div>
@@ -73,8 +73,7 @@
                 placeholder="••••••••"
                 formControlName="password"
                 [class.border-red-500]="
-                  form.get('password')?.invalid &&
-                  form.get('password')?.touched
+                  form.get('password')?.invalid && form.get('password')?.touched
                 "
               />
               <button
