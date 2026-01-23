@@ -109,10 +109,6 @@ export class DeliveryCreateComponent implements OnInit {
     if (id && id !== 'new') {
       this.isEditMode.set(true);
       this.deliveryId.set(id);
-      this.coreService.setPageTitle(
-        'Editar Entrega',
-        'Editar informações da entrega'
-      );
 
       try {
         const delivery = await this.deliveryState.getDeliveryById(id);
@@ -131,11 +127,6 @@ export class DeliveryCreateComponent implements OnInit {
       } catch (error) {
         console.error('Erro ao carregar entrega:', error);
       }
-    } else {
-      this.coreService.setPageTitle(
-        'Nova Entrega',
-        'Criar uma nova entrega agrupando pedidos'
-      );
     }
   }
 

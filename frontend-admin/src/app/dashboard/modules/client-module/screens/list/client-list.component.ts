@@ -86,7 +86,6 @@ export class ClientListComponent implements OnInit {
 
   ngOnInit() {
     this.state.getClientList();
-    this.coreService.setPageTitle('Clientes', 'Lista de clientes cadastrados');
   }
 
   addNewClient() {

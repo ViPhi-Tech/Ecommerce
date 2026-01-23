@@ -72,10 +72,6 @@ export class DeliveryListComponent implements OnInit {
   };
 
   ngOnInit() {
-    this.coreService.setPageTitle(
-      'Lista de Entregas',
-      'Gerencie suas entregas e rotas de forma organizada'
-    );
     this.setTableConfig();
     this.state.getDeliveryList();
   }

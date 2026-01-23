@@ -10,7 +10,6 @@ import { Router, RouterModule, ActivatedRoute } from '@angular/router';
 import { OrderState } from '../../order.state';
 import { OrderCartComponent } from '../../components/order-cart/order-cart.component';
 import { ProductListComponent } from '../../components/product-list/product-list.component';
-import { CoreService } from 'app/shared/services/core.service';
 import { CartState } from '../../components/order-cart/order-cart.state';
 import { ProductState } from 'app/dashboard/modules/product-module/product.state';
 import { DrawerModule } from 'primeng/drawer';
@@ -35,7 +34,6 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
   private activatedRoute = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
 
-  private coreService = inject(CoreService);
   private orderState = inject(OrderState);
   private productState = inject(ProductState);
   public cartState = inject(CartState);
@@ -57,7 +55,6 @@ export class OrderCreateComponent implements OnInit, OnDestroy {
     if (orderId && orderId !== 'new') {
       // await this.orderState.getOrderById(orderId);
     } else {
-      this.coreService.setPageTitle('Nova Venda', 'Criar uma nova venda');
       this.orderState.resetOrder();
       this.cartState.resetCart();
     }

@@ -159,18 +159,6 @@ export class StockMovementListComponent implements OnInit, AfterViewInit {
     this.loadStockMovements();
     this.state.getStockMetrics();
 
-    if (this.productId) {
-      this.coreService.setPageTitle(
-        'Movimentos de Estoque',
-        `Movimentos do produto ${this.productId}`
-      );
-    } else {
-      this.coreService.setPageTitle(
-        'Movimentos de Estoque',
-        'Lista de movimentos de estoque'
-      );
-    }
-
     this.formFilter.valueChanges
       .pipe(takeUntilDestroyed(this.destroyedRef))
       .subscribe(() => {

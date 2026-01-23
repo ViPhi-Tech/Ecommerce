@@ -110,10 +110,6 @@ export class ServiceOrderListComponent implements OnInit {
 
   ngOnInit() {
     this.state.getServiceOrderList();
-    this.coreService.setPageTitle(
-      'Ordens de Serviço',
-      'Lista de ordens de serviço'
-    );
   }
 
   addNewServiceOrder() {

@@ -168,11 +168,6 @@ export class AccountsReceivableListComponent implements OnInit {
     localStorage.setItem('accounts-receivable-view-preference', 'list');
 
     // this.loadAccountsReceivable();
-
-    this.coreService.setPageTitle(
-      'Contas a Receber',
-      'Lista de contas a receber'
-    );
   }
 
   async loadAccountsReceivable() {

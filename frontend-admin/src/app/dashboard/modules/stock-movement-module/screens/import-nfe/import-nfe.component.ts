@@ -59,10 +59,6 @@ export class ImportNfeComponent implements OnInit {
   constructor() {}
 
   ngOnInit() {
-    this.coreService.setPageTitle(
-      'Importar Nota Fiscal',
-      'Importação de nota fiscal eletrônica'
-    );
   }
 
   onCloseDialog() {

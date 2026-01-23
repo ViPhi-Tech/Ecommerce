@@ -122,10 +122,6 @@ export class InboundComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.coreService.setPageTitle(
-      'Nova entrada',
-      'Cadastro de nova entrada de produtos'
-    );
   }
 
   // ========== INICIALIZAÇÃO ==========

@@ -93,7 +93,6 @@ export class UserListComponent implements OnInit {
   title = 'Usuários';
 
   constructor() {
-    this.coreService.setPageTitle(this.title, 'Listagem com os usuários');
   }
 
   ngOnInit() {

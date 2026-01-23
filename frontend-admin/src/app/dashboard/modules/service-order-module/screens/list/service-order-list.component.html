@@ -1,15 +1,15 @@
-<div class="p-6 animate-fade-in">
-  <div class="flex items-center">
-    <div>
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-200">
+<div class="p-4 sm:p-6 animate-fade-in">
+  <div class="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-0">
+    <div class="flex-1 min-w-0">
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200 truncate">
         Ordens de Serviço - Listagem
       </h1>
-      <p class="text-gray-600 dark:text-gray-400 mt-1">
+      <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
         Gerencie suas ordens de serviço de forma visual e organizada
       </p>
     </div>
 
-    <div class="flex gap-3 ml-auto">
+    <div class="flex gap-2 sm:gap-3 sm:ml-auto flex-wrap sm:flex-nowrap">
       @if (state.currentView() === 'grid') {
         <p-button
           label="Listagem"
@@ -18,6 +18,7 @@
           (onClick)="state.setView('list')"
           pTooltip="Visualizar em tabela"
           tooltipPosition="bottom"
+          class="hidden sm:inline-flex"
         />
       } @else {
         <p-button
@@ -27,6 +28,7 @@
           label="Grid"
           pTooltip="Visualizar em cards"
           tooltipPosition="bottom"
+          class="hidden sm:inline-flex"
         />
       }
 
@@ -46,12 +48,13 @@
         (onClick)="addNewServiceOrder()"
         pTooltip="Adicionar nova ordem de serviço"
         tooltipPosition="bottom"
+        class="flex-1 sm:flex-initial"
       />
     </div>
   </div>
 
   @if (state.currentView() === 'list') {
-    <div class="animate-left">
+    <div class="animate-left mt-4 sm:mt-6">
       <fuse-table
         [data]="state.serviceOrderList()"
         [loading]="state.loading()"
@@ -66,7 +69,7 @@
     </div>
   }
   @if (state.currentView() === 'grid') {
-    <div class="animate-right space-y-4">
+    <div class="animate-right space-y-4 mt-4 sm:mt-6">
       <div class="rounded-lg border bg-card text-card-foreground shadow-sm">
         <div class="p-6 pt-6">
           <div class="flex flex-col md:flex-row gap-4">

@@ -132,7 +132,6 @@ export class AccountsPayableListComponent implements OnInit {
   });
 
   constructor() {
-    this.coreService.setPageTitle('Financeiro', '');
   }
 
   async ngOnInit() {
