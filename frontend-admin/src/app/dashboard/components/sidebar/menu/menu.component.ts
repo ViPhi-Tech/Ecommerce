@@ -87,6 +87,13 @@ export class MenuComponent implements OnInit {
           visible: true,
           route: '/dashboard/stock-movements/list',
         },
+        {
+          id: ROLES_SITEMAP.MovimentacaoEstoque,
+          label: 'Notas Fiscais de Entrada',
+          icon: 'lucideFileText',
+          visible: true,
+          route: '/dashboard/purchase-invoices/list',
+        },
       ],
     },
     {

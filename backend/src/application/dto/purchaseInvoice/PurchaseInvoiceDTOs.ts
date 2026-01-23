@@ -58,6 +58,9 @@ export const purchaseInvoiceIdJsonSchema = {
   type: 'object',
   required: ['id'],
   properties: {
-    id: { type: 'number' },
+    id: { 
+      type: 'string',
+      pattern: '^[0-9]+$',
+    },
   },
 };

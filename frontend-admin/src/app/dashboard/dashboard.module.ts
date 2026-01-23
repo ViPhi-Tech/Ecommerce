@@ -20,6 +20,7 @@ import { reportRoutes } from './modules/report-module/report.routing';
 import { serviceOrderRoutes } from './modules/service-order-module/service-order.routing';
 import { schedulingRoutes } from './modules/scheduling-module/scheduling.routing';
 import { deliveryRoutes } from './modules/delivery-module/delivery.routing';
+import { purchaseInvoiceRoutes } from './modules/purchase-invoice-module/purchase-invoice.routing';
 
 const routes: Routes = [
   {
@@ -102,6 +103,11 @@ const routes: Routes = [
         path: 'deliveries',
         children: deliveryRoutes,
         data: { animation: 'deliveries' },
+      },
+      {
+        path: 'purchase-invoices',
+        children: purchaseInvoiceRoutes,
+        data: { animation: 'purchase-invoices' },
       },
       {
         path: '**',

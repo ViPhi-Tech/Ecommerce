@@ -3,6 +3,8 @@ import { PurchaseInvoiceRepository } from '../../database/repositories/PurchaseI
 import { ProductRepository } from '../../database/repositories/ProductRepository';
 import { SupplierRepository } from '../../database/repositories/SupplierRepository';
 import { CreatePurchaseInvoiceUseCase } from '../../../application/use-cases/purchaseInvoice/CreatePurchaseInvoiceUseCase';
+import { FindPurchaseInvoiceByIdUseCase } from '../../../application/use-cases/purchaseInvoice/FindPurchaseInvoiceByIdUseCase';
+import { FindAllPurchaseInvoicesUseCase } from '../../../application/use-cases/purchaseInvoice/FindAllPurchaseInvoicesUseCase';
 import { PurchaseInvoiceController } from '../../http/controllers/PurchaseInvoiceController';
 import { PrismaTransactionRunner } from '../../database/PrismaTransactionRunner';
 
@@ -21,6 +23,16 @@ const createPurchaseInvoiceUseCase = new CreatePurchaseInvoiceUseCase(
   supplierRepository
 );
 
+const findPurchaseInvoiceByIdUseCase = new FindPurchaseInvoiceByIdUseCase(
+  purchaseInvoiceRepository
+);
+
+const findAllPurchaseInvoicesUseCase = new FindAllPurchaseInvoicesUseCase(
+  purchaseInvoiceRepository
+);
+
 export const purchaseInvoiceController = new PurchaseInvoiceController(
-  createPurchaseInvoiceUseCase
+  createPurchaseInvoiceUseCase,
+  findPurchaseInvoiceByIdUseCase,
+  findAllPurchaseInvoicesUseCase
 );
