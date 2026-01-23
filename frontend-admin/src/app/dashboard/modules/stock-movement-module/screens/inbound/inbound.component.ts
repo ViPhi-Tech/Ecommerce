@@ -76,7 +76,6 @@ export class InboundComponent implements OnInit, AfterViewInit {
 
   @ViewChild('dialogRef') dialogRef!: Dialog;
   @ViewChild('unitCostTemplate') unitCostTemplate!: TemplateRef<any>;
-  @ViewChild('icmsTemplate') icmsTemplate!: TemplateRef<any>;
   @ViewChild('stTemplate') stTemplate!: TemplateRef<any>;
 
   private importInvoiceService = inject(ImportInvoiceService);
@@ -105,7 +104,6 @@ export class InboundComponent implements OnInit, AfterViewInit {
     quantity: [1, [Validators.required, Validators.min(1)]],
     unitCost: [null, [Validators.min(0)]],
     invoiceNumber: [null],
-    icms: [null, [Validators.min(0)]],
     st: [null, [Validators.min(0)]],
   });
 
@@ -167,15 +165,6 @@ export class InboundComponent implements OnInit, AfterViewInit {
         width: '130px', 
         type: 'currency',
         template: this.unitCostTemplate,
-        component: self
-      },
-      { 
-        field: 'icms', 
-        caption: 'ICMS Unit.', 
-        sortable: true, 
-        width: '120px', 
-        type: 'currency',
-        template: this.icmsTemplate,
         component: self
       },
       { 
@@ -335,7 +324,6 @@ export class InboundComponent implements OnInit, AfterViewInit {
 
       // Converter valores monetários para número
       const unitCost = this.convertMoneyToNumber(formData.unitCost);
-      const icms = this.convertMoneyToNumber(formData.icms);
       const st = this.convertMoneyToNumber(formData.st);
 
       if (existingProductIndex > -1) {
@@ -343,7 +331,6 @@ export class InboundComponent implements OnInit, AfterViewInit {
         // Atualizar campos se fornecidos
         if (unitCost !== null) products[existingProductIndex].unitCost = unitCost;
         if (formData.invoiceNumber) products[existingProductIndex].invoiceNumber = formData.invoiceNumber;
-        if (icms !== null) products[existingProductIndex].icms = icms;
         if (st !== null) products[existingProductIndex].st = st;
       } else {
         products.push({
@@ -352,7 +339,6 @@ export class InboundComponent implements OnInit, AfterViewInit {
           stock: selectedProduct?.stock?.quantity,
           unitCost: unitCost,
           invoiceNumber: formData.invoiceNumber || null,
-          icms: icms,
           st: st,
         });
       }
@@ -387,7 +373,7 @@ export class InboundComponent implements OnInit, AfterViewInit {
       let convertedValue: any = value;
 
       // Converter valores monetários
-      if (['unitCost', 'icms', 'st'].includes(editing.field)) {
+      if (['unitCost', 'st'].includes(editing.field)) {
         convertedValue = this.convertMoneyToNumber(value);
       }
 

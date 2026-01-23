@@ -101,9 +101,8 @@ export class XmlUtils {
         unitCost: parseFloat(prod?.vUnCom || 0).toFixed(2), // Valor custo = valor unitário
         unitTotalWithTax: (() => {
           const unitPrice = parseFloat(prod?.vUnCom || 0);
-          const icmsUnit = icmsData?.vICMS ? parseFloat(icmsData.vICMS.toString()) / parseFloat(prod?.qCom || 1) : 0;
           const stUnit = icmsData?.vICMSST ? parseFloat(icmsData.vICMSST.toString()) / parseFloat(prod?.qCom || 1) : 0;
-          return (unitPrice + icmsUnit + stUnit).toFixed(2);
+          return (unitPrice + stUnit).toFixed(2);
         })(),
         // Valores calculados (totais)
         totalCost: (() => {
@@ -114,9 +113,8 @@ export class XmlUtils {
         totalWithTax: (() => {
           const unitPrice = parseFloat(prod?.vUnCom || 0);
           const quantity = parseFloat(prod?.qCom || 0);
-          const icmsTotal = icmsData?.vICMS ? parseFloat(icmsData.vICMS.toString()) : 0;
           const stTotal = icmsData?.vICMSST ? parseFloat(icmsData.vICMSST.toString()) : 0;
-          return (unitPrice * quantity + icmsTotal + stTotal).toFixed(2);
+          return (unitPrice * quantity + stTotal).toFixed(2);
         })(),
         // Tributação (mantido para compatibilidade)
         eanTrib: prod?.cEANTrib,

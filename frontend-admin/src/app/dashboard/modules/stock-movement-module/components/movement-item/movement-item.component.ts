@@ -18,17 +18,16 @@ export class MovementItemComponent implements OnInit {
   ngOnInit() {}
 
   /**
-   * Calcula o valor total unitário (custo + ICMS + ST)
+   * Calcula o valor total unitário (custo + ST, sem ICMS)
    */
   getTotalUnitValue(): number {
     const item = this.item();
     if (!item) return 0;
     
     const unitCost = item.unitCost || 0;
-    const icms = item.icms || 0;
     const st = item.st || 0;
     
-    return unitCost + icms + st;
+    return unitCost + st;
   }
 
   /**

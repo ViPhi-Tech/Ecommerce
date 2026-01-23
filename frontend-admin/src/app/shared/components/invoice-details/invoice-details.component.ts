@@ -158,22 +158,6 @@ export class InvoiceDetailsComponent implements OnInit {
           type: 'currency',
         },
         {
-          field: 'icmsBase',
-          caption: 'BC ICMS',
-          sortable: true,
-          align: 'right',
-          width: '120px',
-          type: 'currency',
-        },
-        {
-          field: 'icmsValue',
-          caption: 'V. ICMS',
-          sortable: true,
-          align: 'right',
-          width: '120px',
-          type: 'currency',
-        },
-        {
           field: 'icmsStBase',
           caption: 'BC ICMS ST',
           sortable: true,
@@ -196,14 +180,6 @@ export class InvoiceDetailsComponent implements OnInit {
           align: 'right',
           width: '120px',
           type: 'currency',
-        },
-        {
-          field: 'icmsRate',
-          caption: 'Alíq. ICMS',
-          sortable: true,
-          align: 'right',
-          width: '100px',
-          type: 'percent',
         },
         {
           field: 'ipiRate',

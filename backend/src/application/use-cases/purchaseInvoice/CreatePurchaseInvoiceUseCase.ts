@@ -110,7 +110,7 @@ export class CreatePurchaseInvoiceUseCase {
         type: 'IN';
         unitCost: number;
         invoiceNumber: string;
-        icms: number;
+        icms: number | null;
         st: number;
       }> = [];
 
@@ -143,8 +143,8 @@ export class CreatePurchaseInvoiceUseCase {
         const icmsUnitValue = quantity > 0 ? icmsTotalValue / quantity : 0;
         const stUnitValue = quantity > 0 ? stTotalValue / quantity : 0;
         
-        // Calcular finalPrice = unitPrice + ICMS unitário + ST unitário
-        const finalPrice = unitPrice + icmsUnitValue + stUnitValue;
+        // Calcular finalPrice = unitPrice + ST unitário (sem ICMS)
+        const finalPrice = unitPrice + stUnitValue;
         
         // Extrair dados fiscais detalhados
         const code = prod.cProd?.toString() || null;
@@ -164,7 +164,7 @@ export class CreatePurchaseInvoiceUseCase {
         
         // Calcular valores unitários
         const unitCost = unitPrice; // Valor custo unitário
-        const unitTotalWithTax = finalPrice; // Valor unitário com tributo = unitPrice + ICMS + ST
+        const unitTotalWithTax = finalPrice; // Valor unitário com tributo = unitPrice + ST (sem ICMS)
         
         // Calcular valores totais
         const totalCost = unitCost * quantity; // Valor total do custo
@@ -195,7 +195,7 @@ export class CreatePurchaseInvoiceUseCase {
             ean: ean !== '0' ? ean : '0', // Sempre salvar "0" como string quando inválido
             sku: productSku,
             initialPrice: unitPrice,
-            finalPrice: finalPrice, // Valor unitário + ICMS + ST
+            finalPrice: finalPrice, // Valor unitário + ST (sem ICMS)
             icms: icmsUnitValue, // Salvar ICMS unitário no produto
             st: stUnitValue, // Salvar ST unitário no produto
             description: productName,
@@ -233,7 +233,7 @@ export class CreatePurchaseInvoiceUseCase {
           type: 'IN',
           unitCost: unitPrice,
           invoiceNumber: `${ide.serie || ''}-${ide.nNF || ''}`.replace(/^-/, ''),
-          icms: icmsUnitValue, // Valor unitário do ICMS na hora da nota
+          icms: null, // Não usar ICMS no cálculo, apenas salvar no banco
           st: stUnitValue, // Valor unitário da ST na hora da nota
         });
 
