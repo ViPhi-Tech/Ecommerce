@@ -161,7 +161,7 @@ export class OutboundComponent implements OnInit, AfterViewInit {
       },
       {
         field: 'st',
-        caption: 'ST Unit.',
+        caption: 'ICMS ST',
         sortable: true,
         width: '120px',
         type: 'currency',
