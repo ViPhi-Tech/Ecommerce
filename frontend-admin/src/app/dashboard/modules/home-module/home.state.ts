@@ -105,7 +105,30 @@ export class HomeState extends BaseState<HomeModuleState> {
   }
 
   setCharts(metrics: DashboardCharts) {
-    this.updateState('charts', metrics);
+    const charts: DashboardCharts = {
+      salesByMonth: metrics.salesByMonth,
+      topProducts: metrics.topProducts,
+      orderStatus: metrics.orderStatus.map(item => ({
+        name: this.fromToStatus(item.name),
+        total: item.total,
+      })),
+      salesByCategory: metrics.salesByCategory,
+    };
+    console.log(charts);
+    this.updateState('charts', charts);
+  }
+
+  fromToStatus(status: string) {
+    console.log(status);
+    const statusMap = {
+      'PENDING': 'Pendente',
+      'PROCESSING': 'Processando',
+      'SENT': 'Enviado',
+      'DELIVERED': 'Entregue',
+      'CANCELLED': 'Cancelado',
+      'COMPLETED': 'Finalizado',
+    };
+    return statusMap[status as keyof typeof statusMap];
   }
 
   setSelectedPeriod(period: HomeModuleState['selectedPeriod']) {
