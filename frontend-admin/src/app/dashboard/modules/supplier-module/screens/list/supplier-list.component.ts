@@ -33,6 +33,7 @@ export class SupplierListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    refresh: () => this.refreshSuppliers(),
     columns: [
       { field: 'id', caption: 'ID', sortable: true },
       { field: 'legalName', caption: 'Razão Social', sortable: true },

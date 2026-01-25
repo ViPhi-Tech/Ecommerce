@@ -45,6 +45,7 @@ export class UserListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    refresh: () => this.refreshUsers(),
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'fullName', caption: 'Nome', sortable: true, filter: true },

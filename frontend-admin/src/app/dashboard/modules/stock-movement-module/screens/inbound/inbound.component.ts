@@ -7,8 +7,6 @@ import {
   AfterViewInit,
   signal,
   ViewChild,
-  ViewChildren,
-  QueryList,
   TemplateRef,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';

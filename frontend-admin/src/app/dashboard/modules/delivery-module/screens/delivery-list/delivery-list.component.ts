@@ -145,6 +145,7 @@ export class DeliveryListComponent implements OnInit {
       rowsPerPage: 10,
       paginator: true,
       pageLinkSize: 5,
+      refresh: () => this.refreshDeliveries(),
       columns: [
         {
           field: 'id',

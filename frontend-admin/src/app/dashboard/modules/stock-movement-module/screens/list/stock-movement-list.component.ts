@@ -63,6 +63,7 @@ export class StockMovementListComponent implements OnInit, AfterViewInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    refresh: () => this.refreshStockMovements(),
     columns: [
       {
         field: 'date',
@@ -178,6 +179,11 @@ export class StockMovementListComponent implements OnInit, AfterViewInit {
 
   onFilterChange() {
     this.loadStockMovements();
+  }
+
+  refreshStockMovements() {
+    this.loadStockMovements();
+    this.state.getStockMetrics();
   }
 
   private loadStockMovements() {

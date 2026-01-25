@@ -30,6 +30,7 @@ export class CategoryListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    refresh: () => this.refreshCategories(),
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'name', caption: 'Nome', sortable: true, filter: true },

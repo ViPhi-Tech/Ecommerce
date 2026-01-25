@@ -149,6 +149,7 @@ export class OrderListComponent implements OnInit {
       rowsPerPage: 10,
       paginator: true,
       pageLinkSize: 5,
+      refresh: () => this.refreshOrders(),
       columns: [
         {
           field: 'id',

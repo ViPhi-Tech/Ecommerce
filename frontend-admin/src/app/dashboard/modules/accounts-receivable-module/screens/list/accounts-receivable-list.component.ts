@@ -68,6 +68,7 @@ export class AccountsReceivableListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    refresh: () => this.loadAccountsReceivable(),
     columns: [
       {
         field: 'clientName',

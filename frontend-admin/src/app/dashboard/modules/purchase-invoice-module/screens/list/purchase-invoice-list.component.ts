@@ -23,6 +23,7 @@ export class PurchaseInvoiceListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    refresh: () => this.refreshPurchaseInvoices(),
     columns: [
       { field: 'id', caption: 'ID', sortable: true, width: '80px' },
       { field: 'number', caption: 'Número', sortable: true, width: '120px' },

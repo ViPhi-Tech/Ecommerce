@@ -32,6 +32,7 @@ export class ClientListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    refresh: () => this.refreshClients(),
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       {

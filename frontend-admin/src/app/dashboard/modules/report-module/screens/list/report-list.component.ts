@@ -61,6 +61,7 @@ export class ReportListComponent implements OnInit {
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    refresh: () => this.refreshReport(),
     columns: [],
   });
 
