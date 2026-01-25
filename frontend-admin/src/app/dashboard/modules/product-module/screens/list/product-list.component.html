@@ -12,16 +12,6 @@
     <div class="flex gap-2 sm:gap-3 sm:ml-auto flex-wrap sm:flex-nowrap">
       <p-button
         [text]="true"
-        styleClass="h-full"
-        (onClick)="refreshProducts()"
-        pTooltip="Atualizar dados"
-        tooltipPosition="bottom"
-      >
-        <ng-icon name="lucideRefreshCw" />
-      </p-button>
-
-      <p-button
-        [text]="true"
         icon="pi pi-upload"
         pTooltip="Importar Produtos"
         (onClick)="importProducts()"

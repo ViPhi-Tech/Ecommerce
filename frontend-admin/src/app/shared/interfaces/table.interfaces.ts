@@ -18,6 +18,7 @@ export interface TableConfig {
   columns: TableColumn[];
   headerButtons?: HeaderButton[];
   rowClick?: (rowData: any, rowIndex: number) => void;
+  refresh?: () => void;
 }
 
 export interface TableColumn {

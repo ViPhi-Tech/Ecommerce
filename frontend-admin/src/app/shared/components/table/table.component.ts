@@ -176,6 +176,13 @@ export class TableComponent implements OnInit {
     }
   }
 
+  refreshData() {
+    const config = this.config();
+    if (config && typeof config.refresh === 'function') {
+      config.refresh();
+    }
+  }
+
   formatLabelFilter(value: any, type: string): string {
     let label = value;
     if (type === 'date') {

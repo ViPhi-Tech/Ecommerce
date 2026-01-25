@@ -67,9 +67,24 @@
               </p-button>
             }
 
+            @if (config().refresh) {
+              <p-button
+                size="large"
+                pTooltip="Atualizar dados"
+                tooltipPosition="left"
+                [loading]="loading()"
+                (click)="refreshData()"
+              >
+                @if (!loading()) {
+                  <ng-icon name="lucideRefreshCw"></ng-icon>
+                }
+              </p-button>
+            }
+
             @if (config().showExport) {
               <p-button
                 size="large"
+                tooltipPosition="left"
                 pTooltip="Exportar para Excel"
                 (click)="exportTable()"
               >

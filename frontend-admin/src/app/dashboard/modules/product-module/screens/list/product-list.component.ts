@@ -43,6 +43,7 @@ export class ProductListComponent implements OnInit {
     paginator: true,
     pageLinkSize: 5,
     showExport: true,
+    refresh: () => this.refreshProducts(),
     columns: [
       { field: 'id', caption: 'ID', sortable: true, filter: true },
       { field: 'name', caption: 'Nome', sortable: true, filter: true },
