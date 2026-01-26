@@ -70,13 +70,13 @@ export class OrderState extends BaseState<OrderModuleState> {
       });
   }
 
-  getAvailableOrdersList(skipLoader = true): void {
+  getAvailableOrdersList(skipLoader = true, deliveryId?: number): void {
     this.setLoading(true);
     this.clearError();
     this.setOrderList([], false);
 
     lastValueFrom(
-      this.orderService.getAvailableOrders(skipLoader).pipe(
+      this.orderService.getAvailableOrders(skipLoader, deliveryId).pipe(
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
       )

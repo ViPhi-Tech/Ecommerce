@@ -170,9 +170,13 @@ export class OrderController {
 
     async findAvailable(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try {
+            // Aceita deliveryId opcional como query param para excluir uma entrega específica (útil na edição)
+            const query = request.query as { deliveryId?: string };
+            const excludeDeliveryId = query?.deliveryId ? parseInt(query.deliveryId, 10) : undefined;
+            
             return reply.status(HTTP_STATUS.API_STATUS_SUCCESS).send({
                 status: HTTP_MESSAGES.API_STATUS_SUCCESS,
-                data: await this.findAvailableOrdersUseCase.execute(),
+                data: await this.findAvailableOrdersUseCase.execute(excludeDeliveryId),
             });
         } catch (error) {
             return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({

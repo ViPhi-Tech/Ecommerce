@@ -195,6 +195,29 @@ export class DeliveryState extends BaseState<DeliveryModuleState> {
     });
   }
 
+  completeDelivery(uuid: string): Promise<Delivery> {
+    this.setLoading(true);
+    this.clearError();
+
+    return lastValueFrom(
+      this.deliveryService.completeDelivery(uuid).pipe(
+        catchError(error => this.handleError(error)),
+        finalize(() => this.setLoading(false))
+      )
+    ).then((response: ApiResponse<Delivery>) => {
+      const completedDelivery = response?.data || response?.dados || response;
+      const currentList = this.deliveryList();
+      const updatedList = currentList.map(delivery =>
+        delivery.uuid === uuid ? completedDelivery : delivery
+      );
+      this.setDeliveryList(updatedList);
+      if (this.deliveryDetails().uuid === uuid) {
+        this.updateState('deliveryDetails', completedDelivery);
+      }
+      return completedDelivery;
+    });
+  }
+
   resetDelivery() {
     this.updateState('deliveryDetails', {} as Delivery);
   }

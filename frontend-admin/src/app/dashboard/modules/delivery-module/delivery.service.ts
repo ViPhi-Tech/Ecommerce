@@ -99,4 +99,13 @@ export class DeliveryService {
       {}
     );
   }
+
+  completeDelivery(
+    uuid: string
+  ): Observable<ApiResponse<Delivery>> {
+    return this.http.patch<ApiResponse<Delivery>>(
+      `${this.apiUrl}delivery/${uuid}/complete`,
+      {}
+    );
+  }
 }

@@ -198,6 +198,9 @@ export class DeliveryRouteComponent implements OnInit {
       const deliveryId = this.deliveryId();
       if (deliveryId) {
         await this.loadDelivery();
+        
+        // Verifica se todos os pedidos foram entregues
+        await this.checkAndCompleteDelivery();
       }
     } catch (error: any) {
       console.error('Erro ao marcar pedido como entregue:', error);
@@ -206,6 +209,46 @@ export class DeliveryRouteComponent implements OnInit {
         summary: 'Erro',
         detail: error?.error?.description || 'Erro ao marcar pedido como entregue',
       });
+    }
+  }
+
+  private async checkAndCompleteDelivery() {
+    const deliveryData = this.delivery();
+    if (!deliveryData || !deliveryData.orders || deliveryData.orders.length === 0) {
+      return;
+    }
+
+    // Verifica se todos os pedidos estão entregues
+    const allOrdersDelivered = deliveryData.orders.every(order => 
+      this.isOrderDelivered(order.status)
+    );
+
+    // Verifica se a entrega ainda não está finalizada
+    const deliveryStatus = deliveryData.status?.toUpperCase();
+    const isDeliveryNotCompleted = deliveryStatus !== 'DELIVERED';
+
+    if (allOrdersDelivered && isDeliveryNotCompleted) {
+      const uuid = deliveryData.uuid || this.deliveryId();
+      if (uuid) {
+        try {
+          await this.deliveryState.completeDelivery(uuid);
+          this.toast.add({
+            severity: 'success',
+            summary: 'Entrega Finalizada',
+            detail: 'Todos os pedidos foram entregues. A entrega foi finalizada automaticamente.',
+          });
+          
+          // Recarrega os dados para atualizar o status
+          await this.loadDelivery();
+        } catch (error: any) {
+          console.error('Erro ao finalizar entrega:', error);
+          this.toast.add({
+            severity: 'warn',
+            summary: 'Aviso',
+            detail: 'Todos os pedidos foram entregues, mas houve um erro ao finalizar a entrega automaticamente.',
+          });
+        }
+      }
     }
   }
 

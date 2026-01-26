@@ -90,7 +90,6 @@ export class DeliveryCreateComponent implements OnInit {
 
   ngOnInit() {
     this.loadDeliveryData();
-    this.loadAvailableOrders();
     this.setTableConfig();
   }
 
@@ -124,15 +123,25 @@ export class DeliveryCreateComponent implements OnInit {
           const orderIds = new Set(delivery.orderIds);
           this.selectedOrders.set(orderIds);
         }
+
+        // Carrega pedidos disponíveis incluindo os desta entrega (para edição)
+        this.loadAvailableOrders(delivery.id);
       } catch (error) {
         console.error('Erro ao carregar entrega:', error);
+        // Se der erro, carrega sem deliveryId
+        this.loadAvailableOrders();
       }
+    } else {
+      // Se for nova entrega, carrega sem deliveryId
+      this.loadAvailableOrders();
     }
   }
 
-  private loadAvailableOrders() {
+  private loadAvailableOrders(deliveryId?: number | string) {
     // Usa o método que busca apenas pedidos disponíveis (não entregues)
-    this.orderState.getAvailableOrdersList(true);
+    // Se deliveryId for fornecido, inclui pedidos dessa entrega (para edição)
+    const deliveryIdNumber = typeof deliveryId === 'string' ? parseInt(deliveryId, 10) : deliveryId;
+    this.orderState.getAvailableOrdersList(true, deliveryIdNumber);
   }
 
   toggleOrderSelection(orderId: string | number) {
