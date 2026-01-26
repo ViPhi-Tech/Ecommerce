@@ -61,7 +61,7 @@ export class DeliveryRepository implements IDeliveryRepository {
         deliveryDate: deliveryData.deliveryDate,
         driverName: deliveryData.driverName,
         vehiclePlate: deliveryData.vehiclePlate,
-        status: deliveryData.status || 'pending',
+        status: deliveryData.status || 'PENDING',
       },
       include: {
         orders: {

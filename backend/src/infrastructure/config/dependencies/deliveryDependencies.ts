@@ -6,6 +6,7 @@ import { FindAllDeliveryUseCase } from "../../../application/use-cases/delivery/
 import { UpdateDeliveryUseCase } from "../../../application/use-cases/delivery/UpdateDeliveryUseCase";
 import { DeleteDeliveryUseCase } from "../../../application/use-cases/delivery/DeleteDeliveryUseCase";
 import { CompleteDeliveryUseCase } from "../../../application/use-cases/delivery/CompleteDeliveryUseCase";
+import { CancelDeliveryUseCase } from "../../../application/use-cases/delivery/CancelDeliveryUseCase";
 import { GetDeliveryDashboardUseCase } from "../../../application/use-cases/delivery/GetDeliveryDashboardUseCase";
 import { DeliveryController } from "../../http/controllers/DeliveryController";
 import { OrderRepository } from "../../database/repositories/OrderRepository";
@@ -33,6 +34,7 @@ export const updateDeliveryUseCase = new UpdateDeliveryUseCase(
 );
 export const deleteDeliveryUseCase = new DeleteDeliveryUseCase(deliveryRepository);
 export const completeDeliveryUseCase = new CompleteDeliveryUseCase(deliveryRepository);
+export const cancelDeliveryUseCase = new CancelDeliveryUseCase(deliveryRepository);
 export const getDeliveryDashboardUseCase = new GetDeliveryDashboardUseCase(deliveryRepository);
 
 // Controller com todos use cases
@@ -43,6 +45,7 @@ export const deliveryController = new DeliveryController(
   updateDeliveryUseCase,
   deleteDeliveryUseCase,
   completeDeliveryUseCase,
+  cancelDeliveryUseCase,
   getDeliveryDashboardUseCase
 );
 

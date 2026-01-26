@@ -39,6 +39,7 @@ export class CreateDeliveryUseCase {
         deliveryDate: parsedDate,
         driverName: input.driverName,
         vehiclePlate: input.vehiclePlate,
+        status: 'PENDING',
       });
 
       if (!delivery?.id) {

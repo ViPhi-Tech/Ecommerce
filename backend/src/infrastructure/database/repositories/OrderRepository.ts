@@ -22,6 +22,25 @@ export class OrderRepository implements IOrderRepository {
     });
   };
 
+  async findAvailable(): Promise<Order[]> {
+    return this.prisma.order.findMany({
+        include: {
+          items: true,
+          client: true,
+          payments: true,
+        },
+        where: {
+          isActive: true,
+          status: {
+            not: 'DELIVERED'
+          }
+        },
+        orderBy: {
+          createdAt: 'desc'
+        }
+    });
+  };
+
   async createItems(orderId: number, items: any[]): Promise<OrderItem[]> {
     await this.prisma.orderItem.createMany({
       data: items.map((item) => ({

@@ -74,6 +74,16 @@ export default async function deliveryRoutes(
     handler: deliveryController.complete.bind(deliveryController),
   });
 
+  fastify.patch('/:uuid/cancel', {
+    schema: {
+      tags: ['delivery'],
+      description: 'Cancela uma entrega, alterando o status para "CANCELLED"',
+      params: deliveryUuidJsonSchema,
+    },
+    preValidation: [authenticate],
+    handler: deliveryController.cancel.bind(deliveryController),
+  });
+
   fastify.get('/dashboard/metrics', {
     schema: {
       tags: ['delivery'],
