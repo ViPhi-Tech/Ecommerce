@@ -149,6 +149,7 @@
   <ng-template #body let-rowData let-rowIndex="rowIndex">
     <tr
       [class.cursor-pointer]="config().rowClick"
+      [ngClass]="config().rowClass?.(rowData) || ''"
       (click)="onRowClick(rowData, rowIndex)"
     >
       @if (config().selection?.mode) {

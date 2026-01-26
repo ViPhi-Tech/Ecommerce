@@ -4,6 +4,7 @@ import {
   inject,
   OnInit,
   signal,
+  Signal,
   TemplateRef,
   ViewChild,
   ChangeDetectionStrategy,
@@ -55,10 +56,10 @@ export class DeliveryListComponent implements OnInit {
 
   tableConfig = signal<TableConfig>(DEFAULT_TABLE_CONFIG);
 
-  statusSeverityMap: Record<DeliveryStatus, string> = {
-    [DeliveryStatus.PENDING]: 'warning',
+  statusSeverityMap: Record<DeliveryStatus, 'success' | 'secondary' | 'info' | 'warn' | 'danger'> = {
+    [DeliveryStatus.PENDING]: 'warn',
     [DeliveryStatus.SCHEDULED]: 'info',
-    [DeliveryStatus.IN_ROUTE]: 'primary',
+    [DeliveryStatus.IN_ROUTE]: 'info',
     [DeliveryStatus.DELIVERED]: 'success',
     [DeliveryStatus.CANCELLED]: 'danger',
   };
@@ -70,6 +71,18 @@ export class DeliveryListComponent implements OnInit {
     [DeliveryStatus.DELIVERED]: 'Entregue',
     [DeliveryStatus.CANCELLED]: 'Cancelada',
   };
+
+  getStatusLabel(status: string | DeliveryStatus | undefined): string {
+    if (!status) return 'Desconhecido';
+    const statusKey = status as DeliveryStatus;
+    return this.statusLabelMap[statusKey] || status;
+  }
+
+  getStatusSeverity(status: string | DeliveryStatus | undefined): 'success' | 'secondary' | 'info' | 'warn' | 'danger' {
+    if (!status) return 'secondary';
+    const statusKey = status as DeliveryStatus;
+    return this.statusSeverityMap[statusKey] || 'secondary';
+  }
 
   ngOnInit() {
     this.setTableConfig();
@@ -91,11 +104,115 @@ export class DeliveryListComponent implements OnInit {
   }
 
   viewRoute(deliveryData: Delivery) {
-    this.router.navigate(['dashboard', 'deliveries', deliveryData.id, 'route']);
+    // Usa UUID se disponível, caso contrário usa o ID
+    const identifier = deliveryData.uuid || deliveryData.id;
+    if (!identifier) return;
+    
+    this.router.navigate(['dashboard', 'deliveries', identifier, 'route']);
   }
 
   editDelivery(deliveryData: Delivery) {
     this.router.navigate(['dashboard', 'deliveries', deliveryData.id, 'edit']);
+  }
+
+  private isUuid(value: string | number): boolean {
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    return uuidRegex.test(String(value));
+  }
+
+  private async findUuidById(id: string | number): Promise<string | null> {
+    try {
+      // Busca na lista de entregas para encontrar o UUID correspondente ao ID
+      const deliveries = this.state.deliveryList();
+      const delivery = deliveries.find(d => 
+        d.id === id || 
+        d.id?.toString() === id?.toString() ||
+        d.id?.toString() === String(id)
+      );
+      if (delivery?.uuid) {
+        return delivery.uuid;
+      }
+      
+      // Se não encontrar na lista em cache, busca a entrega pelo ID para obter o UUID
+      try {
+        const deliveryData = await this.state.getDeliveryById(id);
+        if (deliveryData?.uuid) {
+          return deliveryData.uuid;
+        }
+      } catch (err) {
+        console.error('Erro ao buscar entrega pelo ID:', err);
+      }
+      
+      return null;
+    } catch (err) {
+      console.error('Erro ao buscar UUID:', err);
+      return null;
+    }
+  }
+
+  async cancelDelivery(deliveryData: Delivery) {
+    if (!deliveryData) return;
+
+    try {
+      console.log('cancelDelivery - deliveryData:', deliveryData);
+      console.log('cancelDelivery - deliveryData.uuid:', deliveryData.uuid);
+      console.log('cancelDelivery - deliveryData.id:', deliveryData.id);
+      
+      // Sempre busca o UUID do backend para garantir que temos o UUID correto
+      let uuid: string | null = null;
+      
+      // Primeiro tenta usar o UUID do deliveryData se for válido
+      if (deliveryData.uuid && this.isUuid(deliveryData.uuid)) {
+        uuid = deliveryData.uuid;
+        console.log('UUID encontrado no deliveryData:', uuid);
+      } else {
+        // Se não tiver UUID válido, busca pelo ID
+        console.log('UUID não encontrado ou inválido, buscando pelo ID...');
+        uuid = await this.findUuidById(deliveryData.id);
+        console.log('UUID encontrado pelo ID:', uuid);
+      }
+      
+      // Se ainda não encontrou, tenta buscar a entrega completa pelo ID
+      if (!uuid || !this.isUuid(uuid)) {
+        console.log('Tentando buscar entrega completa pelo ID para obter UUID...');
+        try {
+          const fullDelivery = await this.state.getDeliveryById(deliveryData.id);
+          if (fullDelivery?.uuid && this.isUuid(fullDelivery.uuid)) {
+            uuid = fullDelivery.uuid;
+            console.log('UUID obtido da entrega completa:', uuid);
+          }
+        } catch (err) {
+          console.error('Erro ao buscar entrega completa:', err);
+        }
+      }
+
+      // Validação final
+      if (!uuid || !this.isUuid(uuid)) {
+        console.error('UUID inválido após todas as tentativas:', uuid);
+        this.toast.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Não foi possível obter o UUID da entrega. Tente novamente.',
+        });
+        return;
+      }
+
+      console.log('Enviando cancelamento com UUID:', uuid);
+      await this.state.cancelDelivery(uuid);
+      this.toast.add({
+        severity: 'success',
+        summary: 'Sucesso',
+        detail: 'Entrega cancelada com sucesso',
+      });
+      this.refreshDeliveries();
+    } catch (error: any) {
+      console.error('Erro ao cancelar entrega:', error);
+      this.toast.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: error?.error?.description || error?.message || 'Erro ao cancelar entrega',
+      });
+    }
   }
 
   deleteDelivery(deliveryId: string | number) {
@@ -145,6 +262,12 @@ export class DeliveryListComponent implements OnInit {
       rowsPerPage: 10,
       paginator: true,
       pageLinkSize: 5,
+      rowClass: (rowData: Delivery) => {
+        if (rowData.status === 'CANCELLED') {
+          return 'bg-red-50 dark:bg-red-900/20';
+        }
+        return '';
+      },
       columns: [
         {
           field: 'id',
@@ -209,12 +332,13 @@ export class DeliveryListComponent implements OnInit {
               },
             },
             {
-              icon: 'lucideTrash2',
-              color: 'warn',
+              icon: 'lucideX',
+              color: 'danger',
               variant: 'text',
-              tooltip: 'Excluir Entrega',
+              tooltip: 'Cancelar Entrega',
+              colorIcon: '#EF4444',
               action: (data: Delivery) => {
-                this.deleteDelivery(data.id);
+                this.cancelDelivery(data);
               },
             },
           ],

@@ -88,4 +88,15 @@ export class DeliveryService {
       { status }
     );
   }
+
+  cancelDelivery(
+    uuid: string
+  ): Observable<ApiResponse<Delivery>> {
+    console.log('DeliveryService.cancelDelivery - UUID recebido:', uuid);
+    console.log('DeliveryService.cancelDelivery - URL:', `${this.apiUrl}delivery/${uuid}/cancel`);
+    return this.http.patch<ApiResponse<Delivery>>(
+      `${this.apiUrl}delivery/${uuid}/cancel`,
+      {}
+    );
+  }
 }

@@ -19,6 +19,7 @@ import { SkeletonModule } from 'primeng/skeleton';
 import {
   CurrencyPipe,
   DecimalPipe,
+  NgClass,
   NgStyle,
   NgTemplateOutlet,
 } from '@angular/common';
@@ -49,6 +50,7 @@ import { MessageService } from 'primeng/api';
     InputIconModule,
     InputTextModule,
     ButtonModule,
+    NgClass,
     NgStyle,
     NgTemplateOutlet,
     TooltipModule,

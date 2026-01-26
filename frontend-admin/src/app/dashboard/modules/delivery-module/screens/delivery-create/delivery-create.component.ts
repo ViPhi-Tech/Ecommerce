@@ -131,7 +131,8 @@ export class DeliveryCreateComponent implements OnInit {
   }
 
   private loadAvailableOrders() {
-    this.orderState.getOrderList(true);
+    // Usa o método que busca apenas pedidos disponíveis (não entregues)
+    this.orderState.getAvailableOrdersList(true);
   }
 
   toggleOrderSelection(orderId: string | number) {

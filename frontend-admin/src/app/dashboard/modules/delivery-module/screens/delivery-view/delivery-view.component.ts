@@ -87,10 +87,14 @@ export class DeliveryViewComponent implements OnInit {
   }
 
   viewRoute() {
-    const id = this.deliveryId();
-    if (id) {
-      this.router.navigate(['dashboard', 'deliveries', id, 'route']);
-    }
+    const deliveryData = this.delivery();
+    if (!deliveryData) return;
+
+    // Usa UUID se disponível, caso contrário usa o ID
+    const identifier = deliveryData.uuid || deliveryData.id;
+    if (!identifier) return;
+
+    this.router.navigate(['dashboard', 'deliveries', identifier, 'route']);
   }
 
   editDelivery() {
@@ -101,10 +105,14 @@ export class DeliveryViewComponent implements OnInit {
   }
 
   generateRoute() {
-    const id = this.deliveryId();
-    if (!id) return;
+    const deliveryData = this.delivery();
+    if (!deliveryData) return;
 
-    this.deliveryState.generateRoute(id).then(() => {
+    // Usa UUID se disponível, caso contrário usa o ID
+    const identifier = deliveryData.uuid || deliveryData.id;
+    if (!identifier) return;
+
+    this.deliveryState.generateRoute(identifier).then(() => {
       this.toast.add({
         severity: 'success',
         summary: 'Sucesso',
@@ -115,10 +123,14 @@ export class DeliveryViewComponent implements OnInit {
   }
 
   optimizeRoute() {
-    const id = this.deliveryId();
-    if (!id) return;
+    const deliveryData = this.delivery();
+    if (!deliveryData) return;
 
-    this.deliveryState.optimizeRoute(id).then(() => {
+    // Usa UUID se disponível, caso contrário usa o ID
+    const identifier = deliveryData.uuid || deliveryData.id;
+    if (!identifier) return;
+
+    this.deliveryState.optimizeRoute(identifier).then(() => {
       this.toast.add({
         severity: 'success',
         summary: 'Sucesso',

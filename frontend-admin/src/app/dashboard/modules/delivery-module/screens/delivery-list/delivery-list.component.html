@@ -41,10 +41,10 @@
 </div>
 
 <ng-template #status let-row>
-  <!-- <p-tag
-    [value]="statusLabelMap[row.status]"
-    [severity]="statusSeverityMap[row.status]"
-  ></p-tag> -->
+  <p-tag
+    [value]="getStatusLabel(row.status)"
+    [severity]="getStatusSeverity(row.status)"
+  ></p-tag>
 </ng-template>
 
 <ng-template #orders let-row>
