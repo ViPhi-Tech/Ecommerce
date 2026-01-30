@@ -57,3 +57,10 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Use `create()` to create a new item in a state
 - Use `update()` to update an item in a state
 - Use `delete()` to delete an item in a state
+
+## Icons Reference
+
+- When suggesting or using icons, refer to the `.cursor/rules/icons.txt` file for the complete list of available Lucide icons
+- Icon names in the file follow the pattern: `lucide[IconName]` (e.g., `lucideUser`, `lucideHome`, `lucideSettings`)
+- When importing icons from `lucide-angular`, use the icon name without the `lucide` prefix (e.g., `User`, `Home`, `Settings`)
+- Always check the icons.txt file before suggesting an icon to ensure it exists in the available icon set

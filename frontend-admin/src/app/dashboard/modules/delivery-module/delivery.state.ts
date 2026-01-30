@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { catchError, finalize } from 'rxjs';
-import { Delivery, DeliveryModuleState } from './interfaces/delivery.interface';
+import { Delivery, DeliveryModuleState, DeliveryStatus } from './interfaces/delivery.interface';
 import { lastValueFrom } from 'rxjs';
 import { DeliveryService } from './delivery.service';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
@@ -21,6 +21,22 @@ export class DeliveryState extends BaseState<DeliveryModuleState> {
 
   deliveryList = computed(() => this.state().deliveryList);
   deliveryDetails = computed(() => this.state().deliveryDetails);
+
+  deliveredCount = computed(() =>
+    this.deliveryList().filter(d => (d.status as string) === DeliveryStatus.DELIVERED).length
+  );
+
+  pendingCount = computed(() =>
+    this.deliveryList().filter(
+      d =>
+        (d.status as string) !== DeliveryStatus.DELIVERED &&
+        (d.status as string) !== DeliveryStatus.CANCELLED
+    ).length
+  );
+
+  cancelledCount = computed(() =>
+    this.deliveryList().filter(d => (d.status as string) === DeliveryStatus.CANCELLED).length
+  );
 
   getDeliveryList(skipLoader = true): void {
     this.setLoading(true);

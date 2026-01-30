@@ -26,6 +26,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DeliveryService } from '../../delivery.service';
 import { Tooltip } from 'primeng/tooltip';
 import { Delivery, DeliveryStatus } from '../../interfaces/delivery.interface';
+import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/simple-indicator.component';
 
 @Component({
   selector: 'fuse-delivery-list',
@@ -39,6 +40,7 @@ import { Delivery, DeliveryStatus } from '../../interfaces/delivery.interface';
     ButtonModule,
     TagModule,
     Tooltip,
+    SimpleIndicatorComponent,
   ],
   providers: [DeliveryState],
 })

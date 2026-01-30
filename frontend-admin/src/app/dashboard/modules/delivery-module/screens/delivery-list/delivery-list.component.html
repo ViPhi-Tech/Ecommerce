@@ -31,6 +31,30 @@
     </div>
   </div>
 
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 sm:mt-6">
+    <fuse-simple-indicator
+      title="Entregues"
+      [value]="state.deliveredCount()"
+      variant="success"
+      icon="lucideCircleCheckBig"
+      [loading]="state.loading()"
+    />
+    <fuse-simple-indicator
+      title="Pendentes"
+      [value]="state.pendingCount()"
+      variant="info"
+      icon="lucideClock"
+      [loading]="state.loading()"
+    />
+    <fuse-simple-indicator
+      title="Canceladas"
+      [value]="state.cancelledCount()"
+      variant="error"
+      icon="lucideCircleX"
+      [loading]="state.loading()"
+    />
+  </div>
+
   <div class="animate-left mt-4 sm:mt-6">
     <fuse-table
       [data]="state.deliveryList()"
