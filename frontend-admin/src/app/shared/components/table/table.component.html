@@ -5,7 +5,7 @@
   [rows]="10"
   [rowsPerPageOptions]="[10, 25, 50]"
   [loading]="loading()"
-  [showGridlines]="true"
+  [showGridlines]="false"
   [showLoader]="false"
   [(selection)]="selectedData"
   [scrollable]="true"
@@ -19,8 +19,22 @@
       <div
         class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 justify-between items-center"
       >
+        <div class="mr-auto w-full"
+        style="max-width: 400px;">
+          <p-iconfield class="medium" iconPosition="left">
+            <p-inputicon class="pi pi-search" />
+            <input
+              pInputText
+              type="text"
+              
+              (input)="search($event, dt2)"
+              placeholder="Pesquisar"
+            />
+          </p-iconfield>
+        </div>
+      
         <div
-          class="w-full flex flex-col sm:flex-row sm:w-auto space-y-2-2 sm:space-x-2 sm:space-y-0"
+          class="w-full flex flex-col sm:flex-row sm:w-auto space-y-2-2 sm:space-x-2 sm:space-y-0 mr-2"
         >
           @for (button of config().headerButtons; track $index) {
             @if (button?.visible !== false) {
@@ -47,16 +61,6 @@
           <ng-content select="[data-headerFilter]"></ng-content>
 
           <div class="flex items-center gap-2 w-full sm:w-auto">
-            <p-iconfield class="medium" iconPosition="left">
-              <p-inputicon class="pi pi-search" />
-              <input
-                pInputText
-                type="text"
-                class="w-full sm:w-[250px]"
-                (input)="search($event, dt2)"
-                placeholder="Pesquisar"
-              />
-            </p-iconfield>
             @if (config().showClearFilters) {
               <p-button
                 size="small"
