@@ -13,13 +13,13 @@ export class CompleteDeliveryUseCase {
     }
 
     // Verificar se já está finalizada
-    if (delivery.status === 'delivered') {
+    if (delivery.status === 'DELIVERED' || delivery.status === 'delivered') {
       throw new Error('Esta entrega já foi finalizada');
     }
 
-    // Atualizar status para delivered
+    // Atualizar status para DELIVERED
     const updatedDelivery = await this.deliveryRepository.updateByUuid(uuid, {
-      status: 'delivered',
+      status: 'DELIVERED',
     });
 
     return {

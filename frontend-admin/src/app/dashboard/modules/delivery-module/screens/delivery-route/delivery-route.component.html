@@ -34,132 +34,320 @@
         </div>
       </div>
 
-      @if (route(); as routeData) {
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <!-- Mapa e Rota -->
-          <div class="lg:col-span-2">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Informações da Entrega -->
+        <div class="lg:col-span-2 space-y-6">
+          <!-- Dados da Entrega -->
+          <p-card>
+            <h2
+              class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200"
+            >
+              Informações da Entrega
+            </h2>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <span class="text-sm text-gray-600 dark:text-gray-400"
+                  >Nome</span
+                >
+                <p class="font-semibold mt-1">{{ deliveryData.name }}</p>
+              </div>
+              @if (deliveryData.description) {
+                <div>
+                  <span class="text-sm text-gray-600 dark:text-gray-400"
+                    >Descrição</span
+                  >
+                  <p class="font-semibold mt-1">
+                    {{ deliveryData.description }}
+                  </p>
+                </div>
+              }
+              <div>
+                <span class="text-sm text-gray-600 dark:text-gray-400"
+                  >Data de Entrega</span
+                >
+                <p class="font-semibold mt-1">
+                  {{ deliveryData.deliveryDate | date: 'dd/MM/yyyy' }}
+                </p>
+              </div>
+              <div>
+                <span class="text-sm text-gray-600 dark:text-gray-400"
+                  >Status</span
+                >
+                <p class="font-semibold mt-1">{{ deliveryData.status }}</p>
+              </div>
+              @if (deliveryData.driverName) {
+                <div>
+                  <span class="text-sm text-gray-600 dark:text-gray-400"
+                    >Motorista</span
+                  >
+                  <p class="font-semibold mt-1">
+                    {{ deliveryData.driverName }}
+                  </p>
+                </div>
+              }
+              @if (deliveryData.vehiclePlate) {
+                <div>
+                  <span class="text-sm text-gray-600 dark:text-gray-400"
+                    >Placa do Veículo</span
+                  >
+                  <p class="font-semibold mt-1">
+                    {{ deliveryData.vehiclePlate }}
+                  </p>
+                </div>
+              }
+            </div>
+          </p-card>
+
+          <!-- Pedidos -->
+          @if (deliveryData.orders && deliveryData.orders.length > 0) {
             <p-card>
               <h2
                 class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200"
               >
-                Mapa da Rota
+                Pedidos ({{ deliveryData.orders.length }})
               </h2>
-              <!-- Aqui você pode integrar um componente de mapa (Google Maps, Leaflet, etc.) -->
-              <div
-                class="bg-gray-200 dark:bg-gray-700 rounded-lg h-96 flex items-center justify-center"
-              >
-                <div class="text-center">
-                  <ng-icon
-                    name="lucideMap"
-                    class="text-6xl text-gray-400 mb-4"
-                  />
-                  <p class="text-gray-600 dark:text-gray-400">
-                    Integre um componente de mapa aqui
-                  </p>
-                  <p class="text-sm text-gray-500 dark:text-gray-500 mt-2">
-                    (Google Maps, Leaflet, Mapbox, etc.)
-                  </p>
-                </div>
-              </div>
+              <div class="space-y-4">
+                @for (order of deliveryData.orders; track order.id) {
+                  <div
+                    class="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                  >
+                    <div class="flex items-start justify-between mb-3">
+                      <div class="flex-1">
+                        <h3
+                          class="font-semibold text-gray-800 dark:text-gray-200"
+                        >
+                          Pedido #{{ order.id }}
+                        </h3>
+                        @if (order.status) {
+                          <p
+                            class="text-sm text-gray-600 dark:text-gray-400 mt-1"
+                          >
+                            Status: {{ order.status }}
+                          </p>
+                        }
+                      </div>
+                      <div class="flex items-center gap-3">
+                        <div class="text-right">
+                          <p
+                            class="text-lg font-bold text-gray-800 dark:text-gray-200"
+                          >
+                            {{ order.total | currency: 'BRL' }}
+                          </p>
+                        </div>
+                        @if (!isOrderDelivered(order.status)) {
+                          <p-button
+                            label="Marcar como Entregue"
+                            icon="pi pi-check-circle"
+                            [outlined]="true"
+                            severity="success"
+                            size="small"
+                            (onClick)="markOrderAsDelivered(order.id)"
+                          />
+                        } @else {
+                          <p-tag
+                            value="Entregue"
+                            severity="success"
+                            icon="pi pi-check-circle"
+                          ></p-tag>
+                        }
+                      </div>
+                    </div>
 
-              <!-- Informações da Rota -->
-              <div class="grid grid-cols-2 gap-4 mt-4">
+                    <!-- Cliente -->
+                    @if (order.client) {
+                      <div class="mb-3 p-3 bg-gray-50 dark:bg-gray-700 rounded">
+                        <p class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-1">
+                          Cliente
+                        </p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                          {{ order.client.fullName }}
+                        </p>
+                        @if (order.client.document) {
+                          <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                            Documento: {{ order.client.document }}
+                          </p>
+                        }
+                        @if (order.client.address) {
+                          <div class="mt-2 pt-2 border-t border-gray-200 dark:border-gray-600">
+                            <p class="text-xs font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                              Endereço
+                            </p>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">
+                              {{ order.client.address.street }},
+                              {{ order.client.address.number }}
+                            </p>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">
+                              {{ order.client.address.city }} -
+                              {{ order.client.address.state }}
+                            </p>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">
+                              CEP: {{ order.client.address.zipCode }}
+                            </p>
+                            @if (order.client.address.complement) {
+                              <p class="text-xs text-gray-600 dark:text-gray-400">
+                                Complemento: {{ order.client.address.complement }}
+                              </p>
+                            }
+                          </div>
+                        }
+                      </div>
+                    } @else {
+                      <div class="mb-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded">
+                        <p class="text-sm text-yellow-700 dark:text-yellow-400">
+                          Cliente não informado
+                        </p>
+                      </div>
+                    }
+
+                    <!-- Itens do Pedido -->
+                    @if (order.items && order.items.length > 0) {
+                      <div>
+                        <p
+                          class="text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2"
+                        >
+                          Itens do Pedido
+                        </p>
+                        <div class="space-y-2">
+                          @for (item of order.items; track item.id) {
+                            <div
+                              class="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-700 rounded"
+                            >
+                              <div class="flex-1">
+                                <p
+                                  class="text-sm font-semibold text-gray-800 dark:text-gray-200"
+                                >
+                                  @if (item.product) {
+                                    {{ item.product.name }}
+                                  } @else {
+                                    Produto #{{ item.productId }}
+                                  }
+                                </p>
+                                @if (item.product?.sku) {
+                                  <p
+                                    class="text-xs text-gray-500 dark:text-gray-500"
+                                  >
+                                    SKU: {{ item.product?.sku }}
+                                  </p>
+                                }
+                                <p class="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                                  Quantidade: {{ item.quantity }} x
+                                  {{ item.price | currency: 'BRL' }}
+                                </p>
+                              </div>
+                              <div class="text-right ml-4">
+                                <p
+                                  class="text-sm font-semibold text-gray-800 dark:text-gray-200"
+                                >
+                                  {{
+                                    item.quantity * item.price | currency: 'BRL'
+                                  }}
+                                </p>
+                              </div>
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+
+                    <!-- Data do Pedido -->
+                    <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                      <p class="text-xs text-gray-500 dark:text-gray-500">
+                        Criado em:
+                        {{ order.createdAt | date: 'dd/MM/yyyy HH:mm' }}
+                      </p>
+                      <p class="text-xs text-gray-500 dark:text-gray-500">
+                        Atualizado em:
+                        {{ order.updatedAt | date: 'dd/MM/yyyy HH:mm' }}
+                      </p>
+                    </div>
+                  </div>
+                }
+              </div>
+            </p-card>
+          } @else {
+            <p-card>
+              <div class="text-center py-8">
+                <p class="text-gray-600 dark:text-gray-400">
+                  Nenhum pedido associado a esta entrega
+                </p>
+              </div>
+            </p-card>
+          }
+        </div>
+
+        <!-- Sidebar -->
+        <div class="space-y-6">
+          <!-- Resumo -->
+          <p-card>
+            <h2
+              class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200"
+            >
+              Resumo
+            </h2>
+            <div class="space-y-3">
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400"
+                  >Total de Pedidos:</span
+                >
+                <span class="font-semibold">
+                  {{ deliveryData.orders?.length || 0 }}
+                </span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600 dark:text-gray-400"
+                  >Valor Total:</span
+                >
+                <span class="font-semibold">
+                  {{ getTotalValue() | currency: 'BRL' }}
+                </span>
+              </div>
+            </div>
+          </p-card>
+
+          <!-- Rota (se existir) -->
+          @if (route(); as routeData) {
+            <p-card>
+              <h2
+                class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200"
+              >
+                Informações da Rota
+              </h2>
+              <div class="space-y-3">
                 @if (routeData.totalDistance) {
-                  <div class="p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                  <div>
                     <span class="text-sm text-gray-600 dark:text-gray-400"
                       >Distância Total</span
                     >
-                    <p
-                      class="text-2xl font-bold text-blue-600 dark:text-blue-400"
-                    >
+                    <p class="font-semibold mt-1">
                       {{ routeData.totalDistance }} km
                     </p>
                   </div>
                 }
                 @if (routeData.estimatedTime) {
-                  <div class="p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                  <div>
                     <span class="text-sm text-gray-600 dark:text-gray-400"
                       >Tempo Estimado</span
                     >
-                    <p
-                      class="text-2xl font-bold text-green-600 dark:text-green-400"
-                    >
+                    <p class="font-semibold mt-1">
                       {{ routeData.estimatedTime }} min
+                    </p>
+                  </div>
+                }
+                @if (routeData.waypoints && routeData.waypoints.length > 0) {
+                  <div>
+                    <span class="text-sm text-gray-600 dark:text-gray-400"
+                      >Paradas</span
+                    >
+                    <p class="font-semibold mt-1">
+                      {{ routeData.waypoints.length }}
                     </p>
                   </div>
                 }
               </div>
             </p-card>
-          </div>
-
-          <!-- Lista de Paradas -->
-          <div>
-            <p-card>
-              <h2
-                class="text-lg font-semibold mb-4 text-gray-800 dark:text-gray-200"
-              >
-                Paradas da Rota
-              </h2>
-              <div class="space-y-3">
-                @for (waypoint of routeData.waypoints; track waypoint.orderId) {
-                  <div
-                    class="flex items-start gap-3 p-3 border rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                  >
-                    <div
-                      class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center font-semibold text-sm"
-                    >
-                      {{ waypoint.sequence }}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <p class="font-semibold text-sm">
-                        Pedido #{{ waypoint.orderId }}
-                      </p>
-                      <p
-                        class="text-xs text-gray-600 dark:text-gray-400 mt-1 break-words"
-                      >
-                        {{ waypoint.address }}
-                      </p>
-                      @if (waypoint.estimatedArrival) {
-                        <p
-                          class="text-xs text-gray-500 dark:text-gray-500 mt-1"
-                        >
-                          Chegada:
-                          {{ waypoint.estimatedArrival | date: 'HH:mm' }}
-                        </p>
-                      }
-                    </div>
-                    @if (waypoint.completed) {
-                      <ng-icon
-                        name="lucideCheckCircle"
-                        class="text-green-500 flex-shrink-0"
-                      />
-                    }
-                  </div>
-                }
-              </div>
-            </p-card>
-          </div>
+          }
         </div>
-      } @else {
-        <p-card>
-          <div class="text-center py-12">
-            <ng-icon name="lucideMap" class="text-6xl text-gray-400 mb-4" />
-            <h3
-              class="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200"
-            >
-              Nenhuma rota gerada
-            </h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-6">
-              Gere uma rota para visualizar o trajeto de entrega
-            </p>
-            <p-button
-              label="Gerar Rota"
-              icon="pi pi-map"
-              (onClick)="generateRoute()"
-            />
-          </div>
-        </p-card>
-      }
+      </div>
     </div>
   } @else {
     <div class="flex items-center justify-center h-64">

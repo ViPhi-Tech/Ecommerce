@@ -22,6 +22,47 @@ export class OrderRepository implements IOrderRepository {
     });
   };
 
+  async findAvailable(excludeDeliveryId?: number): Promise<Order[]> {
+    const whereConditions: any = {
+      isActive: true,
+      status: {
+        not: 'DELIVERED'
+      },
+      OR: [
+        // Pedidos que não estão em nenhuma entrega
+        {
+          deliveryId: null
+        },
+        // OU pedidos que estão em uma entrega cancelada
+        {
+          delivery: {
+            status: 'CANCELLED'
+          }
+        }
+      ]
+    };
+
+    // Se excludeDeliveryId for fornecido, também inclui pedidos dessa entrega (para edição)
+    if (excludeDeliveryId) {
+      whereConditions.OR.push({
+        deliveryId: excludeDeliveryId
+      });
+    }
+
+    return this.prisma.order.findMany({
+        include: {
+          items: true,
+          client: true,
+          payments: true,
+          delivery: true, // Inclui a entrega para verificar o status
+        },
+        where: whereConditions,
+        orderBy: {
+          createdAt: 'desc'
+        }
+    });
+  };
+
   async createItems(orderId: number, items: any[]): Promise<OrderItem[]> {
     await this.prisma.orderItem.createMany({
       data: items.map((item) => ({

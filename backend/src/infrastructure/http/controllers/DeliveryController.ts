@@ -5,6 +5,7 @@ import { FindAllDeliveryUseCase } from '../../../application/use-cases/delivery/
 import { UpdateDeliveryUseCase } from '../../../application/use-cases/delivery/UpdateDeliveryUseCase';
 import { DeleteDeliveryUseCase } from '../../../application/use-cases/delivery/DeleteDeliveryUseCase';
 import { CompleteDeliveryUseCase } from '../../../application/use-cases/delivery/CompleteDeliveryUseCase';
+import { CancelDeliveryUseCase } from '../../../application/use-cases/delivery/CancelDeliveryUseCase';
 import { GetDeliveryDashboardUseCase } from '../../../application/use-cases/delivery/GetDeliveryDashboardUseCase';
 import { ApiResponse } from "../../../shared/types/apiResponse";
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
@@ -29,6 +30,7 @@ export class DeliveryController {
     private updateDeliveryUseCase: UpdateDeliveryUseCase,
     private deleteDeliveryUseCase: DeleteDeliveryUseCase,
     private completeDeliveryUseCase: CompleteDeliveryUseCase,
+    private cancelDeliveryUseCase: CancelDeliveryUseCase,
     private getDeliveryDashboardUseCase: GetDeliveryDashboardUseCase
   ) {}
 
@@ -119,6 +121,21 @@ export class DeliveryController {
       return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
         status: HTTP_MESSAGES.API_STATUS_BAD_REQUEST,
         description: error instanceof Error ? error.message : 'Erro desconhecido ao finalizar entrega',
+      });
+    }
+  }
+
+  async cancel(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+    try {
+      const deliveryParams = deliveryUuidSchema.parse(request.params);
+      return reply.status(HTTP_STATUS.API_STATUS_SUCCESS).send({
+        status: HTTP_MESSAGES.API_STATUS_SUCCESS,
+        data: await this.cancelDeliveryUseCase.execute(deliveryParams.uuid),
+      });
+    } catch (error) {
+      return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
+        status: HTTP_MESSAGES.API_STATUS_BAD_REQUEST,
+        description: error instanceof Error ? error.message : 'Erro desconhecido ao cancelar entrega',
       });
     }
   }

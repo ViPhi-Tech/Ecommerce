@@ -77,4 +77,21 @@ export class OrderService {
   deleteOrder(orderId: string | number): Observable<ApiResponse<any>> {
     return this.http.delete<ApiResponse<any>>(`${this.apiUrl}order/${orderId}`);
   }
+
+  getAvailableOrders(skipLoader = true, deliveryId?: number): Observable<Order[] | { data: Order[] }> {
+    const headers: any = {};
+    if (skipLoader) {
+      headers['Skip-Loader'] = 'true';
+    }
+
+    let url = `${this.apiUrl}order/available`;
+    if (deliveryId) {
+      url += `?deliveryId=${deliveryId}`;
+    }
+
+    return this.http.get<Order[] | { data: Order[] }>(
+      url,
+      { headers }
+    );
+  }
 }

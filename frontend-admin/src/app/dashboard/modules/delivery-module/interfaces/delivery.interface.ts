@@ -7,6 +7,7 @@ export interface DeliveryModuleState extends BaseModuleState {
 
 export interface Delivery {
   id: string | number;
+  uuid?: string;
   name: string;
   description?: string;
   status: DeliveryStatus;
@@ -14,10 +15,53 @@ export interface Delivery {
   driverName?: string;
   vehiclePlate?: string;
   orderIds: any[];
+  orders?: DeliveryOrder[];
   route?: DeliveryRoute;
   createdAt: Date | string;
   updatedAt: Date | string;
   isActive?: boolean;
+}
+
+export interface DeliveryOrder {
+  id: number;
+  clientId?: number | null;
+  total: number;
+  status?: string | null;
+  createdAt: Date | string;
+  updatedAt: Date | string;
+  client?: DeliveryClient | null;
+  items?: DeliveryOrderItem[];
+}
+
+export interface DeliveryClient {
+  id: number;
+  fullName: string | null;
+  document: string | null;
+  address?: DeliveryAddress | null;
+}
+
+export interface DeliveryAddress {
+  id: number;
+  street: string;
+  number: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  complement: string | null;
+}
+
+export interface DeliveryOrderItem {
+  id: number;
+  productId: number;
+  quantity: number;
+  price: number;
+  product?: DeliveryProduct;
+}
+
+export interface DeliveryProduct {
+  id: number;
+  name: string;
+  sku: string;
 }
 
 export interface DeliveryRoute {
@@ -41,9 +85,9 @@ export interface RouteWaypoint {
 }
 
 export enum DeliveryStatus {
-  PENDING = 'pending',
-  SCHEDULED = 'scheduled',
-  IN_ROUTE = 'in_route',
-  DELIVERED = 'delivered',
-  CANCELLED = 'cancelled',
+  PENDING = 'PENDING',
+  SCHEDULED = 'SCHEDULED',
+  IN_ROUTE = 'IN_ROUTE',
+  DELIVERED = 'DELIVERED',
+  CANCELLED = 'CANCELLED',
 }

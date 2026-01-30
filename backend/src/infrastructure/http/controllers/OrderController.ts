@@ -2,6 +2,7 @@ import { FastifyRequest, FastifyReply } from 'fastify';
 import { CreateOrderUseCase } from '../../../application/use-cases/order/CreateOrderUseCase';
 import { FindByIdOrderUseCase } from '../../../application/use-cases/order/FindByIdOrderUseCase';
 import { FindAllOrderUseCase } from '../../../application/use-cases/order/FindAllOrderUseCase';
+import { FindAvailableOrdersUseCase } from '../../../application/use-cases/order/FindAvailableOrdersUseCase';
 import { CreatePreOrderUseCase } from '../../../application/use-cases/order/CreatePreOrderUseCase';
 import { GetOrderByClientUseCase } from '../../../application/use-cases/order/GetOrderByClientUseCase';
 import { ApiResponse } from "../../../shared/types/apiResponse";
@@ -11,6 +12,7 @@ import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 import { UpdateOrderUseCase } from '../../../application/use-cases/order/UpdateOrderUseCase';
 import { CreateOrderDTO, OrderIdDTO, CreatePreOrderDTO, createOrderSchema, orderIdSchema, createPreOrderSchema } from "../../../application/dto/order/OrderDTOs";
 import { DeleteOrderUseCase } from '../../../application/use-cases/order/DeleteOrderUseCase';
+import { MarkOrderAsDeliveredUseCase } from '../../../application/use-cases/order/MarkOrderAsDeliveredUseCase';
 
 export class OrderController {
     constructor(
@@ -20,7 +22,9 @@ export class OrderController {
         private createPreOrderUseCase: CreatePreOrderUseCase,
         private updateOrderUseCase: UpdateOrderUseCase,
         private getOrderByClientUseCase: GetOrderByClientUseCase,
-        private deleteOrderUseCase: DeleteOrderUseCase
+        private deleteOrderUseCase: DeleteOrderUseCase,
+        private markOrderAsDeliveredUseCase: MarkOrderAsDeliveredUseCase,
+        private findAvailableOrdersUseCase: FindAvailableOrdersUseCase
     ) {}
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
     try {
@@ -145,6 +149,39 @@ export class OrderController {
             return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
                 status: HTTP_MESSAGES.API_STATUS_BAD_REQUEST,
                 description: error instanceof Error ? error.message : 'An unknown error occurred',
+            });
+        }
+    }
+
+    async markAsDelivered(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try {
+            const { id } = request.params as OrderIdDTO;
+            return reply.status(HTTP_STATUS.API_STATUS_SUCCESS).send({
+                status: HTTP_MESSAGES.API_STATUS_SUCCESS,
+                data: await this.markOrderAsDeliveredUseCase.execute(id),
+            });
+        } catch (error) {
+            return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
+                status: HTTP_MESSAGES.API_STATUS_BAD_REQUEST,
+                description: error instanceof Error ? error.message : 'Erro desconhecido ao marcar pedido como entregue',
+            });
+        }
+    }
+
+    async findAvailable(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+        try {
+            // Aceita deliveryId opcional como query param para excluir uma entrega específica (útil na edição)
+            const query = request.query as { deliveryId?: string };
+            const excludeDeliveryId = query?.deliveryId ? parseInt(query.deliveryId, 10) : undefined;
+            
+            return reply.status(HTTP_STATUS.API_STATUS_SUCCESS).send({
+                status: HTTP_MESSAGES.API_STATUS_SUCCESS,
+                data: await this.findAvailableOrdersUseCase.execute(excludeDeliveryId),
+            });
+        } catch (error) {
+            return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
+                status: HTTP_MESSAGES.API_STATUS_BAD_REQUEST,
+                description: error instanceof Error ? error.message : 'Erro desconhecido ao buscar pedidos disponíveis',
             });
         }
     }

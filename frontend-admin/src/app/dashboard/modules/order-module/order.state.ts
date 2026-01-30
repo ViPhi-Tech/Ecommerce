@@ -70,6 +70,34 @@ export class OrderState extends BaseState<OrderModuleState> {
       });
   }
 
+  getAvailableOrdersList(skipLoader = true, deliveryId?: number): void {
+    this.setLoading(true);
+    this.clearError();
+    this.setOrderList([], false);
+
+    lastValueFrom(
+      this.orderService.getAvailableOrders(skipLoader, deliveryId).pipe(
+        catchError(error => this.handleError(error)),
+        finalize(() => this.setLoading(false))
+      )
+    )
+      .then((response: ApiResponse<Order[]>) => {
+        const orders = Array.isArray(response)
+          ? response
+          : response?.data || response?.dados;
+        if (orders && orders.length > 0) {
+          this.setOrderList(orders, false);
+        } else {
+          this.setOrderList([], false);
+          this.setError('Nenhum pedido disponível encontrado.');
+        }
+      })
+      .catch(error => {
+        this.setError('Erro ao carregar a lista de pedidos disponíveis');
+        console.error('Erro ao buscar pedidos disponíveis:', error);
+      });
+  }
+
   setOrderList(orderList: Order[], isNoted = false) {
     let transformedOrders = orderList.map(order => {
       return {

@@ -4,9 +4,11 @@ import { CreateOrderUseCase } from "../../../application/use-cases/order/CreateO
 import { CreatePreOrderUseCase } from "../../../application/use-cases/order/CreatePreOrderUseCase";
 import { FindByIdOrderUseCase } from "../../../application/use-cases/order/FindByIdOrderUseCase";
 import { FindAllOrderUseCase } from "../../../application/use-cases/order/FindAllOrderUseCase";
+import { FindAvailableOrdersUseCase } from "../../../application/use-cases/order/FindAvailableOrdersUseCase";
 import { UpdateOrderUseCase } from "../../../application/use-cases/order/UpdateOrderUseCase";
 import { GetOrderByClientUseCase } from "../../../application/use-cases/order/GetOrderByClientUseCase";
 import { DeleteOrderUseCase } from "../../../application/use-cases/order/DeleteOrderUseCase";
+import { MarkOrderAsDeliveredUseCase } from "../../../application/use-cases/order/MarkOrderAsDeliveredUseCase";
 
 import { OrderController } from "../../http/controllers/OrderController";
 import { ProductRepository } from "../../database/repositories/ProductRepository";
@@ -32,9 +34,11 @@ export const createPreOrderUseCase = new CreatePreOrderUseCase(orderRepository);
 
 export const findByIdOrderUseCase = new FindByIdOrderUseCase(orderRepository);
 export const findAllOrderUseCase = new FindAllOrderUseCase(orderRepository);
+export const findAvailableOrdersUseCase = new FindAvailableOrdersUseCase(orderRepository);
 export const updateOrderUseCase = new UpdateOrderUseCase(transactionRunner, orderRepositoryFactory, productRepositoryFactory, paymentRepositoryFactory);
 export const getOrderByClientUseCase = new GetOrderByClientUseCase(orderRepository);
 export const deleteOrderUseCase = new DeleteOrderUseCase(orderRepository);
+export const markOrderAsDeliveredUseCase = new MarkOrderAsDeliveredUseCase(orderRepository);
 
 // Controller com todos use cases
 export const orderController = new OrderController(
@@ -44,5 +48,7 @@ export const orderController = new OrderController(
      createPreOrderUseCase,
      updateOrderUseCase,
      getOrderByClientUseCase,
-     deleteOrderUseCase
+     deleteOrderUseCase,
+     markOrderAsDeliveredUseCase,
+     findAvailableOrdersUseCase
 );

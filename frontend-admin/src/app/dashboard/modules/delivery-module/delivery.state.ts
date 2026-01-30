@@ -63,9 +63,13 @@ export class DeliveryState extends BaseState<DeliveryModuleState> {
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
       )
-    ).then((response: ApiResponse<Delivery>) => {
-      this.updateState('deliveryDetails', response.data);
-      return response.data;
+    ).then((response: any) => {
+      // O backend pode retornar response.data ou response.dados
+      const delivery = response?.data || response?.dados || response;
+      console.log('Response completa:', response);
+      console.log('Delivery extraído:', delivery);
+      this.updateState('deliveryDetails', delivery);
+      return delivery;
     });
   }
 
@@ -158,6 +162,59 @@ export class DeliveryState extends BaseState<DeliveryModuleState> {
       )
     ).then(() => {
       return this.getDeliveryById(deliveryId);
+    });
+  }
+
+  cancelDelivery(uuid: string): Promise<Delivery> {
+    console.log('DeliveryState.cancelDelivery - UUID recebido:', uuid);
+    console.log('DeliveryState.cancelDelivery - Tipo:', typeof uuid);
+    console.log('DeliveryState.cancelDelivery - É UUID válido?', /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(uuid));
+    
+    this.setLoading(true);
+    this.clearError();
+
+    return lastValueFrom(
+      this.deliveryService.cancelDelivery(uuid).pipe(
+        catchError(error => {
+          console.error('DeliveryState.cancelDelivery - Erro:', error);
+          return this.handleError(error);
+        }),
+        finalize(() => this.setLoading(false))
+      )
+    ).then((response: ApiResponse<Delivery>) => {
+      const cancelledDelivery = response?.data || response?.dados || response;
+      const currentList = this.deliveryList();
+      const updatedList = currentList.map(delivery =>
+        delivery.uuid === uuid ? cancelledDelivery : delivery
+      );
+      this.setDeliveryList(updatedList);
+      if (this.deliveryDetails().uuid === uuid) {
+        this.updateState('deliveryDetails', cancelledDelivery);
+      }
+      return cancelledDelivery;
+    });
+  }
+
+  completeDelivery(uuid: string): Promise<Delivery> {
+    this.setLoading(true);
+    this.clearError();
+
+    return lastValueFrom(
+      this.deliveryService.completeDelivery(uuid).pipe(
+        catchError(error => this.handleError(error)),
+        finalize(() => this.setLoading(false))
+      )
+    ).then((response: ApiResponse<Delivery>) => {
+      const completedDelivery = response?.data || response?.dados || response;
+      const currentList = this.deliveryList();
+      const updatedList = currentList.map(delivery =>
+        delivery.uuid === uuid ? completedDelivery : delivery
+      );
+      this.setDeliveryList(updatedList);
+      if (this.deliveryDetails().uuid === uuid) {
+        this.updateState('deliveryDetails', completedDelivery);
+      }
+      return completedDelivery;
     });
   }
 

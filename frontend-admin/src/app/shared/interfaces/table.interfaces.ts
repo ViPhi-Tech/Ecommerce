@@ -19,6 +19,7 @@ export interface TableConfig {
   headerButtons?: HeaderButton[];
   rowClick?: (rowData: any, rowIndex: number) => void;
   refresh?: () => void;
+  rowClass?: (rowData: any) => string | string[] | Record<string, boolean>;
 }
 
 export interface TableColumn {

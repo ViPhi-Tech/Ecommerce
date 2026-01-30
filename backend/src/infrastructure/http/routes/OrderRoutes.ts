@@ -81,4 +81,23 @@ export default async function saleRoutes(
         handler: orderController.getOrdersByClient.bind(orderController)
      })
 
+     fastify.patch('/:id/delivered', {
+        schema: {
+            tags: ['order'],
+            description: 'Marca um pedido como entregue (status: delivered)',
+            params: orderIdJsonSchema
+        },
+        preValidation: [authenticate],
+        handler: orderController.markAsDelivered.bind(orderController)
+     })
+
+     fastify.get('/available', {
+        schema: {
+            tags: ['order'],
+            description: 'Lista pedidos disponíveis para entrega (exclui pedidos com status DELIVERED)'
+        },
+        preValidation: [authenticate],
+        handler: orderController.findAvailable.bind(orderController)
+     })
+
 }
