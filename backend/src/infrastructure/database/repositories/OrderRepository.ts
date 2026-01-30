@@ -1,12 +1,25 @@
 import { Order } from "../../../domain/entities/Order";
 import { AggregateOrderResponse, AggregateOrderStatusResponse, OrderItem, AggregateOrderCategoryResponse } from "../../../domain/entities/OrderItem";
-import { IOrderRepository } from "../../../domain/repositories/IOrderRepository";
+import { IOrderRepository, FindAllOrderFilter } from "../../../domain/repositories/IOrderRepository";
 import { Prisma, PrismaClient } from "../prismaClient";
 
 export class OrderRepository implements IOrderRepository {
   constructor(private prisma:  PrismaClient | Prisma.TransactionClient) {}
 
-  async findAll(): Promise<Order[]> {
+  async findAll(filter?: FindAllOrderFilter): Promise<Order[]> {
+    const where: Prisma.OrderWhereInput = {
+      isActive: true,
+    };
+    if (filter?.clientId != null) {
+      where.clientId = filter.clientId;
+    }
+    if (filter?.startDate != null && filter?.endDate != null) {
+      const start = new Date(filter.startDate);
+      const end = new Date(filter.endDate);
+      start.setHours(0, 0, 0, 0);
+      end.setHours(23, 59, 59, 999);
+      where.createdAt = { gte: start, lte: end };
+    }
     return this.prisma.order.findMany({
         include: {
           items: {
@@ -17,9 +30,7 @@ export class OrderRepository implements IOrderRepository {
           client: true,
           payments: true,
         },
-        where: {
-          isActive: true
-        },
+        where,
         orderBy: {
           createdAt: 'desc'
         }

@@ -14,16 +14,23 @@ export class OrderService {
 
   constructor() {}
 
-  getOrders(skipLoader = true): Observable<Order[] | { data: Order[] }> {
+  getOrders(
+    skipLoader = true,
+    filter?: { clientId?: number; startDate?: string; endDate?: string }
+  ): Observable<Order[] | { data: Order[] }> {
     const headers: any = {};
     if (skipLoader) {
       headers['Skip-Loader'] = 'true';
     }
+    const params: Record<string, string | number> = {};
+    if (filter?.clientId != null) params['clientId'] = filter.clientId;
+    if (filter?.startDate) params['startDate'] = filter.startDate;
+    if (filter?.endDate) params['endDate'] = filter.endDate;
 
-    return this.http.get<Order[] | { data: Order[] }>(
-      `${this.apiUrl}order/all`,
-      { headers }
-    );
+    return this.http.get<Order[] | { data: Order[] }>(`${this.apiUrl}order/all`, {
+      headers,
+      ...(Object.keys(params).length > 0 && { params }),
+    });
   }
 
   getOrdersByClient(

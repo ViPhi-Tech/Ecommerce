@@ -68,9 +68,20 @@ export class OrderController {
 
     async findAll(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try {
+            const query = request.query as { clientId?: string; startDate?: string; endDate?: string };
+            const hasClient = query.clientId != null && query.clientId !== '';
+            const clientIdNum = hasClient ? parseInt(query.clientId!, 10) : undefined;
+            const hasDate = query.startDate != null && query.startDate !== '' && query.endDate != null && query.endDate !== '';
+            const filter =
+                (hasClient && !isNaN(clientIdNum!)) || hasDate
+                    ? {
+                          ...(hasClient && clientIdNum != null && !isNaN(clientIdNum) && { clientId: clientIdNum }),
+                          ...(hasDate && { startDate: query.startDate!, endDate: query.endDate! }),
+                      }
+                    : undefined;
             return reply.status(HTTP_STATUS.API_STATUS_SUCCESS).send({
                 status: HTTP_MESSAGES.API_STATUS_SUCCESS,
-                data: await this.findallOrderUseCase.execute(),
+                data: await this.findallOrderUseCase.execute(filter),
             });
         } catch (error) {
             return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({

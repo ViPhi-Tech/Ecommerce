@@ -1,6 +1,7 @@
 import {
   Component,
   DestroyRef,
+  effect,
   inject,
   OnInit,
   signal,
@@ -78,18 +79,22 @@ export class OrderListComponent implements OnInit {
 
   selectedClient = signal<string | null>(null);
 
-  filteredOrderList = computed(() => {
-    const orders = this.state.orderList();
-    const selectedClient = this.selectedClient();
-    if (!selectedClient) return orders;
-    return orders.filter(order => order.client?.id === Number(selectedClient));
-  });
+  /** Período atual (setado quando o fuse-period emite). Usado para montar o filtro da API. */
+  currentPeriodRange = signal<PeriodRange | null>(null);
 
-  constructor() {}
+  filteredOrderList = computed(() => this.state.orderList());
+
+  constructor() {
+    effect(() => {
+      this.currentPeriodRange();
+      this.selectedClient();
+      const range = this.currentPeriodRange();
+      if (range) this.loadOrders();
+    });
+  }
 
   ngOnInit() {
     this.setTableConfig();
-    this.state.getOrderList();
   }
 
   addNewOrder() {
@@ -97,7 +102,24 @@ export class OrderListComponent implements OnInit {
   }
 
   refreshOrders() {
-    this.state.getOrderList();
+    this.loadOrders();
+  }
+
+  private loadOrders(): void {
+    const range = this.currentPeriodRange();
+    const clientId = this.selectedClient();
+    const filter =
+      range || clientId
+        ? {
+            ...(clientId != null && clientId !== '' && { clientId: Number(clientId) }),
+            ...(range?.periodType !== 'all' &&
+              range != null && {
+                startDate: range.startDate.toISOString().split('T')[0],
+                endDate: range.endDate.toISOString().split('T')[0],
+              }),
+          }
+        : undefined;
+    this.state.getOrderList(true, false, filter);
   }
 
   viewOrder(orderData: any) {
@@ -141,8 +163,7 @@ export class OrderListComponent implements OnInit {
   }
 
   onPeriodChange(range: PeriodRange) {
-    // TODO: Filtrar pedidos por período se necessário
-    console.log('Período selecionado:', range);
+    this.currentPeriodRange.set(range);
   }
 
   setTableConfig() {

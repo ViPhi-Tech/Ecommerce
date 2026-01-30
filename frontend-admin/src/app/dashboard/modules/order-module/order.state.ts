@@ -90,13 +90,17 @@ export class OrderState extends BaseState<OrderModuleState> {
     });
   }
 
-  getOrderList(skipLoader = true, isNoted = false): void {
+  getOrderList(
+    skipLoader = true,
+    isNoted = false,
+    filter?: { clientId?: number; startDate?: string; endDate?: string }
+  ): void {
     this.setLoading(true);
     this.clearError();
     this.setOrderList([], isNoted);
 
     lastValueFrom(
-      this.orderService.getOrders(skipLoader).pipe(
+      this.orderService.getOrders(skipLoader, filter).pipe(
         catchError(error => this.handleError(error)),
         finalize(() => this.setLoading(false))
       )
