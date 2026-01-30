@@ -1,0 +1,8 @@
+// Skeleton loading: células com altura alinhada ao conteúdo real
+.skeleton-row td {
+  vertical-align: middle;
+}
+
+::ng-deep .skeleton-cell {
+  border-radius: 6px;
+}

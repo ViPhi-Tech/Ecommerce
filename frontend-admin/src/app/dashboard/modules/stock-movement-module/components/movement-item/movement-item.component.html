@@ -5,53 +5,43 @@
 >
   <div class="p-3">
     @if (loading()) {
-      <!-- Skeleton Loading State -->
-      <div
-        class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4"
-      >
-        <div class="flex items-start gap-4">
-          <div class="flex flex-col items-center gap-1">
-            <!-- Skeleton para badge de tipo -->
-            <div
-              class="h-6 w-16 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"
-            ></div>
-            <!-- Skeleton para hora -->
-            <div
-              class="h-3 w-10 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"
-            ></div>
+      <!-- Skeleton Loading State (espelha o conteúdo normal em tamanho e estrutura) -->
+      <div class="flex flex-col gap-2.5">
+        <!-- Cabeçalho: badge + produto + metadados -->
+        <div class="flex items-start gap-2.5 flex-1 min-w-0">
+          <div class="flex flex-col items-center gap-1 flex-shrink-0 pt-0.5">
+            <p-skeleton shape="rounded" width="5rem" height="1.75rem" />
+            <p-skeleton shape="rounded" width="2.5rem" height="0.875rem" />
           </div>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-center gap-2 mb-1">
-              <!-- Skeleton para nome do produto -->
-              <div
-                class="h-5 w-40 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"
-              ></div>
-              <!-- Skeleton para SKU -->
-              <div
-                class="h-5 w-20 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"
-              ></div>
+          <div
+            class="flex-1 min-w-0 border-l-2 border-gray-200 dark:border-gray-700 pl-2.5 space-y-2"
+          >
+            <div class="flex items-center gap-2 flex-wrap">
+              <p-skeleton width="min(100%, 16rem)" height="1.25rem" styleClass="rounded" />
+              <p-skeleton shape="rounded" width="5rem" height="1.25rem" />
             </div>
-            <div class="flex gap-2 text-sm">
-              <!-- Skeleton para data -->
-              <div class="flex items-center gap-1">
-                <div
-                  class="h-3 w-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"
-                ></div>
-                <div
-                  class="h-3 w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"
-                ></div>
-              </div>
-              <!-- Skeleton para quantidade -->
-              <div class="flex items-center gap-1">
-                <div
-                  class="h-3 w-3 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"
-                ></div>
-                <div
-                  class="h-3 w-12 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"
-                ></div>
-              </div>
+            <div class="flex flex-wrap gap-2.5">
+              <p-skeleton width="6rem" height="0.875rem" styleClass="rounded" />
+              <p-skeleton width="4rem" height="0.875rem" styleClass="rounded" />
+              <p-skeleton width="8rem" height="0.875rem" styleClass="rounded" />
             </div>
           </div>
+        </div>
+        <!-- Bloco financeiro (grid como no conteúdo real) -->
+        <div
+          class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2 border-t border-gray-200 dark:border-gray-700"
+        >
+          @for (i of [1,2,3,4]; track i) {
+            <div class="flex flex-col gap-1">
+              <p-skeleton width="4.5rem" height="0.75rem" styleClass="rounded" />
+              <p-skeleton width="5rem" height="1rem" styleClass="rounded" />
+            </div>
+          }
+        </div>
+        <!-- Linha de nota/fornecedor -->
+        <div class="pt-2 border-t border-gray-200 dark:border-gray-700 flex gap-3 flex-wrap">
+          <p-skeleton width="8rem" height="0.875rem" styleClass="rounded" />
+          <p-skeleton width="12rem" height="0.875rem" styleClass="rounded" />
         </div>
       </div>
     } @else {

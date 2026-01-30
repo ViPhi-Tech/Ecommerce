@@ -199,4 +199,23 @@ export class TableComponent implements OnInit {
     }
     return label;
   }
+
+  /**
+   * Retorna largura do skeleton por coluna para um loading mais natural
+   */
+  getSkeletonWidth(col: { field?: string; type?: string }): string {
+    if (col?.field === 'actions') return '4rem';
+    switch (col?.type) {
+      case 'date':
+      case 'datetime':
+        return '75%';
+      case 'currency':
+      case 'percent':
+        return '55%';
+      case 'badge':
+        return '45%';
+      default:
+        return '85%';
+    }
+  }
 }
