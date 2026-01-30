@@ -1,12 +1,16 @@
 import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
-import { CurrencyPipe, NgClass } from '@angular/common';
+import { CurrencyPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import { NgIcon } from '@ng-icons/core';
+import { map } from 'rxjs/operators';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { BreakpointObserver } from '@angular/cdk/layout';
 import { sleep } from 'app/shared/utils/utils';
 import { CartItem, CartState } from './order-cart.state';
 import { ClientSelectionComponent } from '../client-selection/client-selection.component';
 import { StepperModule } from 'primeng/stepper';
 import { DialogModule } from 'primeng/dialog';
+import { DrawerModule } from 'primeng/drawer';
 import { PaymentSelectionComponent } from '../payment-selection/payment-selection.component';
 import { ClientState } from 'app/dashboard/modules/client-module/client.state';
 import { Router } from '@angular/router';
@@ -21,22 +25,33 @@ import { MessageLoaderComponent } from 'app/shared/components/loader/message-loa
     ButtonModule,
     CurrencyPipe,
     NgClass,
+    NgTemplateOutlet,
     NgIcon,
     ClientSelectionComponent,
     PaymentSelectionComponent,
     StepperModule,
     DialogModule,
+    DrawerModule,
     MessageLoaderComponent,
   ],
 })
 export class OrderCartComponent implements OnInit {
   private cdr = inject(ChangeDetectorRef);
   private router = inject(Router);
+  private breakpointObserver = inject(BreakpointObserver);
   public toast = inject(MessageService);
   private confirmationService = inject(ConfirmationService);
 
   private clientState = inject(ClientState);
   cartState = inject(CartState);
+
+  /** true em viewport < 1024px (mobile) para mostrar checkout em drawer. */
+  isMobile = toSignal(
+    this.breakpointObserver
+      .observe('(max-width: 1023px)')
+      .pipe(map((s) => s.matches)),
+    { initialValue: false }
+  );
 
   // Mapeia os itens que estão sendo removidos
   removingItems: Record<string | number, boolean> = {};

@@ -10,3 +10,14 @@
     height: calc(100vh - 64px);
   }
 }
+
+// Drawer do checkout no mobile: sobe de baixo com espaço no topo
+:host ::ng-deep .checkout-drawer-bottom.p-drawer.p-drawer-bottom {
+  top: auto;
+  height: calc(100vh - 2rem);
+  max-height: calc(100vh - 2rem);
+  .p-drawer-content {
+    flex: 1;
+    overflow: auto;
+  }
+}

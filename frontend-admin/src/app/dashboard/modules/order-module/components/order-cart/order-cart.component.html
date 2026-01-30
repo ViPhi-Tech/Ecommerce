@@ -180,18 +180,42 @@
   </div>
 </div>
 
-<p-dialog
-  [(visible)]="showCheckout"
-  header="Finalizar Pedido"
-  [modal]="true"
-  [style]="{ width: '100%', maxWidth: '800px' }"
-  [styleClass]="'w-full sm:w-[90vw] max-w-[800px]'"
->
-  <div class="flex justify-center">
-    <p-stepper [(value)]="step" class="basis-full sm:basis-[50rem] w-full">
+<!-- Modal de checkout: no mobile vira drawer (de baixo), no desktop continua dialog -->
+@if (isMobile()) {
+  <p-drawer
+    [(visible)]="showCheckout"
+    position="bottom"
+    [header]="'Finalizar Pedido'"
+    [modal]="true"
+    [dismissible]="true"
+    [showCloseIcon]="true"
+    [style]="{ height: '90vh' }"
+    styleClass="!w-full sm:!w-[400px]"
+    transitionOptions="300ms cubic-bezier(0, 0, 0.2, 1)"
+  >
+    <ng-container *ngTemplateOutlet="checkoutContent" />
+    <ng-container *ngTemplateOutlet="checkoutFooter" />
+  </p-drawer>
+} @else {
+  <p-dialog
+    [(visible)]="showCheckout"
+    header="Finalizar Pedido"
+    [modal]="true"
+    [style]="{ width: '100%', maxWidth: '800px' }"
+    [styleClass]="'w-full sm:w-[90vw] max-w-[800px]'"
+  >
+    <ng-container *ngTemplateOutlet="checkoutContent" />
+    <ng-template #footer>
+      <ng-container *ngTemplateOutlet="checkoutFooter" />
+    </ng-template>
+  </p-dialog>
+}
+
+<ng-template #checkoutContent>
+  <div class="flex justify-center" [class.pb-4]="isMobile()" [class.pt-6]="!isMobile()">
+    <p-stepper [(value)]="step" [class]="isMobile() ? 'basis-full w-full' : 'basis-full sm:basis-[50rem] w-full'">
       <p-step-list>
         <p-step [value]="1">Cliente</p-step>
-        <!-- <p-step [value]="2">Entrega</p-step> -->
         <p-step [value]="2">Pagamento</p-step>
       </p-step-list>
       <p-step-panels>
@@ -200,15 +224,6 @@
             <fuse-client-selection (clientSelected)="onClientSelected()" />
           </ng-template>
         </p-step-panel>
-
-        <!-- <p-step-panel [value]="2">
-          <ng-template #content>
-            <fuse-delivery-selection
-              (deliveryTypeSelected)="onDeliverySelected()"
-            ></fuse-delivery-selection>
-          </ng-template>
-        </p-step-panel> -->
-
         <p-step-panel [value]="2">
           <ng-template #content>
             <fuse-payment-selection></fuse-payment-selection>
@@ -217,37 +232,38 @@
       </p-step-panels>
     </p-stepper>
   </div>
-  <ng-template #footer>
-    <div class="flex flex-col gap-3 pt-6 w-full">
-      @if (step > 1) {
-        <p-button
-          label="Voltar"
-          icon="pi pi-arrow-left"
-          iconPos="left"
-          (onClick)="step = step - 1"
-          styleClass="w-full"
-        />
-      } @else {
-        <p-button
-          label="Cancelar"
-          icon="pi pi-times"
-          iconPos="left"
-          (onClick)="showCheckout = false"
-          styleClass="w-full"
-        />
-      }
+</ng-template>
+
+<ng-template #checkoutFooter>
+  <div class="flex flex-col gap-3 w-full" [class.pt-6]="!isMobile()" [class.pt-2]="isMobile()" [class.border-t]="isMobile()" [class.border-gray-200]="isMobile()" [class.dark:border-dark]="isMobile()">
+    @if (step > 1) {
       <p-button
-        [loading]="this.cartState.loading()"
-        [disabled]="step === 2 && cartState.getRemainingAmount() > 0"
-        [label]="step === 2 ? 'Finalizar Pedido' : 'Próximo'"
-        icon="pi pi-check"
-        iconPos="right"
-        (onClick)="step === 2 ? checkout() : (step = step + 1)"
+        label="Voltar"
+        icon="pi pi-arrow-left"
+        iconPos="left"
+        (onClick)="step = step - 1"
         styleClass="w-full"
       />
-    </div>
-  </ng-template>
-</p-dialog>
+    } @else {
+      <p-button
+        label="Cancelar"
+        icon="pi pi-times"
+        iconPos="left"
+        (onClick)="showCheckout = false"
+        styleClass="w-full"
+      />
+    }
+    <p-button
+      [loading]="cartState.loading()"
+      [disabled]="step === 2 && cartState.getRemainingAmount() > 0"
+      [label]="step === 2 ? 'Finalizar Pedido' : 'Próximo'"
+      icon="pi pi-check"
+      iconPos="right"
+      (onClick)="step === 2 ? checkout() : (step = step + 1)"
+      styleClass="w-full"
+    />
+  </div>
+</ng-template>
 
 <!-- Loader de finalização do pedido -->
 <fuse-message-loader
