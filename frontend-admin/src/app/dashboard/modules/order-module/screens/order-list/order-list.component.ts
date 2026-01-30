@@ -29,9 +29,9 @@ import { OrderService } from '../../order.service';
 import { FormsModule } from '@angular/forms';
 import { Tooltip } from 'primeng/tooltip';
 import { SelectModule } from 'primeng/select';
-import PeriodComponent, {
+import PeriodMonthComponent, {
   PeriodRange,
-} from 'app/shared/components/period/period.component';
+} from 'app/shared/components/period-month/period-month.component';
 import { AccountsReceivableState } from 'app/dashboard/modules/accounts-receivable-module/accounts-receivable.state';
 import { PAYMENTS_SITEMAP } from 'app/shared/constants/payments.sitemap';
 import { ClientSelectComponent } from 'app/shared/components/client-select/client-select.component';
@@ -52,7 +52,7 @@ import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/sim
     FormsModule,
     Tooltip,
     SelectModule,
-    PeriodComponent,
+    PeriodMonthComponent,
     ClientSelectComponent,
     SimpleIndicatorComponent,
   ],

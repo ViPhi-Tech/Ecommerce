@@ -74,18 +74,8 @@
           </div>
 
           <div class="flex-shrink-0">
-            <fuse-period
-              [availablePeriods]="[
-                'today',
-                'yesterday',
-                'last7days',
-                'last15days',
-                'last30days',
-                'currentMonth',
-                'all',
-              ]"
-              [placeholder]="'Selecione o período'"
-              [defaultValue]="'last30days'"
+            <fuse-period-month
+              placeholder="Selecione o mês"
               (periodChange)="onPeriodChange($event)"
             />
           </div>
@@ -106,6 +96,7 @@
           @for (payment of row.payments; track payment.id) {
             @if (payment.name) {
               <p-tag
+                class="text-xs"
                 [value]="payment.name"
                 [severity]="
                   paymentSeverities()[payment.typeId.toUpperCase()]?.severity
@@ -117,6 +108,7 @@
       </p-popover>
     } @else if (row.payments.length === 1) {
       <p-tag
+        class="text-xs"
         [value]="row.payments[0].name"
         [severity]="
           paymentSeverities()[row.payments[0]?.typeId.toUpperCase()]?.severity
