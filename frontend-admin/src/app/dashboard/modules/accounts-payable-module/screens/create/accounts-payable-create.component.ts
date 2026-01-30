@@ -239,9 +239,6 @@ export class AccountsPayableCreateComponent implements OnInit {
       errorMessages.push(
         'A data de vencimento não pode ser anterior à data de emissão.'
       );
-      this.accountsPayableForm.get('dueDate')?.setErrors({ incorrect: true });
-    } else {
-      this.accountsPayableForm.get('dueDate')?.setErrors(null);
     }
 
     return errorMessages;

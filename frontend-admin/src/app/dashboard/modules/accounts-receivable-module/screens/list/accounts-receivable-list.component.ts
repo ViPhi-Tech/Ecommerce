@@ -23,6 +23,8 @@ import PeriodComponent, {
 } from 'app/shared/components/period/period.component';
 import dayjs from 'dayjs';
 import { IAccountsReceivable } from 'app/shared/interfaces/accounts-receivable/AccountsReceivable';
+import { CommonModule } from '@angular/common';
+import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/simple-indicator.component';
 
 @Component({
   selector: 'fuse-accounts-receivable-list',
@@ -33,6 +35,8 @@ import { IAccountsReceivable } from 'app/shared/interfaces/accounts-receivable/A
     ButtonModule,
     ClientSelectComponent,
     PeriodComponent,
+    CommonModule,
+    SimpleIndicatorComponent,
   ],
 })
 export class AccountsReceivableListComponent implements OnInit {

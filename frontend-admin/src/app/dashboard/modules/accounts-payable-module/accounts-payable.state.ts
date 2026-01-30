@@ -20,6 +20,27 @@ export class AccountsPayableState extends BaseState<AccountsPayableModuleState> 
 
   accountsPayableList = computed(() => this.state().accountsPayableList);
 
+  /** Soma dos valores das contas ainda a pagar (pendente, vence em breve, vencido) */
+  totalPayable = computed(() =>
+    this.accountsPayableList().reduce(
+      (sum, item) => (item.status !== 'paid' ? sum + (Number(item.amount) || 0) : sum),
+      0
+    )
+  );
+
+  /** Soma dos valores das contas pagas */
+  totalPaid = computed(() =>
+    this.accountsPayableList().reduce(
+      (sum, item) => (item.status === 'paid' ? sum + (Number(item.amount) || 0) : sum),
+      0
+    )
+  );
+
+  /** Quantidade de contas vencidas */
+  overdueCount = computed(() =>
+    this.accountsPayableList().filter(item => item.status === 'overdue').length
+  );
+
   // Subject para pré-preencher o formulário de contas a pagar
   private formPrefillSubject = new Subject<Partial<IAccountsPayable>>();
   formPrefill$ = this.formPrefillSubject.asObservable();

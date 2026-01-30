@@ -20,6 +20,30 @@ export class AccountsReceivableState extends BaseState<AccountsReceivableModuleS
 
   accountsReceivableList = computed(() => this.state().accountsReceivableList);
 
+  /** Soma dos valores das contas ainda a receber (pendente, vence em breve, vencido) */
+  totalReceivable = computed(() =>
+    this.accountsReceivableList().reduce(
+      (sum, item) =>
+        item.status !== 'received' ? sum + (Number(item.amount) || 0) : sum,
+      0
+    )
+  );
+
+  /** Soma dos valores das contas recebidas */
+  totalReceived = computed(() =>
+    this.accountsReceivableList().reduce(
+      (sum, item) =>
+        item.status === 'received' ? sum + (Number(item.amount) || 0) : sum,
+      0
+    )
+  );
+
+  /** Quantidade de contas vencidas */
+  overdueCount = computed(() =>
+    this.accountsReceivableList().filter(item => item.status === 'overdue')
+      .length
+  );
+
   // Subject para pré-preencher o formulário de contas a receber
   private formPrefillSubject = new Subject<
     Partial<IAccountsReceivable & { action: string }>

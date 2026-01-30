@@ -18,12 +18,14 @@ import { ButtonModule } from 'primeng/button';
 import { AccountsPayableService } from '../../accounts-payable.service';
 import { AccountsPayableState } from '../../accounts-payable.state';
 import { IAccountsPayable } from 'app/shared/interfaces/accounts-payable/AccountsPayable';
+import { CommonModule } from '@angular/common';
+import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/simple-indicator.component';
 
 @Component({
   selector: 'fuse-accounts-payable-list',
   templateUrl: './accounts-payable-list.component.html',
   animations: [heightAnimation],
-  imports: [TableComponent, ButtonModule],
+  imports: [TableComponent, ButtonModule, CommonModule, SimpleIndicatorComponent],
 })
 export class AccountsPayableListComponent implements OnInit {
   private router = inject(Router);

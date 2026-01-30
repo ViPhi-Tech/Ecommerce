@@ -38,6 +38,30 @@
     </div>
   </div>
 
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 sm:mt-6">
+    <fuse-simple-indicator
+      title="Total a pagar"
+      [value]="(state.totalPayable() | currency: 'BRL') ?? 'R$ 0,00'"
+      variant="warning"
+      icon="lucideBanknote"
+      [loading]="state.loading()"
+    />
+    <fuse-simple-indicator
+      title="Total pago"
+      [value]="(state.totalPaid() | currency: 'BRL') ?? 'R$ 0,00'"
+      variant="success"
+      icon="lucideCircleCheckBig"
+      [loading]="state.loading()"
+    />
+    <fuse-simple-indicator
+      title="Vencidas"
+      [value]="state.overdueCount()"
+      variant="error"
+      icon="lucideCalendarX"
+      [loading]="state.loading()"
+    />
+  </div>
+
   <div class="animate-left mt-4 sm:mt-6">
     <fuse-table
       [data]="state.accountsPayableList()"
