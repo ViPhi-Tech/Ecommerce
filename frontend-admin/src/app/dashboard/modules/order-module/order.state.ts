@@ -28,6 +28,54 @@ export class OrderState extends BaseState<OrderModuleState> {
   orderDetails = computed(() => this.state().orderDetails);
   notedOrderList = computed(() => this.state().notedOrderList);
 
+  totalSales = computed(() =>
+    this.orderList().reduce((sum, order) => sum + (Number(order.total) || 0), 0)
+  );
+
+  bestSellingProduct = computed(() => {
+    const productMap = new Map<number, { name: string; quantity: number }>();
+    for (const order of this.orderList()) {
+      for (const item of order.items || []) {
+        const key = item.productId;
+        const name = item.product?.name ?? `Produto #${key}`;
+        const prev = productMap.get(key) ?? { name, quantity: 0 };
+        productMap.set(key, {
+          name: prev.name,
+          quantity: prev.quantity + (item.quantity || 0),
+        });
+      }
+    }
+    let best: { name: string; quantity: number } = { name: '—', quantity: 0 };
+    productMap.forEach(v => {
+      if (v.quantity > best.quantity) best = v;
+    });
+    return best;
+  });
+
+  mostUsedPayment = computed(() => {
+    const countByType = new Map<string, number>();
+    for (const order of this.orderList()) {
+      for (const payment of order.payments || []) {
+        const typeId = (payment.typeId ?? '').toString().toUpperCase();
+        if (typeId) {
+          countByType.set(typeId, (countByType.get(typeId) ?? 0) + 1);
+        }
+      }
+    }
+    let bestType = '';
+    let bestCount = 0;
+    countByType.forEach((count, typeId) => {
+      if (count > bestCount) {
+        bestCount = count;
+        bestType = typeId;
+      }
+    });
+    const name =
+      (PAYMENTS_SITEMAP[bestType as keyof typeof PAYMENTS_SITEMAP]?.name) ??
+      (bestType || '—');
+    return { name, count: bestCount };
+  });
+
   createPreOrder(clientId: string | number): Promise<Order> {
     this.setLoading(true);
     this.clearError();

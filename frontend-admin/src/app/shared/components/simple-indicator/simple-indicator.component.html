@@ -1,5 +1,5 @@
 <div
-  class="rounded-lg border bg-card text-card-foreground shadow-2xs dark:bg-dark dark:border-dark"
+  class="rounded-lg border bg-card text-card-foreground shadow-2xs dark:bg-dark dark:border-dark min-w-0 overflow-hidden"
 >
   <div class="p-6">
     @if (loading()) {
@@ -15,14 +15,22 @@
     }
 
     @if (!loading()) {
-      <div class="flex items-center justify-between">
-        <div>
+      <div class="flex items-center justify-between gap-3 min-h-0">
+        <div class="min-w-0 flex-1">
           <p
             class="text-sm font-medium text-muted-foreground dark:text-muted mb-1"
           >
             {{ title() }}
           </p>
-          <p class="text-2xl font-bold" [ngClass]="variantClasses.textColor">
+          <p
+            class="font-bold"
+            [ngClass]="[
+              smallValue() ? 'text-sm' : 'text-2xl',
+              variantClasses.textColor,
+              truncateValue() ? 'truncate' : ''
+            ]"
+            [attr.title]="tooltipValue() ?? (truncateValue() ? value() : null)"
+          >
             {{ value() }}
           </p>
         </div>

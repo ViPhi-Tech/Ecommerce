@@ -31,6 +31,36 @@
     </div>
   </div>
 
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 sm:mt-6">
+    <fuse-simple-indicator
+      title="Total de vendas"
+      [value]="(state.totalSales() | currency: 'BRL') ?? 'R$ 0,00'"
+      variant="success"
+      icon="lucideDollarSign"
+      [loading]="state.loading()"
+    />
+    <fuse-simple-indicator
+      title="Produto mais vendido"
+      [value]="state.bestSellingProduct().quantity > 0 ? state.bestSellingProduct().name + ' (' + state.bestSellingProduct().quantity + ' un)' : '—'"
+      [tooltipValue]="state.bestSellingProduct().quantity > 0 ? state.bestSellingProduct().name + ' (' + state.bestSellingProduct().quantity + ' un)' : undefined"
+      [truncateValue]="true"
+      [smallValue]="true"
+      variant="info"
+      icon="lucidePackage"
+      [loading]="state.loading()"
+    />
+    <fuse-simple-indicator
+      title="Forma de pagamento mais usada"
+      [value]="state.mostUsedPayment().count > 0 ? state.mostUsedPayment().name + ' (' + state.mostUsedPayment().count + 'x)' : '—'"
+      [tooltipValue]="state.mostUsedPayment().count > 0 ? state.mostUsedPayment().name + ' (' + state.mostUsedPayment().count + 'x)' : undefined"
+      [truncateValue]="true"
+      [smallValue]="true"
+      variant="info"
+      icon="lucideCreditCard"
+      [loading]="state.loading()"
+    />
+  </div>
+
   <div class="animate-left mt-4 sm:mt-6">
     <fuse-table
       [data]="filteredOrderList()"

@@ -16,6 +16,10 @@ export default class SimpleIndicatorComponent {
   icon = input<string | undefined>();
   customIconSvg = input<string | undefined>();
   loading = input<boolean>(false);
+  truncateValue = input<boolean>(false);
+  tooltipValue = input<string | undefined>();
+  /** Quando true, usa fonte menor (para valores em texto em vez de números) */
+  smallValue = input<boolean>(false);
 
   get variantClasses() {
     const variants = {

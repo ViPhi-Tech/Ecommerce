@@ -34,6 +34,7 @@ import PeriodComponent, {
 import { AccountsReceivableState } from 'app/dashboard/modules/accounts-receivable-module/accounts-receivable.state';
 import { PAYMENTS_SITEMAP } from 'app/shared/constants/payments.sitemap';
 import { ClientSelectComponent } from 'app/shared/components/client-select/client-select.component';
+import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/simple-indicator.component';
 
 @Component({
   selector: 'fuse-order-list',
@@ -52,6 +53,7 @@ import { ClientSelectComponent } from 'app/shared/components/client-select/clien
     SelectModule,
     PeriodComponent,
     ClientSelectComponent,
+    SimpleIndicatorComponent,
   ],
   providers: [OrderState],
 })
