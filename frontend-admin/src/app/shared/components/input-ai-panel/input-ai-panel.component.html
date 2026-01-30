@@ -1,0 +1,70 @@
+<div
+  [class.input-ai-panel-wrapper--disabled]="disabled()"
+  class="input-ai-panel-wrapper"
+  (mouseenter)="onWrapperMouseEnter()"
+  (mouseleave)="onWrapperMouseLeave()"
+>
+  <ng-content />
+
+  <button
+    type="button"
+    class="input-ai-panel__trigger"
+    [class.input-ai-panel__trigger--visible]="showIcon"
+    (click)="onIconClick($event)"
+    title="Gerar descrição com IA"
+    aria-label="Gerar descrição com IA"
+  >
+    <i class="pi pi-sparkles"></i>
+  </button>
+  <p-popover
+    #aiPopover
+    [styleClass]="'input-ai-panel-popover input-ai-panel-popover--' + popoverPosition()"
+    [dismissable]="true"
+    (onHide)="onPopoverHide()"
+  >
+    @if (!generatedText) {
+      <div class="input-ai-panel__initial">
+        <p class="input-ai-panel__hint">Sugestão de texto com IA (demonstração)</p>
+        <p-button
+          label="Gerar informação por IA"
+          icon="pi pi-sparkles"
+          [loading]="isGenerating"
+          (onClick)="generateWithAi()"
+          size="small"
+          severity="secondary"
+          [outlined]="true"
+          class="w-full"
+        />
+      </div>
+    } @else {
+      <div class="input-ai-panel__result">
+        <p class="input-ai-panel__hint">Revise e aceite ou gere novamente</p>
+        <textarea
+          class="input-ai-panel__preview"
+          [value]="generatedText"
+          readonly
+          rows="4"
+        ></textarea>
+        <div class="input-ai-panel__actions">
+          <p-button
+            label="Aceitar"
+            icon="pi pi-check"
+            (onClick)="accept()"
+            size="small"
+            severity="success"
+            class="flex-1"
+          />
+          <p-button
+            label="Gerar"
+            icon="pi pi-refresh"
+            (onClick)="generateAgain()"
+            size="small"
+            severity="secondary"
+            [outlined]="true"
+            class="flex-1"
+          />
+        </div>
+      </div>
+    }
+  </p-popover>
+</div>

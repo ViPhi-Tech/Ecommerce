@@ -16,6 +16,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { Dialog, DialogModule } from 'primeng/dialog';
 import { FormModule } from 'app/shared/components/form/form.module';
+import { InputWithAiPanelComponent } from 'app/shared/components/input-ai-panel/input-ai-panel.component';
 import { ProductService } from '../../product.service';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -27,7 +28,13 @@ import { ProductState } from '../../product.state';
   selector: 'fuse-product-create',
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss'],
-  imports: [DialogModule, ButtonModule, ReactiveFormsModule, FormModule],
+  imports: [
+    DialogModule,
+    ButtonModule,
+    ReactiveFormsModule,
+    FormModule,
+    InputWithAiPanelComponent,
+  ],
 })
 export class ProductCreateComponent implements OnInit {
   destroyedRef = inject(DestroyRef);

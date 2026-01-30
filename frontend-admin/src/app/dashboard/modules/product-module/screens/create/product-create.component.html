@@ -133,14 +133,16 @@
         </div>
 
         <div class="col-12">
-          <fuse-input
-            [isLoading]="isLoading()"
-            type="textarea"
-            label="Descrição"
-            [rows]="5"
-            [control]="productForm.get('description')"
-            placeholder="Descrição detalhada do produto, características, benefícios, etc."
-          />
+          <fuse-input-with-ai [disabled]="true" [control]="productForm.get('description')" [popoverPosition]="'top-left'">
+            <fuse-input
+              [isLoading]="isLoading()"
+              type="textarea"
+              label="Descrição"
+              [rows]="5"
+              [control]="productForm.get('description')"
+              placeholder="Descrição detalhada do produto, características, benefícios, etc."
+            />
+          </fuse-input-with-ai>
         </div>
       </form>
     </div>
