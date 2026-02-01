@@ -1,4 +1,15 @@
 <div class="p-4 sm:p-8 animate-fade-in flex flex-col space-y-4 flex-grow">
+  <div class="flex gap-4 mb-4">
+    <div class="flex-1 min-w-0">
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-800 dark:text-gray-200 truncate">
+        Movimentações de Estoque - Listagem
+      </h1>
+      <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mt-1">
+        Gerencie suas movimentações de estoque de forma visual e organizada
+      </p>
+    </div>
+  </div>
+
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4 animate-left">
     <fuse-simple-indicator
       [loading]="state.loadingCards()"
@@ -26,66 +37,46 @@
   </div>
 
   <div class="animate-left flex flex-col flex-1">
-    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-4">
-      <h1 class="text-lg sm:text-xl font-bold">Listagem de Movimentações</h1>
-      <div>
-        <form [formGroup]="formFilter" class="flex items-center gap-2 sm:gap-4 flex-wrap">
+    <div class="flex-1 flex flex-col">
+      <!-- Botões de alternância de visualização -->
+      <div class="flex gap-2 mb-4 justify-end">
+        <form [formGroup]="formFilter" class="flex flex-col sm:flex-row sm:items-center justify-end gap-2 sm:gap-4 flex-wrap w-full">
           <p-button
             label="Importar NFe"
             icon="pi pi-upload"
             (onClick)="openImportModal()"
             size="small"
             severity="info"
-            class="flex-1 sm:flex-initial"
+            styleClass="w-full sm:w-auto"
           ></p-button>
           <p-button
             label="Nova Entrada"
             (onClick)="newInbound()"
             size="small"
-            class="flex-1 sm:flex-initial"
+            styleClass="w-full sm:w-auto"
           ></p-button>
           <p-button
             label="Nova Saída"
             severity="danger"
             (onClick)="newOutbound()"
             size="small"
-            class="flex-1 sm:flex-initial"
+            styleClass="w-full sm:w-auto"
           ></p-button>
-          <fuse-datepicker
-            placeholder="Filtrar por data"
-            [maxDate]="maxDate()"
-            [control]="formFilter.get('date')"
-          />
+          <div class="w-full sm:w-auto">
+            <fuse-datepicker
+              placeholder="Filtrar por data"
+              [maxDate]="maxDate()"
+              [control]="formFilter.get('date')"
+            />
+          </div>
           <fuse-select
-            addictionalClass="min-w-[200px]"
+            addictionalClass="w-full sm:w-auto sm:min-w-[200px]"
             placeholder="Filtrar por"
             [items]="movementTypes()"
             [canSearch]="false"
             [control]="formFilter.get('type')"
           />
         </form>
-      </div>
-    </div>
-
-    <div class="flex-1 flex flex-col">
-      <!-- Botões de alternância de visualização -->
-      <div class="flex gap-2 mb-4 view-toggle-buttons">
-        <p-button
-          [label]="'Visualização em Cards'"
-          [icon]="'pi pi-th-large'"
-          [outlined]="activeViewMode !== 'cards'"
-          [severity]="activeViewMode === 'cards' ? 'primary' : 'secondary'"
-          (onClick)="setViewMode('cards')"
-          size="small"
-        />
-        <p-button
-          [label]="'Visualização em Tabela'"
-          [icon]="'pi pi-table'"
-          [outlined]="activeViewMode !== 'table'"
-          [severity]="activeViewMode === 'table' ? 'primary' : 'secondary'"
-          (onClick)="setViewMode('table')"
-          size="small"
-        />
       </div>
 
       <!-- Conteúdo das visualizações -->
