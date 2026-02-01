@@ -1,29 +1,19 @@
-import {
-  Component,
-  DestroyRef,
-  inject,
-  OnInit,
-  signal,
-  ViewChild,
-  TemplateRef,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { CoreService } from 'app/shared/services/core.service';
-import { TableConfig } from 'app/shared/interfaces/table.interfaces';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { StockMovementService } from '../../stock-movement.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { heightAnimation } from 'app/shared/utils/animations';
 import { ButtonModule } from 'primeng/button';
-import { BadgeModule } from 'primeng/badge';
+import { SplitButtonModule } from 'primeng/splitbutton';
+import { MenuItem } from 'primeng/api';
 import { StockMovementState } from '../../stock-movement.state';
 import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/simple-indicator.component';
 import { MovementItemComponent } from '../../components/movement-item/movement-item.component';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { NgIcon } from '@ng-icons/core';
-import { TableComponent } from 'app/shared/components/table/table.component';
 import dayjs from 'dayjs';
 
 @Component({
@@ -33,17 +23,15 @@ import dayjs from 'dayjs';
   animations: [heightAnimation],
   imports: [
     ButtonModule,
-    BadgeModule,
+    SplitButtonModule,
     SimpleIndicatorComponent,
     MovementItemComponent,
     FormModule,
     ReactiveFormsModule,
     NgIcon,
-    TableComponent,
   ],
 })
-export class StockMovementListComponent implements OnInit, AfterViewInit {
-  @ViewChild('typeTemplate') typeTemplate!: TemplateRef<any>;
+export class StockMovementListComponent implements OnInit {
   private router = inject(Router);
   private formBuilder = inject(FormBuilder);
   private route = inject(ActivatedRoute);
@@ -56,79 +44,6 @@ export class StockMovementListComponent implements OnInit, AfterViewInit {
   state = inject(StockMovementState);
 
   productId: string | null = null;
-  activeViewMode: 'cards' | 'table' = 'cards';
-
-  tableConfig = signal<TableConfig>({
-    rowsPerPageOptions: [5, 10, 20],
-    rowsPerPage: 10,
-    paginator: true,
-    pageLinkSize: 5,
-    refresh: () => this.refreshStockMovements(),
-    columns: [
-      {
-        field: 'date',
-        caption: 'Data',
-        sortable: true,
-      },
-      {
-        field: 'productName',
-        caption: 'Produto',
-        sortable: true,
-        filter: true,
-      },
-      { field: 'productSku', caption: 'SKU', sortable: true, filter: true },
-      {
-        field: 'type',
-        caption: 'Tipo',
-        sortable: true,
-        filter: true,
-        template: this.typeTemplate,
-        align: 'center',
-      },
-      {
-        field: 'quantity',
-        caption: 'Quantidade',
-        sortable: true,
-        filter: true,
-      },
-      {
-        field: 'previousStock',
-        caption: 'Estoque Anterior',
-        sortable: true,
-        filter: true,
-      },
-      {
-        field: 'currentStock',
-        caption: 'Estoque Atual',
-        sortable: true,
-        filter: true,
-      },
-      { field: 'reason', caption: 'Motivo', sortable: true, filter: true },
-      {
-        field: 'createdAt',
-        caption: 'Data',
-        type: 'date',
-        sortable: true,
-        filter: true,
-      },
-      {
-        field: 'createdBy',
-        caption: 'Criado Por',
-        sortable: true,
-        filter: true,
-      },
-    ],
-    headerButtons: [
-      {
-        icon: 'pi pi-plus',
-        label: 'Adicionar',
-        tooltip: 'Adicionar Movimento de Estoque',
-        action: () => {
-          this.router.navigate(['dashboard/config/stock-movements/new']);
-        },
-      },
-    ],
-  });
 
   title = '';
 
@@ -138,6 +53,12 @@ export class StockMovementListComponent implements OnInit, AfterViewInit {
     { label: 'Entrada', value: 'IN' },
     { label: 'Saída', value: 'OUT' },
   ]);
+
+  filterTypeMenuItems: MenuItem[] = [
+    { label: 'Todos', command: () => this.setFilterType('') },
+    { label: 'Entrada', command: () => this.setFilterType('IN') },
+    { label: 'Saída', command: () => this.setFilterType('OUT') },
+  ];
 
   formFilter = this.formBuilder.group({
     type: [''],
@@ -167,18 +88,18 @@ export class StockMovementListComponent implements OnInit, AfterViewInit {
       });
   }
 
-  ngAfterViewInit() {
-    // Atualiza a configuração da tabela com o template após a view estar inicializada
-    this.tableConfig.update(config => ({
-      ...config,
-      columns: config.columns.map(col =>
-        col.field === 'type' ? { ...col, template: this.typeTemplate } : col
-      ),
-    }));
-  }
-
   onFilterChange() {
     this.loadStockMovements();
+  }
+
+  getSelectedTypeLabel(): string {
+    const value = this.formFilter.get('type')?.value ?? '';
+    const item = this.movementTypes().find(m => m.value === value);
+    return item?.label ?? 'Filtrar por';
+  }
+
+  setFilterType(value: string) {
+    this.formFilter.patchValue({ type: value });
   }
 
   refreshStockMovements() {
@@ -232,10 +153,6 @@ export class StockMovementListComponent implements OnInit, AfterViewInit {
 
   newOutbound() {
     this.router.navigate([{ outlets: { drawer: ['outbound', 'new'] } }]);
-  }
-
-  setViewMode(mode: 'cards' | 'table') {
-    this.activeViewMode = mode;
   }
 
   openImportModal() {
