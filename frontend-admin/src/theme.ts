@@ -25,6 +25,7 @@ import { MessageService } from 'primeng/api';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
 import { provideServiceWorker } from '@angular/service-worker';
 import { isDevMode } from '@angular/core';
+import { NgxFloatUiModule, NgxFloatUiTriggers, NgxFloatUiPlacements } from 'ngx-float-ui';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -38,6 +39,12 @@ export const THEME: ApplicationConfig = {
       NgIconsModule.withIcons(lucideIcons),
       NgxEchartsModule.forRoot({
         echarts: () => import('echarts'),
+      }),
+      NgxFloatUiModule.forRoot({
+        trigger: NgxFloatUiTriggers.hover,
+        hideOnClickOutside: false,
+        appendTo: 'body',
+        placement: NgxFloatUiPlacements.AUTO
       })
     ),
     provideEnvironmentNgxMask(),
