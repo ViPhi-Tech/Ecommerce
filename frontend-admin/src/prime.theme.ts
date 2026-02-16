@@ -2099,7 +2099,7 @@ export const Preset = definePreset(Lara, {
         hoverColor: '{content.hover.color}',
         selectedColor: '{highlight.color}',
         gap: '0.5rem',
-        padding: '0.75rem 1rem',
+        padding: '1rem 1rem',
         focusRing: {
           width: '{focus.ring.width}',
           style: '{focus.ring.style}',
