@@ -8,16 +8,6 @@
         Visualize e gerencie todas as notas fiscais de entrada
       </p>
     </div>
-    <div class="flex gap-2">
-      <p-button
-        icon="lucideRefreshCw"
-        label="Atualizar"
-        [outlined]="true"
-        severity="secondary"
-        (onClick)="refreshPurchaseInvoices()"
-        [loading]="state.loading()"
-      />
-    </div>
   </div>
 
   <fuse-table
