@@ -69,16 +69,17 @@
             <!-- Grade de dias -->
             <div class="days-grid">
               @for (day of monthDays(); track day.date.getTime()) {
-                <div
+                <button
                   class="day-cell"
                   [class.other-month]="!day.isCurrentMonth"
                   [class.today]="day.isToday"
+                  (click)="onDayClick(day, $event)"
                 >
                   <div class="day-number">{{ day.day }}</div>
                   <div class="day-events">
                     <!-- Espaço para eventos futuros -->
                   </div>
-                </div>
+                </button>
               }
             </div>
           </div>
@@ -105,9 +106,9 @@
               <div class="time-row">
                 <div class="time-label">{{ slot.label }}</div>
                 @for (day of weekDays(); track day.day) {
-                  <div class="day-cell">
+                  <button class="day-cell" (click)="onTimeSlotClick(slot, day, $event)" tabindex="0" role="button">
                     <!-- Espaço para eventos futuros -->
-                  </div>
+                  </button>
                 }
               </div>
             }
@@ -133,3 +134,86 @@
     </p-card>
   </div>
 </div>
+
+<!-- Trigger invisível: posiciona o float sobre a célula clicada -->
+<div
+  #dayFloatTrigger="floatUi"
+  [floatUi]="eventDetailContent"
+  [showTrigger]="NgxFloatUiTriggers.none"
+  [targetElement]="floatTargetOrAnchor"
+  hideOnClickOutside
+  [hideOnScroll]="true"
+  [placement]="NgxFloatUiPlacements.AUTOEND"
+  class="day-float-trigger"
+></div>
+
+<float-ui-content #eventDetailContent>
+  @if (selectedDay(); as day) {
+    <div class="day-float-panel">
+      <!-- Header com botão fechar -->
+      <div class="day-float-panel__header">
+        <button class="day-float-panel__close" (click)="dayFloatTrigger?.hide()">
+          <i class="pi pi-times"></i>
+        </button>
+      </div>
+
+      <!-- Input de título -->
+      <div class="day-float-panel__title-row">
+        <input
+          type="text"
+          pInputText
+          class="day-float-panel__title-input"
+          placeholder="Adicionar título e horário"
+          [ngModel]="eventTitle()"
+          (ngModelChange)="eventTitle.set($event)"
+        />
+      </div>
+
+      <!-- Linhas de informação -->
+      <div class="day-float-panel__rows">
+        <!-- Data -->
+        <div class="day-float-panel__row">
+          <i class="pi pi-clock day-float-panel__row-icon"></i>
+          <div class="day-float-panel__row-content">
+            <span class="day-float-panel__row-text">
+              {{ capitalizeFirst(formattedSelectedDate()) }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Descrição -->
+        <div class="day-float-panel__row">
+          <i class="pi pi-align-left day-float-panel__row-icon"></i>
+          @if (!descriptionEditorVisible()) {
+            <span (click)="toggleDescriptionEditor()" (keydown.enter)="toggleDescriptionEditor()" tabindex="0" role="button" class="day-float-panel__row-placeholder">Adicionar descrição</span>
+          }
+          @if (descriptionEditorVisible()) {
+            <div class="day-float-panel__editor-wrapper">
+              <fuse-text-editor
+                [value]="description()"
+                (valueChange)="description.set($event)"
+                placeholder="Adicionar descrição"
+              />
+            </div>
+          }
+        </div>
+      </div>
+
+      <!-- Rodapé: Mais opções + Salvar -->
+      <div class="day-float-panel__footer">
+        <p-button
+          label="Mais opções"
+          [text]="true"
+          severity="secondary"
+          size="small"
+          (onClick)="onMoreOptions()"
+        />
+        <p-button
+          label="Salvar"
+          size="small"
+          (onClick)="onSaveEvent()"
+        />
+      </div>
+    </div>
+  }
+</float-ui-content>

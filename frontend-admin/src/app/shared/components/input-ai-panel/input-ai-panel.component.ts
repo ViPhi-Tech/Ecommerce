@@ -2,7 +2,7 @@ import { Component, input, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
-import { Popover, PopoverModule } from 'primeng/popover';
+import { NgxFloatUiDirective, NgxFloatUiPlacements, NgxFloatUiTriggers, NgxFloatUiContentComponent } from 'ngx-float-ui';
 
 const MOCK_SUGGESTIONS = [
   'Produto de alta qualidade, desenvolvido com materiais selecionados. Ideal para uso diário, combina durabilidade e design. Perfeito para quem busca praticidade e bom custo-benefício.',
@@ -16,12 +16,14 @@ export type PopoverPosition = 'bottom-right' | 'bottom-left' | 'top-right' | 'to
 @Component({
   selector: 'fuse-input-with-ai',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, PopoverModule],
+  imports: [CommonModule, ReactiveFormsModule, ButtonModule, NgxFloatUiDirective, NgxFloatUiContentComponent],
   templateUrl: './input-ai-panel.component.html',
   styleUrls: ['./input-ai-panel.component.scss'],
 })
 export class InputWithAiPanelComponent {
-  @ViewChild('aiPopover') aiPopoverRef!: Popover;
+  @ViewChild(NgxFloatUiDirective) floatUiDirective!: NgxFloatUiDirective;
+
+  NgxFloatUiTriggers = NgxFloatUiTriggers;
 
   control = input.required<AbstractControl | null>();
   disabled = input<boolean>(false);
@@ -41,8 +43,19 @@ export class InputWithAiPanelComponent {
     this.showIcon = false;
   }
 
-  onIconClick(event: Event) {
-    this.aiPopoverRef.toggle(event);
+  onIconClick() {
+    // O toggle é gerenciado pela diretiva floatUi
+  }
+
+  getFloatUiPlacement(): NgxFloatUiPlacements {
+    const position = this.popoverPosition();
+    const placementMap: Record<PopoverPosition, NgxFloatUiPlacements> = {
+      'bottom-right': NgxFloatUiPlacements.BOTTOMEND,
+      'bottom-left': NgxFloatUiPlacements.BOTTOMSTART,
+      'top-right': NgxFloatUiPlacements.TOPEND,
+      'top-left': NgxFloatUiPlacements.TOPSTART,
+    };
+    return placementMap[position] || NgxFloatUiPlacements.BOTTOMEND;
   }
 
   onPopoverHide() {
@@ -70,6 +83,6 @@ export class InputWithAiPanelComponent {
       ctrl.markAsDirty();
     }
     this.generatedText = null;
-    this.aiPopoverRef?.hide();
+    this.floatUiDirective?.hide();
   }
 }

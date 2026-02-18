@@ -34,42 +34,32 @@
   color: var(--p-primary-color);
 }
 
-:host ::ng-deep .input-ai-panel-popover.p-popover {
+:host ::ng-deep .input-ai-panel-popover {
   min-width: 320px;
   max-width: 420px;
-}
-
-:host ::ng-deep .input-ai-panel-popover .p-popover-content {
   padding: 1rem;
+  background: var(--p-surface-0);
+  border: 1px solid var(--p-surface-200);
+  border-radius: var(--p-border-radius);
+  box-shadow: var(--p-shadow-lg);
+  z-index: 1100;
 }
 
 /* Posição: alinhamento horizontal e vertical do popover em relação ao trigger */
-:host ::ng-deep .input-ai-panel-popover--bottom-right.p-popover {
+:host ::ng-deep .input-ai-panel-popover--bottom-right {
   margin-top: 0.5rem;
-  margin-left: 0;
-  transform-origin: top right;
 }
 
-:host ::ng-deep .input-ai-panel-popover--bottom-left.p-popover {
+:host ::ng-deep .input-ai-panel-popover--bottom-left {
   margin-top: 0.5rem;
-  margin-left: 0;
-  transform: translateX(calc(-100% + 2rem));
-  transform-origin: top left;
 }
 
-:host ::ng-deep .input-ai-panel-popover--top-right.p-popover {
-  margin-top: 0;
+:host ::ng-deep .input-ai-panel-popover--top-right {
   margin-bottom: 0.5rem;
-  transform: translateY(-100%);
-  transform-origin: bottom right;
 }
 
-:host ::ng-deep .input-ai-panel-popover--top-left.p-popover {
-  margin-top: 0;
+:host ::ng-deep .input-ai-panel-popover--top-left {
   margin-bottom: 0.5rem;
-  margin-left: 0;
-  transform: translate(calc(-100% + 2rem), -100%);
-  transform-origin: bottom left;
 }
 
 .input-ai-panel__hint {

@@ -55,6 +55,7 @@ export class ImportNfeComponent implements OnInit {
   nfeJson = signal<any>(null);
   nfeFormatted = signal<InvoiceDetails | null>(null);
   showJsonView = signal(false);
+  accessKey = signal<string>('');
 
   constructor() {}
 
@@ -91,6 +92,43 @@ export class ImportNfeComponent implements OnInit {
           // Converte XML para JSON bruto
           const json = await XmlUtils.xmlToJson(xmlString);
           this.nfeJson.set(json);
+
+          // VALIDAÇÃO DO ACCESS KEY - Extrair e validar chave de acesso
+          const nfeProc = json?.nfeProc || json;
+          const nfe = nfeProc?.NFe || nfeProc;
+          const infNFe = nfe?.infNFe || nfe;
+          const protNFe = nfeProc?.protNFe || {};
+
+          // Tentar extrair chave de acesso (mesma lógica do backend)
+          let extractedAccessKey = protNFe?.infProt?.chNFe?.toString() || '';
+          
+          if (!extractedAccessKey && infNFe?.$Id) {
+            // Extrair chave de acesso do ID da NFe (formato: NFe41251106296130000108550010004875691490256908)
+            extractedAccessKey = infNFe.$Id.toString().replace('NFe', '');
+          }
+
+          // Armazenar no signal para exibição
+          this.accessKey.set(extractedAccessKey);
+
+          // Log detalhado para debug
+          console.log('=== VALIDAÇÃO ACCESS KEY ===');
+          console.log('Nome do arquivo:', file.name);
+          console.log('Access Key extraído:', extractedAccessKey);
+          console.log('Fonte 1 (protNFe.infProt.chNFe):', protNFe?.infProt?.chNFe);
+          console.log('Fonte 2 (infNFe.$Id):', infNFe?.$Id);
+          console.log('JSON completo:', json);
+          console.log('===========================');
+
+          if (!extractedAccessKey) {
+            this.toast.add({
+              severity: 'warn',
+              summary: 'Atenção',
+              detail: 'Chave de acesso não encontrada no XML. Verifique o console para mais detalhes.',
+            });
+            console.error('ERRO: Chave de acesso não encontrada no XML!');
+          } else {
+            console.log('Access Key válido:', extractedAccessKey);
+          }
 
           // Formata os dados para exibição bonita (opcional, não necessário para salvar)
           // Não precisa validar produtos, pois serão criados automaticamente pelo backend
@@ -194,6 +232,22 @@ export class ImportNfeComponent implements OnInit {
         severity: 'warn',
         summary: 'Atenção',
         detail: 'Não há nota fiscal para salvar.',
+      });
+      return;
+    }
+
+    // VALIDAÇÃO FINAL DO ACCESS KEY ANTES DE ENVIAR
+    const currentAccessKey = this.accessKey();
+    
+    console.log('=== ENVIANDO PARA BACKEND ===');
+    console.log('Access Key que será enviado:', currentAccessKey);
+    console.log('============================');
+
+    if (!currentAccessKey) {
+      this.toast.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'Chave de acesso não encontrada. Não é possível salvar a nota fiscal.',
       });
       return;
     }

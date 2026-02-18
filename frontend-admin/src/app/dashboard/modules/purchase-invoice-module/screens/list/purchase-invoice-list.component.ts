@@ -32,37 +32,33 @@ export class PurchaseInvoiceListComponent implements OnInit {
         field: 'accessKey',
         caption: 'Chave de Acesso',
         sortable: true,
-        width: '300px',
       },
       {
         field: 'supplierName',
         caption: 'Fornecedor',
         sortable: true,
-        width: '200px',
       },
       {
         field: 'issueDate',
         caption: 'Data de Emissão',
         sortable: true,
-        width: '150px',
         type: 'date',
       },
       {
         field: 'entryDate',
         caption: 'Data de Entrada',
         sortable: true,
-        width: '150px',
         type: 'date',
       },
       {
         field: 'totalAmount',
         caption: 'Valor Total',
         sortable: true,
-        width: '150px',
         type: 'currency',
       },
       {
         field: 'actions',
+        width: '150px',
         caption: 'Ações',
         actionButtonsType: 'buttons',
         actionButtons: [

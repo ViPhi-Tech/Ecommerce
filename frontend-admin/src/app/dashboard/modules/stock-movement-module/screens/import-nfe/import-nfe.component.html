@@ -38,71 +38,73 @@
       <div class="flex flex-col gap-4">
         <!-- Informações Resumidas da Nota Fiscal -->
         @if (nfeFormatted()) {
-          <div
-            class="grid grid-cols-2 md:grid-cols-5 gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800 shadow-sm"
-          >
-            <div class="flex flex-col">
-              <span
-                class="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1"
-                >Número da Nota</span
-              >
-              <span
-                class="text-lg font-semibold text-blue-900 dark:text-blue-100"
-              >
-                {{ nfeFormatted()?.identification?.number }}
-              </span>
-            </div>
-            <div class="flex flex-col">
-              <span
-                class="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1"
-                >Série</span
-              >
-              <span
-                class="text-lg font-semibold text-blue-900 dark:text-blue-100"
-              >
-                {{ nfeFormatted()?.identification?.series }}
-              </span>
-            </div>
-            <div class="flex flex-col">
-              <span
-                class="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1"
-                >Data de Emissão</span
-              >
-              <span
-                class="text-lg font-semibold text-blue-900 dark:text-blue-100"
-              >
-                {{
-                  nfeFormatted()?.identification?.issueDate | date: 'dd/MM/yyyy'
-                }}
-              </span>
-            </div>
-            <div class="flex flex-col">
-              <span
-                class="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1"
-                >Total de Itens</span
-              >
-              <span
-                class="text-lg font-semibold text-blue-900 dark:text-blue-100"
-              >
-                {{ nfeFormatted()?.products?.length ?? 0 }}
-                {{
-                  (nfeFormatted()?.products?.length ?? 0) === 1
-                    ? 'item'
-                    : 'itens'
-                }}
-              </span>
-            </div>
-            <div class="flex flex-col">
-              <span
-                class="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1"
-                >Valor Total</span
-              >
-              <span class="text-xl font-bold text-blue-900 dark:text-blue-100">
-                {{
-                  nfeFormatted()?.totals?.invoiceValue
-                    | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
-                }}
-              </span>
+          <div class="flex flex-col gap-4">
+            <div
+              class="grid grid-cols-2 md:grid-cols-5 gap-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800 shadow-sm"
+            >
+              <div class="flex flex-col">
+                <span
+                  class="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1"
+                  >Número da Nota</span
+                >
+                <span
+                  class="text-lg font-semibold text-blue-900 dark:text-blue-100"
+                >
+                  {{ nfeFormatted()?.identification?.number }}
+                </span>
+              </div>
+              <div class="flex flex-col">
+                <span
+                  class="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1"
+                  >Série</span
+                >
+                <span
+                  class="text-lg font-semibold text-blue-900 dark:text-blue-100"
+                >
+                  {{ nfeFormatted()?.identification?.series }}
+                </span>
+              </div>
+              <div class="flex flex-col">
+                <span
+                  class="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1"
+                  >Data de Emissão</span
+                >
+                <span
+                  class="text-lg font-semibold text-blue-900 dark:text-blue-100"
+                >
+                  {{
+                    nfeFormatted()?.identification?.issueDate | date: 'dd/MM/yyyy'
+                  }}
+                </span>
+              </div>
+              <div class="flex flex-col">
+                <span
+                  class="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1"
+                  >Total de Itens</span
+                >
+                <span
+                  class="text-lg font-semibold text-blue-900 dark:text-blue-100"
+                >
+                  {{ nfeFormatted()?.products?.length ?? 0 }}
+                  {{
+                    (nfeFormatted()?.products?.length ?? 0) === 1
+                      ? 'item'
+                      : 'itens'
+                  }}
+                </span>
+              </div>
+              <div class="flex flex-col">
+                <span
+                  class="text-xs text-blue-600 dark:text-blue-400 font-medium mb-1"
+                  >Valor Total</span
+                >
+                <span class="text-xl font-bold text-blue-900 dark:text-blue-100">
+                  {{
+                    nfeFormatted()?.totals?.invoiceValue
+                      | currency: 'BRL' : 'symbol' : '1.2-2' : 'pt-BR'
+                  }}
+                </span>
+              </div>
             </div>
           </div>
         }

@@ -84,12 +84,20 @@ export class CreatePurchaseInvoiceUseCase {
       // Preparar dados da nota fiscal
       const issueDate = new Date(ide.dhEmi || ide.dhSaiEnt || new Date());
       const entryDate = new Date(ide.dhSaiEnt || ide.dhEmi || new Date());
+
+      // Normalizar model (ex: "55") para Int (Prisma espera Int)
+      const model =
+        typeof ide.mod === 'number'
+          ? ide.mod
+          : typeof ide.mod === 'string'
+            ? parseInt(ide.mod, 10)
+            : 55;
       
       const purchaseInvoiceData: PurchaseInvoice = {
         accessKey: chNFe,
         number: ide.nNF?.toString() || '',
         series: ide.serie?.toString() || '',
-        model: ide.mod || 55,
+        model: Number.isFinite(model) ? model : 55,
         issueDate: issueDate,
         entryDate: entryDate,
         totalAmount: parseFloat(icmsTot.vNF?.toString() || '0'),

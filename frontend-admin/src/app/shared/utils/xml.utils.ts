@@ -8,8 +8,11 @@ export class XmlUtils {
           ignoreAttributes: false,
           attributeNamePrefix: '$',
           textNodeName: '#text',
-          parseAttributeValue: true,
-          parseTagValue: true,
+          // Importante: manter valores como string.
+          // Campos como `chNFe` (44 dígitos) NÃO podem ser parseados como Number,
+          // senão viram notação científica (ex: 4.12e+43) e perdem precisão.
+          parseAttributeValue: false,
+          parseTagValue: false,
           trimValues: true,
           processEntities: true,
           isArray: (name, jpath) => {
