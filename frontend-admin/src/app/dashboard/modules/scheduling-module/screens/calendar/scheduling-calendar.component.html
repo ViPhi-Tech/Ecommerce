@@ -181,14 +181,21 @@
           </div>
         </div>
 
-        {{description()}}
-
         <!-- Descrição -->
         <div class="day-float-panel__row">
           <i class="pi pi-align-left day-float-panel__row-icon"></i>
-          <span (click)="toggleDescriptionEditor()" (keydown.enter)="toggleDescriptionEditor()" tabindex="0" role="button" class="day-float-panel__row-placeholder">Adicionar descrição</span>
-          
-
+          @if (!descriptionEditorVisible()) {
+            <span (click)="toggleDescriptionEditor()" (keydown.enter)="toggleDescriptionEditor()" tabindex="0" role="button" class="day-float-panel__row-placeholder">Adicionar descrição</span>
+          }
+          @if (descriptionEditorVisible()) {
+            <div class="day-float-panel__editor-wrapper">
+              <fuse-text-editor
+                [value]="description()"
+                (valueChange)="description.set($event)"
+                placeholder="Adicionar descrição"
+              />
+            </div>
+          }
         </div>
       </div>
 

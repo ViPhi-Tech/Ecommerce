@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { DividerModule } from 'primeng/divider';
+import { TextEditorComponent } from 'app/shared/components/text-editor/text-editor.component';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
@@ -33,6 +34,7 @@ dayjs.locale('pt-br');
     CardModule,
     InputTextModule,
     DividerModule,
+    TextEditorComponent,
     NgxFloatUiModule,
   ],
 })

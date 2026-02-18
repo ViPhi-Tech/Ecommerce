@@ -623,6 +623,10 @@
     color: var(--p-text-muted-color, #5f6368);
   }
 
+  &__editor-wrapper {
+    margin: 0 16px 12px 52px;
+  }
+
   &__footer {
     display: flex;
     justify-content: flex-end;
