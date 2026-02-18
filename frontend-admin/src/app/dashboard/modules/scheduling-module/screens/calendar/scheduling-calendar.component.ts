@@ -23,6 +23,60 @@ dayjs.extend(weekOfYear);
 dayjs.extend(isoWeek);
 dayjs.locale('pt-br');
 
+interface CalendarEvent {
+  id: string;
+  title: string;
+  description: string;
+  date: Date;
+  allDay: boolean;
+  startHour?: number;
+  endHour?: number;
+  color: string;
+}
+
+const today = dayjs();
+
+const MOCK_EVENTS: CalendarEvent[] = [
+  {
+    id: '1',
+    title: 'Reunião de planejamento',
+    description: 'Planejamento do sprint da semana',
+    date: today.toDate(),
+    allDay: true,
+    color: '#3b82f6',
+  },
+  {
+    id: '2',
+    title: 'Almoço com cliente',
+    description: '',
+    date: today.toDate(),
+    allDay: false,
+    startHour: 12,
+    endHour: 13,
+    color: '#10b981',
+  },
+  {
+    id: '3',
+    title: 'Code review',
+    description: 'Revisar PR #42 do módulo de pagamentos',
+    date: today.toDate(),
+    allDay: false,
+    startHour: 15,
+    endHour: 16,
+    color: '#f59e0b',
+  },
+  {
+    id: '4',
+    title: 'Daily standup',
+    description: '',
+    date: today.toDate(),
+    allDay: false,
+    startHour: 9,
+    endHour: 10,
+    color: '#8b5cf6',
+  },
+];
+
 @Component({
   selector: 'fuse-scheduling-calendar',
   templateUrl: './scheduling-calendar.component.html',
@@ -134,6 +188,9 @@ export class SchedulingCalendarComponent implements OnInit {
     isToday: boolean;
   } | null>(null);
 
+  events = signal<CalendarEvent[]>(MOCK_EVENTS);
+
+  editingEventId = signal<string | null>(null);
   eventForm = signal({ title: '', description: '', allDay: false });
   descriptionEditorVisible = signal(false);
   selectedHour = signal<number | null>(null);
@@ -219,14 +276,63 @@ export class SchedulingCalendarComponent implements OnInit {
     setTimeout(() => this.dayFloatTrigger?.show(), 0);
   }
 
+  onEventClick(ev: CalendarEvent, event: Event) {
+    event.stopPropagation();
+    this.dayFloatTrigger?.hide();
+
+    const d = dayjs(ev.date);
+    this.selectedDay.set({
+      date: ev.date,
+      day: d.date(),
+      isCurrentMonth: true,
+      isToday: d.isSame(dayjs(), 'day'),
+    });
+    this.selectedHour.set(ev.startHour ?? null);
+    this.editingEventId.set(ev.id);
+    this.eventForm.set({
+      title: ev.title,
+      description: ev.description,
+      allDay: ev.allDay,
+    });
+    this.descriptionEditorVisible.set(!!ev.description);
+
+    this.floatTargetElement = event.currentTarget as HTMLElement;
+    setTimeout(() => this.dayFloatTrigger?.show(), 0);
+  }
+
   onSaveEvent() {
     const form = this.eventForm();
-    console.log({
-      title: form.title,
-      date: this.selectedDay()?.date,
-      description: form.description,
-      allDay: form.allDay,
-    });
+    const editingId = this.editingEventId();
+
+    if (editingId) {
+      this.events.update((list) =>
+        list.map((e) =>
+          e.id === editingId
+            ? { ...e, title: form.title, description: form.description, allDay: form.allDay }
+            : e,
+        ),
+      );
+    } else {
+      const newEvent: CalendarEvent = {
+        id: crypto.randomUUID(),
+        title: form.title,
+        description: form.description,
+        date: this.selectedDay()?.date ?? new Date(),
+        allDay: form.allDay,
+        startHour: this.selectedHour() ?? undefined,
+        endHour: this.selectedHour() != null ? this.selectedHour()! + 1 : undefined,
+        color: '#3b82f6',
+      };
+      this.events.update((list) => [...list, newEvent]);
+    }
+
+    this.dayFloatTrigger?.hide();
+  }
+
+  onDeleteEvent() {
+    const editingId = this.editingEventId();
+    if (!editingId) return;
+    this.events.update((list) => list.filter((e) => e.id !== editingId));
     this.dayFloatTrigger?.hide();
   }
 
@@ -247,7 +353,23 @@ export class SchedulingCalendarComponent implements OnInit {
     this.descriptionEditorVisible.set(!this.descriptionEditorVisible());
   }
 
+  getEventsForDay(date: Date): CalendarEvent[] {
+    const d = dayjs(date);
+    return this.events().filter((e) => dayjs(e.date).isSame(d, 'day'));
+  }
+
+  getAllDayEvents(date: Date): CalendarEvent[] {
+    return this.getEventsForDay(date).filter((e) => e.allDay);
+  }
+
+  getSlotEvents(date: Date, hour: number): CalendarEvent[] {
+    return this.getEventsForDay(date).filter(
+      (e) => !e.allDay && e.startHour === hour,
+    );
+  }
+
   private resetEventForm(defaults?: Partial<{ allDay: boolean }>) {
+    this.editingEventId.set(null);
     this.eventForm.set({ title: '', description: '', allDay: defaults?.allDay ?? false });
     this.descriptionEditorVisible.set(false);
   }

@@ -77,7 +77,15 @@
                 >
                   <div class="day-number">{{ day.day }}</div>
                   <div class="day-events">
-                    <!-- Espaço para eventos futuros -->
+                    @for (ev of getEventsForDay(day.date); track ev.id) {
+                      <div class="event-chip" [style.background-color]="ev.color" (click)="onEventClick(ev, $event)" (keydown.enter)="onEventClick(ev, $event)" tabindex="0" role="button">
+                        @if (ev.allDay) {
+                          <span class="event-chip__label">{{ ev.title }}</span>
+                        } @else {
+                          <span class="event-chip__label">{{ ev.startHour! | number: '2.0-0' }}:00 {{ ev.title }}</span>
+                        }
+                      </div>
+                    }
                   </div>
                 </button>
               }
@@ -100,8 +108,21 @@
               </div>
             }
             <div>
-              
+
             </div>
+          </div>
+
+          <div class="week-allday-row">
+            <div class="time-label">Dia inteiro</div>
+            @for (day of weekDays(); track day.day) {
+              <div class="allday-cell">
+                @for (ev of getAllDayEvents(day.date); track ev.id) {
+                  <div class="event-chip" [style.background-color]="ev.color" (click)="onEventClick(ev, $event)" (keydown.enter)="onEventClick(ev, $event)" tabindex="0" role="button">
+                    <span class="event-chip__label">{{ ev.title }}</span>
+                  </div>
+                }
+              </div>
+            }
           </div>
 
           <div class="week-grid">
@@ -110,7 +131,11 @@
                 <div class="time-label">{{ slot.label }}</div>
                 @for (day of weekDays(); track day.day) {
                   <button class="day-cell" (click)="onTimeSlotClick(slot, day, $event)" tabindex="0" role="button">
-                    <!-- Espaço para eventos futuros -->
+                    @for (ev of getSlotEvents(day.date, slot.hour); track ev.id) {
+                      <div class="event-chip" [style.background-color]="ev.color" (click)="onEventClick(ev, $event)" (keydown.enter)="onEventClick(ev, $event)" tabindex="0" role="button">
+                        <span class="event-chip__label">{{ ev.title }}</span>
+                      </div>
+                    }
                   </button>
                 }
               </div>
@@ -122,12 +147,29 @@
       <!-- Visualização de Dia -->
       @if (selectedView() === 'day') {
         <div class="day-view">
+          @if (getAllDayEvents(currentDate()).length) {
+            <div class="day-allday-row">
+              <div class="time-label">Dia inteiro</div>
+              <div class="allday-cell">
+                @for (ev of getAllDayEvents(currentDate()); track ev.id) {
+                  <div class="event-chip" [style.background-color]="ev.color" (click)="onEventClick(ev, $event)" (keydown.enter)="onEventClick(ev, $event)" tabindex="0" role="button">
+                    <span class="event-chip__label">{{ ev.title }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+
           <div class="day-grid">
             @for (slot of timeSlots(); track slot.label) {
               <div class="time-row">
                 <div class="time-label">{{ slot.label }}</div>
                 <button class="day-cell" (click)="onTimeSlotClick(slot, currentDayForDayView(), $event)" tabindex="0" role="button">
-                  <!-- Espaço para eventos futuros -->
+                  @for (ev of getSlotEvents(currentDate(), slot.hour); track ev.id) {
+                    <div class="event-chip" [style.background-color]="ev.color" (click)="onEventClick(ev, $event)" (keydown.enter)="onEventClick(ev, $event)" tabindex="0" role="button">
+                      <span class="event-chip__label">{{ ev.title }}</span>
+                    </div>
+                  }
                 </button>
               </div>
             }
@@ -214,10 +256,19 @@
         </div>
       </div>
 
-      <!-- Rodapé: Mais opções + Salvar -->
+      <!-- Rodapé -->
       <div class="day-float-panel__footer">
+        @if (editingEventId()) {
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [text]="true"
+            size="small"
+            (onClick)="onDeleteEvent()"
+          />
+        }
         <p-button
-          label="Salvar"
+          [label]="editingEventId() ? 'Atualizar' : 'Salvar'"
           size="small"
           (onClick)="onSaveEvent()"
         />
