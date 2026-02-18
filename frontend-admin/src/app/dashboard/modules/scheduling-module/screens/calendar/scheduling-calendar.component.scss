@@ -73,6 +73,8 @@
           padding: 0.75rem;
           transition: all 0.2s;
           cursor: pointer;
+          display: flex;
+
 
           &:nth-child(7n) {
             border-right: none;
@@ -480,5 +482,164 @@
         }
       }
     }
+  }
+
+  // Trigger invisível (posição vem do targetElement = célula clicada)
+  .day-float-trigger {
+    position: fixed;
+    left: -9999px;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+
+  
+}
+
+// Painel flutuante ao clicar no dia (estilo Google Calendar)
+.day-float-panel {
+  width: 420px;
+  background: var(--p-card-background, #fff);
+  border-radius: 12px;
+  box-shadow:
+    0 8px 28px rgba(0, 0, 0, 0.18),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+  animation: dayFloatPanelIn 0.2s ease-out;
+  overflow: hidden;
+
+  &__header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px 8px 0;
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    color: var(--p-text-muted-color, #5f6368);
+    transition: background-color 0.15s;
+
+    &:hover {
+      background-color: var(--p-content-hover-background, rgba(0, 0, 0, 0.06));
+    }
+
+    i {
+      font-size: 0.875rem;
+    }
+  }
+
+  &__title-row {
+    padding: 0 24px 12px 52px;
+  }
+
+  &__title-input {
+    width: 100%;
+    border: none !important;
+    border-bottom: 2px solid var(--p-primary-color, #1a73e8) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 8px 0 !important;
+    font-size: 1.375rem !important;
+    font-weight: 400;
+    background: transparent !important;
+    color: var(--p-text-color, #202124);
+    outline: none;
+
+    &::placeholder {
+      color: var(--p-text-muted-color, #5f6368);
+      font-weight: 400;
+    }
+  }
+
+  &__type-row {
+    padding: 4px 24px 16px 52px;
+
+    ::ng-deep {
+      .p-selectbutton {
+        .p-button {
+          font-size: 0.8125rem;
+          padding: 4px 12px;
+          font-weight: 500;
+        }
+      }
+    }
+  }
+
+  &__rows {
+    padding: 0 24px 8px 0;
+  }
+
+  &__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 10px 0 10px 16px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.15s;
+
+    &:hover {
+      background-color: var(--p-content-hover-background, rgba(0, 0, 0, 0.04));
+    }
+  }
+
+  &__row-icon {
+    flex-shrink: 0;
+    width: 20px;
+    text-align: center;
+    font-size: 1.125rem;
+    color: var(--p-text-muted-color, #5f6368);
+    margin-top: 2px;
+  }
+
+  &__row-content {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__row-text {
+    font-size: 0.875rem;
+    color: var(--p-text-color, #202124);
+    font-weight: 400;
+    text-transform: capitalize;
+  }
+
+  &__row-sub {
+    font-size: 0.75rem;
+    color: var(--p-text-muted-color, #5f6368);
+  }
+
+  &__row-placeholder {
+    font-size: 0.875rem;
+    color: var(--p-text-muted-color, #5f6368);
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-top: 1px solid var(--p-content-border-color, #dadce0);
+  }
+}
+
+@keyframes dayFloatPanelIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }

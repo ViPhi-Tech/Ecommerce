@@ -18,6 +18,8 @@ module.exports = tseslint.config(
       "@typescript-eslint/no-empty-function": "off",
       "@typescript-eslint/no-explicit-any": "off",
       "@angular-eslint/no-empty-lifecycle-method": "off",
+      "@angular-eslint/template/click-events-have-key-events": "off",
+      "@angular-eslint/template/interactive-supports-focus": "off",
       "@angular-eslint/directive-selector": [
         "error",
         {
@@ -44,6 +46,7 @@ module.exports = tseslint.config(
     ],
     rules: {
       "@angular-eslint/template/elements-content": "off",
+      "@angular-eslint/template/interactive-supports-focus": "off",
     },
   },
 );

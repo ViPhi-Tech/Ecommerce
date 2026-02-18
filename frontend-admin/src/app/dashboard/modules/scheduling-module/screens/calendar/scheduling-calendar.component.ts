@@ -1,14 +1,22 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, OnInit, signal, computed, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CoreService } from 'app/shared/services/core.service';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
+import { InputTextModule } from 'primeng/inputtext';
+import { DividerModule } from 'primeng/divider';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import isoWeek from 'dayjs/plugin/isoWeek';
+import {
+  NgxFloatUiModule,
+  NgxFloatUiDirective,
+  NgxFloatUiPlacements,
+  NgxFloatUiTriggers,
+} from 'ngx-float-ui';
 
 dayjs.extend(weekOfYear);
 dayjs.extend(isoWeek);
@@ -24,10 +32,24 @@ dayjs.locale('pt-br');
     SelectButtonModule,
     FormsModule,
     CardModule,
+    InputTextModule,
+    DividerModule,
+    NgxFloatUiModule,
   ],
 })
 export class SchedulingCalendarComponent implements OnInit {
   private coreService = inject(CoreService);
+
+  @ViewChild('dayFloatTrigger') dayFloatTrigger?: NgxFloatUiDirective;
+
+  NgxFloatUiTriggers = NgxFloatUiTriggers;
+  NgxFloatUiPlacements = NgxFloatUiPlacements;
+
+  private floatTargetElement: HTMLElement | null = null;
+
+  get floatTargetOrAnchor(): HTMLElement {
+    return this.floatTargetElement ?? document.body;
+  }
 
   viewOptions = signal([
     { label: 'Mês', value: 'month', icon: 'pi pi-calendar' },
@@ -37,51 +59,6 @@ export class SchedulingCalendarComponent implements OnInit {
 
   selectedView = signal<'month' | 'week' | 'day'>('month');
   currentDate = signal(new Date());
-
-  ptBr = {
-    firstDayOfWeek: 0,
-    dayNames: [
-      'Domingo',
-      'Segunda',
-      'Terça',
-      'Quarta',
-      'Quinta',
-      'Sexta',
-      'Sábado',
-    ],
-    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-    dayNamesMin: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
-    monthNames: [
-      'Janeiro',
-      'Fevereiro',
-      'Março',
-      'Abril',
-      'Maio',
-      'Junho',
-      'Julho',
-      'Agosto',
-      'Setembro',
-      'Outubro',
-      'Novembro',
-      'Dezembro',
-    ],
-    monthNamesShort: [
-      'Jan',
-      'Fev',
-      'Mar',
-      'Abr',
-      'Mai',
-      'Jun',
-      'Jul',
-      'Ago',
-      'Set',
-      'Out',
-      'Nov',
-      'Dez',
-    ],
-    today: 'Hoje',
-    clear: 'Limpar',
-  };
 
   currentTitle = computed(() => {
     const date = dayjs(this.currentDate());
@@ -149,6 +126,30 @@ export class SchedulingCalendarComponent implements OnInit {
 
   weekDaysNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
+  selectedDay = signal<{
+    date: Date;
+    day: number;
+    isCurrentMonth: boolean;
+    isToday: boolean;
+  } | null>(null);
+
+  selectedItemType = signal<'evento' | 'tarefa'>('evento');
+  eventTitle = signal('');
+
+  itemTypeOptions = [
+    { label: 'Evento', value: 'evento' },
+    { label: 'Tarefa', value: 'tarefa' },
+  ];
+
+  formattedSelectedDate = computed(() => {
+    const day = this.selectedDay();
+    if (!day) return '';
+    return dayjs(day.date).format('dddd, D [de] MMMM');
+  });
+
+  descriptionEditorVisible = signal(false);
+  description = signal('');
+
   ngOnInit() {
   }
 
@@ -190,5 +191,36 @@ export class SchedulingCalendarComponent implements OnInit {
 
   goToToday() {
     this.currentDate.set(new Date());
+  }
+
+  onDayClick(day: any, event: MouseEvent) {
+    this.dayFloatTrigger?.hide();
+    this.selectedDay.set(day);
+    this.selectedItemType.set('evento');
+    this.eventTitle.set('');
+    this.floatTargetElement = event.currentTarget as HTMLElement;
+    setTimeout(() => this.dayFloatTrigger?.show(), 0);
+  }
+
+  onSaveEvent() {
+    console.log({
+      title: this.eventTitle(),
+      type: this.selectedItemType(),
+      date: this.selectedDay()?.date,
+    });
+    this.dayFloatTrigger?.hide();
+  }
+
+  onMoreOptions() {
+    this.dayFloatTrigger?.hide();
+  }
+
+  capitalizeFirst(str: string): string {
+    if (!str) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+
+  toggleDescriptionEditor() {
+    this.descriptionEditorVisible.set(!this.descriptionEditorVisible() );
   }
 }
