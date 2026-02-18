@@ -98,6 +98,7 @@ export class EventCreateComponent {
     setTimeout(() => this.dayFloatTrigger?.show(), 0);
   }
 
+  // Quando clicar em um evento na grade de horários
   openForEvent(ev: CalendarEvent, target: HTMLElement) {
     this.hide();
     const d = dayjs(ev.date);
@@ -116,11 +117,15 @@ export class EventCreateComponent {
     });
     this.descriptionEditorVisible.set(!!ev.description);
     this.floatTargetElement = target;
-    setTimeout(() => this.dayFloatTrigger?.show(), 0);
+    setTimeout(() => this.show(), 0);
   }
 
   hide() {
     this.dayFloatTrigger?.hide();
+  }
+
+  show() {
+    this.dayFloatTrigger?.show();
   }
 
   onSave() {
