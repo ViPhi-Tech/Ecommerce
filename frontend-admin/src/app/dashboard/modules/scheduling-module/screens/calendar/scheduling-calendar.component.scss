@@ -41,13 +41,10 @@
 
   // Visualização de Mês
   .month-view {
-    padding: 1.5rem;
-
     .month-grid {
       .weekdays-header {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
-        background-color: #f9fafb;
         border-bottom: 2px solid #e5e7eb;
 
         .weekday-name {
@@ -131,7 +128,6 @@
       display: grid;
       grid-template-columns: 80px repeat(7, 1fr);
       border-bottom: 2px solid #e5e7eb;
-      background-color: #f9fafb;
 
       .time-column {
         border-right: 1px solid #e5e7eb;
@@ -180,8 +176,11 @@
 
     .week-grid {
       max-height: 600px;
-      overflow-y: scroll;
-      scrollbar-gutter: stable;
+      overflow-y: auto;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       .time-row {
         display: grid;
@@ -624,7 +623,7 @@
   }
 
   &__editor-wrapper {
-    margin: 0 16px 12px 52px;
+    width: 100%;
   }
 
   &__footer {

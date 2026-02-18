@@ -111,10 +111,10 @@ export class TextEditorComponent implements AfterViewInit {
     const doc = parser.parseFromString(html, 'text/html');
 
     for (const tag of BLOCKED_TAGS) {
-      doc.querySelectorAll(tag.toLowerCase()).forEach((node) => node.remove());
+      doc.body.querySelectorAll(tag.toLowerCase()).forEach((node) => node.remove());
     }
 
-    doc.querySelectorAll('*').forEach((node) => {
+    doc.body.querySelectorAll('*').forEach((node) => {
       const el = node as HTMLElement;
       const tagName = el.tagName.toUpperCase();
 

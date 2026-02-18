@@ -99,6 +99,9 @@
                 </div>
               </div>
             }
+            <div>
+              
+            </div>
           </div>
 
           <div class="week-grid">
@@ -123,9 +126,9 @@
             @for (slot of timeSlots(); track slot.label) {
               <div class="time-row">
                 <div class="time-label">{{ slot.label }}</div>
-                <div class="day-cell">
+                <button class="day-cell" (click)="onTimeSlotClick(slot, currentDayForDayView(), $event)" tabindex="0" role="button">
                   <!-- Espaço para eventos futuros -->
-                </div>
+                </button>
               </div>
             }
           </div>
@@ -164,8 +167,8 @@
           pInputText
           class="day-float-panel__title-input"
           placeholder="Adicionar título e horário"
-          [ngModel]="eventTitle()"
-          (ngModelChange)="eventTitle.set($event)"
+          [ngModel]="eventForm().title"
+          (ngModelChange)="updateEventForm('title', $event)"
         />
       </div>
 
@@ -181,6 +184,18 @@
           </div>
         </div>
 
+        <!-- Dia inteiro -->
+        <div class="day-float-panel__row">
+          <i class="pi pi-calendar day-float-panel__row-icon"></i>
+          <p-checkbox
+            [ngModel]="eventForm().allDay"
+            (ngModelChange)="updateEventForm('allDay', $event)"
+            [binary]="true"
+            label="Dia inteiro"
+          />
+          <span class="day-float-panel__row-text">Dia inteiro</span>
+        </div>
+
         <!-- Descrição -->
         <div class="day-float-panel__row">
           <i class="pi pi-align-left day-float-panel__row-icon"></i>
@@ -190,8 +205,8 @@
           @if (descriptionEditorVisible()) {
             <div class="day-float-panel__editor-wrapper">
               <fuse-text-editor
-                [value]="description()"
-                (valueChange)="description.set($event)"
+                [value]="eventForm().description"
+                (valueChange)="updateEventForm('description', $event)"
                 placeholder="Adicionar descrição"
               />
             </div>
@@ -201,13 +216,6 @@
 
       <!-- Rodapé: Mais opções + Salvar -->
       <div class="day-float-panel__footer">
-        <p-button
-          label="Mais opções"
-          [text]="true"
-          severity="secondary"
-          size="small"
-          (onClick)="onMoreOptions()"
-        />
         <p-button
           label="Salvar"
           size="small"

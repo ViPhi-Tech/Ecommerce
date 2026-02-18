@@ -21,7 +21,6 @@
     contenteditable="true"
     role="textbox"
     aria-multiline="true"
-    (focus)="isFocused = true"
     (blur)="isFocused = false; handleInput()"
     (input)="handleInput()"
     (paste)="onPaste($event)"

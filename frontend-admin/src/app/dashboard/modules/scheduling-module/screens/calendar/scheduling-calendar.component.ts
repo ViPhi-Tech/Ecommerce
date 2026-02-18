@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
 import { InputTextModule } from 'primeng/inputtext';
 import { DividerModule } from 'primeng/divider';
+import { CheckboxModule } from 'primeng/checkbox';
 import { TextEditorComponent } from 'app/shared/components/text-editor/text-editor.component';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
@@ -34,6 +35,7 @@ dayjs.locale('pt-br');
     CardModule,
     InputTextModule,
     DividerModule,
+    CheckboxModule,
     TextEditorComponent,
     NgxFloatUiModule,
   ],
@@ -132,16 +134,29 @@ export class SchedulingCalendarComponent implements OnInit {
     isToday: boolean;
   } | null>(null);
 
-  eventTitle = signal('');
+  eventForm = signal({ title: '', description: '', allDay: false });
+  descriptionEditorVisible = signal(false);
+  selectedHour = signal<number | null>(null);
+
+  currentDayForDayView = computed(() => {
+    const date = dayjs(this.currentDate());
+    return {
+      date: date.toDate(),
+      day: date.date(),
+      isCurrentMonth: true,
+      isToday: date.isSame(dayjs(), 'day'),
+    };
+  });
 
   formattedSelectedDate = computed(() => {
     const day = this.selectedDay();
     if (!day) return '';
-    return dayjs(day.date).format('dddd, D [de] MMMM');
+    const hour = this.selectedHour();
+    const dateStr = dayjs(day.date).format('dddd, D [de] MMMM');
+    if (hour == null) return dateStr;
+    const hourLabel = `${hour.toString().padStart(2, '0')}:00`;
+    return `${dateStr} · ${hourLabel}`;
   });
-
-  descriptionEditorVisible = signal(false);
-  description = signal('');
 
   ngOnInit() {
   }
@@ -189,7 +204,8 @@ export class SchedulingCalendarComponent implements OnInit {
   onDayClick(day: any, event?: MouseEvent) {
     this.dayFloatTrigger?.hide();
     this.selectedDay.set(day);
-    this.eventTitle.set('');
+    this.selectedHour.set(null);
+    this.resetEventForm({ allDay: true });
     this.floatTargetElement = event?.currentTarget as HTMLElement;
     setTimeout(() => this.dayFloatTrigger?.show(), 0);
   }
@@ -197,16 +213,19 @@ export class SchedulingCalendarComponent implements OnInit {
   onTimeSlotClick(slot: any, day: any, event?: MouseEvent) {
     this.dayFloatTrigger?.hide();
     this.selectedDay.set(day);
-    this.eventTitle.set('');
+    this.selectedHour.set(slot.hour);
+    this.resetEventForm({ allDay: false });
     this.floatTargetElement = event?.currentTarget as HTMLElement;
     setTimeout(() => this.dayFloatTrigger?.show(), 0);
   }
 
   onSaveEvent() {
+    const form = this.eventForm();
     console.log({
-      title: this.eventTitle(),
+      title: form.title,
       date: this.selectedDay()?.date,
-      description: this.description(),
+      description: form.description,
+      allDay: form.allDay,
     });
     this.dayFloatTrigger?.hide();
   }
@@ -220,7 +239,16 @@ export class SchedulingCalendarComponent implements OnInit {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
+  updateEventForm(key: string, value: string | boolean) {
+    this.eventForm.update((f) => ({ ...f, [key]: value }));
+  }
+
   toggleDescriptionEditor() {
-    this.descriptionEditorVisible.set(!this.descriptionEditorVisible() );
+    this.descriptionEditorVisible.set(!this.descriptionEditorVisible());
+  }
+
+  private resetEventForm(defaults?: Partial<{ allDay: boolean }>) {
+    this.eventForm.set({ title: '', description: '', allDay: defaults?.allDay ?? false });
+    this.descriptionEditorVisible.set(false);
   }
 }
