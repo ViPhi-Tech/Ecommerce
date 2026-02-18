@@ -106,9 +106,9 @@
               <div class="time-row">
                 <div class="time-label">{{ slot.label }}</div>
                 @for (day of weekDays(); track day.day) {
-                  <div class="day-cell">
+                  <button class="day-cell" (click)="onTimeSlotClick(slot, day, $event)" tabindex="0" role="button">
                     <!-- Espaço para eventos futuros -->
-                  </div>
+                  </button>
                 }
               </div>
             }
@@ -166,18 +166,6 @@
           placeholder="Adicionar título e horário"
           [ngModel]="eventTitle()"
           (ngModelChange)="eventTitle.set($event)"
-        />
-      </div>
-
-      <!-- Tipo: Evento / Tarefa -->
-      <div class="day-float-panel__type-row">
-        <p-selectButton
-          [options]="itemTypeOptions"
-          [ngModel]="selectedItemType()"
-          (ngModelChange)="selectedItemType.set($event)"
-          optionLabel="label"
-          optionValue="value"
-          size="small"
         />
       </div>
 

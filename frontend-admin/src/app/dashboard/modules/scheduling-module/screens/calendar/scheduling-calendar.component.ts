@@ -1,6 +1,5 @@
-import { Component, inject, OnInit, signal, computed, ViewChild } from '@angular/core';
+import { Component, OnInit, signal, computed, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CoreService } from 'app/shared/services/core.service';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
@@ -38,8 +37,6 @@ dayjs.locale('pt-br');
   ],
 })
 export class SchedulingCalendarComponent implements OnInit {
-  private coreService = inject(CoreService);
-
   @ViewChild('dayFloatTrigger') dayFloatTrigger?: NgxFloatUiDirective;
 
   NgxFloatUiTriggers = NgxFloatUiTriggers;
@@ -133,13 +130,7 @@ export class SchedulingCalendarComponent implements OnInit {
     isToday: boolean;
   } | null>(null);
 
-  selectedItemType = signal<'evento' | 'tarefa'>('evento');
   eventTitle = signal('');
-
-  itemTypeOptions = [
-    { label: 'Evento', value: 'evento' },
-    { label: 'Tarefa', value: 'tarefa' },
-  ];
 
   formattedSelectedDate = computed(() => {
     const day = this.selectedDay();
@@ -193,20 +184,27 @@ export class SchedulingCalendarComponent implements OnInit {
     this.currentDate.set(new Date());
   }
 
-  onDayClick(day: any, event: MouseEvent) {
+  onDayClick(day: any, event?: MouseEvent) {
     this.dayFloatTrigger?.hide();
     this.selectedDay.set(day);
-    this.selectedItemType.set('evento');
     this.eventTitle.set('');
-    this.floatTargetElement = event.currentTarget as HTMLElement;
+    this.floatTargetElement = event?.currentTarget as HTMLElement;
+    setTimeout(() => this.dayFloatTrigger?.show(), 0);
+  }
+
+  onTimeSlotClick(slot: any, day: any, event?: MouseEvent) {
+    this.dayFloatTrigger?.hide();
+    this.selectedDay.set(day);
+    this.eventTitle.set('');
+    this.floatTargetElement = event?.currentTarget as HTMLElement;
     setTimeout(() => this.dayFloatTrigger?.show(), 0);
   }
 
   onSaveEvent() {
     console.log({
       title: this.eventTitle(),
-      type: this.selectedItemType(),
       date: this.selectedDay()?.date,
+      description: this.description(),
     });
     this.dayFloatTrigger?.hide();
   }
