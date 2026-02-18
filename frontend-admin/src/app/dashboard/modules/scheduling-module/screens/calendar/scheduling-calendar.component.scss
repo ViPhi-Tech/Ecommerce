@@ -534,7 +534,7 @@
 
           .p-card-header {
             background-color: #1e1e1e;
-            border-bottom: 1px solid #1f1f23;
+            border-bottom: 1px solid #333637;
           }
 
           .p-card-body {
@@ -549,7 +549,7 @@
       .month-grid {
         .weekdays-header {
           background-color: #1f1f23;
-          border-bottom-color: #1f1f23;
+          border-bottom-color: #333637;
 
           .weekday-name {
             color: #94a3b8;
@@ -558,7 +558,7 @@
 
         .days-grid {
           .day-cell {
-            border-color: #1f1f23;
+            border-color: #333637;
 
             &:hover {
               background-color: #1f2937;
@@ -592,28 +592,28 @@
     // Semana
     .week-view {
       .week-allday-row {
-        border-bottom-color: #1f1f23;
+        border-bottom-color: #333637;
 
         .time-label {
           color: #94a3b8;
-          border-right-color: #1f1f23;
+          border-right-color: #333637;
         }
 
         .allday-cell {
-          border-right-color: #1f1f23;
+          border-right-color: #333637;
         }
       }
 
       .week-header {
-        border-bottom-color: #1f1f23;
+        border-bottom-color: #333637;
         background-color: #1f1f23;
 
         .time-column {
-          border-right-color: #1f1f23;
+          border-right-color: #333637;
         }
 
         .day-column {
-          border-right-color: #1f1f23;
+          border-right-color: #333637;
 
           .day-header {
             .day-name {
@@ -634,15 +634,15 @@
 
       .week-grid {
         .time-row {
-          border-bottom-color: #1f1f23;
+          border-bottom-color: #333637;
 
           .time-label {
             color: #94a3b8;
-            border-right-color: #1f1f23;
+            border-right-color: #333637;
           }
 
           .day-cell {
-            border-right-color: #1f1f23;
+            border-right-color: #333637;
 
             &:hover {
               background-color: #1f2937;
@@ -655,21 +655,21 @@
     // Dia
     .day-view {
       .day-allday-row {
-        border-bottom-color: #1f1f23;
+        border-bottom-color: #333637;
 
         .time-label {
           color: #94a3b8;
-          border-right-color: #1f1f23;
+          border-right-color: #333637;
         }
       }
 
       .day-grid {
         .time-row {
-          border-bottom-color: #1f1f23;
+          border-bottom-color: #333637;
 
           .time-label {
             color: #94a3b8;
-            border-right-color: #1f1f23;
+            border-right-color: #333637;
           }
 
           .day-cell {

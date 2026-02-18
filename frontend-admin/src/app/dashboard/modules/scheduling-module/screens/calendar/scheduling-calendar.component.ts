@@ -83,7 +83,11 @@ export class SchedulingCalendarComponent implements OnInit {
     { label: 'Dia', value: 'day', icon: 'pi pi-clock' },
   ]);
 
-  selectedView = signal<'month' | 'week' | 'day'>('month');
+  private static readonly VIEW_STORAGE_KEY = 'scheduling-calendar-view';
+
+  selectedView = signal<'month' | 'week' | 'day'>(
+    (localStorage.getItem(SchedulingCalendarComponent.VIEW_STORAGE_KEY) as 'month' | 'week' | 'day') || 'month',
+  );
   currentDate = signal(new Date());
 
   currentTitle = computed(() => {
@@ -169,6 +173,7 @@ export class SchedulingCalendarComponent implements OnInit {
 
   onViewChange(view: 'month' | 'week' | 'day') {
     this.selectedView.set(view);
+    localStorage.setItem(SchedulingCalendarComponent.VIEW_STORAGE_KEY, view);
   }
 
   previousPeriod() {
