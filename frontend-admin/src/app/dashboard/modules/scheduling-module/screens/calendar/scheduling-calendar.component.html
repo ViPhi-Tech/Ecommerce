@@ -1,4 +1,4 @@
-<div class="scheduling-calendar-container">
+<div class="scheduling-calendar-container animate-fade-in">
   <div class="header-section">
     <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
       <div>
@@ -57,7 +57,7 @@
 
       <!-- Visualização de Mês -->
       @if (selectedView() === 'month') {
-        <div class="month-view">
+        <div class="month-view animate-fade-in">
           <div class="month-grid">
             <!-- Cabeçalho dos dias da semana -->
             <div class="weekdays-header">
@@ -96,7 +96,7 @@
 
       <!-- Visualização de Semana -->
       @if (selectedView() === 'week') {
-        <div class="week-view">
+        <div class="week-view animate-fade-in">
           <div class="week-header">
             <div class="time-column"></div>
             @for (day of weekDays(); track day.day) {
@@ -146,7 +146,7 @@
 
       <!-- Visualização de Dia -->
       @if (selectedView() === 'day') {
-        <div class="day-view">
+        <div class="day-view animate-fade-in">
           @if (getAllDayEvents(currentDate()).length) {
             <div class="day-allday-row">
               <div class="time-label">Dia inteiro</div>
