@@ -3,7 +3,7 @@
   [floatUi]="eventDetailContent"
   [showTrigger]="NgxFloatUiTriggers.none"
   [targetElement]="floatTargetOrAnchor"
-  hideOnClickOutside
+  [hideOnClickOutside]="!dateTimeEditorVisible()"
   [hideOnScroll]="true"
   [placement]="NgxFloatUiPlacements.AUTOEND"
   class="day-float-trigger"
@@ -30,13 +30,59 @@
       </div>
 
       <div class="day-float-panel__rows">
-        <div class="day-float-panel__row">
+        <div class="day-float-panel__row" (click)="toggleDateTimeEditor()" (keydown.enter)="toggleDateTimeEditor()" tabindex="0" role="button">
           <i class="pi pi-clock day-float-panel__row-icon"></i>
-          <div class="day-float-panel__row-content">
-            <span class="day-float-panel__row-text">
-              {{ capitalizeFirst(formattedSelectedDate()) }}
-            </span>
-          </div>
+          @if (!dateTimeEditorVisible()) {
+            <div class="day-float-panel__row-content">
+              <span class="day-float-panel__row-text">
+                {{ capitalizeFirst(formattedSelectedDate()) }}
+              </span>
+            </div>
+          }
+          @if (dateTimeEditorVisible()) {
+            <div class="day-float-panel__datetime-inputs" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()">
+              <p-datepicker
+                [ngModel]="formDateValue()"
+                (ngModelChange)="onDateChange($event)"
+                dateFormat="dd/mm/yy"
+                [iconDisplay]="'input'"
+                [showIcon]="true"
+                appendTo="body"
+                size="small"
+              />
+              <div class="day-float-panel__time-row">
+                <p-datepicker
+                  [ngModel]="formStartTime()"
+                  (ngModelChange)="onStartTimeChange($event)"
+                  [timeOnly]="true"
+                  appendTo="body"
+                  placeholder="Início"
+                  size="small"
+                  [iconDisplay]="'input'"
+                  [showIcon]="true"
+                >
+                  <ng-template #inputicon>
+                    <i class="pi pi-clock"></i>
+                  </ng-template>
+                </p-datepicker>
+                <span class="day-float-panel__time-separator">–</span>
+                <p-datepicker
+                  [ngModel]="formEndTime()"
+                  (ngModelChange)="onEndTimeChange($event)"
+                  [timeOnly]="true"
+                  appendTo="body"
+                  placeholder="Fim"
+                  size="small"
+                  [iconDisplay]="'input'"
+                  [showIcon]="true"
+                >
+                  <ng-template #inputicon>
+                    <i class="pi pi-clock"></i>
+                  </ng-template>
+                </p-datepicker>
+              </div>
+            </div>
+          }
         </div>
 
         <div class="day-float-panel__row">

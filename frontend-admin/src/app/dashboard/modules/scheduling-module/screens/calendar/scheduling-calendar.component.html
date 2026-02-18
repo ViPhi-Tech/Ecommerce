@@ -126,17 +126,32 @@
           </div>
 
           <div class="week-grid">
-            @for (slot of timeSlots(); track slot.label) {
-              <div class="time-row">
-                <div class="time-label">{{ slot.label }}</div>
-                @for (day of weekDays(); track day.day) {
-                  <button class="day-cell" (click)="onTimeSlotClick(slot, day, $event)" tabindex="0" role="button">
-                    @for (ev of getSlotEvents(day.date, slot.hour); track ev.id) {
-                      <div class="event-chip" [style.background-color]="ev.color" (click)="onEventClick(ev, $event)" (keydown.enter)="onEventClick(ev, $event)" tabindex="0" role="button">
-                        <span class="event-chip__label">{{ ev.title }}</span>
-                      </div>
-                    }
-                  </button>
+            <div class="week-grid__time-col">
+              @for (slot of timeSlots(); track slot.label) {
+                <div class="week-grid__time-label">{{ slot.label }}</div>
+              }
+            </div>
+            @for (day of weekDays(); track day.day) {
+              <div class="week-grid__day-col">
+                @for (slot of timeSlots(); track slot.label) {
+                  <button class="week-grid__slot" (click)="onTimeSlotClick(slot, day, $event)" tabindex="0" role="button"></button>
+                }
+                @for (ev of getTimedEventsForDay(day.date); track ev.id) {
+                  <div
+                    class="event-block"
+                    [style.top.px]="getEventTop(ev)"
+                    [style.height.px]="getEventHeight(ev)"
+                    [style.left]="getEventLeft(ev, day.date)"
+                    [style.width]="getEventWidth(ev, day.date)"
+                    [style.background-color]="ev.color"
+                    (click)="onEventClick(ev, $event)"
+                    (keydown.enter)="onEventClick(ev, $event)"
+                    tabindex="0"
+                    role="button"
+                  >
+                    <span class="event-block__title">{{ ev.title }}</span>
+                    <span class="event-block__time">{{ ev.startHour! | number: '2.0-0' }}:00 – {{ ev.endHour! | number: '2.0-0' }}:00</span>
+                  </div>
                 }
               </div>
             }
@@ -161,18 +176,33 @@
           }
 
           <div class="day-grid">
-            @for (slot of timeSlots(); track slot.label) {
-              <div class="time-row">
-                <div class="time-label">{{ slot.label }}</div>
-                <button class="day-cell" (click)="onTimeSlotClick(slot, currentDayForDayView(), $event)" tabindex="0" role="button">
-                  @for (ev of getSlotEvents(currentDate(), slot.hour); track ev.id) {
-                    <div class="event-chip" [style.background-color]="ev.color" (click)="onEventClick(ev, $event)" (keydown.enter)="onEventClick(ev, $event)" tabindex="0" role="button">
-                      <span class="event-chip__label">{{ ev.title }}</span>
-                    </div>
-                  }
-                </button>
-              </div>
-            }
+            <div class="day-grid__time-col">
+              @for (slot of timeSlots(); track slot.label) {
+                <div class="day-grid__time-label">{{ slot.label }}</div>
+              }
+            </div>
+            <div class="day-grid__day-col">
+              @for (slot of timeSlots(); track slot.label) {
+                <button class="day-grid__slot" (click)="onTimeSlotClick(slot, currentDayForDayView(), $event)" tabindex="0" role="button"></button>
+              }
+              @for (ev of getTimedEventsForDay(currentDate()); track ev.id) {
+                <div
+                  class="event-block"
+                  [style.top.px]="getEventTop(ev)"
+                  [style.height.px]="getEventHeight(ev)"
+                  [style.left]="getEventLeft(ev, currentDate())"
+                  [style.width]="getEventWidth(ev, currentDate())"
+                  [style.background-color]="ev.color"
+                  (click)="onEventClick(ev, $event)"
+                  (keydown.enter)="onEventClick(ev, $event)"
+                  tabindex="0"
+                  role="button"
+                >
+                  <span class="event-block__title">{{ ev.title }}</span>
+                  <span class="event-block__time">{{ ev.startHour! | number: '2.0-0' }}:00 – {{ ev.endHour! | number: '2.0-0' }}:00</span>
+                </div>
+              }
+            </div>
           </div>
         </div>
       }

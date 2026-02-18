@@ -230,7 +230,15 @@ export class SchedulingCalendarComponent implements OnInit {
       this.events.update((list) =>
         list.map((e) =>
           e.id === payload.editingId
-            ? { ...e, title: payload.form.title, description: payload.form.description, allDay: payload.form.allDay }
+            ? {
+                ...e,
+                title: payload.form.title,
+                description: payload.form.description,
+                allDay: payload.form.allDay,
+                date: payload.day,
+                startHour: payload.hour ?? undefined,
+                endHour: payload.endHour ?? undefined,
+              }
             : e,
         ),
       );
@@ -242,7 +250,7 @@ export class SchedulingCalendarComponent implements OnInit {
         date: payload.day,
         allDay: payload.form.allDay,
         startHour: payload.hour ?? undefined,
-        endHour: payload.hour != null ? payload.hour + 1 : undefined,
+        endHour: payload.endHour ?? undefined,
         color: '#3b82f6',
       };
       this.events.update((list) => [...list, newEvent]);
@@ -253,6 +261,8 @@ export class SchedulingCalendarComponent implements OnInit {
     this.events.update((list) => list.filter((e) => e.id !== eventId));
   }
 
+  readonly SLOT_HEIGHT = 60;
+
   getEventsForDay(date: Date): CalendarEvent[] {
     const d = dayjs(date);
     return this.events().filter((e) => dayjs(e.date).isSame(d, 'day'));
@@ -262,10 +272,89 @@ export class SchedulingCalendarComponent implements OnInit {
     return this.getEventsForDay(date).filter((e) => e.allDay);
   }
 
-  getSlotEvents(date: Date, hour: number): CalendarEvent[] {
-    return this.getEventsForDay(date).filter(
-      (e) => !e.allDay && e.startHour === hour,
-    );
+  getTimedEventsForDay(date: Date): CalendarEvent[] {
+    return this.getEventsForDay(date).filter((e) => !e.allDay && e.startHour != null);
+  }
+
+  getEventTop(ev: CalendarEvent): number {
+    return (ev.startHour ?? 0) * this.SLOT_HEIGHT;
+  }
+
+  getEventHeight(ev: CalendarEvent): number {
+    const start = ev.startHour ?? 0;
+    const end = ev.endHour ?? start + 1;
+    return Math.max((end - start) * this.SLOT_HEIGHT, this.SLOT_HEIGHT);
+  }
+
+  getEventLeft(ev: CalendarEvent, date: Date): string {
+    const layout = this.computeEventLayout(date);
+    const info = layout.get(ev.id);
+    if (!info || info.total <= 1) return '0';
+    return `${(info.column / info.total) * 100}%`;
+  }
+
+  getEventWidth(ev: CalendarEvent, date: Date): string {
+    const layout = this.computeEventLayout(date);
+    const info = layout.get(ev.id);
+    if (!info || info.total <= 1) return '100%';
+    return `${(1 / info.total) * 100}%`;
+  }
+
+  private computeEventLayout(date: Date): Map<string, { column: number; total: number }> {
+    const events = this.getTimedEventsForDay(date)
+      .sort((a, b) => (a.startHour ?? 0) - (b.startHour ?? 0));
+
+    if (events.length === 0) return new Map();
+
+    const groups: CalendarEvent[][] = [];
+    let currentGroup: CalendarEvent[] = [];
+    let groupEnd = 0;
+
+    for (const ev of events) {
+      const start = ev.startHour ?? 0;
+      const end = ev.endHour ?? start + 1;
+
+      if (currentGroup.length === 0 || start < groupEnd) {
+        currentGroup.push(ev);
+        groupEnd = Math.max(groupEnd, end);
+      } else {
+        groups.push(currentGroup);
+        currentGroup = [ev];
+        groupEnd = end;
+      }
+    }
+    if (currentGroup.length > 0) groups.push(currentGroup);
+
+    const layout = new Map<string, { column: number; total: number }>();
+
+    for (const group of groups) {
+      const columns: number[] = [];
+
+      for (const ev of group) {
+        const start = ev.startHour ?? 0;
+        const end = ev.endHour ?? start + 1;
+        let placed = -1;
+        for (let c = 0; c < columns.length; c++) {
+          if (columns[c] <= start) {
+            placed = c;
+            break;
+          }
+        }
+        if (placed === -1) {
+          placed = columns.length;
+          columns.push(0);
+        }
+        columns[placed] = end;
+        layout.set(ev.id, { column: placed, total: 0 });
+      }
+
+      const total = columns.length;
+      for (const ev of group) {
+        layout.get(ev.id)!.total = total;
+      }
+    }
+
+    return layout;
   }
 
 }

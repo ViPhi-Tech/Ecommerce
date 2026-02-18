@@ -204,6 +204,37 @@
     }
   }
 
+  .event-block {
+    position: absolute;
+    border-radius: 4px;
+    padding: 4px 6px;
+    color: #fff;
+    font-size: 0.7rem;
+    line-height: 1.3;
+    overflow: hidden;
+    cursor: pointer;
+    z-index: 1;
+    box-sizing: border-box;
+    border-left: 3px solid rgba(0, 0, 0, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+
+    &__title {
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    &__time {
+      font-size: 0.625rem;
+      opacity: 0.9;
+      white-space: nowrap;
+    }
+  }
+
   // Visualização de Semana
   .week-view {
     flex: 1;
@@ -304,44 +335,52 @@
       flex: 1;
       min-height: 0;
       overflow-y: auto;
+      display: flex;
       scrollbar-width: none;
       &::-webkit-scrollbar {
         display: none;
       }
 
-      .time-row {
-        display: grid;
-        grid-template-columns: 80px repeat(7, 1fr);
+      &__time-col {
+        width: 80px;
+        flex-shrink: 0;
+      }
+
+      &__time-label {
+        height: 60px;
+        box-sizing: border-box;
+        padding: 0.5rem;
+        font-size: 0.75rem;
+        color: #6b7280;
+        border-right: 1px solid #e5e7eb;
         border-bottom: 1px solid #e5e7eb;
-        min-height: 60px;
+        text-align: right;
+        padding-right: 0.75rem;
+      }
 
-        .time-label {
-          padding: 0.5rem;
-          font-size: 0.75rem;
-          color: #6b7280;
-          border-right: 1px solid #e5e7eb;
-          text-align: right;
-          padding-right: 0.75rem;
+      &__day-col {
+        flex: 1;
+        min-width: 0;
+        position: relative;
+        border-right: 1px solid #e5e7eb;
+
+        &:last-child {
+          border-right: none;
         }
+      }
 
-        .day-cell {
-          border-right: 1px solid #e5e7eb;
-          padding: 4px;
-          position: relative;
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
-          min-width: 0;
-          overflow: hidden;
+      &__slot {
+        height: 60px;
+        width: 100%;
+        display: block;
+        border: none;
+        border-bottom: 1px solid #e5e7eb;
+        background: transparent;
+        cursor: pointer;
+        padding: 0;
 
-          &:hover {
-            background-color: #f9fafb;
-            cursor: pointer;
-          }
-
-          &:last-child {
-            border-right: none;
-          }
+        &:hover {
+          background-color: #f9fafb;
         }
       }
     }
@@ -387,40 +426,47 @@
       flex: 1;
       min-height: 0;
       overflow-y: auto;
-
+      display: flex;
       scrollbar-width: none;
       &::-webkit-scrollbar {
         display: none;
       }
 
-      .time-row {
-        display: grid;
-        grid-template-columns: 80px 1fr;
+      &__time-col {
+        width: 80px;
+        flex-shrink: 0;
+      }
+
+      &__time-label {
+        height: 60px;
+        box-sizing: border-box;
+        padding: 0.5rem;
+        font-size: 0.75rem;
+        color: #6b7280;
+        border-right: 1px solid #e5e7eb;
         border-bottom: 1px solid #e5e7eb;
-        min-height: 60px;
+        text-align: right;
+        padding-right: 0.75rem;
+      }
 
-        .time-label {
-          padding: 0.5rem;
-          font-size: 0.75rem;
-          color: #6b7280;
-          border-right: 1px solid #e5e7eb;
-          text-align: right;
-          padding-right: 0.75rem;
-        }
+      &__day-col {
+        flex: 1;
+        min-width: 0;
+        position: relative;
+      }
 
-        .day-cell {
-          padding: 4px;
-          position: relative;
-          min-width: 0;
-          overflow: hidden;
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
+      &__slot {
+        height: 60px;
+        width: 100%;
+        display: block;
+        border: none;
+        border-bottom: 1px solid #e5e7eb;
+        background: transparent;
+        cursor: pointer;
+        padding: 0;
 
-          &:hover {
-            background-color: #f9fafb;
-            cursor: pointer;
-          }
+        &:hover {
+          background-color: #f9fafb;
         }
       }
     }
@@ -496,26 +542,30 @@
       }
 
       .week-grid {
-        .time-row {
-          grid-template-columns: 60px repeat(7, 1fr);
-          min-height: 50px;
+        &__time-col {
+          width: 60px;
+        }
 
-          .time-label {
-            font-size: 0.625rem;
-            padding-right: 0.5rem;
-          }
+        &__time-label {
+          height: 50px;
+          font-size: 0.625rem;
+          padding-right: 0.5rem;
+        }
+
+        &__slot {
+          height: 50px;
         }
       }
     }
 
     .day-view {
       .day-grid {
-        .time-row {
-          grid-template-columns: 60px 1fr;
+        &__time-col {
+          width: 60px;
+        }
 
-          .time-label {
-            font-size: 0.625rem;
-          }
+        &__time-label {
+          font-size: 0.625rem;
         }
       }
     }
@@ -632,20 +682,21 @@
       }
 
       .week-grid {
-        .time-row {
+        &__time-label {
+          color: #94a3b8;
+          border-right-color: #333637;
+          border-bottom-color: #333637;
+        }
+
+        &__day-col {
+          border-right-color: #333637;
+        }
+
+        &__slot {
           border-bottom-color: #333637;
 
-          .time-label {
-            color: #94a3b8;
-            border-right-color: #333637;
-          }
-
-          .day-cell {
-            border-right-color: #333637;
-
-            &:hover {
-              background-color: #1f2937;
-            }
+          &:hover {
+            background-color: #1f2937;
           }
         }
       }
@@ -663,18 +714,17 @@
       }
 
       .day-grid {
-        .time-row {
+        &__time-label {
+          color: #94a3b8;
+          border-right-color: #333637;
+          border-bottom-color: #333637;
+        }
+
+        &__slot {
           border-bottom-color: #333637;
 
-          .time-label {
-            color: #94a3b8;
-            border-right-color: #333637;
-          }
-
-          .day-cell {
-            &:hover {
-              background-color: #1f2937;
-            }
+          &:hover {
+            background-color: #1f2937;
           }
         }
       }

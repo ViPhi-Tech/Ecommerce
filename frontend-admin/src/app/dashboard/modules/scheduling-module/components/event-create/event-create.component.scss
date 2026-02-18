@@ -132,6 +132,26 @@
     color: var(--p-text-muted-color, #5f6368);
   }
 
+  &__datetime-inputs {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__time-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__time-separator {
+    color: var(--p-text-muted-color, #5f6368);
+    font-size: 0.875rem;
+    flex-shrink: 0;
+  }
+
   &__editor-wrapper {
     width: 100%;
   }
