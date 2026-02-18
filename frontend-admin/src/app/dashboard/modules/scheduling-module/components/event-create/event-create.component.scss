@@ -16,6 +16,8 @@
     0 2px 8px rgba(0, 0, 0, 0.08);
   animation: dayFloatPanelIn 0.2s ease-out;
   overflow: hidden;
+  z-index: 200;
+  position: relative;
 
   &__header {
     display: flex;
