@@ -1,12 +1,29 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .scheduling-calendar-container {
   padding: 1.5rem;
-  min-height: calc(100vh - 80px);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
 
   .header-section {
+    flex-shrink: 0;
     margin-bottom: 1.5rem;
   }
 
   .calendar-wrapper {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
 
     ::ng-deep {
@@ -14,19 +31,32 @@
         box-shadow:
           0 1px 3px 0 rgba(0, 0, 0, 0.1),
           0 1px 2px 0 rgba(0, 0, 0, 0.06);
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
         overflow: hidden;
 
         .p-card-header {
           padding: 1.5rem;
           border-bottom: 1px solid #e5e7eb;
+          flex-shrink: 0;
         }
 
         .p-card-body {
           padding: 0;
+          flex: 1;
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
           overflow: hidden;
         }
 
         .p-card-content {
+          flex: 1;
+          min-height: 0;
+          display: flex;
+          flex-direction: column;
           overflow: hidden;
         }
       }
@@ -49,13 +79,31 @@
 
   // Visualização de Mês
   .month-view {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .month-grid {
+      flex: 1;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
       .weekdays-header {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
         border-bottom: 2px solid #e5e7eb;
+        flex-shrink: 0;
 
         .weekday-name {
           padding: 0.75rem;
@@ -70,10 +118,14 @@
       .days-grid {
         display: grid;
         grid-template-columns: repeat(7, 1fr);
+        grid-template-rows: repeat(auto-fill, 1fr);
         gap: 0;
+        flex: 1;
+        min-height: 0;
+        overflow-y: auto;
 
         .day-cell {
-          min-height: 120px;
+          min-height: 100px;
           border: 1px solid #e5e7eb;
           border-top: none;
           border-left: none;
@@ -155,13 +207,22 @@
 
   // Visualização de Semana
   .week-view {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
 
     .week-allday-row {
       display: grid;
       grid-template-columns: 80px repeat(7, 1fr);
       border-bottom: 2px solid #e5e7eb;
       min-height: 36px;
+      flex-shrink: 0;
 
       .time-label {
         padding: 0.5rem;
@@ -193,6 +254,7 @@
       display: grid;
       grid-template-columns: 80px repeat(7, 1fr);
       border-bottom: 2px solid #e5e7eb;
+      flex-shrink: 0;
 
       .time-column {
         border-right: 1px solid #e5e7eb;
@@ -240,7 +302,8 @@
     }
 
     .week-grid {
-      max-height: 600px;
+      flex: 1;
+      min-height: 0;
       overflow-y: auto;
       scrollbar-width: none;
       &::-webkit-scrollbar {
@@ -287,6 +350,10 @@
 
   // Visualização de Dia
   .day-view {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
     overflow: hidden;
 
     .day-allday-row {
@@ -294,6 +361,7 @@
       grid-template-columns: 80px 1fr;
       border-bottom: 2px solid #e5e7eb;
       min-height: 36px;
+      flex-shrink: 0;
 
       .time-label {
         padding: 0.5rem;
@@ -317,8 +385,14 @@
     }
 
     .day-grid {
-      max-height: 600px;
+      flex: 1;
+      min-height: 0;
       overflow-y: auto;
+
+      scrollbar-width: none;
+      &::-webkit-scrollbar {
+        display: none;
+      }
 
       .time-row {
         display: grid;
