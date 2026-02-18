@@ -4,35 +4,19 @@ import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { FormsModule } from '@angular/forms';
 import { CardModule } from 'primeng/card';
-import { InputTextModule } from 'primeng/inputtext';
-import { DividerModule } from 'primeng/divider';
-import { CheckboxModule } from 'primeng/checkbox';
-import { TextEditorComponent } from 'app/shared/components/text-editor/text-editor.component';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import weekOfYear from 'dayjs/plugin/weekOfYear';
 import isoWeek from 'dayjs/plugin/isoWeek';
 import {
-  NgxFloatUiModule,
-  NgxFloatUiDirective,
-  NgxFloatUiPlacements,
-  NgxFloatUiTriggers,
-} from 'ngx-float-ui';
+  EventCreateComponent,
+  CalendarEvent,
+  EventSavePayload,
+} from '../../components/event-create/event-create.component';
 
 dayjs.extend(weekOfYear);
 dayjs.extend(isoWeek);
 dayjs.locale('pt-br');
-
-interface CalendarEvent {
-  id: string;
-  title: string;
-  description: string;
-  date: Date;
-  allDay: boolean;
-  startHour?: number;
-  endHour?: number;
-  color: string;
-}
 
 const today = dayjs();
 
@@ -87,24 +71,11 @@ const MOCK_EVENTS: CalendarEvent[] = [
     SelectButtonModule,
     FormsModule,
     CardModule,
-    InputTextModule,
-    DividerModule,
-    CheckboxModule,
-    TextEditorComponent,
-    NgxFloatUiModule,
+    EventCreateComponent,
   ],
 })
 export class SchedulingCalendarComponent implements OnInit {
-  @ViewChild('dayFloatTrigger') dayFloatTrigger?: NgxFloatUiDirective;
-
-  NgxFloatUiTriggers = NgxFloatUiTriggers;
-  NgxFloatUiPlacements = NgxFloatUiPlacements;
-
-  private floatTargetElement: HTMLElement | null = null;
-
-  get floatTargetOrAnchor(): HTMLElement {
-    return this.floatTargetElement ?? document.body;
-  }
+  @ViewChild('eventCreate') eventCreate?: EventCreateComponent;
 
   viewOptions = signal([
     { label: 'Mês', value: 'month', icon: 'pi pi-calendar' },
@@ -181,19 +152,7 @@ export class SchedulingCalendarComponent implements OnInit {
 
   weekDaysNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-  selectedDay = signal<{
-    date: Date;
-    day: number;
-    isCurrentMonth: boolean;
-    isToday: boolean;
-  } | null>(null);
-
   events = signal<CalendarEvent[]>(MOCK_EVENTS);
-
-  editingEventId = signal<string | null>(null);
-  eventForm = signal({ title: '', description: '', allDay: false });
-  descriptionEditorVisible = signal(false);
-  selectedHour = signal<number | null>(null);
 
   currentDayForDayView = computed(() => {
     const date = dayjs(this.currentDate());
@@ -203,16 +162,6 @@ export class SchedulingCalendarComponent implements OnInit {
       isCurrentMonth: true,
       isToday: date.isSame(dayjs(), 'day'),
     };
-  });
-
-  formattedSelectedDate = computed(() => {
-    const day = this.selectedDay();
-    if (!day) return '';
-    const hour = this.selectedHour();
-    const dateStr = dayjs(day.date).format('dddd, D [de] MMMM');
-    if (hour == null) return dateStr;
-    const hourLabel = `${hour.toString().padStart(2, '0')}:00`;
-    return `${dateStr} · ${hourLabel}`;
   });
 
   ngOnInit() {
@@ -259,98 +208,44 @@ export class SchedulingCalendarComponent implements OnInit {
   }
 
   onDayClick(day: any, event?: MouseEvent) {
-    this.dayFloatTrigger?.hide();
-    this.selectedDay.set(day);
-    this.selectedHour.set(null);
-    this.resetEventForm({ allDay: true });
-    this.floatTargetElement = event?.currentTarget as HTMLElement;
-    setTimeout(() => this.dayFloatTrigger?.show(), 0);
+    this.eventCreate?.openForDay(day, event?.currentTarget as HTMLElement);
   }
 
   onTimeSlotClick(slot: any, day: any, event?: MouseEvent) {
-    this.dayFloatTrigger?.hide();
-    this.selectedDay.set(day);
-    this.selectedHour.set(slot.hour);
-    this.resetEventForm({ allDay: false });
-    this.floatTargetElement = event?.currentTarget as HTMLElement;
-    setTimeout(() => this.dayFloatTrigger?.show(), 0);
+    this.eventCreate?.openForTimeSlot(slot, day, event?.currentTarget as HTMLElement);
   }
 
   onEventClick(ev: CalendarEvent, event: Event) {
     event.stopPropagation();
-    this.dayFloatTrigger?.hide();
-
-    const d = dayjs(ev.date);
-    this.selectedDay.set({
-      date: ev.date,
-      day: d.date(),
-      isCurrentMonth: true,
-      isToday: d.isSame(dayjs(), 'day'),
-    });
-    this.selectedHour.set(ev.startHour ?? null);
-    this.editingEventId.set(ev.id);
-    this.eventForm.set({
-      title: ev.title,
-      description: ev.description,
-      allDay: ev.allDay,
-    });
-    this.descriptionEditorVisible.set(!!ev.description);
-
-    this.floatTargetElement = event.currentTarget as HTMLElement;
-    setTimeout(() => this.dayFloatTrigger?.show(), 0);
+    this.eventCreate?.openForEvent(ev, event.currentTarget as HTMLElement);
   }
 
-  onSaveEvent() {
-    const form = this.eventForm();
-    const editingId = this.editingEventId();
-
-    if (editingId) {
+  onEventSaved(payload: EventSavePayload) {
+    if (payload.editingId) {
       this.events.update((list) =>
         list.map((e) =>
-          e.id === editingId
-            ? { ...e, title: form.title, description: form.description, allDay: form.allDay }
+          e.id === payload.editingId
+            ? { ...e, title: payload.form.title, description: payload.form.description, allDay: payload.form.allDay }
             : e,
         ),
       );
     } else {
       const newEvent: CalendarEvent = {
         id: crypto.randomUUID(),
-        title: form.title,
-        description: form.description,
-        date: this.selectedDay()?.date ?? new Date(),
-        allDay: form.allDay,
-        startHour: this.selectedHour() ?? undefined,
-        endHour: this.selectedHour() != null ? this.selectedHour()! + 1 : undefined,
+        title: payload.form.title,
+        description: payload.form.description,
+        date: payload.day,
+        allDay: payload.form.allDay,
+        startHour: payload.hour ?? undefined,
+        endHour: payload.hour != null ? payload.hour + 1 : undefined,
         color: '#3b82f6',
       };
       this.events.update((list) => [...list, newEvent]);
     }
-
-    this.dayFloatTrigger?.hide();
   }
 
-  onDeleteEvent() {
-    const editingId = this.editingEventId();
-    if (!editingId) return;
-    this.events.update((list) => list.filter((e) => e.id !== editingId));
-    this.dayFloatTrigger?.hide();
-  }
-
-  onMoreOptions() {
-    this.dayFloatTrigger?.hide();
-  }
-
-  capitalizeFirst(str: string): string {
-    if (!str) return str;
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  updateEventForm(key: string, value: string | boolean) {
-    this.eventForm.update((f) => ({ ...f, [key]: value }));
-  }
-
-  toggleDescriptionEditor() {
-    this.descriptionEditorVisible.set(!this.descriptionEditorVisible());
+  onEventDeleted(eventId: string) {
+    this.events.update((list) => list.filter((e) => e.id !== eventId));
   }
 
   getEventsForDay(date: Date): CalendarEvent[] {
@@ -368,9 +263,4 @@ export class SchedulingCalendarComponent implements OnInit {
     );
   }
 
-  private resetEventForm(defaults?: Partial<{ allDay: boolean }>) {
-    this.editingEventId.set(null);
-    this.eventForm.set({ title: '', description: '', allDay: defaults?.allDay ?? false });
-    this.descriptionEditorVisible.set(false);
-  }
 }
