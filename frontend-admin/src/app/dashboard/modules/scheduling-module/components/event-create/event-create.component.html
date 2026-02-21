@@ -51,35 +51,33 @@
                 size="small"
               />
               <div class="day-float-panel__time-row">
-                <p-datepicker
-                  [ngModel]="formStartTime()"
+                <p-select
+                  [options]="startTimeOptions()"
+                  optionLabel="label"
+                  optionValue="value"
+                  [ngModel]="selectedHour()"
                   (ngModelChange)="onStartTimeChange($event)"
-                  [timeOnly]="true"
-                  appendTo="body"
                   placeholder="Início"
-                  size="small"
-                  [iconDisplay]="'input'"
-                  [showIcon]="true"
-                >
-                  <ng-template #inputicon>
-                    <i class="pi pi-clock"></i>
-                  </ng-template>
-                </p-datepicker>
-                <span class="day-float-panel__time-separator">–</span>
-                <p-datepicker
-                  [ngModel]="formEndTime()"
-                  (ngModelChange)="onEndTimeChange($event)"
-                  [timeOnly]="true"
                   appendTo="body"
-                  placeholder="Fim"
+                  [filter]="true"
+                  filterPlaceholder="Buscar..."
                   size="small"
-                  [iconDisplay]="'input'"
-                  [showIcon]="true"
-                >
-                  <ng-template #inputicon>
-                    <i class="pi pi-clock"></i>
-                  </ng-template>
-                </p-datepicker>
+                  class="day-float-panel__time-select"
+                />
+                <span class="day-float-panel__time-separator">–</span>
+                <p-select
+                  [options]="endTimeOptions()"
+                  optionLabel="label"
+                  optionValue="value"
+                  [ngModel]="selectedEndHour()"
+                  (ngModelChange)="onEndTimeChange($event)"
+                  placeholder="Fim"
+                  appendTo="body"
+                  [filter]="true"
+                  filterPlaceholder="Buscar..."
+                  size="small"
+                  class="day-float-panel__time-select"
+                />
               </div>
             </div>
           }

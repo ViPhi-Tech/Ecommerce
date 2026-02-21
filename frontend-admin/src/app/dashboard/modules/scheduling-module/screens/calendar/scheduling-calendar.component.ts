@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal, computed, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, signal, computed, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -19,6 +19,7 @@ import {
   SchedulingService,
   UpdateScheduleDTO,
 } from '../../scheduling.service';
+import { ScheduleNotificationService } from '../../schedule-notification.service';
 
 dayjs.extend(weekOfYear);
 dayjs.extend(isoWeek);
@@ -37,8 +38,9 @@ dayjs.locale('pt-br');
     EventCreateComponent,
   ],
 })
-export class SchedulingCalendarComponent implements OnInit {
+export class SchedulingCalendarComponent implements OnInit, OnDestroy {
   private schedulingService = inject(SchedulingService);
+  private notificationService = inject(ScheduleNotificationService);
   @ViewChild('eventCreate') eventCreate?: EventCreateComponent;
 
   viewOptions = signal([
@@ -134,6 +136,11 @@ export class SchedulingCalendarComponent implements OnInit {
 
   ngOnInit() {
     this.loadSchedules();
+    this.notificationService.start();
+  }
+
+  ngOnDestroy() {
+    this.notificationService.stop();
   }
 
   onViewChange(view: 'month' | 'week' | 'day') {
@@ -346,8 +353,8 @@ export class SchedulingCalendarComponent implements OnInit {
       description: item.description ?? '',
       date: start.toDate(),
       allDay: isAllDay,
-      startHour: isAllDay ? undefined : start.hour(),
-      endHour: isAllDay ? undefined : end.hour(),
+      startHour: isAllDay ? undefined : start.hour() + start.minute() / 60,
+      endHour: isAllDay ? undefined : end.hour() + end.minute() / 60,
       color: this.getColorByStatus(item.status),
     };
   }
@@ -372,13 +379,23 @@ export class SchedulingCalendarComponent implements OnInit {
       };
     }
 
-    const startHour = payload.hour ?? 9;
-    const endHour = payload.endHour ?? Math.min(startHour + 1, 23);
-    const normalizedEnd = endHour <= startHour ? Math.min(startHour + 1, 23) : endHour;
+    const startFrac = payload.hour ?? 9;
+    const endFrac = payload.endHour ?? Math.min(startFrac + 1, 23 + 55 / 60);
+    const normalizedEnd = endFrac <= startFrac ? Math.min(startFrac + 5 / 60, 23 + 55 / 60) : endFrac;
 
     return {
-      startDateTime: base.hour(startHour).minute(0).second(0).millisecond(0).toDate(),
-      endDateTime: base.hour(normalizedEnd).minute(0).second(0).millisecond(0).toDate(),
+      startDateTime: base
+        .hour(Math.floor(startFrac))
+        .minute(Math.round((startFrac % 1) * 60))
+        .second(0)
+        .millisecond(0)
+        .toDate(),
+      endDateTime: base
+        .hour(Math.floor(normalizedEnd))
+        .minute(Math.round((normalizedEnd % 1) * 60))
+        .second(0)
+        .millisecond(0)
+        .toDate(),
     };
   }
 

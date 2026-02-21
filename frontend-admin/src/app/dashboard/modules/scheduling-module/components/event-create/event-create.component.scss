@@ -148,6 +148,11 @@
     gap: 8px;
   }
 
+  &__time-select {
+    flex: 1;
+    min-width: 0;
+  }
+
   &__time-separator {
     color: var(--p-text-muted-color, #5f6368);
     font-size: 0.875rem;
