@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, computed, ViewChild } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -13,53 +13,16 @@ import {
   CalendarEvent,
   EventSavePayload,
 } from '../../components/event-create/event-create.component';
+import {
+  CreateScheduleDTO,
+  ScheduleEntity,
+  SchedulingService,
+  UpdateScheduleDTO,
+} from '../../scheduling.service';
 
 dayjs.extend(weekOfYear);
 dayjs.extend(isoWeek);
 dayjs.locale('pt-br');
-
-const today = dayjs();
-
-const MOCK_EVENTS: CalendarEvent[] = [
-  {
-    id: '1',
-    title: 'Reunião de planejamento',
-    description: 'Planejamento do sprint da semana',
-    date: today.toDate(),
-    allDay: true,
-    color: '#3b82f6',
-  },
-  {
-    id: '2',
-    title: 'Almoço com cliente',
-    description: '',
-    date: today.toDate(),
-    allDay: false,
-    startHour: 12,
-    endHour: 13,
-    color: '#10b981',
-  },
-  {
-    id: '3',
-    title: 'Code review',
-    description: 'Revisar PR #42 do módulo de pagamentos',
-    date: today.toDate(),
-    allDay: false,
-    startHour: 15,
-    endHour: 16,
-    color: '#f59e0b',
-  },
-  {
-    id: '4',
-    title: 'Daily standup',
-    description: '',
-    date: today.toDate(),
-    allDay: false,
-    startHour: 9,
-    endHour: 10,
-    color: '#8b5cf6',
-  },
-];
 
 @Component({
   selector: 'fuse-scheduling-calendar',
@@ -75,6 +38,7 @@ const MOCK_EVENTS: CalendarEvent[] = [
   ],
 })
 export class SchedulingCalendarComponent implements OnInit {
+  private schedulingService = inject(SchedulingService);
   @ViewChild('eventCreate') eventCreate?: EventCreateComponent;
 
   viewOptions = signal([
@@ -156,7 +120,7 @@ export class SchedulingCalendarComponent implements OnInit {
 
   weekDaysNames = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
 
-  events = signal<CalendarEvent[]>(MOCK_EVENTS);
+  events = signal<CalendarEvent[]>([]);
 
   currentDayForDayView = computed(() => {
     const date = dayjs(this.currentDate());
@@ -169,6 +133,7 @@ export class SchedulingCalendarComponent implements OnInit {
   });
 
   ngOnInit() {
+    this.loadSchedules();
   }
 
   onViewChange(view: 'month' | 'week' | 'day') {
@@ -226,39 +191,39 @@ export class SchedulingCalendarComponent implements OnInit {
   }
 
   onEventSaved(payload: EventSavePayload) {
+    const dateTime = this.buildDateTimes(payload);
+    const basePayload: CreateScheduleDTO = {
+      title: payload.form.title.trim(),
+      description: payload.form.description?.trim() || null,
+      startDateTime: dateTime.startDateTime,
+      endDateTime: dateTime.endDateTime,
+      isAllDay: payload.form.allDay,
+      status: 'SCHEDULED',
+      location: null,
+    };
+
     if (payload.editingId) {
-      this.events.update((list) =>
-        list.map((e) =>
-          e.id === payload.editingId
-            ? {
-                ...e,
-                title: payload.form.title,
-                description: payload.form.description,
-                allDay: payload.form.allDay,
-                date: payload.day,
-                startHour: payload.hour ?? undefined,
-                endHour: payload.endHour ?? undefined,
-              }
-            : e,
-        ),
-      );
-    } else {
-      const newEvent: CalendarEvent = {
-        id: crypto.randomUUID(),
-        title: payload.form.title,
-        description: payload.form.description,
-        date: payload.day,
-        allDay: payload.form.allDay,
-        startHour: payload.hour ?? undefined,
-        endHour: payload.endHour ?? undefined,
-        color: '#3b82f6',
-      };
-      this.events.update((list) => [...list, newEvent]);
+      const id = Number(payload.editingId);
+      const updatePayload: UpdateScheduleDTO = { ...basePayload };
+      this.schedulingService.update(id, updatePayload).subscribe({
+        next: () => this.loadSchedules(true),
+        error: (err) => console.error('Erro ao atualizar agendamento:', err),
+      });
+      return;
     }
+
+    this.schedulingService.create(basePayload).subscribe({
+      next: () => this.loadSchedules(true),
+      error: (err) => console.error('Erro ao criar agendamento:', err),
+    });
   }
 
   onEventDeleted(eventId: string) {
-    this.events.update((list) => list.filter((e) => e.id !== eventId));
+    const id = Number(eventId);
+    this.schedulingService.delete(id).subscribe({
+      next: () => this.loadSchedules(true),
+      error: (err) => console.error('Erro ao deletar agendamento:', err),
+    });
   }
 
   readonly SLOT_HEIGHT = 60;
@@ -355,6 +320,66 @@ export class SchedulingCalendarComponent implements OnInit {
     }
 
     return layout;
+  }
+
+  private loadSchedules(skipLoader = false) {
+    this.schedulingService.getAll(skipLoader).subscribe({
+      next: (res) => {
+        const raw = res.data ?? res.dados ?? [];
+        this.events.set((raw as ScheduleEntity[]).map((item) => this.mapToCalendarEvent(item)));
+      },
+      error: (err) => {
+        console.error('Erro ao carregar agendamentos:', err);
+        this.events.set([]);
+      },
+    });
+  }
+
+  private mapToCalendarEvent(item: ScheduleEntity): CalendarEvent {
+    const start = dayjs(item.startDateTime);
+    const end = dayjs(item.endDateTime);
+    const isAllDay = !!item.isAllDay;
+
+    return {
+      id: String(item.id),
+      title: item.title,
+      description: item.description ?? '',
+      date: start.toDate(),
+      allDay: isAllDay,
+      startHour: isAllDay ? undefined : start.hour(),
+      endHour: isAllDay ? undefined : end.hour(),
+      color: this.getColorByStatus(item.status),
+    };
+  }
+
+  private getColorByStatus(status: ScheduleEntity['status']) {
+    if (status === 'COMPLETED') return '#10b981';
+    if (status === 'CANCELLED') return '#ef4444';
+    return '#3b82f6';
+  }
+
+  private buildDateTimes(payload: EventSavePayload): {
+    startDateTime: Date;
+    endDateTime: Date;
+  } {
+    const base = dayjs(payload.day);
+    const allDay = payload.form.allDay;
+
+    if (allDay) {
+      return {
+        startDateTime: base.startOf('day').toDate(),
+        endDateTime: base.endOf('day').toDate(),
+      };
+    }
+
+    const startHour = payload.hour ?? 9;
+    const endHour = payload.endHour ?? Math.min(startHour + 1, 23);
+    const normalizedEnd = endHour <= startHour ? Math.min(startHour + 1, 23) : endHour;
+
+    return {
+      startDateTime: base.hour(startHour).minute(0).second(0).millisecond(0).toDate(),
+      endDateTime: base.hour(normalizedEnd).minute(0).second(0).millisecond(0).toDate(),
+    };
   }
 
 }

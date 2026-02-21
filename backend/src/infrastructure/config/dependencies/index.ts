@@ -4,3 +4,4 @@ export * from './partnerDependencies';
 export * from './categoryDependencies';
 export * from './productDependencies';
 export * from './orderDependencies';
+export * from './scheduleDependencies';

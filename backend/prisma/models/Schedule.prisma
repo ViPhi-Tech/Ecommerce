@@ -1,0 +1,15 @@
+model Schedule {
+  id            Int       @id @default(autoincrement())
+  title         String
+  description   String?
+  startDateTime DateTime
+  endDateTime   DateTime
+  location      String?
+  isAllDay      Boolean   @default(false)
+  status        String    @default("SCHEDULED") // SCHEDULED | CANCELLED | COMPLETED
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  userId        Int
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

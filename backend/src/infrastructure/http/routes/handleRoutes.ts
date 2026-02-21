@@ -16,6 +16,7 @@ import dashboardRoutes from './Dashboard';
 import accountsReceivableRoutes from './AccountsReceivableRoutes';
 import deliveryRoutes from './DeliveryRoutes';
 import purchaseInvoiceRoutes from './PurchaseInvoiceRoutes';
+import scheduleRoutes from './ScheduleRoutes';
 
 export default async function handleRoutes(fastify: FastifyInstance) {
   fastify.get(
@@ -48,6 +49,7 @@ export default async function handleRoutes(fastify: FastifyInstance) {
       fastify.register(dashboardRoutes, { prefix: '/dashboard' })
       fastify.register(deliveryRoutes, { prefix: '/delivery' })
       fastify.register(purchaseInvoiceRoutes, { prefix: '/purchase-invoice' })
+      fastify.register(scheduleRoutes, { prefix: '/schedule' })
       fastify.get(
         '/',
         {
