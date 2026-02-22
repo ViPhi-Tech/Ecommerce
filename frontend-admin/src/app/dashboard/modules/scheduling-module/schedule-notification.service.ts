@@ -1,4 +1,4 @@
-import { DestroyRef, inject, Injectable, OnDestroy, signal } from '@angular/core';
+import { DestroyRef, inject, Injectable, NgZone, OnDestroy, signal } from '@angular/core';
 import { SchedulingService, ScheduleEntity } from './scheduling.service';
 import dayjs from 'dayjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -14,26 +14,33 @@ interface ScheduleNotificationStorage {
   schedules: StoredScheduleNotification[];
 }
 
+interface NotifiedIdsStorage {
+  date: string;
+  ids: number[];
+}
+
 @Injectable({
   providedIn: 'root',
 })
 export class ScheduleNotificationService implements OnDestroy {
   private schedulingService = inject(SchedulingService);
   private destroyedRef = inject(DestroyRef);
+  private ngZone = inject(NgZone);
 
   private startNotificationTimeouts = new Map<number, ReturnType<typeof setTimeout>>();
   private modalQueue: ScheduleEntity[] = [];
-  private notifiedIds = new Set<number>();
 
-  storedNotificationIds = signal<number[]>([]);
+  /** IDs já notificados — persiste por dia no localStorage */
+  private notifiedIds = new Set<number>();
 
   notificationModalVisible = signal(false);
   currentNotification = signal<ScheduleEntity | null>(null);
 
-  private static readonly STORAGE_KEY = 'schedule-notified-ids';
+  private static readonly SCHEDULES_KEY = 'schedule-notification-cache';
+  private static readonly NOTIFIED_IDS_KEY = 'schedule-notified-ids';
 
   start(): void {
-    this.scheduleFromStorageIfValid();
+    this.loadNotifiedIdsFromStorage();
     this.getTodaySchedules();
   }
 
@@ -45,54 +52,55 @@ export class ScheduleNotificationService implements OnDestroy {
     this.stop();
   }
 
-  getTodaySchedules() {
+  getTodaySchedules(): void {
     this.schedulingService.getAll(true).pipe(takeUntilDestroyed(this.destroyedRef)).subscribe({
       next: (res) => {
-        const schedules = ((res.data ?? res.dados ?? []) as ScheduleEntity[]).filter((s) =>
-          dayjs(s.startDateTime).isSame(dayjs(), 'day'),
-        );
-        this.prepareStartNotifications(schedules);
+        const all = (res.data ?? res.dados ?? []) as ScheduleEntity[];
+        const today = all.filter((s) => dayjs(s.startDateTime).isSame(dayjs(), 'day'));
+        this.scheduleNotifications(today);
       },
       error: (err) => {
-        console.error('Erro ao carregar agendamentos de hoje:', err);
+        console.error('[ScheduleNotification] Erro ao carregar agendamentos:', err);
+        this.scheduleFromStorageIfValid();
       },
     });
   }
 
-  private prepareStartNotifications(schedules: ScheduleEntity[]): void {
+  private scheduleNotifications(schedules: ScheduleEntity[]): void {
     this.clearStartNotificationTimeouts();
     this.saveSchedulesToStorage(schedules);
 
     const now = dayjs();
+
     for (const schedule of schedules) {
       if (schedule.status !== 'SCHEDULED') continue;
+      if (this.notifiedIds.has(schedule.id)) continue;
 
       const start = dayjs(schedule.startDateTime);
-      const millisecondsUntilStart = start.diff(now);
+      const msUntilStart = start.diff(now);
 
-      if (millisecondsUntilStart <= 0) {
-        if (!this.storedNotificationIds().includes(schedule.id)) {
-          this.notify(`${schedule.title} está começando agora!`, schedule);
-          this.storedNotificationIds.set([...this.storedNotificationIds(), schedule.id]);
-        }
+      if (msUntilStart <= 0) {
+        this.notify(schedule);
         continue;
       }
 
-      const timeoutId = setTimeout(() => {
-        if (!this.storedNotificationIds().includes(schedule.id)) {
-          this.notify(`${schedule.title} está começando agora!`, schedule);
-          this.storedNotificationIds.set([...this.storedNotificationIds(), schedule.id]);
-        }
-        this.startNotificationTimeouts.delete(schedule.id);
-      }, millisecondsUntilStart);
+      const id = schedule.id;
+      const timeoutId = this.ngZone.runOutsideAngular(() =>
+        setTimeout(() => {
+          this.ngZone.run(() => this.notify(schedule));
+          this.startNotificationTimeouts.delete(id);
+        }, msUntilStart),
+      );
 
-      this.startNotificationTimeouts.set(schedule.id, timeoutId);
+      this.startNotificationTimeouts.set(id, timeoutId);
     }
   }
 
-  private notify(message: string, schedule: ScheduleEntity): void {
+  private notify(schedule: ScheduleEntity): void {
     if (this.notifiedIds.has(schedule.id)) return;
+
     this.notifiedIds.add(schedule.id);
+    this.saveNotifiedIdsToStorage();
 
     if (this.notificationModalVisible()) {
       this.modalQueue.push(schedule);
@@ -103,16 +111,66 @@ export class ScheduleNotificationService implements OnDestroy {
     this.notificationModalVisible.set(true);
   }
 
-  private clearStartNotificationTimeouts(): void {
-    this.startNotificationTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
-    this.startNotificationTimeouts.clear();
-  }
-
   closeNotificationModal(): void {
     const next = this.modalQueue.shift() ?? null;
     this.currentNotification.set(next);
     this.notificationModalVisible.set(!!next);
   }
+
+  private clearStartNotificationTimeouts(): void {
+    this.startNotificationTimeouts.forEach((id) => clearTimeout(id));
+    this.startNotificationTimeouts.clear();
+  }
+
+  // ---------------------------------------------------------------------------
+  // Notified IDs Storage — persiste quais agendamentos já mostraram modal hoje
+  // ---------------------------------------------------------------------------
+
+  private loadNotifiedIdsFromStorage(): void {
+    try {
+      const raw = localStorage.getItem(ScheduleNotificationService.NOTIFIED_IDS_KEY);
+      if (!raw) return;
+
+      const parsed = JSON.parse(raw) as NotifiedIdsStorage;
+      if (!this.isValidNotifiedIdsPayload(parsed)) {
+        localStorage.removeItem(ScheduleNotificationService.NOTIFIED_IDS_KEY);
+        return;
+      }
+
+      const today = dayjs().format('YYYY-MM-DD');
+      if (parsed.date !== today) {
+        localStorage.removeItem(ScheduleNotificationService.NOTIFIED_IDS_KEY);
+        return;
+      }
+
+      this.notifiedIds = new Set(parsed.ids);
+    } catch {
+      localStorage.removeItem(ScheduleNotificationService.NOTIFIED_IDS_KEY);
+    }
+  }
+
+  private saveNotifiedIdsToStorage(): void {
+    const payload: NotifiedIdsStorage = {
+      date: dayjs().format('YYYY-MM-DD'),
+      ids: Array.from(this.notifiedIds),
+    };
+    localStorage.setItem(ScheduleNotificationService.NOTIFIED_IDS_KEY, JSON.stringify(payload));
+  }
+
+  private isValidNotifiedIdsPayload(payload: any): payload is NotifiedIdsStorage {
+    return (
+      payload &&
+      typeof payload === 'object' &&
+      typeof payload.date === 'string' &&
+      /^\d{4}-\d{2}-\d{2}$/.test(payload.date) &&
+      Array.isArray(payload.ids) &&
+      payload.ids.every((id: any) => Number.isFinite(id) && id > 0)
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // Schedules Storage — cache de agendamentos (fallback offline)
+  // ---------------------------------------------------------------------------
 
   private scheduleFromStorageIfValid(): void {
     const stored = this.loadSchedulesFromStorage();
@@ -129,23 +187,23 @@ export class ScheduleNotificationService implements OnDestroy {
       status: 'SCHEDULED',
     }));
 
-    this.storedNotificationIds.set(schedules.map((item) => item.id));
+    this.scheduleNotifications(schedules);
   }
 
   private loadSchedulesFromStorage(): ScheduleNotificationStorage | null {
     try {
-      const raw = localStorage.getItem(ScheduleNotificationService.STORAGE_KEY);
+      const raw = localStorage.getItem(ScheduleNotificationService.SCHEDULES_KEY);
       if (!raw) return null;
 
       const parsed = JSON.parse(raw) as ScheduleNotificationStorage;
-      if (!this.isValidStoragePayload(parsed)) {
-        localStorage.removeItem(ScheduleNotificationService.STORAGE_KEY);
+      if (!this.isValidSchedulesPayload(parsed)) {
+        localStorage.removeItem(ScheduleNotificationService.SCHEDULES_KEY);
         return null;
       }
 
       return parsed;
     } catch {
-      localStorage.removeItem(ScheduleNotificationService.STORAGE_KEY);
+      localStorage.removeItem(ScheduleNotificationService.SCHEDULES_KEY);
       return null;
     }
   }
@@ -166,27 +224,27 @@ export class ScheduleNotificationService implements OnDestroy {
       schedules: validSchedules,
     };
 
-    localStorage.setItem(ScheduleNotificationService.STORAGE_KEY, JSON.stringify(payload));
+    localStorage.setItem(ScheduleNotificationService.SCHEDULES_KEY, JSON.stringify(payload));
   }
 
-  private isValidStoragePayload(payload: any): payload is ScheduleNotificationStorage {
+  private isValidSchedulesPayload(payload: any): payload is ScheduleNotificationStorage {
     if (!payload || typeof payload !== 'object') return false;
     if (!Array.isArray(payload.schedules)) return false;
     if (typeof payload.savedAt !== 'string' || !this.isValidDateTime(payload.savedAt)) return false;
 
-    return payload.schedules.every((s: any) =>
-      s &&
-      typeof s === 'object' &&
-      Number.isFinite(s.id) &&
-      s.id > 0 &&
-      typeof s.title === 'string' &&
-      typeof s.startDateTime === 'string' &&
-      this.isValidDateTime(s.startDateTime),
+    return payload.schedules.every(
+      (s: any) =>
+        s &&
+        typeof s === 'object' &&
+        Number.isFinite(s.id) &&
+        s.id > 0 &&
+        typeof s.title === 'string' &&
+        typeof s.startDateTime === 'string' &&
+        this.isValidDateTime(s.startDateTime),
     );
   }
 
   private isValidDateTime(value: string): boolean {
-    const date = dayjs(value);
-    return date.isValid();
+    return dayjs(value).isValid();
   }
 }
