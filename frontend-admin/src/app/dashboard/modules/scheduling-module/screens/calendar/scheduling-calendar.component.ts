@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject, signal, computed, ViewChild } from '@angular/core';
+import { Component, OnInit, inject, signal, computed, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { SelectButtonModule } from 'primeng/selectbutton';
@@ -19,7 +19,6 @@ import {
   SchedulingService,
   UpdateScheduleDTO,
 } from '../../scheduling.service';
-import { ScheduleNotificationService } from '../../schedule-notification.service';
 
 dayjs.extend(weekOfYear);
 dayjs.extend(isoWeek);
@@ -38,9 +37,8 @@ dayjs.locale('pt-br');
     EventCreateComponent,
   ],
 })
-export class SchedulingCalendarComponent implements OnInit, OnDestroy {
+export class SchedulingCalendarComponent implements OnInit {
   private schedulingService = inject(SchedulingService);
-  private notificationService = inject(ScheduleNotificationService);
   @ViewChild('eventCreate') eventCreate?: EventCreateComponent;
 
   viewOptions = signal([
@@ -136,11 +134,6 @@ export class SchedulingCalendarComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loadSchedules();
-    this.notificationService.start();
-  }
-
-  ngOnDestroy() {
-    this.notificationService.stop();
   }
 
   onViewChange(view: 'month' | 'week' | 'day') {

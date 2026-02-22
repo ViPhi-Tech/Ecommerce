@@ -12,6 +12,8 @@ import {
   updateScheduleSchema,
   scheduleIdSchema,
 } from '../../../application/dto/schedule/ScheduleDTOs';
+import { FindTodayScheduleUseCase } from '../../../application/use-cases/schedule/FindTodayScheduleUseCase';
+import { Schedule } from '../../../generated/client';
 
 export class ScheduleController {
   constructor(
@@ -19,7 +21,8 @@ export class ScheduleController {
     private findByIdScheduleUseCase: FindByIdScheduleUseCase,
     private findAllScheduleUseCase: FindAllScheduleUseCase,
     private updateScheduleUseCase: UpdateScheduleUseCase,
-    private deleteScheduleUseCase: DeleteScheduleUseCase
+    private deleteScheduleUseCase: DeleteScheduleUseCase,
+    private findTodayScheduleUseCase: FindTodayScheduleUseCase
   ) {}
 
   private getUserId(request: FastifyRequest): number {
@@ -115,6 +118,23 @@ export class ScheduleController {
       const { id } = scheduleIdSchema.parse(request.params);
       await this.deleteScheduleUseCase.execute(id, userId);
       return reply.status(HTTP_STATUS.API_STATUS_NO_CONTENT).send();
+    } catch (error) {
+      return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
+        status: HTTP_MESSAGES.API_STATUS_BAD_REQUEST,
+        description:
+          error instanceof Error ? error.message : 'An unknown error occurred',
+      });
+    }
+  }
+
+  async findToday(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
+    try {
+      const userId = this.getUserId(request);
+      const schedules = await this.findTodayScheduleUseCase.execute(userId) as Schedule[];
+      return reply.status(HTTP_STATUS.API_STATUS_SUCCESS).send({
+        status: HTTP_MESSAGES.API_STATUS_SUCCESS,
+        data: schedules,
+      });
     } catch (error) {
       return reply.status(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({
         status: HTTP_MESSAGES.API_STATUS_BAD_REQUEST,

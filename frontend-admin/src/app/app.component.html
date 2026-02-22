@@ -4,3 +4,64 @@
 <fuse-loader />
 <p-toast />
 <p-confirmdialog position="top" />
+
+<p-dialog
+  [visible]="notificationService.notificationModalVisible()"
+  [modal]="true"
+  [closable]="false"
+  [showHeader]="false"
+  [draggable]="false"
+  [resizable]="false"
+  [dismissableMask]="false"
+  [style]="{ width: '38rem', maxWidth: '96vw' }"
+  styleClass="schedule-notification-dialog"
+>
+  @if (notificationService.currentNotification(); as schedule) {
+    <div class="schedule-notification">
+      <div class="schedule-notification__header">
+        <div class="schedule-notification__title-wrap">
+          <i class="pi pi-calendar schedule-notification__title-icon"></i>
+          <span class="schedule-notification__title-label">Calendário</span>
+        </div>
+        <button
+          type="button"
+          class="schedule-notification__close"
+          (click)="notificationService.closeNotificationModal()"
+          aria-label="Fechar notificação"
+        >
+          <i class="pi pi-times"></i>
+        </button>
+      </div>
+
+      <div class="schedule-notification__content">
+        <h3 class="schedule-notification__event-title">{{ schedule.title }}</h3>
+
+        <div class="schedule-notification__line">
+          <i class="pi pi-clock"></i>
+          <span>{{ getScheduleTimeRange() }}</span>
+          @if (getStartsInLabel(); as startsIn) {
+            <span class="schedule-notification__starts-in">({{ startsIn }})</span>
+          }
+        </div>
+
+        @if (schedule.location) {
+          <div class="schedule-notification__line">
+            <i class="pi pi-map-marker"></i>
+            <span>{{ schedule.location }}</span>
+          </div>
+        }
+
+        @if (schedule.description) {
+          <p class="schedule-notification__description">{{ schedule.description }}</p>
+        }
+      </div>
+
+      <div class="schedule-notification__footer">
+        <p-button
+          label="Fechar"
+          (onClick)="notificationService.closeNotificationModal()"
+        />
+      </div>
+    </div>
+  }
+</p-dialog>

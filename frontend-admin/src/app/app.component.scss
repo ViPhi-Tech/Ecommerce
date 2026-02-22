@@ -1,0 +1,87 @@
+:host ::ng-deep .schedule-notification-dialog .p-dialog-content {
+  padding: 0;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.schedule-notification {
+  border-left: 4px solid #1a73e8;
+}
+
+.schedule-notification__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.schedule-notification__title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.schedule-notification__title-icon {
+  color: #1a73e8;
+  font-size: 1.1rem;
+}
+
+.schedule-notification__title-label {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #334155;
+}
+
+.schedule-notification__close {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+.schedule-notification__close:hover {
+  background: #f1f5f9;
+}
+
+.schedule-notification__content {
+  padding: 1.25rem 1.5rem 1rem;
+}
+
+.schedule-notification__event-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.schedule-notification__line {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #475569;
+  margin-bottom: 0.5rem;
+  font-size: 1.4rem;
+}
+
+.schedule-notification__starts-in {
+  color: #1a73e8;
+  font-weight: 600;
+}
+
+.schedule-notification__description {
+  margin-top: 1rem;
+  color: #475569;
+  font-size: 1.2rem;
+}
+
+.schedule-notification__footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 1rem 1.5rem 1.5rem;
+}

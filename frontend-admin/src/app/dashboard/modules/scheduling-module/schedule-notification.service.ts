@@ -1,158 +1,192 @@
-import { inject, Injectable, NgZone, OnDestroy } from '@angular/core';
-import { ToastService } from 'app/shared/services/toast.service';
+import { DestroyRef, inject, Injectable, OnDestroy, signal } from '@angular/core';
 import { SchedulingService, ScheduleEntity } from './scheduling.service';
 import dayjs from 'dayjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
-interface NotifiedEntry {
+interface StoredScheduleNotification {
   id: number;
-  type: 'reminder' | 'now';
+  title: string;
+  startDateTime: string;
+}
+
+interface ScheduleNotificationStorage {
+  savedAt: string;
+  schedules: StoredScheduleNotification[];
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class ScheduleNotificationService implements OnDestroy {
-  private toast = inject(ToastService);
   private schedulingService = inject(SchedulingService);
-  private ngZone = inject(NgZone);
+  private destroyedRef = inject(DestroyRef);
 
-  private intervalId: ReturnType<typeof setInterval> | null = null;
-  private notified = new Set<string>();
-  private permissionGranted = false;
-  private running = false;
+  private startNotificationTimeouts = new Map<number, ReturnType<typeof setTimeout>>();
+  private modalQueue: ScheduleEntity[] = [];
+  private notifiedIds = new Set<number>();
 
-  private static readonly CHECK_INTERVAL_MS = 30_000;
-  private static readonly REMINDER_MINUTES = 5;
+  storedNotificationIds = signal<number[]>([]);
+
+  notificationModalVisible = signal(false);
+  currentNotification = signal<ScheduleEntity | null>(null);
+
   private static readonly STORAGE_KEY = 'schedule-notified-ids';
 
   start(): void {
-    if (this.running) return;
-    this.running = true;
-    this.loadNotifiedFromStorage();
-    this.requestPermission();
-
-    this.ngZone.runOutsideAngular(() => {
-      this.checkUpcoming();
-      this.intervalId = setInterval(
-        () => this.checkUpcoming(),
-        ScheduleNotificationService.CHECK_INTERVAL_MS,
-      );
-    });
+    this.scheduleFromStorageIfValid();
+    this.getTodaySchedules();
   }
 
   stop(): void {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-      this.intervalId = null;
-    }
-    this.running = false;
+    this.clearStartNotificationTimeouts();
   }
 
   ngOnDestroy(): void {
     this.stop();
   }
 
-  private requestPermission(): void {
-    if (!('Notification' in window)) return;
-
-    if (Notification.permission === 'granted') {
-      this.permissionGranted = true;
-      return;
-    }
-
-    if (Notification.permission !== 'denied') {
-      Notification.requestPermission().then((perm) => {
-        this.permissionGranted = perm === 'granted';
-      });
-    }
-  }
-
-  private checkUpcoming(): void {
-    this.schedulingService.getAll(true).subscribe({
+  getTodaySchedules() {
+    this.schedulingService.getAll(true).pipe(takeUntilDestroyed(this.destroyedRef)).subscribe({
       next: (res) => {
-        const schedules = (res.data ?? res.dados ?? []) as ScheduleEntity[];
-        this.evaluateSchedules(schedules);
+        const schedules = ((res.data ?? res.dados ?? []) as ScheduleEntity[]).filter((s) =>
+          dayjs(s.startDateTime).isSame(dayjs(), 'day'),
+        );
+        this.prepareStartNotifications(schedules);
+      },
+      error: (err) => {
+        console.error('Erro ao carregar agendamentos de hoje:', err);
       },
     });
   }
 
-  private evaluateSchedules(schedules: ScheduleEntity[]): void {
-    const now = dayjs();
+  private prepareStartNotifications(schedules: ScheduleEntity[]): void {
+    this.clearStartNotificationTimeouts();
+    this.saveSchedulesToStorage(schedules);
 
+    const now = dayjs();
     for (const schedule of schedules) {
       if (schedule.status !== 'SCHEDULED') continue;
 
       const start = dayjs(schedule.startDateTime);
-      const diffMinutes = start.diff(now, 'minute', true);
+      const millisecondsUntilStart = start.diff(now);
 
-      const reminderKey = this.buildKey(schedule.id, 'reminder');
-      if (
-        diffMinutes > 0 &&
-        diffMinutes <= ScheduleNotificationService.REMINDER_MINUTES &&
-        !this.notified.has(reminderKey)
-      ) {
-        const minutes = Math.ceil(diffMinutes);
-        this.notify(
-          `${schedule.title} começa em ${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`,
-          schedule,
-          'reminder',
-        );
+      if (millisecondsUntilStart <= 0) {
+        if (!this.storedNotificationIds().includes(schedule.id)) {
+          this.notify(`${schedule.title} está começando agora!`, schedule);
+          this.storedNotificationIds.set([...this.storedNotificationIds(), schedule.id]);
+        }
+        continue;
       }
 
-      const nowKey = this.buildKey(schedule.id, 'now');
-      if (diffMinutes <= 0 && diffMinutes > -1 && !this.notified.has(nowKey)) {
-        this.notify(`${schedule.title} está começando agora!`, schedule, 'now');
-      }
+      const timeoutId = setTimeout(() => {
+        if (!this.storedNotificationIds().includes(schedule.id)) {
+          this.notify(`${schedule.title} está começando agora!`, schedule);
+          this.storedNotificationIds.set([...this.storedNotificationIds(), schedule.id]);
+        }
+        this.startNotificationTimeouts.delete(schedule.id);
+      }, millisecondsUntilStart);
+
+      this.startNotificationTimeouts.set(schedule.id, timeoutId);
     }
   }
 
-  private notify(message: string, schedule: ScheduleEntity, type: 'reminder' | 'now'): void {
-    const key = this.buildKey(schedule.id, type);
-    this.notified.add(key);
-    this.saveNotifiedToStorage();
+  private notify(message: string, schedule: ScheduleEntity): void {
+    if (this.notifiedIds.has(schedule.id)) return;
+    this.notifiedIds.add(schedule.id);
 
-    this.ngZone.run(() => {
-      this.toast.info(message);
-    });
-
-    if (this.permissionGranted) {
-      const startFormatted = dayjs(schedule.startDateTime).format('HH:mm');
-      new Notification('Agendamento', {
-        body: `${message}\nHorário: ${startFormatted}`,
-        icon: '/assets/icons/icon-128x128.png',
-        tag: key,
-      });
+    if (this.notificationModalVisible()) {
+      this.modalQueue.push(schedule);
+      return;
     }
+
+    this.currentNotification.set(schedule);
+    this.notificationModalVisible.set(true);
   }
 
-  private buildKey(id: number, type: string): string {
-    const today = dayjs().format('YYYY-MM-DD');
-    return `${today}_${id}_${type}`;
+  private clearStartNotificationTimeouts(): void {
+    this.startNotificationTimeouts.forEach((timeoutId) => clearTimeout(timeoutId));
+    this.startNotificationTimeouts.clear();
   }
 
-  private loadNotifiedFromStorage(): void {
+  closeNotificationModal(): void {
+    const next = this.modalQueue.shift() ?? null;
+    this.currentNotification.set(next);
+    this.notificationModalVisible.set(!!next);
+  }
+
+  private scheduleFromStorageIfValid(): void {
+    const stored = this.loadSchedulesFromStorage();
+    if (!stored) return;
+
+    const schedules: ScheduleEntity[] = stored.schedules.map((item) => ({
+      id: item.id,
+      title: item.title,
+      description: '',
+      startDateTime: item.startDateTime,
+      endDateTime: item.startDateTime,
+      location: '',
+      isAllDay: false,
+      status: 'SCHEDULED',
+    }));
+
+    this.storedNotificationIds.set(schedules.map((item) => item.id));
+  }
+
+  private loadSchedulesFromStorage(): ScheduleNotificationStorage | null {
     try {
-      const stored = localStorage.getItem(ScheduleNotificationService.STORAGE_KEY);
-      if (!stored) return;
+      const raw = localStorage.getItem(ScheduleNotificationService.STORAGE_KEY);
+      if (!raw) return null;
 
-      const parsed = JSON.parse(stored) as { date: string; keys: string[] };
-      const today = dayjs().format('YYYY-MM-DD');
-
-      if (parsed.date === today) {
-        this.notified = new Set(parsed.keys);
-      } else {
+      const parsed = JSON.parse(raw) as ScheduleNotificationStorage;
+      if (!this.isValidStoragePayload(parsed)) {
         localStorage.removeItem(ScheduleNotificationService.STORAGE_KEY);
+        return null;
       }
+
+      return parsed;
     } catch {
       localStorage.removeItem(ScheduleNotificationService.STORAGE_KEY);
+      return null;
     }
   }
 
-  private saveNotifiedToStorage(): void {
-    const payload = {
-      date: dayjs().format('YYYY-MM-DD'),
-      keys: Array.from(this.notified),
+  private saveSchedulesToStorage(schedules: ScheduleEntity[]): void {
+    const validSchedules = schedules
+      .filter((s) => s.status === 'SCHEDULED')
+      .filter((s) => this.isValidDateTime(String(s.startDateTime)))
+      .map((s) => ({
+        id: Number(s.id),
+        title: s.title ?? 'Agendamento',
+        startDateTime: dayjs(s.startDateTime).toISOString(),
+      }))
+      .filter((s) => Number.isFinite(s.id) && s.id > 0);
+
+    const payload: ScheduleNotificationStorage = {
+      savedAt: dayjs().toISOString(),
+      schedules: validSchedules,
     };
+
     localStorage.setItem(ScheduleNotificationService.STORAGE_KEY, JSON.stringify(payload));
+  }
+
+  private isValidStoragePayload(payload: any): payload is ScheduleNotificationStorage {
+    if (!payload || typeof payload !== 'object') return false;
+    if (!Array.isArray(payload.schedules)) return false;
+    if (typeof payload.savedAt !== 'string' || !this.isValidDateTime(payload.savedAt)) return false;
+
+    return payload.schedules.every((s: any) =>
+      s &&
+      typeof s === 'object' &&
+      Number.isFinite(s.id) &&
+      s.id > 0 &&
+      typeof s.title === 'string' &&
+      typeof s.startDateTime === 'string' &&
+      this.isValidDateTime(s.startDateTime),
+    );
+  }
+
+  private isValidDateTime(value: string): boolean {
+    const date = dayjs(value);
+    return date.isValid();
   }
 }

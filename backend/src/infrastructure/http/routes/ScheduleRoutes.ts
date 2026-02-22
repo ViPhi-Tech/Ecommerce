@@ -55,4 +55,12 @@ export default async function scheduleRoutes(
     preValidation: [authenticate],
     handler: scheduleController.delete.bind(scheduleController),
   });
+
+  fastify.get('/today', {
+    schema: {
+      tags: ['schedule'],
+    },
+    preValidation: [authenticate],
+    handler: scheduleController.findToday.bind(scheduleController),
+  });
 }

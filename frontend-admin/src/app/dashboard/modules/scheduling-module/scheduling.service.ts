@@ -50,6 +50,10 @@ export class SchedulingService {
     });
   }
 
+  getTodaySchedules(): Observable<ApiResponse<ScheduleEntity[]>> {
+    return this.http.get<ApiResponse<ScheduleEntity[]>>(`${this.apiUrl}/today`);
+  }
+
   create(payload: CreateScheduleDTO): Observable<ApiResponse<ScheduleEntity>> {
     return this.http.post<ApiResponse<ScheduleEntity>>(`${this.apiUrl}/create`, payload);
   }

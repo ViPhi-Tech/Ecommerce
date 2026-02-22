@@ -6,6 +6,7 @@ import { FindAllScheduleUseCase } from '../../../application/use-cases/schedule/
 import { UpdateScheduleUseCase } from '../../../application/use-cases/schedule/UpdateScheduleUseCase';
 import { DeleteScheduleUseCase } from '../../../application/use-cases/schedule/DeleteScheduleUseCase';
 import { ScheduleController } from '../../http/controllers/ScheduleController';
+import { FindTodayScheduleUseCase } from '../../../application/use-cases/schedule/FindTodayScheduleUseCase';
 
 export const scheduleRepository = new ScheduleRepository(prisma);
 
@@ -14,11 +15,13 @@ const findByIdScheduleUseCase = new FindByIdScheduleUseCase(scheduleRepository);
 const findAllScheduleUseCase = new FindAllScheduleUseCase(scheduleRepository);
 const updateScheduleUseCase = new UpdateScheduleUseCase(scheduleRepository);
 const deleteScheduleUseCase = new DeleteScheduleUseCase(scheduleRepository);
+const findTodayScheduleUseCase = new FindTodayScheduleUseCase(scheduleRepository);
 
 export const scheduleController = new ScheduleController(
   createScheduleUseCase,
   findByIdScheduleUseCase,
   findAllScheduleUseCase,
   updateScheduleUseCase,
-  deleteScheduleUseCase
+  deleteScheduleUseCase,
+  findTodayScheduleUseCase
 );
