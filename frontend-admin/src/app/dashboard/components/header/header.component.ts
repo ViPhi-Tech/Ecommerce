@@ -6,17 +6,20 @@ import { QuickAccessComponent } from '../quick-admin/quick-access.component';
 import { PopoverModule } from 'primeng/popover';
 import { Router } from '@angular/router';
 import { SidebarService } from '../../../shared/services/sidebar.service';
+import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
+import { SettingsModalService } from '../settings-modal/settings-modal.service';
 
 @Component({
   selector: 'fuse-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  imports: [NgIcon, QuickAccessComponent, QuickAccessComponent, PopoverModule],
+  imports: [NgIcon, QuickAccessComponent, PopoverModule, SettingsModalComponent],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   private coreService = inject(CoreService);
   private router = inject(Router);
   private sidebarService = inject(SidebarService);
+  settingsModal = inject(SettingsModalService);
 
   pageTitle = signal({
     title: '',

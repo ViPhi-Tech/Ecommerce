@@ -1,0 +1,161 @@
+<p-dialog
+  [(visible)]="settingsModal.visible"
+  [modal]="true"
+  [closeOnEscape]="true"
+  [draggable]="false"
+  [showHeader]="false"
+  (onShow)="onShow()"
+  styleClass="settings-dialog"
+  contentStyleClass="settings-dialog__content"
+>
+  <div class="settings-layout">
+    <!-- Sidebar -->
+    <aside class="settings-sidebar">
+      <div class="settings-sidebar__header">
+        <ng-icon name="lucideSettings" size="20" />
+        <span>Configurações</span>
+      </div>
+      <nav class="settings-sidebar__nav">
+        @for (tab of tabs; track tab.id) {
+          <button
+            class="settings-sidebar__tab"
+            [class.settings-sidebar__tab--active]="activeTab() === tab.id"
+            (click)="selectTab(tab.id)"
+          >
+            <ng-icon [name]="tab.icon" size="18" />
+            <span>{{ tab.label }}</span>
+          </button>
+        }
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <section class="settings-content">
+      <div class="settings-content__header">
+        <h2 class="settings-content__title">
+          @switch (activeTab()) {
+            @case ('profile') { Editar Perfil }
+            @case ('integrations') { Integrações }
+            @case ('notifications') { Notificações }
+            @case ('security') { Segurança }
+          }
+        </h2>
+        <button class="settings-content__close" (click)="onCancel()">
+          <ng-icon name="lucideX" size="20" />
+        </button>
+      </div>
+
+      @switch (activeTab()) {
+        @case ('profile') {
+          <div class="settings-content__body">
+            <!-- Foto de perfil -->
+            <div class="profile-photo">
+              <div class="profile-photo__label">
+                <span class="profile-photo__title">Foto de Perfil</span>
+                <span class="profile-photo__subtitle">Esta foto será exibida para outros membros da equipe.</span>
+              </div>
+              <div class="profile-photo__actions">
+                <div class="profile-photo__avatar-wrapper">
+                  <img [src]="avatarUrl()" alt="Avatar" class="profile-photo__avatar" />
+                  <div class="profile-photo__badge">
+                    <ng-icon name="lucidePencil" size="12" />
+                  </div>
+                </div>
+                <div class="profile-photo__buttons">
+                  <button pButton label="Alterar Foto" size="small" (click)="onChangePhoto()"></button>
+                  <button
+                    class="profile-photo__remove"
+                    (click)="onRemovePhoto()"
+                  >
+                    Remover atual
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Campos -->
+            <div class="profile-fields">
+              <div class="profile-fields__row">
+                <div class="profile-fields__group">
+                  <label class="profile-fields__label">Nome Completo</label>
+                  <input
+                    type="text"
+                    pInputText
+                    class="profile-fields__input"
+                    placeholder="Ex: Alex Johnson"
+                    [ngModel]="profileForm().fullName"
+                    (ngModelChange)="updateField('fullName', $event)"
+                  />
+                </div>
+                <div class="profile-fields__group">
+                  <label class="profile-fields__label">Nome de Usuário</label>
+                  <div class="profile-fields__username">
+                    <span class="profile-fields__at">@</span>
+                    <input
+                      type="text"
+                      pInputText
+                      class="profile-fields__input profile-fields__input--username"
+                      placeholder="usuario"
+                      [ngModel]="profileForm().username"
+                      (ngModelChange)="updateField('username', $event)"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="profile-fields__group">
+                <label class="profile-fields__label">Endereço de E-mail</label>
+                <input
+                  type="email"
+                  pInputText
+                  class="profile-fields__input"
+                  placeholder="email@empresa.com"
+                  [ngModel]="profileForm().email"
+                  (ngModelChange)="updateField('email', $event)"
+                />
+                <span class="profile-fields__hint">E-mails de verificação serão enviados para este endereço.</span>
+              </div>
+            </div>
+          </div>
+        }
+        @case ('integrations') {
+          <div class="settings-content__body settings-content__placeholder">
+            <ng-icon name="lucideSettings2" size="48" />
+            <p>Integrações em breve.</p>
+          </div>
+        }
+        @case ('notifications') {
+          <div class="settings-content__body settings-content__placeholder">
+            <ng-icon name="lucideBell" size="48" />
+            <p>Configurações de notificações em breve.</p>
+          </div>
+        }
+        @case ('security') {
+          <div class="settings-content__body settings-content__placeholder">
+            <ng-icon name="lucideShield" size="48" />
+            <p>Configurações de segurança em breve.</p>
+          </div>
+        }
+      }
+
+      <!-- Footer -->
+      <div class="settings-content__footer">
+        <button
+          pButton
+          label="Cancelar"
+          [outlined]="true"
+          severity="secondary"
+          size="small"
+          (click)="onCancel()"
+        ></button>
+        <button
+          pButton
+          label="Salvar Alterações"
+          size="small"
+          [loading]="isLoading()"
+          (click)="onSave()"
+        ></button>
+      </div>
+    </section>
+  </div>
+</p-dialog>

@@ -4,6 +4,7 @@ import { MenuComponent } from './menu/menu.component';
 import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { NgClass } from '@angular/common';
 import { SidebarService } from '../../../shared/services/sidebar.service';
+import { SettingsModalService } from '../settings-modal/settings-modal.service';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -15,6 +16,7 @@ import { filter } from 'rxjs/operators';
 export class SidebarComponent implements OnDestroy {
   private router = inject(Router);
   private sidebarService = inject(SidebarService);
+  settingsModal = inject(SettingsModalService);
   compactMode = signal(false);
   isOpen = this.sidebarService.isOpen;
   private navigationSubscription: any;

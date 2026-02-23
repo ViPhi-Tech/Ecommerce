@@ -64,3 +64,6 @@ You are an expert in TypeScript, Angular, and scalable web application developme
 - Icon names in the file follow the pattern: `lucide[IconName]` (e.g., `lucideUser`, `lucideHome`, `lucideSettings`)
 - When importing icons from `lucide-angular`, use the icon name without the `lucide` prefix (e.g., `User`, `Home`, `Settings`)
 - Always check the icons.txt file before suggesting an icon to ensure it exists in the available icon set
+
+
+- try ever user tailwind classes instead of custom classes
