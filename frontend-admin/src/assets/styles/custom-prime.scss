@@ -182,10 +182,27 @@ input {
   position: sticky !important;
 }
 
-// mobile 
+// mobile
 @media (max-width: 768px) {
   .p-dialog-footer {
     padding-top: 1.5rem !important;
+  }
+}
+
+@supports (-webkit-touch-callout: none) {
+  input[type='text'],
+  input[type='email'],
+  input[type='password'],
+  input[type='number'],
+  input[type='search'],
+  input[type='tel'],
+  input[type='url'],
+  input:not([type]),
+  textarea,
+  select,
+  .p-inputtext,
+  .p-select {
+    font-size: 16px !important;
   }
 }
 
