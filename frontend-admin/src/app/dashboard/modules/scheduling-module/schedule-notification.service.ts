@@ -157,14 +157,14 @@ export class ScheduleNotificationService implements OnDestroy {
     localStorage.setItem(ScheduleNotificationService.NOTIFIED_IDS_KEY, JSON.stringify(payload));
   }
 
-  private isValidNotifiedIdsPayload(payload: any): payload is NotifiedIdsStorage {
+  private isValidNotifiedIdsPayload(payload: unknown): payload is NotifiedIdsStorage {
+    if (!payload || typeof payload !== 'object') return false;
+    const obj = payload as Record<string, unknown>;
     return (
-      payload &&
-      typeof payload === 'object' &&
-      typeof payload.date === 'string' &&
-      /^\d{4}-\d{2}-\d{2}$/.test(payload.date) &&
-      Array.isArray(payload.ids) &&
-      payload.ids.every((id: any) => Number.isFinite(id) && id > 0)
+      typeof obj['date'] === 'string' &&
+      /^\d{4}-\d{2}-\d{2}$/.test(obj['date']) &&
+      Array.isArray(obj['ids']) &&
+      (obj['ids'] as unknown[]).every((id) => typeof id === 'number' && Number.isFinite(id) && id > 0)
     );
   }
 
@@ -227,21 +227,24 @@ export class ScheduleNotificationService implements OnDestroy {
     localStorage.setItem(ScheduleNotificationService.SCHEDULES_KEY, JSON.stringify(payload));
   }
 
-  private isValidSchedulesPayload(payload: any): payload is ScheduleNotificationStorage {
+  private isValidSchedulesPayload(payload: unknown): payload is ScheduleNotificationStorage {
     if (!payload || typeof payload !== 'object') return false;
-    if (!Array.isArray(payload.schedules)) return false;
-    if (typeof payload.savedAt !== 'string' || !this.isValidDateTime(payload.savedAt)) return false;
+    const obj = payload as Record<string, unknown>;
+    if (!Array.isArray(obj['schedules'])) return false;
+    if (typeof obj['savedAt'] !== 'string' || !this.isValidDateTime(obj['savedAt'])) return false;
 
-    return payload.schedules.every(
-      (s: any) =>
-        s &&
-        typeof s === 'object' &&
-        Number.isFinite(s.id) &&
-        s.id > 0 &&
-        typeof s.title === 'string' &&
-        typeof s.startDateTime === 'string' &&
-        this.isValidDateTime(s.startDateTime),
-    );
+    return (obj['schedules'] as unknown[]).every((s) => {
+      if (!s || typeof s !== 'object') return false;
+      const item = s as Record<string, unknown>;
+      return (
+        typeof item['id'] === 'number' &&
+        Number.isFinite(item['id']) &&
+        (item['id'] as number) > 0 &&
+        typeof item['title'] === 'string' &&
+        typeof item['startDateTime'] === 'string' &&
+        this.isValidDateTime(item['startDateTime'])
+      );
+    });
   }
 
   private isValidDateTime(value: string): boolean {

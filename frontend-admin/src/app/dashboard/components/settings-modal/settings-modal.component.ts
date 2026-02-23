@@ -1,6 +1,5 @@
-import { Component, inject, signal, computed, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -22,9 +21,9 @@ interface TabItem {
   selector: 'fuse-settings-modal',
   templateUrl: './settings-modal.component.html',
   styleUrls: ['./settings-modal.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    CommonModule,
-    FormsModule,
+    ReactiveFormsModule,
     DialogModule,
     ButtonModule,
     InputTextModule,
@@ -35,15 +34,16 @@ export class SettingsModalComponent implements OnInit {
   private authService = inject(AuthService);
   private userService = inject(UserService);
   private toast = inject(ToastService);
+  private fb = inject(FormBuilder);
   settingsModal = inject(SettingsModalService);
 
   activeTab = signal<SettingsTab>('profile');
   isLoading = signal(false);
 
-  profileForm = signal({
-    fullName: '',
-    username: '',
-    email: '',
+  profileForm = this.fb.group({
+    fullName: ['', [Validators.required, Validators.minLength(2)]],
+    username: [''],
+    email: ['', [Validators.required, Validators.email]],
   });
 
   avatarUrl = signal(
@@ -70,13 +70,9 @@ export class SettingsModalComponent implements OnInit {
     this.activeTab.set(tab);
   }
 
-  updateField(field: string, value: string): void {
-    this.profileForm.update((f) => ({ ...f, [field]: value }));
-  }
-
   onSave(): void {
-    const form = this.profileForm();
-    if (!form.fullName.trim() || !form.email.trim()) {
+    if (this.profileForm.invalid) {
+      this.profileForm.markAllAsTouched();
       this.toast.warn('Preencha os campos obrigatórios.');
       return;
     }
@@ -91,11 +87,13 @@ export class SettingsModalComponent implements OnInit {
       return;
     }
 
+    const { fullName, email } = this.profileForm.getRawValue();
+
     this.userService
       .upsertUser({
         id: userId,
-        fullName: form.fullName.trim(),
-        email: form.email.trim(),
+        fullName: fullName?.trim(),
+        email: email?.trim(),
       })
       .subscribe({
         next: () => {
@@ -140,7 +138,7 @@ export class SettingsModalComponent implements OnInit {
   private loadCurrentUser(): void {
     const decoded = this.authService.getDecodedToken();
     if (decoded) {
-      this.profileForm.set({
+      this.profileForm.patchValue({
         fullName: decoded.fullName || decoded.name || '',
         username: decoded.username || decoded.email?.split('@')[0] || '',
         email: decoded.email || '',
