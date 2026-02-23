@@ -1,11 +1,11 @@
 import { Component, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { NgIcon } from '@ng-icons/core';
 
 @Component({
   selector: 'fuse-message-loader',
   standalone: true,
-  imports: [CommonModule, NgIcon],
+  imports: [NgIcon],
   template: `
     @if (visible() && modal()) {
       <div

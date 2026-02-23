@@ -14,7 +14,7 @@ import { DialogModule } from 'primeng/dialog';
 import { CartState } from '../order-cart/order-cart.state';
 import { ClientState } from '../../../client-module/client.state';
 import { InputTextModule } from 'primeng/inputtext';
-import { CommonModule } from '@angular/common';
+
 import { Router } from '@angular/router';
 import { ClientService } from 'app/dashboard/modules/client-module/client.service';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -24,7 +24,7 @@ import { IClient } from 'app/shared/interfaces/client/Client';
   selector: 'fuse-client-selection',
   templateUrl: './client-selection.component.html',
   styleUrls: ['./client-selection.component.scss'],
-  imports: [NgIcon, DialogModule, ButtonModule, InputTextModule, CommonModule],
+  imports: [NgIcon, DialogModule, ButtonModule, InputTextModule],
 })
 export class ClientSelectionComponent implements OnInit {
   private destroyRef = inject(DestroyRef);

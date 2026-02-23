@@ -1,5 +1,5 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { NgIcon } from '@ng-icons/core';
@@ -17,7 +17,6 @@ import { DatePickerComponent } from 'app/shared/components/form/datepicker/datep
   selector: 'fuse-home',
   standalone: true,
   imports: [
-    CommonModule,
     ReactiveFormsModule,
     ButtonModule,
     NgIcon,
@@ -27,8 +26,8 @@ import { DatePickerComponent } from 'app/shared/components/form/datepicker/datep
     SalesChartComponent,
     TopProductsChartComponent,
     CategoriesChartComponent,
-    OrderStatusChartComponent,
-  ],
+    OrderStatusChartComponent
+],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })

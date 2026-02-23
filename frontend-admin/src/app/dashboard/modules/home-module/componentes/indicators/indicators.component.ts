@@ -1,5 +1,5 @@
 import { Component, Input, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { EmptyStateComponent } from 'app/shared/components/empty-state/empty-state.component';
 
 export interface Indicator {
@@ -13,7 +13,7 @@ export interface Indicator {
 @Component({
   selector: 'fuse-indicators',
   standalone: true,
-  imports: [CommonModule, EmptyStateComponent],
+  imports: [EmptyStateComponent],
   templateUrl: './indicators.component.html',
   styleUrls: ['./indicators.component.scss'],
 })

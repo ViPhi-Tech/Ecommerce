@@ -1,5 +1,5 @@
 import { Component, Input, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { OrderStatu } from 'app/shared/interfaces/home/HomeModuleState';
@@ -14,7 +14,7 @@ export interface OrderStatusData {
 @Component({
   selector: 'fuse-order-status-chart',
   standalone: true,
-  imports: [CommonModule, NgxEchartsModule, EmptyStateComponent],
+  imports: [NgxEchartsModule, EmptyStateComponent],
   templateUrl: './order-status-chart.component.html',
   styleUrls: ['./order-status-chart.component.scss'],
 })

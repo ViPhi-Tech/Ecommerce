@@ -17,7 +17,7 @@ import {
   TableConfig,
 } from 'app/shared/interfaces/table.interfaces';
 import { DeliveryState } from '../../delivery.state';
-import { CommonModule } from '@angular/common';
+
 import { NgIcon } from '@ng-icons/core';
 import { ButtonModule } from 'primeng/button';
 import { TagModule } from 'primeng/tag';
@@ -35,13 +35,12 @@ import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/sim
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     TableComponent,
-    CommonModule,
     NgIcon,
     ButtonModule,
     TagModule,
     Tooltip,
-    SimpleIndicatorComponent,
-  ],
+    SimpleIndicatorComponent
+],
   providers: [DeliveryState],
 })
 export class DeliveryListComponent implements OnInit {

@@ -2,12 +2,7 @@ import { Component, OnInit, Renderer2, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OrderState } from '../../dashboard/modules/order-module/order.state';
 import { Order } from '../../dashboard/modules/order-module/interfaces/order.interface';
-import {
-  DatePipe,
-  CurrencyPipe,
-  TitleCasePipe,
-  CommonModule,
-} from '@angular/common';
+import { DatePipe, CurrencyPipe, TitleCasePipe, CommonModule } from '@angular/common';
 
 @Component({
   selector: 'fuse-order-report',

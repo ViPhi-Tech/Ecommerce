@@ -1,5 +1,5 @@
 import { Component, input, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { NgxFloatUiDirective, NgxFloatUiPlacements, NgxFloatUiTriggers, NgxFloatUiContentComponent } from 'ngx-float-ui';
@@ -16,7 +16,7 @@ export type PopoverPosition = 'bottom-right' | 'bottom-left' | 'top-right' | 'to
 @Component({
   selector: 'fuse-input-with-ai',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ButtonModule, NgxFloatUiDirective, NgxFloatUiContentComponent],
+  imports: [ReactiveFormsModule, ButtonModule, NgxFloatUiDirective, NgxFloatUiContentComponent],
   templateUrl: './input-ai-panel.component.html',
   styleUrls: ['./input-ai-panel.component.scss'],
 })

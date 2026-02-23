@@ -1,5 +1,5 @@
 import { Component, computed, inject, model, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import { SelectModule } from 'primeng/select';
 import { NgIcon } from '@ng-icons/core';
@@ -8,7 +8,7 @@ import { ClientState } from 'app/dashboard/modules/client-module/client.state';
 @Component({
   selector: 'fuse-client-select',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectModule, NgIcon],
+  imports: [FormsModule, SelectModule, NgIcon],
   template: `
     <p-select
       class="w-full max-w-64"

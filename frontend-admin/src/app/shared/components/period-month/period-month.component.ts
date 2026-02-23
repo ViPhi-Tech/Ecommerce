@@ -1,5 +1,5 @@
 import { Component, input, output, OnInit, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import dayjs from 'dayjs';
 import { SelectModule } from 'primeng/select';
@@ -26,7 +26,7 @@ const MONTH_NAMES = [
 
 @Component({
   selector: 'fuse-period-month',
-  imports: [CommonModule, FormsModule, SelectModule, NgIcon, TooltipModule],
+  imports: [FormsModule, SelectModule, NgIcon, TooltipModule],
   templateUrl: './period-month.component.html',
   styleUrls: ['./period-month.component.scss'],
 })

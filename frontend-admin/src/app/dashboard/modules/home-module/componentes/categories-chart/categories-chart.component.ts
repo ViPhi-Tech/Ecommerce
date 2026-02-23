@@ -1,5 +1,5 @@
 import { Component, Input, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { SalesByCategory } from 'app/shared/interfaces/home/HomeModuleState';
@@ -8,7 +8,7 @@ import { EmptyStateComponent } from 'app/shared/components/empty-state/empty-sta
 @Component({
   selector: 'fuse-categories-chart',
   standalone: true,
-  imports: [CommonModule, NgxEchartsModule, EmptyStateComponent],
+  imports: [NgxEchartsModule, EmptyStateComponent],
   templateUrl: './categories-chart.component.html',
   styleUrls: ['./categories-chart.component.scss'],
 })
