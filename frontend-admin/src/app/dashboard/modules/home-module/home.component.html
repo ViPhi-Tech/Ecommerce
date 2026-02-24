@@ -13,27 +13,13 @@
 
       <!-- Filtros e Ações -->
       <div class="flex items-center gap-4">
-        <!-- Select de Período -->
-        <fuse-select
-          class="hidden"
-          [control]="periodControl"
-          [items]="periodOptions"
-          label="Período"
-          placeholder="Selecione o período"
-          labelPosition="left"
-          addictionalClass="min-w-48"
-          (changeValue)="onPeriodChange($event.value)"
-        />
 
-        <!-- DatePicker para período personalizado -->
-        @if (periodControl.value === 'custom') {
-          <fuse-datepicker
-            [control]="dateRangeControl"
-            label="Data"
-            placeholder="Selecione a data"
-            labelPosition="left"
-          />
-        }
+        <!-- Select de Período -->
+        <fuse-period
+          defaultValue="last30days"
+          [allowStore]="false"
+          (periodChange)="onPeriodChange($event)"
+        />
 
         <!-- Botão de Refresh -->
         <p-button

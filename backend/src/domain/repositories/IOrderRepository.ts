@@ -18,9 +18,13 @@ export interface IOrderRepository {
     createPreOrder(clientId: number): Promise<Order>;
     countByMonth(initialMonth: number, finalMonth: number): Promise<number>;
     countSalesByMonth(initialMonth: number, finalMonth: number): Promise<number>;
+    countByDateRange(startDate: Date, endDate: Date): Promise<number>;
+    countSalesByDateRange(startDate: Date, endDate: Date): Promise<number>;
     aggregateSalesByMonth(initialMonth: number, finalMonth: number): Promise<AggregateOrderResponse[]>;
     aggregateSalesByStatus(initialMonth: number, finalMonth: number): Promise<AggregateOrderStatusResponse[]>;
+    aggregateSalesByStatusByDateRange(startDate: Date, endDate: Date): Promise<AggregateOrderStatusResponse[]>;
     aggregateSalesByCategory(initialMonth: number, finalMonth: number): Promise<AggregateOrderCategoryResponse[]>;
+    aggregateSalesByCategoryByDateRange(startDate: Date, endDate: Date): Promise<AggregateOrderCategoryResponse[]>;
     getOrdersByClient(clientId: number, startDate: string, endDate: string, paymentTypeId: string): Promise<Order[]>;
     assignOrdersToAccountsReceivable(orders: number[], accountsReceivableId: number): Promise<void>;
     assignOrdersToDelivery(orderIds: number[], deliveryId: number): Promise<void>;

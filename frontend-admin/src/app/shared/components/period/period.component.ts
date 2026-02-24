@@ -16,6 +16,7 @@ export interface PeriodRange {
   startDate: Date;
   endDate: Date;
   periodType: string;
+  firstEmit?: boolean;
 }
 
 export type PeriodType =
@@ -48,6 +49,7 @@ export default class PeriodComponent implements OnInit {
   disabled = input<boolean>(false);
   defaultValue = input<PeriodType | undefined>(undefined);
   storeKey = input<string>('period_selector');
+  allowStore = input<boolean>(true);
   size = input<string>('small');
   firstEmit = input<boolean>(true);
   tooltip = input<string>('');
@@ -78,29 +80,32 @@ export default class PeriodComponent implements OnInit {
 
   ngOnInit() {
     const storedPeriod = localStorage.getItem(this.storeKey());
-    if (storedPeriod) {
+    if (storedPeriod && this.allowStore()) {
       this.selectedPeriod = JSON.parse(storedPeriod).periodType;
       if (this.firstEmit()) {
-        this.onPeriodChange(this.selectedPeriod);
+        this.onPeriodChange(this.selectedPeriod, true);
       }
     } else if (this.defaultValue()) {
       this.selectedPeriod = this.defaultValue();
       if (this.firstEmit()) {
-        this.onPeriodChange(this.selectedPeriod);
+        this.onPeriodChange(this.selectedPeriod, true);
       }
     } else {
       this.selectedPeriod = 'today';
       if (this.firstEmit()) {
-        this.onPeriodChange(this.selectedPeriod);
+        this.onPeriodChange(this.selectedPeriod, true);
       }
     }
   }
 
-  onPeriodChange(periodType: string | undefined) {
+  onPeriodChange(periodType: string | undefined, firstEmit = false) {
     if (!periodType) return;
     const range = this.calculatePeriodRange(periodType as PeriodType);
     localStorage.setItem(this.storeKey(), JSON.stringify(range));
-    this.periodChange.emit(range);
+    this.periodChange.emit({
+      ...range,
+      firstEmit,
+    });
   }
 
   private calculatePeriodRange(periodType: PeriodType): PeriodRange {

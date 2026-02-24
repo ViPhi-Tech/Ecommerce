@@ -1,4 +1,3 @@
-import { DashboardMetrics } from '../../../domain/entities/Dashboard';
 import { IClientRepository } from '../../../domain/repositories/IClientRepository';
 import { IOrderRepository } from '../../../domain/repositories/IOrderRepository';
 import { IProductRepository } from '../../../domain/repositories/IProductRepository';
@@ -10,13 +9,23 @@ export class GetDashboardMetricUseCase {
     private orderRepository: IOrderRepository,
     private clientRepository: IClientRepository
   ) {}
-  
-  async execute(): Promise<DashboardMetricsResponse> {
-    const month = new Date().getMonth() + 1
-    const totalOrders = await this.orderRepository.countByMonth(month, month)
-    const totalProductsWithStock = await this.productRepository.countByMonth(month, month)
-    const totalSales = await this.orderRepository.countSalesByMonth(month, month)
-    const totalClients = await this.clientRepository.countByMonth(month, month)
-    return {totalOrders: totalOrders, totalProductsWithStock: totalProductsWithStock, totalSales: totalSales, activeClients: totalClients}
+
+  async execute(startDate: string, endDate: string): Promise<DashboardMetricsResponse> {
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+
+    const [totalOrders, totalSales, totalProductsWithStock, activeClients] = await Promise.all([
+      this.orderRepository.countByDateRange(start, end),
+      this.orderRepository.countSalesByDateRange(start, end),
+      this.productRepository.countProductsWithStock(),
+      this.clientRepository.countActive(),
+    ]);
+
+    return {
+      totalOrders,
+      totalSales,
+      totalProductsWithStock,
+      activeClients,
+    };
   }
 } 

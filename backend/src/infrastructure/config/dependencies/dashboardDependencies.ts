@@ -20,7 +20,6 @@ export const getDashboardMetricUseCase = new GetDashboardMetricUseCase(
 export const chartDataRepository = new GetDashboardChartsUseCase(
   productRepository,
   orderRepository,
-  clientRepository
 );
 
 export const dashboardController = new DashboardController(getDashboardMetricUseCase, chartDataRepository);

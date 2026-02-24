@@ -84,4 +84,9 @@ export class ClientRepository implements IClientRepository {
     )
   }
 
+  async countActive(): Promise<number> {
+    return this.prisma.client.count({
+      where: { isActive: true },
+    });
+  }
 }
