@@ -1,0 +1,154 @@
+<p-dialog
+  [(visible)]="settingsModal.visible"
+  [modal]="true"
+  [closeOnEscape]="true"
+  [draggable]="false"
+  [showHeader]="false"
+  (onShow)="onShow()"
+  styleClass="settings-dialog"
+>
+  <div class="flex min-h-[520px] max-sm:flex-col">
+    <!-- Sidebar -->
+    <aside class="w-[220px] shrink-0 border-r border-[var(--p-content-border-color)] flex flex-col py-6 max-sm:w-full max-sm:border-r-0 max-sm:border-b max-sm:py-4">
+      <div class="flex items-center gap-2.5 px-5 pb-5 text-lg font-semibold text-[var(--p-text-color)] max-sm:px-4 max-sm:pb-3">
+        <ng-icon name="lucideSettings" size="20" />
+        <span>Configurações</span>
+      </div>
+      <nav class="flex flex-col gap-0.5 px-3 max-sm:flex-row max-sm:overflow-x-auto max-sm:gap-1 max-sm:px-3 max-sm:pb-2">
+        @for (tab of tabs; track tab.id) {
+          <button
+            class="settings-tab max-sm:whitespace-nowrap"
+            [class.settings-tab--active]="activeTab() === tab.id"
+            (click)="selectTab(tab.id)"
+          >
+            <ng-icon [name]="tab.icon" size="18" />
+            <span>{{ tab.label }}</span>
+          </button>
+        }
+      </nav>
+    </aside>
+
+    <!-- Content -->
+    <section class="flex-1 flex flex-col min-w-0">
+      <div class="flex justify-between items-center px-6 pt-6">
+        <h2 class="text-xl font-semibold text-[var(--p-text-color)] m-0">
+          @switch (activeTab()) {
+            @case ('profile') { Editar Perfil }
+            @case ('integrations') { Integrações }
+            @case ('notifications') { Notificações }
+            @case ('security') { Segurança }
+          }
+        </h2>
+        <button class="settings-close-btn" (click)="onCancel()">
+          <ng-icon name="lucideX" size="20" />
+        </button>
+      </div>
+
+      @switch (activeTab()) {
+        @case ('profile') {
+          <div class="flex-1 p-6 overflow-y-auto max-sm:p-4">
+            <!-- Foto de perfil -->
+            <div class="mb-7">
+              <div class="flex flex-col gap-1 mb-4">
+                <span class="settings-label text-[0.95rem]">Foto de Perfil</span>
+                <span class="settings-hint">Esta foto será exibida para outros membros da equipe.</span>
+              </div>
+              <div class="flex items-center gap-4">
+                <div class="relative shrink-0">
+                  <img [src]="avatarUrl()" alt="Avatar" class="settings-avatar" />
+                  <div class="settings-avatar-badge">
+                    <ng-icon name="lucidePencil" size="12" />
+                  </div>
+                </div>
+                <div class="flex flex-col gap-1.5 items-start">
+                  <button pButton label="Alterar Foto" size="small" (click)="onChangePhoto()"></button>
+                  <button class="settings-remove-btn" (click)="onRemovePhoto()">
+                    Remover atual
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Campos -->
+            <form [formGroup]="profileForm" class="flex flex-col gap-5">
+              <div class="flex gap-4 max-sm:flex-col">
+                <div class="flex-1 min-w-0 flex flex-col gap-1.5">
+                  <label class="settings-label">Nome Completo</label>
+                  <input
+                    type="text"
+                    pInputText
+                    class="w-full"
+                    placeholder="Ex: Alex Johnson"
+                    formControlName="fullName"
+                  />
+                </div>
+                <div class="flex-1 min-w-0 flex flex-col gap-1.5">
+                  <label class="settings-label">Nome de Usuário</label>
+                  <div class="relative flex items-center">
+                    <span class="settings-at-prefix">@</span>
+                    <input
+                      type="text"
+                      pInputText
+                      class="w-full !pl-7"
+                      placeholder="usuario"
+                      formControlName="username"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex flex-col gap-1.5">
+                <label class="settings-label">Endereço de E-mail</label>
+                <input
+                  type="email"
+                  pInputText
+                  class="w-full"
+                  placeholder="email&#64;empresa.com"
+                  formControlName="email"
+                />
+                <span class="settings-hint">E-mails de verificação serão enviados para este endereço.</span>
+              </div>
+            </form>
+          </div>
+        }
+        @case ('integrations') {
+          <div class="flex-1 p-6 flex flex-col items-center justify-center gap-3 text-[var(--p-text-muted-color)] text-center">
+            <ng-icon name="lucideSettings2" size="48" />
+            <p class="text-[0.95rem]">Integrações em breve.</p>
+          </div>
+        }
+        @case ('notifications') {
+          <div class="flex-1 p-6 flex flex-col items-center justify-center gap-3 text-[var(--p-text-muted-color)] text-center">
+            <ng-icon name="lucideBell" size="48" />
+            <p class="text-[0.95rem]">Configurações de notificações em breve.</p>
+          </div>
+        }
+        @case ('security') {
+          <div class="flex-1 p-6 flex flex-col items-center justify-center gap-3 text-[var(--p-text-muted-color)] text-center">
+            <ng-icon name="lucideShield" size="48" />
+            <p class="text-[0.95rem]">Configurações de segurança em breve.</p>
+          </div>
+        }
+      }
+
+      <!-- Footer -->
+      <div class="flex justify-end items-center gap-2 px-6 py-4 border-t border-[var(--p-content-border-color)]">
+        <button
+          pButton
+          label="Cancelar"
+          [outlined]="true"
+          severity="secondary"
+          size="small"
+          (click)="onCancel()"
+        ></button>
+        <button
+          pButton
+          label="Salvar Alterações"
+          size="small"
+          [loading]="isLoading()"
+          (click)="onSave()"
+        ></button>
+      </div>
+    </section>
+  </div>
+</p-dialog>

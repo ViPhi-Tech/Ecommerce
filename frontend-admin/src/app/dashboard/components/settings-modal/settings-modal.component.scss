@@ -1,0 +1,70 @@
+::ng-deep .settings-dialog {
+  max-width: 780px;
+  width: 95vw;
+  border-radius: 16px !important;
+  overflow: hidden;
+
+  .p-dialog-content {
+    padding: 0 !important;
+  }
+}
+
+.settings-tab {
+  @apply flex items-center gap-2.5 px-3 py-2.5 rounded-lg border-none bg-transparent cursor-pointer text-sm transition-all duration-150;
+  color: var(--p-text-muted-color);
+
+  &:hover {
+    @apply bg-black/5;
+    color: var(--p-text-color);
+  }
+
+  &--active {
+    @apply text-white font-medium;
+    background: var(--p-primary-color);
+
+    &:hover {
+      @apply text-white brightness-110;
+      background: var(--p-primary-color);
+    }
+  }
+}
+
+.settings-close-btn {
+  @apply flex items-center justify-center w-8 h-8 rounded-full border-none bg-transparent cursor-pointer transition-colors duration-150;
+  color: var(--p-text-muted-color);
+
+  &:hover {
+    background: var(--p-content-hover-background);
+  }
+}
+
+.settings-avatar {
+  @apply w-[72px] h-[72px] rounded-full object-cover;
+  border: 3px solid var(--p-content-border-color);
+}
+
+.settings-avatar-badge {
+  @apply absolute bottom-0.5 right-0.5 w-[22px] h-[22px] rounded-full text-white flex items-center justify-center;
+  background: var(--p-primary-color);
+  border: 2px solid var(--p-card-background);
+}
+
+.settings-remove-btn {
+  @apply bg-transparent border-none text-xs cursor-pointer p-0 hover:underline;
+  color: var(--p-text-muted-color);
+}
+
+.settings-label {
+  @apply text-sm font-semibold;
+  color: var(--p-text-color);
+}
+
+.settings-hint {
+  @apply text-xs;
+  color: var(--p-text-muted-color);
+}
+
+.settings-at-prefix {
+  @apply absolute left-3 text-sm z-[1] pointer-events-none;
+  color: var(--p-text-muted-color);
+}
