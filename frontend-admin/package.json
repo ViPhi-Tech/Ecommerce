@@ -50,9 +50,9 @@
     "fast-xml-parser": "^5.2.5",
     "file-saver": "^2.0.5",
     "jwt-decode": "^4.0.0",
-    "ngx-echarts": "^20.0.2",
-    "ngx-float-ui": "^20.1.0",
-    "ngx-mask": "^19.0.7",
+    "ngx-echarts": "^21.0.0",
+    "ngx-float-ui": "^21.0.1",
+    "ngx-mask": "^21.0.1",
     "primeicons": "^7.0.0",
     "primeng": "^21.1.1",
     "rxjs": "~7.8.0",
@@ -86,6 +86,6 @@
     "sharp": "^0.34.5",
     "tailwindcss": "^3.4.17",
     "typescript": "~5.9.0",
-    "typescript-eslint": "8.27.0"
+    "typescript-eslint": "^8.56.1"
   }
 }
