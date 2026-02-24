@@ -76,6 +76,7 @@ export const updateProductSchema = z.object({
   image: z.string().optional(),
   sku: z.string().min(1, { message: "SKU é obrigatório" }),
   cost: z.number().optional(),
+  categoryId: z.number().optional(),
   icms: z.number().nullable().optional(), // Valor unitário do ICMS (editável)
   st: z.number().nullable().optional(), // Valor unitário da ST (editável)
 });

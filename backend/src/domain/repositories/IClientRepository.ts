@@ -8,4 +8,5 @@ export interface IClientRepository {
   findByDocument(document: string): Promise<Client | null>;
   delete(id: number): Promise<void>;
   countByMonth(initialMonth: number, finalMonth: number): Promise<number>;
+  countActive(): Promise<number>;
 } 
