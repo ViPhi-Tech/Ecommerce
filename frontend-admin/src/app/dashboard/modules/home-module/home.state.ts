@@ -108,6 +108,7 @@ export class HomeState extends BaseState<HomeModuleState> {
   }
 
   setCharts(metrics: DashboardCharts) {
+    debugger;
     const charts: DashboardCharts = {
       salesByMonth: metrics.salesByMonth,
       topProducts: metrics.topProducts,

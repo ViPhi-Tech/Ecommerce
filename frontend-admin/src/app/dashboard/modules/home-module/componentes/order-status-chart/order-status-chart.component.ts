@@ -1,5 +1,4 @@
-import { Component, Input, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, input } from '@angular/core';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { OrderStatu } from 'app/shared/interfaces/home/HomeModuleState';
@@ -13,15 +12,14 @@ export interface OrderStatusData {
 
 @Component({
   selector: 'fuse-order-status-chart',
-  standalone: true,
-  imports: [CommonModule, NgxEchartsModule, EmptyStateComponent],
+  imports: [NgxEchartsModule, EmptyStateComponent],
   templateUrl: './order-status-chart.component.html',
-  styleUrls: ['./order-status-chart.component.scss'],
+  styleUrl: './order-status-chart.component.scss',
 })
 export class OrderStatusChartComponent {
-  @Input() data: OrderStatu[] = [];
-  @Input() title = 'Status dos Pedidos';
-  @Input() loading = false;
+  data = input<OrderStatu[]>([]);
+  title = input<string>('Status dos Pedidos');
+  loading = input<boolean>(false);
 
   // Mapeamento de cores para cada status
   private statusColors: Record<string, string> = {
@@ -39,7 +37,7 @@ export class OrderStatusChartComponent {
 
   // Converte os dados para o formato esperado pelo gráfico
   chartData = computed<OrderStatusData[]>(() => {
-    return this.data.map(item => ({
+    return this.data().map(item => ({
       name: item.name,
       value: item.total,
       itemStyle: {
@@ -48,14 +46,13 @@ export class OrderStatusChartComponent {
     }));
   });
 
-  // Computed para verificar se há dados
   hasData = computed<boolean>(() => {
-    return this.data.length > 0 && this.data.some(item => item.total > 0);
+    return this.data().length > 0 && this.data().some(item => item.total > 0);
   });
 
   chartOption = computed<EChartsOption>(() => ({
     title: {
-      text: this.title,
+      text: this.title(),
       left: 'center',
       top: '0px',
       textStyle: {

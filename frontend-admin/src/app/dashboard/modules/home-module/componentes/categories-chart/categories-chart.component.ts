@@ -1,5 +1,4 @@
-import { Component, Input, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, computed, input } from '@angular/core';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { SalesByCategory } from 'app/shared/interfaces/home/HomeModuleState';
@@ -7,35 +6,32 @@ import { EmptyStateComponent } from 'app/shared/components/empty-state/empty-sta
 
 @Component({
   selector: 'fuse-categories-chart',
-  standalone: true,
-  imports: [CommonModule, NgxEchartsModule, EmptyStateComponent],
+  imports: [NgxEchartsModule, EmptyStateComponent],
   templateUrl: './categories-chart.component.html',
-  styleUrls: ['./categories-chart.component.scss'],
+  styleUrl: './categories-chart.component.scss',
 })
 export class CategoriesChartComponent {
-  @Input() data: SalesByCategory[] = [];
-  @Input() title = 'Vendas por Categoria';
-  @Input() loading = false;
+  data = input<SalesByCategory[]>([]);
+  title = input<string>('Vendas por Categoria');
+  loading = input<boolean>(false);
 
-  // Extrair valores e categorias dos dados
   chartValues = computed<number[]>(() => {
-    return this.data.map(item => item.total_quantity);
+    return this.data().map(item => item.total_quantity);
   });
 
   chartCategories = computed<string[]>(() => {
-    return this.data.map(item => item.category_name);
+    return this.data().map(item => item.category_name);
   });
 
-  // Computed para verificar se há dados
   hasData = computed<boolean>(() => {
     return (
-      this.data.length > 0 && this.data.some(item => item.total_quantity > 0)
+      this.data().length > 0 && this.data().some(item => item.total_quantity > 0)
     );
   });
 
   chartOption = computed<EChartsOption>(() => ({
     title: {
-      text: this.title,
+      text: this.title(),
       left: 'center',
       top: '0px',
       textStyle: {

@@ -38,7 +38,6 @@ export class HomeComponent implements OnInit {
   // Computed signals do state
   loading = this.homeState.loading;
   error = this.homeState.error;
-  charts = this.homeState.charts;
 
   indicators = computed(() => {
     const metrics = this.homeState.indicators();
@@ -79,7 +78,7 @@ export class HomeComponent implements OnInit {
     ];
   });
 
-  chart = computed(() => {
+  charts = computed(() => {
     return this.homeState.charts();
   });
 
