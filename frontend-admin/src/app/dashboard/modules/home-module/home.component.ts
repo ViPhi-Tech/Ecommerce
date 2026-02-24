@@ -1,6 +1,6 @@
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { NgIcon } from '@ng-icons/core';
 import { HomeState } from './home.state';
@@ -10,8 +10,9 @@ import { SalesChartComponent } from './componentes/sales-chart/sales-chart.compo
 import { TopProductsChartComponent } from './componentes/top-products-chart/top-products-chart.component';
 import { CategoriesChartComponent } from './componentes/categories-chart/categories-chart.component';
 import { OrderStatusChartComponent } from './componentes/order-status-chart/order-status-chart.component';
-import { SelectComponent } from 'app/shared/components/form/select/select.component';
-import { DatePickerComponent } from 'app/shared/components/form/datepicker/datepicker.component';
+import PeriodComponent from 'app/shared/components/period/period.component';
+import { PeriodRange } from 'app/shared/components/period-month/period-month.component';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'fuse-home',
@@ -21,8 +22,7 @@ import { DatePickerComponent } from 'app/shared/components/form/datepicker/datep
     ReactiveFormsModule,
     ButtonModule,
     NgIcon,
-    SelectComponent,
-    DatePickerComponent,
+    PeriodComponent,
     IndicatorsComponent,
     SalesChartComponent,
     TopProductsChartComponent,
@@ -35,24 +35,10 @@ import { DatePickerComponent } from 'app/shared/components/form/datepicker/datep
 export class HomeComponent implements OnInit {
   private homeState = inject(HomeState);
 
-  // Form controls para filtros
-  dateRangeControl = new FormControl();
-  periodControl = new FormControl('today');
-
-  // Opções para o select de período
-  periodOptions = [
-    { label: 'Hoje', value: 'today' },
-    { label: 'Esta Semana', value: 'week' },
-    { label: 'Este Mês', value: 'month' },
-    { label: 'Este Ano', value: 'year' },
-    { label: 'Período Personalizado', value: 'custom' },
-  ];
-
   // Computed signals do state
   loading = this.homeState.loading;
   error = this.homeState.error;
   charts = this.homeState.charts;
-  selectedPeriod = this.homeState.selectedPeriod;
 
   indicators = computed(() => {
     const metrics = this.homeState.indicators();
@@ -61,15 +47,13 @@ export class HomeComponent implements OnInit {
       {
         title: 'Vendas Totais',
         value: formatCurrency(metrics.totalSales || 0),
-        percentage: this.calculatePercentage(),
         trend:
           (metrics.totalSales || 0) >= 0 ? ('up' as const) : ('down' as const),
         icon: 'lucideTrendingUp',
       },
       {
-        title: 'Pedidos Hoje',
+        title: 'Pedidos',
         value: (metrics.totalOrders || 0).toString(),
-        percentage: this.calculatePercentage(),
         trend:
           (metrics.totalOrders || 0) >= 0 ? ('up' as const) : ('down' as const),
         icon: 'lucideShoppingCart',
@@ -77,7 +61,6 @@ export class HomeComponent implements OnInit {
       {
         title: 'Clientes Ativos',
         value: (metrics.activeClients || 0).toString(),
-        percentage: this.calculatePercentage(),
         trend:
           (metrics.activeClients || 0) >= 0
             ? ('up' as const)
@@ -87,7 +70,6 @@ export class HomeComponent implements OnInit {
       {
         title: 'Produtos em Estoque',
         value: (metrics.totalProductsWithStock || 0).toString(),
-        percentage: this.calculatePercentage(),
         trend:
           (metrics.totalProductsWithStock || 0) >= 0
             ? ('up' as const)
@@ -104,17 +86,7 @@ export class HomeComponent implements OnInit {
   constructor() {}
 
   ngOnInit(): void {
-    this.loadDashboardData();
-
-    // Configurar valor inicial do controle de período
-    this.periodControl.setValue('today');
-
-    // Escutar mudanças no dateRangeControl
-    this.dateRangeControl.valueChanges.subscribe(value => {
-      if (value) {
-        this.onDateRangeChange(value);
-      }
-    });
+    // Primeiro carregamento sera apos o perido carregar
   }
 
   private async loadDashboardData(): Promise<void> {
@@ -125,25 +97,11 @@ export class HomeComponent implements OnInit {
     await this.loadDashboardData();
   }
 
-  public onPeriodChange(period: string): void {
-    this.homeState.setSelectedPeriod(
-      period as 'today' | 'week' | 'month' | 'year'
-    );
-
-    // Se for período personalizado, mostrar o datepicker
-    if (period !== 'custom') {
-      this.loadDashboardData();
-    }
-  }
-
-  public onDateRangeChange(dateRange: Date): void {
-    // Aqui você pode implementar a lógica para filtrar por data personalizada
-    console.log('Data personalizada selecionada:', dateRange);
-    this.loadDashboardData();
-  }
-
-  public changePeriod(period: 'today' | 'week' | 'month' | 'year'): void {
-    this.homeState.setSelectedPeriod(period);
+  public onPeriodChange(period: PeriodRange): void {
+    this.homeState.setDateFilter({
+      startDate: dayjs(period.startDate).format('YYYY-MM-DD'),
+      endDate: dayjs(period.endDate).format('YYYY-MM-DD'),
+    });
   }
 
   private calculatePercentage(): string {

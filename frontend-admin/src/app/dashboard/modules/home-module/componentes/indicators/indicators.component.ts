@@ -5,7 +5,6 @@ import { EmptyStateComponent } from 'app/shared/components/empty-state/empty-sta
 export interface Indicator {
   title: string;
   value: string;
-  percentage: string;
   trend: 'up' | 'down';
   icon: string;
 }

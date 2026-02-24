@@ -19,6 +19,7 @@ import {
   SchedulingService,
   UpdateScheduleDTO,
 } from '../../scheduling.service';
+import { ScheduleNotificationService } from '../../schedule-notification.service';
 
 dayjs.extend(weekOfYear);
 dayjs.extend(isoWeek);
@@ -39,6 +40,7 @@ dayjs.locale('pt-br');
 })
 export class SchedulingCalendarComponent implements OnInit {
   private schedulingService = inject(SchedulingService);
+  private notificationService = inject(ScheduleNotificationService);
   @ViewChild('eventCreate') eventCreate?: EventCreateComponent;
 
   viewOptions = signal([
@@ -206,14 +208,14 @@ export class SchedulingCalendarComponent implements OnInit {
       const id = Number(payload.editingId);
       const updatePayload: UpdateScheduleDTO = { ...basePayload };
       this.schedulingService.update(id, updatePayload).subscribe({
-        next: () => this.loadSchedules(true),
+        next: () => { this.loadSchedules(); this.notificationService.refresh(); },
         error: (err) => console.error('Erro ao atualizar agendamento:', err),
       });
       return;
     }
 
     this.schedulingService.create(basePayload).subscribe({
-      next: () => this.loadSchedules(true),
+      next: () => { this.loadSchedules(); this.notificationService.refresh(); },
       error: (err) => console.error('Erro ao criar agendamento:', err),
     });
   }
@@ -221,7 +223,7 @@ export class SchedulingCalendarComponent implements OnInit {
   onEventDeleted(eventId: string) {
     const id = Number(eventId);
     this.schedulingService.delete(id).subscribe({
-      next: () => this.loadSchedules(true),
+      next: () => { this.loadSchedules(); this.notificationService.refresh(); },
       error: (err) => console.error('Erro ao deletar agendamento:', err),
     });
   }
@@ -322,15 +324,20 @@ export class SchedulingCalendarComponent implements OnInit {
     return layout;
   }
 
-  private loadSchedules(skipLoader = false) {
-    this.schedulingService.getAll(skipLoader).subscribe({
+  loading = signal(false);
+
+  private loadSchedules() {
+    this.loading.set(true);
+    this.schedulingService.getAll(true).subscribe({
       next: (res) => {
         const raw = res.data ?? res.dados ?? [];
         this.events.set((raw as ScheduleEntity[]).map((item) => this.mapToCalendarEvent(item)));
+        this.loading.set(false);
       },
       error: (err) => {
         console.error('Erro ao carregar agendamentos:', err);
         this.events.set([]);
+        this.loading.set(false);
       },
     });
   }

@@ -7,6 +7,7 @@ import {
   DashboardMetrics,
   HomeModuleState,
 } from 'app/shared/interfaces/home/HomeModuleState';
+import dayjs from 'dayjs';
 
 @Injectable({
   providedIn: 'root',
@@ -27,20 +28,22 @@ export class HomeState extends BaseState<HomeModuleState> {
       orderStatus: [],
       salesByCategory: [],
     },
-    selectedPeriod: 'month',
+    date: {
+      startDate: dayjs().format('YYYY-MM-DD'),
+      endDate: dayjs().format('YYYY-MM-DD'),
+    },
     loading: false,
     error: null,
   });
 
   indicators = computed(() => this.state().indicators);
   charts = computed(() => this.state().charts);
-  selectedPeriod = computed(() => this.state().selectedPeriod);
 
   async getDashboardMetrics(skipLoader = true): Promise<void> {
     try {
       await lastValueFrom(
         this.homeService
-          .getDashboardMetrics(this.state().selectedPeriod, skipLoader)
+          .getDashboardMetrics(this.state().date, skipLoader)
           .pipe(
             tap((response: any) => {
               const metrics = Array.isArray(response)
@@ -64,7 +67,7 @@ export class HomeState extends BaseState<HomeModuleState> {
     try {
       await lastValueFrom(
         this.homeService
-          .getDashboardCharts(this.state().selectedPeriod, skipLoader)
+          .getDashboardCharts(this.state().date, skipLoader)
           .pipe(
             tap((response: any) => {
               const metrics = Array.isArray(response)
@@ -114,12 +117,10 @@ export class HomeState extends BaseState<HomeModuleState> {
       })),
       salesByCategory: metrics.salesByCategory,
     };
-    console.log(charts);
     this.updateState('charts', charts);
   }
 
   fromToStatus(status: string) {
-    console.log(status);
     const statusMap = {
       'PENDING': 'Pendente',
       'PROCESSING': 'Processando',
@@ -131,8 +132,8 @@ export class HomeState extends BaseState<HomeModuleState> {
     return statusMap[status as keyof typeof statusMap];
   }
 
-  setSelectedPeriod(period: HomeModuleState['selectedPeriod']) {
-    this.updateState('selectedPeriod', period);
+  setDateFilter(period: HomeModuleState['date']) {
+    this.updateState('date', period);
     // Recarregar dados quando o período mudar
     this.loadAllMetrics(true);
   }
