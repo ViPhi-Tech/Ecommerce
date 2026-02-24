@@ -273,10 +273,13 @@
         flex-direction: column;
         gap: 2px;
         min-width: 0;
+      }
+    }
 
-        &:last-child {
-          border-right: none;
-        }
+    // mobile
+    @media (max-width: 768px) {
+      .week-allday-row {
+        grid-template-columns: 60px repeat(7, 1fr);
       }
     }
 
@@ -362,11 +365,6 @@
         flex: 1;
         min-width: 0;
         position: relative;
-        border-right: 1px solid #e5e7eb;
-
-        &:last-child {
-          border-right: none;
-        }
       }
 
       &__slot {
@@ -375,6 +373,7 @@
         display: block;
         border: none;
         border-bottom: 1px solid #e5e7eb;
+        border-right: 1px solid #e5e7eb;
         background: transparent;
         cursor: pointer;
         padding: 0;
@@ -688,12 +687,9 @@
           border-bottom-color: #333637;
         }
 
-        &__day-col {
-          border-right-color: #333637;
-        }
-
         &__slot {
           border-bottom-color: #333637;
+          border-right-color: #333637;
 
           &:hover {
             background-color: #1f2937;
