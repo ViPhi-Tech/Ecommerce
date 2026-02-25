@@ -1,0 +1,17 @@
+<button type="button" class="date-picker-button" (click)="openPanel()">
+  {{ displayText() }}
+</button>
+
+@if (showPanel()) {
+  <div class="date-picker-panel animate-fade-in">
+    <p-datepicker
+      [ngModel]="internalDate()"
+      (ngModelChange)="onDateChange($event)"
+      [inline]="true"
+      [dateFormat]="dateFormat()"
+      [minDate]="minDate() ?? undefined"
+      [maxDate]="maxDate() ?? undefined"
+      [showIcon]="false"
+    />
+  </div>
+}

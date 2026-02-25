@@ -1,0 +1,50 @@
+:host.fuse-date-picker-host {
+  display: inline-block;
+  position: relative;
+}
+
+.date-picker-button {
+  background-color: #e9eef6;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 40px;
+  min-width: 140px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  color: #334155;
+  text-align: left;
+
+  &:hover {
+    background-color: #dfe5f0;
+  }
+}
+
+.date-picker-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  z-index: 10;
+  background: var(--p-card-background, #fff);
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+
+  // Esconde o input do p-datepicker no modo inline, deixa só o calendário
+  ::ng-deep .p-datepicker {
+    border: none;
+    background: transparent;
+  }
+
+  ::ng-deep .p-datepicker-inline {
+    width: 100%;
+  }
+
+  ::ng-deep .p-datepicker-input,
+  ::ng-deep .p-inputtext {
+    display: none !important;
+  }
+}

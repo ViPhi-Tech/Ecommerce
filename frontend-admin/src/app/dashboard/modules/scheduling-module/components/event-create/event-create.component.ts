@@ -3,9 +3,9 @@ import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
-import { DatePickerModule } from 'primeng/datepicker';
-import { SelectModule } from 'primeng/select';
 import { TextEditorComponent } from 'app/shared/components/text-editor/text-editor.component';
+import { FuseDatePickerComponent } from 'app/shared/components/date-picker/date-picker.component';
+import { TimeSlotPickerComponent } from 'app/shared/components/time-slot-picker/time-slot-picker.component';
 import {
   NgxFloatUiModule,
   NgxFloatUiDirective,
@@ -48,9 +48,9 @@ export interface EventSavePayload {
     InputTextModule,
     CheckboxModule,
     ButtonModule,
-    DatePickerModule,
-    SelectModule,
     TextEditorComponent,
+    FuseDatePickerComponent,
+    TimeSlotPickerComponent,
     NgxFloatUiModule,
   ],
 })
@@ -74,21 +74,17 @@ export class EventCreateComponent {
   selectedHour = signal<number | null>(null);
   selectedEndHour = signal<number | null>(null);
 
-  private allTimeOptions = this.buildTimeOptions();
-
-  startTimeOptions = computed(() => {
-    const end = this.selectedEndHour();
-    if (end == null) return this.allTimeOptions;
-    return this.allTimeOptions.filter((opt) => opt.value < end);
-  });
-
-  endTimeOptions = computed(() => {
-    const start = this.selectedHour();
-    if (start == null) return this.allTimeOptions;
-    return this.allTimeOptions.filter((opt) => opt.value > start);
-  });
-
   formDateValue = computed(() => this.selectedDay()?.date ?? new Date());
+
+  startTimeFormatted = computed(() => {
+    const h = this.selectedHour();
+    return h != null ? this.formatFractionalHour(h) : null;
+  });
+
+  endTimeFormatted = computed(() => {
+    const h = this.selectedEndHour();
+    return h != null ? this.formatFractionalHour(h) : null;
+  });
 
   formattedSelectedDate = computed(() => {
     const day = this.selectedDay();
@@ -198,25 +194,24 @@ export class EventCreateComponent {
     });
   }
 
-  onStartTimeChange(value: number) {
-    if (value == null) return;
-    this.selectedHour.set(value);
+  onStartTimeFromPicker(timeStr: string) {
+    this.selectedHour.set(this.timeStrToFractional(timeStr));
     const endHour = this.selectedEndHour();
-    if (endHour == null || endHour <= value) {
-      const nextSlot = Math.min(value + 5 / 60, 23 + 55 / 60);
-      this.selectedEndHour.set(this.roundToSlot(nextSlot));
+    const startVal = this.timeStrToFractional(timeStr);
+    if (endHour == null || endHour <= startVal) {
+      this.selectedEndHour.set(Math.min(startVal + 30 / 60, 23 + 59 / 60));
     }
-    if (this.eventForm().allDay) {
-      this.updateEventForm('allDay', false);
-    }
+    if (this.eventForm().allDay) this.updateEventForm('allDay', false);
   }
 
-  onEndTimeChange(value: number) {
-    if (value == null) return;
-    this.selectedEndHour.set(value);
-    if (this.eventForm().allDay) {
-      this.updateEventForm('allDay', false);
-    }
+  onEndTimeFromPicker(timeStr: string) {
+    this.selectedEndHour.set(this.timeStrToFractional(timeStr));
+    if (this.eventForm().allDay) this.updateEventForm('allDay', false);
+  }
+
+  private timeStrToFractional(time: string): number {
+    const [h, m] = time.split(':').map(Number);
+    return h + (m ?? 0) / 60;
   }
 
   toggleDescriptionEditor() {
@@ -232,24 +227,6 @@ export class EventCreateComponent {
     const h = Math.floor(value);
     const m = Math.round((value - h) * 60);
     return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-  }
-
-  private roundToSlot(value: number): number {
-    const totalMinutes = Math.round(value * 60);
-    const rounded = Math.round(totalMinutes / 5) * 5;
-    return rounded / 60;
-  }
-
-  private buildTimeOptions(): { label: string; value: number }[] {
-    const options: { label: string; value: number }[] = [];
-    for (let h = 0; h < 24; h++) {
-      for (let m = 0; m < 60; m += 5) {
-        const value = h + m / 60;
-        const label = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-        options.push({ label, value });
-      }
-    }
-    return options;
   }
 
   private resetForm(defaults?: Partial<{ allDay: boolean }>) {

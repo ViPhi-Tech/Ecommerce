@@ -25,6 +25,9 @@ export class TimeSlotPickerComponent {
   /** Se true, mostra rótulos de período (Manhã / Tarde / Noite) */
   showPeriodLabels = input<boolean>(true);
 
+  /** Texto do botão quando nenhum horário está selecionado */
+  placeholder = input<string>('Horário');
+
   _timeSelected = signal<string | null>(null);
   timeSelected = output<string>();
 
@@ -55,6 +58,12 @@ export class TimeSlotPickerComponent {
       if (this.showTimeSlots()) {
         this.scrollToValue();
       }
+    });
+
+    // sincroniza value() do parent com _timeSelected para exibir no botão
+    effect(() => {
+      const v = this.value();
+      if (v != null) this._timeSelected.set(v);
     });
   }
 

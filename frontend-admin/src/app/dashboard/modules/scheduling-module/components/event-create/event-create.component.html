@@ -41,42 +41,28 @@
           }
           @if (dateTimeEditorVisible()) {
             <div class="day-float-panel__datetime-inputs" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()">
-              <p-datepicker
-                [ngModel]="formDateValue()"
-                (ngModelChange)="onDateChange($event)"
+              <fuse-date-picker
+                [value]="formDateValue()"
+                (dateSelected)="onDateChange($event)"
+                displayFormat="DD/MM/YYYY"
                 dateFormat="dd/mm/yy"
-                [iconDisplay]="'input'"
-                [showIcon]="true"
-                appendTo="body"
-                size="small"
+                placeholder="Data"
+                class="day-float-panel__date-picker"
               />
               <div class="day-float-panel__time-row">
-                <p-select
-                  [options]="startTimeOptions()"
-                  optionLabel="label"
-                  optionValue="value"
-                  [ngModel]="selectedHour()"
-                  (ngModelChange)="onStartTimeChange($event)"
+                <fuse-time-slot-picker
+                  [interval]="30"
+                  [value]="startTimeFormatted()"
                   placeholder="Início"
-                  appendTo="body"
-                  [filter]="true"
-                  filterPlaceholder="Buscar..."
-                  size="small"
-                  class="day-float-panel__time-select"
+                  (timeSelected)="onStartTimeFromPicker($event)"
+                  class="day-float-panel__time-picker"
                 />
-                <span class="day-float-panel__time-separator">–</span>
-                <p-select
-                  [options]="endTimeOptions()"
-                  optionLabel="label"
-                  optionValue="value"
-                  [ngModel]="selectedEndHour()"
-                  (ngModelChange)="onEndTimeChange($event)"
+                <fuse-time-slot-picker
+                  [interval]="30"
+                  [value]="endTimeFormatted()"
                   placeholder="Fim"
-                  appendTo="body"
-                  [filter]="true"
-                  filterPlaceholder="Buscar..."
-                  size="small"
-                  class="day-float-panel__time-select"
+                  (timeSelected)="onEndTimeFromPicker($event)"
+                  class="day-float-panel__time-picker"
                 />
               </div>
             </div>

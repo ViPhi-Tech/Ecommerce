@@ -1,5 +1,5 @@
 <button class="button-time-slot-picker" (click)="showTimeSlots.set(!showTimeSlots())">
-  {{_timeSelected()}}
+  {{ _timeSelected() ?? placeholder() }}
 </button>
 
 @if (showTimeSlots()) {

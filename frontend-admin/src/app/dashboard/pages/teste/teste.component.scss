@@ -37,11 +37,33 @@
     }
   }
 
+  &__result,
+  &__result-inline {
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+    color: var(--p-text-color, #334155);
+  }
+
   &__result {
     padding: 1rem 1.25rem;
     background: var(--p-highlight-background, #eff6ff);
     border-radius: 8px;
     color: var(--p-text-color, #1e40af);
     font-size: 0.9375rem;
+  }
+}
+
+.card {
+  background: var(--p-card-background, #fff);
+  border-radius: 12px;
+  padding: 1rem;
+  border: 1px solid var(--p-content-border-color, #e2e8f0);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--p-text-color, #334155);
   }
 }

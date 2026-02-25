@@ -142,21 +142,20 @@
     min-width: 0;
   }
 
+  &__date-picker {
+    width: 100%;
+  }
+
   &__time-row {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-wrap: wrap;
   }
 
-  &__time-select {
+  &__time-picker {
     flex: 1;
-    min-width: 0;
-  }
-
-  &__time-separator {
-    color: var(--p-text-muted-color, #5f6368);
-    font-size: 0.875rem;
-    flex-shrink: 0;
+    min-width: 70px;
   }
 
   &__editor-wrapper {
