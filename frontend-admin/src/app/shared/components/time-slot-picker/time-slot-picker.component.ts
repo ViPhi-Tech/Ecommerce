@@ -1,5 +1,5 @@
-import { Component, computed, input, output, viewChild, afterNextRender, ElementRef, signal, effect } from '@angular/core';
-import { getHorariosByInterval } from 'app/shared/constants/horarios';
+import { Component, computed, input, output, viewChild, afterNextRender, ElementRef, signal, effect, inject, HostListener } from '@angular/core';
+import { getHorariosByInterval, getNextHorario } from 'app/shared/constants/horarios';
 import dayjs from 'dayjs';
 import { ButtonModule } from 'primeng/button';
 
@@ -10,9 +10,11 @@ export type TimeSlotInterval = 15 | 30 | 60;
   imports: [ButtonModule],
   templateUrl: './time-slot-picker.component.html',
   styleUrl: './time-slot-picker.component.scss',
+  host: { class: 'fuse-time-slot-picker-host' },
 })
 export class TimeSlotPickerComponent {
   private scrollRef = viewChild<ElementRef<HTMLElement>>('scrollContainer');
+  private hostRef = inject(ElementRef);
 
   /** Intervalo entre slots em minutos: 15, 30 ou 60 */
   interval = input<TimeSlotInterval>(15);
@@ -42,17 +44,18 @@ export class TimeSlotPickerComponent {
   
     if (!this.value()) {
       const data = dayjs().format('HH:mm');
-      console.log(data);
+      const nextHorario = getNextHorario(data, this.interval());
+      if (nextHorario) {
+        this._timeSelected.set(nextHorario.start);
+      }
     }
 
     // quando abrir o time slots, scroll para o valor inicial
     effect(() => {
       if (this.showTimeSlots()) {
-        console.log('scroll to value');
         this.scrollToValue();
       }
     });
-
   }
 
   selectSlot(slot: { time: string }, event?: KeyboardEvent) {
@@ -82,5 +85,13 @@ export class TimeSlotPickerComponent {
     if (slot) {
       (slot as HTMLElement).scrollIntoView({ block: 'nearest', behavior: 'auto' });
     }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    if (!this.showTimeSlots()) return;
+    const target = event.target as Node | null;
+    if (target && this.hostRef.nativeElement.contains(target)) return;
+    this.hideTimeSlots();
   }
 }

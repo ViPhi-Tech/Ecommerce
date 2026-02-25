@@ -26,7 +26,7 @@ export const horarios60em60 = () => {
   return horarios;
 }
 
-export type HorarioIntervalType = '15em15' | '30em30' | '60em60';
+export type HorarioIntervalType = 15 | 30 | 60;
 
 export const getHorariosByInterval = (intervalMinutes: 15 | 30 | 60): string[] => {
   if (intervalMinutes === 15) return horarios15em15();
@@ -34,12 +34,12 @@ export const getHorariosByInterval = (intervalMinutes: 15 | 30 | 60): string[] =
   return horarios60em60();
 }
 
-export const getNextHorario = (value: string, type: HorarioIntervalType = '15em15'): { start: string, end: string } | null => {
+export const getNextHorario = (value: string, type: HorarioIntervalType = 15): { start: string, end: string } | null => {
   const [h, m] = value.split(':').map(Number);
   if (isNaN(h) || isNaN(m)) return null;
 
-  const interval = type === '15em15' ? 15 : type === '30em30' ? 30 : 60;
-  const nextSlot = Math.ceil((m + 1) / interval) * interval;
+  const interval = type === 15 ? 15 : type === 30 ? 30 : 60;
+  const nextSlot = Math.ceil((m + 1) / interval) * interval;  
 
   const startTotal = h * 60 + nextSlot;
   const endTotal = startTotal + interval;

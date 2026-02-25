@@ -1,5 +1,6 @@
-<p-button [label]="_timeSelected() ?? 'Selecione um horário'" (click)="showTimeSlots.set(!showTimeSlots())">
-</p-button>
+<button class="button-time-slot-picker" (click)="showTimeSlots.set(!showTimeSlots())">
+  {{_timeSelected()}}
+</button>
 
 @if (showTimeSlots()) {
   <div class="time-slot-picker-container animate-fade-in" #scrollContainer>

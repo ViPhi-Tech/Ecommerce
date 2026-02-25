@@ -1,3 +1,13 @@
+.button-time-slot-picker {
+  background-color: #e9eef6;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  height: 40px;
+  width: 70px;
+  @apply rounded-sm;
+}
+
+
 .time-slot-picker-container {
   background-color: white;
   max-height: 200px;
