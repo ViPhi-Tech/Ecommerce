@@ -1,0 +1,63 @@
+<p-button [label]="_timeSelected() ?? 'Selecione um horário'" (click)="showTimeSlots.set(!showTimeSlots())">
+</p-button>
+
+@if (showTimeSlots()) {
+  <div class="time-slot-picker-container animate-fade-in" #scrollContainer>
+    @for (slot of slots(); track slot.time) {
+      <div 
+        class="time-slot-picker-container--item" 
+        [class.time-slot-picker-container--item--selected]="_timeSelected() === slot.time"
+        [attr.data-time]="slot.time"
+        (click)="selectSlot(slot)" 
+        (keyup)="selectSlot(slot)" 
+        (keydown)="selectSlot(slot)" 
+        (keypress)="selectSlot(slot)"
+      >{{ slot.time }}</div>
+    }
+  </div>
+}
+
+<!-- <div class="time-slot-picker" #scrollContainer>
+  @if (showPeriodLabels()) {
+    @for (period of slotsByPeriod(); track period.label) {
+      <div class="time-slot-picker__period">
+        <div class="time-slot-picker__period-label">{{ period.label }}</div>
+            <div class="time-slot-picker__slots">
+          @for (slot of period.slots; track slot.time) {
+            <button
+              type="button"
+              class="time-slot-picker__slot"
+              [class.time-slot-picker__slot--disabled]="isSlotDisabled(slot)"
+              [attr.data-time]="slot.time"
+              (click)="selectSlot(slot)"
+              [disabled]="isSlotDisabled(slot)"
+            >
+              <span class="time-slot-picker__slot-start">{{ slot.time }}</span>
+              @if (slot.end) {
+                <span class="time-slot-picker__slot-end">– {{ slot.end }}</span>
+              }
+            </button>
+          }
+        </div>
+      </div>
+    }
+  } @else {
+    <div class="time-slot-picker__slots time-slot-picker__slots--flat">
+      @for (slot of slotsFiltered(); track slot.time) {
+        <button
+          type="button"
+          class="time-slot-picker__slot"
+          [class.time-slot-picker__slot--disabled]="isSlotDisabled(slot)"
+          [attr.data-time]="slot.time"
+          (click)="selectSlot(slot)"
+          [disabled]="isSlotDisabled(slot)"
+        >
+          <span class="time-slot-picker__slot-start">{{ slot.time }}</span>
+          @if (slot.end) {
+            <span class="time-slot-picker__slot-end">– {{ slot.end }}</span>
+          }
+        </button>
+      }
+    </div>
+  }
+</div> -->

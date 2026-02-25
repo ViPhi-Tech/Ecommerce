@@ -1,0 +1,28 @@
+.time-slot-picker-container {
+  background-color: white;
+  max-height: 200px;
+  overflow-y: scroll;
+  margin: 8px 0;
+  box-shadow: 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12), 0 2px 4px -1px rgba(0, 0, 0, .2);
+  border-radius: 2px;
+  outline: 0;
+  z-index: 6;
+  position: fixed;
+  border-radius: 4px;
+
+  &--item {
+    min-width: 150px;
+    padding: 0 15px;
+    line-height: 40px;
+    cursor: pointer;
+    &:hover {
+      background-color: #f0f0f0;
+    }
+
+    &--selected {
+      background-color: #f0f0f0;
+    }
+  }
+
+}
+

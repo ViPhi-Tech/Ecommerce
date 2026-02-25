@@ -110,6 +110,11 @@ const routes: Routes = [
         data: { animation: 'purchase-invoices' },
       },
       {
+        path: 'teste',
+        loadComponent: () =>
+          import('./pages/teste/teste.component').then(m => m.TesteComponent),
+      },
+      {
         path: '**',
         redirectTo: '',
         pathMatch: 'full',
