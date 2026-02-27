@@ -1,5 +1,5 @@
 import { Component, input, output, OnInit, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { FormsModule } from '@angular/forms';
 import dayjs from 'dayjs';
 import { SelectModule } from 'primeng/select';
@@ -30,7 +30,7 @@ export type PeriodType =
 
 @Component({
   selector: 'fuse-period',
-  imports: [CommonModule, FormsModule, SelectModule, NgIcon, TooltipModule],
+  imports: [FormsModule, SelectModule, NgIcon, TooltipModule],
   templateUrl: './period.component.html',
   styleUrls: ['./period.component.scss'],
 })

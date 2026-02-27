@@ -7,15 +7,16 @@ import { CoreService } from '../../services/core.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div
-      *ngIf="coreService.loading$ | async"
-      class="fixed inset-0 flex items-center justify-center bg-gray-500"
+    @if (coreService.loading$ | async) {
+      <div
+        class="fixed inset-0 flex items-center justify-center bg-gray-500"
       style="  z-index: 5001;
         opacity: .3"
-    >
-      <div class="loader"></div>
-    </div>
-  `,
+        >
+        <div class="loader"></div>
+      </div>
+    }
+    `,
   styles: [
     `
       .loader {

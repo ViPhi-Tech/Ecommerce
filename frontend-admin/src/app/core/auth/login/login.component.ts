@@ -2,7 +2,7 @@ import { Component, HostListener, inject, OnInit, signal } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MessageModule } from 'primeng/message';
-import { CommonModule } from '@angular/common';
+
 import { NgIcon } from '@ng-icons/core';
 import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
@@ -19,13 +19,12 @@ import {
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   imports: [
-    CommonModule,
     ButtonModule,
     FormModule,
     ReactiveFormsModule,
     MessageModule,
-    NgIcon,
-  ],
+    NgIcon
+],
   providers: [],
 })
 export class LoginComponent implements OnInit {

@@ -7,7 +7,7 @@ import {
   effect,
   DestroyRef,
 } from '@angular/core';
-import { CommonModule, CurrencyPipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { SelectModule } from 'primeng/select';
 import { FormsModule } from '@angular/forms';
@@ -35,13 +35,12 @@ import dayjs from 'dayjs';
   templateUrl: './accounts-receivable-kanban.component.html',
   styleUrls: ['./accounts-receivable-kanban.component.scss'],
   imports: [
-    CommonModule,
     ButtonModule,
     SelectModule,
     FormsModule,
     NgIcon,
-    KanbanComponent,
-  ],
+    KanbanComponent
+],
   providers: [CurrencyPipe],
 })
 export class AccountsReceivableKanbanComponent implements OnInit {

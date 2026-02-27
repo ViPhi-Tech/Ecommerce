@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 
 @Component({
   selector: 'fuse-empty-state',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './empty-state.component.html',
   styleUrls: ['./empty-state.component.scss'],
 })
