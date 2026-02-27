@@ -9,20 +9,30 @@ export interface GetDashboardMetricsInput {
 }
 
 // ===== VALIDATION SCHEMAS (Para HTTP) =====
+const dateStringSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
+  message: "Date must be in YYYY-MM-DD format",
+});
+
+export const dashboardDateRangeSchema = z.object({
+  startDate: dateStringSchema,
+  endDate: dateStringSchema,
+});
+
 export const getDashboardMetricsSchema = z.object({
-  companyId: z.number().min(1, { message: "ID da empresa é obrigatório" }),
-  startDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
-    message: "A data de início deve estar no formato YYYY-MM-DD",
-  }).optional(),
-  endDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, {
-    message: "A data de fim deve estar no formato YYYY-MM-DD",
-  }).optional(),
+  companyId: z.number().min(1, { message: "ID da empresa é obrigatório" }).optional(),
+  startDate: dateStringSchema.optional(),
+  endDate: dateStringSchema.optional(),
 });
 
 // ===== JSON SCHEMAS =====
+export const dashboardDateRangeJsonSchema = {
+  ...zodToJsonSchema(dashboardDateRangeSchema),
+  required: ['startDate', 'endDate'] as const,
+};
 export const getDashboardMetricsJsonSchema = zodToJsonSchema(getDashboardMetricsSchema);
 
 // ===== TYPES =====
+export type DashboardDateRangeDTO = z.infer<typeof dashboardDateRangeSchema>;
 export type GetDashboardMetricsDTO = z.infer<typeof getDashboardMetricsSchema>;
 
 // ===== RESPONSE DTOs =====

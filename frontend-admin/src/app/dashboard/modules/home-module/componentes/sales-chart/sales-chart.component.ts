@@ -1,5 +1,4 @@
 import { Component, computed, input } from '@angular/core';
-
 import { NgxEchartsModule } from 'ngx-echarts';
 import { EChartsOption } from 'echarts';
 import { SalesByMonth } from 'app/shared/interfaces/home/HomeModuleState';
@@ -7,10 +6,9 @@ import { EmptyStateComponent } from 'app/shared/components/empty-state/empty-sta
 
 @Component({
   selector: 'fuse-sales-chart',
-  standalone: true,
   imports: [NgxEchartsModule, EmptyStateComponent],
   templateUrl: './sales-chart.component.html',
-  styleUrls: ['./sales-chart.component.scss'],
+  styleUrl: './sales-chart.component.scss',
 })
 export class SalesChartComponent {
   data = input<SalesByMonth[]>([]);

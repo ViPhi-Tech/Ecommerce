@@ -2,6 +2,7 @@ import { Order } from "../../../domain/entities/Order";
 import { AggregateOrderResponse, AggregateOrderStatusResponse, OrderItem, AggregateOrderCategoryResponse } from "../../../domain/entities/OrderItem";
 import { IOrderRepository, FindAllOrderFilter } from "../../../domain/repositories/IOrderRepository";
 import { Prisma, PrismaClient } from "../prismaClient";
+import { startOfDayBRT, endOfDayBRT } from "../../../shared/utils/dateUtils";
 
 export class OrderRepository implements IOrderRepository {
   constructor(private prisma:  PrismaClient | Prisma.TransactionClient) {}
@@ -181,9 +182,10 @@ export class OrderRepository implements IOrderRepository {
     return await this.prisma.order.count({
       where: {
         createdAt: {
-          gte: new Date(new Date().getFullYear(), initialMonth - 1, 1),
-          lt: new Date(new Date().getFullYear(), finalMonth, 1),
-        }
+          gte: startOfDayBRT(new Date(new Date().getFullYear(), initialMonth - 1, 1)),
+          lt: endOfDayBRT(new Date(new Date().getFullYear(), finalMonth, 1)),
+        },
+        isActive: true,
       }
     })
   };
@@ -196,15 +198,36 @@ export class OrderRepository implements IOrderRepository {
     },
     where: {
       createdAt: {
-        gte: new Date(new Date().getFullYear(), initialMonth - 1, 1),
-        lt: new Date(new Date().getFullYear(), finalMonth, 1),
-      }
+        gte: startOfDayBRT(new Date(new Date().getFullYear(), initialMonth - 1, 1)),
+        lt: endOfDayBRT(new Date(new Date().getFullYear(), finalMonth, 1)),
+      },
+      isActive: true,
     }
   })
   return result._sum.total ?? 0
 };
 
-async aggregateSalesByMonth(initialMonth: number, finalMonth: number): Promise<AggregateOrderResponse[]> {
+  async countByDateRange(startDate: Date, endDate: Date): Promise<number> {
+    return this.prisma.order.count({
+      where: {
+        createdAt: { gte: startOfDayBRT(startDate), lte: endOfDayBRT(endDate) },
+        isActive: true,
+      },
+    });
+  }
+
+  async countSalesByDateRange(startDate: Date, endDate: Date): Promise<number> {
+    const result = await this.prisma.order.aggregate({
+      _sum: { total: true },
+      where: {
+        createdAt: { gte: startOfDayBRT(startDate), lte: endOfDayBRT(endDate) },
+        isActive: true,
+      },
+    });
+    return result._sum.total ?? 0;
+  }
+
+  async aggregateSalesByMonth(initialMonth: number, finalMonth: number): Promise<AggregateOrderResponse[]> {
   const monthNames = [
     'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
     'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
@@ -247,7 +270,27 @@ async aggregateSalesByStatus(initialMonth: number, finalMonth: number): Promise<
   return results;
 };
 
+async aggregateSalesByStatusByDateRange(startDate: Date, endDate: Date): Promise<AggregateOrderStatusResponse[]> {
+  const start = startOfDayBRT(startDate);
+  const end = endOfDayBRT(endDate);
+  const results = await this.prisma.$queryRaw<
+    { name: string; total: number }[]
+  >`
+    SELECT 
+      o."status" AS name,
+      COALESCE(SUM(oi."quantity")::int, 0) AS total
+    FROM "Order" o
+    JOIN "OrderItem" oi ON oi."orderId" = o."id"
+    WHERE o."createdAt" >= ${start} AND o."createdAt" <= ${end}
+    GROUP BY o."status"
+    ORDER BY total DESC;
+  `;
+  return results;
+}
+
 async aggregateSalesByCategory(initialMonth: number, finalMonth: number): Promise<AggregateOrderCategoryResponse[]> {
+  const start = startOfDayBRT(new Date(new Date().getFullYear(), initialMonth - 1, 1));
+  const end = endOfDayBRT(new Date(new Date().getFullYear(), finalMonth, 1));
   const results = await this.prisma.$queryRaw<{ name: string; total: number }[]
   >`
     SELECT 
@@ -257,13 +300,32 @@ async aggregateSalesByCategory(initialMonth: number, finalMonth: number): Promis
     JOIN "Product" p ON p."id" = oi."productId"
     JOIN "Category" c ON c."id" = p."categoryId"
     JOIN "Order" o ON o."id" = oi."orderId"
-    WHERE EXTRACT(MONTH FROM o."createdAt") BETWEEN ${initialMonth} AND ${finalMonth}
+    WHERE o."createdAt" >= ${start} AND o."createdAt" <= ${end}
     GROUP BY c."id", c."name"
     ORDER BY total_quantity DESC;
   `;
 
   return results;
 };
+
+async aggregateSalesByCategoryByDateRange(startDate: Date, endDate: Date): Promise<AggregateOrderCategoryResponse[]> {
+  const start = startOfDayBRT(startDate);
+  const end = endOfDayBRT(endDate);
+  const results = await this.prisma.$queryRaw<{ name: string; total: number }[]
+  >`
+    SELECT 
+      c."name" AS category_name,
+      COALESCE(SUM(oi."quantity")::int, 0) AS total_quantity
+    FROM "OrderItem" oi
+    JOIN "Product" p ON p."id" = oi."productId"
+    JOIN "Category" c ON c."id" = p."categoryId"
+    JOIN "Order" o ON o."id" = oi."orderId"
+    WHERE o."createdAt" >= ${start} AND o."createdAt" <= ${end}
+    GROUP BY c."id", c."name"
+    ORDER BY total_quantity DESC;
+  `;
+  return results;
+}
 
 
 async getOrdersByClient(clientId: number, startDate: string, endDate: string, paymentTypeId: string): Promise<Order[]> {

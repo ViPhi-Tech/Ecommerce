@@ -17,23 +17,29 @@ export class HomeService {
   constructor() {}
 
   getDashboardMetrics(
-    period: 'today' | 'week' | 'month' | 'year' = 'month',
+    date: { startDate: string; endDate: string },
     skipLoader = true
   ): Observable<ApiResponse<any>> {
     return this.http.get<ApiResponse<any>>(`${this.apiUrl}/metrics`, {
-      params: { period },
+      params: { 
+        startDate: date.startDate,
+        endDate: date.endDate,
+      },
       headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
     });
   }
 
   getDashboardCharts(
-    period: 'today' | 'week' | 'month' | 'year' = 'month',
+    date: { startDate: string; endDate: string },
     skipLoader = true
   ): Observable<ApiResponse<DashboardCharts>> {
     return this.http.get<ApiResponse<DashboardCharts>>(
       `${this.apiUrl}/charts`,
       {
-        params: { period },
+        params: { 
+          startDate: date.startDate,
+          endDate: date.endDate,
+        },
         headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
       }
     );

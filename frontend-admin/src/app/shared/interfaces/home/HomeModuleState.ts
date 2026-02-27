@@ -18,7 +18,10 @@ export interface DashboardMetrics {
 export interface HomeModuleState extends BaseModuleState {
   indicators: DashboardMetrics;
   charts: DashboardCharts;
-  selectedPeriod: 'today' | 'week' | 'month' | 'year';
+  date: {
+    startDate: string;
+    endDate: string;
+  };
 }
 export interface DashboardCharts {
   salesByMonth: SalesByMonth[];

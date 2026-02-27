@@ -2,6 +2,7 @@ import { PrismaClient, Prisma } from '../prismaClient';
 import { Product, Stock, stockMovement, findMoviment, TopProducts } from '../../../domain/entities/Product';
 import { IProductRepository } from "../../../domain/repositories/IProductRepository";
 import {CreateProductDTO, UpdateProductDTO, FindMovementDTO} from "../../../application/dto/product/ProductDTOs";
+import { startOfDayBRT, endOfDayBRT } from "../../../shared/utils/dateUtils";
 
 export class ProductRepository implements IProductRepository {
   constructor(private prisma: PrismaClient | Prisma.TransactionClient) {}
@@ -429,6 +430,15 @@ async countByMonth(initialMonth: number, finalMonth: number): Promise<number> {
   return result._sum.quantity ?? 0
 };
 
+async countProductsWithStock(): Promise<number> {
+  return this.prisma.product.count({
+    where: {
+      stock: {
+        quantity: { gt: 0 },
+      },
+    },
+  });
+}
 
 async getTopProductsByMonth(initialMonth: number, finalMonth: number): Promise<TopProducts[]> {
   const result = await this.prisma.orderItem.groupBy({
@@ -459,11 +469,37 @@ async getTopProductsByMonth(initialMonth: number, finalMonth: number): Promise<T
     select: { id: true, name: true },
   })
 
-  // Montar a lista final sem duplicações
   return result.map(r => ({
     name: products.find(p => p.id === r.productId)?.name ?? 'Produto desconhecido',
     total: r._sum.quantity ?? 0,
   }))
+}
+
+async getTopProductsByDateRange(startDate: Date, endDate: Date): Promise<TopProducts[]> {
+  const start = startOfDayBRT(startDate);
+  const end = endOfDayBRT(endDate);
+
+  const result = await this.prisma.orderItem.groupBy({
+    by: ['productId'],
+    _sum: { quantity: true },
+    where: {
+      order: {
+        createdAt: { gte: start, lte: end },
+      },
+    },
+    orderBy: { _sum: { quantity: 'desc' } },
+    take: 10,
+  });
+
+  const products = await this.prisma.product.findMany({
+    where: { id: { in: result.map(r => r.productId) } },
+    select: { id: true, name: true },
+  });
+
+  return result.map(r => ({
+    name: products.find(p => p.id === r.productId)?.name ?? 'Produto desconhecido',
+    total: r._sum.quantity ?? 0,
+  }));
 }
   async validateProducts(products: Product[]): Promise<{
     skuExisting: string[],

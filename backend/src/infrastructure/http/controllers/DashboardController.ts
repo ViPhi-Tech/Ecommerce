@@ -11,20 +11,22 @@ export class DashboardController {
 
   async getDashboardMetrics(request: FastifyRequest, reply: FastifyReply): Promise<Response> {
     try {
-        const dashboardMetrics = await this.getDashboardMetricUseCase.execute()
-        return reply.status(200).send(dashboardMetrics)
+        const query = request.query as { startDate: string; endDate: string };
+        const dashboardMetrics = await this.getDashboardMetricUseCase.execute(query.startDate, query.endDate);
+        return reply.status(200).send(dashboardMetrics);
     } catch (error) {
-        return reply.status(500).send({message: 'Internal server error'})
+        return reply.status(500).send({ message: 'Internal server error' });
     }
   };
 
 
   async getDashboardCharts(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const dashboardCharts = await this.getDashboardChartsUseCase.execute()
-      return reply.status(200).send(dashboardCharts)
+      const query = request.query as { startDate: string; endDate: string };
+      const dashboardCharts = await this.getDashboardChartsUseCase.execute(query.startDate, query.endDate);
+      return reply.status(200).send(dashboardCharts);
     } catch (error) {
-      return reply.status(500).send({message: 'Internal server error'})
+      return reply.status(500).send({ message: 'Internal server error' });
     }
   }
 }

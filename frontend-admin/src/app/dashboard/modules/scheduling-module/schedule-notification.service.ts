@@ -44,6 +44,11 @@ export class ScheduleNotificationService implements OnDestroy {
     this.getTodaySchedules();
   }
 
+  /** Recarrega e reagenda as notificações do dia — chamar após criar/editar/remover agendamentos */
+  refresh(): void {
+    this.getTodaySchedules();
+  }
+
   stop(): void {
     this.clearStartNotificationTimeouts();
   }
@@ -53,15 +58,15 @@ export class ScheduleNotificationService implements OnDestroy {
   }
 
   getTodaySchedules(): void {
-    this.schedulingService.getAll(true).pipe(takeUntilDestroyed(this.destroyedRef)).subscribe({
+    this.schedulingService.getTodaySchedules().pipe(takeUntilDestroyed(this.destroyedRef)).subscribe({
       next: (res) => {
         const all = (res.data ?? res.dados ?? []) as ScheduleEntity[];
         const today = all.filter((s) => dayjs(s.startDateTime).isSame(dayjs(), 'day'));
+        localStorage.removeItem(ScheduleNotificationService.SCHEDULES_KEY);
         this.scheduleNotifications(today);
       },
       error: (err) => {
         console.error('[ScheduleNotification] Erro ao carregar agendamentos:', err);
-        this.scheduleFromStorageIfValid();
       },
     });
   }
@@ -78,19 +83,20 @@ export class ScheduleNotificationService implements OnDestroy {
 
       const start = dayjs(schedule.startDateTime);
       const msUntilStart = start.diff(now);
-
+      console.log(msUntilStart);
+      
       if (msUntilStart <= 0) {
-        this.notify(schedule);
-        continue;
+        if (!this.notifiedIds.has(schedule.id)) {
+          this.notify(schedule);
+          this.startNotificationTimeouts.delete(schedule.id);
+        }
       }
 
       const id = schedule.id;
-      const timeoutId = this.ngZone.runOutsideAngular(() =>
-        setTimeout(() => {
-          this.ngZone.run(() => this.notify(schedule));
-          this.startNotificationTimeouts.delete(id);
-        }, msUntilStart),
-      );
+      const timeoutId = setTimeout(() => {
+        this.notify(schedule)
+        this.startNotificationTimeouts.delete(id);
+      }, msUntilStart);
 
       this.startNotificationTimeouts.set(id, timeoutId);
     }
@@ -171,42 +177,6 @@ export class ScheduleNotificationService implements OnDestroy {
   // ---------------------------------------------------------------------------
   // Schedules Storage — cache de agendamentos (fallback offline)
   // ---------------------------------------------------------------------------
-
-  private scheduleFromStorageIfValid(): void {
-    const stored = this.loadSchedulesFromStorage();
-    if (!stored) return;
-
-    const schedules: ScheduleEntity[] = stored.schedules.map((item) => ({
-      id: item.id,
-      title: item.title,
-      description: '',
-      startDateTime: item.startDateTime,
-      endDateTime: item.startDateTime,
-      location: '',
-      isAllDay: false,
-      status: 'SCHEDULED',
-    }));
-
-    this.scheduleNotifications(schedules);
-  }
-
-  private loadSchedulesFromStorage(): ScheduleNotificationStorage | null {
-    try {
-      const raw = localStorage.getItem(ScheduleNotificationService.SCHEDULES_KEY);
-      if (!raw) return null;
-
-      const parsed = JSON.parse(raw) as ScheduleNotificationStorage;
-      if (!this.isValidSchedulesPayload(parsed)) {
-        localStorage.removeItem(ScheduleNotificationService.SCHEDULES_KEY);
-        return null;
-      }
-
-      return parsed;
-    } catch {
-      localStorage.removeItem(ScheduleNotificationService.SCHEDULES_KEY);
-      return null;
-    }
-  }
 
   private saveSchedulesToStorage(schedules: ScheduleEntity[]): void {
     const validSchedules = schedules

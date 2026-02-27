@@ -2,7 +2,7 @@
   class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4 mb-8"
   >
   <!-- Skeleton Loading State -->
-  @if (loading) {
+  @if (loading()) {
     @for (skeleton of [1, 2, 3, 4]; track $index) {
       <div
         class="rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
@@ -37,9 +37,9 @@
   }
 
   <!-- Actual Content -->
-  @if (!loading) {
+  @if (!loading()) {
     @if (hasData()) {
-      @for (indicator of indicators; track $index) {
+      @for (indicator of indicators(); track $index) {
         <div
           class="rounded-lg p-6 shadow-sm border border-gray-200 dark:border-gray-700"
           >
@@ -78,14 +78,14 @@
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
-                >
+              >
                 @if (indicator.trend === 'up') {
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     stroke-width="2"
                     d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-                    />
+                  />
                 }
                 @if (indicator.trend === 'down') {
                   <path
@@ -93,7 +93,7 @@
                     stroke-linejoin="round"
                     stroke-width="2"
                     d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"
-                    />
+                  />
                 }
               </svg>
             </div>
