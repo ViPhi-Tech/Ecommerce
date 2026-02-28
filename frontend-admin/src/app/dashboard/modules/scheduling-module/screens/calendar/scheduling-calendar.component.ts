@@ -179,17 +179,17 @@ export class SchedulingCalendarComponent implements OnInit {
     this.currentDate.set(new Date());
   }
 
-  onDayClick(day: any, event?: MouseEvent) {
-    this.eventCreate?.openForDay(day, event?.currentTarget as HTMLElement);
+  onDayClick(day: any) {
+    this.eventCreate?.openForDay(day);
   }
 
-  onTimeSlotClick(slot: any, day: any, event?: MouseEvent) {
-    this.eventCreate?.openForTimeSlot(slot, day, event?.currentTarget as HTMLElement);
+  onTimeSlotClick(slot: any, day: any) {
+    this.eventCreate?.openForTimeSlot(slot, day);
   }
 
   onEventClick(ev: CalendarEvent, event: Event) {
     event.stopPropagation();
-    this.eventCreate?.openForEvent(ev, event.currentTarget as HTMLElement);
+    this.eventCreate?.openForEvent(ev);
   }
 
   onEventSaved(payload: EventSavePayload) {
@@ -355,6 +355,8 @@ export class SchedulingCalendarComponent implements OnInit {
       allDay: isAllDay,
       startHour: isAllDay ? undefined : start.hour() + start.minute() / 60,
       endHour: isAllDay ? undefined : end.hour() + end.minute() / 60,
+      startHourFormatted: isAllDay ? undefined : start.format('HH:mm'),
+      endHourFormatted: isAllDay ? undefined : end.format('HH:mm'),
       color: this.getColorByStatus(item.status),
     };
   }
@@ -371,7 +373,7 @@ export class SchedulingCalendarComponent implements OnInit {
   } {
     const base = dayjs(payload.day);
     const allDay = payload.form.allDay;
-
+    
     if (allDay) {
       return {
         startDateTime: base.startOf('day').toDate(),
@@ -379,24 +381,19 @@ export class SchedulingCalendarComponent implements OnInit {
       };
     }
 
-    const startFrac = payload.hour ?? 9;
-    const endFrac = payload.endHour ?? Math.min(startFrac + 1, 23 + 55 / 60);
-    const normalizedEnd = endFrac <= startFrac ? Math.min(startFrac + 5 / 60, 23 + 55 / 60) : endFrac;
+    const startDateTime = base.hour(Number(payload.hour?.split(':')[0])).minute(Number(payload.hour?.split(':')[1])).second(0).millisecond(0).toDate();
+    const endDateTime = base.hour(Number(payload.endHour?.split(':')[0])).minute(Number(payload.endHour?.split(':')[1])).second(0).millisecond(0).toDate();
 
     return {
-      startDateTime: base
-        .hour(Math.floor(startFrac))
-        .minute(Math.round((startFrac % 1) * 60))
-        .second(0)
-        .millisecond(0)
-        .toDate(),
-      endDateTime: base
-        .hour(Math.floor(normalizedEnd))
-        .minute(Math.round((normalizedEnd % 1) * 60))
-        .second(0)
-        .millisecond(0)
-        .toDate(),
+      startDateTime,
+      endDateTime,
     };
+  }
+
+  toSeconds(time?: string | null): number | null {
+    if (!time) return null;
+    const [h, m] = time.split(':').map(Number);
+    return h * 3600 + m * 60;
   }
 
 }

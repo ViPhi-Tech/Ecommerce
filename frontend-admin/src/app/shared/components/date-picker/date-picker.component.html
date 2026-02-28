@@ -1,10 +1,16 @@
-<button type="button" class="date-picker-button" (click)="openPanel()">
+<button #triggerButton type="button" class="date-picker-button" (click)="openPanel()">
   {{ displayText() }}
 </button>
 
 @if (showPanel()) {
-  <div class="date-picker-panel animate-fade-in">
-    <p-datepicker
+  <div class="date-picker-overlay" (click)="closePanel()">
+    <div
+      class="date-picker-panel animate-fade-in"
+      [style.top.px]="panelPosition().top"
+      [style.left.px]="panelPosition().left"
+      (click)="$event.stopPropagation()"
+    >
+      <p-datepicker
       [ngModel]="internalDate()"
       (ngModelChange)="onDateChange($event)"
       [inline]="true"
@@ -12,6 +18,7 @@
       [minDate]="minDate() ?? undefined"
       [maxDate]="maxDate() ?? undefined"
       [showIcon]="false"
-    />
+      />
+    </div>
   </div>
 }

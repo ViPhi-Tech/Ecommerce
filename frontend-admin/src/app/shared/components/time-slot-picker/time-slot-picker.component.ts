@@ -50,6 +50,7 @@ export class TimeSlotPickerComponent {
       const nextHorario = getNextHorario(data, this.interval());
       if (nextHorario) {
         this._timeSelected.set(nextHorario.start);
+        this.timeSelected.emit(nextHorario.start);
       }
     }
 
@@ -86,6 +87,7 @@ export class TimeSlotPickerComponent {
 
   private scrollToValue(): void {
     const val = this._timeSelected();
+    console.log('val', val);
     if (!val) return;
     const elRef = this.scrollRef();
     const el = elRef?.nativeElement;

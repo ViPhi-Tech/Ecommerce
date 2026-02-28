@@ -1,22 +1,16 @@
-.day-float-trigger {
-  position: fixed;
-  left: -9999px;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-  pointer-events: none;
+:host ::ng-deep .event-create-dialog.p-dialog {
+  .p-dialog-content {
+    border-radius: 12px;
+    overflow: hidden;
+  }
 }
 
 .day-float-panel {
-  width: 420px;
+  width: 100%;
   background: var(--p-card-background, #fff);
   border-radius: 12px;
-  box-shadow:
-    0 8px 28px rgba(0, 0, 0, 0.18),
-    0 2px 8px rgba(0, 0, 0, 0.08);
   animation: dayFloatPanelIn 0.2s ease-out;
   overflow: hidden;
-  z-index: 200;
   position: relative;
 
   &__header {
@@ -137,13 +131,27 @@
   &__datetime-inputs {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
     flex: 1;
     min-width: 0;
   }
 
-  &__date-picker {
-    width: 100%;
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__label {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--p-text-muted-color, #5f6368);
+    margin: 0;
+  }
+
+
+  &__time-row-wrap {
+    gap: 6px;
   }
 
   &__time-row {
@@ -153,9 +161,10 @@
     flex-wrap: wrap;
   }
 
-  &__time-picker {
-    flex: 1;
-    min-width: 70px;
+  &__time-de-ate {
+    font-size: 0.8125rem;
+    color: var(--p-text-muted-color, #5f6368);
+    flex-shrink: 0;
   }
 
   &__editor-wrapper {

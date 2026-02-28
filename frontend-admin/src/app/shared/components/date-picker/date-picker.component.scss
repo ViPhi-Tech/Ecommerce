@@ -1,5 +1,4 @@
 :host.fuse-date-picker-host {
-  display: inline-block;
   position: relative;
 }
 
@@ -15,17 +14,26 @@
   font-size: 0.875rem;
   color: #334155;
   text-align: left;
-
+  text-align: center;
+  font-size: 14px;
+  
   &:hover {
     background-color: #dfe5f0;
   }
+}
+
+.date-picker-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  // Quando movido para body, fica acima do modal do PrimeNG
 }
 
 .date-picker-panel {
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
-  z-index: 10;
+  z-index: 1;
   background: var(--p-card-background, #fff);
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.1),

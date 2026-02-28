@@ -1,18 +1,14 @@
-import { Component, ViewChild, signal, computed, output } from '@angular/core';
+import { Component, signal, computed, output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { CheckboxModule } from 'primeng/checkbox';
 import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
 import { TextEditorComponent } from 'app/shared/components/text-editor/text-editor.component';
 import { FuseDatePickerComponent } from 'app/shared/components/date-picker/date-picker.component';
-import { TimeSlotPickerComponent } from 'app/shared/components/time-slot-picker/time-slot-picker.component';
-import {
-  NgxFloatUiModule,
-  NgxFloatUiDirective,
-  NgxFloatUiPlacements,
-  NgxFloatUiTriggers,
-} from 'ngx-float-ui';
+import { TimeSlotInterval, TimeSlotPickerComponent } from 'app/shared/components/time-slot-picker/time-slot-picker.component';
 import dayjs from 'dayjs';
+import { getNextHorario } from 'app/shared/constants/horarios';
 
 export interface CalendarEvent {
   id: string;
@@ -22,6 +18,8 @@ export interface CalendarEvent {
   allDay: boolean;
   startHour?: number;
   endHour?: number;
+  startHourFormatted?: string;
+  endHourFormatted?: string;
   color: string;
 }
 
@@ -35,8 +33,8 @@ export interface EventSavePayload {
   form: EventFormData;
   editingId: string | null;
   day: Date;
-  hour: number | null;
-  endHour: number | null;
+  hour: string | null;
+  endHour: string | null;
 }
 
 @Component({
@@ -48,42 +46,29 @@ export interface EventSavePayload {
     InputTextModule,
     CheckboxModule,
     ButtonModule,
+    DialogModule,
     TextEditorComponent,
     FuseDatePickerComponent,
     TimeSlotPickerComponent,
-    NgxFloatUiModule,
   ],
 })
 export class EventCreateComponent {
-  @ViewChild('dayFloatTrigger') dayFloatTrigger?: NgxFloatUiDirective;
-
-  NgxFloatUiTriggers = NgxFloatUiTriggers;
-  NgxFloatUiPlacements = NgxFloatUiPlacements;
-
-  private floatTargetElement: HTMLElement | null = null;
-
-  get floatTargetOrAnchor(): HTMLElement {
-    return this.floatTargetElement ?? document.body;
-  }
-
   selectedDay = signal<{ date: Date; day: number; isCurrentMonth: boolean; isToday: boolean } | null>(null);
   editingEventId = signal<string | null>(null);
   eventForm = signal<EventFormData>({ title: '', description: '', allDay: false });
   descriptionEditorVisible = signal(false);
   dateTimeEditorVisible = signal(false);
-  selectedHour = signal<number | null>(null);
-  selectedEndHour = signal<number | null>(null);
+  selectedHour = signal<string | null>(null);
+  selectedEndHour = signal<string | null>(null);
 
   formDateValue = computed(() => this.selectedDay()?.date ?? new Date());
 
   startTimeFormatted = computed(() => {
-    const h = this.selectedHour();
-    return h != null ? this.formatFractionalHour(h) : null;
+    return this.selectedHour();
   });
 
   endTimeFormatted = computed(() => {
-    const h = this.selectedEndHour();
-    return h != null ? this.formatFractionalHour(h) : null;
+    return this.selectedEndHour();
   });
 
   formattedSelectedDate = computed(() => {
@@ -93,38 +78,29 @@ export class EventCreateComponent {
     const endHour = this.selectedEndHour();
     const dateStr = dayjs(day.date).format('dddd, D [de] MMMM');
     if (hour == null) return dateStr;
-    const startLabel = this.formatFractionalHour(hour);
     if (endHour != null) {
-      const endLabel = this.formatFractionalHour(endHour);
-      return `${dateStr} · ${startLabel} – ${endLabel}`;
+      return `${dateStr} · ${hour} – ${endHour}`;
     }
-    return `${dateStr} · ${startLabel}`;
+    return `${dateStr} · ${hour}`;
   });
 
   saved = output<EventSavePayload>();
   deleted = output<string>();
+  interval = signal<TimeSlotInterval>(15);
 
-  openForDay(day: any, target: HTMLElement) {
+  openForDay(day: any) {
     this.hide();
     this.selectedDay.set(day);
-    this.selectedHour.set(null);
-    this.selectedEndHour.set(null);
-    this.resetForm({ allDay: true });
-    this.floatTargetElement = target;
-    setTimeout(() => this.dayFloatTrigger?.show(), 0);
+    this.setStartAndEndHour();
   }
 
-  openForTimeSlot(slot: { hour: number }, day: any, target: HTMLElement) {
+  openForTimeSlot(slot: { hour: number }, day: any) {
     this.hide();
     this.selectedDay.set(day);
-    this.selectedHour.set(slot.hour);
-    this.selectedEndHour.set(Math.min(slot.hour + 1, 23));
     this.resetForm({ allDay: false });
-    this.floatTargetElement = target;
-    setTimeout(() => this.dayFloatTrigger?.show(), 0);
   }
 
-  openForEvent(ev: CalendarEvent, target: HTMLElement) {
+  openForEvent(ev: CalendarEvent) {
     this.hide();
     const d = dayjs(ev.date);
     this.selectedDay.set({
@@ -133,9 +109,9 @@ export class EventCreateComponent {
       isCurrentMonth: true,
       isToday: d.isSame(dayjs(), 'day'),
     });
-    this.selectedHour.set(ev.startHour ?? null);
-    this.selectedEndHour.set(ev.endHour ?? null);
-    this.editingEventId.set(ev.id);
+    this.selectedHour.set(ev.startHourFormatted ?? null);
+    this.selectedEndHour.set(ev.endHourFormatted ?? null);
+    this.editingEventId.set(ev.id ?? null);
     this.eventForm.set({
       title: ev.title,
       description: ev.description,
@@ -143,16 +119,14 @@ export class EventCreateComponent {
     });
     this.descriptionEditorVisible.set(!!ev.description);
     this.dateTimeEditorVisible.set(false);
-    this.floatTargetElement = target;
-    setTimeout(() => this.show(), 0);
   }
 
   hide() {
-    this.dayFloatTrigger?.hide();
+    this.selectedDay.set(null);
   }
 
   show() {
-    this.dayFloatTrigger?.show();
+    // Mantido para compatibilidade com chamadas externas; o modal abre quando selectedDay é setado
   }
 
   onSave() {
@@ -162,8 +136,8 @@ export class EventCreateComponent {
       form: { ...this.eventForm() },
       editingId: this.editingEventId(),
       day: day.date,
-      hour: this.selectedHour(),
-      endHour: this.selectedEndHour(),
+      hour: this.selectedHour() ? this.selectedHour() : null,
+      endHour: this.selectedEndHour() ? this.selectedEndHour() : null,
     });
     this.hide();
   }
@@ -175,7 +149,23 @@ export class EventCreateComponent {
     this.hide();
   }
 
+  setStartAndEndHour() {
+    const data = dayjs().format('HH:mm');
+    const nextHorario = getNextHorario(data, this.interval());
+    if (nextHorario) {
+      this.selectedHour.set(nextHorario.start);
+      this.selectedEndHour.set(nextHorario.end);
+    }
+  }
+
   updateEventForm(key: string, value: string | boolean) {
+    if (key == 'allDay' && value == false) {
+      this.setStartAndEndHour();
+    }
+    if (key == 'allDay' && value == true) {
+      this.selectedHour.set(null);
+      this.selectedEndHour.set(null);
+    }
     this.eventForm.update((f) => ({ ...f, [key]: value }));
   }
 
@@ -195,23 +185,17 @@ export class EventCreateComponent {
   }
 
   onStartTimeFromPicker(timeStr: string) {
-    this.selectedHour.set(this.timeStrToFractional(timeStr));
+    this.selectedHour.set(timeStr);
     const endHour = this.selectedEndHour();
-    const startVal = this.timeStrToFractional(timeStr);
-    if (endHour == null || endHour <= startVal) {
-      this.selectedEndHour.set(Math.min(startVal + 30 / 60, 23 + 59 / 60));
+    if (endHour == null || endHour <= timeStr) {
+      this.selectedEndHour.set(getNextHorario(timeStr, this.interval())?.end ?? null);
     }
     if (this.eventForm().allDay) this.updateEventForm('allDay', false);
   }
 
   onEndTimeFromPicker(timeStr: string) {
-    this.selectedEndHour.set(this.timeStrToFractional(timeStr));
+    this.selectedEndHour.set(timeStr);
     if (this.eventForm().allDay) this.updateEventForm('allDay', false);
-  }
-
-  private timeStrToFractional(time: string): number {
-    const [h, m] = time.split(':').map(Number);
-    return h + (m ?? 0) / 60;
   }
 
   toggleDescriptionEditor() {
@@ -221,12 +205,6 @@ export class EventCreateComponent {
   capitalizeFirst(str: string): string {
     if (!str) return str;
     return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-
-  formatFractionalHour(value: number): string {
-    const h = Math.floor(value);
-    const m = Math.round((value - h) * 60);
-    return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
   }
 
   private resetForm(defaults?: Partial<{ allDay: boolean }>) {
