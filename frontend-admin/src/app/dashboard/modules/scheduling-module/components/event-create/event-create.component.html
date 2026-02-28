@@ -1,15 +1,17 @@
-<div
-  #dayFloatTrigger="floatUi"
-  [floatUi]="eventDetailContent"
-  [showTrigger]="NgxFloatUiTriggers.none"
-  [targetElement]="floatTargetOrAnchor"
-  [hideOnClickOutside]="!dateTimeEditorVisible()"
-  [hideOnScroll]="true"
-  [placement]="NgxFloatUiPlacements.AUTOEND"
-  class="day-float-trigger"
-></div>
-
-<float-ui-content #eventDetailContent>
+<p-dialog
+  [visible]="selectedDay() !== null"
+  (onHide)="hide()"
+  [modal]="true"
+  [closable]="true"
+  [closeOnEscape]="true"
+  [dismissableMask]="!dateTimeEditorVisible()"
+  [draggable]="false"
+  [resizable]="false"
+  [showHeader]="false"
+  [style]="{ width: '420px' }"
+  styleClass="event-create-dialog"
+  [contentStyle]="{ padding: '0', overflow: 'visible' }"
+>
   @if (selectedDay(); as day) {
     <div class="day-float-panel">
       <div class="day-float-panel__header">
@@ -41,30 +43,38 @@
           }
           @if (dateTimeEditorVisible()) {
             <div class="day-float-panel__datetime-inputs" (click)="$event.stopPropagation()" (keydown.enter)="$event.stopPropagation()">
-              <fuse-date-picker
-                [value]="formDateValue()"
-                (dateSelected)="onDateChange($event)"
-                displayFormat="DD/MM/YYYY"
-                dateFormat="dd/mm/yy"
-                placeholder="Data"
-                class="day-float-panel__date-picker"
-              />
-              <div class="day-float-panel__time-row">
-                <fuse-time-slot-picker
-                  [interval]="30"
-                  [value]="startTimeFormatted()"
-                  placeholder="Início"
-                  (timeSelected)="onStartTimeFromPicker($event)"
-                  class="day-float-panel__time-picker"
-                />
-                <fuse-time-slot-picker
-                  [interval]="30"
-                  [value]="endTimeFormatted()"
-                  placeholder="Fim"
-                  (timeSelected)="onEndTimeFromPicker($event)"
-                  class="day-float-panel__time-picker"
-                />
+              <div class="day-float-panel__field">
+                <span class="day-float-panel__label" role="text">Data</span>
+                <div class="day-float-panel__field day-float-panel__time-row-wrap">
+                  <div class="day-float-panel__time-row">
+                    <fuse-date-picker
+                      [value]="formDateValue()"
+                      (dateSelected)="onDateChange($event)"
+                      displayFormat="DD/MM/YYYY"
+                      dateFormat="dd/mm/yy"
+                      placeholder="Selecione a data"
+                      class="day-float-panel__date-picker"
+                    />
+                    <fuse-time-slot-picker
+                        [interval]="15"
+                        [value]="startTimeFormatted()"
+                        placeholder="Início"
+                        (timeSelected)="onStartTimeFromPicker($event)"
+                        class="day-float-panel__time-picker"
+                    />
+                    <span class="day-float-panel__time-de-ate">até</span>
+                    <fuse-time-slot-picker
+                      [interval]="15"
+                      [value]="endTimeFormatted()"
+                      placeholder="Fim"
+                      (timeSelected)="onEndTimeFromPicker($event)"
+                      class="day-float-panel__time-picker"
+                    />
+                  </div>
+                </div>
+                
               </div>
+             
             </div>
           }
         </div>
@@ -110,9 +120,10 @@
         <p-button
           [label]="editingEventId() ? 'Atualizar' : 'Salvar'"
           size="small"
+          [disabled]="!eventForm().title || !selectedDay() || (!eventForm().allDay && (!selectedHour() || !selectedEndHour()))"
           (onClick)="onSave()"
         />
       </div>
     </div>
   }
-</float-ui-content>
+</p-dialog>

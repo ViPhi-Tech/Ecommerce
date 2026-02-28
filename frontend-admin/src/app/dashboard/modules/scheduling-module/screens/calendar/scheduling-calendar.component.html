@@ -80,7 +80,7 @@
                   class="day-cell"
                   [class.other-month]="!day.isCurrentMonth"
                   [class.today]="day.isToday"
-                  (click)="onDayClick(day, $event)"
+                  (click)="onDayClick(day)"
                 >
                   <div class="day-number">{{ day.day }}</div>
                   <div class="day-events">
@@ -89,7 +89,7 @@
                         @if (ev.allDay) {
                           <span class="event-chip__label">{{ ev.title }}</span>
                         } @else {
-                          <span class="event-chip__label">{{ ev.startHour! | number: '2.0-0' }}:00 {{ ev.title }}</span>
+                          <span class="event-chip__label">{{ ev.startHourFormatted }} {{ ev.title }}</span>
                         }
                       </div>
                     }
@@ -141,7 +141,7 @@
             @for (day of weekDays(); track day.day) {
               <div class="week-grid__day-col">
                 @for (slot of timeSlots(); track slot.label) {
-                  <button class="week-grid__slot" (click)="onTimeSlotClick(slot, day, $event)" tabindex="0" role="button"></button>
+                  <button class="week-grid__slot" (click)="onTimeSlotClick(slot, day)" tabindex="0" role="button"></button>
                 }
                 @for (ev of getTimedEventsForDay(day.date); track ev.id) {
                   <div
@@ -157,7 +157,7 @@
                     role="button"
                   >
                     <span class="event-block__title">{{ ev.title }}</span>
-                    <span class="event-block__time">{{ ev.startHour! | number: '2.0-0' }}:00 – {{ ev.endHour! | number: '2.0-0' }}:00</span>
+                    <span class="event-block__time">{{ ev.startHourFormatted }} – {{ ev.endHourFormatted }}</span>
                   </div>
                 }
               </div>
@@ -190,7 +190,7 @@
             </div>
             <div class="day-grid__day-col">
               @for (slot of timeSlots(); track slot.label) {
-                <button class="day-grid__slot" (click)="onTimeSlotClick(slot, currentDayForDayView(), $event)" tabindex="0" role="button"></button>
+                <button class="day-grid__slot" (click)="onTimeSlotClick(slot, currentDayForDayView())" tabindex="0" role="button"></button>
               }
               @for (ev of getTimedEventsForDay(currentDate()); track ev.id) {
                 <div
@@ -206,7 +206,7 @@
                   role="button"
                 >
                   <span class="event-block__title">{{ ev.title }}</span>
-                  <span class="event-block__time">{{ ev.startHour! | number: '2.0-0' }}:00 – {{ ev.endHour! | number: '2.0-0' }}:00</span>
+                  <span class="event-block__time">{{ ev.startHourFormatted }} – {{ ev.endHourFormatted }}</span>
                 </div>
               }
             </div>
