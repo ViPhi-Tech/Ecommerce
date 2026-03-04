@@ -28,6 +28,7 @@ export class MenuComponent implements OnInit {
           icon: 'lucideLayoutDashboard',
           route: '/dashboard',
           visible: true,
+          exact: true,
         },
         {
           id: ROLES_SITEMAP.Agendamentos,

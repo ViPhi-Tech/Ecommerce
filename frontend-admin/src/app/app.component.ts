@@ -1,10 +1,9 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { LoaderComponent } from './shared/components/loader/loader.component';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ScheduleNotificationService } from './dashboard/modules/scheduling-module/schedule-notification.service';
 import { ScheduleNotificationComponent } from './shared/components/schedule-notification/schedule-notification.component';
 
 @Component({
@@ -14,9 +13,7 @@ import { ScheduleNotificationComponent } from './shared/components/schedule-noti
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent implements OnInit, OnDestroy {
-  private notificationService = inject(ScheduleNotificationService);
-
+export class AppComponent {
   title = 'sellup';
 
   constructor() {
@@ -26,11 +23,4 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnInit() {
-    this.notificationService.start();
-  }
-
-  ngOnDestroy() {
-    this.notificationService.stop();
-  }
 }

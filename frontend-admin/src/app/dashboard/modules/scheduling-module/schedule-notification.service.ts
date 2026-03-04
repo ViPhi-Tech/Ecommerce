@@ -1,7 +1,8 @@
-import { DestroyRef, inject, Injectable, NgZone, OnDestroy, signal } from '@angular/core';
+import { DestroyRef, inject, Injectable, OnDestroy, signal } from '@angular/core';
 import { SchedulingService, ScheduleEntity } from './scheduling.service';
 import dayjs from 'dayjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Router } from '@angular/router';
 
 interface StoredScheduleNotification {
   id: number;
@@ -25,7 +26,6 @@ interface NotifiedIdsStorage {
 export class ScheduleNotificationService implements OnDestroy {
   private schedulingService = inject(SchedulingService);
   private destroyedRef = inject(DestroyRef);
-  private ngZone = inject(NgZone);
 
   private startNotificationTimeouts = new Map<number, ReturnType<typeof setTimeout>>();
   private modalQueue: ScheduleEntity[] = [];
