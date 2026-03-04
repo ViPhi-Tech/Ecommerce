@@ -23,8 +23,6 @@ import { CoreInterceptor } from './app/shared/interceptors/core.interceptor';
 import { Preset } from './prime.theme';
 import { MessageService } from 'primeng/api';
 import { provideEnvironmentNgxMask } from 'ngx-mask';
-import { provideServiceWorker } from '@angular/service-worker';
-import { isDevMode } from '@angular/core';
 import { NgxFloatUiModule } from 'ngx-float-ui';
 
 registerLocaleData(localePt, 'pt-BR');
@@ -49,10 +47,6 @@ export const THEME: ApplicationConfig = {
       heroPencilSquare,
     }),
     { provide: LOCALE_ID, useValue: 'pt-BR' },
-    provideServiceWorker('ngsw-worker.js', {
-      enabled: !isDevMode(),
-      registrationStrategy: 'registerWhenStable:30000',
-    }),
     providePrimeNG({
       theme: {
         preset: Preset,
