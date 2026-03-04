@@ -52,16 +52,11 @@
                   "maximumError": "20kB"
                 }
               ],
-              "outputHashing": "media",
-              "optimization": {
-                "scripts": true,
-                "styles": {
-                  "minify": true,
-                  "inlineCritical": false
-                },
-                "fonts": true
-              },
+              "optimization": true,
+              "outputHashing": "all",
               "sourceMap": false,
+              "namedChunks": false,
+              "extractLicenses": true,
               "fileReplacements": [
                 {
                   "replace": "src/environments/environments.ts",
