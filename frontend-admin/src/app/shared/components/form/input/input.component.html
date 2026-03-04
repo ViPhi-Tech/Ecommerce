@@ -1,9 +1,12 @@
 <div class="w-full label-position {{ labelPosition() }} flex flex-col gap-1">
   @if (label() && !isLoading()) {
-    <label [for]="idRef()" class="label">
+    <label [for]="idRef()" class="label flex justify-between">
       {{ label() }}
-      @if (isRequired()) {
-        <span class="text-red-500 lh-0">*</span>
+      @if (isRequired() && control().invalid) {
+        <span class="text-red-500 flex">
+          <p>*</p>   
+          <p class="text-xs">Obrigatório</p>
+        </span>
       }
     </label>
   }
@@ -21,6 +24,7 @@
       (input)="inputChangeComponent($event)"
       (keydown)="keydownChangeComponent($event)"
       [mask]="mask()"
+      [required]="isRequired()"
     />
   }
 
@@ -39,6 +43,7 @@
       (keydown)="keydownChangeComponent($event)"
       [min]="min()"
       [max]="max()"
+      [required]="isRequired()"
     />
   }
 
@@ -50,6 +55,7 @@
       [id]="idRef()"
       [feedback]="feedback()"
       (onBlur)="blurChangeComponent($event)"
+      [required]="isRequired()"
     />
   }
 
@@ -62,6 +68,7 @@
       [placeholder]="placeholder()"
       [id]="idRef()"
       [name]="idRef()"
+      [required]="isRequired()"
       (blur)="blurChangeComponent($event)"
       (input)="inputChangeComponent($event)"
       (keydown)="keydownChangeComponent($event)"
@@ -82,6 +89,7 @@
       [name]="idRef()"
       [rows]="rows()"
       (onBlur)="blurChangeComponent($event)"
+      [required]="isRequired()"
     ></textarea>
   }
 
@@ -97,6 +105,7 @@
             name="item"
             [value]="item.value"
             [formControl]="control()"
+            [required]="isRequired()"
           />
           <label [for]="item.key" class="ml-2">{{ item.label }}</label>
         </div>

@@ -1,10 +1,13 @@
 <div class="w-full label-position {{ labelPosition() }}">
   @if (!isLoading()) {
     @if (label()) {
-      <label for="icondisplay" class="label">
+      <label for="icondisplay" class="label flex justify-between">
         {{ label() }}
-        @if (isRequired()) {
-          <span class="text-red-500">*</span>
+        @if (isRequired() && control().invalid) {
+          <span class="text-red-500 flex">
+            <p>*</p>   
+            <p class="text-xs">Obrigatório</p>
+          </span>
         }
       </label>
     }
@@ -23,6 +26,7 @@
         [styleClass]="addictionalClass()"
         (onChange)="onChange($event)"
         class="animate-fadein"
+        [required]="isRequired()"
       >
         @if (drawer().length > 0 || drawerAux().length > 0) {
           <ng-template #footer>

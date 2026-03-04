@@ -1,10 +1,13 @@
 <div class="w-full label-position {{ labelPosition() }}">
   @if (!isLoading()) {
     @if (label()) {
-      <div class="label">
+      <div class="label flex justify-between">
         {{ label() }}
-        @if (isRequired()) {
-          <span class="text-red-500">*</span>
+        @if (isRequired() && control().invalid) {
+          <span class="text-red-500 flex">
+            <p>*</p>   
+            <p class="text-xs">Obrigatório</p>
+          </span>
         }
       </div>
     }
