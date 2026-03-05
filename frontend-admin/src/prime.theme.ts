@@ -1537,7 +1537,7 @@ export const Preset = definePreset(Lara, {
         color: '{content.color}',
         borderRadius: '{content.border.radius}',
         shadow: '{overlay.popover.shadow}',
-        padding: '{overlay.popover.padding}',
+        padding: '0.75rem;',
       },
       header: {
         background: '{content.background}',
@@ -1592,6 +1592,7 @@ export const Preset = definePreset(Lara, {
       },
       dayView: {
         margin: '0.75rem 0 0 0',
+        padding: '0.25rem',
       },
       weekDay: {
         padding: '0.375rem',
@@ -1606,8 +1607,8 @@ export const Preset = definePreset(Lara, {
         hoverColor: '{content.hover.color}',
         selectedColor: '{primary.contrast.color}',
         rangeSelectedColor: '{highlight.color}',
-        width: '2.5rem',
-        height: '2.5rem',
+        width: '2rem',
+        height: '2rem',
         borderRadius: '50%',
         padding: '0.375rem',
         focusRing: {
