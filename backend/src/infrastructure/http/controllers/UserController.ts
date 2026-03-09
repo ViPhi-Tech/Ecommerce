@@ -60,13 +60,12 @@ export class UserController {
       
       const userData = validationResult.data;
       
-      // Converter CreateUserDTO para CreateUserInput
+      // Converter CreateUserDTO para CreateUserInput (senha é definida apenas pelo link no e-mail)
       const createUserInput = {
         fullName: userData.fullName,
         isActive: userData.isActive,
         email: userData.email,
         googleId: userData.googleId,
-        password: userData.password,
         roles: userData.roles
       };
       

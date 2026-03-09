@@ -1,10 +1,14 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { AuthUseCase } from '../../../application/use-cases/auth/AuthUseCase';
+import { SetInitialPasswordUseCase } from '../../../application/use-cases/auth/SetInitialPasswordUseCase';
 import { LoginDTO, GoogleLoginDTO, loginSchema, googleLoginSchema } from '../../../application/dto/auth/AuthDTOs';
 import { InvalidCredentialsError } from '../../../shared/errors/UserErrors';
 
 export class AuthController {
-  constructor(private authUseCase: AuthUseCase) {}
+  constructor(
+    private authUseCase: AuthUseCase,
+    private setInitialPasswordUseCase: SetInitialPasswordUseCase
+  ) {}
 
   async login(request: FastifyRequest, reply: FastifyReply) {
     try {
@@ -130,6 +134,25 @@ export class AuthController {
         status: false,
         descricao: 'Erro interno do servidor'
       });
+    }
+  }
+
+  async setInitialPassword(request: FastifyRequest, reply: FastifyReply) {
+    try {
+      const body = request.body as { token: string; password: string };
+      if (!body.token || !body.password) {
+        return reply.code(400).send({
+          message: 'Token e senha são obrigatórios.'
+        });
+      }
+      await this.setInitialPasswordUseCase.execute(body.token, body.password);
+      return reply.code(200).send({
+        message: 'Senha criada com sucesso. Você já pode fazer login.'
+      });
+    } catch (error: any) {
+      const message = error?.message || 'Erro ao definir senha.';
+      const isBadRequest = message.includes('inválido') || message.includes('expirado');
+      return reply.code(isBadRequest ? 400 : 500).send({ message });
     }
   }
 }

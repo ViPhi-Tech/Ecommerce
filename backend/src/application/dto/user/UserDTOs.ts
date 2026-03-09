@@ -22,9 +22,9 @@ export const createUserSchema = z.object({
   isActive: z.boolean().optional().default(true),
   email: z.string().email({ message: "Email inválido" }),
   googleId: z.string().optional(),
-  password: z.string().min(6, { message: "Senha deve ter pelo menos 6 caracteres" }).optional(),
   roles: z.array(z.string().uuid({ message: "Cada role deve ser um UUID válido" }))
-           .min(1, { message: "É necessário ao menos 1 role" })});
+           .min(1, { message: "É necessário ao menos 1 role" })
+});
 
 export const updateUserSchema = z.object({
   fullName: z.string().min(2, { message: "Nome deve ter pelo menos 2 caracteres" }).optional(),

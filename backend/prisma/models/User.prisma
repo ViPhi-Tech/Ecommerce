@@ -1,10 +1,12 @@
 model Login {
-  id             Int     @id @default(autoincrement())
-  email          String  @unique
-  googleId       String? @unique
-  hashedPassword String?
-  client         Client?
-  user           User?
+  id                          Int       @id @default(autoincrement())
+  email                       String    @unique
+  googleId                    String?   @unique
+  hashedPassword              String?
+  createPasswordToken         String?   @unique
+  createPasswordTokenExpiresAt DateTime?
+  client                      Client?
+  user                        User?
 }
 
 model User {

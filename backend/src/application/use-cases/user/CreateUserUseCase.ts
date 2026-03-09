@@ -1,26 +1,26 @@
+import { randomUUID } from 'crypto';
 import { User } from '../../../domain/entities/User';
-// import { CreateUserDTO} from "../../../infrastructure/http/dto/User.dto";
 import { CreateUserInput } from '../../dto/user/CreateUserInput';
 import { IUserRepository } from '../../../domain/repositories/IUserRepository';
 import { ILoginRepository } from '../../../domain/repositories/ILoginRepository';
-import { IPasswordService } from '../../../domain/services/IPasswordService';
+import { IEmailService } from '../../../domain/services/IEmailService';
 import { EmailAlreadyExistsError } from '../../../shared/errors/UserErrors';
+
+const TOKEN_EXPIRY_HOURS = 24;
 
 export class CreateUserUseCase {
   constructor(
     private userRepository: IUserRepository,
     private loginRepository: ILoginRepository,
-    private passwordService: IPasswordService
+    private emailService: IEmailService
   ) {}
 
   async execute(data: CreateUserInput): Promise<User> {
-    // Verificar se já existe um login com o email fornecido
     const existingLogin = await this.loginRepository.findByEmail(data.email);
     if (existingLogin) {
       throw new EmailAlreadyExistsError();
     }
 
-    // Verificar se já existe um login com o google_id fornecido (se houver)
     if (data.googleId) {
       const existingGoogleLogin = await this.loginRepository.findByGoogleId(data.googleId);
       if (existingGoogleLogin) {
@@ -28,20 +28,20 @@ export class CreateUserUseCase {
       }
     }
 
-    // Hash da senha
-    const hashed_password = data.password
-    ? await this.passwordService.hash(data.password)
-    : null;
+    const token = randomUUID();
+    const expiresAt = new Date(Date.now() + TOKEN_EXPIRY_HOURS * 60 * 60 * 1000);
 
-    // Criar login
     const login = await this.loginRepository.create({
       email: data.email,
       googleId: data.googleId,
-      hashedPassword: hashed_password || undefined
+      hashedPassword: null
     });
 
+    await this.loginRepository.update(login.id, {
+      createPasswordToken: token,
+      createPasswordTokenExpiresAt: expiresAt
+    });
 
-    // Criar usuário
     const user = await this.userRepository.create({
       fullName: data.fullName,
       isActive: data.isActive ?? true,
@@ -49,16 +49,20 @@ export class CreateUserUseCase {
     });
 
     try {
-      await this.userRepository.createRoles(
-        user.id,
-        data.roles
-      );
+      await this.userRepository.createRoles(user.id, data.roles);
     } catch (error: any) {
       console.error('Erro ao criar roles:', error);
-      // Se houver erro ao criar roles, ainda retornamos o usuário criado
-      // mas logamos o erro para investigação
       throw new Error(`Erro ao associar roles ao usuário: ${error?.message || 'Erro desconhecido'}`);
     }
+
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:4200';
+    const createPasswordUrl = `${frontendUrl.replace(/\/$/, '')}/create-password?token=${token}`;
+
+    await this.emailService.sendCreatePasswordEmail(data.email, {
+      createPasswordUrl,
+      fullName: data.fullName?.trim() || 'usuário',
+      expiryHours: '24'
+    });
 
     return user;
   }

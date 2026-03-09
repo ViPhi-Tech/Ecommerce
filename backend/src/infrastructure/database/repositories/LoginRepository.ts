@@ -5,9 +5,13 @@ import { ILoginRepository } from '../../../domain/repositories/ILoginRepository'
 export class LoginRepository implements ILoginRepository {
   constructor(private prisma: PrismaClient) {}
 
-  async create(data: { email: string; googleId?: string; hashedPassword: string }): Promise<Login> {
+  async create(data: { email: string; googleId?: string; hashedPassword?: string | null }): Promise<Login> {
     return this.prisma.login.create({
-      data
+      data: {
+        email: data.email,
+        googleId: data.googleId,
+        hashedPassword: data.hashedPassword ?? null
+      }
     });
   }
 
@@ -29,7 +33,19 @@ export class LoginRepository implements ILoginRepository {
     });
   }
 
-  async update(id: number, data: { email?: string; google_id?: string | null; hashed_password?: string }): Promise<Login> {
+  async findByCreatePasswordToken(token: string): Promise<Login | null> {
+    return this.prisma.login.findUnique({
+      where: { createPasswordToken: token }
+    });
+  }
+
+  async update(id: number, data: Partial<{
+    email: string;
+    googleId: string | null;
+    hashedPassword: string | null;
+    createPasswordToken: string | null;
+    createPasswordTokenExpiresAt: Date | null;
+  }>): Promise<Login> {
     return this.prisma.login.update({
       where: { id },
       data

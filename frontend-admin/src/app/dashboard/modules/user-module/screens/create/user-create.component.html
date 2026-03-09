@@ -38,35 +38,28 @@
               [control]="userForm.get('email')"
               placeholder="Digite o email do usuário"
             />
-          </div>
-
-          <div class="col-12 mb-4">
-            <fuse-input
-              [isLoading]="isLoading()"
-              type="password"
-              label="Senha"
-              [control]="userForm.get('password')"
-              placeholder="Digite a senha do usuário"
-            />
+            <p class="text-xs text-muted-foreground mt-1">
+              Um e-mail será enviado para o usuário criar a senha de acesso.
+            </p>
           </div>
 
           <div class="col-12 mb-4">
             <div class="flex justify-between items-center mb-3">
-              <div class="block text-sm font-medium">Módulos do Sistema *</div>
+              <div class="block text-sm font-medium">Perfis (Roles) *</div>
               <div class="flex gap-2">
                 <button
                   type="button"
                   class="text-xs text-blue-600 hover:text-blue-800 underline"
-                  (click)="selectAllModules()"
-                  [disabled]="isLoading() || areAllModulesSelected()"
+                  (click)="selectAllRoles()"
+                  [disabled]="isLoading() || areAllRolesSelected()"
                 >
                   Selecionar Todos
                 </button>
                 <button
                   type="button"
                   class="text-xs text-gray-600 hover:text-gray-800 underline"
-                  (click)="clearAllModules()"
-                  [disabled]="isLoading() || areNoModulesSelected()"
+                  (click)="clearAllRoles()"
+                  [disabled]="isLoading() || areNoRolesSelected()"
                 >
                   Limpar Todos
                 </button>
@@ -75,48 +68,48 @@
             <div
               class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 modules-grid"
             >
-              @for (module of systemModules; track module.id) {
+              @for (role of systemModules; track role.id) {
                 <div
                   class="flex items-start space-x-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors module-card cursor-pointer"
-                  [class.selected]="isModuleSelected(module.id)"
+                  [class.selected]="isRoleSelected(role.id)"
                   [class.disabled]="isLoading()"
-                  (click)="toggleModule(module.id)"
-                  (keyup.enter)="toggleModule(module.id)"
-                  (keyup.space)="toggleModule(module.id)"
+                  (click)="toggleRole(role.id)"
+                  (keyup.enter)="toggleRole(role.id)"
+                  (keyup.space)="toggleRole(role.id)"
                   [attr.tabindex]="isLoading() ? -1 : 0"
                   [attr.role]="'checkbox'"
-                  [attr.aria-checked]="isModuleSelected(module.id)"
-                  [attr.aria-label]="'Selecionar módulo ' + module.name"
+                  [attr.aria-checked]="isRoleSelected(role.id)"
+                  [attr.aria-label]="'Selecionar perfil ' + role.name"
                 >
                   <input
                     type="checkbox"
-                    [id]="'module-' + module.id"
-                    [checked]="isModuleSelected(module.id)"
-                    (change)="toggleModule(module.id)"
+                    [id]="'role-' + role.id"
+                    [checked]="isRoleSelected(role.id)"
+                    (change)="toggleRole(role.id)"
                     class="mt-1 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                     [disabled]="isLoading()"
                     tabindex="-1"
                   />
                   <div class="flex-1 min-w-0">
                     <label
-                      [for]="'module-' + module.id"
+                      [for]="'role-' + role.id"
                       class="block text-sm cursor-pointer module-title"
                     >
-                      {{ module.name }}
+                      {{ role.name }}
                     </label>
                     <p class="mt-1 module-description">
-                      {{ module.description }}
+                      {{ role.description }}
                     </p>
                   </div>
                 </div>
               }
             </div>
             @if (
-              userForm.get('modules')?.invalid &&
-              userForm.get('modules')?.touched
+              userForm.get('roles')?.invalid &&
+              userForm.get('roles')?.touched
             ) {
               <div class="validation-error">
-                Selecione pelo menos um módulo para o usuário
+                Selecione pelo menos um perfil para o usuário
               </div>
             }
           </div>

@@ -1,4 +1,5 @@
 import { AuthUseCase } from '../../../application/use-cases/auth/AuthUseCase';
+import { SetInitialPasswordUseCase } from '../../../application/use-cases/auth/SetInitialPasswordUseCase';
 import { AuthController } from '../../http/controllers/AuthController';
 import { JwtAuthService } from '../../services/AuthService';
 import { userRepository, loginRepository, passwordService } from './userDependencies';
@@ -25,5 +26,10 @@ export const authUseCase = new AuthUseCase(
   authService
 );
 
+export const setInitialPasswordUseCase = new SetInitialPasswordUseCase(
+  loginRepository,
+  passwordService
+);
+
 // Controllers
-export const authController = new AuthController(authUseCase);
+export const authController = new AuthController(authUseCase, setInitialPasswordUseCase);

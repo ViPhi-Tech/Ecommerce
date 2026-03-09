@@ -44,6 +44,22 @@ export default async function authRoutes(
     handler: authController.getGoogleAuthUrl.bind(authController)
   });
 
+  // Criar primeira senha (link enviado por e-mail)
+  fastify.post('/create-password', {
+    schema: {
+      tags: ['auth'],
+      body: {
+        type: 'object',
+        required: ['token', 'password'],
+        properties: {
+          token: { type: 'string' },
+          password: { type: 'string', minLength: 6 }
+        }
+      }
+    },
+    handler: authController.setInitialPassword.bind(authController)
+  });
+
   // Callback do Google - suporta tanto código de autorização quanto ID token
   fastify.post('/callback', {
     schema: {

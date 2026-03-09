@@ -74,8 +74,7 @@ export class UserCreateComponent implements OnInit {
     this.userForm = this.formBuilder.group({
       fullName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      modules: [[], [Validators.required]], // Array de módulos selecionados
+      roles: [[], [Validators.required]], // Array de roles (perfis) selecionados
     });
   }
 
@@ -86,9 +85,6 @@ export class UserCreateComponent implements OnInit {
       this.title.set('Editar Usuário');
       this.submitButtonLabel.set('Atualizar');
       this.loadUser(id);
-      // Para edição, a senha não é obrigatória
-      this.userForm.get('password')?.clearValidators();
-      this.userForm.get('password')?.updateValueAndValidity();
     }
   }
 
@@ -103,7 +99,7 @@ export class UserCreateComponent implements OnInit {
           this.userForm.patchValue({
             fullName: user.fullName,
             email: user.email,
-            modules: user.modules || [],
+            roles: user.roles || user.modules || [],
           });
           this.isLoading.set(false);
         },
@@ -129,11 +125,6 @@ export class UserCreateComponent implements OnInit {
       // Se é edição, adiciona o ID
       if (this.userId()) {
         formData.id = this.userId();
-      }
-
-      // Se não há senha (edição), remove o campo
-      if (!formData.password) {
-        delete formData.password;
       }
 
       this.userService
@@ -171,51 +162,47 @@ export class UserCreateComponent implements OnInit {
     });
   }
 
-  // Método para verificar se um módulo está selecionado
-  isModuleSelected(moduleId: string): boolean {
-    const selectedModules = this.userForm.get('modules')?.value || [];
-    return selectedModules.includes(moduleId);
+  // Método para verificar se um role está selecionado
+  isRoleSelected(roleId: string): boolean {
+    const selectedRoles = this.userForm.get('roles')?.value || [];
+    return selectedRoles.includes(roleId);
   }
 
-  // Método para alternar a seleção de um módulo
-  toggleModule(moduleId: string): void {
-    const modulesControl = this.userForm.get('modules');
-    const currentModules = modulesControl?.value || [];
+  // Método para alternar a seleção de um role
+  toggleRole(roleId: string): void {
+    const rolesControl = this.userForm.get('roles');
+    const currentRoles = rolesControl?.value || [];
 
-    if (currentModules.includes(moduleId)) {
-      // Remove o módulo se já estiver selecionado
-      const updatedModules = currentModules.filter(
-        (id: string) => id !== moduleId
-      );
-      modulesControl?.setValue(updatedModules);
+    if (currentRoles.includes(roleId)) {
+      const updatedRoles = currentRoles.filter((id: string) => id !== roleId);
+      rolesControl?.setValue(updatedRoles);
     } else {
-      // Adiciona o módulo se não estiver selecionado
-      const updatedModules = [...currentModules, moduleId];
-      modulesControl?.setValue(updatedModules);
+      const updatedRoles = [...currentRoles, roleId];
+      rolesControl?.setValue(updatedRoles);
     }
   }
 
-  // Método para selecionar todos os módulos
-  selectAllModules(): void {
-    const allModuleIds = this.systemModules.map(module => module.id);
-    this.userForm.get('modules')?.setValue(allModuleIds);
+  // Método para selecionar todos os roles
+  selectAllRoles(): void {
+    const allRoleIds = this.systemModules.map(m => m.id);
+    this.userForm.get('roles')?.setValue(allRoleIds);
   }
 
   // Método para limpar todas as seleções
-  clearAllModules(): void {
-    this.userForm.get('modules')?.setValue([]);
+  clearAllRoles(): void {
+    this.userForm.get('roles')?.setValue([]);
   }
 
-  // Método para verificar se todos os módulos estão selecionados
-  areAllModulesSelected(): boolean {
-    const selectedModules = this.userForm.get('modules')?.value || [];
-    return selectedModules.length === this.systemModules.length;
+  // Método para verificar se todos os roles estão selecionados
+  areAllRolesSelected(): boolean {
+    const selectedRoles = this.userForm.get('roles')?.value || [];
+    return selectedRoles.length === this.systemModules.length;
   }
 
-  // Método para verificar se nenhum módulo está selecionado
-  areNoModulesSelected(): boolean {
-    const selectedModules = this.userForm.get('modules')?.value || [];
-    return selectedModules.length === 0;
+  // Método para verificar se nenhum role está selecionado
+  areNoRolesSelected(): boolean {
+    const selectedRoles = this.userForm.get('roles')?.value || [];
+    return selectedRoles.length === 0;
   }
 
   closeDrawer(e?: Event) {

@@ -112,20 +112,20 @@ export class UserListComponent implements OnInit {
   }
 
   showUserModules(user: any) {
-    const userModules = user.modules || [];
-    const moduleNames = userModules.map((moduleId: string) => {
-      const module = SYSTEM_MODULES.find(m => m.id === moduleId);
-      return module ? module.name : moduleId;
+    const userRoles = user.roles || user.modules || [];
+    const roleNames = userRoles.map((roleId: string) => {
+      const role = SYSTEM_MODULES.find(m => m.id === roleId);
+      return role ? role.name : roleId;
     });
 
-    const modulesText =
-      moduleNames.length > 0
-        ? moduleNames.join(', ')
-        : 'Nenhum módulo atribuído';
+    const rolesText =
+      roleNames.length > 0
+        ? roleNames.join(', ')
+        : 'Nenhum perfil atribuído';
 
     this.confirmationService.confirm({
-      message: `<strong>Módulos do usuário ${user.fullName}:</strong><br><br>${modulesText}`,
-      header: 'Módulos Permitidos',
+      message: `<strong>Perfis do usuário ${user.fullName}:</strong><br><br>${rolesText}`,
+      header: 'Perfis (Roles)',
       icon: 'pi pi-info-circle',
       acceptLabel: 'Fechar',
       rejectVisible: false,

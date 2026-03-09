@@ -41,7 +41,7 @@ export class UpdateUserUseCase {
       if (loginData.email) loginUpdateData.email = loginData.email;
       if (loginData.googleId !== undefined) loginUpdateData.googleId = loginData.googleId;
       if (loginData.password) {
-        loginUpdateData.hashed_password = await this.passwordService.hash(loginData.password);
+        loginUpdateData.hashedPassword = await this.passwordService.hash(loginData.password);
       }
 
       // Atualizar login

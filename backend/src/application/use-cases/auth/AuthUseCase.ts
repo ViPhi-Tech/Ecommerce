@@ -22,10 +22,15 @@ export class AuthUseCase {
       throw new InvalidCredentialsError();
     }
 
-    // Verificar senha
+    if (!login.hashedPassword) {
+      throw new InvalidCredentialsError(
+        'Defina sua senha pelo link enviado no seu e-mail antes de fazer login.'
+      );
+    }
+
     const isPasswordValid = await this.passwordService.compare(
       data.password,
-      login.hashedPassword ?? ''
+      login.hashedPassword
     );
 
     if (!isPasswordValid) {

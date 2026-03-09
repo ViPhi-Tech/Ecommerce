@@ -8,32 +8,31 @@ export default async function userRoutes(
   fastify: FastifyInstance,
   options: FastifyPluginOptions
 ) {
-  // Criar usuário
-fastify.post('/create', {
-  schema: {
-    tags: ['user'],
-    body: {
-      type: 'object',
-      required: ['fullName', 'email', 'password'],
-      properties: {
-        fullName: { type: 'string' },
-        isActive: { type: 'boolean' },
-        email: { type: 'string', format: 'email' },
-        googleId: { type: 'string' },
-        password: { type: 'string', minLength: 6 },
-        roles: {
-          type: 'array',
-          minItems: 1,
-          items: {
-            type: 'string',
-            format: 'uuid'
-          },
+  // Criar usuário (senha será criada pelo link enviado por e-mail)
+  fastify.post('/create', {
+    schema: {
+      tags: ['user'],
+      body: {
+        type: 'object',
+        required: ['fullName', 'email', 'roles'],
+        properties: {
+          fullName: { type: 'string' },
+          isActive: { type: 'boolean' },
+          email: { type: 'string', format: 'email' },
+          googleId: { type: 'string' },
+          roles: {
+            type: 'array',
+            minItems: 1,
+            items: {
+              type: 'string',
+              format: 'uuid'
+            },
+          }
         }
       }
-    }
-  },
-  handler: userController.create.bind(userController)
-});
+    },
+    handler: userController.create.bind(userController)
+  });
 
   // Obter todos os usuários
   fastify.get('/', {
