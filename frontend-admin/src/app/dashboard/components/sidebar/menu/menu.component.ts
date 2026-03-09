@@ -116,13 +116,13 @@ export class MenuComponent implements OnInit {
           exact: false,
           visible: true,
         },
-        {
-          id: ROLES_SITEMAP.Relatorios,
-          label: 'Relatórios',
-          icon: 'lucideChartPie',
-          route: '/dashboard/reports/list',
-          visible: true,
-        },
+        // {
+        //   id: ROLES_SITEMAP.Relatorios,
+        //   label: 'Relatórios',
+        //   icon: 'lucideChartPie',
+        //   route: '/dashboard/reports/list',
+        //   visible: true,
+        // },
       ],
     },
     {
