@@ -29,13 +29,13 @@
     </aside>
 
     <!-- Content -->
-    <section class="flex-1 flex flex-col min-w-0">
+    <section class="flex-1 flex flex-col min-w-0" [formGroup]="settingsForm">
       <div class="flex justify-between items-center px-6 pt-6">
         <h2 class="text-xl font-semibold text-[var(--p-text-color)] m-0">
           @switch (activeTab()) {
             @case ('profile') { Editar Perfil }
             @case ('integrations') { Integrações }
-            @case ('notifications') { Notificações }
+            @case ('email') { Configurações de E-mail }
             @case ('security') { Segurança }
           }
         </h2>
@@ -70,45 +70,37 @@
             </div>
 
             <!-- Campos -->
-            <form [formGroup]="profileForm" class="flex flex-col gap-5">
+            <div class="flex flex-col gap-5">
               <div class="flex gap-4 max-sm:flex-col">
-                <div class="flex-1 min-w-0 flex flex-col gap-1.5">
-                  <label class="settings-label">Nome Completo</label>
-                  <input
-                    type="text"
-                    pInputText
-                    class="w-full"
+                <div class="flex-1 min-w-0">
+                  <fuse-input
+                    label="Nome Completo"
+                    [control]="settingsForm.get('fullName')"
                     placeholder="Ex: Alex Johnson"
-                    formControlName="fullName"
                   />
                 </div>
-                <div class="flex-1 min-w-0 flex flex-col gap-1.5">
-                  <label class="settings-label">Nome de Usuário</label>
-                  <div class="relative flex items-center">
+                <div class="flex-1 min-w-0">
+                  <div class="relative">
                     <span class="settings-at-prefix">@</span>
-                    <input
-                      type="text"
-                      pInputText
-                      class="w-full !pl-7"
+                    <fuse-input
+                      label="Nome de Usuário"
+                      [control]="settingsForm.get('username')"
                       placeholder="usuario"
-                      formControlName="username"
+                      addictionalClass="!pl-7 w-full"
                     />
                   </div>
                 </div>
               </div>
 
               <div class="flex flex-col gap-1.5">
-                <label class="settings-label">Endereço de E-mail</label>
-                <input
-                  type="email"
-                  pInputText
-                  class="w-full"
+                <fuse-input
+                  label="Endereço de E-mail"
+                  [control]="settingsForm.get('email')"
                   placeholder="email&#64;empresa.com"
-                  formControlName="email"
                 />
                 <span class="settings-hint">E-mails de verificação serão enviados para este endereço.</span>
               </div>
-            </form>
+            </div>
           </div>
         }
         @case ('integrations') {
@@ -117,10 +109,33 @@
             <p class="text-[0.95rem]">Integrações em breve.</p>
           </div>
         }
-        @case ('notifications') {
-          <div class="flex-1 p-6 flex flex-col items-center justify-center gap-3 text-[var(--p-text-muted-color)] text-center">
-            <ng-icon name="lucideBell" size="48" />
-            <p class="text-[0.95rem]">Configurações de notificações em breve.</p>
+        @case ('email') {
+          <div class="flex-1 p-6 overflow-y-auto max-sm:p-4">
+            <div class="flex flex-col gap-5">
+              <div class="flex flex-col gap-4">
+                <div class="flex items-start gap-3">
+                  <p-checkbox
+                    formControlName="wantDailyReports"
+                    [binary]="true"
+                    inputId="wantDailyReports"
+                  />
+                  <label for="wantDailyReports" class="settings-label cursor-pointer mt-1.5">
+                    Deseja receber relatórios diários?
+                  </label>
+                </div>
+                @if (settingsForm.get('wantDailyReports')?.value) {
+                  <div class="pl-8">
+                    <fuse-input
+                      label="E-mail para envio dos relatórios"
+                      [control]="settingsForm.get('dailyReportsEmail')"
+                      placeholder="email&#64;empresa.com"
+                      addictionalClass="max-w-md"
+                      errorMessage="Informe um e-mail válido."
+                    />
+                  </div>
+                }
+              </div>
+            </div>
           </div>
         }
         @case ('security') {

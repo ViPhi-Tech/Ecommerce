@@ -1,8 +1,20 @@
+@keyframes settingsModalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
 ::ng-deep .settings-dialog {
   max-width: 780px;
   width: 95vw;
   border-radius: 16px !important;
   overflow: hidden;
+  animation: settingsModalIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
 
   .p-dialog-content {
     padding: 0 !important;

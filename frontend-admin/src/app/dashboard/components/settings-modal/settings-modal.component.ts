@@ -3,13 +3,15 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { CheckboxModule } from 'primeng/checkbox';
 import { NgIcon } from '@ng-icons/core';
+import { InputComponent } from 'app/shared/components/form/input/input.component';
 import { AuthService } from 'app/core/auth/auth.service';
 import { UserService } from 'app/dashboard/modules/user-module/user.service';
 import { ToastService } from 'app/shared/services/toast.service';
 import { SettingsModalService } from './settings-modal.service';
 
-type SettingsTab = 'profile' | 'integrations' | 'notifications' | 'security';
+type SettingsTab = 'profile' | 'integrations' | 'email' | 'security';
 
 interface TabItem {
   id: SettingsTab;
@@ -27,6 +29,8 @@ interface TabItem {
     DialogModule,
     ButtonModule,
     InputTextModule,
+    CheckboxModule,
+    InputComponent,
     NgIcon,
   ],
 })
@@ -40,10 +44,12 @@ export class SettingsModalComponent implements OnInit {
   activeTab = signal<SettingsTab>('profile');
   isLoading = signal(false);
 
-  profileForm = this.fb.group({
+  settingsForm = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(2)]],
     username: [''],
     email: ['', [Validators.required, Validators.email]],
+    wantDailyReports: [false],
+    dailyReportsEmail: [{ value: '', disabled: true }],
   });
 
   avatarUrl = signal(
@@ -53,12 +59,15 @@ export class SettingsModalComponent implements OnInit {
   tabs: TabItem[] = [
     { id: 'profile', label: 'Perfil', icon: 'lucideUser' },
     { id: 'integrations', label: 'Integrações', icon: 'lucideSettings2' },
-    { id: 'notifications', label: 'Notificações', icon: 'lucideBell' },
+    { id: 'email', label: 'Envio de E-mail', icon: 'lucideMail' },
     { id: 'security', label: 'Segurança', icon: 'lucideShield' },
   ];
 
   ngOnInit(): void {
     this.loadCurrentUser();
+    this.settingsForm.get('wantDailyReports')?.valueChanges?.subscribe((v) =>
+      this.onDailyReportsToggle(!!v),
+    );
   }
 
   onShow(): void {
@@ -70,9 +79,23 @@ export class SettingsModalComponent implements OnInit {
     this.activeTab.set(tab);
   }
 
+  onDailyReportsToggle(checked: boolean): void {
+    const emailControl = this.settingsForm.get('dailyReportsEmail');
+    if (!emailControl) return;
+    if (checked) {
+      emailControl.enable();
+      emailControl.setValidators([Validators.required, Validators.email]);
+    } else {
+      emailControl.disable();
+      emailControl.clearValidators();
+      emailControl.setValue('');
+    }
+    emailControl.updateValueAndValidity();
+  }
+
   onSave(): void {
-    if (this.profileForm.invalid) {
-      this.profileForm.markAllAsTouched();
+    if (this.settingsForm.invalid) {
+      this.settingsForm.markAllAsTouched();
       this.toast.warn('Preencha os campos obrigatórios.');
       return;
     }
@@ -87,7 +110,7 @@ export class SettingsModalComponent implements OnInit {
       return;
     }
 
-    const { fullName, email } = this.profileForm.getRawValue();
+    const { fullName, email } = this.settingsForm.getRawValue();
 
     this.userService
       .upsertUser({
@@ -138,7 +161,7 @@ export class SettingsModalComponent implements OnInit {
   private loadCurrentUser(): void {
     const decoded = this.authService.getDecodedToken();
     if (decoded) {
-      this.profileForm.patchValue({
+      this.settingsForm.patchValue({
         fullName: decoded.fullName || decoded.name || '',
         username: decoded.username || decoded.email?.split('@')[0] || '',
         email: decoded.email || '',
