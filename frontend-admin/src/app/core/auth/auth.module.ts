@@ -4,6 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+import { CreatePasswordComponent } from './create-password/create-password.component';
 import { AuthService } from './auth.service';
 
 const routes: Routes = [
@@ -19,12 +20,21 @@ const routes: Routes = [
         path: 'register',
         component: RegisterComponent,
       },
+      {
+        path: 'create-password',
+        component: CreatePasswordComponent,
+      },
     ],
   },
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule.forChild(routes), AuthComponent],
+  imports: [
+    CommonModule,
+    RouterModule.forChild(routes),
+    AuthComponent,
+    CreatePasswordComponent,
+  ],
   declarations: [],
   providers: [AuthService],
 })

@@ -39,6 +39,18 @@ export class AuthService {
     }) as Observable<AuthResponse>;
   }
 
+  /**
+   * Cria/define senha a partir do link recebido por e-mail.
+   * O token vem da query string da página (?token=...); envia token + password para POST /create-password.
+   */
+  createPassword(token: string, password: string): Observable<AuthResponse> {
+    return this.http.post<AuthResponse>(
+      `${this.apiUrl}auth/create-password`,
+      { token, password },
+      { headers: { 'Skip-Loader': 'true' } }
+    );
+  }
+
   setToken(token: string, name = 'accessToken') {
     // setar o token no local storage
     localStorage.setItem(name, token);

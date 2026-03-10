@@ -56,7 +56,7 @@ export class CreateUserUseCase {
     }
 
     const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:4200';
-    const createPasswordUrl = `${frontendUrl.replace(/\/$/, '')}/create-password?token=${token}`;
+    const createPasswordUrl = `${frontendUrl.replace(/\/$/, '')}/auth/create-password?token=${token}`;
 
     await this.emailService.sendCreatePasswordEmail(data.email, {
       createPasswordUrl,
