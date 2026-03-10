@@ -29,9 +29,6 @@ export class ResendEmailService implements IEmailService {
       html = html.replace(placeholder, String(value ?? ''));
     }
 
-    console.log(this.from);
-    console.log(to);
-
     const { error } = await this.resend.emails.send({
       from: this.from,
       to: [to],
