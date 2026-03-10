@@ -6,6 +6,8 @@ RUN npm install
 COPY . .
 RUN npx prisma generate
 RUN npm run build
+# Incluir templates de e-mail em dist (tsc não copia .html)
+RUN cp -r src/shared dist/
 
 # Etapa 2: imagem final
 FROM node:22-alpine

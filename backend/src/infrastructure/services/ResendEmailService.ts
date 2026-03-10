@@ -13,9 +13,11 @@ export class ResendEmailService implements IEmailService {
   }
 
   async sendCreatePasswordEmail(to: string, variables: CreatePasswordEmailVariables): Promise<void> {
+    // __dirname em runtime aponta para dist/infrastructure/services; templates ficam em dist/shared/emails-templates
     const templatePath = path.join(
-      process.cwd(),
-      'src',
+      __dirname,
+      '..',
+      '..',
       'shared',
       'emails-templates',
       'create-first-password.html'
