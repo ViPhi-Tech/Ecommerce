@@ -72,14 +72,6 @@
   }
 }
 
-/* Animação global para todos os PrimeNG Dialogs */
-.p-dialog-mask {
-  animation: fadeIn 0.25s ease-out;
-}
-
-.p-dialog {
-  animation: dialogScaleIn 0.25s ease-out;
-}
 
 @keyframes dialogScaleIn {
   from {
