@@ -24,6 +24,8 @@ import { FormModule } from 'app/shared/components/form/form.module';
 import { ToastModule } from 'primeng/toast';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SYSTEM_MODULES } from 'app/shared/constants/system-modules.constants';
+import { UserMessageDialogComponent } from 'app/shared/components/user-message-dialog/user-message-dialog.component';
+import { UserMessageDialogService } from 'app/shared/services/user-message-dialog.service';
 
 @Component({
   selector: 'fuse-user-create',
@@ -37,6 +39,7 @@ import { SYSTEM_MODULES } from 'app/shared/constants/system-modules.constants';
     TextareaModule,
     FormModule,
     ToastModule,
+    UserMessageDialogComponent,
   ],
 })
 export class UserCreateComponent implements OnInit {
@@ -47,6 +50,7 @@ export class UserCreateComponent implements OnInit {
   private userState = inject(UserState);
   private toast = inject(MessageService);
   private destroyRef = inject(DestroyRef);
+  private userMessageDialog = inject(UserMessageDialogService);
 
   @ViewChild('dialogRef') dialogRef!: Dialog;
 
@@ -127,6 +131,8 @@ export class UserCreateComponent implements OnInit {
         formData.id = this.userId();
       }
 
+      const isEdit = !!this.userId();
+
       this.userService
         .upsertUser(formData)
         .pipe(takeUntilDestroyed(this.destroyRef))
@@ -138,6 +144,18 @@ export class UserCreateComponent implements OnInit {
               detail: `Usuário ${this.userId() ? 'atualizado' : 'cadastrado'} com sucesso`,
             });
             this.userService.refreshUserList();
+            if (!isEdit) {
+              const email = this.userForm.get('email')?.value || '';
+              this.userMessageDialog.open({
+                title: 'Convite enviado',
+                description:
+                  'Enviamos um e-mail para ' +
+                  email +
+                  ' com o link para criar a senha de acesso.',
+                icon: 'lucideMailCheck',
+                intent: 'info',
+              });
+            }
             this.onCloseDialog();
           },
           error: error => {

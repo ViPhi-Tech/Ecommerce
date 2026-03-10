@@ -80,6 +80,8 @@ export class UserListComponent implements OnInit {
           {
             icon: 'lucideTrash2',
             variant: 'text',
+            colorText: '#EF4444',
+            colorIcon: '#EF4444',
             tooltip: 'Excluir usuário',
             action: (rowData: any) => {
               this.confirmDelete(rowData);
@@ -140,6 +142,8 @@ export class UserListComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       acceptLabel: 'Sim',
       rejectLabel: 'Não',
+      acceptButtonStyleClass: 'p-button-danger',
+      rejectButtonStyleClass: 'p-button-secondary',
       accept: () => {
         this.deleteUser(user.id);
       },

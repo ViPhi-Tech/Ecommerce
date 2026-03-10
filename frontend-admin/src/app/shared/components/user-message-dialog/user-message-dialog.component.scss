@@ -1,0 +1,25 @@
+.user-message-dialog {
+  .p-dialog-content {
+    padding: 1.5rem 1.5rem 1.25rem !important;
+  }
+}
+.user-message-dialog {
+  .p-dialog-content {
+    padding: 1.5rem 1.5rem 1.25rem !important;
+  }
+
+  .p-dialog {
+    animation: userMessageDialogIn 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+}
+
+@keyframes userMessageDialogIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}

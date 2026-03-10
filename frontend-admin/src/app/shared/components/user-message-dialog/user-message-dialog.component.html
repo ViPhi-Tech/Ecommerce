@@ -1,0 +1,49 @@
+<p-dialog
+  [visible]="dialog.visible()"
+  [modal]="true"
+  [closable]="true"
+  [closeOnEscape]="true"
+  [draggable]="false"
+  [dismissableMask]="true"
+  [style.width.px]="420"
+  (onHide)="onHide()"
+  styleClass="user-message-dialog"
+>
+  <div class="flex flex-col gap-4">
+    <div class="flex items-start gap-3">
+      <div
+        class="flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary"
+      >
+        <ng-icon [name]="dialog.icon()" size="18" />
+      </div>
+      <div class="flex-1">
+        <h3 class="text-base font-semibold mb-1">
+          {{ dialog.title() }}
+        </h3>
+        <p class="text-sm text-muted-foreground">
+          {{ dialog.description() || 'Ação concluída com sucesso.' }}
+        </p>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 mt-2">
+      @if (dialog.showSecondary()) {
+        <button
+          pButton
+          type="button"
+          [label]="dialog.secondaryLabel()"
+          size="small"
+          severity="secondary"
+          (click)="onSecondaryClick()"
+        ></button>
+      }
+      <button
+        pButton
+        type="button"
+        [label]="dialog.primaryLabel()"
+        size="small"
+        (click)="onPrimaryClick()"
+      ></button>
+    </div>
+  </div>
+</p-dialog>

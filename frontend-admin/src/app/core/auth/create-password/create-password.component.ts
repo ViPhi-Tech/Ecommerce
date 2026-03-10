@@ -81,7 +81,7 @@ export class CreatePasswordComponent implements OnInit {
           this.loading.set(false);
         },
         error: ({ error }: any) => {
-          this.errorMessage.set(translate(error?.descricao || 'Erro ao definir senha. Tente novamente.'));
+          this.errorMessage.set(translate(error?.message || 'Erro ao definir senha. Tente novamente.'));
           this.loading.set(false);
         },
       });
