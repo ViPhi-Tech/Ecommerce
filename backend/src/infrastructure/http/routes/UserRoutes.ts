@@ -80,20 +80,10 @@ export default async function userRoutes(
       body: {
         type: 'object',
         properties: {
-          user: {
-            type: 'object',
-            properties: {
-              fullName: { type: 'string' },
-              isActive: { type: 'boolean' }
-            }
-          },
-          login: {
-            type: 'object',
-            properties: {
-              email: { type: 'string', format: 'email' },
-              googleId: { type: 'string' },
-              password: { type: 'string', minLength: 6 }
-            }
+          fullName: { type: 'string' },
+          roles: {
+            type: 'array',
+            items: { type: 'string', format: 'uuid' }
           }
         }
       }

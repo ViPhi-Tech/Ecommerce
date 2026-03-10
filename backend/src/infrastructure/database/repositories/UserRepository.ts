@@ -12,9 +12,24 @@ export class UserRepository implements IUserRepository {
   }
 
   async findById(id: number): Promise<User | null> {
-    return this.prisma.user.findUnique({
-      where: { id }
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      include: {
+        roles: true,
+        login: {
+          select: {
+            email: true,
+          }
+        }
+      }
     });
+
+    if (!user) return null;
+
+    return {
+      ...user,
+      roles: user.roles.map(r => r.roleId)
+    } as User;
   }
 
 async findByLoginId(loginId: number): Promise<User | null> {
@@ -162,6 +177,19 @@ async findByLoginId(loginId: number): Promise<User | null> {
       }
       throw error;
     }
+  };
+
+  async updateRoles(userId: number, roles: string[]): Promise<void> {
+    // Remove todas as roles atuais e recria com a nova lista
+    await this.prisma.userRole.deleteMany({
+      where: { userId }
+    });
+
+    if (!roles || roles.length === 0) {
+      return;
+    }
+
+    await this.createRoles(userId, roles);
   };
 
   async getUserRoles(userId: number): Promise<string[]> {

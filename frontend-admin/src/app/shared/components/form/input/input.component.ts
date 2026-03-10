@@ -61,6 +61,7 @@ export class InputComponent implements OnInit {
   mask = input<string>('');
 
   isRequired = signal(false);
+  isDisabled = signal(false);
   isLoading = input<boolean>(false);
   feedback = input<boolean>(false);
   errorMessage = input<string>('');
@@ -73,6 +74,18 @@ export class InputComponent implements OnInit {
 
   ngOnInit() {
     this.checkIsRequired();
+    this.checkIsDisabled();
+  }
+
+  checkIsDisabled() {
+    const ctrl = this.control();
+    if (!ctrl?.validator) {
+      this.isDisabled.set(false);
+    } else {
+      const emptyControl = new FormControl(null);
+      const result = ctrl.validator(emptyControl as any);
+      this.isDisabled.set(!!result?.['disabled']);
+    }
   }
 
   checkIsRequired() {

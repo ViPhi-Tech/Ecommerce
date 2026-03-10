@@ -9,7 +9,8 @@ export interface IUserRepository {
   findAllWithLogin(): Promise<(User & { login: any })[]>;
   update(id: number, data: Partial<{ fullName: string; isActive: boolean }>): Promise<User>;
   delete(id: number): Promise<void>;
-  createRoles(userid: number, roles: string[]): Promise<void>
+  createRoles(userId: number, roles: string[]): Promise<void>;
+  updateRoles(userId: number, roles: string[]): Promise<void>;
   // Métodos adicionais para autenticação
   create_user(userData: { fullName: string; isActive?: boolean; loginId: number }): Promise<User>;
   get_or_create_user_by_google(googleId: string, email: string, name: string): Promise<User>;

@@ -72,6 +72,27 @@
   }
 }
 
+/* Animação global para todos os PrimeNG Dialogs */
+.p-dialog-mask {
+  animation: fadeIn 0.25s ease-out;
+}
+
+.p-dialog {
+  animation: dialogScaleIn 0.25s ease-out;
+}
+
+@keyframes dialogScaleIn {
+  from {
+    transform: translateY(10px) scale(0.80);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
 .label {
   @apply text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-2;
 }

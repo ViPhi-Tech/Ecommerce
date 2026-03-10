@@ -23,7 +23,7 @@ export const emailService = new ResendEmailService(resendApiKey, resendFrom);
 // Use Cases
 const createUserUseCase = new CreateUserUseCase(userRepository, loginRepository, emailService);
 const getUserUseCase = new GetUserUseCase(userRepository);
-const updateUserUseCase = new UpdateUserUseCase(userRepository, loginRepository, passwordService);
+const updateUserUseCase = new UpdateUserUseCase(userRepository);
 const deleteUserUseCase = new DeleteUserUseCase(userRepository, loginRepository);
 const getUserRolesUseCase = new GetUserRolesUseCase(userRepository);
 

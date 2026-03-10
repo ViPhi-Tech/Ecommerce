@@ -59,7 +59,8 @@ export class UserListComponent implements OnInit {
         actionButtonsType: 'buttons',
         actionButtons: [
           {
-            icon: 'lucideEdit',
+            icon: 'lucideSquarePen',
+            label: 'Editar',
             color: 'info',
             variant: 'text',
             tooltip: 'Editar usuário',

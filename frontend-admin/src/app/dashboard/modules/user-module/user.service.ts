@@ -18,12 +18,16 @@ export class UserService {
 
   constructor() {}
 
-  getUserById(userId: string): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(`${this.apiUrl}/${userId}`);
+  getUserById(userId: string, skipLoader = true): Observable<ApiResponse> {
+    return this.http.get<ApiResponse>(`${this.apiUrl}/${userId}`, {
+      headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
+    });
   }
 
-  getUsersList(): Observable<ApiResponse<IUser[]>> {
-    return this.http.get<ApiResponse<IUser[]>>(`${this.apiUrl}/all`);
+  getUsersList(skipLoader = true): Observable<ApiResponse<IUser[]>> {
+    return this.http.get<ApiResponse<IUser[]>>(`${this.apiUrl}/all`, {
+      headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
+    });
   }
 
   // Define methods for user operations here
@@ -32,10 +36,7 @@ export class UserService {
   ): Observable<ApiResponse> {
     if (userData?.id) {
       // Update existing user
-      return this.http.put<ApiResponse>(
-        `${this.apiUrl}/update/${userData?.id}`,
-        userData
-      );
+      return this.http.put<ApiResponse>(`${this.apiUrl}/${userData.id}`, userData);
     }
     // Create new user
     return this.http.post<ApiResponse>(`${this.apiUrl}/create`, userData);

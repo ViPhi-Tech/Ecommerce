@@ -50,8 +50,10 @@ export class SchedulingService {
     });
   }
 
-  getTodaySchedules(): Observable<ApiResponse<ScheduleEntity[]>> {
-    return this.http.get<ApiResponse<ScheduleEntity[]>>(`${this.apiUrl}/today`);
+  getTodaySchedules(skipLoader = true): Observable<ApiResponse<ScheduleEntity[]>> {
+    return this.http.get<ApiResponse<ScheduleEntity[]>>(`${this.apiUrl}/today`, {
+      headers: { 'Skip-Loader': skipLoader ? 'true' : 'false' },
+    });
   }
 
   create(payload: CreateScheduleDTO): Observable<ApiResponse<ScheduleEntity>> {

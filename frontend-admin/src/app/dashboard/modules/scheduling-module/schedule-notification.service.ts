@@ -2,7 +2,6 @@ import { DestroyRef, inject, Injectable, OnDestroy, signal } from '@angular/core
 import { SchedulingService, ScheduleEntity } from './scheduling.service';
 import dayjs from 'dayjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
 
 interface StoredScheduleNotification {
   id: number;
@@ -58,7 +57,7 @@ export class ScheduleNotificationService implements OnDestroy {
   }
 
   getTodaySchedules(): void {
-    this.schedulingService.getTodaySchedules().pipe(takeUntilDestroyed(this.destroyedRef)).subscribe({
+    this.schedulingService.getTodaySchedules(true).pipe(takeUntilDestroyed(this.destroyedRef)).subscribe({
       next: (res) => {
         const all = (res.data ?? res.dados ?? []) as ScheduleEntity[];
         const today = all.filter((s) => dayjs(s.startDateTime).isSame(dayjs(), 'day'));

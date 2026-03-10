@@ -24,7 +24,6 @@ import { FormModule } from 'app/shared/components/form/form.module';
 import { ToastModule } from 'primeng/toast';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SYSTEM_MODULES } from 'app/shared/constants/system-modules.constants';
-import { UserMessageDialogComponent } from 'app/shared/components/user-message-dialog/user-message-dialog.component';
 import { UserMessageDialogService } from 'app/shared/services/user-message-dialog.service';
 
 @Component({
@@ -39,7 +38,6 @@ import { UserMessageDialogService } from 'app/shared/services/user-message-dialo
     TextareaModule,
     FormModule,
     ToastModule,
-    UserMessageDialogComponent,
   ],
 })
 export class UserCreateComponent implements OnInit {
@@ -76,6 +74,7 @@ export class UserCreateComponent implements OnInit {
 
   initForm() {
     this.userForm = this.formBuilder.group({
+      id: [''],
       fullName: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
       roles: [[], [Validators.required]], // Array de roles (perfis) selecionados
@@ -99,13 +98,15 @@ export class UserCreateComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: response => {
-          const user = response.data || response;
+          const user = response.dados || response;
           this.userForm.patchValue({
+            id: user?.id ?? '',
             fullName: user.fullName,
-            email: user.email,
+            email: user.login?.email ?? '',
             roles: user.roles || user.modules || [],
           });
           this.isLoading.set(false);
+          this.userForm.get('email')?.disable();
         },
         error: error => {
           console.error('Error loading user:', error);

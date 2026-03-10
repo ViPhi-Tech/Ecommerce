@@ -99,19 +99,19 @@ export class UserController {
       const id = parseInt(request.params.id, 10);
       
       if (isNaN(id)) {
-        return reply.code(400).send({ message: 'Invalid ID format' });
+        return reply.code(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({ status: false, descricao: 'ID inválido' });
       }
       
       const user = await this.getUserUseCase.findById(id);
 
-      return reply.code(200).send(user);
+      return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: user });
     } catch (error) {
       if (error instanceof UserNotFoundError) {
-        return reply.code(404).send({ message: error.message });
+        return reply.code(HTTP_STATUS.API_STATUS_NOT_FOUND).send({ status: false, descricao: error.message });
       }
       
       console.error(error);
-      return reply.code(500).send({ message: 'Internal server error' });
+      return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
     }
   };
 
@@ -123,10 +123,10 @@ export class UserController {
         ? await this.getUserUseCase.findAllWithLogin()
         : await this.getUserUseCase.findAll();
 
-      return reply.code(200).send(users);
+      return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: users });
     } catch (error) {
       console.error(error);
-      return reply.code(500).send({ message: 'Internal server error' });
+      return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
     }
   };
 
@@ -135,32 +135,43 @@ export class UserController {
       const id = parseInt(request.params.id, 10);
       
       if (isNaN(id)) {
-        return reply.code(400).send({ message: 'Invalid ID format' });
+        return reply.code(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({ status: false, descricao: 'ID inválido' });
       }
-      
-      const { user: userData, login: loginData } = request.body as {
-        user?: UpdateUserDTO;
-        login?: UpdateLoginDTO;
-      };
-      
-      if (!userData && !loginData) {
-        return reply.code(400).send({ message: 'No data provided for update' });
-      }
-      
-      const user = await this.updateUserUseCase.execute(id, userData || {}, loginData);
 
-      return reply.code(200).send(user);
+      const body = request.body as {
+        fullName?: string;
+        roles?: string[];
+      };
+
+      if (!body || (!body.fullName && (!body.roles || body.roles.length === 0))) {
+        return reply
+          .code(HTTP_STATUS.API_STATUS_BAD_REQUEST)
+          .send({ status: false, descricao: 'Nenhum dado fornecido para atualização' });
+      }
+
+      const userData: UpdateUserDTO = {};
+      if (body.fullName) {
+        userData.fullName = body.fullName;
+      }
+
+      const roles = body.roles;
+
+      const user = await this.updateUserUseCase.execute(id, userData, roles);
+
+      return reply
+        .code(HTTP_STATUS.API_STATUS_SUCCESS)
+        .send({ status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: user });
     } catch (error) {
       if (error instanceof UserNotFoundError) {
-        return reply.code(404).send({ message: error.message });
+        return reply.code(HTTP_STATUS.API_STATUS_NOT_FOUND).send({ status: false, descricao: error.message });
       }
       
       if (error instanceof EmailAlreadyExistsError) {
-        return reply.code(409).send({ message: error.message });
+        return reply.code(HTTP_STATUS.API_STATUS_CONFLICT).send({ status: false, descricao: error.message });
       }
       
       console.error(error);
-      return reply.code(500).send({ message: 'Internal server error' });
+      return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
     }
   };
 
@@ -169,7 +180,7 @@ export class UserController {
       const id = parseInt(request.params.id, 10);
       
       if (isNaN(id)) {
-        return reply.code(400).send({ message: 'Invalid ID format' });
+        return reply.code(HTTP_STATUS.API_STATUS_BAD_REQUEST).send({ status: false, descricao: 'ID inválido' });
       }
       
       await this.deleteUserUseCase.execute(id);
@@ -177,11 +188,11 @@ export class UserController {
       return reply.code(204).send();
     } catch (error) {
       if (error instanceof UserNotFoundError) {
-        return reply.code(404).send({ message: error.message });
+        return reply.code(HTTP_STATUS.API_STATUS_NOT_FOUND).send({ status: false, descricao: error.message });
       }
       
       console.error(error);
-      return reply.code(500).send({ message: 'Internal server error' });
+      return reply.code(HTTP_STATUS.API_STATUS_INTERNAL_ERROR).send({ status: false, descricao: HTTP_MESSAGES.API_STATUS_INTERNAL_ERROR });
     }
   };
 
