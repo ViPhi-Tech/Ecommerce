@@ -46,7 +46,15 @@
       <strong>Horário selecionado:</strong> {{ v }}
     </div>
   }
-
-
-  alteracao teste
+  <div class="mt-8 card">
+    <h2 class="card-title">Exemplo de Data Table (Produtos)</h2>
+    <p class="text-sm text-gray-600 mb-3">
+      Exemplo simples usando o novo componente <code>fuse-data-table</code>, baseado na lista de produtos.
+    </p>
+    <fuse-data-table
+      [columns]="productColumns"
+      [data]="productRows"
+      countLabel="produtos"
+    />
+  </div>
 </div>

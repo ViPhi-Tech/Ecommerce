@@ -1,0 +1,72 @@
+<div class="flex flex-wrap items-center justify-between gap-4 mt-4">
+  <div class="flex flex-wrap items-center gap-4">
+    <p class="text-sm text-slate-500 dark:text-slate-400">
+      Exibindo
+      <span class="font-semibold text-slate-900 dark:text-white">{{
+        pagination().showingFrom
+      }}</span>
+      a
+      <span class="font-semibold text-slate-900 dark:text-white">{{ pagination().showingTo }}</span>
+      de <span class="font-semibold text-slate-900 dark:text-white">{{ pagination().total }}</span>
+      {{ pagination().countLabel }}
+    </p>
+    @if (pagination().pageSizeOptions?.length) {
+      <div class="flex items-center gap-2">
+        <span class="text-sm text-slate-500 dark:text-slate-400">Por página</span>
+        <div class="flex rounded-lg border border-slate-200 dark:border-slate-700 overflow-hidden">
+          @for (size of pagination().pageSizeOptions; track size) {
+            <button
+              type="button"
+              class="px-3 py-1.5 text-sm font-medium transition-colors min-w-[2.5rem]"
+              [class.bg-primary]="pagination().pageSize === size"
+              [class.text-white]="pagination().pageSize === size"
+              [class.text-slate-600]="pagination().pageSize !== size"
+              [class.dark:text-slate-300]="pagination().pageSize !== size"
+              [class.hover:bg-slate-100]="pagination().pageSize !== size"
+              [class.dark:hover:bg-slate-700]="pagination().pageSize !== size"
+              (click)="onPageSizeChange(size)"
+            >
+              {{ size }}
+            </button>
+          }
+        </div>
+      </div>
+    }
+  </div>
+  @if (pagination().totalPages > 1) {
+    <div class="flex items-center gap-2">
+      <button
+        type="button"
+        class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        [disabled]="pagination().currentPage <= 1"
+        (click)="onPageChange(pagination().currentPage - 1)"
+      >
+        {{ pagination().previousLabel ?? 'Anterior' }}
+      </button>
+      @for (p of pagination().pages; track p) {
+        <button
+          type="button"
+          class="px-3 py-1.5 rounded-lg border text-sm font-medium transition-colors min-w-[2.5rem]"
+          [class.border-slate-200]="p !== pagination().currentPage"
+          [class.dark:border-slate-700]="p !== pagination().currentPage"
+          [class.bg-primary]="p === pagination().currentPage"
+          [class.text-white]="p === pagination().currentPage"
+          [class.border-primary]="p === pagination().currentPage"
+          [class.hover:bg-slate-50]="p !== pagination().currentPage"
+          [class.dark:hover:bg-slate-800]="p !== pagination().currentPage"
+          (click)="onPageChange(p)"
+        >
+          {{ p }}
+        </button>
+      }
+      <button
+        type="button"
+        class="px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+        [disabled]="pagination().currentPage >= pagination().totalPages"
+        (click)="onPageChange(pagination().currentPage + 1)"
+      >
+        {{ pagination().nextLabel ?? 'Próximo' }}
+      </button>
+    </div>
+  }
+</div>

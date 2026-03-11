@@ -1,0 +1,21 @@
+<div class="flex items-center gap-3">
+  <div
+    class="size-10 rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden flex items-center justify-center"
+  >
+    @if (row()[column().avatarUrlKey]) {
+      <img
+        class="w-full h-full object-cover"
+        [alt]="row()[column().avatarAltKey]"
+        [src]="row()[column().avatarUrlKey]"
+      />
+    } @else {
+      <ng-icon name="lucideUser" class="size-full text-slate-500 dark:text-slate-400" />
+    }
+  </div>
+  <div class="flex flex-col">
+    <span class="text-sm font-semibold text-slate-900 dark:text-white">{{
+      row()[column().nameKey]
+    }}</span>
+    <span class="text-xs text-slate-500">{{ row()[column().subKey] }}</span>
+  </div>
+</div>

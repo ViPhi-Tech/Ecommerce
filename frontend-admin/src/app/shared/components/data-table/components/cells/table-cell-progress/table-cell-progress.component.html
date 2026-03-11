@@ -1,0 +1,8 @@
+<div class="flex items-center gap-3 w-32">
+  <div class="flex-1 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
+    <div class="bg-primary h-full rounded-full" [style.width.%]="row()[column().valueKey]"></div>
+  </div>
+  <span class="text-xs font-bold text-slate-600 dark:text-slate-300">
+    {{ row()[column().valueKey] }}{{ column().suffix ?? '' }}
+  </span>
+</div>

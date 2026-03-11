@@ -1,0 +1,9 @@
+<span
+  class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold"
+  [class]="row()[column().classKey]"
+>
+  @if (column().dotKey && row()[column().dotKey]) {
+    <span [class]="dotClass"></span>
+  }
+  {{ label() }}
+</span>

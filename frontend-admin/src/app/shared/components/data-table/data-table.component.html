@@ -1,0 +1,101 @@
+<div class="mb-4">
+  <ng-content select="[header-buttons]"></ng-content>
+</div>
+<div
+  class="bg-white dark:bg-slate-900/50 rounded-xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm"
+>
+  <div class="overflow-x-auto overflow-y-hidden">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr
+          class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200 dark:border-slate-700"
+        >
+          @for (col of columns(); track col.key) {
+            <th
+              class="px-6 py-4 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400"
+              [class.text-right]="col.align === 'right'"
+              [class.text-center]="col.align === 'center'"
+            >
+              @if (col.sortable) {
+                <button
+                  type="button"
+                  class="flex items-center gap-1.5 w-full hover:text-slate-700 dark:hover:text-slate-200 transition-colors outline-none focus:ring-2 focus:ring-primary/50 rounded"
+                  [class.justify-end]="col.align === 'right'"
+                  [class.justify-center]="col.align === 'center'"
+                  (click)="onSortColumn(col)"
+                >
+                  <span>{{ col.label }}</span>
+                  @if (getSortIcon(col); as icon) {
+                    <ng-icon [name]="icon" size="14" class="opacity-70 shrink-0" />
+                  }
+                </button>
+              } @else {
+                {{ col.label }}
+              }
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+        @for (row of paginatedData(); track row[trackByKey()]; let i = $index) {
+          <tr
+            class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors"
+            [style.animation-delay.ms]="getRowAnimationDelay(i)"
+          >
+            @for (col of columns(); track col.key) {
+              <td
+                class="px-6 py-4"
+                [class.text-right]="col.align === 'right'"
+                [class.text-center]="col.align === 'center'"
+                [class]="col.cellClass"
+              >
+                @switch (col.type) {
+                  @case ('avatar') {
+                    <fuse-table-cell-avatar [column]="col" [row]="row" />
+                  }
+                  @case ('nameSub') {
+                    <fuse-table-cell-name-sub [column]="col" [row]="row" />
+                  }
+                  @case ('badge') {
+                    <fuse-table-cell-badge
+                      [column]="col"
+                      [row]="row"
+                      [classMap]="col.classMap"
+                      [labelMap]="col.labelMap"
+                    />
+                  }
+                  @case ('progress') {
+                    <fuse-table-cell-progress [column]="col" [row]="row" />
+                  }
+                  @case ('link') {
+                    <fuse-table-cell-link [column]="col" [row]="row" />
+                  }
+                  @case ('actions') {
+                    <fuse-table-cell-actions [column]="col" [row]="row" />
+                  }
+                  @default {
+                    <fuse-table-cell-text [column]="col" [row]="row" />
+                  }
+                }
+              </td>
+            }
+          </tr>
+        } @empty {
+          <tr>
+            <td
+              [attr.colspan]="columns().length"
+              class="px-6 py-12 text-center text-slate-500 dark:text-slate-400"
+            >
+              {{ emptyMessage() }}
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
+<fuse-table-pagination
+  [pagination]="pagination()"
+  (pageChange)="onPageChange($event)"
+  (pageSizeChange)="onPageSizeChange($event)"
+/>

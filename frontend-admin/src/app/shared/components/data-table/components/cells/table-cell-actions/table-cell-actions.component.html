@@ -1,0 +1,45 @@
+<div class="flex items-center justify-center gap-2 relative">
+  @for (action of visibleActions(); track action.label) {
+    <button
+      type="button"
+      [class]="action.class"
+      (click)="handleActionClick(action)"
+      class="action-button"
+      [attr.aria-label]="action.label"
+      [title]="action.label"
+    >
+      <ng-icon [name]="action.icon" size="16" aria-hidden="true" />
+    </button>
+  }
+  @if (hasMoreActions()) {
+    <div class="more-actions-wrapper">
+      <button
+        type="button"
+        class="more-actions-button"
+        (click)="toggleDropdown()"
+        [attr.aria-expanded]="isDropdownOpen()"
+        aria-label="Mais ações"
+        title="Mais ações"
+      >
+        <ng-icon name="lucideMoreVertical" size="16" aria-hidden="true" />
+      </button>
+      @if (isDropdownOpen()) {
+        <div
+          class="absolute right-0 top-full mt-1 z-50 min-w-48 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 shadow-lg py-1"
+        >
+          @for (action of hiddenActions(); track action.label) {
+            <button
+              type="button"
+              [title]="action.label"
+              class="w-full flex items-center cursor-pointer gap-3 px-4 py-2 text-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors text-left"
+              (click)="handleActionClick(action)"
+            >
+              <ng-icon [name]="action.icon" size="16" class="dropdown-icon" aria-hidden="true" />
+              <span>{{ action.label }}</span>
+            </button>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

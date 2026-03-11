@@ -1,0 +1,22 @@
+@reference "tailwindcss";
+
+:host {
+  display: block;
+}
+
+.action-button {
+  @apply px-3 py-1.5 rounded-lg text-sm font-medium transition-colors flex items-center justify-center cursor-pointer;
+}
+
+.more-actions-wrapper {
+  @apply relative;
+}
+
+.more-actions-button {
+  @apply px-3 py-1.5 rounded-lg text-sm font-medium transition-colors bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 flex items-center justify-center;
+}
+
+
+.dropdown-icon {
+  @apply shrink-0 text-slate-500 dark:text-slate-400;
+}

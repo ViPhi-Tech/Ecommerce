@@ -1,0 +1,19 @@
+:host {
+  display: block;
+}
+
+/* Animação de entrada por linha (apenas opacity para não disparar scroll) */
+@keyframes rowEnter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+tbody tr {
+  opacity: 0;
+  animation: rowEnter 0.25s ease-out forwards;
+}
