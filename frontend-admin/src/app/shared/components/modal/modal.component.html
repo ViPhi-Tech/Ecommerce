@@ -1,0 +1,57 @@
+<div
+  #backdrop
+  class="modal-backdrop fixed inset-0 z-9999 flex items-center justify-center p-4 bg-black/50"
+  role="dialog"
+  aria-modal="true"
+  [attr.aria-labelledby]="title() ? titleId() : null"
+  tabindex="-1"
+  (click)="onBackdropClick()"
+  (keydown)="onEscapeKey($event)"
+  [@backdropEnter]
+>
+  <div
+    class="w-full max-w-2xl bg-white dark:bg-[#161b2e] border border-slate-200 dark:border-[#1e293b] rounded-xl shadow-2xl overflow-visible"
+    (click)="onContentClick($event)"
+    (keydown)="onEscapeKey($event)"
+    [@contentEnter]
+  >
+    <!-- Header: default (title/subtitle/icon) ou conteúdo projetado em [modal-header] -->
+    @if (title()) {
+      <header
+        class="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-[#1e293b]"
+      >
+        <div class="flex items-center gap-3">
+          @if (icon()) {
+            <div class="bg-primary/10 p-2 rounded-lg text-primary flex items-center justify-center">
+              <ng-icon [name]="icon()" size="20" />
+            </div>
+          }
+          <div>
+            <h2
+              [id]="titleId()"
+              class="text-lg font-semibold tracking-tight text-slate-900 dark:text-white"
+            >
+              {{ title() }}
+            </h2>
+            @if (subtitle()) {
+              <p class="text-xs text-slate-500 dark:text-slate-400">{{ subtitle() }}</p>
+            }
+          </div>
+        </div>
+        <p-button
+          type="button"
+          icon="lucideX"
+          iconSize="20"
+          ariaLabel="Fechar"
+          (clicked)="closeModal()"
+        ></p-button>
+      </header>
+    } @else {
+      <ng-content select="[modal-header]"></ng-content>
+    }
+    <!-- Body: conteúdo com [modal-body] ou qualquer conteúdo restante -->
+    <ng-content select="[modal-body]"></ng-content>
+    <!-- Footer: conteúdo projetado em [modal-footer] -->
+    <ng-content select="[modal-footer]"></ng-content>
+  </div>
+</div>

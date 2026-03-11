@@ -1,0 +1,15 @@
+:host {
+  display: contents;
+}
+
+/* Garante que o backdrop cubra toda a viewport (100vw/100vh) */
+.modal-backdrop {
+  width: 100vw;
+  min-width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
