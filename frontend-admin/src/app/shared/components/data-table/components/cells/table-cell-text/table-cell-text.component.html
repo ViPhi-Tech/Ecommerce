@@ -1,3 +1,50 @@
-<span class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{
-  row()[column().key]
-}}</span>
+@if (column().type === 'date') {
+  <span class="text-sm text-slate-600 dark:text-slate-400 font-medium">
+    {{ row()[column().key] | dateCustom: 'short' }}
+  </span>
+} @else if (column().type === 'datetime') {
+  <span class="text-sm text-slate-600 dark:text-slate-400 font-medium">
+    {{ row()[column().key] | dateCustom: 'medium' }}
+  </span>
+} @else if (column().type === 'phone') {
+  <span class="text-sm text-slate-600 dark:text-slate-400 font-medium">
+    {{ row()[column().key] | phone }}
+  </span>
+} @else if (column().type === 'document') {
+  <span class="text-sm text-slate-600 dark:text-slate-400 font-medium">
+    {{ row()[column().key] | document }}
+  </span>
+} @else if (column().type === 'currency') {
+  <span class="text-sm text-slate-600 dark:text-slate-400 font-medium">
+    {{
+      row()[column().key]
+        | currency: 'BRL':'symbol':'1.2-2':'pt-BR'
+    }}
+  </span>
+} @else if (column().type === 'percent') {
+  <span class="text-sm text-slate-600 dark:text-slate-400 font-medium">
+    {{ row()[column().key] | number: '1.2-2' }}%
+  </span>
+} @else if (column().type === 'activeOrNot') {
+  @if (row()[column().key] === true) {
+    <ng-icon
+      size="18"
+      color="rgb(15, 181, 126)"
+      name="lucideCircleCheckBig"
+    />
+  } @else if (row()[column().key] === false) {
+    <ng-icon
+      size="18"
+      color="rgb(255, 0, 1)"
+      name="lucideCircleSlash2"
+    />
+  } @else {
+    <span class="text-sm text-slate-600 dark:text-slate-400 font-medium">
+      {{ row()[column().key] ?? '' }}
+    </span>
+  }
+} @else {
+  <span class="text-sm text-slate-600 dark:text-slate-400 font-medium">
+    {{ row()[column().key] }}
+  </span>
+}

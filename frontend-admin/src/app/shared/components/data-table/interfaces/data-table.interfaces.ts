@@ -1,5 +1,12 @@
 export type TableColumnType =
   | 'text'
+  | 'date'
+  | 'datetime'
+  | 'phone'
+  | 'document'
+  | 'currency'
+  | 'percent'
+  | 'activeOrNot'
   | 'avatar'
   | 'nameSub'
   | 'badge'
@@ -18,7 +25,15 @@ export interface TableColumnBase {
 }
 
 export interface TableColumnText extends TableColumnBase {
-  type?: 'text';
+  type?:
+    | 'text'
+    | 'date'
+    | 'datetime'
+    | 'phone'
+    | 'document'
+    | 'currency'
+    | 'percent'
+    | 'activeOrNot';
 }
 
 export interface TableColumnAvatar extends TableColumnBase {
