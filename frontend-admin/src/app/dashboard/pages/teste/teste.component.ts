@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
+import { ButtonModule } from 'primeng/button';
 import { DataTableComponent } from 'app/shared/components/data-table/data-table.component';
 import { TableColumn } from 'app/shared/components/data-table/interfaces/data-table.interfaces';
 import { TimeSlotPickerComponent } from 'app/shared/components/time-slot-picker/time-slot-picker.component';
@@ -8,11 +10,12 @@ import { FuseDatePickerComponent } from 'app/shared/components/date-picker/date-
 @Component({
   selector: 'fuse-teste',
   standalone: true,
-  imports: [DatePipe, TimeSlotPickerComponent, FuseDatePickerComponent, DataTableComponent],
+  imports: [DatePipe, TimeSlotPickerComponent, FuseDatePickerComponent, DataTableComponent, ButtonModule],
   templateUrl: './teste.component.html',
   styleUrl: './teste.component.scss',
 })
 export class TesteComponent {
+  private router = inject(Router);
   selected = signal<string | null>(null);
   selectedDate = signal<Date | null>(null);
 
@@ -68,5 +71,9 @@ export class TesteComponent {
 
   onDelete(row: unknown) {
     console.log('Excluir produto (teste data-table):', row);
+  }
+
+  openTesteModal(): void {
+    this.router.navigate([{ outlets: { drawer: ['teste', 'new'] } }]);
   }
 }

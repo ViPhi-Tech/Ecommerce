@@ -1,0 +1,49 @@
+<fuse-modal
+  [title]="title()"
+  subtitle="Exemplo usando fuse-modal em vez de p-dialog"
+  icon="lucideFlaskConical"
+  (closeRequested)="onCloseDialog()"
+>
+  <div modal-body class="p-6">
+    <form [formGroup]="testeForm" class="row">
+      <div class="col-12 mb-4">
+        <fuse-input
+          label="Nome"
+          [control]="testeForm.get('nome')"
+          placeholder="Digite um nome"
+        />
+      </div>
+      <div class="col-12 mb-4">
+        <fuse-input
+          label="Descrição"
+          [control]="testeForm.get('descricao')"
+          placeholder="Digite uma descrição (opcional)"
+        />
+      </div>
+    </form>
+  </div>
+
+  <div
+    modal-footer
+    class="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 dark:border-[#1e293b]"
+  >
+    <button
+      pButton
+      type="button"
+      label="Cancelar"
+      icon="pi pi-times"
+      severity="secondary"
+      [outlined]="true"
+      size="small"
+      (click)="onCloseDialog()"
+    ></button>
+    <button
+      pButton
+      type="submit"
+      label="Salvar"
+      icon="pi pi-check"
+      size="small"
+      (click)="onSubmit()"
+    ></button>
+  </div>
+</fuse-modal>

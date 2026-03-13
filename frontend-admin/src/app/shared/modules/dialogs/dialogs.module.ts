@@ -11,6 +11,7 @@ import { dialogOrderRoutes } from 'app/dashboard/modules/order-module/order.rout
 import { dialogProductRoutes } from 'app/dashboard/modules/product-module/product.routing';
 import { dialogServiceOrderRoutes } from 'app/dashboard/modules/service-order-module/service-order.routing';
 import { dialogUserRoutes } from 'app/dashboard/modules/user-module/user.routing';
+import { dialogTesteRoutes } from 'app/dashboard/pages/teste/teste.routing';
 
 // Combined dialog routes
 export const dialogRoutes: Routes = [
@@ -24,6 +25,7 @@ export const dialogRoutes: Routes = [
   ...dialogUserRoutes,
   ...dialogProductRoutes,
   ...dialogServiceOrderRoutes,
+  ...dialogTesteRoutes,
 ];
 
 @NgModule({
