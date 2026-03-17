@@ -9,3 +9,38 @@
 ::ng-deep .popover-actions .p-popover-content {
   padding: 0 !important;
 }
+
+.theme-mode-btn {
+  @apply flex items-center justify-center gap-1.5 px-2 py-1.5 rounded-md border text-xs cursor-pointer transition-all duration-150;
+  background: transparent;
+  border-color: var(--p-content-border-color);
+  color: var(--p-text-muted-color);
+
+  &:hover:not(:disabled) {
+    border-color: var(--p-primary-color);
+    color: var(--p-text-color);
+  }
+
+  &--active {
+    border-color: var(--p-primary-color);
+    background: color-mix(in srgb, var(--p-primary-color) 12%, transparent);
+    color: var(--p-primary-color);
+    font-weight: 500;
+    cursor: default;
+  }
+}
+
+.theme-color-swatch {
+  @apply w-6 h-6 rounded-full flex items-center justify-center cursor-pointer transition-all duration-150;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  &--active {
+    outline-color: var(--p-primary-color);
+    transform: scale(1.1);
+  }
+}

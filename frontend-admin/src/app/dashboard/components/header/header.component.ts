@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { SidebarService } from '../../../shared/services/sidebar.service';
 import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
 import { SettingsModalService } from '../settings-modal/settings-modal.service';
+import { ThemeService, THEME_COLORS } from '../../../shared/services/theme.service';
 
 @Component({
   selector: 'fuse-header',
@@ -20,6 +21,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   private sidebarService = inject(SidebarService);
   settingsModal = inject(SettingsModalService);
+  themeService = inject(ThemeService);
+
+  readonly themeColors = THEME_COLORS;
 
   pageTitle = signal({
     title: '',
@@ -48,11 +52,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleDarkMode() {
-    document.documentElement.classList.toggle('dark');
-    localStorage.setItem(
-      'theme',
-      document.documentElement.classList.contains('dark') ? 'dark' : 'light'
-    );
+    this.themeService.toggleDarkMode();
   }
 
   logout() {
