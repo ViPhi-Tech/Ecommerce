@@ -9,12 +9,13 @@ import { SidebarService } from '../../../shared/services/sidebar.service';
 import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
 import { SettingsModalService } from '../settings-modal/settings-modal.service';
 import { ThemeService, THEME_COLORS } from '../../../shared/services/theme.service';
+import { AvatarComponent } from '../../../shared/components/avatar/avatar.component';
 
 @Component({
   selector: 'fuse-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  imports: [NgIcon, QuickAccessComponent, PopoverModule, SettingsModalComponent],
+  imports: [NgIcon, QuickAccessComponent, PopoverModule, SettingsModalComponent, AvatarComponent],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   private coreService = inject(CoreService);

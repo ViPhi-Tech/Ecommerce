@@ -100,17 +100,13 @@
         (click)="profilePopover.toggle($event)"
         type="button"
         class="focus:outline-none"
+        aria-label="Abrir menu de perfil"
       >
-        <img
-          alt="User avatar"
-          loading="lazy"
-          width="28"
-          height="28"
-          decoding="async"
-          data-nimg="1"
-          class="rounded-full ring-2 ring-gray-200 dark:ring-[#2B2B30] sm:w-8 sm:h-8 cursor-pointer"
-          src="https://ferf1mheo22r9ira.public.blob.vercel-storage.com/avatar-01-n0x8HFv8EUetf9z6ht0wScJKoTHqf8.png"
-          style="color: transparent"
+        <fuse-avatar
+          [label]="'Admin'"
+          icon="lucideUser"
+          size="normal"
+          shape="circle"
         />
       </button>
 
@@ -119,13 +115,13 @@
           role="menu"
           class="z-50 w-[8rem] px-2 overflow-hidden rounded-md border dark:border-dark bg-popover p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 w-[200px]"
         >
-          <button
+          <!-- <button
             (click)="settingsModal.open(); profilePopover.hide()"
             class="relative cursor-pointer flex w-full select-none items-center gap-2 rounded-sm px-2 py-1.5 outline-none transition-colors hover:bg-accent focus:bg-accent focus:text-accent-foreground"
           >
             <ng-icon name="lucideSettings" size="18" />
             <span class="ml-2 text-sm">Configurações</span>
-          </button>
+          </button> -->
           <button
             (click)="logout()"
             class="relative cursor-pointer flex w-full select-none items-center gap-2 rounded-sm px-2 py-1.5 outline-none transition-colors hover:bg-accent focus:bg-accent focus:text-accent-foreground"
