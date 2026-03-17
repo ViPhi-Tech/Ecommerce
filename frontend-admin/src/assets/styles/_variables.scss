@@ -1,0 +1,89 @@
+:root {
+  // --- Backgrounds ---
+  --color-bg-primary:       #ffffff;
+  --color-bg-secondary:     #f8fafc;   // slate-50
+  --color-bg-card:          #ffffff;
+  --color-bg-input:         #f8fafc;
+  --color-bg-sidebar:       #ffffff;
+  --color-bg-overlay:       rgba(0, 0, 0, 0.5);
+
+  // --- Borders ---
+  --color-border:           #e2e8f0;   // slate-200
+  --color-border-strong:    #cbd5e1;   // slate-300
+
+  // --- Text ---
+  --color-text-primary:     #0f172a;   // slate-900
+  --color-text-secondary:   #475569;   // slate-600
+  --color-text-muted:       #94a3b8;   // slate-400
+  --color-text-inverted:    #ffffff;
+
+  // --- Status ---
+  --color-success:          #22c55e;   // green-500
+  --color-success-bg:       #f0fdf4;   // green-50
+  --color-warning:          #f59e0b;   // amber-500
+  --color-warning-bg:       #fffbeb;   // amber-50
+  --color-danger:           #ef4444;   // red-500
+  --color-danger-bg:        #fef2f2;   // red-50
+  --color-info:             #3b82f6;   // blue-500
+  --color-info-bg:          #eff6ff;   // blue-50
+
+  // --- Scrollbar ---
+  --scrollbar-thumb:        #cbd5e1;
+  --scrollbar-thumb-hover:  #94a3b8;
+
+  // --- Input ---
+  --input-background:       #fff;
+  --input-border-color:     #e2e8f0;
+  --input-text-color:       #0f172a;
+  --input-placeholder-color: #94a3b8;
+  --input-focus-border-color: #6366f1;
+  --input-focus-box-shadow: none;
+  --input-focus-outline: none;
+  --input-disabled-background: #eeeeee;
+  --input-invalid-border-color: #ef4444;
+}
+
+:root.dark {
+  // --- Backgrounds ---
+  --color-bg-primary:       #0d1117;
+  --color-bg-secondary:     #101322;
+  --color-bg-card:          #161b2e;
+  --color-bg-input:         #101322;
+  --color-bg-sidebar:       #0d1117;
+  --color-bg-overlay:       rgba(0, 0, 0, 0.7);
+
+  // --- Borders ---
+  --color-border:           #1e293b;   // slate-800
+  --color-border-strong:    #334155;   // slate-700
+
+  // --- Text ---
+  --color-text-primary:     #f1f5f9;   // slate-100
+  --color-text-secondary:   #94a3b8;   // slate-400
+  --color-text-muted:       #475569;   // slate-600
+  --color-text-inverted:    #0f172a;
+
+  // --- Status (mantém cores vivas no dark) ---
+  --color-success:          #4ade80;   // green-400
+  --color-success-bg:       #052e16;
+  --color-warning:          #fbbf24;   // amber-400
+  --color-warning-bg:       #1c1002;
+  --color-danger:           #f87171;   // red-400
+  --color-danger-bg:        #1c0202;
+  --color-info:             #60a5fa;   // blue-400
+  --color-info-bg:          #01061c;
+
+  // --- Scrollbar ---
+  --scrollbar-thumb:        #334155;
+  --scrollbar-thumb-hover:  #475569;
+
+  // --- Input ---
+  --input-background:       #101322;
+  --input-border-color:     #1e293b;
+  --input-text-color:       #f1f5f9;
+  --input-placeholder-color: #94a3b8;
+  --input-focus-border-color: #6366f1;
+  --input-focus-box-shadow: none;
+  --input-focus-outline: none;
+  --input-disabled-background: #101322;
+  --input-invalid-border-color: #ef4444;
+}

@@ -20,11 +20,11 @@
     height: 2.75rem; // h-11
     padding-left: 1rem; // px-4
     padding-right: 1rem;
-    background-color: #f8fafc; // bg-slate-50
+    background-color: var(--input-background);
     border: 1px solid var(--p-select-border-color); // border-slate-200
     border-radius: 0.5rem; // rounded-lg
     font-size: 0.875rem; // text-sm
-    color: #0f172a; // text-slate-900
+    color: var(--input-text-color); // text-slate-900
     transition: all 0.2s;
     outline: none;
 
@@ -38,30 +38,21 @@
       outline: none;
     }
 
-    // Dark mode styles
-    .dark & {
-      background-color: #101322; // dark:bg-[#101322]
-      border-color: #1e293b; // dark:border-[#1e293b]
-      color: #fff; // dark:text-white
-    }
     &.ng-invalid.ng-touched {
-      @apply border-red-500;
+      border-color: var(--input-invalid-border-color);
     }
-    &.ng-valid.ng-touched {
-      @apply border-green-500;
-    }
+   
     &[disabled] {
-      background-color: var(--p-input-disabled-background);
+      background-color: var(--input-disabled-background);
     }
   }
 
   .fuse-textarea-base {
     padding: 1rem; // px-4
-    background-color: #f8fafc; // bg-slate-50
     border: 1px solid var(--p-select-border-color); // border-slate-200
     border-radius: 0.5rem; // rounded-lg
     font-size: 0.875rem; // text-sm
-    color: #0f172a; // text-slate-900
+    color: var(--input-text-color); // text-slate-900
     transition: all 0.2s;
     outline: none;
 
@@ -70,22 +61,17 @@
     }
 
     &:focus {
-      border-color: var(--primary, #6366f1); // focus:border-primary, fallback to a typical primary if CSS var missing
-      box-shadow: none; // focus:ring-0
-      outline: none;
+      border-color: var(--input-focus-border-color); // focus:border-primary, fallback to a typical primary if CSS var missing
+      box-shadow: var(--input-focus-box-shadow); // focus:ring-0   ```
+      outline: var(--input-focus-outline);
     }
 
-    // Dark mode styles
-    .dark & {
-      background-color: #101322; // dark:bg-[#101322]
-      border-color: #1e293b; // dark:border-[#1e293b]
-      color: #fff; // dark:text-white
-    }
     &.ng-invalid.ng-touched {
-      @apply border-red-500;
+      border-color: var(--input-invalid-border-color);
     }
-    &.ng-disabled.ng-touched {
-      @apply border-gray-300;
+
+    &[disabled] {
+      background-color: var(--input-disabled-background);
     }
   }
 }
