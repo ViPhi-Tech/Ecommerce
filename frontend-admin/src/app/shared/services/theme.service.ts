@@ -94,8 +94,6 @@ export class ThemeService {
   }
 
   setPrimaryColor(name: string): void {
-    console.log('setPrimaryColor', name);
-    
     this.applyColor(name);
   }
 
