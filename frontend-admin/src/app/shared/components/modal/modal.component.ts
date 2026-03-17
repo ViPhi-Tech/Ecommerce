@@ -18,16 +18,16 @@ import { ButtonModule } from 'primeng/button';
 export const modalBackdropAnimation = trigger('backdropEnter', [
   state('open', style({ opacity: 1 })),
   state('closing', style({ opacity: 0 })),
-  transition(':enter', [style({ opacity: 0 }), animate('200ms ease-out', style({ opacity: 1 }))]),
-  transition('open => closing', [animate('200ms ease-in')]),
+  transition(':enter', [style({ opacity: 0 }), animate('150ms ease-out', style({ opacity: 1 }))]),
+  transition('open => closing', [animate('150ms ease-in')]),
 ]);
 
 export const modalContentAnimation = trigger('contentEnter', [
-  state('open', style({ opacity: 1, transform: 'scale(1) translateY(0)' })),
-  state('closing', style({ opacity: 0, transform: 'scale(0.96) translateY(-8px)' })),
+  state('open', style({ opacity: 1, transform: 'scale(1)' })),
+  state('closing', style({ opacity: 0, transform: 'scale(0.85)' })),
   transition(':enter', [
-    style({ opacity: 0, transform: 'scale(0.96) translateY(-8px)' }),
-    animate('250ms ease-out', style({ opacity: 1, transform: 'scale(1) translateY(0)' })),
+    style({ opacity: 0, transform: 'scale(0.85)' }),
+    animate('300ms cubic-bezier(0.34, 1.56, 0.64, 1)', style({ opacity: 1, transform: 'scale(1)' })),
   ]),
   transition('open => closing', [animate('200ms ease-in')]),
 ]);

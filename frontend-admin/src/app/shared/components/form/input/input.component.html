@@ -12,28 +12,36 @@
   }
 
   @if (type() === 'text' && !isLoading()) {
+    @if (prefix()) {
+      <div
+        class="absolute inset-y-0 left-3 flex items-center pointer-events-none *:pointer-events-auto"
+      >
+        <ng-content select="[inputPrefix]"></ng-content>
+      </div>
+    }
     <input
-      pInputText
-      [formControl]="control()"
-      class="{{ addictionalClass() }}"
-      [pSize]="size()"
-      [placeholder]="placeholder()"
       [id]="idRef()"
-      [name]="idRef()"
-      (blur)="blurChangeComponent($event)"
-      (input)="inputChangeComponent($event)"
-      (keydown)="keydownChangeComponent($event)"
-      [mask]="mask()"
-      [required]="isRequired()"
+      [type]="type()"
+      [placeholder]="placeholder()"
+      [formControl]="control()"
+      class="fuse-input-base {{ addictionalClass() }}"
+      [class.pl-10]="prefix()"
+      [class.pr-11]="suffix()"
     />
+    @if (suffix()) {
+      <div
+        class="absolute inset-y-0 right-3 flex items-center pointer-events-none *:pointer-events-auto"
+      >
+        <ng-content select="[inputSuffix]"></ng-content>
+      </div>
+    }
   }
 
   @if (type() === 'number' && !isLoading()) {
     <input
       type="number"
-      pInputText
+      class="fuse-input-base {{ addictionalClass() }}"
       [formControl]="control()"
-      [pSize]="size()"
       [placeholder]="placeholder()"
       [id]="idRef()"
       [name]="idRef()"
@@ -61,10 +69,8 @@
 
   @if (['price', 'money'].includes(type()) && !isLoading()) {
     <input
-      pInputText
+      class="fuse-input-base {{ addictionalClass() }}"
       [formControl]="control()"
-      class="{{ addictionalClass() }}"
-      [pSize]="size()"
       [placeholder]="placeholder()"
       [id]="idRef()"
       [name]="idRef()"
@@ -82,13 +88,15 @@
 
   @if (type() === 'textarea' && !isLoading()) {
     <textarea
-      pTextarea
+      class="fuse-textarea-base {{ addictionalClass() }}"
       [formControl]="control()"
       [placeholder]="placeholder()"
       [id]="idRef()"
       [name]="idRef()"
       [rows]="rows()"
-      (onBlur)="blurChangeComponent($event)"
+      (blur)="blurChangeComponent($event)"
+      (input)="inputChangeComponent($event)"
+      (keydown)="keydownChangeComponent($event)"
       [required]="isRequired()"
     ></textarea>
   }
@@ -117,7 +125,11 @@
     <p-skeleton height="1rem" styleClass="mb-2" width="100px" />
 
     @if (type() === 'textarea') {
-      <p-skeleton height="6rem" styleClass="mb-2" width="100%" />
+      @if (rows() > 3) {
+        <p-skeleton height="8rem" styleClass="mb-2" width="100%" />
+      } @else {
+        <p-skeleton height="6rem" styleClass="mb-2" width="100%" />
+      }
     } @else {
       <p-skeleton height="2rem" styleClass="mb-2" width="100%" />
     }

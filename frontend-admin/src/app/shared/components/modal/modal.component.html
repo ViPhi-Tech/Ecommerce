@@ -39,15 +39,13 @@
             }
           </div>
         </div>
-        <p-button
-          type="button"
-          iconSize="20"
-          variant="text"
-          ariaLabel="Fechar"
-          (clicked)="closeModal()"
+        <a
+          class="cursor-pointer p-2 rounded-lg text-slate-900 dark:text-white flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+          (click)="closeModal()"
+          (keyup)="closeModal()"
         >
           <ng-icon name="lucideX" size="20" />
-        </p-button>
+      </a>
       </header>
     } @else {
       <div class="flex-shrink-0">

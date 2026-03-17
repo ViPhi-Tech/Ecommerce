@@ -110,7 +110,7 @@ export class ProductCreateComponent implements OnInit {
   initForm(): void {
     this.productForm = this.formBuilder.group({
       id: [''],
-      name: ['', [Validators.required, Validators.maxLength(255)]],
+      name: [{value: '', disabled: true}, [Validators.required, Validators.maxLength(255)]],
       ean: ['', [Validators.required]],
       sku: ['', [Validators.required]],
       categoryId: ['', [Validators.required]],
