@@ -12,11 +12,11 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
-import { Dialog, DialogModule } from 'primeng/dialog';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { InputWithAiPanelComponent } from 'app/shared/components/input-ai-panel/input-ai-panel.component';
+import { ModalComponent } from 'app/shared/components/modal/modal.component';
 import { ProductService } from '../../product.service';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -29,7 +29,7 @@ import { ProductState } from '../../product.state';
   templateUrl: './product-create.component.html',
   styleUrls: ['./product-create.component.scss'],
   imports: [
-    DialogModule,
+    ModalComponent,
     ButtonModule,
     ReactiveFormsModule,
     FormModule,
@@ -37,8 +37,9 @@ import { ProductState } from '../../product.state';
   ],
 })
 export class ProductCreateComponent implements OnInit {
+  @ViewChild(ModalComponent) modal!: ModalComponent;
+
   destroyedRef = inject(DestroyRef);
-  private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
   private formBuilder = inject(FormBuilder);
   private toast = inject(MessageService);
@@ -47,12 +48,9 @@ export class ProductCreateComponent implements OnInit {
   private productState = inject(ProductState);
   categoryState = inject(CategoryState);
 
-  @ViewChild('dialogRef') dialogRef!: Dialog;
-
   formGroup = this.formBuilder.group({});
 
   // signals
-  visible = signal(true);
   title = signal('Cadastrar Produto');
   subtitle = signal('Preencha os dados do novo produto abaixo');
   submitButtonLabel = signal('Salvar');
@@ -156,7 +154,7 @@ export class ProductCreateComponent implements OnInit {
               : 'Produto criado com sucesso!',
           });
           this.productState.getProductList();
-          this.closeDialog();
+          this.onCloseDialog();
         },
         error: () => {
           this.toast.add({
@@ -174,16 +172,7 @@ export class ProductCreateComponent implements OnInit {
     this.productForm.get('quantity')?.disable();
   }
 
-  closeDialog(e = new Event('close')): void {
-    this.dialogRef.close(e);
-  }
-
-  onCloseDialog() {
-    this.visible.set(false);
-    setTimeout(() => {
-      this.router.navigate([{ outlets: { drawer: null } }], {
-        relativeTo: this.activatedRoute.root,
-      });
-    }, 300);
+  onCloseDialog(): void {
+    this.modal.closeModal();
   }
 }

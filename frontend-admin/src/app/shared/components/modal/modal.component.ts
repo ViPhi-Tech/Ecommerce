@@ -6,23 +6,30 @@ import {
   input,
   OnDestroy,
   output,
+  signal,
   ViewChild,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
-import { animate, style, transition, trigger } from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { NgIcon } from '@ng-icons/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 
 export const modalBackdropAnimation = trigger('backdropEnter', [
+  state('open', style({ opacity: 1 })),
+  state('closing', style({ opacity: 0 })),
   transition(':enter', [style({ opacity: 0 }), animate('200ms ease-out', style({ opacity: 1 }))]),
+  transition('open => closing', [animate('200ms ease-in')]),
 ]);
 
 export const modalContentAnimation = trigger('contentEnter', [
+  state('open', style({ opacity: 1, transform: 'scale(1) translateY(0)' })),
+  state('closing', style({ opacity: 0, transform: 'scale(0.96) translateY(-8px)' })),
   transition(':enter', [
     style({ opacity: 0, transform: 'scale(0.96) translateY(-8px)' }),
     animate('250ms ease-out', style({ opacity: 1, transform: 'scale(1) translateY(0)' })),
   ]),
+  transition('open => closing', [animate('200ms ease-in')]),
 ]);
 
 @Component({
@@ -33,17 +40,30 @@ export const modalContentAnimation = trigger('contentEnter', [
   animations: [modalBackdropAnimation, modalContentAnimation],
 })
 export class ModalComponent implements AfterViewInit, OnDestroy {
+  // === Injected Dependencies ===
   private readonly doc = inject(DOCUMENT, { optional: true });
   private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+
+  // === ViewChild References ===
   @ViewChild('backdrop') private readonly backdropRef!: ElementRef<HTMLElement>;
 
+  // === Inputs ===
   readonly title = input<string>('');
   readonly subtitle = input<string>('');
   readonly icon = input<string>('');
   readonly titleId = input<string>('modal-title');
-  readonly closeOnBackdropClick = input<boolean>(true);
+  readonly closeOnBackdropClick = input<boolean>(false);
+  readonly maxWidth = input<string>('672px');
+  readonly modalInUrl = input<boolean>(false);
+
+  // === Outputs ===
   readonly closeRequested = output<void>();
 
+  // === Signals ===
+  readonly closing = signal(false);
+
+  // === Local Variables ===
   private backdropEl: HTMLElement | null = null;
 
   ngAfterViewInit(): void {
@@ -59,7 +79,15 @@ export class ModalComponent implements AfterViewInit, OnDestroy {
   }
 
   closeModal(): void {
-    this.closeRequested.emit();
+    this.closing.set(true);
+    setTimeout(() => {
+      if (this.modalInUrl()) {
+        this.router.navigate([{ outlets: { drawer: null } }], {
+          relativeTo: this.activatedRoute.root,
+        });
+      }
+      this.closeRequested.emit();
+    }, 200);
   }
 
   onBackdropClick(): void {
