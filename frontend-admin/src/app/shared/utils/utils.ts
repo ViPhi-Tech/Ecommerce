@@ -1,5 +1,8 @@
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import * as XLSX from 'xlsx';
+
+dayjs.extend(customParseFormat);
 
 export const randomId = () => {
   return Math.random().toString(36).substring(2, 15);
@@ -89,6 +92,14 @@ export const formatDate = (date: string): string => {
     return dayjs(date).format('YYYY-MM-DD');
   }
   return '';
+};
+
+/** Data de conta a pagar/receber: envia ISO com +3h sobre o início do dia (DD/MM/AAAA do formulário). */
+export const formatAccountsDateForBackend = (dateStr: string): string => {
+  if (!dateStr || typeof dateStr !== 'string') return dateStr;
+  const parsed = dayjs(dateStr, 'DD/MM/YYYY', true);
+  if (!parsed.isValid()) return dateStr;
+  return parsed.startOf('day').add(3, 'hour').toISOString();
 };
 
 export const formatCurrency = (value: number): string => {

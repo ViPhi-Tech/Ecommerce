@@ -20,6 +20,7 @@ import { AccountsPayableService } from '../../accounts-payable.service';
 import { Drawer } from 'primeng/drawer';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import dayjs from 'dayjs';
+import { formatAccountsDateForBackend } from 'app/shared/utils/utils';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -185,7 +186,11 @@ export class AccountsPayableCreateComponent implements OnInit {
       return;
     }
 
-    const payload = { ...formValue };
+    const payload = {
+      ...formValue,
+      issueDate: formatAccountsDateForBackend(formValue.issueDate),
+      dueDate: formatAccountsDateForBackend(formValue.dueDate),
+    };
 
     this.accountsPayableService
       .upsert(payload)

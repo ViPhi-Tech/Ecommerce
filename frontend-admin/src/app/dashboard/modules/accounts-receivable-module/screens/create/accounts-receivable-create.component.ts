@@ -20,6 +20,7 @@ import { AccountsReceivableService } from '../../accounts-receivable.service';
 import { Drawer } from 'primeng/drawer';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import dayjs from 'dayjs';
+import { formatAccountsDateForBackend } from 'app/shared/utils/utils';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
 import { FormModule } from 'app/shared/components/form/form.module';
 import { CheckboxModule } from 'primeng/checkbox';
@@ -201,6 +202,8 @@ export class AccountsReceivableCreateComponent implements OnInit {
 
     const payload: any = {
       ...formValue,
+      issueDate: formatAccountsDateForBackend(formValue.issueDate),
+      dueDate: formatAccountsDateForBackend(formValue.dueDate),
     };
 
     if (formValue.id) {
