@@ -25,7 +25,11 @@ export const parseDate = (dateString?: string | null): Date => {
 		const parts = s.split('/');
 		if (parts.length !== 3) return new Date(NaN);
 		const [day, month, year] = parts;
-		return new Date(Number(year), Number(month) - 1, Number(day));
+		// Interpreta dd/mm/yyyy como "data do calendário em BRT"
+		// (preserva a data correta mesmo que o servidor execute em UTC)
+		return startOfDayBRT(
+			`${Number(year)}-${String(Number(month)).padStart(2, '0')}-${String(Number(day)).padStart(2, '0')}`
+		);
 	}
 
 	// Treat ISO-like strings as pure dates, ignoring timezone offsets
@@ -36,7 +40,10 @@ export const parseDate = (dateString?: string | null): Date => {
 	const isoDatePart = s.split('T')[0];
 	if (/^\d{4}-\d{2}-\d{2}$/.test(isoDatePart)) {
 		const [year, month, day] = isoDatePart.split('-').map(Number);
-		return new Date(year, month - 1, day);
+		// Preserva a "data do calendário" (BRT = UTC-3) mesmo que o servidor/banco
+		// acabe interpretando/gravando em UTC.
+		// Ex: 2026-03-15 vira 2026-03-15T03:00:00.000Z (que corresponde a 15/03 00:00 em UTC-3).
+		return startOfDayBRT(`${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`);
 	}
 
 	// Fallback to Date parser (handles other browser/Node supported formats)

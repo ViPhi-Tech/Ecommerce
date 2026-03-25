@@ -35,7 +35,8 @@ export class AuthController {
           descricao: error.message
         });
       }
-      
+
+      console.error('[auth/login]', error);
       return reply.code(500).send({
         status: false,
         descricao: 'Erro interno do servidor'
@@ -63,7 +64,8 @@ export class AuthController {
           descricao: error.message
         });
       }
-      
+
+      console.error('[auth/login/angular]', error);
       return reply.code(500).send({
         status: false,
         descricao: 'Erro interno do servidor'
