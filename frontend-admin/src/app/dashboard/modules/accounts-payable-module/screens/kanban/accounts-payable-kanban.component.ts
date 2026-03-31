@@ -28,7 +28,6 @@ import { AccountsPayableService } from '../../accounts-payable.service';
 import { PeriodRange } from 'app/shared/components/period/period.component';
 import { SupplierState } from '../../../supplier-module/supplier.state';
 import { ISupplier } from 'app/shared/interfaces/supplier/Supplier';
-import dayjs from 'dayjs';
 
 @Component({
   selector: 'fuse-accounts-payable-kanban',
@@ -111,7 +110,7 @@ export class AccountsPayableKanbanComponent implements OnInit {
   }
 
   async loadAccountsPayable() {
-    await this.state.getAccountsPayableList(true);
+    await this.state.getAccountsPayableList(true, 'all');
   }
 
   private setupKanbanColumns() {

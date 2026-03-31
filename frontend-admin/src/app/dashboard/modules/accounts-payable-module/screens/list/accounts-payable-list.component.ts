@@ -20,12 +20,34 @@ import { AccountsPayableState } from '../../accounts-payable.state';
 import { IAccountsPayable } from 'app/shared/interfaces/accounts-payable/AccountsPayable';
 import { CommonModule } from '@angular/common';
 import SimpleIndicatorComponent from 'app/shared/components/simple-indicator/simple-indicator.component';
+import { buildPeriodRange } from 'app/shared/utils/period-range';
+import { DatePickerModule } from 'primeng/datepicker';
+import { FormsModule } from '@angular/forms';
+import { TooltipModule } from 'primeng/tooltip';
+import { SelectModule } from 'primeng/select';
+import dayjs from 'dayjs';
+import type {
+  AccountsPayableListDueRange,
+  AccountsPayableListStatusParam,
+} from 'app/shared/interfaces/accounts-payable/accounts-payable-list-query';
+
+const LS_FILTERS_KEY = 'payable_list_filters';
+const LS_LEGACY_PERIOD_KEY = 'payable_list_period';
 
 @Component({
   selector: 'fuse-accounts-payable-list',
   templateUrl: './accounts-payable-list.component.html',
   animations: [heightAnimation],
-  imports: [TableComponent, ButtonModule, CommonModule, SimpleIndicatorComponent],
+  imports: [
+    TableComponent,
+    ButtonModule,
+    CommonModule,
+    SimpleIndicatorComponent,
+    DatePickerModule,
+    FormsModule,
+    TooltipModule,
+    SelectModule,
+  ],
 })
 export class AccountsPayableListComponent implements OnInit {
   private router = inject(Router);
@@ -37,14 +59,35 @@ export class AccountsPayableListComponent implements OnInit {
 
   state = inject(AccountsPayableState);
 
+  readonly statusOptions: { label: string; value: AccountsPayableListStatusParam }[] =
+    [
+      { label: 'Todos', value: 'all' },
+      { label: 'Pendente', value: 'pending' },
+      { label: 'Pago', value: 'paid' },
+      { label: 'Vencido', value: 'overdue' },
+      { label: 'Vence em breve', value: 'due_soon' },
+      { label: 'Cancelado', value: 'cancelled' },
+    ];
+
+  dueDateRange = signal<AccountsPayableListDueRange>(
+    (() => {
+      const d = buildPeriodRange('currentMonth');
+      return { startDate: d.startDate, endDate: d.endDate };
+    })()
+  );
+
+  statusFilter = signal<AccountsPayableListStatusParam>('all');
+
+  calendarRangeModel: Date[] | null = null;
+
   tableConfig = signal<TableConfig>({
     rowsPerPageOptions: [5, 10, 20],
     rowsPerPage: 10,
     paginator: true,
     pageLinkSize: 5,
+    exportSort: { field: 'dueDate', order: 'asc' },
     refresh: () => this.loadAccountsPayable(),
     columns: [
-      // { field: 'id', caption: 'ID', sortable: true, filter: true },
       {
         field: 'supplierName',
         caption: 'Fornecedor',
@@ -134,21 +177,118 @@ export class AccountsPayableListComponent implements OnInit {
     ],
   });
 
-  constructor() {
-  }
-
-  async ngOnInit() {
-    // Salvar preferência atual como lista
+  ngOnInit() {
     localStorage.setItem('accounts-payable-view-preference', 'list');
-
+    this.hydrateFiltersFromStorage();
     this.loadAccountsPayable();
   }
 
-  loadAccountsPayable() {
-    this.state.getAccountsPayableList();
+  private hydrateFiltersFromStorage(): void {
+    const raw = localStorage.getItem(LS_FILTERS_KEY);
+    if (raw) {
+      try {
+        const p = JSON.parse(raw) as {
+          startDate: string;
+          endDate: string;
+          status?: AccountsPayableListStatusParam;
+        };
+        const dr: AccountsPayableListDueRange = {
+          startDate: new Date(p.startDate),
+          endDate: new Date(p.endDate),
+        };
+        this.dueDateRange.set(dr);
+        this.calendarRangeModel = [dr.startDate, dr.endDate];
+        if (p.status && this.isValidStatus(p.status)) {
+          this.statusFilter.set(p.status);
+        }
+        return;
+      } catch {
+        /* fallthrough */
+      }
+    }
+
+    const legacy = localStorage.getItem(LS_LEGACY_PERIOD_KEY);
+    if (legacy) {
+      try {
+        const p = JSON.parse(legacy) as {
+          startDate: string;
+          endDate: string;
+        };
+        const dr: AccountsPayableListDueRange = {
+          startDate: new Date(p.startDate),
+          endDate: new Date(p.endDate),
+        };
+        this.dueDateRange.set(dr);
+        this.calendarRangeModel = [dr.startDate, dr.endDate];
+        this.persistFiltersToStorage();
+        return;
+      } catch {
+        /* fallthrough */
+      }
+    }
+
+    const d = buildPeriodRange('currentMonth');
+    const dr = { startDate: d.startDate, endDate: d.endDate };
+    this.dueDateRange.set(dr);
+    this.calendarRangeModel = [dr.startDate, dr.endDate];
+    this.persistFiltersToStorage();
   }
 
-  // Método para marcar como pendente/vencido
+  private isValidStatus(v: string): v is AccountsPayableListStatusParam {
+    return this.statusOptions.some(o => o.value === v);
+  }
+
+  private persistFiltersToStorage(): void {
+    const dr = this.dueDateRange();
+    localStorage.setItem(
+      LS_FILTERS_KEY,
+      JSON.stringify({
+        startDate: dr.startDate.toISOString(),
+        endDate: dr.endDate.toISOString(),
+        status: this.statusFilter(),
+      })
+    );
+  }
+
+  onStatusFilterChange(value: AccountsPayableListStatusParam | null): void {
+    if (value === null || value === undefined) return;
+    this.statusFilter.set(value);
+    this.persistFiltersToStorage();
+    this.loadAccountsPayable();
+  }
+
+  onCalendarRangeChange(value: Date | Date[] | null): void {
+    const dates = Array.isArray(value)
+      ? value.filter((d): d is Date => d instanceof Date)
+      : [];
+    if (dates.length < 2) return;
+    const cur = this.dueDateRange();
+    if (
+      dayjs(cur.startDate).isSame(dayjs(dates[0]), 'day') &&
+      dayjs(cur.endDate).isSame(dayjs(dates[1]), 'day')
+    ) {
+      return;
+    }
+    this.dueDateRange.set({
+      startDate: dates[0],
+      endDate: dates[1],
+    });
+    this.calendarRangeModel = [dates[0], dates[1]];
+    this.persistFiltersToStorage();
+    this.loadAccountsPayable();
+  }
+
+  loadAccountsPayable(): void {
+    const dr = this.dueDateRange();
+    void this.state.getAccountsPayableList(true, {
+      dueDateRange: {
+        startDate: new Date(dr.startDate),
+        endDate: new Date(dr.endDate),
+      },
+      status: this.statusFilter(),
+    });
+  }
+
   async markAsPendingOrOverdue(id: number) {
     this.confirmationService.confirm({
       message:
@@ -189,7 +329,6 @@ export class AccountsPayableListComponent implements OnInit {
     });
   }
 
-  // Método para dar baixa na conta a pagar
   async markAsPaid(id: number) {
     this.confirmationService.confirm({
       message: 'Você tem certeza que deseja dar baixa nesta conta a pagar?',
@@ -277,7 +416,6 @@ export class AccountsPayableListComponent implements OnInit {
   }
 
   navigateToKanban() {
-    // Salvar preferência de visualização
     localStorage.setItem('accounts-payable-view-preference', 'kanban');
     this.router.navigate(['/dashboard/accounts-payable/kanban']);
   }

@@ -1,6 +1,11 @@
 import { TemplateRef } from '@angular/core';
 import { ButtonSeverityType } from '../types/button.types';
 
+export interface TableExportSort {
+  field: string;
+  order: 'asc' | 'desc';
+}
+
 export interface TableConfig {
   rowsPerPageOptions?: number[];
   rowsPerPage?: number;
@@ -20,6 +25,8 @@ export interface TableConfig {
   rowClick?: (rowData: any, rowIndex: number) => void;
   refresh?: () => void;
   rowClass?: (rowData: any) => string | string[] | Record<string, boolean>;
+  /** Applied to the dataset right before Excel export (e.g. due date ascending). */
+  exportSort?: TableExportSort;
 }
 
 export interface TableColumn {

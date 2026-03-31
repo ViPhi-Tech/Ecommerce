@@ -7,7 +7,17 @@ import { FindByStatusAccountsPayableUseCase } from '../../../application/use-cas
 import { FindOverdueAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/FindOverdueAccountsPayableUseCase';
 import { UpdateAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/UpdateAccountsPayableUseCase';
 import { DeleteAccountsPayableUseCase } from '../../../application/use-cases/accounts-payable/DeleteAccountsPayableUseCase';
-import { CreateAccountsPayableInput, UpdateAccountsPayableInput, UpdateAccountsPayableStatusInput } from '../../../application/dto/accountsPayable/AccountsPayableDTOs';
+import {
+  CreateAccountsPayableInput,
+  UpdateAccountsPayableInput,
+  UpdateAccountsPayableStatusInput,
+  accountsPayableListQuerySchema,
+} from '../../../application/dto/accountsPayable/AccountsPayableDTOs';
+import {
+  endOfDayBRT,
+  startOfDayBRT,
+} from '../../../shared/utils/dateUtils';
+import { AccountsPayableListFilter } from '../../../domain/repositories/IAccountsPayableRepository';
 
 export class AccountsPayableController {
   constructor(
@@ -42,8 +52,36 @@ export class AccountsPayableController {
 
   async findAll(request: FastifyRequest, reply: FastifyReply) {
     try {
-      const accountsPayable = await this.findAllAccountsPayableUseCase.execute();
-      
+      const parsed = accountsPayableListQuerySchema.safeParse(request.query);
+      if (!parsed.success) {
+        const msg = parsed.error.issues.map(i => i.message).join('; ');
+        return reply.status(400).send({
+          success: false,
+          message: msg || 'Invalid query parameters',
+        });
+      }
+
+      const { dueDateFrom, dueDateTo, status } = parsed.data;
+
+      const listFilter: AccountsPayableListFilter = {};
+      if (dueDateFrom && dueDateTo) {
+        listFilter.dueDateRange = {
+          dueDateFrom: startOfDayBRT(dueDateFrom),
+          dueDateTo: endOfDayBRT(dueDateTo),
+        };
+      }
+      if (status !== undefined && status !== 'all') {
+        listFilter.status = status;
+      }
+
+      const hasFilter =
+        listFilter.dueDateRange !== undefined || listFilter.status !== undefined;
+
+      const accountsPayable =
+        await this.findAllAccountsPayableUseCase.execute(
+          hasFilter ? listFilter : undefined
+        );
+
       return reply.status(200).send({
         success: true,
         data: accountsPayable,

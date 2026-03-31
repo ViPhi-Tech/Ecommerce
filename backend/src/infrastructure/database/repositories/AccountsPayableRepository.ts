@@ -1,5 +1,8 @@
 import { PrismaClient } from '../prismaClient';
-import { IAccountsPayableRepository } from '../../../domain/repositories/IAccountsPayableRepository';
+import {
+  AccountsPayableListFilter,
+  IAccountsPayableRepository,
+} from '../../../domain/repositories/IAccountsPayableRepository';
 import { AccountsPayable } from '../../../domain/entities/AccountsPayable';
 import { CreateAccountsPayableInput, UpdateAccountsPayableInput } from '../../../application/dto/accountsPayable/AccountsPayableDTOs';
 import { parseDate } from '../../../shared/utils/dateUtils';
@@ -23,8 +26,27 @@ export class AccountsPayableRepository implements IAccountsPayableRepository {
     });
   }
 
-  async findAll(): Promise<AccountsPayable[]> {
+  async findAll(filter?: AccountsPayableListFilter): Promise<AccountsPayable[]> {
+    const where: {
+      dueDate?: { gte: Date; lte: Date };
+      status?: string;
+    } = {};
+
+    if (filter?.dueDateRange) {
+      where.dueDate = {
+        gte: filter.dueDateRange.dueDateFrom,
+        lte: filter.dueDateRange.dueDateTo,
+      };
+    }
+
+    if (filter?.status && filter.status !== 'all') {
+      where.status = filter.status;
+    }
+
+    const hasWhere = Object.keys(where).length > 0;
+
     return await this.prisma.accountsPayable.findMany({
+      where: hasWhere ? where : undefined,
       include: {
         supplier: true,
       },

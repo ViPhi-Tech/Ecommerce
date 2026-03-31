@@ -1,0 +1,32 @@
+---
+description: Monorepo Ecommerce — pacotes, backend em camadas, onde achar regras Angular
+alwaysApply: true
+---
+
+# Projeto Ecommerce
+
+Leia o arquivo **`AGENTS.md`** na raiz do repositório para a estrutura completa e o fluxo de novas features no backend.
+
+## Idioma
+
+- **Código, API (identificadores) e banco** (tabelas, colunas, Prisma, nomes no TypeScript): **inglês**.
+- **Textos de interface** nos frontends (o que o usuário/cliente vê): **pt-BR**.
+
+## Raiz
+
+- Quatro pacotes: `backend/` (Fastify + Prisma + Zod), `frontend-admin/` (Angular), `frontend-ecommerce/` e `frontend-landing-page/` (Next.js).
+- Sem workspace na raiz — `npm`/`dev` por pasta.
+
+## Backend (resumo)
+
+- Camadas: `domain/` → `application/` (use-cases + dto) → `infrastructure/` (routes, controllers, repositories Prisma).
+- Novos endpoints: use case + repository + controller + route + registrar em `handleRoutes.ts` + wiring em `infrastructure/config/dependencies/*Dependencies.ts`.
+- API sob prefixo `/api`; documentação Swagger em `/api/docs`.
+
+## Frontend admin
+
+- Padrões Angular (signals, standalone, etc.): **`frontend-admin/.cursor/rules/agents.mdc`**.
+
+## Escopo
+
+- Mudanças focadas no pacote em questão; seguir estilo e padrões já presentes nos arquivos editados.

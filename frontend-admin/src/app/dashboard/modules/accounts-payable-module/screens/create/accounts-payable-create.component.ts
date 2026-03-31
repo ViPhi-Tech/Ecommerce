@@ -204,7 +204,7 @@ export class AccountsPayableCreateComponent implements OnInit {
               ? 'Conta a pagar atualizada com sucesso!'
               : 'Conta a pagar criada com sucesso!',
           });
-          this.accountsPayableState.getAccountsPayableList();
+          void this.accountsPayableState.reloadAccountsPayableList();
           this.back();
         },
         error: () => {

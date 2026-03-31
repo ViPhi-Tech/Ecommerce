@@ -131,6 +131,32 @@ export class TableComponent implements OnInit {
   });
   ngOnInit() {}
 
+  private sortExportData(
+    rows: any[],
+    field: string,
+    order: 'asc' | 'desc'
+  ): any[] {
+    const dir = order === 'asc' ? 1 : -1;
+    return rows.sort((a, b) => {
+      const va = a?.[field];
+      const vb = b?.[field];
+      if (va == null && vb == null) return 0;
+      if (va == null) return 1;
+      if (vb == null) return -1;
+      const na = typeof va === 'number' ? va : NaN;
+      const nb = typeof vb === 'number' ? vb : NaN;
+      if (!Number.isNaN(na) && !Number.isNaN(nb)) {
+        return (na - nb) * dir;
+      }
+      const da = dayjs(va);
+      const db = dayjs(vb);
+      if (da.isValid() && db.isValid()) {
+        return (da.valueOf() - db.valueOf()) * dir;
+      }
+      return String(va).localeCompare(String(vb), 'pt-BR') * dir;
+    });
+  }
+
   search($event: any, dt2: any) {
     dt2.filterGlobal($event?.target?.value, 'contains');
   }
@@ -141,7 +167,15 @@ export class TableComponent implements OnInit {
 
   exportTable() {
     const columns = this.exportColumns();
-    const data = this.data();
+    let data = this.data();
+    const sortCfg = this.config().exportSort;
+    if (sortCfg?.field && data?.length) {
+      data = this.sortExportData(
+        [...data],
+        sortCfg.field,
+        sortCfg.order ?? 'asc'
+      );
+    }
 
     if (!data || data.length === 0) {
       this.messageService.add({
@@ -152,23 +186,24 @@ export class TableComponent implements OnInit {
       return;
     }
 
-    try {
-      const fileName = this.title() || 'dados';
-      this.excelExportService.exportToExcel(data, columns, fileName);
-
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Sucesso',
-        detail: 'Excel exportado com sucesso!',
+    const fileName = this.title() || 'dados';
+    void this.excelExportService
+      .exportToExcel(data, columns, fileName)
+      .then(() => {
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Sucesso',
+          detail: 'Excel exportado com sucesso!',
+        });
+      })
+      .catch(error => {
+        console.error('Erro ao exportar Excel:', error);
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: 'Erro ao exportar dados para Excel',
+        });
       });
-    } catch (error) {
-      console.error('Erro ao exportar Excel:', error);
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Erro',
-        detail: 'Erro ao exportar dados para Excel',
-      });
-    }
   }
 
   onRowClick(rowData: any, rowIndex: number) {

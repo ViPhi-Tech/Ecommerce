@@ -88,6 +88,49 @@ export const updateAccountsPayableStatusSchema = z.object({
   }),
 });
 
+const accountsPayableListStatusValues = [
+  'all',
+  'pending',
+  'paid',
+  'overdue',
+  'due_soon',
+  'cancelled',
+] as const;
+
+/** Query opcional em GET /all: filtra `dueDate` inclusivo e/ou `status` no banco. */
+export const accountsPayableListQuerySchema = z
+  .object({
+    dueDateFrom: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, {
+        message: 'dueDateFrom must be YYYY-MM-DD',
+      })
+      .optional(),
+    dueDateTo: z
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, {
+        message: 'dueDateTo must be YYYY-MM-DD',
+      })
+      .optional(),
+    status: z.enum(accountsPayableListStatusValues).optional(),
+  })
+  .refine(
+    q =>
+      (q.dueDateFrom === undefined && q.dueDateTo === undefined) ||
+      (q.dueDateFrom !== undefined && q.dueDateTo !== undefined),
+    {
+      message: 'dueDateFrom and dueDateTo must both be provided or both omitted',
+    }
+  )
+  .refine(
+    q => !q.dueDateFrom || !q.dueDateTo || q.dueDateFrom <= q.dueDateTo,
+    { message: 'dueDateFrom must be on or before dueDateTo' }
+  );
+
+export type AccountsPayableListQueryDTO = z.infer<
+  typeof accountsPayableListQuerySchema
+>;
+
 // ===== JSON SCHEMAS (Para Swagger) =====
 export const createAccountsPayableJsonSchema = zodToJsonSchema(createAccountsPayableSchema);
 export const updateAccountsPayableJsonSchema = zodToJsonSchema(updateAccountsPayableSchema);
@@ -95,6 +138,9 @@ export const accountsPayableIdJsonSchema = zodToJsonSchema(accountsPayableIdSche
 export const accountsPayableSupplierJsonSchema = zodToJsonSchema(accountsPayableSupplierSchema);
 export const accountsPayableStatusJsonSchema = zodToJsonSchema(accountsPayableStatusSchema);
 export const updateAccountsPayableStatusJsonSchema = zodToJsonSchema(updateAccountsPayableStatusSchema);
+export const accountsPayableListQueryJsonSchema = zodToJsonSchema(
+  accountsPayableListQuerySchema
+);
 
 // ===== TYPES (Para TypeScript) =====
 export type CreateAccountsPayableDTO = z.infer<typeof createAccountsPayableSchema>;

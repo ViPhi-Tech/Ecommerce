@@ -1,8 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { IAccountsPayable } from 'app/shared/interfaces/accounts-payable/AccountsPayable';
 import { AccountsPayableStatus } from 'app/shared/interfaces/accounts-payable/AccountsPayableStatus';
+import type { AccountsPayableListStatusParam } from 'app/shared/interfaces/accounts-payable/accounts-payable-list-query';
 import { ApiResponse } from 'app/shared/interfaces/api-response.interface';
+import dayjs from 'dayjs';
 import { Observable } from 'rxjs';
 import { environments } from 'src/environments/environments';
 
@@ -15,17 +17,33 @@ export class AccountsPayableService {
 
   constructor() {}
 
-  getAll(skipLoader = true) {
-    const headers: any = {};
+  /**
+   * @param dueRange Filtra `dueDate` inclusivo no servidor.
+   * @param status Filtra pelo status persistido no banco (`all` ou omitido = sem filtro).
+   */
+  getAll(
+    skipLoader = true,
+    dueRange?: { startDate: Date; endDate: Date },
+    status?: AccountsPayableListStatusParam
+  ): Observable<ApiResponse<IAccountsPayable[]>> {
+    const headers: Record<string, string> = {};
     if (skipLoader) {
       headers['Skip-Loader'] = 'true';
     }
 
+    let params = new HttpParams();
+    if (dueRange) {
+      params = params
+        .set('dueDateFrom', dayjs(dueRange.startDate).format('YYYY-MM-DD'))
+        .set('dueDateTo', dayjs(dueRange.endDate).format('YYYY-MM-DD'));
+    }
+    if (status !== undefined && status !== 'all') {
+      params = params.set('status', status);
+    }
+
     return this.http.get<ApiResponse<IAccountsPayable[]>>(
       `${this.apiUrl}/all`,
-      {
-        headers,
-      }
+      { headers, params }
     );
   }
 

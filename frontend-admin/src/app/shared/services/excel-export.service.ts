@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import dayjs from 'dayjs';
 
@@ -14,65 +14,119 @@ export interface ExportColumn {
   providedIn: 'root',
 })
 export class ExcelExportService {
-  constructor() {}
-
   /**
-   * Exporta dados para Excel
-   * @param data Array de dados para exportar
-   * @param columns Configuração das colunas
-   * @param fileName Nome do arquivo (sem extensão)
-   * @param sheetName Nome da planilha
+   * Exporta dados para Excel (formatação preservada via ExcelJS).
    */
-  exportToExcel(
+  async exportToExcel(
     data: any[],
     columns: ExportColumn[],
     fileName = 'exportacao',
     sheetName = 'Dados'
-  ): void {
+  ): Promise<void> {
     if (!data || data.length === 0) {
       console.warn('Nenhum dado para exportar');
       return;
     }
 
-    // Preparar os dados formatados
-    const formattedData = data.map(item => {
-      const formattedItem: any = {};
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = 'Sellup';
 
-      columns.forEach(column => {
-        const value = item[column.dataKey];
-        formattedItem[column.title] = this.formatValue(value, column.type);
+    const sheet = workbook.addWorksheet(sheetName, {
+      views: [{ state: 'frozen', ySplit: 1 }],
+    });
+
+    const headerFill: ExcelJS.Fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FF4472C4' },
+    };
+
+    const zebraFill: ExcelJS.Fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFF3F4F6' },
+    };
+
+    const borderThin: Partial<ExcelJS.Borders> = {
+      top: { style: 'thin', color: { argb: 'FFB4B4B4' } },
+      left: { style: 'thin', color: { argb: 'FFB4B4B4' } },
+      bottom: { style: 'thin', color: { argb: 'FFB4B4B4' } },
+      right: { style: 'thin', color: { argb: 'FFB4B4B4' } },
+    };
+
+    const headerRow = sheet.addRow(columns.map(c => c.title));
+    headerRow.height = 22;
+    headerRow.eachCell((cell, colNumber) => {
+      const col = columns[colNumber - 1];
+      const horizontal = this.excelHorizontalAlign(col.headerAlign);
+      cell.font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 11 };
+      cell.fill = headerFill;
+      cell.alignment = { vertical: 'middle', horizontal };
+      cell.border = borderThin as ExcelJS.Borders;
+    });
+
+    data.forEach((item, rowIndex) => {
+      const values = columns.map(col =>
+        this.formatValue(item[col.dataKey], col.type)
+      );
+      const row = sheet.addRow(values);
+      const isZebra = rowIndex % 2 === 1;
+      row.eachCell((cell, colNumber) => {
+        const col = columns[colNumber - 1];
+        const horizontal = this.bodyHorizontalAlign(col.type);
+        cell.alignment = { vertical: 'middle', horizontal };
+        cell.border = borderThin as ExcelJS.Borders;
+        if (isZebra) {
+          cell.fill = zebraFill;
+        }
       });
-
-      return formattedItem;
     });
 
-    // Criar workbook e worksheet
-    const worksheet = XLSX.utils.json_to_sheet(formattedData);
-    const workbook = XLSX.utils.book_new();
-
-    // Aplicar estilos ao cabeçalho
-    this.styleHeader(worksheet, columns);
-
-    // Ajustar largura das colunas
-    this.autoSizeColumns(worksheet, formattedData, columns);
-
-    // Adicionar worksheet ao workbook
-    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-
-    // Gerar arquivo e fazer download
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: 'xlsx',
-      type: 'array',
-      cellStyles: true,
+    columns.forEach((col, idx) => {
+      const width = this.estimateColumnWidth(col, sheet, idx + 1);
+      sheet.getColumn(idx + 1).width = width;
     });
 
-    this.saveExcelFile(excelBuffer, fileName);
+    const buffer = await workbook.xlsx.writeBuffer();
+    this.saveExcelFile(buffer, fileName);
   }
 
-  /**
-   * Formata valores baseado no tipo
-   */
-  private formatValue(value: any, type?: string): any {
+  private excelHorizontalAlign(
+    headerAlign?: string
+  ): 'left' | 'center' | 'right' {
+    if (headerAlign === 'center') return 'center';
+    if (headerAlign === 'right') return 'right';
+    return 'left';
+  }
+
+  private bodyHorizontalAlign(type?: string): 'left' | 'right' {
+    if (
+      type === 'currency' ||
+      type === 'number' ||
+      type === 'percent'
+    ) {
+      return 'right';
+    }
+    return 'left';
+  }
+
+  private estimateColumnWidth(
+    col: ExportColumn,
+    sheet: ExcelJS.Worksheet,
+    colNumber: number
+  ): number {
+    let max = col.title.length;
+    const rowCount = sheet.rowCount;
+    for (let r = 1; r <= rowCount; r++) {
+      const cell = sheet.getRow(r).getCell(colNumber);
+      const v = cell.value;
+      const len = v != null ? String(v).length : 0;
+      if (len > max) max = len;
+    }
+    return Math.min(Math.max(max + 2, 10), 50);
+  }
+
+  private formatValue(value: any, type?: string): string | number {
     if (value === null || value === undefined) {
       return '';
     }
@@ -88,25 +142,22 @@ export class ExcelExportService {
         return new Intl.NumberFormat('pt-BR', {
           style: 'currency',
           currency: 'BRL',
-        }).format(value);
+        }).format(Number(value));
 
       case 'phone':
-        return this.formatPhone(value);
+        return this.formatPhone(String(value));
 
       case 'document':
-        return this.formatDocument(value);
+        return this.formatDocument(String(value));
 
       case 'activeOrNot':
         return value === true ? 'Ativo' : value === false ? 'Inativo' : '';
 
       default:
-        return value;
+        return typeof value === 'number' ? value : String(value);
     }
   }
 
-  /**
-   * Formata telefone
-   */
   private formatPhone(phone: string): string {
     if (!phone) return '';
 
@@ -121,19 +172,14 @@ export class ExcelExportService {
     return phone;
   }
 
-  /**
-   * Formata documento (CPF/CNPJ)
-   */
   private formatDocument(document: string): string {
     if (!document) return '';
 
     const cleanDoc = document.replace(/\D/g, '');
 
     if (cleanDoc.length === 11) {
-      // CPF
       return cleanDoc.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
     } else if (cleanDoc.length === 14) {
-      // CNPJ
       return cleanDoc.replace(
         /(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/,
         '$1.$2.$3/$4-$5'
@@ -143,75 +189,13 @@ export class ExcelExportService {
     return document;
   }
 
-  /**
-   * Aplica estilos ao cabeçalho
-   */
-  private styleHeader(
-    worksheet: XLSX.WorkSheet,
-    columns: ExportColumn[]
-  ): void {
-    const headerRow = 1;
-
-    columns.forEach((column, index) => {
-      const cellRef = XLSX.utils.encode_cell({ r: 0, c: index });
-
-      if (!worksheet[cellRef]) return;
-
-      worksheet[cellRef].s = {
-        font: { bold: true, color: { rgb: 'FFFFFF' } },
-        fill: { fgColor: { rgb: '4472C4' } },
-        alignment: {
-          horizontal: column.headerAlign || 'left',
-          vertical: 'center',
-        },
-        border: {
-          top: { style: 'thin', color: { rgb: '000000' } },
-          bottom: { style: 'thin', color: { rgb: '000000' } },
-          left: { style: 'thin', color: { rgb: '000000' } },
-          right: { style: 'thin', color: { rgb: '000000' } },
-        },
-      };
+  private saveExcelFile(buffer: BlobPart, fileName: string): void {
+    const data = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
     });
-  }
-
-  /**
-   * Ajusta automaticamente a largura das colunas
-   */
-  private autoSizeColumns(
-    worksheet: XLSX.WorkSheet,
-    data: any[],
-    columns: ExportColumn[]
-  ): void {
-    const colWidths: number[] = [];
-
-    columns.forEach((column, index) => {
-      // Largura mínima baseada no título
-      let maxWidth = column.title.length;
-
-      // Verificar largura dos dados
-      data.forEach(row => {
-        const cellValue = String(row[column.title] || '');
-        if (cellValue.length > maxWidth) {
-          maxWidth = cellValue.length;
-        }
-      });
-
-      // Limitar largura máxima e mínima
-      colWidths[index] = Math.min(Math.max(maxWidth + 2, 10), 50);
-    });
-
-    worksheet['!cols'] = colWidths.map(width => ({ width }));
-  }
-
-  /**
-   * Salva o arquivo Excel
-   */
-  private saveExcelFile(buffer: any, fileName: string): void {
-    const data = new Blob([buffer], { type: 'application/octet-stream' });
     const timestamp = dayjs().format('YYYY-MM-DD_HH-mm-ss');
     const fullFileName = `${fileName}_${timestamp}.xlsx`;
 
-    // Usar file-saver se disponível, senão fallback para download nativo
     if (typeof saveAs === 'function') {
       saveAs(data, fullFileName);
     } else {
@@ -219,9 +203,6 @@ export class ExcelExportService {
     }
   }
 
-  /**
-   * Fallback para download de arquivo
-   */
   private downloadFile(blob: Blob, fileName: string): void {
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement('a');
@@ -235,22 +216,22 @@ export class ExcelExportService {
   }
 
   /**
-   * Exporta dados simples para Excel (sem formatação especial)
+   * Exportação simples (chaves do primeiro registro como colunas).
    */
-  exportSimple(data: any[], fileName = 'exportacao'): void {
+  async exportSimple(
+    data: Record<string, unknown>[],
+    fileName = 'exportacao'
+  ): Promise<void> {
     if (!data || data.length === 0) {
       console.warn('Nenhum dado para exportar');
       return;
     }
 
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Dados');
-
-    const excelBuffer = XLSX.write(workbook, {
-      bookType: 'xlsx',
-      type: 'array',
-    });
-    this.saveExcelFile(excelBuffer, fileName);
+    const keys = Object.keys(data[0]);
+    const columns: ExportColumn[] = keys.map(k => ({
+      title: k,
+      dataKey: k,
+    }));
+    await this.exportToExcel(data, columns, fileName);
   }
 }

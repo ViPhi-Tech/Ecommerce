@@ -1,32 +1,23 @@
 import { Component, input, output, OnInit, computed } from '@angular/core';
 
 import { FormsModule } from '@angular/forms';
-import dayjs from 'dayjs';
 import { SelectModule } from 'primeng/select';
 import { NgIcon } from '@ng-icons/core';
 import { TooltipModule } from 'primeng/tooltip';
+import {
+  buildPeriodRange,
+  type PeriodRange,
+  type PeriodType,
+  type PeriodPreset,
+} from 'app/shared/utils/period-range';
+
+export type { PeriodRange, PeriodType, PeriodPreset } from 'app/shared/utils/period-range';
 
 export interface PeriodOption {
   label: string;
   value: string;
   disabled?: boolean;
 }
-
-export interface PeriodRange {
-  startDate: Date;
-  endDate: Date;
-  periodType: string;
-  firstEmit?: boolean;
-}
-
-export type PeriodType =
-  | 'today'
-  | 'yesterday'
-  | 'last7days'
-  | 'last15days'
-  | 'last30days'
-  | 'currentMonth'
-  | 'all';
 
 @Component({
   selector: 'fuse-period',
@@ -36,7 +27,7 @@ export type PeriodType =
 })
 export default class PeriodComponent implements OnInit {
   // Inputs
-  availablePeriods = input<PeriodType[]>([
+  availablePeriods = input<PeriodPreset[]>([
     'today',
     'yesterday',
     'last7days',
@@ -47,7 +38,7 @@ export default class PeriodComponent implements OnInit {
   ]);
   placeholder = input<string>('Selecione o período');
   disabled = input<boolean>(false);
-  defaultValue = input<PeriodType | undefined>(undefined);
+  defaultValue = input<PeriodPreset | undefined>(undefined);
   storeKey = input<string>('period_selector');
   allowStore = input<boolean>(true);
   size = input<string>('small');
@@ -67,7 +58,7 @@ export default class PeriodComponent implements OnInit {
 
   selectedPeriod: PeriodType | undefined;
 
-  // Todas as opções disponíveis
+  // Todas as opções disponíveis (custom só para exibir valor ao restaurar do storage)
   private allOptions: Record<PeriodType, PeriodOption> = {
     today: { label: 'Hoje', value: 'today' },
     yesterday: { label: 'Ontem', value: 'yesterday' },
@@ -76,31 +67,45 @@ export default class PeriodComponent implements OnInit {
     last30days: { label: 'Últimos 30 dias', value: 'last30days' },
     currentMonth: { label: 'Mês atual', value: 'currentMonth' },
     all: { label: 'Todos', value: 'all' },
+    custom: { label: 'Personalizado', value: 'custom' },
   };
 
   ngOnInit() {
     const storedPeriod = localStorage.getItem(this.storeKey());
     if (storedPeriod && this.allowStore()) {
-      this.selectedPeriod = JSON.parse(storedPeriod).periodType;
+      const parsed = JSON.parse(storedPeriod) as PeriodRange & {
+        startDate: string;
+        endDate: string;
+      };
+      this.selectedPeriod = parsed.periodType as PeriodType;
       if (this.firstEmit()) {
-        this.onPeriodChange(this.selectedPeriod, true);
+        if (parsed.periodType === 'custom') {
+          this.periodChange.emit({
+            startDate: new Date(parsed.startDate),
+            endDate: new Date(parsed.endDate),
+            periodType: 'custom',
+            firstEmit: true,
+          });
+        } else {
+          this.onPeriodChange(this.selectedPeriod as PeriodPreset, true);
+        }
       }
     } else if (this.defaultValue()) {
       this.selectedPeriod = this.defaultValue();
       if (this.firstEmit()) {
-        this.onPeriodChange(this.selectedPeriod, true);
+        this.onPeriodChange(this.selectedPeriod as PeriodPreset, true);
       }
     } else {
       this.selectedPeriod = 'today';
       if (this.firstEmit()) {
-        this.onPeriodChange(this.selectedPeriod, true);
+        this.onPeriodChange(this.selectedPeriod as PeriodPreset, true);
       }
     }
   }
 
   onPeriodChange(periodType: string | undefined, firstEmit = false) {
-    if (!periodType) return;
-    const range = this.calculatePeriodRange(periodType as PeriodType);
+    if (!periodType || periodType === 'custom') return;
+    const range = buildPeriodRange(periodType as PeriodPreset);
     localStorage.setItem(this.storeKey(), JSON.stringify(range));
     this.periodChange.emit({
       ...range,
@@ -108,57 +113,15 @@ export default class PeriodComponent implements OnInit {
     });
   }
 
-  private calculatePeriodRange(periodType: PeriodType): PeriodRange {
-    const now = dayjs();
-    let startDate: dayjs.Dayjs;
-    let endDate: dayjs.Dayjs;
-
-    switch (periodType) {
-      case 'today':
-        startDate = now.startOf('day');
-        endDate = now.endOf('day');
-        break;
-
-      case 'yesterday':
-        startDate = now.subtract(1, 'day').startOf('day');
-        endDate = now.subtract(1, 'day').endOf('day');
-        break;
-
-      case 'last7days':
-        startDate = now.subtract(6, 'day').startOf('day');
-        endDate = now.endOf('day');
-        break;
-
-      case 'last15days':
-        startDate = now.subtract(14, 'day').startOf('day');
-        endDate = now.endOf('day');
-        break;
-
-      case 'last30days':
-        startDate = now.subtract(29, 'day').startOf('day');
-        endDate = now.endOf('day');
-        break;
-
-      case 'currentMonth':
-        startDate = now.startOf('month');
-        endDate = now.endOf('month');
-        break;
-
-      case 'all':
-        // Para "todos", usa uma data muito antiga até hoje
-        startDate = dayjs('2000-01-01').startOf('day');
-        endDate = now.endOf('day');
-        break;
-
-      default:
-        startDate = now.startOf('day');
-        endDate = now.endOf('day');
-    }
-
-    return {
-      startDate: startDate.toDate(),
-      endDate: endDate.toDate(),
-      periodType,
+  /** Usado pelo pai ao definir intervalo pelo calendário; mantém o select alinhado. */
+  setCustomPeriod(startDate: Date, endDate: Date): void {
+    this.selectedPeriod = 'custom';
+    const range: PeriodRange = {
+      startDate,
+      endDate,
+      periodType: 'custom',
     };
+    localStorage.setItem(this.storeKey(), JSON.stringify(range));
+    this.periodChange.emit(range);
   }
 }

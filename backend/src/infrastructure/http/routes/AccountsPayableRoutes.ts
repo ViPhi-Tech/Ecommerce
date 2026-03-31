@@ -7,13 +7,13 @@ import {
   updateAccountsPayableJsonSchema,
   accountsPayableSupplierJsonSchema,
   accountsPayableStatusJsonSchema,
+  accountsPayableListQueryJsonSchema,
 } from "../../../application/dto/accountsPayable/AccountsPayableDTOs";
 
 export default async function accountsPayableRoutes(
   fastify: FastifyInstance,
   options: FastifyPluginOptions
 ) {
-  // Criar conta a pagar
   fastify.post("/create", {
     preValidation: [authenticate],
     schema: {
@@ -24,28 +24,29 @@ export default async function accountsPayableRoutes(
     handler: accountsPayableController.create.bind(accountsPayableController),
   });
 
-  // Buscar conta a pagar por ID
-  fastify.get("/:id", {
-    preValidation: [authenticate],
-    schema: {
-      tags: ["accounts-payable"],
-      summary: "Buscar conta a pagar por ID",
-      params: accountsPayableIdJsonSchema,
-    },
-    handler: accountsPayableController.findById.bind(accountsPayableController),
-  });
-
-  // Listar todas as contas a pagar
+  // Rotas literais antes de /:id para não capturar "all", "overdue", etc.
   fastify.get("/all", {
     preValidation: [authenticate],
     schema: {
       tags: ["accounts-payable"],
-      summary: "Listar todas as contas a pagar",
+      summary:
+        "Listar contas a pagar (query opcional: dueDateFrom, dueDateTo YYYY-MM-DD; status all|pending|paid|overdue|due_soon|cancelled)",
+      querystring: accountsPayableListQueryJsonSchema,
     },
     handler: accountsPayableController.findAll.bind(accountsPayableController),
   });
 
-  // Buscar contas a pagar por fornecedor
+  fastify.get("/overdue", {
+    preValidation: [authenticate],
+    schema: {
+      tags: ["accounts-payable"],
+      summary: "Buscar contas a pagar em atraso",
+    },
+    handler: accountsPayableController.findOverdue.bind(
+      accountsPayableController
+    ),
+  });
+
   fastify.get("/supplier/:supplierId", {
     preValidation: [authenticate],
     schema: {
@@ -58,7 +59,6 @@ export default async function accountsPayableRoutes(
     ),
   });
 
-  // Buscar contas a pagar por status
   fastify.get("/status/:status", {
     preValidation: [authenticate],
     schema: {
@@ -71,19 +71,6 @@ export default async function accountsPayableRoutes(
     ),
   });
 
-  // Buscar contas a pagar em atraso
-  fastify.get("/overdue", {
-    preValidation: [authenticate],
-    schema: {
-      tags: ["accounts-payable"],
-      summary: "Buscar contas a pagar em atraso",
-    },
-    handler: accountsPayableController.findOverdue.bind(
-      accountsPayableController
-    ),
-  });
-
-  // Atualizar conta a pagar
   fastify.put("/update/:id", {
     preValidation: [authenticate],
     schema: {
@@ -95,7 +82,6 @@ export default async function accountsPayableRoutes(
     handler: accountsPayableController.update.bind(accountsPayableController),
   });
 
-  // Atualizar status da conta a pagar
   fastify.patch("/update-status/:id", {
     preValidation: [authenticate],
     schema: {
@@ -107,7 +93,16 @@ export default async function accountsPayableRoutes(
     handler: accountsPayableController.updateStatus.bind(accountsPayableController),
   });
 
-  // Deletar conta a pagar
+  fastify.get("/:id", {
+    preValidation: [authenticate],
+    schema: {
+      tags: ["accounts-payable"],
+      summary: "Buscar conta a pagar por ID",
+      params: accountsPayableIdJsonSchema,
+    },
+    handler: accountsPayableController.findById.bind(accountsPayableController),
+  });
+
   fastify.delete("/:id", {
     preValidation: [authenticate],
     schema: {

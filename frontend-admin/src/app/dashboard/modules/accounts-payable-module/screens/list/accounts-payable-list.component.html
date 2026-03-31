@@ -10,15 +10,6 @@
     </div>
 
     <div class="flex gap-2 sm:gap-3 sm:ml-auto flex-wrap sm:flex-nowrap">
-      <!-- <p-button
-        icon="pi pi-table"
-        label="Kanban"
-        [text]="true"
-        (onClick)="navigateToKanban()"
-        pTooltip="Visualizar em Kanban"
-        tooltipPosition="bottom"
-      /> -->
-
       <p-button
         icon="pi pi-refresh"
         [text]="true"
@@ -62,8 +53,66 @@
     />
   </div>
 
+  <div
+    class="mt-4 sm:mt-6 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-900/40 shadow-sm p-4 sm:p-5"
+  >
+    <div class="flex flex-col gap-2 sm:gap-1">
+      <span
+        class="text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400"
+      >
+        Filtros
+      </span>
+      <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+        Intervalo de vencimento no calendário e situação no banco de dados. A
+        consulta e os totais refletem só o que passa nos dois filtros (servidor).
+      </p>
+      <div
+        class="flex flex-col lg:flex-row lg:items-end gap-4 lg:gap-6 flex-wrap"
+      >
+        <div class="flex flex-col gap-2 min-w-[220px]">
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Situação
+          </span>
+          <p-select
+            [options]="statusOptions"
+            [ngModel]="statusFilter()"
+            (ngModelChange)="onStatusFilterChange($event)"
+            optionLabel="label"
+            optionValue="value"
+            placeholder="Situação"
+            [showClear]="false"
+            styleClass="w-full min-w-[200px]"
+            pTooltip="Filtrar pelo status salvo no sistema"
+            tooltipPosition="bottom"
+          />
+        </div>
+        <div class="flex flex-col gap-2 flex-1 min-w-[260px] max-w-md">
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+            Vencimento
+          </span>
+          <p-datepicker
+            [(ngModel)]="calendarRangeModel"
+            selectionMode="range"
+            [readonlyInput]="true"
+            [showIcon]="true"
+            [iconDisplay]="'input'"
+            dateFormat="dd/mm/yy"
+            placeholder="Data inicial — data final"
+            appendTo="body"
+            styleClass="w-full"
+            inputStyleClass="w-full"
+            pTooltip="Intervalo de datas de vencimento"
+            tooltipPosition="bottom"
+            (ngModelChange)="onCalendarRangeChange($event)"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="animate-left mt-4 sm:mt-6">
     <fuse-table
+      title="contas-a-pagar"
       [data]="state.accountsPayableList()"
       [loading]="state.loading()"
       [config]="tableConfig()"

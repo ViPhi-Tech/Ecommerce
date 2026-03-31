@@ -22,7 +22,10 @@
         class="text-gray-500"
         style="font-size: 1.2em"
       ></ng-icon>
-      <span>{{ selectedOption?.label }}</span>
+      <span>{{
+        selectedOption?.label ||
+          (selectedPeriod === 'custom' ? 'Personalizado' : '')
+      }}</span>
     </span>
   </ng-template>
 </p-select>
