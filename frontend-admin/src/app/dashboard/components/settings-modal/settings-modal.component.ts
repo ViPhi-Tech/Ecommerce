@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -10,6 +11,12 @@ import { AuthService } from 'app/core/auth/auth.service';
 import { UserService } from 'app/dashboard/modules/user-module/user.service';
 import { ToastService } from 'app/shared/services/toast.service';
 import { SettingsModalService } from './settings-modal.service';
+
+/** Corpo retornado por GET /user/:id (perfil + login aninhado) */
+interface SettingsUserFromApi {
+  fullName?: string;
+  login?: { email?: string | null };
+}
 
 type SettingsTab = 'profile' | 'integrations' | 'email' | 'security';
 
@@ -39,6 +46,7 @@ export class SettingsModalComponent implements OnInit {
   private userService = inject(UserService);
   private toast = inject(ToastService);
   private fb = inject(FormBuilder);
+  private destroyRef = inject(DestroyRef);
   settingsModal = inject(SettingsModalService);
 
   activeTab = signal<SettingsTab>('profile');
@@ -47,7 +55,7 @@ export class SettingsModalComponent implements OnInit {
   settingsForm = this.fb.group({
     fullName: ['', [Validators.required, Validators.minLength(2)]],
     username: [''],
-    email: ['', [Validators.required, Validators.email]],
+    email: [{value: '', disabled: true}, [Validators.required, Validators.email]],
     wantDailyReports: [false],
     dailyReportsEmail: [{ value: '', disabled: true }],
   });
@@ -64,7 +72,6 @@ export class SettingsModalComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.loadCurrentUser();
     this.settingsForm.get('wantDailyReports')?.valueChanges?.subscribe((v) =>
       this.onDailyReportsToggle(!!v),
     );
@@ -160,12 +167,64 @@ export class SettingsModalComponent implements OnInit {
 
   private loadCurrentUser(): void {
     const decoded = this.authService.getDecodedToken();
-    if (decoded) {
-      this.settingsForm.patchValue({
-        fullName: decoded.fullName || decoded.name || '',
-        username: decoded.username || decoded.email?.split('@')[0] || '',
-        email: decoded.email || '',
-      });
+    const userIdRaw = decoded?.sub ?? decoded?.id ?? decoded?.userId;
+    const userId = userIdRaw != null ? String(userIdRaw) : null;
+
+    if (!userId) {
+      this.applyUserFromJwt(decoded);
+      return;
     }
+
+    this.userService
+      .getUserById(userId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (res) => {
+          const raw = (res.data ?? res.dados ?? res) as SettingsUserFromApi | null;
+          if (!raw || typeof raw !== 'object' || !('fullName' in raw)) {
+            this.applyUserFromJwt(decoded);
+            return;
+          }
+          const email = raw.login?.email?.trim() ?? '';
+          const emailCtrl = this.settingsForm.get('email');
+          emailCtrl?.enable({ emitEvent: false });
+          this.settingsForm.patchValue(
+            {
+              fullName: raw.fullName ?? '',
+              email,
+            },
+            { emitEvent: false },
+          );
+          emailCtrl?.disable({ emitEvent: false });
+        },
+        error: () => {
+          this.applyUserFromJwt(decoded);
+          this.toast.warn('Não foi possível carregar o perfil. Exibindo dados da sessão.');
+        },
+      });
+  }
+
+  private applyUserFromJwt(decoded: Record<string, unknown> | null): void {
+    if (!decoded) return;
+    const email = (decoded['email'] as string) || '';
+    const emailCtrl = this.settingsForm.get('email');
+    emailCtrl?.enable({ emitEvent: false });
+    this.settingsForm.patchValue(
+      {
+        fullName: (decoded['fullName'] as string) || (decoded['name'] as string) || '',
+        username: this.usernameFromJwt(decoded),
+        email,
+      },
+      { emitEvent: false },
+    );
+    emailCtrl?.disable({ emitEvent: false });
+  }
+
+  private usernameFromJwt(decoded: Record<string, unknown> | null): string {
+    if (!decoded) return '';
+    const u = decoded['username'] as string | undefined;
+    if (u) return u;
+    const email = decoded['email'] as string | undefined;
+    return email?.split('@')[0] ?? '';
   }
 }
