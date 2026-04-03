@@ -20,6 +20,9 @@ import { NgClass } from '@angular/common';
 import { InputMaskModule } from 'primeng/inputmask';
 import { NgxMaskDirective } from 'ngx-mask';
 
+const INPUT_BASE_CLASS =
+  'fuse-input-base';
+
 @Component({
   selector: 'fuse-input',
   templateUrl: './input.component.html',
@@ -49,6 +52,9 @@ export class InputComponent implements OnInit {
   size = input<'large' | 'small'>('small');
   labelPosition = input<'top' | 'left'>('top');
   radioDirection = input<'row' | 'col'>('row');
+  
+  readonly suffix = input<boolean>(false);
+  readonly prefix = input<boolean>(false);
 
   step = input<string | number>(1);
 
@@ -65,6 +71,8 @@ export class InputComponent implements OnInit {
   isLoading = input<boolean>(false);
   feedback = input<boolean>(false);
   errorMessage = input<string>('');
+
+  inputBaseClass = signal(INPUT_BASE_CLASS);
 
   @Output() blurChange = new EventEmitter<any>();
   @Output() inputChange = new EventEmitter<any>();

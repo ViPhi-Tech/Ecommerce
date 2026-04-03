@@ -1,0 +1,142 @@
+<div class="w-full label-position {{ labelPosition() }} flex flex-col gap-1">
+  @if (label() && !isLoading()) {
+    <label [for]="idRef()" class="label flex justify-between">
+      {{ label() }}
+      @if (isRequired() && control().invalid) {
+        <span class="text-red-500 flex">
+          <p>*</p>   
+          <p class="text-xs">Obrigatório</p>
+        </span>
+      }
+    </label>
+  }
+
+  @if (type() === 'text' && !isLoading()) {
+    <input
+      pInputText
+      [formControl]="control()"
+      class="{{ addictionalClass() }}"
+      [pSize]="size()"
+      [placeholder]="placeholder()"
+      [id]="idRef()"
+      [name]="idRef()"
+      (blur)="blurChangeComponent($event)"
+      (input)="inputChangeComponent($event)"
+      (keydown)="keydownChangeComponent($event)"
+      [mask]="mask()"
+      [required]="isRequired()"
+    />
+  }
+
+  @if (type() === 'number' && !isLoading()) {
+    <input
+      type="number"
+      pInputText
+      [formControl]="control()"
+      [pSize]="size()"
+      [placeholder]="placeholder()"
+      [id]="idRef()"
+      [name]="idRef()"
+      [step]="step()"
+      (input)="inputChangeComponent($event)"
+      (blur)="blurChangeComponent($event)"
+      (keydown)="keydownChangeComponent($event)"
+      [min]="min()"
+      [max]="max()"
+      [required]="isRequired()"
+    />
+  }
+
+  @if (type() === 'password' && !isLoading()) {
+    <p-password
+      [formControl]="control()"
+      styleClass="w-full"
+      [size]="size()"
+      [id]="idRef()"
+      [feedback]="feedback()"
+      (onBlur)="blurChangeComponent($event)"
+      [required]="isRequired()"
+    />
+  }
+
+  @if (['price', 'money'].includes(type()) && !isLoading()) {
+    <input
+      pInputText
+      [formControl]="control()"
+      class="{{ addictionalClass() }}"
+      [pSize]="size()"
+      [placeholder]="placeholder()"
+      [id]="idRef()"
+      [name]="idRef()"
+      [required]="isRequired()"
+      (blur)="blurChangeComponent($event)"
+      (input)="inputChangeComponent($event)"
+      (keydown)="keydownChangeComponent($event)"
+      prefix="R$ "
+      mask="separator.2"
+      [thousandSeparator]="'.'"
+      [decimalMarker]="','"
+      [dropSpecialCharacters]="true"
+    />
+  }
+
+  @if (type() === 'textarea' && !isLoading()) {
+    <textarea
+      pTextarea
+      [formControl]="control()"
+      [placeholder]="placeholder()"
+      [id]="idRef()"
+      [name]="idRef()"
+      [rows]="rows()"
+      (onBlur)="blurChangeComponent($event)"
+      [required]="isRequired()"
+    ></textarea>
+  }
+
+  @if (type() === 'radio' && !isLoading()) {
+    <div
+      class="flex gap-4"
+      [ngClass]="{ 'flex-col': radioDirection() === 'col' }"
+    >
+      @for (item of items(); track $index) {
+        <div class="field-checkbox">
+          <p-radiobutton
+            [inputId]="item.key"
+            name="item"
+            [value]="item.value"
+            [formControl]="control()"
+            [required]="isRequired()"
+          />
+          <label [for]="item.key" class="ml-2">{{ item.label }}</label>
+        </div>
+      }
+    </div>
+  }
+
+  @if (isLoading()) {
+    <p-skeleton height="1rem" styleClass="mb-2" width="100px" />
+
+    @if (type() === 'textarea') {
+      @if (rows() > 3) {
+        <p-skeleton height="8rem" styleClass="mb-2" width="100%" />
+      } @else {
+        <p-skeleton height="6rem" styleClass="mb-2" width="100%" />
+      }
+    } @else {
+      <p-skeleton height="2rem" styleClass="mb-2" width="100%" />
+    }
+  }
+</div>
+
+@if (
+  errorMessage() && control().invalid && (control().dirty || control().touched)
+) {
+  <p-message
+    severity="error"
+    icon="pi pi-times-circle"
+    styleClass="mt-2"
+    size="small"
+  >
+    {{ errorMessage() }}
+  </p-message>
+}

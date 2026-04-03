@@ -8,18 +8,23 @@ import { Router } from '@angular/router';
 import { SidebarService } from '../../../shared/services/sidebar.service';
 import { SettingsModalComponent } from '../settings-modal/settings-modal.component';
 import { SettingsModalService } from '../settings-modal/settings-modal.service';
+import { ThemeService, THEME_COLORS } from '../../../shared/services/theme.service';
+import { AvatarComponent } from '../../../shared/components/avatar/avatar.component';
 
 @Component({
   selector: 'fuse-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
-  imports: [NgIcon, QuickAccessComponent, PopoverModule, SettingsModalComponent],
+  imports: [NgIcon, QuickAccessComponent, PopoverModule, SettingsModalComponent, AvatarComponent],
 })
 export class HeaderComponent implements OnInit, OnDestroy {
   private coreService = inject(CoreService);
   private router = inject(Router);
   private sidebarService = inject(SidebarService);
   settingsModal = inject(SettingsModalService);
+  themeService = inject(ThemeService);
+
+  readonly themeColors = THEME_COLORS;
 
   pageTitle = signal({
     title: '',
@@ -48,11 +53,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   toggleDarkMode() {
-    document.documentElement.classList.toggle('dark');
-    localStorage.setItem(
-      'theme',
-      document.documentElement.classList.contains('dark') ? 'dark' : 'light'
-    );
+    this.themeService.toggleDarkMode();
   }
 
   logout() {

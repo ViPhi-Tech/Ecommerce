@@ -1,178 +1,162 @@
-<p-dialog
-  #dialogRef
-  [(visible)]="visible"
-  (onHide)="onCloseDialog()"
-  [modal]="true"
-  [closeOnEscape]="true"
-  [draggable]="false"
-  styleClass="max-w-[800px] w-full"
+<fuse-modal
+  [title]="title()"
+  [subtitle]="subtitle()"
+  icon="lucidePackage"
+  maxWidth="800px"
+  [modalInUrl]="true"
 >
-  <ng-template #header>
-    <div class="flex flex-col space-y-1.5 text-center sm:text-left">
-      <h2 class="text-2xl font-semibold leading-none tracking-tight">
-        {{ title() }}
-      </h2>
-      <p class="text-sm text-muted-foreground">
-        {{ subtitle() }}
-      </p>
-    </div>
-  </ng-template>
+  <div modal-body class="p-6">
+    <form [formGroup]="productForm" class="row space-y-4">
+      <div class="col-12 md:col-12">
+        <fuse-input
+          [isLoading]="isLoading()"
+          label="Nome do Produto"
+          [control]="productForm.get('name')"
+          placeholder="Ex: Smartphone Galaxy S22 Ultra"
+        />
+      </div>
 
-  <div class="flex flex-col gap-4">
-    <div>
-      <form [formGroup]="productForm" class="row space-y-4">
-        <div class="col-12 md:col-12">
-          <fuse-input
-            [isLoading]="isLoading()"
-            label="Nome do Produto"
-            [control]="productForm.get('name')"
-            placeholder="Ex: Smartphone Galaxy S22 Ultra"
-          />
-        </div>
+      <div class="col-12 md:col-6">
+        <fuse-input
+          [isLoading]="isLoading()"
+          label="Ean"
+          type="number"
+          [control]="productForm.get('ean')"
+          placeholder="Ex: 7891234567890"
+        />
+      </div>
 
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            label="Ean"
-            type="number"
-            [control]="productForm.get('ean')"
-            placeholder="Ex: 7891234567890"
-          />
-        </div>
+      <div class="col-12 md:col-6">
+        <fuse-input
+          [isLoading]="isLoading()"
+          label="Código/SKU"
+          [control]="productForm.get('sku')"
+          placeholder="Ex: SM-S22U-256GB-BLK"
+        />
+      </div>
 
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            label="Código/SKU"
-            [control]="productForm.get('sku')"
-            placeholder="Ex: SM-S22U-256GB-BLK"
-          />
-        </div>
+      <div class="col-12 md:col-6">
+        <fuse-select
+          label="Categoria"
+          [items]="categoryState.categoryList()"
+          valueRef="id"
+          labelRef="name"
+          [isLoading]="isLoading()"
+          [drawer]="['categories', 'new']"
+          [control]="productForm.get('categoryId')"
+          placeholder="Adicione uma categoria"
+        />
+      </div>
 
-        <div class="col-12 md:col-6">
-          <fuse-select
-            label="Categoria"
-            [items]="categoryState.categoryList()"
-            valueRef="id"
-            labelRef="name"
-            [isLoading]="isLoading()"
-            [drawer]="['categories', 'new']"
-            [control]="productForm.get('categoryId')"
-            placeholder="Adicione uma categoria"
-          />
-        </div>
+      <div class="col-12 md:col-6">
+        <fuse-input
+          [isLoading]="isLoading()"
+          label="Marca / Fabricante"
+          [control]="productForm.get('brand')"
+          placeholder="Ex: Samsung"
+        />
+      </div>
 
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            label="Marca / Fabricante"
-            [control]="productForm.get('brand')"
-            placeholder="Ex: Samsung"
-          />
-        </div>
+      <div class="col-12 md:col-6">
+        <fuse-input
+          [isLoading]="isLoading()"
+          type="price"
+          label="Preço de custo"
+          [min]="1"
+          [control]="productForm.get('initialPrice')"
+          placeholder="R$ 0,00"
+        />
+      </div>
 
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            type="price"
-            label="Preço de custo"
-            [min]="1"
-            [control]="productForm.get('initialPrice')"
-            placeholder="R$ 0,00"
-          />
-        </div>
+      <div class="col-12 md:col-6">
+        <fuse-input
+          [isLoading]="isLoading()"
+          type="price"
+          label="Preço de venda"
+          [control]="productForm.get('finalPrice')"
+          placeholder="R$ 0,00"
+        />
+      </div>
 
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            type="price"
-            label="Preço de venda"
-            [control]="productForm.get('finalPrice')"
-            placeholder="R$ 0,00"
-          />
-        </div>
+      <div class="col-12 md:col-6">
+        <fuse-input
+          [isLoading]="isLoading()"
+          type="price"
+          label="ICMS Unitário"
+          [control]="productForm.get('icms')"
+          placeholder="R$ 0,00"
+        />
+      </div>
 
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            type="price"
-            label="ICMS Unitário"
-            [control]="productForm.get('icms')"
-            placeholder="R$ 0,00"
-          />
-        </div>
+      <div class="col-12 md:col-6">
+        <fuse-input
+          [isLoading]="isLoading()"
+          type="price"
+          label="ST Unitário (Substituição Tributária)"
+          [control]="productForm.get('st')"
+          placeholder="R$ 0,00"
+        />
+      </div>
 
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            type="price"
-            label="ST Unitário (Substituição Tributária)"
-            [control]="productForm.get('st')"
-            placeholder="R$ 0,00"
-          />
-        </div>
+      <div class="col-12 md:col-6">
+        <fuse-input
+          [isLoading]="isLoading()"
+          label="Estoque inicial"
+          type="number"
+          [control]="productForm.get('quantity')"
+          placeholder="Adicione a quantidade inicial em estoque"
+        />
+      </div>
 
-        <div class="col-12 md:col-6">
-          <fuse-input
-            [isLoading]="isLoading()"
-            label="Estoque inicial"
-            type="number"
-            [control]="productForm.get('quantity')"
-            placeholder="Adicione a quantidade inicial em estoque"
-          />
-        </div>
+      <div class="col-12">
+        <fuse-input
+          [isLoading]="isLoading()"
+          type="textarea"
+          label="Descrição curta"
+          [control]="productForm.get('shortDescription')"
+          placeholder="Breve descrição do produto (máx. 255 caracteres)"
+        />
+      </div>
 
-        <div class="col-12">
+      <div class="col-12">
+        <fuse-input-with-ai [disabled]="true" [control]="productForm.get('description')" [popoverPosition]="'top-left'">
           <fuse-input
             [isLoading]="isLoading()"
             type="textarea"
-            label="Descrição curta"
-            [control]="productForm.get('shortDescription')"
-            placeholder="Breve descrição do produto (máx. 255 caracteres)"
+            label="Descrição"
+            [rows]="5"
+            [control]="productForm.get('description')"
+            placeholder="Descrição detalhada do produto, características, benefícios, etc."
           />
-        </div>
-
-        <div class="col-12">
-          <fuse-input-with-ai [disabled]="true" [control]="productForm.get('description')" [popoverPosition]="'top-left'">
-            <fuse-input
-              [isLoading]="isLoading()"
-              type="textarea"
-              label="Descrição"
-              [rows]="5"
-              [control]="productForm.get('description')"
-              placeholder="Descrição detalhada do produto, características, benefícios, etc."
-            />
-          </fuse-input-with-ai>
-        </div>
-      </form>
-    </div>
+        </fuse-input-with-ai>
+      </div>
+    </form>
   </div>
 
-  <ng-template #footer>
-    <div
-      class="w-full flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4"
-    >
-      <button
-        pButton
-        type="button"
-        label="Cancelar"
-        icon="pi pi-times"
-        (click)="closeDialog($event)"
-        severity="secondary"
-        [outlined]="true"
-        class="w-full sm:w-[200px] order-2 sm:order-1"
-        size="small"
-      ></button>
-      <button
-        pButton
-        type="submit"
-        [label]="submitButtonLabel()"
-        icon="pi pi-check"
-        class="w-full sm:w-[200px] order-1 sm:order-2"
-        size="small"
-        [disabled]="productForm.invalid"
-        (click)="onSubmit($event)"
-      ></button>
-    </div>
-  </ng-template>
-</p-dialog>
+  <div
+    modal-footer
+    class="flex flex-col sm:flex-row justify-end items-stretch sm:items-center gap-2 sm:gap-4 px-6 py-4 border-t border-slate-200 dark:border-[#1e293b]"
+  >
+    <button
+      pButton
+      type="button"
+      label="Cancelar"
+      icon="pi pi-times"
+      (click)="onCloseDialog()"
+      severity="secondary"
+      [outlined]="true"
+      class="w-full sm:w-[200px] order-2 sm:order-1"
+      size="small"
+    ></button>
+    <button
+      pButton
+      type="submit"
+      [label]="submitButtonLabel()"
+      icon="pi pi-check"
+      class="w-full sm:w-[200px] order-1 sm:order-2"
+      size="small"
+      [disabled]="productForm.invalid"
+      (click)="onSubmit($event)"
+    ></button>
+  </div>
+</fuse-modal>
