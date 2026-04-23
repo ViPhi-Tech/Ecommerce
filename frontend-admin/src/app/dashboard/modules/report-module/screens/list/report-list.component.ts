@@ -20,6 +20,7 @@ import { CommonModule } from '@angular/common';
 import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { TooltipModule } from 'primeng/tooltip';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'fuse-report-list',
@@ -54,6 +55,8 @@ export class ReportListComponent implements OnInit {
   selectedPeriodTypeControl = new FormControl('current_month');
   customStartDateControl = new FormControl('');
   customEndDateControl = new FormControl('');
+  exportingPdf = signal(false);
+  exportingExcel = signal(false);
 
   // Table configuration
   tableConfig = signal<TableConfig>({
@@ -151,9 +154,14 @@ export class ReportListComponent implements OnInit {
   }
 
   exportToPDF() {
+    if (this.exportingPdf()) return;
+    this.exportingPdf.set(true);
     this.state
       .exportReport('pdf')
-      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyedRef),
+        finalize(() => this.exportingPdf.set(false))
+      )
       .subscribe({
         next: blob => {
           this.downloadFile(blob, 'relatorio.pdf');
@@ -174,9 +182,14 @@ export class ReportListComponent implements OnInit {
   }
 
   exportToExcel() {
+    if (this.exportingExcel()) return;
+    this.exportingExcel.set(true);
     this.state
       .exportReport('excel')
-      .pipe(takeUntilDestroyed(this.destroyedRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyedRef),
+        finalize(() => this.exportingExcel.set(false))
+      )
       .subscribe({
         next: blob => {
           this.downloadFile(blob, 'relatorio.xlsx');

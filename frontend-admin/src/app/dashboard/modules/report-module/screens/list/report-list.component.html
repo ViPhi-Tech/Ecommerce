@@ -33,6 +33,8 @@
         size="small"
         label="PDF"
         [outlined]="true"
+        [disabled]="exportingPdf()"
+        [loading]="exportingPdf()"
         pTooltip="Exportar para PDF"
       >
         <ng-template #content>
@@ -47,6 +49,8 @@
         severity="primary"
         size="small"
         label="Excel"
+        [disabled]="exportingExcel()"
+        [loading]="exportingExcel()"
         pTooltip="Exportar para Excel"
       >
         <ng-template #content>
