@@ -1,5 +1,21 @@
 import { z } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
+import { stripNonDigits, stripNonDigitsOrNull } from '../../../shared/utils/stringUtils';
+
+const cnpjFieldSchema = z
+  .string()
+  .transform((value) => stripNonDigits(value))
+  .pipe(
+    z
+      .string()
+      .min(14, { message: 'CNPJ deve ter 14 caracteres' })
+      .max(14, { message: 'CNPJ deve ter 14 caracteres' })
+  );
+
+const phoneFieldSchema = z
+  .union([z.string(), z.null()])
+  .optional()
+  .transform((value) => stripNonDigitsOrNull(value));
 
 // ===== INPUT DTOs (Para Use Cases) =====
 export interface CreateSupplierInput {
@@ -24,19 +40,19 @@ export interface UpdateSupplierInput {
 export const createSupplierSchema = z.object({
   tradeName: z.string().min(1, { message: "Nome fantasia é obrigatório" }),
   legalName: z.string().min(1, { message: "Razão social é obrigatória" }),
-  cnpj: z.string().min(14, { message: "CNPJ deve ter 14 caracteres" }).max(14, { message: "CNPJ deve ter 14 caracteres" }),
+  cnpj: cnpjFieldSchema,
   address: z.string().min(1, { message: "Endereço é obrigatório" }),
   email: z.string().email({ message: "Email inválido" }).optional().nullable(),
-  phone: z.string().optional().nullable(),
+  phone: phoneFieldSchema,
 });
 
 export const updateSupplierSchema = z.object({
   tradeName: z.string().min(1, { message: "Nome fantasia é obrigatório" }).optional(),
   legalName: z.string().min(1, { message: "Razão social é obrigatória" }).optional(),
-  cnpj: z.string().min(14, { message: "CNPJ deve ter 14 caracteres" }).max(14, { message: "CNPJ deve ter 14 caracteres" }).optional(),
+  cnpj: cnpjFieldSchema.optional(),
   address: z.string().min(1, { message: "Endereço é obrigatório" }).optional(),
   email: z.string().email({ message: "Email inválido" }).optional().nullable(),
-  phone: z.string().optional().nullable(),
+  phone: phoneFieldSchema,
 });
 
 export const supplierIdSchema = z.object({

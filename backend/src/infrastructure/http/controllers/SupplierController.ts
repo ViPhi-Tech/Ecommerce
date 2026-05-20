@@ -6,6 +6,11 @@ import { FindByIdSupplierUseCase } from "../../../application/use-cases/supplier
 import { FindAllSupplierUseCase } from '../../../application/use-cases/supplier/FindAllSupplierUseCase';
 import { ApiResponse } from "../../../shared/types/apiResponse";
 import { SupplierCreateDTO, SupplierUpdateDTO } from "../../../application/dto/supplier/Supplier.dto";
+import {
+    createSupplierSchema,
+    updateSupplierSchema,
+    supplierIdSchema,
+} from "../../../application/dto/supplier/SupplierDTOs";
 import { HTTP_STATUS } from "../../../shared/types/httpStatus";
 import { HTTP_MESSAGES } from "../../../shared/types/httpMessages";
 
@@ -20,7 +25,7 @@ export class SupplierController {
     
     async create(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try {
-            const supplierData = request.body as SupplierCreateDTO;
+            const supplierData = createSupplierSchema.parse(request.body) as SupplierCreateDTO;
             const supplier = await this.createSupplierUseCase.execute(supplierData)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: supplier})
         } catch (error) {
@@ -41,7 +46,7 @@ export class SupplierController {
 
     async findById(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const { id } = request.params as { id: string };
+            const { id } = supplierIdSchema.parse(request.params);
             const supplier = await this.findSupplierByIdUseCase.execute(id)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: supplier})
         } catch (error) {
@@ -52,8 +57,8 @@ export class SupplierController {
 
     async update(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const { id } = request.params as { id: string };
-            const supplier = request.body as SupplierUpdateDTO
+            const { id } = supplierIdSchema.parse(request.params);
+            const supplier = updateSupplierSchema.parse(request.body) as SupplierUpdateDTO;
             const data_supplier = await this.updateSupplierUseCase.execute(id, supplier)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: data_supplier})
         } catch (error) {
@@ -64,7 +69,7 @@ export class SupplierController {
 
     async delete(request: FastifyRequest, reply: FastifyReply): Promise<ApiResponse> {
         try{
-            const { id } = request.params as { id: string };
+            const { id } = supplierIdSchema.parse(request.params);
             await this.deleteSupplierUseCase.execute(id)
             return reply.code(HTTP_STATUS.API_STATUS_SUCCESS).send({status: true, descricao: HTTP_MESSAGES.API_STATUS_SUCCESS, dados: null})
         } catch (error) {

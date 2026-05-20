@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import { supplierController } from "../../config/dependencies/supplierDependencies"
 import { authenticate } from "../middlewares/authMiddleware";
+import { sanitizeSupplierBody } from "../middlewares/sanitizeSupplierBody";
 import { createSupplierJsonSchema, updateSupplierJsonSchema, supplierIdJsonSchema } from "../../../application/dto/supplier/SupplierDTOs";
 
 export default async function supplierRoutes(
@@ -13,7 +14,7 @@ export default async function supplierRoutes(
             tags: ['supplier'],
             body: createSupplierJsonSchema
         },
-        preValidation: [authenticate],
+        preValidation: [sanitizeSupplierBody, authenticate],
         handler: supplierController.create.bind(supplierController)
     });
 
@@ -40,7 +41,7 @@ export default async function supplierRoutes(
             body: updateSupplierJsonSchema,
             params: supplierIdJsonSchema
         },
-        preValidation: [authenticate],
+        preValidation: [sanitizeSupplierBody, authenticate],
         handler: supplierController.update.bind(supplierController)
     });
 
