@@ -8,7 +8,9 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "generate": "prisma generate",
-    "migrate": "prisma migrate dev"
+    "migrate": "prisma migrate dev",
+    "seed": "prisma db seed",
+    "seed:mock": "tsx prisma/seed-mock.ts"
   },
   "keywords": [],
   "author": "",

@@ -9,6 +9,12 @@ export const SYSTEM_MODULES: IUserModule[] = [
     route: '/dashboard/home',
   },
   {
+    id: ROLES_SITEMAP.Agendamentos,
+    name: 'Agendamentos',
+    description: 'Calendário de agendamentos',
+    route: '/dashboard/scheduling',
+  },
+  {
     id: ROLES_SITEMAP.Produtos,
     name: 'Produtos',
     description: 'Gerenciamento de produtos e catálogo',

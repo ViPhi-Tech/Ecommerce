@@ -172,8 +172,8 @@ export class DeliveryRepository implements IDeliveryRepository {
       count: item._count.status,
     }));
 
-    const pendingDeliveries = deliveriesByStatus.find((item) => item.status === 'pending')?.count || 0;
-    const deliveredDeliveries = deliveriesByStatus.find((item) => item.status === 'delivered')?.count || 0;
+    const pendingDeliveries = deliveriesByStatus.find((item) => item.status === 'PENDING')?.count || 0;
+    const deliveredDeliveries = deliveriesByStatus.find((item) => item.status === 'DELIVERED')?.count || 0;
 
     // Buscar todas as entregas com pedidos para calcular métricas
     const deliveries = await this.prisma.delivery.findMany({

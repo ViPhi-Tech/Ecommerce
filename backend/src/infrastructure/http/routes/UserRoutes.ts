@@ -31,6 +31,7 @@ export default async function userRoutes(
         }
       }
     },
+    preValidation: [authenticate],
     handler: userController.create.bind(userController)
   });
 

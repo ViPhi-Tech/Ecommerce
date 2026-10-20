@@ -6,7 +6,7 @@ model Delivery {
   deliveryDate    DateTime
   driverName      String?
   vehiclePlate    String?
-  status          String           @default("pending")
+  status          String           @default("PENDING")
   orders          Order[]
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt

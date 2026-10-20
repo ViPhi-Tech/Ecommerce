@@ -1,6 +1,6 @@
 export const ROLES_SITEMAP = {
   Dashboard: '3f29a6d2-4e71-4f0a-8c0d-6b2f9e1c4a11',
-  Agendamentos: '3f29a6d2-4e71-4f0a-8c0d-6b2f9e1c4a11',
+  Agendamentos: 'e4f5a6b7-c8d9-4e0f-8a1b-2c3d4e5f6a24',
   Produtos: '7c5d2b0a-8f34-4e1e-9a2b-3d6f7b2c9d12',
   Categorias: 'a1e6b3c4-2f5d-4a7b-8c1d-5e6f7a8b9c13',
   Clientes: 'f0d1a2b3-4c5e-6f7a-8b9c-1d2e3f4a5b14',

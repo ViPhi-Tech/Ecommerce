@@ -67,7 +67,7 @@ export default async function deliveryRoutes(
   fastify.patch('/:uuid/complete', {
     schema: {
       tags: ['delivery'],
-      description: 'Finaliza uma entrega, alterando o status para "delivered"',
+      description: 'Finaliza uma entrega, alterando o status para "DELIVERED"',
       params: deliveryUuidJsonSchema,
     },
     preValidation: [authenticate],
