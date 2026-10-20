@@ -3,27 +3,34 @@ services:
     build:
       context: ./backend
       args:
-        DATABASE_URL: ${DATABASE_URL:-}
-    container_name: ecommerce-backend
-    ports:
-      - "8010:8000"   # agora acessível externamente
-    env_file:
-      - ./backend/.env
+        DATABASE_URL: ${DATABASE_URL}
+    expose:
+      - "8000"
     environment:
       - NODE_ENV=production
       - PORT=8000
-      - DATABASE_URL=${DATABASE_URL:-}
-      - SECRET_KEY=${SECRET_KEY:-}
-      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID:-}
-      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET:-}
-      - GOOGLE_REDIRECT_URI=${GOOGLE_REDIRECT_URI:-}
+      - DATABASE_URL=${DATABASE_URL}
+      - SECRET_KEY=${SECRET_KEY}
+      - FRONTEND_URL=${FRONTEND_URL}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - GOOGLE_REDIRECT_URI=${GOOGLE_REDIRECT_URI}
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT:-6379}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - CLOUDINARY_CLOUD_NAME=${CLOUDINARY_CLOUD_NAME}
+      - CLOUDINARY_API_KEY=${CLOUDINARY_API_KEY}
+      - CLOUDINARY_API_SECRET=${CLOUDINARY_API_SECRET}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - RESEND_FROM=${RESEND_FROM}
     restart: unless-stopped
 
   frontend:
     build:
       context: .
       dockerfile: frontend-admin/Dockerfile
-    container_name: ecommerce-frontend-1
+    expose:
+      - "80"
     depends_on:
       - backend
     restart: unless-stopped

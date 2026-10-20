@@ -1,23 +1,23 @@
-# Use uma imagem estável e otimizada
-FROM node:18-alpine
-
-# Define o diretório de trabalho
+# Stage 1: install dependencies and build (dev dependencies are needed for next build)
+FROM node:22-alpine AS build
 WORKDIR /app
 
-# Copia apenas os arquivos necessários para instalar dependências
-COPY package.json yarn.lock ./
+COPY package.json package-lock.json* yarn.lock* ./
+RUN npm install
 
-# Instala apenas as dependências de produção
-RUN yarn install --production
-
-# Copia o restante do código do frontend
 COPY . .
+RUN npm run build
 
-# Compila a aplicação Next.js
-RUN yarn build
+# Stage 2: production runtime
+FROM node:22-alpine
+WORKDIR /app
+ENV NODE_ENV=production
 
-# Expõe a porta padrão do Next.js
+COPY --from=build /app/package.json ./
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/.next ./.next
+COPY --from=build /app/public ./public
+COPY --from=build /app/next.config.ts ./
+
 EXPOSE 3000
-
-# Comando para iniciar o Next.js no modo de produção
-CMD ["yarn", "start"]
+CMD ["npm", "start"]
