@@ -24,6 +24,7 @@ server.register(cors, {
       "http://localhost:4200",
       "https://vendaqui.onrender.com",
       "http://localhost:8000",
+      "http://localhost:61320",
     ];
 
     if (allowed.includes(origin)) return cb(null, true);
